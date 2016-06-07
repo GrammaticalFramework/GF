@@ -690,6 +690,7 @@ lin alright_A = variants {} ; --
 lin alright_Adv = variants {} ; --
 lin alsatianFem_N = variants {} ; ---- sense to be split
 lin alsatianMasc_N = variants {} ; ---- sense to be split
+lin also_AdV = lin AdV {s = "ook"} ;
 lin also_Adv = mkAdv "ook" | mkAdv "eveneens" | mkAdv "tevens" ;
 lin altar_N = mkN "altaar" neuter ; -- status=guess
 lin alter_V = variants {} ; --

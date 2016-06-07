@@ -1799,13 +1799,13 @@ lin alphavirus_N = variants {} ;
 lin alpine_A = variants {} ;
 lin alpinist_N = variants {} ;
 lin alprazolam_N = variants {} ;
-lin already_AdV = variants {} ;
+lin already_AdV = lin AdV {s = "schon"} ;
 lin already_Adv = L.already_Adv ;
 lin alright_A = variants {} ; --
 lin alright_Adv = variants {} ; --
 lin alsatianFem_N = variants {} ;
 lin alsatianMasc_N = variants {} ;
-lin also_AdV = variants {} ;
+lin also_AdV = lin AdV {s = "auch"} ;
 lin also_Adv = mkAdv "auch" ;
 lin also_ran_N = variants {} ;
 lin alstroemeria_N = variants {} ;
@@ -19706,7 +19706,7 @@ lin eve_PN = mkPN "Eve" ; -- src=eng status=guess
 lin evelyn_PN = mkPN "Evelyn" ; -- src=eng status=guess
 lin even_A = mk3A "gerade" "gerader" "geradeste" ; -- status=guess
 lin even_AdA = variants {} ;
-lin even_AdV = variants {} ;
+lin even_AdV = lin AdV {s = "sogar"} ;
 lin even_Adv = mkAdv "sogar" ;
 lin even_N = mkN "gerade Funktion" feminine ; -- status=guess
 lin even_V2 = variants {} ;
@@ -19722,7 +19722,7 @@ lin eventide_N = variants {} ;
 lin eventration_N = variants {} ;
 lin eventual_A = variants {} ; --
 lin eventuality_N = variants {} ;
-lin ever_AdV = variants {} ;
+lin ever_AdV = lin AdV {s = "einmal"} ;
 lin ever_Adv = mkAdv "jemals" | mkAdv "je" ;
 lin evergreen_A = mkA "immergrün" ; -- status=guess
 lin evergreen_N = mkN "immergrüne Pflanze" feminine ; -- status=guess
@@ -22877,7 +22877,7 @@ lin furrow_V2 = variants {} ;
 lin furry_A = mk3A "pelzig" "pelziger" "pelzigste" | mkA "Pelz-" ; -- status=guess status=guess
 lin furth_PN = mkPN "Furth" ; -- src=geonames status=guess
 lin further_A = variants {} ;
-lin further_AdV = variants {} ;
+lin further_AdV = lin AdV {s = "weiter"} ;
 lin further_Adv = mkAdv "des Weiteren" ;
 lin further_V2 = mkV2 (mkV "fördern") ; -- status=guess, src=wikt
 lin furtherance_N = variants {} ;
@@ -28494,7 +28494,7 @@ lin indecisive_A = mkA "unentschlossen" ; -- status=guess
 lin indecisiveness_N = variants {} ;
 lin indecorous_A = variants {} ;
 lin indecorum_N = variants {} ;
-lin indeed_AdV = variants {} ;
+lin indeed_AdV = lin AdV {s = "tatsächlich"} ;
 lin indeed_Adv = mkAdv "allerdings" ;
 lin indefatigability_N = variants {} ;
 lin indefatigable_A = mkA "unermüdlich" ; -- status=guess
@@ -30432,7 +30432,7 @@ lin jury_mast_N = variants {} ;
 lin jury_rigge_V2 = variants {} ;
 lin juryman_N = variants {} ;
 lin just_A = mk3A "gerecht" "gerechter" "gerechteste" | regA "berechtigt" ; -- status=guess status=guess
-lin just_AdV = variants {} ;
+lin just_AdV = lin AdV {s = "nur"} ;
 lin just_Adv = mkAdv "genau" | mkAdv "nur" ; -- comment=split
 lin just_Predet = variants {} ;
 lin justice_N = mkN "Gerechtigkeit" "Gerechtigkeiten" feminine ; -- status=guess
@@ -37683,7 +37683,7 @@ lin no_Quant = S.no_Quant ;
 lin no_ball_N = variants {} ;
 lin no_fewer_than_AdN = variants {} ;
 lin no_go_A = variants {} ;
-lin no_longer_AdV = variants {} ;
+lin no_longer_AdV = lin AdV {s = "nicht mehr"} ;
 lin no_man's_land_N = variants {} ;
 lin no_more_than_AdN = variants {} ;
 lin no_one_NP = variants {} ;
@@ -38226,7 +38226,7 @@ lin novitiate_N = variants {} ;
 lin novobiocin_N = variants {} ;
 lin novokuznetsk_PN = mkPN "Nowokusnezk" ; -- src=geonames status=guess
 lin novosibirsk_PN = mkPN "Nowosibirsk" ; -- src=geonames status=guess
-lin now_AdV = variants {} ;
+lin now_AdV = lin AdV {s = "nun"} ;
 lin now_Adv = mkAdv "jetzt" | mkAdv "nun" ;
 lin now_N = mkN "Jetzt" neuter ; -- status=guess
 lin nowadays_Adv = mkAdv "gegenwärtig" | mkAdv "zur Zeit" | mkAdv "derzeitig" | mkAdv "jetzt" | mkAdv "zurzeit" | mkAdv "momentan" ; -- status=guess status=guess status=guess status=guess status=guess status=guess
@@ -38714,7 +38714,7 @@ lin offstage_Adv = variants {} ;
 lin oft_Adv = variants {} ;
 lin oft_times_Adv = variants {} ;
 lin often_AdA = variants {} ;
-lin often_AdV = variants {} ;
+lin often_AdV = lin AdV {s = "oft"} ;
 lin often_Adv = mkAdv "häufig" | mkAdv "oft" ;
 lin oftener_Adv = variants {} ;
 lin ogee_N = variants {} ;
@@ -38870,7 +38870,7 @@ lin on_licence_N = variants {} ;
 lin on_top_of_Prep = variants {} ;
 lin onager_N = variants {} ;
 lin onboard_A = mkA "Bord-" ; -- status=guess
-lin once_AdV = variants {} ;
+lin once_AdV = lin AdV {s = "einmal"} ;
 lin once_Adv = mkAdv "einmal" ;
 lin once_Prep = variants {} ;
 lin once_Subj = ss "sobald" ;
@@ -52904,7 +52904,7 @@ lin some_Det = {s,sp = \\_,_ => "ein wenig" ; c = R.noCase ; a = R.Strong ; isDe
 lin some_Quant = N.IndefArt ** {s = N.IndefArt.sp} ;
 lin somebody_NP = S.somebody_NP ;
 lin someday_Adv = mkAdv "eines Tages" | mkAdv "irgendwann" ; -- status=guess status=guess
-lin somehow_AdV = variants {} ;
+lin somehow_AdV = lin AdV {s = "irgendwie"} ;
 lin somehow_Adv = mkAdv "irgendwie" ; -- status=guess
 lin someone_NP = S.somebody_NP ;
 lin someplace_Adv = variants {} ;
@@ -52953,7 +52953,7 @@ lin sonority_N = variants {} ;
 lin sonorous_A = variants {} ;
 lin sonsy_A = variants {} ;
 lin soochow_PN = mkPN "Soochow" ; -- src=eng status=guess
-lin soon_AdV = variants {} ;
+lin soon_AdV = lin AdV {s = "bald"} ;
 lin soon_Adv = mkAdv "bald" ;
 lin sooner_Adv = mkAdv "früher oder später" ; -- status=guess
 lin soonest_Adv = variants {} ;
@@ -54523,7 +54523,7 @@ lin stile_N = mkN "Zauntritt" masculine ; -- status=guess
 lin stiletto_N = mkN "Stilett" neuter ; -- status=guess
 lin still_A = mk3A "still" "stiller" "stillste" ; -- status=guess
 lin still_AdA = variants {} ;
-lin still_AdV = variants {} ;
+lin still_AdV = lin AdV {s = "immer noch"} ;
 lin still_Adv = mkAdv "immer noch" ;
 lin still_N = mkN "Destillierapparat" masculine | mkN "Destillierkolben" "Destillierkolben" masculine ; -- status=guess status=guess
 lin still_V2 = variants {} ;
@@ -64451,7 +64451,7 @@ lin yesterday_Adv = mkAdv "gestern" ;
 lin yesterday_N = mkN "gestern" ; -- status=guess
 lin yet_1_Adv = mkAdv "noch" ;
 lin yet_2_Adv = mkAdv "dennoch" ;
-lin yet_AdV = variants {} ;
+lin yet_AdV = lin AdV {s = "noch"} ;
 lin yeti_N = mkN "Yeti" "Yetis" masculine | mkN "Schneemensch" masculine ; -- status=guess status=guess
 lin yew_N = mkN "Eibe" "Eiben" feminine ; -- status=guess
 lin yew_tree_N = variants {} ;
