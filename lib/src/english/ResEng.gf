@@ -525,6 +525,17 @@ param
     AgP2 Pl      => "yourselves" ;
     AgP3Pl _     => "themselves"
     } ;
+    
+  possPron : Agr => Str = table {
+    AgP1 Sg      => "my" ;
+    AgP2 Sg      => "your" ;
+    AgP3Sg Masc  => "his" ;
+    AgP3Sg Fem   => "her" ;
+    AgP3Sg Neutr => "its" ;
+    AgP1 Pl      => "our" ;
+    AgP2 Pl      => "your" ;
+    AgP3Pl _     => "their"
+    } ;
 
 -- For $Sentence$.
 

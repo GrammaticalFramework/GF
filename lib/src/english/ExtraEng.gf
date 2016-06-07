@@ -281,6 +281,21 @@ lin
         g = cn.g
         } ;
 
+  lincat
+    RNP     = {s : Agr => Str} ;
+    RNPList = {s1,s2 : Agr => Str} ;
+
+  lin 
+    ReflRNP vps rnp = insertObjPre (\\a => vps.c2 ++ rnp.s ! a) vps ;
+    ReflPron = {s = reflPron} ;
+    ReflPoss num cn = {s = \\a => possPron ! a ++ num.s ! Nom ++ cn.s ! num.n ! Nom} ;
+    PredetRNP predet rnp = {s = \\a => predet.s ++ rnp.s ! a} ;
+
+---- TODO: RNPList construction
+
+
+------ English-only part
+
   that_RP =
      { s = table {
         RC _ (NCase Gen) | RC _ NPNomPoss => "whose" ; 
