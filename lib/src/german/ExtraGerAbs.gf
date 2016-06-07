@@ -3,7 +3,9 @@ abstract ExtraGerAbs = Extra [
   VPS,ListVPS,BaseVPS,ConsVPS,ConjVPS,MkVPS,PredVPS,EmptyRelSlash,
   VPSlash, PassVPSlash, PassAgentVPSlash, CompIQuant, PastPartAP, PastPartAgentAP,
   Temp,Tense,Pol,S,NP,VV,VP,Conj,IAdv,IQuant,IComp,ICompAP,IAdvAdv,Adv,AP,
-  Foc,FocObj,FocAdv,FocAP,UseFoc] ** {
+  Foc,FocObj,FocAdv,FocAP,UseFoc,
+  RNP,ReflRNP,ReflPoss
+  ] ** {
   flags coding=utf8;
   
   cat
@@ -23,4 +25,5 @@ abstract ExtraGerAbs = Extra [
   	VPass : V -> FClause ;   -- (es) wird getanzt
   	AdvFor : Adv -> FClause -> FClause ; -- es wird heute gelacht - addition of adverbs
   	FtoCl : FClause -> Cl ;  -- embedding FClause within the RGL, to allow generation of S, Utt, etc.
+
 }
