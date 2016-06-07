@@ -270,4 +270,27 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
       h = Back ; ---- TODO should be ap.h, which does not exist
       } ;
 
+  lincat
+    RNP = {s : Agr => NPForm => Str ; isPron : Bool} ;
+  lin
+    ReflRNP vps rnp = insertObjPre False
+      (\fin,b,agr -> appCompl fin b vps.c2
+                    {s = \\npf => rnp.s ! agr ! npf ; a = agr ; isPron = rnp.isPron})
+      vps ;
+
+    ReflPoss num cn = {
+      s = \\agr, npf =>
+        let
+          quant : NounFin.Quant = lin Quant {  -- possessive pronoun with suffix only
+    	    s2 : Harmony => Str = \\harm => possSuffixGen harm agr ;
+	    s1,sp = \\_,_ => [] ; isNum,isNeg = False ; isPoss,isDef = True
+	    } ; 
+          det = NounFin.DetQuant quant num
+        in
+        (NounFin.DetCN det cn).s ! npf ;
+     isPron = False
+     } ;
+
+ 
+
 } 

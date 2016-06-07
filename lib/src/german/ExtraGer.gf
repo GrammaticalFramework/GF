@@ -149,6 +149,14 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
 
     ConjVPS = conjunctDistrTable2 Order Agr ;
 
+  lincat
+    RNP = {s : Agr => Case => Str} ;
+  lin
+    ReflRNP vps rnp =
+      insertObj (\\a => appPrep vps.c2 
+        (\\k => usePrepC k (\c -> rnp.s ! a ! c))) vps ;
+
+    ReflPoss num cn = {s = \\a,c => num.s ! cn.g ! c ++ possPron a num.n cn.g c ++ cn.s ! adjfCase Strong c ! num.n ! c} ;
 
 -- implementation of some of the relevant Foc rules from Extra
 
