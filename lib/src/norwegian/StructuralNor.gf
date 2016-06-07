@@ -42,7 +42,7 @@ concrete StructuralNor of Structural = CatNor **
   if_Subj = ss "hvis" ;
   in8front_Prep = ss "foran" ;
   i_Pron = 
-    MorphoNor.mkNP "jeg" "meg" "min" "mit" "mine"  Utr Sg P1 ; --- mi
+    MorphoNor.mkNP "jeg" "meg" "min" "mitt" "mine"  Utr Sg P1 ; --- mi
 ---    MorphoNor.mkNP "jeg" "meg" (variants {"min" ; "mi"}) "mit" "mine"  Utr Sg P1 ;
   in_Prep = ss "i" ;
   it_Pron = MorphoNor.regNP "det" "dets" Neutr Sg ;
@@ -118,7 +118,7 @@ concrete StructuralNor of Structural = CatNor **
   with_Prep = ss "med" ;
   yes_Utt = ss ["ja"] ;
   youSg_Pron = 
-    MorphoNor.mkNP "du" "deg" "din" "dit" "dine" Utr Sg P2 ; ----
+    MorphoNor.mkNP "du" "deg" "din" "ditt" "dine" Utr Sg P2 ; ----
 ---    MorphoNor.mkNP "du" "deg" (variants {"din" ; "di"}) "dit" "dine" Utr Sg P2 ; ----
   youPl_Pron = MorphoNor.mkNP "dere" "dere" "deres" "deres" "deres"  Utr Pl P2 ;
   youPol_Pron = MorphoNor.mkNP "Dere" "Dere" "Deres" "Deres" "Deres"  Utr Sg P2 ; --- wrong in refl

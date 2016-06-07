@@ -67,5 +67,7 @@ interface DiffScand = open CommonScand, Prelude in {
     hur_IAdv : {s : Str} ;
 
     av_Prep : Str ;
+
+    possPron : Number -> Person -> Number -> Gender -> Str ;  -- mina bilar: Sg, P1, Utr, Pl
 }
 
