@@ -4,7 +4,7 @@ module CGIUtils (throwCGIError, handleCGIErrors,
                  stderrToFile,logError,
                  outputJSONP,outputEncodedJSONP,
                  outputPNG,outputBinary,outputBinary',
-                 outputHTML,outputPlain) where
+                 outputHTML,outputPlain,outputText) where
 
 import Control.Exception(Exception(..),SomeException(..),throw)
 import Data.Dynamic(Typeable,cast)
@@ -73,7 +73,7 @@ outputEncodedJSONP json =
                         Nothing -> ("json",json)
                         Just c  -> ("javascript",c ++ "(" ++ json ++ ")")
            ct = "application/"++ty++"; charset=utf-8"
-       outputStrict ct $ UTF8.encodeString str
+       outputText ct str
 
 outputPNG :: BS.ByteString -> CGI CGIResult
 outputPNG = outputBinary' "image/png"
@@ -88,10 +88,12 @@ outputBinary' ct x = do
        outputFPS x
 
 outputHTML :: String -> CGI CGIResult
-outputHTML = outputStrict "text/html; charset=utf-8" . UTF8.encodeString
+outputHTML = outputText "text/html; charset=utf-8"
 
 outputPlain :: String -> CGI CGIResult
-outputPlain = outputStrict "text/plain; charset=utf-8" . UTF8.encodeString 
+outputPlain = outputText "text/plain; charset=utf-8"
+
+outputText ct = outputStrict ct . UTF8.encodeString
 
 outputStrict :: String -> String -> CGI CGIResult
 outputStrict ct x | x == x = do setHeader "Content-Type" ct

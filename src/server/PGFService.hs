@@ -7,8 +7,9 @@ import PGF (PGF)
 import qualified PGF
 import PGF.Lexing
 import Cache
-import CGIUtils(outputJSONP,outputPlain,outputHTML,logError,outputBinary,
-                outputBinary',handleCGIErrors,throwCGIError,stderrToFile)
+import CGIUtils(outputJSONP,outputPlain,outputHTML,outputText,
+                outputBinary,outputBinary',
+                logError,handleCGIErrors,throwCGIError,stderrToFile)
 import CGI(CGI,readInput,getInput,getVarWithDefault,
            CGIResult,requestAcceptLanguage,handleErrors,setHeader,
            Accept(..),Language(..),negotiate,liftIO)
@@ -777,9 +778,11 @@ parseTree pgf lang opts tree = PGF.graphvizParseTree pgf lang opts tree
 doDepTree path pgf fmt lang tree =
   do lbls <- either (const Nothing) Just # liftIO (tryIOError readDepLabels)
      let vis = PGF.graphvizDependencyTree fmt False lbls Nothing pgf lang tree
-     if fmt `elem` ["png","gif","svg","gv"]
+     if fmt `elem` ["png","gif","gv"]
        then outputGraphviz vis
-       else outputPlain vis
+       else if fmt=="svg"
+            then outputText "image/svg+xml" vis
+            else outputPlain vis
   where
     labelsPath = dropExtension path <.> "labels"
     readDepLabels = PGF.getDepLabels . lines # readFile labelsPath
