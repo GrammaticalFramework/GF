@@ -43,6 +43,17 @@ function button_img(url,action) {
     return i;
 }
 
+function cycle_images(img_urls) {
+    var current=0;
+    function cycle() {
+	current++;
+	if(current>=img_urls.length) current=0;
+	i.src=img_urls[current]
+    }
+    var i=button_img(img_urls[0],cycle);
+    return i
+}
+
 function toggle_img(i) {
   var tmp=i.src;
   i.src=i.other;

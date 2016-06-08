@@ -289,12 +289,22 @@ Translations.prototype.alignment_button=function(abs,all,toLangs) {
 }
 
 Translations.prototype.parsetree_button=function(abs,lang) {
-  var f=this.options.tree_img_format;
-  var img=this.server.current_grammar_url
-          +"?command=parsetree&format="+f+"&nodep=true&nodefont=arial"
-	  +"&from="+lang+"&tree="+encodeURIComponent(abs);
-  var btn=tree_button(img)
-  btn.title="Click to display parse tree. Click again to show function names."
+    var f=this.options.tree_img_format;
+    var img=this.server.current_grammar_url
+        +"?command=parsetree&format="+f+"&nodep=true&nodefont=arial"
+	+"&from="+lang+"&tree="+encodeURIComponent(abs);
+    var img_nofun=img+"&nofun=true"
+    var help="Click again to display parse tree. Click again to show function names."
+    if(f=="svg") {
+	var depimg=this.server.current_grammar_url
+            +"?command=deptree&format=svg&to="+lang
+	    +"&tree="+encodeURIComponent(abs);
+	var imgs=[tree_icon,depimg,img_nofun,img]
+	help="Click to display dependency tree. "+help
+    }
+    else var imgs=[tree_icon,img_nofun,img]
+  var btn=cycle_images(imgs)
+  btn.title=help
   return btn;
 }
 
@@ -305,15 +315,7 @@ function mt_local(grammar_url) {
 }
 
 function tree_button(img_url,opt) {
-    var imgs=[tree_icon,img_url+(opt||"&nofun=true"),img_url]
-    var current=0;
-    function cycle() {
-	current++;
-	if(current>=imgs.length) current=0;
-	i.src=imgs[current]
-    }
-    var i=button_img(tree_icon,cycle);
-    return i
+    return cycle_images([tree_icon,img_url+(opt||"&nofun=true"),img_url])
 }
 
 function draw_brackets(b) {
