@@ -637,6 +637,8 @@ latexDoc body =
         body,
         text "\\end{document}"]
 
+-- * SVG (see https://www.w3.org/Graphics/SVG/IG/resources/svgprimer.html)
+
 -- | Render LaTeX pictures as SVG
 toSVG = concatMap toSVG1
   where
@@ -648,8 +650,12 @@ toSVG = concatMap toSVG1
                        ("viewBox",unwords (map show [0,0,x1,y0+5])),
                        ("version","1.1"),
                        ("xmlns","http://www.w3.org/2000/svg")]
-                       (concatMap draw cmds)]
+                       (white_bg:concatMap draw cmds)]
           where
+            white_bg =
+              Elem "rect" ["x".=0,"y".=0,"width".=x1,"height".=y0+5,
+                           ("fill","white")] []
+
             draw (Put pos obj) = objectSVG pos obj
 
             objectSVG pos obj =
