@@ -47,14 +47,15 @@ lin
                        
       ) ;
     s2= frameTable (
-      tr (intagAttr "th" "rowspan=\"2\"" "Степень сравнения"  ++
+intagAttr "tr" "style=\"border-top-color:white;border-left-color:white;border-right-color:white\"" (intagAttr "th" "colspan=\"6\"" "Положительная степень сравнения") ++
+
+      tr (
           intagAttr "th" "rowspan=\"2\" colspan=\"2\"" "Падеж"  ++
           intagAttr "th" "colspan=\"3\"" "ед. ч." ++
           intagAttr "th" "rowspan=\"2\"" "мн. ч." ) ++
       tr(th "муж. р." ++ th "ср. р." ++ th "жен. р.") ++
 
-        tr (intagAttr "th" "rowspan=\"7\"" "Положительная" ++
-              intagAttr "th" "colspan=\"2\"" "Им."   ++ td (a.s ! Posit ! (AF Nom Animate (GSg Masc)))
+        tr (intagAttr "th" "colspan=\"2\"" "Им."   ++ td (a.s ! Posit ! (AF Nom Animate (GSg Masc)))
                          ++ td (a.s ! Posit ! (AF Nom Animate (GSg Neut)))  
                          ++ td (a.s ! Posit ! (AF Nom Animate (GSg Fem)))
                          ++ td (a.s ! Posit ! (AF Nom Animate GPl))) ++
@@ -68,12 +69,12 @@ lin
                          ++ td (a.s ! Posit ! (AF Dat Animate GPl))) ++
 
         tr (intagAttr "th" "rowspan=\"2\"" "В."
-                         ++ th "одушевленное"
+                         ++ th "одуш."
                          ++ td (a.s ! Posit ! (AF Acc Animate (GSg Masc)))
                          ++ intagAttr "td" "rowspan=\"2\"" (a.s ! Posit ! (AF Acc Animate (GSg Neut)))  
                          ++ intagAttr "td" "rowspan=\"2\"" (a.s ! Posit ! (AF Acc Animate (GSg Fem)))
                          ++ td (a.s ! Posit ! (AF Acc Animate GPl))) ++
-        tr (                th "неодушевленное"
+        tr (                th "неодуш."
 
                          ++ td (a.s ! Posit ! (AF Acc Inanimate (GSg Masc)))
                          ++ td (a.s ! Posit ! (AF Acc Inanimate GPl))) ++
@@ -87,39 +88,44 @@ lin
                          ++ td (a.s ! Posit ! (AF (Prepos PrepOther) Animate (GSg Neut)))  
                          ++ td (a.s ! Posit ! (AF (Prepos PrepOther) Animate (GSg Fem)))
                          ++ td (a.s ! Posit ! (AF Inst Animate GPl))) ++
-         tr (intagAttr "th" "rowspan=\"6\"" "Сравнительная" ++
-               intagAttr "th" "colspan=\"2\"" "Им."
-                         ++ td (a.s ! Compar ! (AF Nom Animate (GSg Masc)))
-                         ++ td (a.s ! Compar ! (AF Nom Animate (GSg Neut)))  
-                         ++ td (a.s ! Compar ! (AF Nom Animate (GSg Fem)))
-                         ++ td (a.s ! Compar ! (AF Nom Animate GPl))) ++
-        tr (intagAttr "th" "colspan=\"2\"" "Р."
-                         ++ td (a.s ! Compar ! (AF Gen Animate (GSg Masc)))
-                         ++ td (a.s ! Compar ! (AF Gen Animate (GSg Neut)))  
-                         ++ td (a.s ! Compar ! (AF Gen Animate (GSg Fem)))
-                         ++ td (a.s ! Compar ! (AF Gen Animate GPl))) ++
-        tr (intagAttr "th" "colspan=\"2\"" "Д."
-                         ++ td (a.s ! Compar ! (AF Dat Animate (GSg Masc)))
-                         ++ td (a.s ! Compar ! (AF Dat Animate (GSg Neut)))  
-                         ++ td (a.s ! Compar ! (AF Dat Animate (GSg Fem)))
-                         ++ td (a.s ! Compar ! (AF Dat Animate GPl))) ++
-        tr (intagAttr "th" "colspan=\"2\"" "В."
-                         ++ td (a.s ! Compar ! (AF Acc Animate (GSg Masc)))
-                         ++ td (a.s ! Compar ! (AF Acc Animate (GSg Neut)))  
-                         ++ td (a.s ! Compar ! (AF Acc Animate (GSg Fem)))
-                         ++ td (a.s ! Compar ! (AF Acc Animate GPl))) ++
-        tr (intagAttr "th" "colspan=\"2\"" "Тв."
-                         ++ td (a.s ! Compar ! (AF Inst Animate (GSg Masc)))
-                         ++ td (a.s ! Compar ! (AF Inst Animate (GSg Neut)))  
-                         ++ td (a.s ! Compar ! (AF Inst Animate (GSg Fem)))
-                         ++ td (a.s ! Compar ! (AF Inst Animate GPl))) ++
-        tr (intagAttr "th" "colspan=\"2\"" "Пр."
-                         ++ td (a.s ! Compar ! (AF (Prepos PrepOther) Animate (GSg Masc)))
-                         ++ td (a.s ! Compar ! (AF (Prepos PrepOther) Animate (GSg Neut))) 
-                         ++ td (a.s ! Compar ! (AF (Prepos PrepOther) Animate (GSg Fem)))
-                         ++ td (a.s ! Compar ! (AF (Prepos PrepOther) Animate GPl))) ++
- tr (intagAttr "th" "rowspan=\"7\"" "Превосходная" ++
-       intagAttr "th" "colspan=\"2\"" "Им."
+
+ intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\"" (intagAttr "th" "colspan=\"6\"" "Сравнительная степень сравнения") ++
+       
+        tr (intagAttr "td" "colspan=\"6\" align=\"center\" style=\"border-top-color:black\"" (a.s ! Compar ! (AF Nom Animate (GSg Masc)))) ++
+
+        --  tr (intagAttr "th" "colspan=\"2\"" "Им."
+        --                  ++ td (a.s ! Compar ! (AF Nom Animate (GSg Masc)))
+        --                  ++ td (a.s ! Compar ! (AF Nom Animate (GSg Neut)))  
+        --                  ++ td (a.s ! Compar ! (AF Nom Animate (GSg Fem)))
+        --                  ++ td (a.s ! Compar ! (AF Nom Animate GPl))) ++
+        -- tr (intagAttr "th" "colspan=\"2\"" "Р."
+        --                  ++ td (a.s ! Compar ! (AF Gen Animate (GSg Masc)))
+        --                  ++ td (a.s ! Compar ! (AF Gen Animate (GSg Neut)))  
+        --                  ++ td (a.s ! Compar ! (AF Gen Animate (GSg Fem)))
+        --                  ++ td (a.s ! Compar ! (AF Gen Animate GPl))) ++
+        -- tr (intagAttr "th" "colspan=\"2\"" "Д."
+        --                  ++ td (a.s ! Compar ! (AF Dat Animate (GSg Masc)))
+        --                  ++ td (a.s ! Compar ! (AF Dat Animate (GSg Neut)))  
+        --                  ++ td (a.s ! Compar ! (AF Dat Animate (GSg Fem)))
+        --                  ++ td (a.s ! Compar ! (AF Dat Animate GPl))) ++
+        -- tr (intagAttr "th" "colspan=\"2\"" "В."
+        --                  ++ td (a.s ! Compar ! (AF Acc Animate (GSg Masc)))
+        --                  ++ td (a.s ! Compar ! (AF Acc Animate (GSg Neut)))  
+        --                  ++ td (a.s ! Compar ! (AF Acc Animate (GSg Fem)))
+        --                  ++ td (a.s ! Compar ! (AF Acc Animate GPl))) ++
+        -- tr (intagAttr "th" "colspan=\"2\"" "Тв."
+        --                  ++ td (a.s ! Compar ! (AF Inst Animate (GSg Masc)))
+        --                  ++ td (a.s ! Compar ! (AF Inst Animate (GSg Neut)))  
+        --                  ++ td (a.s ! Compar ! (AF Inst Animate (GSg Fem)))
+        --                  ++ td (a.s ! Compar ! (AF Inst Animate GPl))) ++
+        -- tr (intagAttr "th" "colspan=\"2\"" "Пр."
+        --                  ++ td (a.s ! Compar ! (AF (Prepos PrepOther) Animate (GSg Masc)))
+        --                  ++ td (a.s ! Compar ! (AF (Prepos PrepOther) Animate (GSg Neut))) 
+        --                  ++ td (a.s ! Compar ! (AF (Prepos PrepOther) Animate (GSg Fem)))
+        --                  ++ td (a.s ! Compar ! (AF (Prepos PrepOther) Animate GPl))) ++
+     intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\"" (intagAttr "th" "colspan=\"6\"" "Превосходная степень сравнения") ++
+
+        tr (intagAttr "th" "colspan=\"2\"" "Им."
                          ++ td (a.s ! Superl ! (AF Nom Animate (GSg Masc)))
                          ++ td (a.s ! Superl ! (AF Nom Animate (GSg Neut))) 
                          ++ td (a.s ! Superl ! (AF Nom Animate (GSg Fem)))
@@ -135,12 +141,12 @@ lin
                          ++ td (a.s ! Superl ! (AF Dat Animate (GSg Fem)))
                          ++ td (a.s ! Superl ! (AF Dat Animate GPl))) ++
         tr (intagAttr "th" "rowspan=\"2\"" "В."
-                         ++ th "одушевленное"
+                         ++ th "одуш."
                          ++ td (a.s ! Superl ! (AF Acc Animate (GSg Masc)))
                          ++ intagAttr "td" "rowspan=\"2\"" (a.s ! Posit ! (AF Acc Animate (GSg Neut)))  
                          ++ intagAttr "td" "rowspan=\"2\"" (a.s ! Posit ! (AF Acc Animate (GSg Fem)))
                          ++ td (a.s ! Superl ! (AF Acc Animate GPl))) ++
-        tr (                th "неодушевленное"
+        tr (                th "неодуш."
 
                          ++ td (a.s ! Superl ! (AF Acc Inanimate (GSg Masc)))
                          ++ td (a.s ! Superl ! (AF Acc Inanimate GPl))) ++
@@ -154,9 +160,9 @@ lin
                          ++ td (a.s ! Superl ! (AF (Prepos PrepOther) Animate (GSg Neut)))  
                          ++ td (a.s ! Superl ! (AF (Prepos PrepOther) Animate (GSg Fem)))
                          ++ td (a.s ! Superl ! (AF (Prepos PrepOther) Animate GPl))) ++
-        
-     tr (intagAttr "th" "rowspan=\"6\"" "Краткая" ++
-              intagAttr "th" "colspan=\"2\"" ""   ++ td (a.s ! Posit ! (AFShort (GSg Masc)))
+
+     intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\"" (intagAttr "th" "colspan=\"6\"" "Краткая форма") ++
+     tr (intagAttr "th" "colspan=\"2\"" ""   ++ td (a.s ! Posit ! (AFShort (GSg Masc)))
                          ++ td (a.s ! Posit ! (AFShort (GSg Neut))) 
                          ++ td (a.s ! Posit ! (AFShort (GSg Fem)))
            ++ td (a.s ! Posit ! (AFShort GPl)))
@@ -165,8 +171,71 @@ lin
   } ;
 
 
-  
-  InflectionV,   
+  InflectionV = \v -> {
+    t = "гл" ;
+    s1 = heading1 ("Глагол" ++
+                     case v.asp of {
+                      Imperfective => "совершенный" ;
+                      Perfective => "несовершенный" 
+                     }) ;
+    s2 = frameTable (
+      tr(
+         
+         intagAttr "th" "rowspan=\"2\"" "Лицо"  ++
+         intagAttr "th" "colspan=\"3\"" "ед. ч." ++
+         intagAttr "th" "rowspan=\"2\"" "мн. ч." ) ++
+      tr(th "муж. р." ++ th "ср. р." ++ th "жен. р.") ++
+      (intagAttr "tr" "style=\"border-bottom-color:white;border-top-color:white;border-left-color:white;border-right-color:white\""
+
+        (intagAttr "th" "style=\"text-align:center;padding-top:20px;\"colspan=5" "Действительный залог")) ++
+
+        (intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\""
+        (intagAttr "th" "colspan=\"5\"" "Настоящее время")) ++
+      tr(th "I" ++
+         td (v.s ! VFORM Act (VIND (GSg Masc) (VPresent P1))) ++
+         td (v.s ! VFORM Act (VIND (GSg Neut) (VPresent P1))) ++
+         td (v.s ! VFORM Act (VIND (GSg Fem)  (VPresent P1))) ++
+         td (v.s ! VFORM Act (VIND GPl        (VPresent P1)))) ++
+      tr(th "II" ++
+         td (v.s ! VFORM Act (VIND (GSg Masc) (VPresent P2))) ++
+         td (v.s ! VFORM Act (VIND (GSg Neut) (VPresent P2))) ++
+         td (v.s ! VFORM Act (VIND (GSg Fem)  (VPresent P2))) ++
+         td (v.s ! VFORM Act (VIND GPl        (VPresent P2)))) ++
+      tr(th "III" ++
+         td (v.s ! VFORM Act (VIND (GSg Masc) (VPresent P3))) ++
+         td (v.s ! VFORM Act (VIND (GSg Neut) (VPresent P3))) ++
+         td (v.s ! VFORM Act (VIND (GSg Fem)  (VPresent P3))) ++
+         td (v.s ! VFORM Act (VIND GPl        (VPresent P3)))) ++
+        (intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\""
+        (intagAttr "th" "colspan=\"5\"" "Прошедшее время")) ++
+      tr(th "" ++
+         td (v.s ! VFORM Act (VIND (GSg Masc) VPast)) ++
+         td (v.s ! VFORM Act (VIND (GSg Neut) VPast)) ++
+         td (v.s ! VFORM Act (VIND (GSg Fem)  VPast)) ++ 
+         td (v.s ! VFORM Act (VIND GPl        VPast))) ++
+       (intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\""
+        (intagAttr "th" "colspan=\"5\"" "Будущее время")) ++
+      tr(
+         th "I" ++
+         td (v.s ! VFORM Act (VIND (GSg Masc) (VFuture P1))) ++
+         td (v.s ! VFORM Act (VIND (GSg Neut) (VFuture P1))) ++
+         td (v.s ! VFORM Act (VIND (GSg Fem)  (VFuture P1))) ++
+         td (v.s ! VFORM Act (VIND GPl        (VFuture P1)))) ++
+      tr(th "II" ++
+         td (v.s ! VFORM Act (VIND (GSg Masc) (VFuture P2))) ++
+         td (v.s ! VFORM Act (VIND (GSg Neut) (VFuture P2))) ++
+         td (v.s ! VFORM Act (VIND (GSg Fem)  (VFuture P2))) ++
+         td (v.s ! VFORM Act (VIND GPl        (VFuture P2)))) ++
+      tr(th "III" ++
+         td (v.s ! VFORM Act (VIND (GSg Masc) (VFuture P3))) ++
+         td (v.s ! VFORM Act (VIND (GSg Neut) (VFuture P3))) ++
+         td (v.s ! VFORM Act (VIND (GSg Fem)  (VFuture P3))) ++
+         td (v.s ! VFORM Act (VIND GPl        (VFuture P3)))) );
+    s3 = "" ;
+
+  } ;
+
+    
   InflectionV2, 
   InflectionVV,
   InflectionVS,
@@ -184,76 +253,90 @@ lin
                       Perfective => "несовершенный" 
                      }) ;
     s2 = frameTable (
-      tr(intagAttr "th" "rowspan=\"2\"" "Залог" ++
-         intagAttr "th" "rowspan=\"2\"" "Время" ++
+      tr(
+         
          intagAttr "th" "rowspan=\"2\"" "Лицо"  ++
          intagAttr "th" "colspan=\"3\"" "ед. ч." ++
          intagAttr "th" "rowspan=\"2\"" "мн. ч." ) ++
       tr(th "муж. р." ++ th "ср. р." ++ th "жен. р.") ++
-      tr(intagAttr "th" "rowspan=\"7\"" "Действительный" ++
-         intagAttr "th" "rowspan=\"3\"" "Настоящее" ++
-         th "Первое" ++
+
+      (intagAttr "tr" "style=\"border-bottom-color:white;border-top-color:white;border-left-color:white;border-right-color:white\""
+
+        (intagAttr "th" "style=\"text-align:center;padding-top:20px;\"colspan=5" "Действительный залог")) ++
+
+        (intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\""
+        (intagAttr "th" "colspan=\"5\"" "Настоящее время")) ++
+      tr(th "I" ++
          td (v.s ! VFORM Act (VIND (GSg Masc) (VPresent P1))) ++
          td (v.s ! VFORM Act (VIND (GSg Neut) (VPresent P1))) ++
          td (v.s ! VFORM Act (VIND (GSg Fem)  (VPresent P1))) ++
          td (v.s ! VFORM Act (VIND GPl        (VPresent P1)))) ++
-      tr(th "Второе" ++
+      tr(th "II" ++
          td (v.s ! VFORM Act (VIND (GSg Masc) (VPresent P2))) ++
          td (v.s ! VFORM Act (VIND (GSg Neut) (VPresent P2))) ++
          td (v.s ! VFORM Act (VIND (GSg Fem)  (VPresent P2))) ++
          td (v.s ! VFORM Act (VIND GPl        (VPresent P2)))) ++
-      tr(th "Третье" ++
+      tr(th "III" ++
          td (v.s ! VFORM Act (VIND (GSg Masc) (VPresent P3))) ++
          td (v.s ! VFORM Act (VIND (GSg Neut) (VPresent P3))) ++
          td (v.s ! VFORM Act (VIND (GSg Fem)  (VPresent P3))) ++
          td (v.s ! VFORM Act (VIND GPl        (VPresent P3)))) ++
-      tr(intagAttr "th" "rowspan=\"1\"" "Прошедшее" ++
-         th "" ++
+        (intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\""
+        (intagAttr "th" "colspan=\"5\"" "Прошедшее время")) ++
+      tr(th "" ++
          td (v.s ! VFORM Act (VIND (GSg Masc) VPast)) ++
          td (v.s ! VFORM Act (VIND (GSg Neut) VPast)) ++
          td (v.s ! VFORM Act (VIND (GSg Fem)  VPast)) ++ 
          td (v.s ! VFORM Act (VIND GPl        VPast))) ++
-      tr(intagAttr "th" "rowspan=\"3\"" "Будущее" ++
-         th "Первое" ++
+       (intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\""
+        (intagAttr "th" "colspan=\"5\"" "Будущее время")) ++
+      tr(
+         th "I" ++
          td (v.s ! VFORM Act (VIND (GSg Masc) (VFuture P1))) ++
          td (v.s ! VFORM Act (VIND (GSg Neut) (VFuture P1))) ++
          td (v.s ! VFORM Act (VIND (GSg Fem)  (VFuture P1))) ++
          td (v.s ! VFORM Act (VIND GPl        (VFuture P1)))) ++
-      tr(th "Второе" ++
+      tr(th "II" ++
          td (v.s ! VFORM Act (VIND (GSg Masc) (VFuture P2))) ++
          td (v.s ! VFORM Act (VIND (GSg Neut) (VFuture P2))) ++
          td (v.s ! VFORM Act (VIND (GSg Fem)  (VFuture P2))) ++
          td (v.s ! VFORM Act (VIND GPl        (VFuture P2)))) ++
-      tr(th "Третье" ++
+      tr(th "III" ++
          td (v.s ! VFORM Act (VIND (GSg Masc) (VFuture P3))) ++
          td (v.s ! VFORM Act (VIND (GSg Neut) (VFuture P3))) ++
          td (v.s ! VFORM Act (VIND (GSg Fem)  (VFuture P3))) ++
          td (v.s ! VFORM Act (VIND GPl        (VFuture P3)))) ++
-      tr(intagAttr "th" "rowspan=\"7\"" "Страдательны" ++
-         intagAttr "th" "rowspan=\"3\"" "Настоящее" ++
-         th "Первое" ++
+      (intagAttr "tr" "style=\"border-bottom-color:white;border-top-color:white;border-left-color:white;border-right-color:white\""
+
+        (intagAttr "th" "style=\"text-align:center;padding-top:20px;\"colspan=5" "Страдательный залог")) ++
+ (intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\""
+        (intagAttr "th" "colspan=\"5\"" "Настоящее время")) ++
+
+      tr(th "I" ++
          td (v.s ! VFORM Pass (VIND (GSg Masc) (VPresent P1))) ++
          td (v.s ! VFORM Pass (VIND (GSg Neut) (VPresent P1))) ++
          td (v.s ! VFORM Pass (VIND (GSg Fem)  (VPresent P1))) ++
          td (v.s ! VFORM Pass (VIND GPl        (VPresent P1)))) ++
-      tr(th "Второе" ++
+      tr(th "II" ++
          td (v.s ! VFORM Pass (VIND (GSg Masc) (VPresent P2))) ++
          td (v.s ! VFORM Pass (VIND (GSg Neut) (VPresent P2))) ++
          td (v.s ! VFORM Pass (VIND (GSg Fem)  (VPresent P2))) ++
          td (v.s ! VFORM Pass (VIND GPl        (VPresent P2)))) ++
-      tr(th "Третье" ++
+      tr(th "III" ++
          td (v.s ! VFORM Pass (VIND (GSg Masc) (VPresent P3))) ++
          td (v.s ! VFORM Pass (VIND (GSg Neut) (VPresent P3))) ++
          td (v.s ! VFORM Pass (VIND (GSg Fem)  (VPresent P3))) ++
          td (v.s ! VFORM Pass (VIND GPl        (VPresent P3)))) ++
-      tr(intagAttr "th" "rowspan=\"1\"" "Прошедшее" ++
-         th "" ++
+        (intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\""
+        (intagAttr "th" "colspan=\"5\"" "Прошедшее время")) ++
+      tr(th "" ++
          td (v.s ! VFORM Pass (VIND (GSg Masc) VPast)) ++
          td (v.s ! VFORM Pass (VIND (GSg Neut) VPast)) ++
          td (v.s ! VFORM Pass (VIND (GSg Fem)  VPast)) ++
-         td (v.s ! VFORM Pass (VIND GPl        VPast))) ++
-      tr(intagAttr "th" "rowspan=\"3\"" "Будущее" ++
-         th "Первое" ++
+           td (v.s ! VFORM Pass (VIND GPl        VPast))) ++
+        (intagAttr "tr" "style=\"border-left-color:white;border-right-color:white\""
+        (intagAttr "th" "colspan=\"5\"" "Будущее время")) ++
+      tr(th "Первое" ++
          td (v.s ! VFORM Pass (VIND (GSg Masc) (VFuture P1))) ++
          td (v.s ! VFORM Pass (VIND (GSg Neut) (VFuture P1))) ++
          td (v.s ! VFORM Pass (VIND (GSg Fem)  (VFuture P1))) ++
@@ -273,7 +356,6 @@ lin
     s3 = "" ;
 
   } ;    
-
 
   InflectionAdv = \adv -> {
     t = "нар" ;
