@@ -72,14 +72,18 @@ sg_triple_result_get_query(SgTripleResult* tres, SgTriple triple);
 void
 sg_triple_result_close(SgTripleResult* tres, GuExn* err);
 
-typedef struct SgQuery SgQuery;
 typedef struct SgQueryResult SgQueryResult;
 
-SgQuery*
-sg_prepare_query(SgSG *sg, size_t n_triples, SgTriple* triples,
-                 GuPool* pool, GuExn* err);
-
 SgQueryResult*
-sg_query(SgSG *sg, SgQuery* query, GuExn* err);
+sg_query(SgSG *sg, size_t n_triples, SgTriple* triples, GuExn* err);
+
+size_t
+sg_query_result_columns(SgQueryResult* qres);
+
+int
+sg_query_result_fetch(SgQueryResult* qres, PgfExpr* res, GuPool* out_pool, GuExn* err);
+
+void
+sg_query_result_close(SgQueryResult* qres, GuExn* err);
 
 #endif
