@@ -159,7 +159,13 @@ ComplV2V       head dobj xcomp
 ComplV3	       head iobj dobj   ---- could be dobj dobj
 PassAgentV2    head ncomp	-- not sure
 RelV2	       mark nsubj head
-QuestV2	       dobj nsubj head 
+QuestV2	       dobj nsubj head
+
+ModCN	       amod head  -- in ResourceDemo
+RSubjS	       mark advcl head 
+SlashV2	       nsubj head
+RAdvCN	       head case nmod
+SubjCl	       head mark advcl
 
 A	ADJ
 A2	ADJ

@@ -103,6 +103,12 @@ abstract ResourceDemo = Lexicon, Numeral, Grammar [
     QuestIComp,
     CompIAdv,
 
+    UseRCl,   -- Tense -> Pol -> RCl -> RS,
+    RelVP   , -- RP -> VP -> QCl,       -- who walks
+    RelSlash, -- RP -> ClSlash -> QCl,  -- who does she walk with
+    RelCN, -- CN -> RS -> CN 
+    IdRP, -- RP
+
     SubjCl, -- Cl -> Subj -> S -> Cl,     -- she walks because we run
 
     PrepNP , -- Prep -> NP -> Adv, -- in the house
@@ -156,10 +162,10 @@ fun
    possDet : Pron -> Det ;
    numeralDet : Numeral -> Det ;
    i_Pron, youSg_Pron, he_Pron, she_Pron, we_Pron, youPl_Pron, they_Pron : Pron ;
-   SubjS   : Subj -> S -> S -> S ;     -- if she walks we run
+   RSubjS   : Subj -> S -> S -> S ;     -- if she walks we run
    SlashV2 : NP -> V2 -> ClSlash ;   -- she loves
    SlashPrep : Cl -> Prep -> ClSlash ; -- she walks with
-   AdvCN : CN -> Prep -> NP -> CN ; -- man in the city
+   RAdvCN : CN -> Prep -> NP -> CN ; -- man in the city
 
 
 }
