@@ -34,7 +34,7 @@ sg_raise_sqlite(int rc, GuExn* err)
 
 	GuExnData* err_data = gu_raise(err, SgError);
 	if (err_data) {
-		err_data->data = gu_malloc(err_data->pool, strlen(msg+1));
+		err_data->data = gu_malloc(err_data->pool, strlen(msg)+1);
 		strcpy(err_data->data, msg);
 	}
 }
