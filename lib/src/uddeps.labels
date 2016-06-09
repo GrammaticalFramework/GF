@@ -166,6 +166,9 @@ RSubjS	       mark advcl head
 SlashV2	       nsubj head
 RAdvCN	       head case nmod
 SubjCl	       head mark advcl
+RConjS	       cc head conj
+RConjAP	       cc head conj
+RConjNP	       cc head conj
 
 A	ADJ
 A2	ADJ

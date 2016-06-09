@@ -157,9 +157,9 @@ lin
    CompCN ap = mkVP <(lin CN ap) : CN> ;
    CompNP ap = mkVP <(lin NP ap) : NP> ;
    CompAdv ap = mkVP <(lin Adv ap) : Adv> ;
-   ConjS co x y = mkS (lin Conj co) (lin S x) (lin S y) ;
-   ConjAP co x y = mkAP co x y ;
-   ConjNP co x y = mkNP co x y ;
+   RConjS co x y = mkS (lin Conj co) (lin S x) (lin S y) ;
+   RConjAP co x y = mkAP co x y ;
+   RConjNP co x y = mkNP co x y ;
    a_Det = mkDet a_Quant ;
    the_Det = mkDet the_Quant ;
    aPl_Det = mkDet a_Quant plNum ;
