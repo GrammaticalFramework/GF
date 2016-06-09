@@ -7,6 +7,8 @@ var online_options={
   //grammar_list: ["Foods.pgf"], // leave undefined to get list from server
 }
 
+if(window.grammar_list) online_options.grammar_list=grammar_list
+
 var minibar_options= {
     show_abstract: true,
     show_trees: true,
