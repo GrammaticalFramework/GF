@@ -131,7 +131,7 @@ module PGF(
            graphvizDefaults,
            conlls2latexDoc,
            -- extra:
-           getDepLabels,
+           Labels, getDepLabels,
  
            -- * Probabilities
            Probabilities,

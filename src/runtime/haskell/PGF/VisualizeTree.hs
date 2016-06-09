@@ -16,7 +16,7 @@ module PGF.VisualizeTree
              , graphvizParseTree
              , graphvizParseTreeDep
              , graphvizDependencyTree
-             , getDepLabels
+             , Labels, getDepLabels
              , graphvizBracketedString
              , graphvizAlignment
              , gizaAlignment
@@ -232,8 +232,8 @@ graphvizDependencyTree format debug mlab ms pgf lang t =
 
 -- | Prepare lines obtained from a configuration file for labels for
 -- use with 'graphvizDependencyTree'. Format per line /fun/ /label/@*@.
-getDepLabels :: [String] -> Labels
-getDepLabels ss = Map.fromList [(mkCId f,ls) | f:ls <- map words ss]
+getDepLabels :: String -> Labels
+getDepLabels s = Map.fromList [(mkCId f,ls) | f:ls <- map words (lines s)]
 
 -- the old function, without dependencies
 graphvizParseTree :: PGF -> Language -> GraphvizOptions -> Tree -> String

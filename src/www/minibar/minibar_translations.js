@@ -135,7 +135,7 @@ Translations.prototype.show_translations=function(translationResults) {
 	var ts = text_speech(langcode,to,txt,lin)
 	var as = wrap("span",
 		    self.options.show_trees
-		    ? [self.parsetree_button(tree,to),text(" "),ts]
+		    ? [self.parsetree_button(tree,to,self.grammar),text(" "),ts]
 		    : [ts])
 	as.active=txt
 	as.swap=ts
@@ -225,7 +225,7 @@ Translations.prototype.show_translations=function(translationResults) {
 			    var hdr=title("Switch input language to "+langcode,
 					  button(langcode,act(lin[i])))
 			    //hdr.disabled=lin[i].to==current.from
-			    var btn=parsetree_button(t.tree,lin[i].to)
+			    var btn=parsetree_button(t.tree,lin[i].to,grammar)
 			    tbody.appendChild(
 				tr([th(hdr),show_lin(langcode,lin[i],t.tree)]));
 			}
@@ -288,14 +288,14 @@ Translations.prototype.alignment_button=function(abs,all,toLangs) {
   return i;
 }
 
-Translations.prototype.parsetree_button=function(abs,lang) {
+Translations.prototype.parsetree_button=function(abs,lang,grammar) {
     var f=this.options.tree_img_format;
     var img=this.server.current_grammar_url
         +"?command=parsetree&format="+f+"&nodep=true&nodefont=arial"
 	+"&from="+lang+"&tree="+encodeURIComponent(abs);
     var img_nofun=img+"&nofun=true"
     var help="Click again to display parse tree. Click again to show function names."
-    if(f=="svg") {
+    if(f=="svg" && grammar.hasDependencyLabels) {
 	var depimg=this.server.current_grammar_url
             +"?command=deptree&format=svg&to="+lang
 	    +"&tree="+encodeURIComponent(abs);

@@ -551,7 +551,7 @@ pgfCommands = Map.fromList [
          let outp = valStrOpts "output" "dot" opts
          mlab <- case file of
            "" -> return Nothing
-           _  -> (Just . getDepLabels . lines) `fmap` restricted (readFile file)
+           _  -> (Just . getDepLabels) `fmap` restricted (readFile file)
          let lang = optLang pgf opts
          let grphs = map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
          if isOpt "conll2latex" opts
@@ -616,7 +616,7 @@ pgfCommands = Map.fromList [
          let depfile = valStrOpts "file" "" opts
          mlab <- case depfile of
            "" -> return Nothing
-           _  -> (Just . getDepLabels . lines) `fmap` restricted (readFile depfile)
+           _  -> (Just . getDepLabels) `fmap` restricted (readFile depfile)
          let grphs = map (graphvizParseTreeDep mlab pgf lang gvOptions) es
          if isFlag "view" opts || isFlag "format" opts
            then do
