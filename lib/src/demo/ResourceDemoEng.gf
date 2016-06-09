@@ -64,6 +64,8 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
     Utt,     -- utterance (sentence or question) e.g. "does she walk"
     QS,      -- question (fixed tense)           e.g. "who doesn't walk"
     QCl,     -- question clause (variable tense) e.g. "who walks"
+    RS,      -- relative (fixed tense)           e.g. "that doesn't walk"
+    RCl,     -- relative clause (variable tense) e.g. "that walks"
     ClSlash, -- clause missing noun phrase       e.g. "she walks with"
     Adv,     -- adverb                           e.g. "here"
     Prep,    -- preposition (and/or case)        e.g. "with"
@@ -71,6 +73,7 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
     VQ,      -- question-complement verb         e.g. "wonder"
     VV,      -- verb-phrase-complement verb      e.g. "want"
     IP,      -- interrogative pronoun            e.g. "who"
+    RP,      -- relative pronoun                 e.g. "that"
     PN,      -- proper name                      e.g. "John"
     Subj,    -- subjunction                      e.g. "because"
     IAdv,    -- interrogative adverb             e.g. "why"
@@ -106,6 +109,12 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
     QuestIAdv , -- IAdv -> Cl -> QCl,     -- why does she walk
     QuestIComp,
     CompIAdv,
+
+    UseRCl,   -- Tense -> Pol -> RCl -> RS,
+    RelVP   , -- RP -> VP -> QCl,       -- who walks
+    RelSlash, -- RP -> ClSlash -> QCl,  -- who does she walk with
+    RelCN, -- CN -> RS -> CN 
+    IdRP, -- RP
 
     SubjCl, -- Cl -> Subj -> S -> Cl,     -- she walks because we run
 
@@ -161,8 +170,8 @@ lin
    those_Det = S.those_Det ;
    possDet p = S.mkDet <p : Pron> ;
    numeralDet n = S.mkDet <n : Numeral> ;
-   SubjS subj a b = mkS (S.mkAdv <subj : Subj> <a : S>) b ;
+   RSubjS subj a b = mkS (S.mkAdv <subj : Subj> <a : S>) b ;
    SlashV2 np v2 = mkClSlash np v2 ;
    SlashPrep cl p = mkClSlash (lin Cl cl) <p : Prep> ;
-   AdvCN cn p pp = mkCN <lin CN cn : CN> (mkAdv <p : Prep> <pp : NP>) ;
+   RAdvCN cn p pp = mkCN <lin CN cn : CN> (mkAdv <p : Prep> <pp : NP>) ;
 }
