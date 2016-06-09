@@ -153,9 +153,9 @@ fun
    CompCN  : CN -> VP ;
    CompNP  : NP -> VP ;
    CompAdv : Adv -> VP ;
-   ConjS   : Conj -> S  -> S  -> S ;
-   ConjAP  : Conj -> AP -> AP -> AP ;
-   ConjNP  : Conj -> NP -> NP -> NP ;
+   RConjS  : Conj -> S  -> S  -> S ;
+   RConjAP : Conj -> AP -> AP -> AP ;
+   RConjNP : Conj -> NP -> NP -> NP ;
    a_Det, the_Det, aPl_Det, thePl_Det : Det ; 
    this_Det, these_Det : Det ;
    that_Det, those_Det : Det ;
