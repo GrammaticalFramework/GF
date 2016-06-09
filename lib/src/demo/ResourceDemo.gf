@@ -161,7 +161,7 @@ fun
    that_Det, those_Det : Det ;
    possDet : Pron -> Det ;
    numeralDet : Numeral -> Det ;
-   i_Pron, youSg_Pron, he_Pron, she_Pron, we_Pron, youPl_Pron, they_Pron : Pron ;
+   i_Pron, youSg_Pron, youPol_Pron, he_Pron, she_Pron, we_Pron, youPl_Pron, they_Pron : Pron ;
    RSubjS   : Subj -> S -> S -> S ;     -- if she walks we run
    SlashV2 : NP -> V2 -> ClSlash ;   -- she loves
    SlashPrep : Cl -> Prep -> ClSlash ; -- she walks with

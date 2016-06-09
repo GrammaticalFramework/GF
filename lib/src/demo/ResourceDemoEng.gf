@@ -46,7 +46,7 @@ concrete ResourceDemoEng of ResourceDemo = LexiconEng, NumeralEng, GrammarEng [
     every_Det, -- Det,
 ---    this_Det, these_Det, -- Det,
 ---    that_Det, those_Det, -- Det,
-    i_Pron, youSg_Pron, he_Pron, she_Pron, we_Pron, youPl_Pron, they_Pron, -- NP,
+    i_Pron, youSg_Pron, youPol_Pron, he_Pron, she_Pron, we_Pron, youPl_Pron, they_Pron, -- NP,
     very_AdA, -- AdA,
 
     TTAnt, -- Tense -> Ant -> Temp ;
