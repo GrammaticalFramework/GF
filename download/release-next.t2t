@@ -43,8 +43,15 @@ Over 350 changes have been pushed to the source repository since
 ===Resource Grammar Library===
 
 - Various fixes for several languages.
+  - English and Scandinavian: relative clauses and slash questions have been modernized to
+    using preposition stranding by default. This also enables the use of //that// in English,
+    which solves a problem of choosing between //which// and //who// when animacy information
+    is not available. The previous defaults (//which//,//who//,//whom//, pied piping) are available
+    in ``Extra`` modules.
+
+
 - Numerous fixes in the translation dictionaries.
-- ...
+  - two new wide-coverage languages: Estonian and Russian
 
 
 ===GF Cloud services===
