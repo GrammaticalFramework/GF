@@ -12,7 +12,7 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==What's new==
 
-Over 300 changes have been pushed to the source repository since
+Over 350 changes have been pushed to the source repository since
 [the release of GF 3.7.1 release-3.7.1.html] in October 2015.
 
 
@@ -56,7 +56,11 @@ Over 300 changes have been pushed to the source repository since
   translations in the domain they cover.
   You can change the order in which the selected grammars are tried
   by dragging them up and down in the list.
-
+- PGF service: there is a new command ``deptree`` that can output
+  universal dependency diagrams for grammars that support it (there
+  has to be a label configuration file).
+- Minibar can now show universal dependency diagrams for grammars that
+  support it (e.g. the ResourceDemo grammar).
 
 --------------------
 
