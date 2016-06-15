@@ -560,9 +560,9 @@ dep2latex d =
    arcs = [(min u v, max u v) | ((u,v),_) <- deps d]
    depth x y = case [(u,v) | (u,v) <- arcs, (x < u && v <= y) || (x == u && v < y)] of ---- only projective arcs counted
      [] -> 0
-     uvs -> 1 + maximum [depth u v | (u,v) <- uvs]
+     uvs -> 1 + maximum (0:[depth u v | (u,v) <- uvs])
    width = {-round-} (sum [wsize rwld w | (w,_) <- zip [0..] (tokens d)]) + {-round-} spaceLength * fromIntegral ((length (tokens d)) - 1)
-   height = 40 + 20 * {-round-} (maximum [aheight x y | ((x,y),_) <- deps d])
+   height = 50 + 20 * {-round-} (maximum (0:[aheight x y | ((x,y),_) <- deps d]))
 
 type CoNLL = [[String]]
 parseCoNLL :: String -> CoNLL
@@ -579,7 +579,7 @@ conll2dep' ls = Dep {
   , root = head $ [read x-1 | x:_:_:_:_:_:"0":_ <- ls] ++ [1]
   }
  where
-   wld i = maximum [charWidth * fromIntegral (length w) | w <- let (tok,pos) = toks !! i in [tok,pos]]
+   wld i = maximum (0:[charWidth * fromIntegral (length w) | w <- let (tok,pos) = toks !! i in [tok,pos]])
    toks = [(w,c) | _:w:_:c:_ <- ls]
    dps = [((read y-1, read x-1),lab) | x:_:_:_:_:_:y:lab:_ <- ls, y /="0"]
    --maxdist = maximum [abs (x-y) | ((x,y),_) <- dps]
