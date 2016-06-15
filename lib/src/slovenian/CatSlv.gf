@@ -36,6 +36,8 @@ lincat
 
   -- Open lexical classes, e.g. Lexicon
   V  = {s : VForm => Str};
+  VQ = {s : VForm => Str};
+  VV = {s : VForm => Str};
   V2 = {s : VForm => Str; c2 : Prep};
 
   A = {s : AForm => Str};
