@@ -1,11 +1,4 @@
-body { color: black; background: #eee; }
-h1 { font-size: 175%; }
-h1,h2,h3,h4,small { font-family: sans-serif;}
-h1,h2,h3,h4 { color: #303030; text-shadow: rgba(0,0,0,0.25) 3px 3px 5px; }
-
-h1:first-child, h2:first-child { margin-top: 0; margin-bottom: 1ex; }
-h1 img { float: right; border: 0; max-width: 50%; }
-h1 img.nofloat { float: none; }
+@import url(../cloud.css);
 
 #editor {
     /* This allows the div to grow wider than the window if necessary to
@@ -32,12 +25,6 @@ table.extension th { border-right-width: 0; color: #009; }
 table.extension td { border-left-width: 0; min-width: 30em; }
 
 .slideshow .hidden { display: none; }
-
-img.cloud, img.right, div.right, div.modtime, div.version { float: right; }
-
-div.modtime >small { visibility: hidden; }
-div.modtime:hover >small { visibility: visible; }
-.modtime,.version { color: #999; white-space: nowrap; }
 
 table.grammar_list { border-collapse: collapse; margin-left: 1.0em; }
 table.grammar_list td { padding: 0.4ex 0.25em; }
@@ -119,8 +106,6 @@ table.tabs input[type=button], table.matrixview th input[type=button] {
 textarea.string_edit { vertical-align: top; }
 
 ul.languages { -moz-column-width: 10em; }
-
-li { margin-top: 0.5ex; margin-bottom: 0.5ex; }
 
 #sharing h1, #sharing .footer { display: none; }
 
