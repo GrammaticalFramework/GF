@@ -1,6 +1,7 @@
 concrete StructuralSlv of Structural = CatSlv ** open ResSlv, ParadigmsSlv in {
 
 lin
+  and_Conj = mkConj "in" ;
   he_Pron = mkPron "òn" "njêga" "njêga" "njêmu" "njêm" "njím" "njegôv" Masc Sg P3 ;
   i_Pron  = mkPron "jàz" "méne" "méne" "méni" "méni" ("menój"|"máno") "mój" Masc Sg P1 ;
   it_Pron  = mkPron "ôno" "njêga" "njêga" "njêmu" "njêm" "njím" ("njegôv"|"njegòv") Neut Sg P3 ;
