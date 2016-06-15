@@ -8,8 +8,8 @@ concrete GrammarSlv of Grammar =
   NumeralSlv,
   SentenceSlv,
   QuestionSlv,
-{-  RelativeSlv,
-  ConjunctionSlv,-}
+{-  RelativeSlv,-}
+  ConjunctionSlv,
   PhraseSlv,
   TextX - [Pol,PPos,PNeg],
   StructuralSlv,
