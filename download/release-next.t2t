@@ -1,4 +1,4 @@
-GF 3.x Release Notes
+GF 3.8 Release Notes
 June 2016
 
 %!style:../css/notes.css
@@ -21,6 +21,9 @@ Over 350 changes have been pushed to the source repository since
 
 ====New features and notable changes====
 
+- GF shell: ``vd`` can now output
+  [universal dependency http://universaldependencies.org/] diagrams
+  in various formats, see ``help vd``.
 - ...
 
 
@@ -29,8 +32,9 @@ Over 350 changes have been pushed to the source repository since
 - GF shell: a simple post-processing step has been added in the ``cc`` command
   to try compute ``pre{...}`` tokens instead of leaving them uninterpreted.
 - GF shell: an argument parsing problem has been fixed in the ``cc`` command.
-  The problem prevented commands like ``cc "last"`` and ``cc "last"++"year"``
-  from working, but they should work now.
+  The problem was introduced before the release of GF 3.7.1 and prevented
+  commands like ``cc "last"`` and ``cc "last"++"year"`` from working,
+  but they should work again now.
 - Various improvements and bug fixes in the C run-time system and its bindings
   to other languages.
 
@@ -48,7 +52,6 @@ Over 350 changes have been pushed to the source repository since
     which solves a problem of choosing between //which// and //who// when animacy information
     is not available. The previous defaults (//which//,//who//,//whom//, pied piping) are available
     in ``Extra`` modules.
-
 
 - Numerous fixes in the translation dictionaries.
   - two new wide-coverage languages: Estonian and Russian
