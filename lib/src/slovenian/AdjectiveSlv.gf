@@ -17,5 +17,9 @@ concrete AdjectiveSlv of Adjective = CatSlv ** open ResSlv in {
         }
       } ;
 
+    AdAP ada ap = {
+      s = \\spec,g,c,n => ada.s ++ ap.s ! spec ! g ! c ! n
+      } ;
+
     AdvAP ap adv = {s = \\spec,g,c,n => ap.s ! spec ! g ! c ! n ++ adv.s} ;
 }
