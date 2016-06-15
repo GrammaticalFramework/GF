@@ -31,6 +31,7 @@ lincat
   Numeral = {s : Gender => Case => Str ; n : NumAgr} ;
 
   -- Structural
+  Conj = {s : Str} ;
   Prep = {s : Str; c : Case} ;
 
   -- Open lexical classes, e.g. Lexicon
