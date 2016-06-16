@@ -20,9 +20,9 @@ Document root = /usr/share/gf-3.8/www
 Starting HTTP server, open http://localhost:41296/ in your web browser.
 ```
 
-A compiled GF grammar (a ``.pgf`` file) could be used in web applications
+A compiled GF grammar (a ``.pgf`` file) can be used in web applications
 %in the same way as JSP, ASP or PHP pages are used.
-by placing somewhere under the document root.
+by placing it somewhere under the document root.
 %, usually in the ``grammars/`` subdirectory.
 When there is a request for access to a ``.pgf`` file, the GF web server
 will load and cache the grammar and interpret any parameters included in the URL
@@ -274,7 +274,7 @@ or graphviz (``text/plain``) format, respectively.
 
 --------------------------------------------------------------------------------
 
-===Word Alignment Diagram===
+===Word Alignment Diagrams===
 
 This command renders the word alignment diagram for some sentence and all languages in the grammar. The sentence is generated from a given abstract syntax tree.
 
@@ -296,6 +296,62 @@ By default, the output is an image in PNG format. The Content-Ttype is set to
 The ``format`` parameter can also be ``gif``, ``svg`` or ``gv``, for
 GIF (``image/gif``), SVG (``image/svg+xml``)
 or graphviz (``text/plain``) format, respectively.
+
+--------------------------------------------------------------------------------
+===Word Dependency Diagrams===
+
+This command (available in GF>=3.8) outputs word dependency diagrams
+in various format.
+
+====Input====
+|| Parameter | Description                        | Default      |
+| ``command``   | should be ``deptree``              | -         |
+| ``tree``      | the abstract syntax tree to render | -         |
+| ``format``    | output format, see below           | ``dot``   |
+| ``to``        | name of the concrete syntax to use in the diagram     | - |
+
+The ``format`` is one of the following:
+
+- ``png``, ``gif``, ``gv``: rendered with graphviz,
+- ``svg``, ``latex``: [universal dependency http://universaldependencies.org/]
+                      diagrams, in SVG format for use in web pages or
+                      as LaTeX Picture code for use in LaTeX documents,
+- ``conll``, ``malt_tab`` and ``malt_input``: text formats
+
+--------------------------------------------------------------------------------
+
+===Undocumented commands===
+
+There a few additional commands that lack proper documentation:
+
+- ``abstrjson``, ``browse``, ``download``, ``generate``, ``linearizeAll``,
+  ``linearizeTable``, ``lookupmorpho``, ``translategroup``.
+
+
+See the source code for details.
+
+--------------------------------------------------------------------------------
+
+==Commands that use the C run-time system==
+
+GF includes two implementations of the PGF API: the traditional
+Haskell implementation and the newer C implementation. The commands documented
+above all use the Haskell implementation.
+The following command use the C implementation instead:
+
+- ``c-parse``, ``c-linearize``, ``c-linearizeAll``, ``c-translate``,
+  ``c-lookupmorpho``, ``c-flush``, ``c-grammar``, ``c-abstrtree``,
+  ``c-parsetree``, ``c-wordforword``.
+
+
+They implement the same functionality as the corresponding commands
+without the ``c-`` prefix, although there are some restrictions in what
+parameters they support, and some differences in the JSON
+data structures they output.
+
+When using these commands, the grammar will be loaded and cached
+by the C run-time system. If you use commands from both the Haskell and C
+implementations with the same grammar, the grammar will be loaded twice.
 
 --------------------------------------------------------------------------------
 
