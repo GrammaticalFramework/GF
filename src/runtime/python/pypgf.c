@@ -2257,13 +2257,13 @@ Concr_load(ConcrObject* self, PyObject *args)
 	// Read the PGF grammar.
 	pgf_concrete_load(self->concr, in, err);
 	if (!gu_ok(err)) {
+		fclose(infile);
 		if (gu_exn_caught(err, GuErrno)) {
 			errno = *((GuErrno*) gu_exn_caught_data(err));
 			PyErr_SetFromErrnoWithFilename(PyExc_IOError, fpath);
 		} else if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
 			PyErr_SetString(PGFError, msg);
-			return NULL;
 		} else {
 			PyErr_SetString(PGFError, "The language cannot be loaded");
 		}
@@ -2271,6 +2271,8 @@ Concr_load(ConcrObject* self, PyObject *args)
 	}
 
 	gu_pool_free(tmp_pool);
+
+	fclose(infile);
 
 	Py_RETURN_NONE;
 }
