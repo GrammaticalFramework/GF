@@ -337,7 +337,7 @@ See the source code for details.
 GF includes two implementations of the PGF API: the traditional
 Haskell implementation and the newer C implementation. The commands documented
 above all use the Haskell implementation.
-The following command use the C implementation instead:
+The following commands use the C implementation instead:
 
 - ``c-parse``, ``c-linearize``, ``c-linearizeAll``, ``c-translate``,
   ``c-lookupmorpho``, ``c-flush``, ``c-grammar``, ``c-abstrtree``,

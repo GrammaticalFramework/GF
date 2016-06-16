@@ -465,10 +465,15 @@ support by doing
 ```
 cabal install -fserver -fc-runtime
 ```
-from the top directory. This give you two new things:
+from the top directory. This give you three new things:
 
 - ``PGF2``: a module to import in Haskell programs, providing a binding to
    the C run-time system.
+
+- The GF shell can be started with ``gf -cshell`` or ``gf -crun`` to use
+  the C run-time system instead of the Haskell run-time system.
+  Only limited functionality is available when running the shell in these
+  modes (use the ``help`` command in the shell for details).
 
 - ``gf -server`` mode is extended with new requests to call the C run-time
    system, e.g. ``c-parse``, ``c-linearize`` and ``c-translate``.
@@ -482,7 +487,9 @@ directories, respecively. Compile them by following the instructions in
 the ``INSTALL`` files in those directories.
 
 
-== Creating .deb packages for Ubuntu ==
+== Creating binary distribution packages ==
+
+=== Creating .deb packages for Ubuntu ===
 
 This was tested on Ubuntu 14.04 for the release of GF 3.6, and the
 resulting ``.deb`` packages appears to work on Ubuntu 12.04, 13.10 and 14.04.
@@ -492,13 +499,13 @@ tested them on Ubuntu 12.04 and 14.04.
 Under Ubuntu, Haskell executables are statically linked against other Haskell
 libraries, so the .deb packages are fairly self-contained.
 
-=== Preparations ===
+==== Preparations ====
 
 ```
 sudo apt-get install dpkg-dev debhelper
 ```
 
-=== Creating the package ===
+==== Creating the package ====
 
 Make sure the ``debian/changelog`` starts with an entry that describes the
 version you are building. Then run
@@ -507,7 +514,13 @@ version you are building. Then run
 make deb
 ```
 
-== Creating OS X Installer packages ==
+If get error messages about missing dependencies
+(e.g. ``autoconf``, ``automake``, ``libtool-bin``, ``python-dev``,
+``java-sdk``, ``txt2tags``)
+use ``apt-get intall`` to install them, then try again.
+
+
+=== Creating OS X Installer packages ===
 
 Run
 
@@ -515,7 +528,15 @@ Run
 make pkg
 ```
 
-== Creating .rpm packages for Fedora ==
+=== Creating binary tar distributions ===
+
+Run
+
+```
+make bintar
+```
+
+=== Creating .rpm packages for Fedora ===
 
 This is possible, but the procedure has not been automated.
 It involves using the cabal-rpm tool,
