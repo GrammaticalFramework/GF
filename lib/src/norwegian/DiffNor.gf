@@ -95,17 +95,17 @@ instance DiffNor of DiffScand = open CommonScand, Prelude in {
 
     possPron : Number -> Person -> Number -> Gender -> Str = \sn,sb,on,og -> case <sn,sb,on,og> of {
        <Sg,P1,Sg,Utr>   => "min" ;
-       <Sg,P1,Sg,Neutr> => "mit" ;
+       <Sg,P1,Sg,Neutr> => "mitt" ;
        <Sg,P1,Pl,_>     => "mine" ;
        <Sg,P2,Sg,Utr>   => "din" ;
-       <Sg,P2,Sg,Neutr> => "dit" ;
+       <Sg,P2,Sg,Neutr> => "ditt" ;
        <Sg,P2,Pl,_>     => "dine" ;
        <Pl,P1,Sg,Utr>   => "vår" ;
        <Pl,P1,Sg,Neutr> => "vårt" ;
        <Pl,P1,Pl,_>     => "våre" ;
        <Pl,P2,_,_>      => "deres" ;
        <_,_,Sg,Utr>     => "sin" ;
-       <_,_,Sg,Neutr>   => "sit" ;
+       <_,_,Sg,Neutr>   => "sitt" ;
        <_,_,Pl,_>       => "sine"
        } ;
 }
