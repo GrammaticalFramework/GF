@@ -46,6 +46,12 @@ Over 350 changes have been pushed to the source repository since
 
 ===Resource Grammar Library===
 
+- New languages:
+  - Nynorsk by Stian Rødven Eide (fairly complete, supports API)
+  - Ancient Greek by Hans Leiß (partial, no API yet)
+  - Slovene by Krasimir Angelov (partial, no API yet)
+  
+
 - Various fixes for several languages.
   - English and Scandinavian: relative clauses and slash questions have been modernized to
     using preposition stranding by default. This also enables the use of //that// in English,
