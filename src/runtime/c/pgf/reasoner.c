@@ -370,7 +370,7 @@ void
 pgf_reasoner_mk_string(PgfReasoner* rs, PgfExprState* parent)
 {
 	pgf_reasoner_mk_literal(rs, parent, "String",
-	                        pgf_expr_string("FOO", rs->out_pool));
+	                        pgf_expr_string("__mock_string__", rs->out_pool));
 }
 
 void
