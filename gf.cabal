@@ -333,8 +333,8 @@ Executable gf
 
 
 executable pgf-shell
-  if !flag(c-runtime)
-    buildable: False
+--if !flag(c-runtime)
+  buildable: False
   main-is:             pgf-shell.hs
   hs-source-dirs:      src/runtime/haskell-bind/examples
   build-depends:       gf, base, containers, mtl, lifted-base
