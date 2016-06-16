@@ -12,7 +12,7 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==What's new==
 
-Over 350 changes have been pushed to the source repository since
+Over 380 changes have been pushed to the source repository since
 [the release of GF 3.7.1 release-3.7.1.html] in October 2015.
 
 
@@ -51,7 +51,6 @@ Over 350 changes have been pushed to the source repository since
   - Ancient Greek by Hans Leiß (partial, no API yet)
   - Slovene by Krasimir Angelov (partial, no API yet)
   
-
 - Various fixes for several languages.
   - English and Scandinavian: relative clauses and slash questions have been modernized to
     using preposition stranding by default. This also enables the use of //that// in English,
@@ -65,6 +64,11 @@ Over 350 changes have been pushed to the source repository since
 
 ===GF Cloud services===
 
+- Minibar can now show universal dependency diagrams for grammars that
+  support it (e.g. the ResourceDemo grammar).
+- PGF service: there is a new command ``deptree`` that can output
+  universal dependency diagrams for grammars that support it (there
+  has to be a label configuration file).
 - Wide Coverage Translation Demo:
   there is now a new button "Grammars..." which show a list where users can
   select which application grammars to use for translation, in addition to
@@ -72,11 +76,6 @@ Over 350 changes have been pushed to the source repository since
   translations in the domain they cover.
   You can change the order in which the selected grammars are tried
   by dragging them up and down in the list.
-- PGF service: there is a new command ``deptree`` that can output
-  universal dependency diagrams for grammars that support it (there
-  has to be a label configuration file).
-- Minibar can now show universal dependency diagrams for grammars that
-  support it (e.g. the ResourceDemo grammar).
 
 --------------------
 
