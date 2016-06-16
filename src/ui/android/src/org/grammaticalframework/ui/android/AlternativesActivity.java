@@ -296,7 +296,7 @@ public class AlternativesActivity extends ListActivity {
 				mAllTopics[i++] = entry.getValue();
 			}
 			if (addOther) {
-				Expr topicExpr = Expr.readExpr("other_1_A");
+				Expr topicExpr = Expr.readExpr("other_A");
 				String name = mTranslator.linearizeSource(topicExpr);
 				mOtherTopic = new Topic(name, topicExpr);
 				mAllTopics[i++] = mOtherTopic;
