@@ -86,6 +86,8 @@ newPGFCache _ = do pgfCache <- newCache' PGF.readPGF
                    lblCache <- newCache' (fmap PGF.getDepLabels . readFile)
                    return $ Caches pgfCache lblCache
 flushPGFCache c = flushCache (pgfCache c)
+
+listPGFCache :: Caches -> IO ([(FilePath,UTCTime)],[(FilePath,UTCTime)])
 listPGFCache c = (,) # listCache (pgfCache c) % return []
 #endif
 
