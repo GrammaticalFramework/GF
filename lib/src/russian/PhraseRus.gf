@@ -20,6 +20,7 @@ concrete PhraseRus of Phrase = CatRus ** open Prelude, ResRus in {
     UttCN n = {s = n.s ! NF Sg Nom nom} ;
     UttCard n = {s = n.s ! Neut ! Inanimate ! Nom} ;
     UttAP ap = {s = ap.s ! AF Nom Inanimate (GSg Neut)} ; ---- gennum ? (AR)
+    UttInterj i = i ;
 
     NoPConj = {s = []} ;
     PConjConj conj = ss conj.s2 ;
