@@ -2954,7 +2954,7 @@ lin by8agent_Prep = S.by8agent_Prep ;
 lin by8means_Prep = S.by8means_Prep ;
 lin by_Adv = mkAdv "langs" ; -- status=guess
 lin by_Prep = mkPrep "bij" ; --- split mkPrep "tegen" by 6 o'clock, --- split mkPrep "door" decision by
-lin bye_Interj = mkInterj "dag" | mkInterj "doei" | mkInterj "tot ziens" | mkInterj "hoie" | mkInterj "houdoe" | mkInterj "doeg" ; -- status=guess status=guess status=guess status=guess status=guess status=guess
+lin bye_Interj = mkInterj "dag" | mkInterj "doei" | mkInterj "hoie" | mkInterj "houdoe" | mkInterj "doeg" ; -- status=guess status=guess status=guess status=guess status=guess status=guess
 lin bye_N = mkN "doei doei" | mkN "dag" ; -- status=guess status=guess
 lin bygone_A = mkA "vervlogen" ; -- status=guess
 lin bygone_N = mkN "het verleden" | mkN "de dingen die voorbij zijn" ; -- status=guess status=guess
@@ -3586,7 +3586,7 @@ lin cheekbone_N = mkN "jukbeen" neuter ; -- status=guess
 lin cheer_V = variants {} ; --
 lin cheer_V2 = variants {} ; --
 lin cheerful_A = variants {} ; --
-lin cheers_Interj = mkInterj "tot ziens" | mkInterj "tot later" | mkInterj "ciao" | mkInterj "hoi" | mkInterj "doei" | mkInterj "doeg" | mkInterj "ik zie je" | mkInterj "later" | mkInterj "salu" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess
+lin cheers_Interj = mkInterj "proost" ;
 lin cheese_N = L.cheese_N ;
 lin cheeseburger_N = mkN "kaasburger" masculine feminine ; -- status=guess
 lin cheesecake_N = mkN "kwarktaart" masculine feminine ; -- status=guess
@@ -5229,6 +5229,7 @@ lin damage_V2 = mkV2 (mkV "beschadigen") ; -- status=guess, src=wikt
 lin damaging_A = variants {} ; --
 lin damascus_PN = mkPN "Damascus" ; -- src=geonames status=guess
 lin dammit_Interj = mkInterj "verdomme" ; -- status=guess
+lin damn_Interj = mkInterj "verdomme" ; -- status=guess
 lin damn_V2 = variants {} ; --
 lin damocles_PN = mkPN "Damocles" ; -- src=eng status=guess
 lin damp_A = mkA "klam" ; -- status=guess
@@ -7230,6 +7231,7 @@ lin excrete_V2 = mkV2 (mkV "afscheiden") ; -- status=guess, src=wikt
 lin excursion_N = mkN "excursie" ; -- status=guess
 lin excuse_N = mkN "uitvlucht" masculine feminine | mkN "excuus" neuter ; -- status=guess status=guess
 lin excuse_V2 = mkV2 (mkV "verontschuldigen") | mkV2 (mkV "excuseren") ; -- status=guess, src=wikt status=guess, src=wikt
+lin excuse_me_Interj = mkInterj "pardon" ;
 lin execrable_A = mkA "verfoeilijk" ; -- status=guess
 lin execute_V2 = mkV2 (mkV "uitvoeren") ; -- status=guess, src=wikt
 lin execution_N = mkN "uitvoering" feminine ; -- status=guess
@@ -8949,7 +8951,12 @@ lin gonorrhea_N = mkN "gonorroe" ; -- status=guess
 lin goo_N = mkN "stroperigheid" ; -- status=guess
 lin good_A = L.good_A ;
 lin good_N = mkN "goed" | mkN "goede" ;
-lin goodbye_Interj = mkInterj "tot ziens" | mkInterj "doei" | mkInterj "dag" | mkInterj "houdoe" ; -- status=guess status=guess status=guess status=guess
+lin good_afternoon_Interj = mkInterj "goedendag" ;
+lin good_evening_Interj = mkInterj "goedenavond" ;
+lin good_luck_Interj = mkInterj "veel geluk" ;
+lin good_morning_Interj = mkInterj "goedemorgen" ;
+lin good_night_Interj = mkInterj "goedenacht" ;
+lin goodbye_Interj = mkInterj "tot ziens" ;
 lin goodness_N = mkN "goedheid" feminine ; -- status=guess
 lin goods_N = mkN "goederen {p}" | mkN "waar" feminine ; -- status=guess status=guess
 lin gooey_A = mkA "papperig" | mkA "slijmachtig" ; -- status=guess status=guess
@@ -9662,7 +9669,7 @@ lin helium_N = mkN "helium" neuter | mkN "helium" ; -- status=guess status=guess
 lin hell_N = mkN "hel" ; -- status=guess
 lin hellfire_N = mkN "hellevuur" neuter ; -- status=guess
 lin hellish_A = mkA "hels" ; -- status=guess
-lin hello_Interj = mkInterj "hallo!" ; -- status=guess
+lin hello_Interj = mkInterj "hallo" ;
 lin helm_N = mkN "stuurman" masculine | mkN "roerganger" masculine ; -- status=guess status=guess
 lin helmet_N = mkN "helm" masculine ; -- status=guess
 lin helmeted_A = mkA "gehelmd" ; -- status=guess
@@ -15468,7 +15475,7 @@ lin plead_V = mkV "pleiten" | mkV "bepleiten" ; -- status=guess, src=wikt status
 lin plead_V2 = mkV2 (mkV "pleiten") | mkV2 (mkV "bepleiten") ; -- status=guess, src=wikt status=guess, src=wikt
 lin plead_VS = mkVS (mkV "pleiten") | mkVS (mkV "bepleiten") ; -- status=guess, src=wikt status=guess, src=wikt
 lin pleasant_A = mkA "aangenaam" | mkA "behaagelijk" | mkA "plezierig" | mkA "fijn" ; -- status=guess status=guess status=guess status=guess
-lin please_Adv = mkAdv "alsjeblieft" | mkAdv "alstublieft" | mkAdv "gelieve" ; ---- the last one is quite formal and only occurs as first word in a sentence
+lin please_Adv = mkAdv "alsjeblieft" ;
 lin please_V = mkV "bevallen" | mkV "behagen" ; -- status=guess, src=wikt status=guess, src=wikt
 lin please_V2 = mkV2 (mkV "bevallen") | mkV2 (mkV "behagen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin please_V2V = mkV2V (mkV "bevallen") | mkV2V (mkV "behagen") ; -- status=guess, src=wikt status=guess, src=wikt
@@ -19137,7 +19144,7 @@ lin sorority_N = mkN "zusterlijkheid" ; -- status=guess
 lin sorrel_N = mkN "zurkel" | mkN "veldzuring" feminine ; -- status=guess status=guess
 lin sorrow_N = mkN "smart" | mkN "rouw" ; -- status=guess status=guess
 lin sorry_A = mkA "armzalig" | mkA "treurig" ; ---- improper translations ; I am sorry -> het spijt me (it regrets me)
-lin sorry_Interj = mkInterj "sorry" | mkInterj "het spijt me" | mkInterj "pardon" | mkInterj "excuseer" ; -- status=guess status=guess status=guess status=guess
+lin sorry_Interj = mkInterj "sorry" ; -- status=guess status=guess status=guess status=guess
 lin sort_N = mkN "soort" neuter ;
 lin sort_V = mkV "rangschikken" ; -- status=guess, src=wikt
 lin sort_V2 = mkV2 (mkV "rangschikken") ; -- status=guess, src=wikt
@@ -20708,7 +20715,7 @@ lin thallium_N = mkN "thallium" neuter ; -- status=guess
 lin thame_PN = mkPN "Thame" ; -- src=geonames status=guess
 lin than_Subj = mkSubj "dan" ;
 lin thank_V2 = mkV2 (mkV "bedanken") | mkV2 (mkV "danken") ;
-lin thanks_Interj = mkInterj "bedankt" | mkInterj "dank je" | mkInterj "dank u" ; -- status=guess status=guess status=guess
+lin thanks_Interj = mkInterj "bedankt" | mkInterj "dank je" | mkInterj "dank u" ;
 lin thanks_N = mkN "bedankt" ; -- status=guess
 lin thanksgiving_N = mkN "dankzegging" feminine ; -- status=guess
 lin that_AdA = variants {} ; --
@@ -22389,7 +22396,7 @@ lin wave_down_V2 = prepV2 OP_wave_V OP_down_Prep ; -- guess-p-verb
 lin wave_off_V2 = prepV2 OP_wave_V OP_off_Prep ; -- guess-p-verb
 lin wave_on_V2 = prepV2 OP_wave_V OP_on_Prep ; -- guess-p-verb
 lin wavelength_N = mkN "golflengte" ; -- status=guess
-lin waver_N = mkN "translated by nominalizing the verb" ; -- status=guess
+lin waver_N = variants {} ;
 lin waver_V = mkV "twijfelen" | mkV "weifelen" ; -- status=guess, src=wikt status=guess, src=wikt
 lin wax_N = mkN "was" masculine ; -- status=guess
 lin wax_V = wassen_V | mkV (mkV "was") "aanbrengen" | mkV (mkV "met") "was insmeren" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt

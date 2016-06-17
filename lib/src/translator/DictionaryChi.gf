@@ -12245,7 +12245,7 @@ lin excretory_A = mkA "分泌" | mkA "排泄" ; -- open-multilingual-wordnet
 lin excursion_N = mkN "偏移" ;
 lin excuse_N = mkN "借" | {-HSK-} mkN "借口" ;
 lin excuse_V2 = mkV2 "原谅" ;
-lin excuse_me_Interj = mkInterj "劳驾" | mkInterj "对不起" | {-HSK-} mkInterj "原谅我" ;
+lin excuse_me_Interj = mkInterj "原谅我" ;
 lin execute_V2 = mkV2 "执行" | {-HSK-} mkV2 "进行" ;
 lin execution_N = mkN "执行" ;
 lin executive_A = mkA "执行" ;
@@ -14845,9 +14845,9 @@ lin gong_N = mkN "鑼" | mkN "锣" | {-mwn-} mkN "钟" | mkN "钟琴" ; -- statu
 lin gonorrhea_N = mkN "淋病" ; -- status=guess -- open-multilingual-wordnet
 lin gonorrhoea_N = mkN "淋病" ; -- open-multilingual-wordnet
 lin goo_N = mkN "感伤""" ;
-lin good_A = mkA "好" ; ---- | mkA "商品" | mkA "硬" | mkA "良好" ;
+lin good_A = mkA "好" ;
 lin good_N = mkN "商品" "個" | mkN "好" | mkN "硬" | mkN "良好" ;
-lin good_afternoon_Interj = mkInterj "下午好" ;
+lin good_afternoon_Interj = mkInterj "你好" ;
 lin good_evening_Interj = mkInterj "下午好" ;
 lin good_looking_A = mkA "好看" ;
 lin good_luck_Interj = mkInterj "祝你好运" ;
@@ -14855,7 +14855,6 @@ lin good_morning_Interj = mkInterj "早上好" ;
 lin good_natured_A = mkA "和蔼" ;
 lin good_night_Interj = mkInterj "晚安" ;
 lin goodbye_Interj = mkInterj "再见" ;
-lin goodbye_N = mkN "再见" | {-HSK-} mkN "走好" | mkN "走好" ; -- status=guess -- status=guess
 lin goodness_N = mkN "天哪" ;
 lin goods_N = mkN "产品" "個" | {-HSK-} mkN "產品" | mkN "产品" | mkN "貨物" | mkN "货物" | mkN "製品" | mkN "制品" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin goodwill_N = mkN "友好" [] ;
@@ -15868,7 +15867,7 @@ lin hell_Interj = mkInterj "见鬼去吧" ;
 lin hell_N = mkN "地狱" [] ;
 lin hellfire_N = mkN "地獄之火" | mkN "地狱之火" ; -- status=guess -- status=guess
 lin hellgrammiate_N = mkN "水虿" ; -- open-multilingual-wordnet
-lin hello_Interj = mkInterj "喂" ;
+lin hello_Interj = mkInterj "你好" ;
 lin helm_N = mkN "舵" ;
 lin helmet_N = variants {} ;
 lin helmeted_A = mkA "佩戴头盔" ;
@@ -25036,7 +25035,7 @@ lin please_V = mkV "请" ;
 lin please_V2 = mkV2 "请" ;
 lin please_V2V = mkV2V "请" ;
 lin please_VV = mkVV "使+喜欢" ;
-lin please_Voc = S.please_Voc ;
+lin please_Voc = ss "请上" ;
 lin pleased_A = {-HSK-} mkA "快" | mkA "满意" ;
 lin pleasing_N = mkN "愉快" ;
 lin pleasingly_Adv = mkAdv "喜欢地" | mkAdv "高兴地" ; -- open-multilingual-wordnet
@@ -30531,7 +30530,7 @@ lin sorrel_N = mkN "酸模" | {-mwn-} mkN "栗色马" ; -- status=guess -- open-
 lin sorrow_N = mkN "悲哀" ;
 lin sorrowful_A = mkA "悲哀" | mkA "悲痛" | mkA "悲傷" | mkA "悲伤" | mkA "哀愁" ; -- status=guess -- status=guess -- status=guess -- status=guess -- status=guess
 lin sorry_A = mkA "对不起" | mkA "抱歉" | mkA "遗憾" ;
-lin sorry_Interj = mkInterj "对不起" | mkInterj "抱歉" | mkInterj "遗憾" ;
+lin sorry_Interj = mkInterj "对不起" ;
 lin sort_N = mkN "分类" ;
 lin sort_V = mkV "分类" ;
 lin sort_V2 = mkV2 "分类" ;
@@ -32901,7 +32900,7 @@ lin thanatophobia_N = mkN "死亡恐惧" ; -- open-multilingual-wordnet
 lin thank_V2 = mkV2 "感谢" | {-HSK-} mkV2 "谢谢" ;
 lin thankful_A = mkA "感激" | {-HSK-} mkA "感谢" ;
 lin thankless_A = mkA "不表示感谢" ;
-lin thanks_Interj = mkInterj "感谢" | mkInterj "谢谢" ;
+lin thanks_Interj = mkInterj "谢谢" ;
 lin thanks_N = {-HSK-} mkN "感谢" | mkN "谢谢" ;
 lin thanks_to_Prep = mkPrep "由于" ;
 lin that_AdA = variants {} ;

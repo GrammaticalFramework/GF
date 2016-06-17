@@ -8279,7 +8279,7 @@ lin by_Prep = mkPrep "durch" accusative ;
 lin by_election_N = variants {} ;
 lin by_means_of_Prep = variants {} ;
 lin by_virtue_of_Prep = variants {} ;
-lin bye_Interj = mkInterj "tschüss" ; -- status=guess
+lin bye_Interj = mkInterj "tschüss" | mkInterj "tschau" ;
 lin bye_N = mkN "Heia" ; -- status=guess
 lin bye_bye_Interj = variants {} ;
 lin bye_law_N = variants {} ;
@@ -10071,7 +10071,7 @@ lin cheering_N = variants {} ;
 lin cheerleader_N = mkN "Cheerleader" "Cheerleader" masculine ; -- status=guess
 lin cheerless_A = variants {} ;
 lin cheerlessness_N = variants {} ;
-lin cheers_Interj = mkInterj "tschüss" ; -- status=guess
+lin cheers_Interj = mkInterj "zum Wohl" ;
 lin cheery_A = variants {} ;
 lin cheese_N = L.cheese_N ;
 lin cheeseboard_N = variants {} ;
@@ -14548,10 +14548,10 @@ lin damask_A = variants {} ;
 lin damask_N = variants {} ;
 lin dame_N = variants {} ;
 lin dammar_N = variants {} ;
-lin dammit_Interj = mkInterj "verdammt" | mkInterj "verdammt noch mal" ; -- status=guess status=guess
+lin dammit_Interj = mkInterj "verdammt noch mal" ; -- status=guess status=guess
 lin damn_A = variants {} ;
-lin damn_Interj = variants {} ;
-lin damn_N = mkN "verdammt" | mkN "Mist!" | mkN "Scheiße!" ; -- status=guess status=guess status=guess
+lin damn_Interj = mkInterj "verdammt" ;
+lin damn_N = mkN "verdammt" ; -- status=guess status=guess status=guess
 lin damn_V2 = mkV2 (mkV "verdammen") ; -- status=guess, src=wikt
 lin damnable_A = mkA "verdammenswert" | mkA "verdammungswürdig" ; -- status=guess status=guess
 lin damnation_N = mkN "Verdammnis" feminine ; -- status=guess
@@ -19878,7 +19878,7 @@ lin excursionist_N = variants {} ;
 lin excusable_A = variants {} ;
 lin excuse_N = mkN "Ausrede" "Ausreden" feminine ; -- status=guess
 lin excuse_V2 = mkV2 (mkReflV "entschuldigen") ; -- status=guess, src=wikt
-lin excuse_me_Interj = variants {} ;
+lin excuse_me_Interj = mkInterj "Entschuldigung" ;
 lin execrable_A = variants {} ;
 lin execrate_V2 = variants {} ;
 lin execration_N = mkN "Abscheu" masculine | mkN "Fluch" "Flüche" masculine | mkN "Verwünschung" feminine ; -- status=guess status=guess status=guess
@@ -24253,8 +24253,8 @@ lin gonorrhoea_N = variants {} ;
 lin goo_N = mkN  "Schmalz" "Schmalze" neuter | mkN "übertriebene Sentimentalität" feminine ; -- status=guess status=guess
 lin good_A = mk3A "gut" "besser" "beste" ;
 lin good_N = mkN "Gute" neuter ;
-lin good_afternoon_Interj = variants {} ;
-lin good_evening_Interj = variants {} ;
+lin good_afternoon_Interj = mkInterj "guten Tag" ;
+lin good_evening_Interj = mkInterj "guten Abend" ;
 lin good_fellowship_N = variants {} ;
 lin good_for_naught_A = variants {} ;
 lin good_for_naught_N = variants {} ;
@@ -24262,15 +24262,14 @@ lin good_for_nothing_A = variants {} ;
 lin good_for_nothing_N = variants {} ;
 lin good_humoured_A = variants {} ;
 lin good_looking_A = variants {} ;
-lin good_luck_Interj = variants {} ;
-lin good_morning_Interj = variants {} ;
+lin good_luck_Interj = mkInterj "viel Glück" ;
+lin good_morning_Interj = mkInterj "guten Morgen" ;
 lin good_natured_A = variants {} ;
 lin good_neighbourliness_N = variants {} ;
-lin good_night_Interj = variants {} ;
+lin good_night_Interj = mkInterj "gute Nacht" ;
 lin good_tempered_A = variants {} ;
 lin good_time_A = variants {} ;
-lin goodbye_Interj = mkInterj "auf Wiedersehen" | mkInterj "auf Wiederschauen" | mkInterj "auf Wiederhören" | mkInterj "tschüss" | mkInterj "tschau" | mkInterj "bis später" | mkInterj "bis bald" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess
-lin goodbye_N = variants {} ;
+lin goodbye_Interj = mkInterj "auf Wiedersehen" | mkInterj "auf Wiederschauen" | mkInterj "auf Wiederhören" | mkInterj "bis später" | mkInterj "bis bald" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess
 lin goodish_A = variants {} ;
 lin goodly_A = variants {} ;
 lin goodness_N = mkN "Güte" feminine | mkN "Gütigkeit" feminine | mkN "Herzensgüte" feminine | mkN "Tugend" "Tugenden" feminine | mkN "Integrität" feminine ; -- status=guess status=guess status=guess status=guess status=guess
@@ -42629,6 +42628,7 @@ lin please_V = irregV "gefallen" "gefallt" "gefiel" "gefiele" "gefallen" | mkV "
 lin please_V2 = mkV2 (irregV "gefallen" "gefallt" "gefiel" "gefiele" "gefallen" | mkV "rechtmachen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin please_V2V = mkV2V (irregV "gefallen" "gefallt" "gefiel" "gefiele" "gefallen" | mkV "rechtmachen") ; -- status=guess, src=wikt status=guess, src=wikt
 lin please_VV = mkVV (irregV "gefallen" "gefallt" "gefiel" "gefiele" "gefallen" | mkV "rechtmachen") ; -- status=guess, src=wikt status=guess, src=wikt
+lin please_Voc = S.please_Voc ;
 lin pleased_A = mk3A "froh" "froher" "frohsten, froheste" | mk3A "zufrieden" "zufriedener" "zufriedenste" ; -- status=guess status=guess
 lin pleaser_N = variants {} ;
 lin pleasing_N = variants {} ;
@@ -53009,7 +53009,7 @@ lin sorrow_N = mkN "Kummer" masculine | mkN "Traurigkeit" feminine | mkN "Trauer
 lin sorrow_V = variants {} ;
 lin sorrowful_A = mkA "betrübt" | mkA "kummervoll" | mkA "sorgenvoll" | mk3A "traurig" "trauriger" "traurigste" ; -- status=guess status=guess status=guess status=guess
 lin sorry_A = mkA "traurig" | mkA "armselig" ; -- note: I am sorry = es tut mir Leid.
-lin sorry_Interj = mkInterj "entschuldigen Sie bitte" | mkInterj "verzeihen Sie bitte" | mkInterj "es tut mir Leid" | mkInterj "ich bitte um Entschuldigung" | mkInterj "Verzeihung" | mkInterj "Verzeihung" | mkInterj "Entschuldigung" | mkInterj "sorry" ; -- status=guess status=guess status=guess status=guess status=guess status=guess status=guess status=guess
+lin sorry_Interj = mkInterj "Entschuldigung" ;
 lin sort_N = mkN "Sorte" ;
 lin sort_V = regV "sortieren" ; -- status=guess, src=wikt
 lin sort_V2 = mkV2 (regV "sortieren") ; -- status=guess, src=wikt
@@ -57387,7 +57387,7 @@ lin thank_offering_N = variants {} ;
 lin thankful_A = mk3A "dankbar" "dankbarer" "dankbarste" ; -- status=guess
 lin thankfulness_N = variants {} ;
 lin thankless_A = variants {} ;
-lin thanks_Interj = mkInterj "danke" ; -- status=guess
+lin thanks_Interj = mkInterj "danke" ;
 lin thanks_N = mkN "Dank" masculine | mkN "Danksagung" feminine ; -- status=guess status=guess
 lin thanks_to_Prep = variants {} ;
 lin thanksgiving_N = variants {} ;

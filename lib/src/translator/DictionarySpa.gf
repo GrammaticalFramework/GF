@@ -5465,7 +5465,7 @@ lin cheer_V2 = mkV2 (mkV "animarse") ; -- status=guess
 lin cheerer_N = mkN "aclamador" | mkN "alentador" | mkN "ovacionador" ; --UWN
 lin cheerful_A = mkA "animado" ; -- status=guess
 lin cheerleader_N = mkN "porrista" ; -- status=guess
-lin cheers_Interj = mkInterj "nos vemos" ; -- status=guess
+lin cheers_Interj = mkInterj "salud" ; -- status=guess
 lin cheery_A = mkA "agradable" | mkA "alegre" ; --UWN
 lin cheese_N = L.cheese_N ;
 lin cheeseburger_N = mkN "hamburguesa con queso" ; -- status=guess
@@ -7862,7 +7862,7 @@ lin damascus_PN = mkPN "Damasco" ; -- status=guess src=geonames
 lin damask_N = mkN "damasco" ; -- status=guess
 lin dammit_Interj = mkInterj "mierda" | mkInterj "joder" | mkInterj "maldita sea" ; -- status=guess status=guess status=guess
 lin damn_A = mkA "maldito" | mkA "puto" ; -- status=guess status=guess
-lin damn_Interj = mkInterj "maldición" | mkInterj "maldita sea" | mkInterj "diablos" ; -- status=guess status=guess status=guess
+lin damn_Interj = mkInterj "joder" ;
 lin damn_N = mkN "maldito" ; -- status=guess
 lin damn_V2 = mkV2 (mkV "maldecir") | mkV2 (mkV "condenar") ; -- status=guess
 lin damnation_N = mkN "maldito" ; -- status=guess
@@ -10733,6 +10733,7 @@ lin exculpatory_A = mkA "exculpatorio" ; --UWN
 lin excursion_N = mkN "excursión" feminine ; -- status=guess
 lin excuse_N = mkN "excusa" ; -- status=guess
 lin excuse_V2 = mkV2 (mkV "excusar") | mkV2 (mkV "perdonar") ; -- status=guess
+lin excuse_me_Interj = mkInterj "perdón" ;
 lin executant_N = mkN "ejecutor" ; --UWN
 lin execute_V2 = mkV2 (mkV "ejecutar") ; -- status=guess
 lin execution_N = mkN "ejecución" feminine ; -- status=guess
@@ -13051,7 +13052,12 @@ lin gonorrhea_N = mkN "gonorrea" ; -- status=guess
 lin goo_N = mkN "légamo" ; --UWN
 lin good_A = L.good_A ;
 lin good_N = mkN "bien" masculine ;
-lin goodbye_Interj = mkInterj "adiós" | mkInterj "hasta luego" | mkInterj "hasta la vista" | mkInterj "hasta pronto" | mkInterj "nos vemos" ; -- status=guess status=guess status=guess status=guess status=guess
+lin good_afternoon_Interj = mkInterj "buenos días" ;
+lin good_evening_Interj = mkInterj "buenas tardes" ;
+lin good_luck_Interj = mkInterj "buena suerte" ;
+lin good_morning_Interj = mkInterj "buenos días" ;
+lin good_night_Interj = mkInterj "buenas noches" ;
+lin goodbye_Interj = mkInterj "hasta luego" | mkInterj "hasta la vista" | mkInterj "hasta pronto" | mkInterj "nos vemos" ;
 lin goodness_N = mkN "bondad" feminine ; -- status=guess
 lin goodwill_N = mkN "buena voluntad" ; -- status=guess
 lin goofy_A = mkA "tonto" ; -- status=guess
@@ -14019,7 +14025,7 @@ lin helix_N = mkN "hélice" feminine ; -- status=guess
 lin hell_N = mkN "infierno" ; -- status=guess
 lin hellebore_N = mkN "helleborus" ; --UWN
 lin hellish_A = mkA "infernal" ; -- status=guess
-lin hello_Interj = mkInterj "hola" | mkInterj "buenos días" | mkInterj "qué tal" ; -- status=guess
+lin hello_Interj = mkInterj "hola" ;
 lin helm_N = mkN "timón" masculine ; -- status=guess
 lin helmet_N = mkN "casco" | mkN "yelmo" ; -- status=guess
 lin helminth_N = mkN "helminto" ; -- status=guess
@@ -27490,7 +27496,7 @@ lin sorority_N = mkN "sororidad" feminine ; -- status=guess
 lin sorrow_N = mkN "tristeza" | mkN "aflicción" | mkN "infelicidad" | mkN "pesar" | mkN "dolor" masculine ; -- status=guess status=guess status=guess status=guess status=guess
 lin sorrowful_A = mkA "triste" ; -- status=guess
 lin sorry_A = mkA "lamentable" | mkA "pobre" ;
-lin sorry_Interj = mkInterj "discúlpame" | mkInterj "perdóname" | mkInterj "lo siento" ; -- status=guess status=guess status=guess
+lin sorry_Interj = mkInterj "disculpa" ;
 lin sort_N = mkN "ordenar" ;
 lin sort_V = mkV "ordenar" ; -- status=guess
 lin sort_V2 = mkV2 (mkV "ordenar") ; -- status=guess
