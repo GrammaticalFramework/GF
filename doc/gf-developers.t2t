@@ -40,7 +40,7 @@ web sites, as described below.
 === The Haskell Platform ===
 
 GF is written in Haskell, so first of all you need
-the //Haskell Platform//, version 2014.2.0.0 or 2013.2.0.0. Downloads
+the //Haskell Platform//, e.g. version 7.10.3. Downloads
 and installation instructions are available from here:
 
     http://hackage.haskell.org/platform/
