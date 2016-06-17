@@ -3880,7 +3880,7 @@ lin by8agent_Prep = S.by8agent_Prep ; -- comment=CHECKED
 lin by8means_Prep = S.by8means_Prep ; -- comment=CHECKED
 lin by_Adv = mkAdv "a proposito" ; -- status=guess
 lin by_Prep = mkPrep "per" ;
-lin bye_Interj = mkInterj "ciao" ; -- status=guess
+lin bye_Interj = mkInterj "ciao" ;
 lin bypass_N = mkN "circonvallazione" | mkN "tangenziale" ; -- UWN
 lin bypath_N = mkN "strada_secondaria" ; -- UWN
 lin byplay_N = mkN "controscena" ; -- status=guess
@@ -4744,7 +4744,7 @@ lin cheer_V = variants {} ; --
 lin cheer_V2 = variants {} ; --
 lin cheer_up_V = mkV "consolarsi" | mkV "rallegrarsi" | mkV "rasserenarsi" | mkV "rincuorarsi" ; -- UWN
 lin cheerful_A = mkA "allegro" ; -- status=guess
-lin cheers_Interj = mkInterj "ci vediamo" ; -- status=guess
+lin cheers_Interj = mkInterj "cincin" ;
 lin cheery_A = mkA "vivace" ; -- UWN
 lin cheese_N = L.cheese_N ;
 lin cheeseburger_N = mkN "cheeseburger" masculine ; -- status=guess
@@ -6992,7 +6992,7 @@ lin damaging_A = variants {} ; --
 lin damascus_PN = mkPN "Damasco" ; -- status=guess src=geonames
 lin damask_N = mkN "damasco" ; -- status=guess
 lin dammit_Interj = mkInterj "merda" | mkInterj "cazzo" | mkInterj "dannazione" | mkInterj "cavolo" | mkInterj "cribbio" ; -- status=guess status=guess status=guess status=guess status=guess
-lin damn_Interj = mkInterj "accidenti" | mkInterj "dannazione" | mkInterj "cribbio" | mkInterj "cavolo" ; -- status=guess status=guess status=guess status=guess
+lin damn_Interj = mkInterj "maledizione" ;
 lin damn_N = mkN "maledire" ; ----
 lin damn_V2 = mkV2 (mkV "dannare") ; -- status=guess, src=wikt
 lin damnation_N = mkN "dannazione" feminine ; -- status=guess
@@ -9600,6 +9600,7 @@ lin excursion_N = mkN "gita" | mkN "escursione" feminine ; -- status=guess statu
 lin excursionist_N = mkN "gitante" ; -- UWN
 lin excuse_N = mkN "scusa" | mkN "pretesto" ; -- status=guess status=guess
 lin excuse_V2 = mkV2 (mkV "scusare") ; -- status=guess, src=wikt
+lin excuse_me_Interj = mkInterj "scusa" ;
 lin execute_V2 = variants {} ; --
 lin execution_N = mkN "esecuzione" feminine ; -- status=guess
 lin executioner_N = mkN "boia" | mkN "carnefice" masculine ; -- status=guess status=guess
@@ -11745,7 +11746,12 @@ lin gonorrhoea_N = mkN "blenorragia" | mkN "blenorrea" | mkN "gonorrea" ; -- UWN
 lin goo_N = mkN "belletta" | mkN "fanghiglia" | mkN "limo" | mkN "melma" | mkN "mota" ; -- UWN
 lin good_A = L.good_A ;
 lin good_N = mkN "bene" masculine ; -- status=guess
-lin goodbye_Interj = mkInterj "arrivederci" | mkInterj "arrivederla" | mkInterj "ciao" ; -- status=guess status=guess status=guess
+lin good_afternoon_Interj = mkInterj "buongiorno" ;
+lin good_evening_Interj = mkInterj "buona sera" ;
+lin good_luck_Interj = mkInterj "buona fortuna" ;
+lin good_morning_Interj = mkInterj "buongiorno" ;
+lin good_night_Interj = mkInterj "buona notte" ;
+lin goodbye_Interj = mkInterj "arrivederci" | mkInterj "arrivederla" | mkInterj "ciao" ;
 lin goodness_N = mkN "bontà" feminine ; -- status=guess
 lin goodwill_N = mkN "buona volontà" ; -- status=guess
 lin goody_N = mkN "bocconcino" | mkN "boccone" | mkN "ghiottoneria" | mkN "golosità" | mkN "leccornia" | mkN "mangiarino" | mkN "manicaretto" | mkN "manna" | mkN "squisitezza" ; -- UWN
@@ -12622,7 +12628,7 @@ lin hell_N = mkN "inferno" ; -- status=guess
 lin hellcat_N = mkN "arpia" | mkN "megera" | mkN "strega" ; -- UWN
 lin hellebore_N = mkN "elleboro" ; -- status=guess
 lin hellion_N = mkN "casinaro" | mkN "casinista" | mkN "piantagrane" | mkN "satanasso" ; -- UWN
-lin hello_Interj = mkInterj "ciao" | mkInterj "salve" | mkInterj "buongiorno" ; -- status=guess status=guess status=guess
+lin hello_Interj = mkInterj "ciao" ;
 lin helm_N = mkN "timone" masculine ; -- status=guess
 lin helmet_N = mkN "casco" ; -- status=guess
 lin helminth_N = mkN "elminto" ; -- UWN
@@ -24882,7 +24888,7 @@ lin sorority_N = mkN "sororità" ; -- status=guess
 lin sorrel_N = mkN "sauro" ; -- status=guess
 lin sorrow_N = mkN "tristezza" | mkN "dolore" masculine | mkN "pena" | mkN "afflizione" feminine | mkN "infelicità" feminine ; -- status=guess status=guess status=guess status=guess status=guess
 lin sorry_A = mkA "scusa" ; -- status=guess
-lin sorry_Interj = mkInterj "scusi" | mkInterj "scusa" | mkInterj "mi scusi" | mkInterj "mi scuso" ; -- status=guess status=guess status=guess status=guess
+lin sorry_Interj = mkInterj "scusami" ;
 lin sort_N = mkN "tipo" ; -- status=guess
 lin sort_V = mkV (mettere_V) "in ordine" ; -- status=guess, src=wikt
 lin sort_V2 = mkV2 (mkV (mettere_V) "in ordine") ; -- status=guess, src=wikt

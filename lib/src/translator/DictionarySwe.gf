@@ -14468,7 +14468,7 @@ lin dame_N = variants {} ; -- status=guess
 lin dammar_N = mkN "damm" ;
 lin dammit_Interj = mkInterj "fan" ; -- status=guess
 lin damn_A = compoundA (regA "förbannad") ; -- comment=3
-lin damn_Interj = mkInterj "fan" ; -- status=guess
+lin damn_Interj = mkInterj "fan" ;
 lin damn_N = mkN "jäkel" ; -- comment=5
 lin damn_V2 = dirV2 (partV (mkV "dömer")"ut") ; -- status=guess
 lin damnable_A = variants {} ; -- status=guess
@@ -24111,8 +24111,8 @@ lin gonorrhoea_N = mkN "gonorré" "gonorréer" ; -- SaldoWN
 lin goo_N = mkN "sentimentalitet" "sentimentaliteter" ; -- comment=4
 lin good_A = mkA "god" "gott" "goda" "goda" "bättre" "bäst" "bästa" | mkA "bra" "bra" "bra" "goda" "bättre" "bäst" "bästa" ;
 lin good_N = mkN "nytta" ;
-lin good_afternoon_Interj = mkInterj "god eftermiddag" ; -- status=guess
-lin good_evening_Interj = mkInterj "god afron" ; -- status=guess
+lin good_afternoon_Interj = mkInterj "god dag" | mkInterj "god eftermiddag" ;
+lin good_evening_Interj = mkInterj "god afton" ;
 lin good_fellowship_N = mkN "god-gemenskap" ; -- src=google
 lin good_for_naught_A = variants {} ; -- status=guess
 lin good_for_naught_N = mkN "bra-för-inte" ;
@@ -24120,14 +24120,14 @@ lin good_for_nothing_A = variants {} ; -- status=guess
 lin good_for_nothing_N = mkN "odugling" ;
 lin good_humoured_A = variants {} ; -- status=guess
 lin good_looking_A = variants {} ; -- status=guess
-lin good_luck_Interj = mkInterj "lycka till" ; -- status=guess
-lin good_morning_Interj = mkInterj "god morgon" ; -- status=guess
+lin good_luck_Interj = mkInterj "lycka till" ;
+lin good_morning_Interj = mkInterj "god morgon" ;
 lin good_natured_A = variants {} ; -- status=guess
 lin good_neighbourliness_N = variants {} ; -- status=guess
-lin good_night_Interj = mkInterj "god natt" ; -- status=guess
+lin good_night_Interj = mkInterj "god natt" ;
 lin good_tempered_A = variants {} ; -- status=guess
 lin good_time_A = variants {} ; -- status=guess
-lin goodbye_Interj = mkInterj "adjö" | mkInterj "hej då" | mkInterj "farväl" ; -- status=guess
+lin goodbye_Interj = mkInterj "hej då" ;
 lin goodish_A = variants {} ; -- status=guess
 lin goodly_A = mkA "behaglig" ; -- comment=2
 lin goodness_N = mkN "vänlighet" ; -- comment=6
@@ -25888,7 +25888,7 @@ lin hellgrammiate_N = variants {} ; -- status=guess
 lin hellhound_N = variants {} ; -- status=guess
 lin hellion_N = mkN "buse" utrum ; -- comment=2
 lin hellish_A = variants {} ; -- status=guess
-lin hello_Interj = mkInterj "hej" | mkInterj "hallå" ; -- status=guess
+lin hello_Interj = mkInterj "hallå" ; -- status=guess
 lin helm_N = mkN "roder" neutrum ; -- comment=2
 lin helmet_N = mkN "hjälm" ; -- SaldoWN
 lin helmeted_A = variants {} ; -- status=guess
@@ -26169,13 +26169,13 @@ lin hexangular_A = variants {} ; -- status=guess
 lin hexapod_N = mkN "sexbening" ; -- status=guess
 lin hexed_A = variants {} ; -- status=guess
 lin hexestrol_N = variants {} ; -- status=guess
-lin hexham_PN = mkPN "Hexham" neutrum ; -- src=geonames status=guess
+lin hexham_PN = mkPN "Hexham" neutrum ;
 lin hexose_N = mkN "hexos" ; -- src=google
-lin hey_Interj = mkInterj "hej" | mkInterj "hallå" ; -- status=guess
+lin hey_Interj = mkInterj "hejsan" ;
 lin heyday_N = mkN "storhetstid" "storhetstider" ; -- status=guess
 lin heysham_PN = mkPN "Heysham" ; -- src=eng status=guess
-lin heywood_PN = mkPN "Heywood" neutrum ; -- src=geonames status=guess
-lin hi_Interj = mkInterj "hallå" | mkInterj "hej" | mkInterj "hejsan" ; -- status=guess status=guess status=guess
+lin heywood_PN = mkPN "Heywood" neutrum ;
+lin hi_Interj = mkInterj "hej" ;
 lin hi_fi_A = variants {} ; -- status=guess
 lin hi_fi_N = variants {} ; -- status=guess
 lin hiatus_N = mkN "uppehåll" neutrum ; -- comment=5
@@ -42395,11 +42395,12 @@ lin pleasance_N = variants {} ; -- status=guess
 lin pleasant_A = mkA "angenäm" ; -- SaldoWN
 lin pleasantness_N = mkN "trivsamhet" "trivsamheter" ; -- status=guess
 lin pleasantry_N = variants {} ; -- status=guess
-lin please_Adv = mkAdv "snälla" ;
+lin please_Adv = mkAdv "var så god" ;
 lin please_V = mkV "behagar" ; -- comment=6
 lin please_V2 = mkV2 (mkV "behagar") | mkV2 (mkV "glädja" "gladde" "glatt") | mkV2 (mkV "tillfredsställer") ; -- status=guess
 lin please_V2V = mkV2V (mkV "behagar") | mkV2V (mkV "glädja" "gladde" "glatt") | mkV2V (mkV "tillfredsställer") ; -- status=guess
 lin please_VV = mkVV (mkV "behagar") | mkVV (mkV "glädja" "gladde" "glatt") | mkVV (mkV "tillfredsställer") ; -- status=guess
+lin please_Voc = S.please_Voc ;
 lin pleased_A = mkA "nöjd" "nöjt" ; -- status=guess
 lin pleaser_N = variants {} ; -- status=guess
 lin pleasing_N = mkN "förtjusande" ; -- comment=2
@@ -52673,7 +52674,7 @@ lin sorrow_N = mkN "sorg" "sorger" ; -- comment=2
 lin sorrow_V = variants {} ; -- status=guess
 lin sorrowful_A = mkA "sorgsen" "sorgset" ; -- comment=2
 lin sorry_A = mkA "ledsen" "ledset" ;
-lin sorry_Interj = mkInterj "förlåt" ; -- status=guess
+lin sorry_Interj = mkInterj "förlåt" ;
 lin sort_N = mkN "sort" "sorter" ;
 lin sort_V = mkV "sorterar" ; -- comment=2
 lin sort_V2 = dirV2 (partV (mkV "ordnar")"om") ; -- status=guess
