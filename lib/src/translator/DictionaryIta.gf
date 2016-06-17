@@ -29746,8 +29746,7 @@ lin yen_V = mkV "bramare" | mkV "desiderare" ; -- status=guess, src=wikt status=
 lin yeovil_PN = mkPN "Yeovil" ; -- status=guess src=geonames
 lin yep_Interj = variants {} ; --
 lin yerevan_PN = mkPN "Yerevan" ; -- status=guess src=geonames
-lin yes_Interj = mkInterj "sì" ; -- status=guess
-lin yes_Utt = S.yes_Utt ; -- comment=CHECKED
+lin yes_Interj = mkInterj "sì" ;
 lin yesterday_Adv = mkAdv "ieri" ; -- status=guess
 lin yesterday_N = mkN "ieri" masculine ; -- status=guess
 lin yet_1_Adv = mkAdv "ancora" ;
