@@ -17,6 +17,7 @@ concrete PhraseEst of Phrase = CatEst ** open ResEst, (P = Prelude) in {
     UttCN np = {s = np.s ! NCase Sg Nom} ;
     UttAP np = {s = np.s ! P.False ! NCase Sg Nom} ;
     UttCard n = {s = n.s ! Sg ! Nom} ;
+    UttInterj i = i ;
 
     NoPConj = {s = []} ;
     PConjConj conj = {s = conj.s2} ;
