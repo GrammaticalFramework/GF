@@ -11,7 +11,7 @@ description: GF, Grammatical Framework, is a programming language for multilingu
 homepage: http://www.grammaticalframework.org/
 bug-reports: http://code.google.com/p/grammatical-framework/issues/list
 maintainer: Thomas Hallgren
-tested-with: GHC==7.4.2, GHC==7.6.3, GHC==7.8.3, GHC==7.10.2, GHC==8.0.1
+tested-with: GHC==7.6.3, GHC==7.8.3, GHC==7.10.2, GHC==8.0.1
 
 data-dir: src
 data-files: tools/gf.el

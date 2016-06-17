@@ -115,7 +115,7 @@ manually. Here is one way to do this:
 
 **Note 2**.
 The GF source code has been updated to compile with GHC 8.0.1. Using older
-versions of GHC (7.10.3, 7.10.2, 7.8, 7.6, 7.4) should work too.
+versions of GHC (7.10.3, 7.10.2, 7.8, 7.6) should work too.
 
 === Known problems ===
 
