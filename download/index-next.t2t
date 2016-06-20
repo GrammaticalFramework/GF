@@ -15,11 +15,11 @@ What's new? See the [Release notes release-3.8.html].
 == Binary packages ==
 
 || Platform | Download | Features | How to install
-| Mac OS X | [gf-3.8.pkg gf-3.8.pkg] | //GF+S+C// | Double-click on the package icon (*)
-| Mac OS X | [gf-3.8-bin-intel-mac.tar.gz gf-3.8-bin-intel-mac.tar.gz] | //GF+S+C+B// | ``sudo tar -C /usr/local -zxf gf-3.8-bin-intel-mac.tar.gz``
-%| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | //GF+S+C+B// | ``sudo rpm -i ...``
-| Ubuntu (32-bit) | [gf_3.8-1_i386.deb gf_3.8-1_i386.deb] | //GF+S+C+B// | ``sudo dpkg -i gf_3.8-1_i386.deb``
-| Ubuntu (64-bit) | [gf_3.8-1_amd64.deb gf_3.8-1_amd64.deb] | //GF+S+C+B// | ``sudo dpkg -i gf_3.8-1_amd64.deb``
+| Mac OS X | [gf-3.8.pkg gf-3.8.pkg] | //GF+S+C+P// | Double-click on the package icon (*)
+| Mac OS X | [gf-3.8-bin-intel-mac.tar.gz gf-3.8-bin-intel-mac.tar.gz] | //GF+S+C+P// | ``sudo tar -C /usr/local -zxf gf-3.8-bin-intel-mac.tar.gz``
+%| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | //GF+S+C+J+P// | ``sudo rpm -i ...``
+| Ubuntu (32-bit) | [gf_3.8-1_i386.deb gf_3.8-1_i386.deb] | //GF+S+C+J+P// | ``sudo dpkg -i gf_3.8-1_i386.deb``
+| Ubuntu (64-bit) | [gf_3.8-1_amd64.deb gf_3.8-1_amd64.deb] | //GF+S+C+J+P// | ``sudo dpkg -i gf_3.8-1_amd64.deb``
 | Windows | [gf-3.8-bin-windows.zip gf-3.8-bin-windows.zip] | //GF+S// | ``unzip gf-3.8-bin-windows.zip``
 %| MINGW | [gf-3.8-bin-i686-MINGW32_NT-6.1.tar.gz gf-3.8-bin-i686-MINGW32_NT-6.1.tar.gz] | //GF+S+C// | ``tar -C / gf-3.8-bin-i686-MINGW32_NT-6.1.tar.gz``
 %| ... | ... | ... | ...
@@ -27,7 +27,7 @@ What's new? See the [Release notes release-3.8.html].
 Features: GF = GF shell and grammar compiler and the Resource Grammar Library,
 S = ``gf -server`` mode,
 C = C run-time system,
-B = Python and Java bindings to the C run-time system
+P/J = Python/Java binding to the C run-time system
 
 %More binary packages might be added later.
 
@@ -44,7 +44,8 @@ variables, see Inari's notes on
 %(which is started with ``C:\MinGW\msys\1.0\msys.bat``).
 %It should work out of the box without any additional settings.
 
-The ``.deb`` packages work on Ubuntu 12.04, 14.04 and 16.04.
+The ``.deb`` packages should work on Ubuntu 12.04, 14.04 and 16.04 and similar
+Linux distributions.
 
 The packages for Mac OS X should work on at least 10.9, 10.10 and 10.11 (Mavericks, Yosemite and El Capitan).
 
