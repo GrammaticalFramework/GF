@@ -12,7 +12,7 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==What's new==
 
-Over 380 changes have been pushed to the source repository since
+Over 395 changes have been pushed to the source repository since
 [the release of GF 3.7.1 release-3.7.1.html] in October 2015.
 
 
@@ -35,6 +35,10 @@ Over 380 changes have been pushed to the source repository since
   The problem was introduced before the release of GF 3.7.1 and prevented
   commands like ``cc "last"`` and ``cc "last"++"year"`` from working,
   but they should work again now.
+- Python binding: with the OS X installer package (``gf-3.8.pkg``)
+  the Python binding should now work directly out of the package.
+  (The installer puts the modules under ``/Library/Python/2.7/site-packages``,
+  where the Python interpreter can find them.)
 - Various improvements and bug fixes in the C run-time system and its bindings
   to other languages.
 

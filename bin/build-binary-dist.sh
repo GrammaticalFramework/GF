@@ -36,6 +36,13 @@ if which >/dev/null python; then
     pushd src/runtime/python
     EXTRA_INCLUDE_DIRS="$extrainclude" EXTRA_LIB_DIRS="$extralib" python setup.py build
     python setup.py install --prefix="$destdir$prefix"
+    if [ "$fmt" == pkg ] ; then
+	# A hack for Python on OS X to find the PGF modules
+	pyver=$(ls "$destdir$prefix/lib" | sed -n 's/^python//p')
+	pydest="$destdir/Library/Python/$pyver/site-packages"
+	mkdir -p "$pydest"
+	ln "$destdir$prefix/lib/python$pyver/site-packages"/pgf* "$pydest"
+    fi
     popd
 else
     echo "Python is not installed, so the Python binding will not be included"
@@ -45,8 +52,12 @@ fi
 if which >/dev/null javac && which >/dev/null jar ; then
     pushd src/runtime/java
     rm -f libjpgf.la # In case it contains the wrong INSTALL_PATH
-    make CFLAGS="-I$extrainclude -L$extralib" INSTALL_PATH="$prefix/lib"
-    make INSTALL_PATH="$destdir$prefix/lib" install
+    if make CFLAGS="-I$extrainclude -L$extralib" INSTALL_PATH="$prefix/lib"
+    then
+	make INSTALL_PATH="$destdir$prefix/lib" install
+    else
+	echo "*** Skipping the Java binding because of errors"
+    fi
     popd
 else
     echo "Java SDK is not installed, so the Java binding will not be included"
@@ -68,7 +79,7 @@ case $fmt in
 	;;
     pkg)
 	pkg=$name.pkg
-	pkgbuild --identifier org.grammaticalframework.gf.pkg --version "$ver" --root "$destdir$prefix" --install-location "$prefix" dist/$pkg
+	pkgbuild --identifier org.grammaticalframework.gf.pkg --version "$ver" --root "$destdir" --install-location / dist/$pkg
 	echo "Created $pkg"
 esac
 
