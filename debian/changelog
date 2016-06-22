@@ -1,3 +1,9 @@
+gf (3.8-1) precise trusty vivid; urgency=low
+
+  * GF 3.8
+
+ -- Thomas Hallgren <hallgren@chalmers.se>  Wed, 22 Jun 2016 14:00:00 +0200
+
 gf (3.7.1-1) precise trusty vivid; urgency=low
 
   * GF 3.7.1
