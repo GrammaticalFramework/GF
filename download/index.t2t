@@ -7,25 +7,27 @@ Grammatical Framework Download and Installation
 %!postproc(html): <TD><I> <TD><small>
 %!postproc(html): </I></TD> </small></TD>
 
-**GF 3.7.1** was released on 2 October 2015.
+**GF 3.8** was released on 22 June 2016.
 
-What's new? See the [Release notes release-3.7.1.html].
+What's new? See the [Release notes release-3.8.html].
 
 
 == Binary packages ==
 
 || Platform | Download | Features | How to install
-| Mac OS X | [gf-3.7.1.pkg gf-3.7.1.pkg] | //GF+S+C// | Double-click on the package icon (*)
-| Mac OS X | [gf-3.7.1-bin-intel-mac.tar.gz gf-3.7.1-bin-intel-mac.tar.gz] | //GF+S+C+P// | ``sudo tar -C /usr/local -zxf gf-3.7.1-bin-intel-mac.tar.gz``
-%| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | //GF+S+C+P// | ``sudo rpm -i ...``
-| Ubuntu (32-bit) | [gf_3.7.1-1_i386.deb gf_3.7.1-1_i386.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.7.1-1_i386.deb``
-| Ubuntu (64-bit) | [gf_3.7.1-1_amd64.deb gf_3.7.1-1_amd64.deb] | //GF+S+C+P// | ``sudo dpkg -i gf_3.7.1-1_amd64.deb``
-| Windows | [gf-3.7.1-bin-windows.zip gf-3.7.1-bin-windows.zip] | //GF+S// | ``unzip gf-3.7.1-bin-windows.zip``
-%| MINGW | [gf-3.7.1-bin-i686-MINGW32_NT-6.1.tar.gz gf-3.7.1-bin-i686-MINGW32_NT-6.1.tar.gz] | //GF+S+C// | ``tar -C / gf-3.7.1-bin-i686-MINGW32_NT-6.1.tar.gz``
+| Mac OS X | [gf-3.8.pkg gf-3.8.pkg] | //GF+S+C+P// | Double-click on the package icon (*)
+| Mac OS X | [gf-3.8-bin-intel-mac.tar.gz gf-3.8-bin-intel-mac.tar.gz] | //GF+S+C+P// | ``sudo tar -C /usr/local -zxf gf-3.8-bin-intel-mac.tar.gz``
+%| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | //GF+S+C+J+P// | ``sudo rpm -i ...``
+| Ubuntu (32-bit) | [gf_3.8-1_i386.deb gf_3.8-1_i386.deb] | //GF+S+C+J+P// | ``sudo dpkg -i gf_3.8-1_i386.deb``
+| Ubuntu (64-bit) | [gf_3.8-1_amd64.deb gf_3.8-1_amd64.deb] | //GF+S+C+J+P// | ``sudo dpkg -i gf_3.8-1_amd64.deb``
+| Windows | [gf-3.8-bin-windows.zip gf-3.8-bin-windows.zip] | //GF+S// | ``unzip gf-3.8-bin-windows.zip``
+%| MINGW | [gf-3.8-bin-i686-MINGW32_NT-6.1.tar.gz gf-3.8-bin-i686-MINGW32_NT-6.1.tar.gz] | //GF+S+C// | ``tar -C / gf-3.8-bin-i686-MINGW32_NT-6.1.tar.gz``
 %| ... | ... | ... | ...
 
 Features: GF = GF shell and grammar compiler and the Resource Grammar Library,
-S = ``gf -server`` mode, C = C run-time system, P = Python binding to the C run-time system
+S = ``gf -server`` mode,
+C = C run-time system,
+J/P = Java/Python binding to the C run-time system
 
 %More binary packages might be added later.
 
@@ -42,12 +44,13 @@ variables, see Inari's notes on
 %(which is started with ``C:\MinGW\msys\1.0\msys.bat``).
 %It should work out of the box without any additional settings.
 
-The ``.deb`` packages work on Ubuntu 12.04, 14.04 and 15.04.
+The ``.deb`` packages should work on Ubuntu 12.04, 14.04 and 16.04 and similar
+Linux distributions.
 
 The packages for Mac OS X should work on at least 10.9, 10.10 and 10.11 (Mavericks, Yosemite and El Capitan).
 
 (*) **Note** that for compatibility with OS X 10.11, 
-``gf-3.7.1.pkg`` will install the ``gf`` executable in ``/usr/local/bin``
+``gf-3.8.pkg`` will install the ``gf`` executable in ``/usr/local/bin``
 instead of ``/usr/bin``, so make sure ``/usr/local/bin`` is in your  ``$PATH``.
 Also, if you still have an older version of GF installed in ``/usr/bin``,
 remove it and/or make sure ``/usr/local/bin`` comes before ``/usr/bin``
@@ -59,7 +62,7 @@ You can install them in other locations, but then you need to set the
 ``GF_LIB_PATH`` environment variable:
 
 ```
-  export GF_LIB_PATH=/usr/local/share/gf-3.7.1/lib
+  export GF_LIB_PATH=/usr/local/share/gf-3.8/lib
 ```
 
 where ``/usr/local`` should be replaced with the path to the location where you
@@ -71,8 +74,9 @@ unpacked the package.
 [GF is on Hackage http://hackage.haskell.org/package/gf], so under normal
 circumstances the prodedure is fairly simple:
 
-+ Install the [Haskell Platform http://hackage.haskell.org/platform]
-  version 2013.2.0.0 or 2012.4.0.0 (see note 2 below)
++ Install a recent version of the
+  [Haskell Platform http://hackage.haskell.org/platform],
+  e.g. version 7.10.3 (see note 2 below)
 + ``cabal update``
 + On Linux: install some C libraries from your Linux distribution
   (see note 1 below)
@@ -80,7 +84,7 @@ circumstances the prodedure is fairly simple:
 
 
 You can also download the full source package from here:
-[``gf-3.7.1.tar.gz`` gf-3.7.1.tar.gz].
+[``gf-3.8.tar.gz`` gf-3.8.tar.gz].
 
 === Notes ===
 
@@ -111,22 +115,8 @@ manually. Here is one way to do this:
 
 
 **Note 2**.
-We recommend using GHC 7.8 (which is part of the Haskell Platform 2014.2.0.0)
-or GHC 7.6 (which is part of the Haskell Platform 2013.2.0.0).
-Using GHC 7.10.2 or GHC 7.4 (Haskell Platform 2012.4.0.0) should work too.
-%Compilation with GHC 6.12 is no longer supported, because of multiple package
-%version dependency problems.
-
-%With GHC 70.10.1 we
-%have seen cases where GF stops with the message ``gf: <<loop>>`` when running
-%with multiple threads (``-j +RTS -N -RTS``), so it's probably better to stick
-%with GHC 7.8, at least until GHC 7.10.2 is out.
-
-%**Note 3**.
-%[The Haskell Platform for Mac OS X http://www.haskell.org/platform/mac.html]
-%page states that on OS X 10.6 you need Xcode 3.2 or later, but in fact it appears you need
-%Xcode 3.2.3 or later. If you have Xcode 3.2.2, you can get an error from the
-%linker: ``ld: unknown option: -no_pie``.
+The GF source code has been updated to compile with GHC 8.0.1. Using older
+versions of GHC (7.10.3, 7.10.2, 7.8, 7.6) should work too.
 
 === Known problems ===
 
@@ -170,6 +160,7 @@ For more info on working with the GF source code, see the
 
 ==Older releases==
 
+- [GF 3.7.1 index-3.7.1.html] (October 2015)
 - [GF 3.7 index-3.7.html] (June 2015)
 - [GF 3.6 index-3.6.html] (June 2014)
 - [GF 3.5 index-3.5.html] (August 2013)
