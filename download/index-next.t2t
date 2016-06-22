@@ -27,7 +27,7 @@ What's new? See the [Release notes release-3.8.html].
 Features: GF = GF shell and grammar compiler and the Resource Grammar Library,
 S = ``gf -server`` mode,
 C = C run-time system,
-P/J = Python/Java binding to the C run-time system
+J/P = Java/Python binding to the C run-time system
 
 %More binary packages might be added later.
 

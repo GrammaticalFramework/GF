@@ -12,7 +12,7 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==What's new==
 
-Over 395 changes have been pushed to the source repository since
+Roughly 400 changes have been pushed to the source repository since
 [the release of GF 3.7.1 release-3.7.1.html] in October 2015.
 
 
@@ -31,15 +31,6 @@ Over 395 changes have been pushed to the source repository since
   only used in the GF Offline Translator. The library uses
   the B-tree backend of [SQLite https://www.sqlite.org/]
   which makes it scalable even for non-trivial ontologies.
-- GF Offline Translator now includes a user interface similar
-  to the Phrasomatic. This lets the user to explore the controlled
-  language fragment of the wide coverage grammar. Althought
-  the code is already there, the new release of the app
-  will be postponed to get some of its other features stable.
-- GF Offline Translator now offers glosses and examples for most of
-  its lexical items. This means that now it can be used as a more
-  explanatory dictionary.
-- ...
 
 
 ====Other changes and bug fixes====
@@ -50,7 +41,7 @@ Over 395 changes have been pushed to the source repository since
   The problem was introduced before the release of GF 3.7.1 and prevented
   commands like ``cc "last"`` and ``cc "last"++"year"`` from working,
   but they should work again now.
-- Python binding: with the OS X installer package (``gf-3.8.pkg``)
+- Python binding: with the OS X installer package (``gf-3.8.pkg``),
   the Python binding should now work directly out of the package.
   (The installer puts the modules under ``/Library/Python/2.7/site-packages``,
   where the Python interpreter can find them.)
@@ -79,18 +70,24 @@ Over 395 changes have been pushed to the source repository since
 
 - Numerous fixes in the translation dictionaries.
   - two new wide-coverage languages: Estonian and Russian
-  
-- The abstract syntax of the translation dictionary is now annotated
-  with glosses, examples and sense IDs from WordNet. This gives us
-  a basis on how to choose the best translations for different languages.
-  
-- We have started splitting many of the lexical entries in the abstract
-  syntax of the dictionary into different entries for senses that
-  translate differently accross languages.
+  - The abstract syntax of the translation dictionary is now annotated
+    with glosses, examples and sense IDs from WordNet. This gives us
+    a basis on how to choose the best translations for different languages.
+  - We have started splitting many of the lexical entries in the abstract
+    syntax of the dictionary into different entries for senses that
+    translate differently accross languages.
 
 
-===GF Cloud services===
+===GF Apps and Cloud services===
 
+- GF Offline Translator now includes a user interface similar
+  to the Phrasomatic. This lets the user explore the controlled
+  language fragment of the wide coverage grammar. Althought
+  the code is already there, the new release of the app
+  will be postponed to get some of its other features stable.
+- GF Offline Translator now offers glosses and examples for most of
+  its lexical items. This means that now it can be used as a more
+  explanatory dictionary.
 - Minibar can now show universal dependency diagrams for grammars that
   support it (e.g. the ResourceDemo grammar).
 - PGF service: there is a new command ``deptree`` that can output
