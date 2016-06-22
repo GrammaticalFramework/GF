@@ -24,6 +24,21 @@ Over 395 changes have been pushed to the source repository since
 - GF shell: ``vd`` can now output
   [universal dependency http://universaldependencies.org/] diagrams
   in various formats, see ``help vd``.
+- The C runtime now includes an experimental library for managing
+  and querying ontologies built on top of the abstract syntax of 
+  a grammar. Since the ontology is based on an abstract syntax,
+  it is language independent by design. For now the library is
+  only used in the GF Offline Translator. The library uses
+  the B-tree backend of [SQLite https://www.sqlite.org/]
+  which makes it scalable even for non-trivial ontologies.
+- GF Offline Translator now includes a user interface similar
+  to the Phrasomatic. This lets the user to explore the controlled
+  language fragment of the wide coverage grammar. Althought
+  the code is already there, the new release of the app
+  will be postponed to get some of its other features stable.
+- GF Offline Translator now offers glosses and examples for most of
+  its lexical items. This means that now it can be used as a more
+  explanatory dictionary.
 - ...
 
 
@@ -53,8 +68,8 @@ Over 395 changes have been pushed to the source repository since
 - New languages:
   - Nynorsk by Stian Rødven Eide (fairly complete, supports API)
   - Ancient Greek by Hans Leiß (partial, no API yet)
-  - Slovene by Krasimir Angelov (partial, no API yet)
-  
+  - Slovene by Krasimir Angelov (partial, no API yet, donated by [Digital Grammars http://www.digitalgrammars.com/])
+
 - Various fixes for several languages.
   - English and Scandinavian: relative clauses and slash questions have been modernized to
     using preposition stranding by default. This also enables the use of //that// in English,
@@ -64,6 +79,14 @@ Over 395 changes have been pushed to the source repository since
 
 - Numerous fixes in the translation dictionaries.
   - two new wide-coverage languages: Estonian and Russian
+  
+- The abstract syntax of the translation dictionary is now annotated
+  with glosses, examples and sense IDs from WordNet. This gives us
+  a basis on how to choose the best translations for different languages.
+  
+- We have started splitting many of the lexical entries in the abstract
+  syntax of the dictionary into different entries for senses that
+  translate differently accross languages.
 
 
 ===GF Cloud services===
