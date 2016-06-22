@@ -78,15 +78,15 @@ Roughly 400 changes have been pushed to the source repository since
     translate differently accross languages.
 
 
-===GF Apps and Cloud services===
+===Apps and Cloud services===
 
-- GF Offline Translator now includes a user interface similar
+- GF Offline Translator (for Android) now includes a user interface similar
   to the Phrasomatic. This lets the user explore the controlled
   language fragment of the wide coverage grammar. Althought
   the code is already there, the new release of the app
   will be postponed to get some of its other features stable.
-- GF Offline Translator now offers glosses and examples for most of
-  its lexical items. This means that now it can be used as a more
+- GF Offline Translator (for Android) now offers glosses and examples for
+  most of its lexical items. This means that now it can be used as a more
   explanatory dictionary.
 - Minibar can now show universal dependency diagrams for grammars that
   support it (e.g. the ResourceDemo grammar).
