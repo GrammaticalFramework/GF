@@ -4214,7 +4214,8 @@ lin carcinogenic_A = mkA "cancerogeno" | mkA "oncogeno" ; -- UWN
 lin carcinoid_N = mkN "carcinoide" masculine ; -- status=guess
 lin carcinoma_N = mkN "carcinoma" ; -- UWN
 lin carcinomatous_A = mkA "carcinomatoso" ; -- UWN
-lin card_N = mkN "scheda" | mkN "carta" ; -- status=guess status=guess
+lin card_1_N = mkN "scheda" | mkN "carta" ; -- status=guess status=guess
+lin card_2_N = mkN "scheda" | mkN "carta" ; -- status=guess status=guess
 lin card_V2 = mkV2 (mkV "schedare") ; -- status=guess, src=wikt
 lin cardamom_N = mkN "cardamomo" ; -- status=guess
 lin cardboard_N = mkN "cartone" masculine ; -- status=guess
@@ -6340,7 +6341,8 @@ lin councillorship_N = mkN "assessorato" ; -- UWN
 lin counsel_N = mkN "direzione" ; -- UWN
 lin counselling_N = variants {} ; --
 lin counsellor_N = mkN "avvocato" ; -- UWN
-lin count_N = mkN "conte" masculine ; -- status=guess
+lin count_1_N = mkN "conte" masculine ; -- status=guess
+lin count_2_N = mkN "conte" masculine ; -- status=guess
 lin count_V = mkV "contare" ; -- status=guess, src=wikt
 lin count_V2 = L.count_V2 ;
 lin count_against_V2 = prepV2 OP_count_V OP_against_Prep ; -- guess-p-verb
@@ -8843,7 +8845,8 @@ lin elastomer_N = mkN "elastomero" ; -- status=guess
 lin elbow_N = mkN "gomito" ; -- status=guess
 lin elbow_V2 = mkV2 (mkV "sgomitare") ; -- status=guess, src=wikt
 lin elder_A = mkA "Vecchio" | mkA "maggiore" ; -- UWN
-lin elder_N = mkN "sambuco" ; -- status=guess
+lin elder_1_N = mkN "sambuco" ; -- status=guess
+lin elder_2_N = mkN "sambuco" ; -- status=guess
 lin elderberry_N = mkN "sambuco" ; -- status=guess
 lin elderly_A = variants {} ; --
 lin elderslie_PN = mkPN "Elderslie" ; -- status=guess src=geonames
@@ -9488,7 +9491,8 @@ lin evaporate_VS = mkVS (mkV "evaporare") ; -- status=guess, src=wikt
 lin evaporation_N = mkN "vaporizzazione" feminine ; -- status=guess
 lin evaporative_A = mkA "evaporativo" ; -- UWN
 lin evasion_N = mkN "evasione" feminine ; -- status=guess
-lin even_A = mkA "pari" ; -- status=guess
+lin even_1_A = mkA "pari" ; -- status=guess
+lin even_2_A = mkA "pari" ; -- status=guess
 lin even_Adv = mkAdv "ancora" ;
 lin even_N = mkN "sera" ; -- status=guess
 lin even_V2 = mkV2 (mkV "spianare") ; -- status=guess, src=wikt
@@ -9724,7 +9728,8 @@ lin explosion_N = mkN "esplosione" feminine ; -- status=guess
 lin explosive_A = mkA "irascibile" | mkA "collerico" | mkA "iracondo" ; -- status=guess status=guess status=guess
 lin explosive_N = mkN "esplosivo" ; -- status=guess
 lin expo_N = mkN "esposizione" | mkN "fiera" | mkN "mostra" | mkN "rassegna" ; -- UWN
-lin exponent_N = mkN "esponente" ; -- UWN
+lin exponent_1_N = mkN "esponente" ; -- UWN
+lin exponent_2_N = mkN "esponente" ; -- UWN
 lin exponential_A = mkA "esponenziale" ; -- UWN
 lin exponential_N = mkN "distribuzione esponenziale" ; -- status=guess
 lin export_N = mkN "esportazione" feminine ; -- status=guess
@@ -10448,7 +10453,7 @@ lin flashiness_N = mkN "pacchianeria" | mkN "vistosità" ; -- UWN
 lin flashlight_N = mkN "torcia elettrica" ; -- status=guess
 lin flask_N = mkN "fiaschetta" | mkN "boccetta" ; -- status=guess status=guess
 lin flat_A = mkA "piano" ; -- status=guess
-lin flat_N = mkN "gatto dalla testa piatta" ; -- status=guess
+lin flat_N = variants {} ;
 lin flatfish_N = mkN "rombo" ; -- status=guess
 lin flatfoot_N = mkN "piede_piatto" ; -- UWN
 lin flathead_N = mkN "zuccone" ; -- status=guess
@@ -14906,7 +14911,8 @@ lin kinshasa_PN = mkPN "Kinshasa" ; -- status=guess src=geonames
 lin kinship_N = mkN "parentela" ; -- status=guess
 lin kinsman_N = mkN "parente" masculine ; -- status=guess
 lin kiosk_N = mkN "chiosco" ; -- status=guess
-lin kip_N = mkN "riposo" ; -- status=guess
+lin kip_1_N = mkN "riposo" ; -- status=guess
+lin kip_2_N = mkN "riposo" ; -- status=guess
 lin kirkby_PN = mkPN "Kirkby" ; -- status=guess src=geonames
 lin kirkcaldy_PN = mkPN "Kirkcaldy" ; -- status=guess src=geonames
 lin kirkham_PN = mkPN "Kirkham" ; -- status=guess src=geonames
@@ -15421,7 +15427,8 @@ lin leotard_N = mkN "body" masculine ; -- status=guess
 lin lepiota_N = mkN "bubbola" | mkN "lepiota" ; -- UWN
 lin leprosy_N = mkN "lebbra" ; -- status=guess
 lin leprous_A = mkA "lebbroso" ; -- status=guess
-lin lepton_N = mkN "leptone" masculine ; -- status=guess
+lin lepton_1_N = mkN "leptone" masculine ; -- status=guess
+lin lepton_2_N = mkN "leptone" masculine ; -- status=guess
 lin lerwick_PN = mkPN "Lerwick" ; -- status=guess src=geonames
 lin les_PN = mkPN "Les" ; -- status=guess src=geonames
 lin lesbian_A = mkA "lesbico" | mkA "lesbica" ; -- status=guess status=guess
@@ -15598,7 +15605,8 @@ lin lily_N = mkN "giglio" ; -- status=guess
 lin lima_PN = mkPN "Lima" ; -- status=guess src=geonames
 lin limb_N = mkN "lembo bordo margine" ; -- status=guess
 lin limber_up_V = mkV "scaldarsi" ; -- UWN
-lin lime_N = mkN "limetta" ; -- status=guess
+lin lime_1_N = mkN "limetta" ; -- status=guess
+lin lime_2_N = mkN "limetta" ; -- status=guess
 lin limekiln_N = mkN "calcara" ; -- status=guess
 lin limelight_N = mkN "lucci della rabata" | mkN "luci della ribalta" ; -- status=guess status=guess
 lin limerick_PN = mkPN "Limerick" ; -- status=guess src=geonames
@@ -17472,7 +17480,9 @@ lin motorway_N = mkN "autostrada" ; -- status=guess
 lin motto_N = mkN "divisa" | mkN "motto" | mkN "slogan" ; -- UWN
 lin mouflon_N = mkN "muflone" masculine ; -- status=guess
 lin moujik_N = mkN "mugic" | mkN "mugik" ; -- UWN
-lin mould_N = mkN "stampo" | mkN "calco" ; -- status=guess status=guess
+lin mould_1_N = mkN "stampo" | mkN "calco" ; -- status=guess status=guess
+lin mould_2_N = mkN "stampo" | mkN "calco" ; -- status=guess status=guess
+lin mould_3_N = mkN "stampo" | mkN "calco" ; -- status=guess status=guess
 lin mouldy_A = mkA "ammuffito" ; -- status=guess
 lin moult_N = mkN "muta" | mkN "muda" ; -- status=guess status=guess
 lin moult_V = mkV "mutare" | mkV (I.fare_V) "la muta" ; -- status=guess, src=wikt status=guess, src=wikt
@@ -18387,8 +18397,8 @@ lin octogenarian_N = mkN "ottantenne" | mkN "ottuagenario" ; -- UWN
 lin octopus_N = mkN "piovra" | mkN "polipo" | mkN "polpo" | mkN "ottopode" ; -- status=guess status=guess status=guess status=guess
 lin oculist_N = mkN "oculista" | mkN "oftalmoiatra" | mkN "oftalmologo" ; -- UWN
 lin odalisque_N = mkN "odalisca" ; -- status=guess
-lin odd_A = mkA "dispari" ; -- status=guess
-lin odd_N = variants {} ; --
+lin odd_1_A = mkA "dispari" ; -- status=guess
+lin odd_2_A = mkA "dispari" ; -- status=guess
 lin oddity_N = mkN "stranezza" ; -- status=guess
 lin oddment_N = mkN "curiosità" | mkN "rarità" ; -- UWN
 lin oddness_N = mkN "originalità" feminine | mkN "bizzarria" | mkN "stranezza" | mkN "stramberia" | mkN "bislaccheria" ; -- status=guess status=guess status=guess status=guess status=guess
@@ -20598,7 +20608,8 @@ lin pouch_N = mkN "sacchetto" ; -- status=guess
 lin poulterer_N = mkN "pollaiolo" | mkN "pollinaro" | mkN "pollivendolo" ; -- UWN
 lin poultice_N = mkN "cataplasma" masculine ; -- status=guess
 lin poultryman_N = mkN "pollaiolo" | mkN "pollinaro" | mkN "pollivendolo" ; -- UWN
-lin pound_N = mkN "sterlina" ;
+lin pound_1_N = mkN "sterlina" ;
+lin pound_2_N = mkN "sterlina" ;
 lin pound_V = mkV "frantumare" | mkV "tritare" | mkV "triturare" | mkV "polverizzare" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin pound_V2 = mkV2 (mkV "frantumare") | mkV2 (mkV "tritare") | mkV2 (mkV "triturare") | mkV2 (mkV "polverizzare") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin pour_V = mkV "versare" ; -- status=guess, src=wikt
@@ -24943,7 +24954,8 @@ lin sow_V = mkV "seminare" ; -- status=guess, src=wikt
 lin sow_V2 = mkV2 (mkV "seminare") ; -- status=guess, src=wikt
 lin sower_N = mkN "seminatore" ; -- UWN
 lin soy_N = mkN "latte di soia" ; -- status=guess
-lin space_N = mkN "spazio" ; -- status=guess
+lin space_1_N = mkN "spazio" ; -- status=guess
+lin space_2_N = mkN "spazio" ; -- status=guess
 lin spacecraft_N = mkN "nave spaziale" | mkN "astronave" ; -- status=guess status=guess
 lin spaceship_N = mkN "astronave" | mkN "nave spaziale" ; -- status=guess status=guess
 lin spacesuit_N = mkN "scafandro" | mkN "tuta_spaziale" ; -- UWN
@@ -25336,7 +25348,8 @@ lin stammer_N = mkN "balbettio" ; -- status=guess
 lin stammer_V = mkV "balbettare" ; -- status=guess, src=wikt
 lin stammer_V2 = mkV2 (mkV "balbettare") ; -- status=guess, src=wikt
 lin stammerer_N = mkN "balbuziente" | mkN "ciangottone" | mkN "tartaglia" | mkN "tartaglione" ; -- UWN
-lin stamp_N = mkN "conio" ; -- status=guess
+lin stamp_1_N = mkN "conio" ; -- status=guess
+lin stamp_2_N = mkN "conio" ; -- status=guess
 lin stamp_V = mkV "affrancare" ; -- status=guess, src=wikt
 lin stamp_V2 = mkV2 (mkV "affrancare") ; -- status=guess, src=wikt
 lin stampede_N = mkN "fuggi_fuggi" | mkN "fuggifuggi" ; -- UWN
@@ -25647,7 +25660,8 @@ lin stomach_N = mkN "pancia" masculine ; -- status=guess
 lin stomach_ache_N = mkN "mal di pancia" ; -- status=guess
 lin stomatitis_N = mkN "stomatite" ; -- UWN
 lin stone_A = mkA "pietroso" | mkA "petroso" | mkA "roccioso" ; -- status=guess status=guess status=guess
-lin stone_N = L.stone_N ;
+lin stone_1_N = L.stone_N ;
+lin stone_2_N = L.stone_N ;
 lin stone_PN = mkPN "Stone" ; -- status=guess src=geonames
 lin stone_V2 = mkV2 (mkV "lapidare") ; -- status=guess, src=wikt
 lin stonecrop_N = mkN "borraccina" | mkN "borracina" ; -- UWN
@@ -26553,7 +26567,8 @@ lin tan_V2 = mkV2 (mkV "abbronzarsi") ; -- status=guess, src=wikt
 lin tandem_N = mkN "tandem" masculine ; -- status=guess
 lin tang_N = mkN "codolo" ; -- status=guess
 lin tangency_N = mkN "contatto" ; -- UWN
-lin tangent_N = mkN "tangente" feminine ; -- status=guess
+lin tangent_1_N = mkN "tangente" feminine ; -- status=guess
+lin tangent_2_N = mkN "tangente" feminine ; -- status=guess
 lin tangential_A = mkA "tangenziale" ; -- status=guess
 lin tangerine_N = mkN "mandarino" ; -- status=guess
 lin tangibility_N = mkN "tangibilità" ; -- UWN
