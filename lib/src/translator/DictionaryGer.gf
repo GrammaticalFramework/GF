@@ -58092,7 +58092,7 @@ lin tire_V = mkV "ermüden" ; -- status=guess, src=wikt
 lin tire_V2 = mkV2 (mkV "ermüden") ; -- status=guess, src=wikt
 lin tire_of_V2 = variants {} ;
 lin tire_out_V2 = variants {} ;
-lin tired_A = mkA "müde" ; -- status=guess
+lin tired_A = mkA "müde" ;
 lin tiredness_N = mkN "Müdigkeit" feminine ; -- status=guess
 lin tireless_A = variants {} ;
 lin tiresome_A = variants {} ;

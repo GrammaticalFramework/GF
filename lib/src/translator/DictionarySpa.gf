@@ -30103,7 +30103,7 @@ lin tiramisu_N = mkN "tiramisú" masculine ; -- status=guess
 lin tire_N = mkN "cubierta" | mkN "neumático" ; --UWN
 lin tire_V = mkV "cansarse" | mkV "aburrirse" | mkV "hartarse" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin tire_V2 = mkV2 (mkV "cansarse") | mkV2 (mkV "aburrirse") | mkV2 (mkV "hartarse") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
-lin tired_A = variants {} ; --
+lin tired_A = mkA "cansado" ;
 lin tiredness_N = mkN "fatiga" ; -- status=guess
 lin tireless_A = mkA "incansable" ; -- status=guess
 lin tiresome_A = mkA "cansado" ; -- status=guess

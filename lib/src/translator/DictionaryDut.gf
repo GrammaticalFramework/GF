@@ -20985,7 +20985,7 @@ lin tipsy_A = mkA "aangeschoten" | mkA "tipsy" ; -- status=guess status=guess
 lin tiptoe_V = mkV (mkV "op") "de tippen lopen" ; -- status=guess, src=wikt
 lin tire_V = reflMkV "vermoeien" | mkV (mkV "moe") "worden" ; -- status=guess, src=wikt status=guess, src=wikt
 lin tire_V2 = mkV2 (reflMkV "vermoeien") | mkV2 (mkV (mkV "moe") "worden") ; -- status=guess, src=wikt status=guess, src=wikt
-lin tired_A = mkA "moe" | mkA "vermoeid" ; -- status=guess status=guess
+lin tired_A = mkA "moe" ;
 lin tissue_N = mkN "weefsel" neuter ; -- status=guess
 lin tit_N = mkN "tiet" feminine ; -- status=guess
 lin titanium_N = mkN "titanium" neuter | mkN "titaan" neuter ; -- status=guess status=guess
@@ -21584,7 +21584,7 @@ lin underneath_Adv = variants {} ; --
 lin underneath_Prep = variants {} ; --
 lin underpin_V2 = mkV2 (mkV "ondersteunen") | mkV2 (dragen_V) | mkV2 (mkV "schragen") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin undersecretary_N = mkN "onderminister" masculine ; -- status=guess
-lin understand_V = no_geV (mkV "begrijpen" "begreep" "begrepen") | no_geV (mkV "verstaan" "verstond" "verstaan") ;
+lin understand_V = no_geV (mkV "verstaan" "verstond" "verstaan") ;
 lin understand_V2 = L.understand_V2 ;
 lin understand_VS = mkVS understand_V ;
 lin understandable_A = mkA "begrijpelijk" ; -- status=guess
