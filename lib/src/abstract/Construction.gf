@@ -17,6 +17,7 @@ flags coding=utf8 ;
 fun
   hungry_VP     : VP ;                 -- x is hungry / x a faim (Fre)
   thirsty_VP    : VP ;                 -- x is thirsty / x a soif (Fre)
+  tired_VP      : VP ;                 -- x is tired / x estoy cansado (Spa)
   has_age_VP    : Card -> VP ;         -- x is y years old / x a y ans (Fre)
 
   have_name_Cl  : NP -> NP -> Cl ;     -- x's name is y / x s'appelle y (Fre)

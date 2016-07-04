@@ -1,4 +1,4 @@
---# -path=.:../abstract:../prelude
+--# -path=.:../abstract:../prelude:../api
 
 concrete AllJpn of AllJpnAbs = 
   LangJpn,

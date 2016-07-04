@@ -14,6 +14,8 @@ lincat
 lin
   hungry_VP = mkVP (mkA079 "гладен") ;
   thirsty_VP = mkVP (mkA079 "жаден") ;
+  tired_VP = mkVP (mkA076 "уморен") ;
+
   has_age_VP card = mkVP (SyntaxBul.mkAdv (mkPrep "на" R.Acc) (mkNP <lin Card card : Card> (mkN041 "година"))) ;
   have_name_Cl x name = mkCl <lin NP x : NP> (dirV2 (medialV (actionV (mkV186 "казвам") (mkV156 "кажа")) R.Acc)) <lin NP name : NP> ;
   how_old_QCl p = mkQCl (MorphoFunsBul.mkIAdv "на колко") (mkCl <lin NP p : NP> (mkNP a_Quant plNum (mkN041 "година"))) ;

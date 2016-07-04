@@ -1,7 +1,7 @@
 --# -path=alltenses:.:../abstract
 
 concrete ConstructionCat of Construction = CatCat **
-  open SyntaxCat, SymbolicCat, ParadigmsCat,
+  open SyntaxCat, SymbolicCat, ParadigmsCat, BeschCat,
        (L = LexiconCat), (E = ExtraCat), (I = IrregCat), (R = ResCat), (C = CommonRomance),
        Prelude in {
 flags coding=utf8 ;
@@ -10,6 +10,7 @@ flags coding=utf8 ;
 lin
   hungry_VP = E.ComplCN have_V2 (mkCN (mkN "gana" feminine)) ; -- "fam" (val)
   thirsty_VP = E.ComplCN have_V2 (mkCN (mkN "set" feminine)) ;
+  tired_VP = mkVP stateCopula (mkAP (mkA "cansat")) ;
 
   has_age_VP card = mkVP have_V2 (mkNP <lin Card card : Card> L.year_N) ;
 
@@ -55,6 +56,7 @@ lincat
   Year = NP ;
 oper
   noPrep : Prep = mkPrep [] ;
+  stateCopula = mkVA (mkV (estar_54 "estar")) ;
 
 lin
   weekdayPunctualAdv w = lin Adv {s = w.s ! C.Sg} ;         -- lundi

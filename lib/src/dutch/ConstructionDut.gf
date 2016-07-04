@@ -8,6 +8,8 @@ concrete ConstructionDut of Construction = CatDut **
 lin
   hungry_VP = mkVP have_V2 (mkNP (mkN "honger")) ;
   thirsty_VP = mkVP have_V2 (mkNP (mkN "dorst")) ;
+  tired_VP = mkVP (mkA "moe") ;
+
   has_age_VP card = mkVP (mkNP <card : Card> L.year_N) ;
 
   have_name_Cl x y = mkCl (lin NP x) (mkV2 I.heten_V) (lin NP y) ;
