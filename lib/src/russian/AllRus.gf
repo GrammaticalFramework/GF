@@ -1,4 +1,4 @@
---# -path=.:../abstract:../common:../prelude
+--# -path=.:../abstract:../common:../prelude:../api
 
 concrete AllRus of AllRusAbs = 
   LangRus,

@@ -9,6 +9,8 @@ flags coding=utf8 ;
 lin
   hungry_VP = mkVP (mkA "hungrig") ;
   thirsty_VP = mkVP (mkA "durstig") ;
+  tired_VP = mkVP (mkA "müde") ;
+
   has_age_VP card = mkVP (lin AP (mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> L.year_N))) L.old_A)) ;
 
   have_name_Cl x y = mkCl (lin NP x) (mkV2 I.heißen_V) (lin NP y) ;

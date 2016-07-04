@@ -1,8 +1,9 @@
---# -path=.:../abstract:../common
+--# -path=.:../abstract:../common:../api
 
   concrete LangJpn of Lang = 
     GrammarJpn, 
-    LexiconJpn
+    LexiconJpn,
+    ConstructionJpn
   ,DocumentationJpn --# notpresent
     ;
 

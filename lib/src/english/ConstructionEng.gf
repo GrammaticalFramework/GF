@@ -7,6 +7,8 @@ concrete ConstructionEng of Construction = CatEng **
 lin
   hungry_VP = mkVP (mkA "hungry") ;
   thirsty_VP = mkVP (mkA "thirsty") ;
+  tired_VP = mkVP (mkA "tired") ;
+
   has_age_VP card = mkVP (mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> L.year_N))) L.old_A) ;
 
   have_name_Cl x y = mkCl (mkNP (E.GenNP x) L.name_N) (lin NP y) ;

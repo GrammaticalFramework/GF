@@ -7,6 +7,8 @@ flags coding=utf8 ;
 lin
   hungry_VP = mkVP have_V2 (lin NP (mkNP (mkPN "kõht tühi"))) ;
   thirsty_VP = mkVP have_V2 (lin NP (mkNP (ParadigmsEst.mkN "janu"))) ;
+  tired_VP = mkVP (ParadigmsEst.mkA "väsinud") ;
+
   has_age_VP card = 
     let n_years_AdA : AdA = lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> L.year_N)))
     in  mkVP (mkAP n_years_AdA L.old_A) ;

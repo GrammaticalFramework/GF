@@ -20,7 +20,7 @@ concrete TranslateRus of Translate =
   QuestionRus,
   RelativeRus,
   IdiomRus,
-  --ConstructionRus,
+  ConstructionRus,
   DocumentationRus,
 
   ChunkRus,
