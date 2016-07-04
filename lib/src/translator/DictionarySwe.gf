@@ -57705,7 +57705,7 @@ lin tiramisu_N = variants {} ; -- status=guess
 lin tire_N = mkN "ring" neutrum ; -- comment=5
 lin tire_V = mkV "ringer" ; -- comment=2
 lin tire_V2 = variants {} ; -- status=guess
-lin tired_A = mkA "trött" "trött" ; -- status=guess
+lin tired_A = mkA "trött" "trött" ;
 lin tiredness_N = mkN "trötthet" ; -- status=guess
 lin tireless_A = mkA "outtröttlig" ; -- comment=2
 lin tiresome_A = mkA "tröttsam" "tröttsamt" "tröttsamma" "tröttsamma" "tröttsammare" "tröttsammast" "tröttsammaste" ; -- comment=2
@@ -59893,7 +59893,7 @@ lin underslung_A = variants {} ; -- status=guess
 lin underspend_V = variants {} ; -- status=guess
 lin underspend_V2 = variants {} ; -- status=guess
 lin understaffed_A = variants {} ; -- status=guess
-lin understand_V = mkV "begripa" "begrep" "begripit" | mkV "förstå" "förstod" "förstått" ;
+lin understand_V = mkV "förstå" "förstod" "förstått" ;
 lin understand_V2 = L.understand_V2 ;
 lin understand_VS = mkVS (mkV "förstå" "föstod" "förstått") | mkVS (mkV "begripa" "begrep" "begripit") ;
 lin understandable_A = mkA "förståelig" ; -- comment=4

@@ -27229,7 +27229,7 @@ lin tiramisu_N = mkN "tiramisù" masculine ; -- status=guess
 lin tire_N = mkN "copertone" | mkN "gomma" | mkN "pneumatico" ; -- UWN
 lin tire_V = mkV "stancarsi" ; -- status=guess, src=wikt
 lin tire_V2 = mkV2 (mkV "stancarsi") ; -- status=guess, src=wikt
-lin tired_A = variants {} ; --
+lin tired_A = mkA "stanco" ;
 lin tiredness_N = mkN "sfinitezza" ; -- status=guess
 lin tisane_N = mkN "tisana" ; -- UWN
 lin tissue_N = mkN "tessuto" ; -- status=guess
@@ -28071,7 +28071,7 @@ lin underscore_V2 = mkV2 (mkV "sottolineare") ; -- status=guess, src=wikt
 lin undersecretary_N = mkN "sottosegretario" | mkN "sottosegretaria" | mkN "viceministro" ; -- status=guess status=guess status=guess
 lin underside_N = mkN "basso" | mkN "di_sotto" | mkN "disotto" | mkN "fondo" ; -- UWN
 lin underskirt_N = mkN "sottogonna" | mkN "sottoveste" ; -- UWN
-lin understand_V = mkV "capire" | comprendere_V | mkV "intendere" ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
+lin understand_V = mkV "capire" ;
 lin understand_V2 = L.understand_V2 ;
 lin understand_VS = mkVS (mkV "capire") | mkVS (comprendere_V) | mkVS (mkV "intendere") ; -- status=guess, src=wikt status=guess, src=wikt status=guess, src=wikt
 lin understandable_A = mkA "perdonabile" | mkA "comprensibile" ; -- status=guess status=guess
