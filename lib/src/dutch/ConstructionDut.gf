@@ -11,6 +11,7 @@ lin
   tired_VP = mkVP (mkA "moe") ;
   scared_VP = mkVP (mkA "bang") ;
   ill_VP = mkVP (mkA "ziek") ;
+  ready_VP = mkVP (mkA "klaar") ;
 
   has_age_VP card = mkVP (mkNP <card : Card> L.year_N) ;
 

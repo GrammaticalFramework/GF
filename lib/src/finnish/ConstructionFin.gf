@@ -10,6 +10,7 @@ lin
   tired_VP = mkVP (caseV partitive (mkV "väsyttää")) ;
   scared_VP = mkVP (caseV partitive (mkV "pelottaa")) ;
   ill_VP = mkVP (mkA "sairas") ;
+  ready_VP = mkVP (ParadigmsFin.mkA "valmis") ;
 
   has_age_VP card = mkVP (mkAP (lin AdA (mkUtt (lin NP (mkNP <lin Card card : Card> L.year_N)))) L.old_A) ;
 

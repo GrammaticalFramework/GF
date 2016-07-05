@@ -21839,7 +21839,7 @@ lin reading_PN = mkPN "Reading" ; -- status=guess src=geonames
 lin readjust_V2 = mkV2 (mkV "riadattare") | mkV2 (mkV "riambientarsi") ; -- status=guess, src=wikt status=guess, src=wikt
 lin readjustment_N = mkN "riadattamento" ; -- UWN
 lin readmission_N = mkN "riammissione" masculine ; -- status=guess
-lin ready_A = mkA "pronto" | mkA "preparato" ; -- status=guess status=guess
+lin ready_A = mkA "pronto" ;
 lin ready_V2 = mkV2 (mkV "preparare") ; -- status=guess, src=wikt
 lin reagent_N = mkN "reagente" masculine ; -- status=guess
 lin real_A = mkA "vero" | mkA "vera" ; -- status=guess status=guess

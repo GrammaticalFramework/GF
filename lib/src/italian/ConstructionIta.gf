@@ -13,6 +13,7 @@ lin
   tired_VP = mkVP (mkA "stanco") ;
   scared_VP = E.ComplCN have_V2 (mkCN (mkN "paura" feminine)) ;
   ill_VP = mkVP (mkA "malato") ;
+  ready_VP = mkVP (mkA "pronto") ;
 
   has_age_VP card = mkVP have_V2 (mkNP <lin Card card : Card> L.year_N) ;
 

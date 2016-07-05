@@ -26920,7 +26920,7 @@ lin reading_N = mkN "阅读" ;
 lin reading_PN = mkPN "雷丁" ; -- comment=src=geonames status=guess
 lin readjustment_N = mkN "重新调整" ;
 lin readmit_V2 = mkV2 "重新接纳" ;
-lin ready_A = mkA "准备" | {-HSK-} mkA "愿意" ;
+lin ready_A = L.ready_A ;
 lin ready_N = mkN "愿意" | {-HSK-} mkN "现款""" ;
 lin ready_V2 = mkV2 "准备" ;
 lin reaffirm_V2 = mkV2 "重申" ;
