@@ -9,6 +9,8 @@ lin
   hungry_VP = mkVP have_V2 (mkNP (mkN "honger")) ;
   thirsty_VP = mkVP have_V2 (mkNP (mkN "dorst")) ;
   tired_VP = mkVP (mkA "moe") ;
+  scared_VP = mkVP (mkA "bang") ;
+  ill_VP = mkVP (mkA "ziek") ;
 
   has_age_VP card = mkVP (mkNP <card : Card> L.year_N) ;
 

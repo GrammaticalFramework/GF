@@ -15080,7 +15080,7 @@ lin ilfracombe_PN = mkPN "Ilfracombe" ; -- status=guess src=geonames
 lin ilium_N = mkN "ilium" ; -- UWN
 lin ilkeston_PN = mkPN "Ilkeston" ; -- status=guess src=geonames
 lin ilkley_PN = mkPN "Ilkley" ; -- status=guess src=geonames
-lin ill_A = mkA "mauvais" | mkA "écoeuré" | mkA "malade" ; -- tocheck
+lin ill_A = mkA "malade" ;
 lin ill_Adv = mkAdv "mal" ; -- tocheck
 lin ill_N = mkN "infirmité" | mkN "mal" | mkN "maladie" | mkN "malaise" ; -- UWN
 lin ill_mannered_A = mkA "malappris" ; -- tocheck
