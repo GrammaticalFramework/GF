@@ -27646,7 +27646,7 @@ lin ilium_N = variants {} ; -- status=guess
 lin ilk_N = mkN "like" ;
 lin ilkeston_PN = mkPN "Ilkeston" neutrum ; -- src=geonames status=guess
 lin ilkley_PN = mkPN "Ilkley" neutrum ; -- src=geonames status=guess
-lin ill_A = mkA "sjuk" ; -- comment=5
+lin ill_A = mkA "sjuk" ;
 lin ill_Adv = mkAdv "illa" ; -- status=guess
 lin ill_N = mkN "ondska" ; -- status=guess
 lin ill_advised_A = variants {} ; -- status=guess
@@ -49176,7 +49176,7 @@ lin scare_V = mkV "skrämmer" ; -- comment=2
 lin scare_V2 = mkV2 (mkV "skrämma") ; -- status=guess, src=wikt
 lin scarecrow_N = mkN "fågelskrämma" ; -- status=guess
 lin scarecrowish_A = variants {} ; -- status=guess
-lin scared_A = variants {} ; --
+lin scared_A = mkA "rädd" ;
 lin scaremonger_N = mkN "panikspridare" ; -- src=google
 lin scarf_N = mkN "skarf" ; -- comment=3
 lin scarf_pin_N = variants {} ; -- status=guess

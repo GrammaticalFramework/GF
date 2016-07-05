@@ -28798,7 +28798,7 @@ lin scare_N = mkN "惊吓" ;
 lin scare_V = mkV "吓" ;
 lin scare_V2 = mkV2 "吓" | {-HSK-} mkV2 "惊吓" ;
 lin scarecrow_N = mkN "稻草人" ; -- status=guess
-lin scared_A = variants {} ;
+lin scared_A = mkA "惊慌" ;
 lin scarf_N = mkN "围巾" "條" | {-HSK-} mkN "領巾" | mkN "领巾" | mkN "圍巾" | mkN "围巾" ; -- status=guess -- status=guess -- status=guess -- status=guess
 lin scarlet_A = mkA "红色" ;
 lin scarlet_N = mkN "深紅色" | mkN "深红色" | mkN "緋紅" | mkN "绯红" ; -- status=guess -- status=guess -- status=guess -- status=guess

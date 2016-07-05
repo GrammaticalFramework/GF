@@ -8,6 +8,8 @@ lin
   hungry_VP = mkVP (mkA "hungry") ;
   thirsty_VP = mkVP (mkA "thirsty") ;
   tired_VP = mkVP (mkA "tired") ;
+  scared_VP = mkVP (mkA "scared") ;
+  ill_VP = mkVP (mkA "ill") ;
 
   has_age_VP card = mkVP (mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> L.year_N))) L.old_A) ;
 

@@ -8,6 +8,10 @@ flags coding=utf8 ;
 lin
   hungry_VP = mkVP  (mkA "भूखा") ;
   thirsty_VP = mkVP (mkA "प्यासा") ;
+--  tired_VP = mkVP (mkCompoundA "थका" "हुआ") ;
+--  scared_VP = mkVP (mkCompoundA "डरा" "हुआ") ;
+  ill_VP = mkVP (mkA "बीमार") ;
+
   has_age_VP card = mkVP (mkNP <card : Card> (mkCN (mmodN L.year_N))) ;
 
   have_name_Cl x y = mkCl (mkNP (E.GenNP x) L.name_N) (lin NP y) ;

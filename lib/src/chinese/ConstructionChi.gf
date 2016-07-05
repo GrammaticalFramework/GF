@@ -9,6 +9,8 @@ lin
   hungry_VP = mkVP (mkV "饿") ;
   thirsty_VP = mkVP (mkA "渴") ;
   tired_VP = mkVP (mkV "累了") ;
+  scared_VP = mkVP (mkA "惊慌") ;
+  ill_VP = mkVP (mkV "生病了") ;
 
   has_age_VP card = mkVP (lin AdV card) (mkVP (mkV "岁")) ;
 

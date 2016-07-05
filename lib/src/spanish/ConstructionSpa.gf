@@ -11,6 +11,8 @@ lin
   hungry_VP = E.ComplCN have_V2 (mkCN (mkN "hambre" feminine)) ;
   thirsty_VP = E.ComplCN have_V2 (mkCN (mkN "sed" feminine)) ;
   tired_VP = mkVP stateCopula (mkAP (mkA "cansado")) ;
+  scared_VP = E.ComplCN have_V2 (mkCN (mkN "miedo")) ;
+  ill_VP = mkVP stateCopula (mkAP (mkA "enfermo")) ;
 
   has_age_VP card = mkVP have_V2 (mkNP <lin Card card : Card> L.year_N) ;
 
