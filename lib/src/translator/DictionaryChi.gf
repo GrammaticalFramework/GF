@@ -16888,7 +16888,7 @@ lin ilk_N = mkN "亲属" ;
 lin ilkeston_PN = foreignPN "Ilkeston" ; -- comment=src=geonames status=guess
 lin ilkley_PN = foreignPN "Ilkley" ; -- comment=src=geonames status=guess
 lin ill_A = mkA "生病" ;
-lin ill_Adv = mkAdv "不利地" ;
+lin ill_AdV = mkAdV "不利地" ;
 lin ill_N = mkN "病" ;
 lin ill_advised_A = mkA "欠考虑" ;
 lin ill_disposed_A = mkA "疾病" ;

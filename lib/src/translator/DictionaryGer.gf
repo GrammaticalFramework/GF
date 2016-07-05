@@ -27817,7 +27817,7 @@ lin ilk_N = variants {} ;
 lin ilkeston_PN = mkPN "Ilkeston" ; -- src=geonames status=guess
 lin ilkley_PN = mkPN "Ilkley" ; -- src=geonames status=guess
 lin ill_A = mk3A "schlecht" "schlechter" "schlechteste" | mkA "übel" ; -- status=guess status=guess
-lin ill_Adv = variants {} ; --
+lin ill_AdV = variants {} ; --
 lin ill_N = mkN "Übel" neuter ; -- status=guess
 lin ill_advised_A = variants {} ;
 lin ill_affected_A = variants {} ;
