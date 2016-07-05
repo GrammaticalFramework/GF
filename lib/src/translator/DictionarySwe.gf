@@ -27647,7 +27647,7 @@ lin ilk_N = mkN "like" ;
 lin ilkeston_PN = mkPN "Ilkeston" neutrum ; -- src=geonames status=guess
 lin ilkley_PN = mkPN "Ilkley" neutrum ; -- src=geonames status=guess
 lin ill_A = mkA "sjuk" ;
-lin ill_Adv = mkAdv "illa" ; -- status=guess
+lin ill_AdV = mkAdV "illa" ; -- status=guess
 lin ill_N = mkN "ondska" ; -- status=guess
 lin ill_advised_A = variants {} ; -- status=guess
 lin ill_affected_A = variants {} ; -- status=guess

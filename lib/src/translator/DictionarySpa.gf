@@ -14940,7 +14940,7 @@ lin iliac_A = mkA "ilíaco" | mkA "iliaco" ; -- status=guess status=guess
 lin ilkeston_PN = mkPN "Ilkeston" ; -- status=guess src=geonames
 lin ilkley_PN = mkPN "Ilkley" ; -- status=guess src=geonames
 lin ill_A = mkA "mal" | mkA "mareado" ; -- status=guess
-lin ill_Adv = mkAdv "mal" ; -- status=guess
+lin ill_AdV = mkAdV "mal" ; -- status=guess
 lin ill_advised_A = mkA "desaconsejado" | mkA "imprudente" ; --UWN
 lin illegal_A = mkA "ilegal" ; -- status=guess
 lin illegality_N = mkN "ilegalidad" ; --UWN

@@ -10247,7 +10247,7 @@ lin ilfracombe_PN = mkPN "Ilfracombe" ; -- src=geonames status=guess
 lin ilkeston_PN = mkPN "Ilkeston" ; -- src=geonames status=guess
 lin ilkley_PN = mkPN "Ilkley" ; -- src=geonames status=guess
 lin ill_A = mkA "misselijk" ; -- status=guess
-lin ill_Adv = variants {} ; --
+lin ill_AdV = variants {} ; --
 lin illegal_A = mkA "strafbaar" | mkA "illegaal" | mkA "onwettig" ; -- status=guess status=guess status=guess
 lin illegal_N = mkN "illegaal" masculine feminine ; -- status=guess
 lin illegible_A = mkA "onleesbaar" ; -- status=guess

@@ -13460,7 +13460,7 @@ lin ilium_N = mkN "ileo" | mkN "ilio" ; -- UWN
 lin ilkeston_PN = mkPN "Ilkeston" ; -- status=guess src=geonames
 lin ilkley_PN = mkPN "Ilkley" ; -- status=guess src=geonames
 lin ill_A = mkA "malato" ;
-lin ill_Adv = variants {} ; --
+lin ill_AdV = variants {} ; --
 lin ill_N = mkN "acciacco" | mkN "affezione" | mkN "disturbo" | mkN "magagna" | mkN "malanno" | mkN "malattia" ; -- UWN
 lin ill_advised_A = mkA "malconsigliato" ; -- UWN
 lin illative_A = mkA "illativo" ; -- UWN
