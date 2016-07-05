@@ -13,6 +13,7 @@ lin
   tired_VP = mkVP stateCopula (mkAP (mkA "cansado")) ;
   scared_VP = E.ComplCN have_V2 (mkCN (mkN "miedo")) ;
   ill_VP = mkVP stateCopula (mkAP (mkA "enfermo")) ;
+  ready_VP = mkVP stateCopula (mkAP (mkA "listo")) ;
 
   has_age_VP card = mkVP have_V2 (mkNP <lin Card card : Card> L.year_N) ;
 

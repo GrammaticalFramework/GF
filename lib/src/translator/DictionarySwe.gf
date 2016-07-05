@@ -45940,8 +45940,8 @@ lin readjustment_N = mkN "justering" ; -- status=guess
 lin readmission_N = mkN "återtagande" ;
 lin readmit_V2 = variants {} ; -- status=guess
 lin readout_N = mkN "avläsning" ;
-lin ready_A = mkA "färdig" | mkA "beredd" | mkA "rask" ;
-lin ready_N = mkN "färdig" ; -- src=google
+lin ready_A = mkA "färdig" ;
+lin ready_N = mkN "färdighet" ;
 lin ready_V2 = variants {} ; -- status=guess
 lin ready_made_A = variants {} ; -- status=guess
 lin reaffiliation_N = variants {} ; -- status=guess

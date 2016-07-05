@@ -20,6 +20,7 @@ fun
   tired_VP      : VP ;                 -- x is tired / x estoy cansado (Spa)
   scared_VP     : VP ;                 -- x is scared
   ill_VP        : VP ;                 -- x is ill
+  ready_VP      : VP ;                 -- x is ready
   has_age_VP    : Card -> VP ;         -- x is y years old / x a y ans (Fre)
 
   have_name_Cl  : NP -> NP -> Cl ;     -- x's name is y / x s'appelle y (Fre)

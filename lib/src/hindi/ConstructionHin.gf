@@ -11,6 +11,7 @@ lin
 --  tired_VP = mkVP (mkCompoundA "थका" "हुआ") ;
 --  scared_VP = mkVP (mkCompoundA "डरा" "हुआ") ;
   ill_VP = mkVP (mkA "बीमार") ;
+  ready_VP = mkVP (mkA "तैयार") ;
 
   has_age_VP card = mkVP (mkNP <card : Card> (mkCN (mmodN L.year_N))) ;
 

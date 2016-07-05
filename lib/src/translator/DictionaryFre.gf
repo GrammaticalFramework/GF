@@ -24496,7 +24496,7 @@ lin reading_N = mkN "lecture" feminine ; -- tocheck
 lin reading_PN = mkPN "Reading" ; -- status=guess src=geonames
 lin readjust_V2 = mkV2 (mkV "rééquilibrer") ; -- tocheck
 lin readjustment_N = mkN "réajustement" masculine ; -- tocheck
-lin ready_A = mkA "prêt" ; -- tocheck
+lin ready_A = mkA "prêt" ;
 lin reagent_N = mkN "réactif" masculine ; -- tocheck
 lin real_A = mkA "vrai" | mkA "réel" ;
 lin real_N = mkN "réal" masculine ; -- tocheck

@@ -16705,7 +16705,7 @@ lin readable_A = mkA "leesbaar" | mkA "lezenswaardig" ; -- status=guess status=g
 lin reader_N = mkN "lezer" masculine ;
 lin reading_N = mkN "lezing" feminine ; -- status=guess
 lin reading_PN = mkPN "Reading" ; -- src=geonames status=guess
-lin ready_A = mkA "klaar" | mkA "gereed" ;
+lin ready_A = mkA "klaar" ;
 lin reagent_N = mkN "reagens" neuter ; -- status=guess
 lin real_A = mkA "echt" | mkA "reëel" ;
 lin real_N = mkN "real" masculine ; -- status=guess

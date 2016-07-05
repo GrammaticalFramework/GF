@@ -17,6 +17,7 @@ lin
   tired_VP = mkVP (mkA076 "уморен") ;
   scared_VP = mkVP (mkA076 "уплашен") ;
   ill_VP = mkVP (mkA079 "болен") ;
+  ready_VP = mkVP (mkA076 "готов") ;
 
   has_age_VP card = mkVP (SyntaxBul.mkAdv (mkPrep "на" R.Acc) (mkNP <lin Card card : Card> (mkN041 "година"))) ;
   have_name_Cl x name = mkCl <lin NP x : NP> (dirV2 (medialV (actionV (mkV186 "казвам") (mkV156 "кажа")) R.Acc)) <lin NP name : NP> ;

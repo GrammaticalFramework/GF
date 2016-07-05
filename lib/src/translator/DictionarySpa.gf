@@ -24136,7 +24136,7 @@ lin readiness_N = mkN "preparación" feminine ; -- status=guess
 lin reading_N = mkN "lectura" ; -- status=guess
 lin reading_PN = mkPN "Reading" ; -- status=guess src=geonames
 lin readjustment_N = mkN "reajuste" masculine ; -- status=guess
-lin ready_A = mkA "preparado" | mkA "listo" ;
+lin ready_A = mkA "listo" ;
 lin ready_V2 = mkV2 (mkV "preparar") | mkV2 (mkV "alistar") ; -- status=guess, src=wikt status=guess, src=wikt
 lin reaffiliation_N = mkN "reafiliación" ; --UWN
 lin reaffirm_V2 = mkV2 (mkV "reafirmar") ; -- status=guess, src=wikt
