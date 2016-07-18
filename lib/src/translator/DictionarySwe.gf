@@ -723,7 +723,7 @@ lin add_V = mkV "adderar" ;
 lin add_V2 = mkV2 (mkV "tillägga" "tillade" "tillagt") ;
 lin add_VS = mkVS (mkV "tillägga" "tillade" "tillagt") ;
 lin add_in_V = mkV "adderar" ; -- comment=10
-lin add_on_V2 = dirV2 (partV (mkV "ökar")"till") ; -- comment=3
+lin add_on_to_V2 = dirV2 (partV (mkV "ökar")"till") ; -- comment=3
 lin add_up_V = mkV "adderar" ; -- comment=10
 lin add_up_V2 = dirV2 (partV (mkV "ökar")"till") ; -- comment=3
 lin add_up_to_V2 = dirV2 (partV (mkV "ökar")"till") ; -- comment=3
@@ -10323,7 +10323,7 @@ lin chock_a_block_Adv = variants {} ; -- status=guess
 lin chock_full_A = variants {} ; -- status=guess
 lin chocolate_N = mkN "choklad" neutrum ; -- status=guess
 lin choice_A = mkA "prima" ; -- comment=2
-lin choice_N = mkN "val" "val" | mkN "valmöjlighet" "valmöjligheter" ;
+lin choice_N = mkN "val" "val" ;
 lin choir_N = mkN "kor" neutrum ; -- comment=2
 lin choir_school_N = mkN "kören-skolan" ; -- src=google
 lin choirboy_N = mkN "korgosse" utrum ;
@@ -42775,7 +42775,7 @@ lin politick_V = variants {} ; -- status=guess
 lin politics_N = mkN "politik" ;
 lin polity_N = mkN "polity" ;
 lin polka_N = mkN "polka" ; -- status=guess
-lin poll_N = mkN "enkät" "enkäter" | mkN "val" ; -- SaldoWN -- comment=10
+lin poll_N = mkN "enkät" "enkäter" ;
 lin poll_V = mkV "undersöker" ; -- comment=2
 lin poll_V2 = dirV2 (partV (mkV "få" "fick" "fått")"till") ; -- status=guess
 lin poll_tax_N = mkN "poll-skatt" ; -- src=google
@@ -49929,7 +49929,7 @@ lin select_V2 = mkV2 (mkV "välja" "valde" "valt") ; -- status=guess
 lin select_V2V = mkV2V (mkV "välja" "valde" "valt") ; -- status=guess
 lin select_VV = mkVV (mkV "välja" "valde" "valt") ; -- status=guess
 lin selected_A = mkA "utvald" "utvalt" ; -- status=guess
-lin selection_N = mkN "utdrag" neutrum | mkN "val" neutrum ; -- SaldoWN -- comment=6
+lin selection_N = mkN "utdrag" neutrum ; -- SaldoWN -- comment=6
 lin selective_A = mkA "selektiv" ; -- status=guess
 lin selectivity_N = mkN "selektivitet" "selektiviteter" ;
 lin selectman_N = mkN "select" ; -- src=google
@@ -62990,7 +62990,7 @@ lin whack_V2 = mkV2 (mkV "slå" "slog" "slagit") ; -- status=guess, src=wikt
 lin whacker_N = variants {} ; -- status=guess
 lin whacking_Adv = variants {} ; -- status=guess
 lin whacking_N = variants {} ; -- status=guess
-lin whale_N = mkN "val" ; -- SaldoWN = mkN "val" neutrum ;
+lin whale_N = mkN "val" ;
 lin whale_V = variants {} ; -- status=guess
 lin whaleboat_N = variants {} ; -- status=guess
 lin whalebone_N = mkN "valfiskben" ;

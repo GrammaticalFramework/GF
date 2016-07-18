@@ -391,7 +391,7 @@ lin add_V2 = mkV2 (aggiungere_V) ; -- status=guess, src=wikt
 lin add_V3 = L.add_V3 ; -- comment=CHECKED
 lin add_VS = mkVS (aggiungere_V) ; -- status=guess, src=wikt
 lin add_in_V = advV OP_add_V OP_in_Adv ; -- guess-p-verb
-lin add_on_V2 = prepV2 OP_add_V OP_on_Prep ; -- guess-p-verb
+lin add_on_to_V2 = prepV2 OP_add_V OP_on_Prep ; -- guess-p-verb
 lin add_up_V = advV OP_add_V OP_up_Adv ; -- guess-p-verb
 lin add_up_V2 = prepV2 OP_add_V OP_up_Prep ; -- guess-p-verb
 lin add_up_to_V2 = prepV2 (advV OP_add_V OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
