@@ -52030,7 +52030,7 @@ lin smacker_N = variants {} ; -- status=guess
 lin smacking_N = mkN "smäll" neutrum ; -- comment=2
 lin small_A = L.small_A ;
 lin small_Adv = variants {} ; -- status=guess
-lin small_N = mkN "lättöl" ; -- status=guess
+lin small_N = variants {} ; -- status=guess
 lin small_minded_A = variants {} ; -- status=guess
 lin smaller_A = mkA "liten" "litet" "lilla" "små" "mindre" "minst" "minsta" ; -- status=guess
 lin smallholder_N = variants {} ; -- status=guess
