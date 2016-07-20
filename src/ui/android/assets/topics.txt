@@ -858,8 +858,8 @@
 <satsuma_N,topic,food_N>
 <tangerine_N,topic,food_N>
 <kumquat_N,topic,food_N>
-<lime_N,topic,food_N>
-<grapefood_N,topic,food_N>
+<lime_2_N,topic,food_N>
+<grapefruit_N,topic,food_N>
 <pomelo_N,topic,food_N>
 <shaddock_N,topic,food_N>
 <citrange_N,topic,food_N>
@@ -872,8 +872,8 @@
 <fig_N,topic,food_N>
 <pineapple_N,topic,food_N>
 <granadilla_N,topic,food_N>
-<breadfood_N,topic,food_N>
-<jackfood_N,topic,food_N>
+<breadfruit_N,topic,food_N>
+<jackfruit_N,topic,food_N>
 <canistel_N,topic,food_N>
 <muskmelon_N,topic,food_N>
 <cantaloupe_N,topic,food_N>
@@ -929,7 +929,7 @@
 <clementine_N,topic,citrus_N>
 <satsuma_N,topic,citrus_N>
 <tangerine_N,topic,citrus_N>
-<lime_N,topic,citrus_N>
+<lime_2_N,topic,citrus_N>
 <mandarin_N,topic,tropical_A>
 <orange_1_N,topic,tropical_A>
 <lemon_N,topic,tropical_A>
