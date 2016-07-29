@@ -29555,8 +29555,8 @@ lin teenager_N = mkN "adolescente" masculine ; -- status=guess
 lin teeoff_N = mkN "tee_de_salida" ; --UWN
 lin teeter_V = mkV "titubear" ; -- status=guess, src=wikt
 lin teetotal_A = mkA "abstemio" ; -- status=guess
-lin teetotaler_N = mkN "abstemio" | mkN "abstemia" ; -- status=guess status=guess
 lin teetotaling_N = mkN "abstención" | mkN "abstinencia" ; --UWN
+lin teetotaller_N = mkN "abstemio" | mkN "abstemia" ; -- status=guess status=guess
 lin tegument_N = mkN "piel" ; --UWN
 lin teignmouth_PN = mkPN "Teignmouth" ; -- status=guess src=geonames
 lin tektite_N = mkN "tectita" ; -- status=guess

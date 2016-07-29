@@ -52645,7 +52645,6 @@ lin teeter_V = mkWV (k52 "horjua") ; --UNCHK
 lin teethe_V = mkWV (k63 "saada") "hampaita" ; --UNCHK
 lin teething_N = mkWN "hampaiden" "puhkeaminen" ; --UNCHK
 lin teetotal_A = mkWA (k41A "raitis") ; --UNCHK
-lin teetotaler_N = mkWN (k41A "raitis") ; --UNCHK
 lin teetotaling_N = mkWN (k5 "absolutismi") ; --UNCHK
 lin teetotaller_N = mkWN (k41A "raitis") ; --UNCHK
 lin teetotum_N = mkWN (k10 "hyrrä") ; --UNCHK

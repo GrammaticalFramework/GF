@@ -57055,7 +57055,6 @@ lin teeter_V = variants {} ;
 lin teethe_V = variants {} ;
 lin teething_N = variants {} ;
 lin teetotal_A = variants {} ;
-lin teetotaler_N = mkN031a "въздържател" ;
 lin teetotaling_N = variants {} ;
 lin teetotaller_N = mkN031a "въздържател" ;
 lin teetotum_N = mkN041 "въртележка" ; ----

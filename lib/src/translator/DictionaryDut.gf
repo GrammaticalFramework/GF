@@ -20604,7 +20604,6 @@ lin teenage_A = variants {} ; --
 lin teenager_N = mkN "tiener" ; -- status=guess
 lin teesside_PN = mkPN "Teesside" ; -- src=eng status=guess
 lin teeter_V = mkV "wankelen" | mkV "waggelen" ; -- status=guess, src=wikt status=guess, src=wikt
-lin teetotaler_N = mkN "geheelonthouder" masculine | mkN "geheelonthoudster" feminine ; -- status=guess status=guess
 lin teetotaller_N = mkN "geheelonthouder" masculine | mkN "geheelonthoudster" feminine ; -- status=guess status=guess
 lin teheran_PN = mkPN "Teheran" ; -- src=eng status=guess
 lin teignmouth_PN = mkPN "Teignmouth" ; -- src=geonames status=guess

@@ -56595,7 +56595,6 @@ lin teeter_V = mkV "vippar" ; -- status=guess
 lin teethe_V = variants {} ; -- status=guess
 lin teething_N = mkN "barnsjukdom" ;
 lin teetotal_A = variants {} ; -- status=guess
-lin teetotaler_N = mkN "absolutist" "absolutister" ; -- status=guess
 lin teetotaling_N = variants {} ; -- status=guess
 lin teetotaller_N = mkN "absolutist" "absolutister" ; -- comment=2
 lin teetotum_N = variants {} ; -- status=guess

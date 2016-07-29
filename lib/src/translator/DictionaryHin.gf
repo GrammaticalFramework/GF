@@ -28222,7 +28222,6 @@ lin teeter_V = mkV "लड़खड़ाना" ; -- tocheck
 lin teethe_V = compoundV "दाँत" (mkV "निकलना") ; -- tocheck              
 lin teething_N = mkN "दंतुरण" ; -- tocheck       
 lin teetotal_A = mkA "मद्यत्यागी" ; -- tocheck              
-lin teetotaler_N = mkN "पूर्णतया मद्यत्यागी" ; -- tocheck       
 lin teetotaling_N = mkN "मद्यत्याग" ; -- tocheck       
 lin teetotaller_N = mkN "पूर्णतया मद्यत्यागी" ; -- tocheck              
 lin teetotum_N = mkN "लट्टू" ; -- tocheck              

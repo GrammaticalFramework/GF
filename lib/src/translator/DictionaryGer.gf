@@ -56981,7 +56981,6 @@ lin teeter_V = variants {} ;
 lin teethe_V = variants {} ;
 lin teething_N = mkN "Kinderkrankheit" ; ----en {f} {p}" ; -- status=guess
 lin teetotal_A = variants {} ;
-lin teetotaler_N = mkN "Abstinenzler" "Abstinenzler" masculine | mkN "Antialkoholiker" "Antialkoholiker" masculine | mkN "Temperenzler" masculine ; -- status=guess status=guess status=guess
 lin teetotaling_N = variants {} ;
 lin teetotaller_N = mkN "Abstinenzler" "Abstinenzler" masculine | mkN "Antialkoholiker" "Antialkoholiker" masculine | mkN "Temperenzler" masculine ; -- status=guess status=guess status=guess
 lin teetotum_N = variants {} ;
