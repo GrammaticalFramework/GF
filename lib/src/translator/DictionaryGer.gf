@@ -54053,7 +54053,8 @@ lin stainability_N = variants {} ;
 lin stainable_A = variants {} ;
 lin stainer_N = variants {} ;
 lin staining_N = variants {} ;
-lin stainless_A = regA "rostfrei" ; -- status=guess
+lin stainless_1_A = regA "rostfrei" ; -- status=guess
+lin stainless_2_A = regA "rostfrei" ; -- status=guess
 lin stair_N = mkN "Treppe" "Treppen" feminine ; -- status=guess
 lin stair_carpet_N = variants {} ;
 lin stair_rod_N = variants {} ;

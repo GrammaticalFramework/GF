@@ -19509,7 +19509,8 @@ lin stagnation_N = mkN "stagnatie" feminine ; -- status=guess
 lin staid_A = mkA "formeel" ; -- status=guess
 lin stain_V = mkV "beitsen" ; -- status=guess, src=wikt
 lin stain_V2 = mkV2 (mkV "beitsen") ; -- status=guess, src=wikt
-lin stainless_A = mkA "roestvrij" ; -- status=guess
+lin stainless_1_A = mkA "roestvrij" ; -- status=guess
+lin stainless_2_A = mkA "roestvrij" ; -- status=guess
 lin stair_N = mkN "trap" ; -- status=guess
 lin staircase_N = mkN "trap" masculine ; -- status=guess
 lin stairwell_N = mkN "trappenhuis" neuter ; -- status=guess

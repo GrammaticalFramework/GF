@@ -27993,7 +27993,8 @@ lin staidness_N = mkN "calma" | mkN "ponderación" | mkN "solemnidad" ; --UWN
 lin stain_N = mkN "mancha" ; -- status=guess
 lin stain_V = mkV "manchar" ; -- status=guess
 lin stain_V2 = mkV2 (mkV "manchar") ; -- status=guess
-lin stainless_A = mkA "inoxidable" ; -- status=guess
+lin stainless_1_A = mkA "inoxidable" ; -- status=guess
+lin stainless_2_A = mkA "inoxidable" ; -- status=guess
 lin stair_N = mkN "escalera" ; -- status=guess
 lin staircase_N = mkN "escalera" ; -- status=guess
 lin stairway_N = mkN "escalera" ; -- status=guess

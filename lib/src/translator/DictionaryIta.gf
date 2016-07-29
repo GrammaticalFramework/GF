@@ -25341,7 +25341,8 @@ lin staidness_N = mkN "solennità" ; -- UWN
 lin stain_N = mkN "macchia" ; -- status=guess
 lin stain_V = mkV "mordenzare" ; -- status=guess, src=wikt
 lin stain_V2 = mkV2 (mkV "mordenzare") ; -- status=guess, src=wikt
-lin stainless_A = mkA "inox" | mkA "inossidabile" ; -- status=guess status=guess
+lin stainless_1_A = mkA "inox" | mkA "inossidabile" ; -- status=guess status=guess
+lin stainless_2_A = mkA "inox" | mkA "inossidabile" ; -- status=guess status=guess
 lin stair_N = mkN "scala" ; -- status=guess
 lin staircase_N = mkN "scalinata" ; -- status=guess
 lin stairway_N = mkN "scalinata" ; -- status=guess

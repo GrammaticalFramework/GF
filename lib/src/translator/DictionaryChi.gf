@@ -31064,7 +31064,8 @@ lin stain_N = mkN "污点" | {-HSK-} mkN "点" ;
 lin stain_V = variants {} ; -- comment=mkV2 "玷污" ;
 lin stain_V2 = mkV2 "玷污" ;
 lin stainable_A = mkA "可染" | mkA "可染色" ; -- open-multilingual-wordnet
-lin stainless_A = mkA "不锈" ;
+lin stainless_1_A = mkA "不锈" ;
+lin stainless_2_A = mkA "不锈" ;
 lin stair_N = mkN "楼梯" ;
 lin staircase_N = mkN "楼梯" ;
 lin stairway_N = mkN "楼梯" ; -- open-multilingual-wordnet

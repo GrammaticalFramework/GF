@@ -53700,7 +53700,8 @@ lin stainability_N = variants {} ; -- status=guess
 lin stainable_A = variants {} ; -- status=guess
 lin stainer_N = variants {} ; -- status=guess
 lin staining_N = mkN "färgning" ;
-lin stainless_A = mkA "fläckfri" "fläckfritt" ; -- comment=3
+lin stainless_1_A = mkA "fläckfri" "fläckfritt" ;
+lin stainless_2_A = mkA "rostfri" "rostfritt" ;
 lin stair_N = mkN "trappa" ; -- status=guess
 lin stair_carpet_N = mkN "trappa-mattan" ; -- src=google
 lin stair_rod_N = mkN "trappa-stav" ; -- src=google
