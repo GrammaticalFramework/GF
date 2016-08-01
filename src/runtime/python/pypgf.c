@@ -1788,6 +1788,8 @@ Bracket_repr(BracketObject *self)
 			Py_DECREF(space);
 			return NULL;
 		}
+
+		Py_DECREF(child_str);
 	}
 	
 	Py_DECREF(space);
@@ -2267,6 +2269,7 @@ Concr_load(ConcrObject* self, PyObject *args)
 		} else {
 			PyErr_SetString(PGFError, "The language cannot be loaded");
 		}
+		gu_pool_free(tmp_pool);
 		return NULL;
 	}
 
