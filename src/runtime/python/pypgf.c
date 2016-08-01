@@ -8,6 +8,30 @@
 #include <pgf/pgf.h>
 #include <pgf/linearizer.h>
 
+#if PY_MAJOR_VERSION >= 3
+	#define PyIntObject                  PyLongObject
+	#define PyInt_Type                   PyLong_Type
+	#define PyInt_Check(op)              PyLong_Check(op)
+	#define PyInt_CheckExact(op)         PyLong_CheckExact(op)
+	#define PyInt_FromString             PyLong_FromString
+	#define PyInt_FromUnicode            PyLong_FromUnicode
+	#define PyInt_FromLong               PyLong_FromLong
+	#define PyInt_FromSize_t             PyLong_FromSize_t
+	#define PyInt_FromSsize_t            PyLong_FromSsize_t
+	#define PyInt_AsLong                 PyLong_AsLong
+	#define PyInt_AS_LONG                PyLong_AS_LONG
+	#define PyInt_AsSsize_t              PyLong_AsSsize_t
+	#define PyInt_AsUnsignedLongMask     PyLong_AsUnsignedLongMask
+	#define PyInt_AsUnsignedLongLongMask PyLong_AsUnsignedLongLongMask
+#endif
+
+#if PY_MAJOR_VERSION >= 3
+	#define PyString_Check				 PyUnicode_Check
+	#define PyString_FromString		 	 PyUnicode_FromString
+	#define PyString_FromFormat		 	 PyUnicode_FromFormat
+	#define PyString_Concat(ps,s)		 {PyObject* tmp = *(ps); *(ps) = PyUnicode_Concat(tmp,s); Py_DECREF(tmp);}
+#endif
+
 static PyObject* PGFError;
 
 static PyObject* ParseError;
@@ -50,7 +74,7 @@ Expr_dealloc(ExprObject* self)
 		gu_pool_free(self->pool);
 	}
 
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static PyObject*
@@ -188,8 +212,8 @@ static PyGetSetDef Expr_getseters[] = {
 };
 
 static PyTypeObject pgf_ExprType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
+    //0,                         /*ob_size*/
     "pgf.Expr",                /*tp_name*/
     sizeof(ExprObject),        /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -254,13 +278,30 @@ Expr_initLiteral(ExprObject *self, PyObject *lit)
 	e->lit = gu_null_variant;
 
 	if (PyString_Check(lit)) {
-		GuString s = PyString_AsString(lit);
+		char* s;
+		Py_ssize_t len;
+
+#if PY_MAJOR_VERSION >= 3
+		PyObject* bytes = PyUnicode_AsUTF8String(lit);
+		if (bytes == NULL)
+			return -1;
+		if (PyBytes_AsStringAndSize(bytes,&s,&len) < 0)
+			return -1;
+#else
+		if (PyString_AsStringAndSize(lit,&s,&len) < 0)
+			return -1;
+#endif
+
 		PgfLiteralStr* slit =
 			gu_new_flex_variant(PGF_LITERAL_STR,
 			                    PgfLiteralStr,
-			                    val, strlen(s)+1,
+			                    val, len+1,
 			                    &e->lit, self->pool);
-		strcpy(slit->val, s);
+		memcpy(slit->val, s, len+1);
+
+#if PY_MAJOR_VERSION >= 3
+		Py_DECREF(bytes);
+#endif
 	} else if (PyInt_Check(lit)) {
 		PgfLiteralInt* ilit =
 			gu_new_variant(PGF_LITERAL_INT,
@@ -576,7 +617,12 @@ Expr_reduce_ex(ExprObject* self, PyObject *args)
 
 static PyObject*
 Expr_getattro(ExprObject *self, PyObject *attr_name) {
+#if PY_MAJOR_VERSION >= 3
+#define IS_ATTR(attr) (PyUnicode_CompareWithASCIIString(attr_name,attr) == 0)
+#else
 	const char* name = PyString_AsString(attr_name);
+#define IS_ATTR(attr) (strcmp(name, attr) == 0)
+#endif
 
 	PgfExpr expr = self->expr;
 	
@@ -594,10 +640,10 @@ redo:;
 		pyexpr->expr   = gu_null_variant;
 		Py_INCREF(pyexpr->master);
 
-		if (strcmp(name, "fun") == 0) {
+		if (IS_ATTR("fun")) {
 			pyexpr->expr = eapp->fun;
 			return ((PyObject*) pyexpr);
-		} else if (strcmp(name, "arg") == 0) {
+		} else if (IS_ATTR("arg")) {
 			pyexpr->expr = eapp->arg;
 			return ((PyObject*) pyexpr);
 		} else {
@@ -608,7 +654,7 @@ redo:;
 	case PGF_EXPR_LIT: {
 		PgfExprLit* elit = i.data;
 		
-		if (strcmp(name, "val") == 0) {
+		if (IS_ATTR("val")) {
 			GuVariantInfo i = gu_variant_open(elit->lit);
 			switch (i.tag) {
 			case PGF_LITERAL_INT: {
@@ -629,20 +675,20 @@ redo:;
 	}
 	case PGF_EXPR_META: {
 		PgfExprMeta* emeta = i.data;
-		if (strcmp(name, "id") == 0)
+		if (IS_ATTR("id"))
 			return PyInt_FromLong(emeta->id);
 		break;
 	}
 	case PGF_EXPR_FUN: {
 		PgfExprFun* efun = i.data;
-		if (strcmp(name, "name") == 0) {
+		if (IS_ATTR("name")) {
 			return PyString_FromString(efun->fun);
 		}
 		break;
 	}
 	case PGF_EXPR_VAR: {
 		PgfExprVar* evar = i.data;
-		if (strcmp(name, "index") == 0) {
+		if (IS_ATTR("index")) {
 			return PyInt_FromLong(evar->var);
 		}
 		break;
@@ -696,7 +742,7 @@ Type_dealloc(TypeObject* self)
 		gu_pool_free(self->pool);
 	}
 
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -741,7 +787,7 @@ Type_init(TypeObject *self, PyObject *args, PyObject *kwds)
 		PgfCId cid;
 		PyObject* py_type;
 
-		if (obj->ob_type == &pgf_TypeType) {
+		if (Py_TYPE(obj) == &pgf_TypeType) {
 			py_bindtype = Py_True;
 			cid = "_";
 			py_type = obj;
@@ -763,10 +809,32 @@ Type_init(TypeObject *self, PyObject *args, PyObject *kwds)
 				PyErr_SetString(PyExc_TypeError, "the arguments in the first list must be triples of (boolean,string,pgf.Type)");
 				return -1;
 			}
-			cid = gu_string_copy(PyString_AsString(py_var), self->pool);
+
+			{
+				char* s;
+				Py_ssize_t len;
+
+#if PY_MAJOR_VERSION >= 3
+				PyObject* bytes = PyUnicode_AsUTF8String(py_var);
+				if (bytes == NULL)
+					return -1;
+				if (PyBytes_AsStringAndSize(bytes,&s,&len) < 0)
+					return -1;
+#else
+				if (PyString_AsStringAndSize(py_var,&s,&len) < 0)
+					return -1;
+#endif
+
+				cid = gu_malloc(self->pool, len+1);
+				memcpy((char*)cid, s, len+1);
+
+#if PY_MAJOR_VERSION >= 3
+				Py_DECREF(bytes);
+#endif
+			}
 
 			py_type = PyTuple_GetItem(obj, 2);
-			if (py_type->ob_type != &pgf_TypeType) {
+			if (Py_TYPE(py_type) != &pgf_TypeType) {
 				PyErr_SetString(PyExc_TypeError, "the arguments in the first list must be triples of (boolean,string,pgf.Type)");
 				return -1;
 			}
@@ -788,7 +856,7 @@ Type_init(TypeObject *self, PyObject *args, PyObject *kwds)
 	self->type->n_exprs = n_exprs;
 	for (Py_ssize_t i = 0; i < n_exprs; i++) {
 		PyObject* obj = PyList_GetItem(py_exprs, i);
-		if (obj->ob_type != &pgf_ExprType) {
+		if (Py_TYPE(obj) != &pgf_ExprType) {
 			PyErr_SetString(PyExc_TypeError, "the arguments in the second list must be expressions");
 			return -1;
 		}
@@ -1012,8 +1080,8 @@ static PyGetSetDef Type_getseters[] = {
 };
 
 static PyTypeObject pgf_TypeType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
+    //0,                         /*ob_size*/
     "pgf.Type",                /*tp_name*/
     sizeof(TypeObject),        /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -1127,7 +1195,7 @@ Iter_dealloc(IterObject* self)
 	
 	Py_XDECREF(self->container);
 
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -1159,8 +1227,8 @@ static PyMethodDef Iter_methods[] = {
 };
 
 static PyTypeObject pgf_IterType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
+    //0,                         /*ob_size*/
     "pgf.Iter",                /*tp_name*/
     sizeof(IterObject),        /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -1222,7 +1290,7 @@ static void
 Concr_dealloc(ConcrObject* self)
 {
 	Py_XDECREF(self->grammar);
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static int
@@ -1752,14 +1820,18 @@ Bracket_dealloc(BracketObject* self)
 	Py_XDECREF(self->cat);
 	Py_XDECREF(self->fun);
 	Py_XDECREF(self->children);
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static PyObject *
 Bracket_repr(BracketObject *self)
 {
 	PyObject *repr =
+#if PY_MAJOR_VERSION >= 3
+		PyString_FromFormat("(%U:%d", self->cat, self->fid);
+#else
 		PyString_FromFormat("(%s:%d", PyString_AsString(self->cat), self->fid);
+#endif
 	if (repr == NULL) {
 		return NULL;
 	}
@@ -1776,7 +1848,7 @@ Bracket_repr(BracketObject *self)
 			return NULL;
 		}
 
-		PyObject *child_str = child->ob_type->tp_str(child);
+		PyObject *child_str = Py_TYPE(child)->tp_str(child);
 		if (child_str == NULL) {
 			Py_DECREF(repr);
 			Py_DECREF(space);
@@ -1791,7 +1863,7 @@ Bracket_repr(BracketObject *self)
 
 		Py_DECREF(child_str);
 	}
-	
+
 	Py_DECREF(space);
 
 	PyObject *str = PyString_FromString(")");
@@ -1820,8 +1892,8 @@ static PyMemberDef Bracket_members[] = {
 };
 
 static PyTypeObject pgf_BracketType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
+    //0,                         /*ob_size*/
     "pgf.Bracket",             /*tp_name*/
     sizeof(BracketObject),     /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -2359,8 +2431,8 @@ static PyMethodDef Concr_methods[] = {
 };
 
 static PyTypeObject pgf_ConcrType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
+    //0,                         /*ob_size*/
     "pgf.Concr",               /*tp_name*/
     sizeof(ConcrObject),       /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -2405,7 +2477,7 @@ PGF_dealloc(PGFObject* self)
 {
 	if (self->pool != NULL)
 		gu_pool_free(self->pool);
-    self->ob_type->tp_free((PyObject*)self);
+    Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static PyObject*
@@ -2992,8 +3064,8 @@ static PyMethodDef PGF_methods[] = {
 };
 
 static PyTypeObject pgf_PGFType = {
-    PyObject_HEAD_INIT(NULL)
-    0,                         /*ob_size*/
+    PyVarObject_HEAD_INIT(NULL, 0)
+    //0,                         /*ob_size*/
     "pgf.PGF",                 /*tp_name*/
     sizeof(PGFObject),         /*tp_basicsize*/
     0,                         /*tp_itemsize*/
@@ -3136,32 +3208,48 @@ static PyMethodDef module_methods[] = {
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
-PyMODINIT_FUNC
-initpgf(void)
+#if PY_MAJOR_VERSION >= 3
+  #define MOD_ERROR_VAL NULL
+  #define MOD_SUCCESS_VAL(val) val
+  #define MOD_INIT(name) PyMODINIT_FUNC PyInit_##name(void)
+  #define MOD_DEF(ob, name, doc, methods) \
+	          static struct PyModuleDef moduledef = { \
+				              PyModuleDef_HEAD_INIT, name, doc, -1, methods, }; \
+          ob = PyModule_Create(&moduledef);
+#else
+  #define MOD_ERROR_VAL
+  #define MOD_SUCCESS_VAL(val)
+  #define MOD_INIT(name) void init##name(void)
+  #define MOD_DEF(ob, name, doc, methods) \
+	          ob = Py_InitModule3(name, methods, doc);
+#endif
+
+MOD_INIT(pgf)
 {
     PyObject *m;
 
     if (PyType_Ready(&pgf_PGFType) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     if (PyType_Ready(&pgf_ConcrType) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     if (PyType_Ready(&pgf_BracketType) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     if (PyType_Ready(&pgf_ExprType) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
     if (PyType_Ready(&pgf_TypeType) < 0)
-        return;
+        return MOD_ERROR_VAL;
 
 	if (PyType_Ready(&pgf_IterType) < 0)
-		return;
+		return MOD_ERROR_VAL;
 
-    m = Py_InitModule("pgf", module_methods);
+	MOD_DEF(m, "pgf", "The Runtime for Portable Grammar Format in Python",
+	        module_methods);
     if (m == NULL)
-        return;
+        return MOD_ERROR_VAL;
         
     PGFError = PyErr_NewException("pgf.PGFError", NULL, NULL);
     PyModule_AddObject(m, "PGFError", PGFError);
@@ -3187,4 +3275,6 @@ initpgf(void)
     Py_INCREF(&pgf_ConcrType);
     Py_INCREF(&pgf_IterType);
     Py_INCREF(&pgf_BracketType);
+
+	return MOD_SUCCESS_VAL(m);
 }
