@@ -41,7 +41,7 @@ which respresents the language.
 For example the following will extract the English language:
 <pre class="code">
 >>> eng = gr.languages["AppEng"]
->>> print eng
+>>> print(eng)
 &lt;pgf.Concr object at 0x7f7dfa4471d0&gt;
 </pre>
 
@@ -58,18 +58,22 @@ abstract trees. You can get the next tree by calling next:
 <pre class="code">
 >>> p,e = i.next()
 </pre>
+or by calling __next__ if you are using Python 3:
+<pre class="code">
+>>> p,e = i.__next__()
+</pre>
 The results are always pairs of probability and tree. The probabilities
 are negated logarithmic probabilities and which means that the lowest
 number encodes the most probable result. The possible trees are
 returned in decreasing probability order (i.e. increasing negated logarithm).
 The first tree should have the smallest <tt>p</tt>:
 <pre class="code">
->>> print p
+>>> print(p)
 35.9166526794
 </pre>
 and this is the corresponding abstract tree:
 <pre class="code">
->>> print e
+>>> print(e)
 PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant this_Quant NumSg)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA small_A) (UseN theatre_N)))))))) NoVoc
 </pre>
 
@@ -116,7 +120,7 @@ a new expression like this:
 </pre>
 and then we can linearize it:
 <pre class="code">
->>> print eng.linearize(e)
+>>> print(eng.linearize(e))
 red theatre
 </pre>
 This method produces only a single linearization. If you use variants
@@ -124,7 +128,7 @@ in the grammar then you might want to see all possible linearizations.
 For that purpouse you should use linearizeAll:
 <pre class="code">
 >>> for s in eng.linearizeAll(e):
-       print s
+       print(s)
 red theatre
 red theater
 </pre>
@@ -140,7 +144,7 @@ Finally, you could also get a linearization which is bracketed into
 a list of phrases:
 <pre class="code">
 >>> [b] = eng.bracketedLinearize(e)
->>> print b
+>>> print(b)
 (CN:4 (AP:1 (A:0 red)) (CN:3 (N:2 theatre)))
 </pre>
 Each bracket is actually an object of type pgf.Bracket. The property
@@ -158,7 +162,7 @@ will just see the name of the function in the generated string.
 It is sometimes helpful to be able to see whether a function
 is linearizable or not. This can be done in this way:
 <pre class="code">
->>> print eng.hasLinearization("apple_N")
+>>> print(eng.hasLinearization("apple_N"))
 </pre>
 
 <h2>Analysing and Constructing Expressions</h2>
@@ -199,11 +203,11 @@ to call the method <tt>default</tt>. The following is an example:
 <pre class="code">
 >>> class ExampleVisitor:
 		def on_DetCN(self,quant,cn):
-			print "Found DetCN"
+			print("Found DetCN")
 			cn.visit(self)
 			
 		def on_AdjCN(self,adj,cn):
-			print "Found AdjCN"
+			print("Found AdjCN")
 			cn.visit(self)
 			
 		def default(self,e):
@@ -228,7 +232,7 @@ using the constructor for <tt>pgf.Expr</tt>:
 <pre class="code">
 >>> quant = pgf.readExpr("DetQuant IndefArt NumSg")
 >>> e2 = pgf.Expr("DetCN", [quant, e])
->>> print e2
+>>> print(e2)
 DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN theatre_N))
 </pre>
 
@@ -250,7 +254,7 @@ After that you can simply import the module:
 Now creating new trees is just a matter of calling ordinary Python
 functions:
 <pre class="code">
->>> print App.DetCN(quant,e)
+>>> print(App.DetCN(quant,e))
 DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN house_N))
 </pre>
 
@@ -262,12 +266,12 @@ The following code just iterates over the lexicon and prints each
 word form with its possible analyses:
 <pre class="code">
 for entry in eng.fullFormLexicon():
-	print entry
+	print(entry)
 </pre>
 The second one implements a simple lookup. The argument is a word
 form and the result is a list of analyses:
 <pre class="code">
-print eng.lookupMorpho("letter")
+print(eng.lookupMorpho("letter"))
 [('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
 </pre>
 
@@ -291,7 +295,7 @@ You can also access all functions with the same result category:
 </pre>
 The full type of a function can be retrieved as:
 <pre class="code">
->>> print gr.functionType("DetCN")
+>>> print(gr.functionType("DetCN"))
 Det -> CN -> NP
 </pre>
 
@@ -302,9 +306,9 @@ for simple types. Dependent types are still not fully implemented
 in the current runtime. The inference is done with method <tt>inferExpr</tt>:
 <pre class="code">
 >>> e,ty = gr.inferExpr(e)
->>> print e
+>>> print(e)
 AdjCN (PositA red_A) (UseN theatre_N)
->>> print ty
+>>> print(ty)
 CN
 </pre>
 The result is a potentially updated expression and its type. In this
@@ -316,7 +320,7 @@ wouldn't be true when dependent types are added.
 <p>Type checking is also trivial:
 <pre class="code">
 >>> e = gr.checkExpr(e,pgf.readType("CN"))
->>> print e
+>>> print(e)
 AdjCN (PositA red_A) (UseN theatre_N)
 </pre>
 In case of type error you will get an exception:
@@ -359,7 +363,7 @@ pgf.PGFError: The concrete syntax is not loaded
 Before using the concrete syntax, you need to explicitly load it: 
 <pre class="code">
 >>> eng.load("AppEng.pgf_c")
->>> print eng.lookupMorpho("letter")
+>>> print(eng.lookupMorpho("letter"))
 [('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
 </pre>
 
@@ -376,7 +380,7 @@ In both cases the result is a GraphViz code that can be used for
 rendering the trees. See the examples bellow.
 
 <pre class="code">
->>> print gr.graphvizAbstractTree(e)
+>>> print(gr.graphvizAbstractTree(e))
 graph {
 n0[label = "AdjCN", style = "solid", shape = "plaintext"]
 n1[label = "PositA", style = "solid", shape = "plaintext"]
@@ -391,7 +395,7 @@ n0 -- n3 [style = "solid"]
 </pre>
 
 <pre class="code">
->>> print eng.graphvizParseTree(e)
+>>> print(eng.graphvizParseTree(e))
 graph {
   node[shape=plaintext]
 
