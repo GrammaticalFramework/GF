@@ -32,12 +32,17 @@ oper
 
   VP = {s : VForm => Str; s2 : Agr => Str} ;
 
-  predV : (VForm => Str) -> Tense => Agr => Str =
+  neg : Polarity => Tense => Str =
+    table {Pos => \\_ => "" ;
+           Neg => table {Past => "ni"; _ => "ne"}
+          } ;
+
+  predV : (VForm => Str) -> Tense => Polarity => Agr => Str =
     \v -> table {
-             Pres => \\a => v ! VPres a.n a.p ;
-             Past => \\a => sem_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
-             Fut  => \\a => bom_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
-             Cond => \\a => "bi" ++ v ! VPastPart a.g a.n
+             Pres => \\p,a => neg ! p ! Pres ++ v ! VPres a.n a.p ;
+             Past => \\p,a => neg ! p ! Past +  sem_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
+             Fut  => \\p,a => neg ! p ! Fut  ++ bom_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
+             Cond => \\p,a => neg ! p ! Cond ++ "bi" ++ v ! VPastPart a.g a.n
           } ;
 
   sem_V : Number => Person => Str =
@@ -85,7 +90,7 @@ oper
   mkClause : Str -> Agr -> VP -> Clause =
     \subj,agr,vp -> {
       s = \\t,a,p => 
-        subj ++ predV vp.s ! t ! agr ++ vp.s2 ! agr
+        subj ++ predV vp.s ! t ! p ! agr ++ vp.s2 ! agr
     } ;
 
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
