@@ -96,5 +96,8 @@ oper
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
     s2 = \\a => vp.s2 ! a ++ obj ! a ;
     } ;
+    
+  numAgr2num : NumAgr => Number =
+    table {UseNum n => n; UseGen => Pl} ;
 
 }

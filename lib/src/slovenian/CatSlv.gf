@@ -20,12 +20,12 @@ lincat
   CN = {s : Species => Case => Number => Str; g : Gender} ;
   NP = {s : Case => Str ; a : Agr} ;
 
-  Pron = {s : Case => Str; poss : Str; a : Agr} ;
+  Pron = {s : Case => Str; poss : Gender => Case => Number => Str; a : Agr} ;
 
   Det = {s : Gender => Case => Str; spec : Species; n : NumAgr} ;
   Num  = {s : Gender => Case => Str ; n : NumAgr} ;
   Card = {s : Gender => Case => Str ; n : NumAgr} ;
-  Quant = {s : Str; spec : Species} ;
+  Quant = {s : Gender => Case => Number => Str; spec : Species} ;
 
   -- Numeral
   Numeral = {s : Gender => Case => Str ; n : NumAgr} ;

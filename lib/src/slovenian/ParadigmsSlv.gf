@@ -289,19 +289,85 @@ oper
 
   mkAdA : Str -> AdA = \s -> lin AdA {s=s} ;
 
-  mkPron : (_,_,_,_,_,_,_ : Str) -> Gender -> Number -> Person -> Pron =
-    \nom,acc,gen,dat,loc,instr,poss,g,n,p ->
-    lin Pron {s = table {
-                    Nom => nom;
+  mkPron : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> Number -> Person -> Pron =
+    \nom,acc,gen,dat,loc,instr,
+     mSgNom,mSgGen,mSgDat,mSgAcc,mSgLoc,mSgInstr,
+     mDlNom,mDlGen,mDlDat,mDlAcc,mDlLoc,mDlInstr,
+     mPlNom,mPlGen,mPlDat,mPlAcc,mPlLoc,mPlInstr,
+     fSgNom,fSgGen,fSgDat,fSgAcc,fSgLoc,fSgInstr,
+     fDlNom,fDlGen,fDlDat,fDlAcc,fDlLoc,fDlInstr,
+     fPlNom,fPlGen,fPlDat,fPlAcc,fPlLoc,fPlInstr,
+     nSgNom,nSgGen,nSgDat,nSgAcc,nSgLoc,nSgInstr,
+     nDlNom,nDlGen,nDlDat,nDlAcc,nDlLoc,nDlInstr,
+     nPlNom,nPlGen,nPlDat,nPlAcc,nPlLoc,nPlInstr,g,n,p -> lin Pron {
+       s = table {  Nom => nom;
                     Acc => acc;
                     Gen => gen;
                     Dat => dat;
                     Loc => loc;
                     Instr=>instr
                   } ;
-              poss = poss ;
-              a = {g=g; n=n; p=p}
-             } ;
+       poss = table {
+             Masc => table {Nom   => table Number [mSgNom;   mDlNom;   mPlNom];
+                            Gen   => table Number [mSgGen;   mDlGen;   mPlGen];
+                            Dat   => table Number [mSgDat;   mDlDat;   mPlDat];
+                            Acc   => table Number [mSgAcc;   mDlAcc;   mPlAcc];
+                            Loc   => table Number [mSgLoc;   mDlLoc;   mPlLoc];
+                            Instr => table Number [mSgInstr; mDlInstr; mPlInstr]
+                           };
+             Fem  => table {Nom   => table Number [fSgNom;   fDlNom;   fPlNom];
+                            Gen   => table Number [fSgGen;   fDlGen;   fPlGen];
+                            Dat   => table Number [fSgDat;   fDlDat;   fPlDat];
+                            Acc   => table Number [fSgAcc;   fDlAcc;   fPlAcc];
+                            Loc   => table Number [fSgLoc;   fDlLoc;   fPlLoc];
+                            Instr => table Number [fSgInstr; fDlInstr; fPlInstr]
+                           };
+             Neut => table {Nom   => table Number [nSgNom;   nDlNom;   nPlNom];
+                            Gen   => table Number [nSgGen;   nDlGen;   nPlGen];
+                            Dat   => table Number [nSgDat;   nDlDat;   nPlDat];
+                            Acc   => table Number [nSgAcc;   nDlAcc;   nPlAcc];
+                            Loc   => table Number [nSgLoc;   nDlLoc;   nPlLoc];
+                            Instr => table Number [nSgInstr; nDlInstr; nPlInstr]
+                           }
+           } ;
+       a = {g=g; n=n; p=p}
+     } ;
+
+  mkQuant : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Species -> Quant =
+    \mSgNom,mSgGen,mSgDat,mSgAcc,mSgLoc,mSgInstr,
+     mDlNom,mDlGen,mDlDat,mDlAcc,mDlLoc,mDlInstr,
+     mPlNom,mPlGen,mPlDat,mPlAcc,mPlLoc,mPlInstr,
+     fSgNom,fSgGen,fSgDat,fSgAcc,fSgLoc,fSgInstr,
+     fDlNom,fDlGen,fDlDat,fDlAcc,fDlLoc,fDlInstr,
+     fPlNom,fPlGen,fPlDat,fPlAcc,fPlLoc,fPlInstr,
+     nSgNom,nSgGen,nSgDat,nSgAcc,nSgLoc,nSgInstr,
+     nDlNom,nDlGen,nDlDat,nDlAcc,nDlLoc,nDlInstr,
+     nPlNom,nPlGen,nPlDat,nPlAcc,nPlLoc,nPlInstr,spec  -> lin Quant {
+       s = table {
+             Masc => table {Nom   => table Number [mSgNom;   mDlNom;   mPlNom];
+                            Gen   => table Number [mSgGen;   mDlGen;   mPlGen];
+                            Dat   => table Number [mSgDat;   mDlDat;   mPlDat];
+                            Acc   => table Number [mSgAcc;   mDlAcc;   mPlAcc];
+                            Loc   => table Number [mSgLoc;   mDlLoc;   mPlLoc];
+                            Instr => table Number [mSgInstr; mDlInstr; mPlInstr]
+                           };
+             Fem  => table {Nom   => table Number [fSgNom;   fDlNom;   fPlNom];
+                            Gen   => table Number [fSgGen;   fDlGen;   fPlGen];
+                            Dat   => table Number [fSgDat;   fDlDat;   fPlDat];
+                            Acc   => table Number [fSgAcc;   fDlAcc;   fPlAcc];
+                            Loc   => table Number [fSgLoc;   fDlLoc;   fPlLoc];
+                            Instr => table Number [fSgInstr; fDlInstr; fPlInstr]
+                           };
+             Neut => table {Nom   => table Number [nSgNom;   nDlNom;   nPlNom];
+                            Gen   => table Number [nSgGen;   nDlGen;   nPlGen];
+                            Dat   => table Number [nSgDat;   nDlDat;   nPlDat];
+                            Acc   => table Number [nSgAcc;   nDlAcc;   nPlAcc];
+                            Loc   => table Number [nSgLoc;   nDlLoc;   nPlLoc];
+                            Instr => table Number [nSgInstr; nDlInstr; nPlInstr]
+                           }
+           } ;
+       spec = spec
+     };
 
   mkNP : (_,_,_,_,_,_ : Str) -> Gender -> Number -> NP =
     \nom,acc,gen,dat,loc,instr,g,n ->

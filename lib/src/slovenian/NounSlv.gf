@@ -19,7 +19,7 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
     UsePron p = p ;
 
     DetQuant quant num = {
-      s    = \\c,g => quant.s ++ num.s ! c ! g;
+      s    = \\g,c => quant.s ! g ! c ! (numAgr2num ! num.n) ++ num.s ! g ! c;
       spec = quant.spec ;
       n    = num.n ;
       } ;
@@ -42,12 +42,12 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
     NumNumeral numeral = {s = numeral.s; n = numeral.n} ;
 
     DefArt = {
-      s    = "" ;
+      s    = \\_,_,_ => "" ;
       spec = Def
       } ;
 
     IndefArt = {
-      s    = "" ;
+      s    = \\_,_,_ => "" ;
       spec = Indef
       } ;
 
