@@ -15,4 +15,6 @@ concrete VerbSlv of Verb = CatSlv ** open ResSlv, Prelude in {
     ComplSlash vp np =
       insertObj (\\_ => vp.c2.s ++ np.s ! vp.c2.c) vp ;
 
+    AdvVP vp adv = insertObj (\\_ => adv.s) vp ;
+
 }
