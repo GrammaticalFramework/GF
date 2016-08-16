@@ -2,6 +2,7 @@ resource ParadigmsSlv = open CatSlv, ResSlv, Prelude in {
 
 oper
   nominative : Case = Nom ;
+  genitive   : Case = Gen ;
   dative     : Case = Dat ;
   accusative : Case = Acc ;
   locative   : Case = Loc ;
