@@ -387,6 +387,6 @@ oper
   mkInterj : Str -> Interj =
     \s -> lin Interj {s=s} ;
     
-  mkConj : Str -> Conj =
-    \s -> lin Conj {s=s} ;
+  mkConj : Str -> Number -> Conj =
+    \s,n -> lin Conj {s=s; n=n} ;
 }

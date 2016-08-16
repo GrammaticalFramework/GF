@@ -30,6 +30,18 @@ param
 oper
   Agr = {g : Gender; n : Number; p : Person} ;
 
+  conjNumber : Number -> Number -> Number = \m,n -> 
+    case m of {
+      Sg => n ;
+      _  => Pl 
+    } ;
+
+  conjAgr : Agr -> Agr -> Agr = \a,b -> {
+    g = b.g ;
+    n = conjNumber a.n b.n ;
+    p = b.p
+  } ;
+
   VP = {s : VForm => Str; s2 : Agr => Str} ;
 
   neg : Polarity => Tense => Str =
