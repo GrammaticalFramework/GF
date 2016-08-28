@@ -10,8 +10,18 @@ lin
   apple_N = mkN "jabolko" "jabolka" "jabolku" "jabolko" "jabolku" "jabolkom" "jabolki" "jabolk" "jabolkoma" "jabolki" "jabolkih" "jabolkoma" "jabolka" "jabolk" "jabolkom" "jabolka" "jabolkih" "jabolki" neuter ;
   bank_N = mkN "banka" "banke" "banki" "banko" "banki" "banko" "banki" "bank" "bankama" "banki" "bankah" "bankama" "banke" "bank" "bankam" "banke" "bankah" "bankami" feminine ;
   beer_N = mkN "pivo" "piva" "pivu" "pivo" "pivu" "pivom" "pivi" "piv" "pivoma" "pivi" "pivih" "pivoma" "piva" "piv" "pivom" "piva" "pivih" "pivi" neuter ;
+  big_A = mkA "velik" "večji" ;
   boat_N = mkN "čoln" "čolna" "čolnu" "čoln" "čolnu" "čolnom" "čolna" "čolnov" "čolnoma" "čolna" "čolnih" "čolnoma" "čolni" "čolnov" "čolnom" "čolne" "čolnih" "čolni" masculine ;
+  buy_V2 = mkV2 (mkV "kupiti" "kupi") ;
+  drink_V2 = mkV2 (mkV "piti" "pije" "pil") ;
+  green_A = mkA "zelen" "zelenejši" ;
+  good_A = mkA "dober" "boljši" ;
+  love_V2 = mkV2 (mkV "ljubiti" "ljubi") ;
   red_A = mkA "rdeč" "rdeči" "rdečega" "rdečemu" "rdečega" "rdeč" "rdeči" "rdečem" "rdečim" "rdeča" "rdečih" "rdečima" "rdeča" "rdečih" "rdečima" "rdeči" "rdečih" "rdečim" "rdeče" "rdečih" "rdečimi" "rdeča" "rdeče" "rdeči" "rdečo" "rdeči" "rdečo" "rdeči" "rdečih" "rdečima" "rdeči" "rdečih" "rdečima" "rdeče" "rdečih" "rdečim" "rdeče" "rdečih" "rdečimi" "rdeče" "rdečega" "rdečemu" "rdeče" "rdečem" "rdečim" "rdeči" "rdečih" "rdečima" "rdeči" "rdečih" "rdečima" "rdeča" "rdečih" "rdečim" "rdeča" "rdečih" "rdečimi" nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist nonExist ;
-  love_V2 = mkV2 (mkV "ljubiti" "ljubit" "ljubil" "ljubila" "ljubili" "ljubila" "ljubili" "ljubile" "ljubilo" "ljubili" "ljubila" "ljubim" "ljubiš" "ljubi" "ljubiva" "ljubita" "ljubita" "ljubimo" "ljubite" "ljubijo" "ljubiva" "ljubimo" "ljubi" "ljubita" "ljubite") ;
+  small_A = mkA "mali" "manjši" ;
+  sleep_V = mkV "spati" "spi" "spal" ;
+  sit_V = mkV "sedeti" "sedi" "sedel" ;
+  walk_V = mkV "hoditi" "hodi" ;
+  write_V2 = mkV2 (mkV "pisati" "piše" "pisal") ;
 
 } ;
