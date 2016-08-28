@@ -145,7 +145,65 @@ oper
   mkVV : V -> VV ;
   mkVV v = v ;
 
-  mkA : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> A =
+-- Adjectives
+
+  mkA = overload {
+    mkA : (_,_:Str) -> A = regA ;
+    mkA : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x166 : Str) -> A = worstA ;
+    } ;
+
+  regA : (_,_ :Str) -> A = \star,starejsi -> lin A {
+    s = let starejs = init starejsi
+        in table {
+             APosit  gen num c => mkAdjForm star ! c ! gen ! num ;
+             ACompar gen num c => mkAdjForm starejs ! c ! gen ! num ;
+             ASuperl gen num c => mkAdjForm ("naj" + starejs) ! c ! gen ! num ;
+             APositDefNom      => mkAdjForm star ! Nom ! Masc ! Pl ;
+             APositIndefAcc    => mkAdjForm star ! Nom ! Masc ! Sg ;
+             APositDefAcc      => mkAdjForm star ! Nom ! Masc ! Pl ;
+             AComparDefAcc     => mkAdjForm starejs ! Nom ! Masc ! Sg ;
+             ASuperlDefAcc     => mkAdjForm ("naj" + starejs) ! Nom ! Masc ! Sg
+           }
+    } ;
+
+  mkAdjForm : Str -> Case => Gender => Number => Str = \lep ->
+    let 
+      lp = looseVowel lep --checks for loosewovel in the stem. if there is none, the string comes back the same. 
+    in
+      table {
+        Nom   => table {
+                   Fem  => table {Sg=> (lp + "a"); Dl=>(lp + "i"); Pl=>(lp +"e")}; 
+                   Masc => table {Sg=> lep;        Dl=>(lp + "a"); Pl=>(lp +"i")}; 
+                   Neut => table {Sg=>(lp + "o");  Dl=>(lp + "i"); Pl=>(lp + "a")} 
+                 };
+        Acc   => table {
+                   Fem  => table {Sg=>(lp + "o");  Dl=>(lp + "i"); Pl=>(lp + "e")}; 
+                   Masc => table {Sg=>lep;         Dl=>(lp + "a"); Pl=>(lp + "e")}; 
+                   Neut => table {Sg=>(lp + "o");  Dl=>(lp + "i"); Pl=>(lp +"a")}
+                 };
+        Gen   => table {
+                   Fem  => table {Sg=>(lp + "e");   Dl=>(lp +"ih"); Pl=>(lp +"ih")}; 
+                   Masc => table {Sg=>(lp + "ega"); Dl=>(lp +"ih"); Pl=>(lp +"ih")}; 
+                   Neut => table {Sg=>(lp + "ega"); Dl=>(lp +"ih"); Pl=>(lp +"ih")} 
+                 };
+        Loc   => table {
+                   Fem  => table {Sg=>(lp + "i");  Dl=>(lp +"ih"); Pl=>(lp +"ih")}; 
+                   Masc => table {Sg=>(lp + "em"); Dl=>(lp +"ih"); Pl=>(lp +"ih")}; 
+                   Neut => table {Sg=>(lp + "em"); Dl=>(lp +"ih"); Pl=>(lp +"ih")} 
+                 };
+        Dat   => table {
+                   Fem  => table {Sg=>(lp + "i");   Dl=>(lp +"ima"); Pl=>(lp +"im")}; 
+                   Masc => table {Sg=>(lp + "emu"); Dl=>(lp +"ima"); Pl=>(lp +"im")}; 
+                   Neut => table {Sg=>(lp + "emu"); Dl=>(lp +"ima"); Pl=>(lp +"im")} 
+                 };
+        Instr => table {
+                   Fem  => table {Sg=>(lp + "o");  Dl=>(lp +"ima"); Pl=>(lp +"imi")}; 
+                   Masc => table {Sg=>(lp + "im"); Dl=>(lp +"ima"); Pl=>(lp +"imi")}; 
+                   Neut => table {Sg=>(lp + "im"); Dl=>(lp +"ima"); Pl=>(lp +"imi")} 
+                 }
+      } ;
+
+  worstA : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> A =
     \positMSgNom,positMSgNomDef,positMSgGen,positMSgDat,positMSgAcc,positMSgAccIndef,positMSgAccDef,positMSgLoc,positMSgInstr,
      positMDlNom,positMDlGen,positMDlDat,positMDlAcc,positMDlLoc,positMDlInstr,
      positMPlNom,positMPlGen,positMPlDat,positMPlAcc,positMPlLoc,positMPlInstr,

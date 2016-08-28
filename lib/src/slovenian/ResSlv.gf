@@ -21,6 +21,8 @@ param
   AForm = APosit  Gender Number Case
         | ACompar Gender Number Case
         | ASuperl Gender Number Case
+        
+        -- the rest are not really needed because they seem to be syncretic
         | APositDefNom
         | APositIndefAcc
         | APositDefAcc
