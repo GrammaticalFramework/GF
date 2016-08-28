@@ -40,8 +40,58 @@ oper
            };
        g = g
     };
-    
-  mkV : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> V =
+
+  mkV = overload {
+    mkV : (inf,stem : Str) -> V = regV ; 
+    mkV : (inf,stem,lstem : Str) -> V = irregVa ; 
+    mkV : (inf,stem,lstem,imp : Str) -> V = irregVb ; 
+    mkV : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x25 : Str) -> V = worstV ;
+    } ;
+
+-- Regular verbs are formed from two forms. Infinitive and 3rd person singular presens. 
+
+  regV : (_,_ : Str) -> V = \hoditi,hodi ->  
+        let 
+          imp = mkImp hodi
+        in
+        mkAllV hoditi hodi (hodi +"l") (hodi +"l") imp ;
+
+-- Verbs with irregular l-forms are formed from three forms: 
+---The infinitive, 3rd person singular presens, and the l-form for Masc Sg. 
+-- L-form with that ends with "el" drops the e in all other conjugations. 
+
+  irregVa : (_,_,_ : Str) -> V = \pisati,pise,pisal ->  
+        let 
+          imp = mkImp pise ; 
+          pisl = looseVowel pisal
+        in
+        mkAllV pisati pise pisal pisl imp ;
+
+--Verbs with irregular imperative-form takes the imperative base form as a final argument. 
+
+  irregVb : (_,_,_,_ : Str) -> V = \gledati,gleda,gledal,glej -> 
+        let 
+          lfem = looseVowel gledal
+        in 
+        mkAllV gledati gleda gledal lfem glej;
+
+--The final paradigm-generator for all verbforms. Takes the infinitive,thirdpersonsingular in present tense,
+--masculine l-form, feminine l-form and the imperative base form. 
+
+  mkAllV : (_,_,_,_,_ : Str) -> V = \infinitive,thirdpsg,lformmasc,lformfem,imp ->  
+            let 
+              sup = init infinitive  --Supine is formed by dropping the last letter of the infinitive
+            in
+            worstV  infinitive sup --VInf, Sup
+                    lformmasc (lformfem + "a") (lformfem + "i") --VPastPart Masc Sg,Dl,Pl
+                    (lformfem + "a") (lformfem + "i") (lformfem + "e") --VPastPart Fem Sg,Dl,Pl
+                    (lformfem + "o") (lformfem + "i") (lformfem + "a") --VPastPart Neut Sg,Dl,Pl
+                    (thirdpsg + "m") (thirdpsg + "š") thirdpsg             --VPres Sg P1, P2, P3
+                    (thirdpsg + "va") (thirdpsg + "ta") (thirdpsg + "ta")  --VPres Dl P1, P2, P3
+                    (thirdpsg + "mo") (thirdpsg + "te") (thirdpsg + "jo")  --VPres Pl P1, P2, P3
+                    imp (imp + "va") (imp+"mo") (imp +"ta") (imp + "te"); --Imper P1 Sg Dl Pl + P2 Dl Pl
+
+  worstV : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> V =
     \inf,sup,partsgm,partdlm,partplm,partsgf,partdlf,partplf,partsgn,partdln,partpln,pres1sg,pres2sg,pres3sg,pres1dl,pres2dl,pres3dl,pres1pl,pres2pl,pres3pl,imp1dl,imp1pl,imp2sg,imp2dl,imp2pl -> lin V {
        s = table {
              VInf              => inf;
@@ -71,6 +121,17 @@ oper
              VImper2 Pl        => imp2pl
            }
     };
+
+--Imperative forms are formed separetely. Pattern matching performed on thirdpersonsingular verbform. 
+
+  mkImp : Str -> Str = \caka ->
+        case caka of {
+        _ + "a"         => (caka+"j") ;
+        _ + ("je"|"ji") => let cak = init caka in cak ;
+        _ + "e"         => let cak = init caka in (cak+"i") ; 
+        _ + "i"         => caka ; 
+        _               => caka --this dummy is not grammatically correct. It's just a wild guess. 
+                  };
 
   mkV2 = overload {
     mkV2 : V -> V2 = \v -> v ** {c2 = lin Prep {s=""; c=Acc}} ;
@@ -389,4 +450,22 @@ oper
     
   mkConj : Str -> Number -> Conj =
     \s,n -> lin Conj {s=s; n=n} ;
+
+--Helper function that drops the loose vowel that has to go in many conjugations. 
+
+  looseVowel : (_:Str) -> Str = \vowel ->
+    case vowel of {
+        _ + "sak" => vowel ;
+        _ + "er" => Predef.tk 2 vowel + "r" ;
+        _ + "an" => Predef.tk 2 vowel + "n" ;
+        --_ + "en" => Predef.tk 2 vowel + "n" ; --this is wrong, right?
+        _ + "el" => Predef.tk 2 vowel + "l" ;
+        _ + "ek" => Predef.tk 2 vowel + "k" ;
+        _ + "ak" => Predef.tk 2 vowel + "k" ;
+        _ + #vowel  => init vowel ;
+        _        => vowel
+    } ;
+    
+  vowel : pattern Str = #("a"|"e"|"i"|"o"|"u") ;
+  consonant : pattern Str = #("b"|"d"|"g"|"m"|"n"|"p"|"t") ;
 }
