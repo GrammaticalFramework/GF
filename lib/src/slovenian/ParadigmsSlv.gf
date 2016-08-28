@@ -89,7 +89,7 @@ oper
                     (thirdpsg + "m") (thirdpsg + "š") thirdpsg             --VPres Sg P1, P2, P3
                     (thirdpsg + "va") (thirdpsg + "ta") (thirdpsg + "ta")  --VPres Dl P1, P2, P3
                     (thirdpsg + "mo") (thirdpsg + "te") (thirdpsg + "jo")  --VPres Pl P1, P2, P3
-                    imp (imp + "va") (imp+"mo") (imp +"ta") (imp + "te"); --Imper P1 Sg Dl Pl + P2 Dl Pl
+                    (imp + "va") (imp+"mo") imp (imp +"ta") (imp + "te"); --Imper P1 Dl Pl + P2 Sg Dl Pl
 
   worstV : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> V =
     \inf,sup,partsgm,partdlm,partplm,partsgf,partdlf,partplf,partsgn,partdln,partpln,pres1sg,pres2sg,pres3sg,pres1dl,pres2dl,pres3dl,pres1pl,pres2pl,pres3pl,imp1dl,imp1pl,imp2sg,imp2dl,imp2pl -> lin V {
