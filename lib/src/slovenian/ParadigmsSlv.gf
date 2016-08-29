@@ -15,8 +15,89 @@ oper
   feminine  = Fem;
   neuter    = Neut;
 
-  mkN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> N =
-    \nomsg,gensg,datsg,accsg,locsg,instrsg,nomdl,gendl,datdl,accdl,locdl,instrdl,nompl,genpl,datpl,accpl,locpl,instrpl,g -> lin N {
+  mkN = overload {
+    mkN : (noun : Str) -> N = smartN ;
+    mkN : (noun : Str) -> Gender -> N = regNouns ;
+    mkN : (noun,gensg : Str) -> Gender -> N = irregNouns ;
+    mkN : (noun,gensg,nompl : Str) -> N = irregMasc ;
+    mkN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> N = worstN ;
+    } ;
+
+--All masculine forms (except those with long pluralstem) are formed here. 
+--Takes the baseform + the genitive singular form + animacy. 
+--In case the genitive singular has an extra vowel in the end, it is dropped before coming here.  
+
+  mascAll : (_,_ : Str) -> N = \oce,ocet ->
+    worstN oce          (ocet + "a")  (ocet + "u")   oce          (ocet + "u")  (ocet + "om") -- Singular
+           (ocet + "a") (ocet + "ov") (ocet + "oma") (ocet + "a") (ocet + "ih") (ocet + "oma") -- Dual
+           (ocet + "i") (ocet + "ov") (ocet + "om")  (ocet + "e") (ocet + "ih") (ocet + "i")   -- Plural
+           masculine ;
+
+--All neuter forms are formed here, long or normal. 
+--It takes the baseform + the genitive singular form. 
+--In case the genitive singular has an extra vowel in the end, it is dropped before coming here. 
+
+  neutAll : (_,_ : Str) -> N = \drevo,dreves ->
+    worstN drevo          (dreves + "a") (dreves + "u")   drevo            (dreves + "u")  (dreves + "om")  -- Singular
+           (dreves + "i") dreves         (dreves + "oma") (dreves + "i")   (dreves + "ih") (dreves + "oma") -- Dual
+           (dreves + "a") dreves         (dreves + "om")  (dreves + "a")   (dreves + "ih") (dreves + "i")   -- Plural
+           neuter ;
+
+--Regular feminine nouns are formed from the baseform. Always inanimate. 
+
+  regFem : (_ : Str) -> N = \punca -> 
+      let punc = init punca 
+      in
+      worstN punca        (punc + "e") (punc + "i")   (punc + "o") (punc + "i")  (punc + "o")   -- Singular
+             (punc + "i") punc         (punc + "ama") (punc + "i") (punc + "am") (punc + "ama") -- Dual
+             (punc + "e") punc         (punc + "am")  (punc + "e") (punc + "am") (punc + "ami") -- Plural
+             feminine ;
+
+--This is a smart paradigm for regular nouns. 
+
+  smartN : (noun: Str) -> N =
+    \noun -> case noun of {
+      _ + "a" => regFem noun ;
+      _ + ("ev" | "ost") => regFem noun ;
+      _ + ("o"| "e") => let nou = init noun in neutAll noun nou ;
+      _ + #consonant => mascAll noun noun; --Base form used in the rest of the paradigm. 
+      _ => let nou = init noun in mascAll noun nou -- Drops the last vowel for the rest of the paradigm. 
+  } ;
+
+--Send the masculine and neutral nouns with long stem off to the right paradigm. 
+
+  irregNouns : (noun,longform : Str) -> Gender -> N = \noun,longform,gen ->
+    case gen of {
+      Masc  => let longfor = init longform in mascAll noun longfor ;
+      Neut  => let longfor = init longform in neutAll noun longfor ;
+      Fem   => regFem noun --There are actually no feminine nouns with long stem. 
+      } ;
+
+--Regular masculine nouns that do not end with a consonant, drops the vowel in all conjugated forms. 
+--Takes the baseform + animacy. 
+
+  regNouns : (noun : Str) -> Gender -> N = \noun,gen ->
+    case gen of {
+      Masc  => case noun of {
+                 _ + #consonant => mascAll noun noun ;
+                 _ + #vowel => let nou = init noun in mascAll noun nou
+               };
+      Neut  => let nou = init noun in neutAll noun nou ;
+      Fem   => regFem noun --There are actually no feminine nouns with long stem. 
+      } ;
+
+--Irregular masculine nouns with long stem has no special ending in genitive dual and plural, so need a special paradigm. 
+--Takes the baseform + the genitive singular form + the nominative plural form + animacy.  
+
+  irregMasc : (noun,gensg,plstem : Str) -> N = \bog,boga,bogovi ->
+      let bogov = init bogovi in
+      worstN bog           boga  (bog + "u")     bog           (bog + "u")    (bog + "om")     -- Singular
+             (bogov + "a") bogov (bogov + "oma") (bogov + "a") (bogov + "ih") (bogov + "oma")  -- Dual
+             bogovi        bogov (bogov + "om")  (bogov + "e") (bogov + "ih") (bogov + "i")    -- Plural
+             masculine ;
+
+  worstN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> N =
+      \nomsg,gensg,datsg,accsg,locsg,instrsg,nomdl,gendl,datdl,accdl,locdl,instrdl,nompl,genpl,datpl,accpl,locpl,instrpl,g -> lin N {
        s = table {
              Nom   => table {Sg=>nomsg; Dl=>nomdl; Pl=>nompl};
              Gen   => table {Sg=>gensg; Dl=>gendl; Pl=>genpl};
@@ -134,16 +215,16 @@ oper
                   };
 
   mkV2 = overload {
-    mkV2 : V -> V2 = \v -> v ** {c2 = lin Prep {s=""; c=Acc}} ;
-    mkV2 : V -> Case -> V2 = \v,c -> v ** {c2 = lin Prep {s=""; c=c}} ;
-    mkV2 : V -> Prep -> V2 = \v,p -> v ** {c2 = p} ;
+    mkV2 : V -> V2 = \v -> lin V2 (v ** {c2 = lin Prep {s=""; c=Acc}}) ;
+    mkV2 : V -> Case -> V2 = \v,c -> lin V2 (v ** {c2 = lin Prep {s=""; c=c}}) ;
+    mkV2 : V -> Prep -> V2 = \v,p -> lin V2 (v ** {c2 = p}) ;
   } ;
 
   mkVQ : V -> VQ ;
-  mkVQ v = v ;
+  mkVQ v = lin VQ v ;
 
   mkVV : V -> VV ;
-  mkVV v = v ;
+  mkVV v = lin VV v ;
 
 -- Adjectives
 
