@@ -17,7 +17,7 @@ lincat
   AP = {s : Species => Gender => Case => Number => Str} ;
 
   -- Noun
-  CN = {s : Species => Case => Number => Str; g : Gender} ;
+  CN = {s : Species => Case => Number => Str; g : AGender} ;
   NP = {s : Case => Str ; a : Agr} ;
 
   Pron = {s : Case => Str; poss : Gender => Case => Number => Str; a : Agr} ;
@@ -42,7 +42,7 @@ lincat
 
   A = {s : AForm => Str};
   
-  N = {s : Case => Number => Str; g : Gender};
-  PN = {s : Case => Number => Str; g : Gender};
+  N = {s : Case => Number => Str; g : AGender};
+  PN = {s : Case => Number => Str; g : AGender};
 
 }

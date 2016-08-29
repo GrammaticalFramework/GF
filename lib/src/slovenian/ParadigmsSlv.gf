@@ -11,27 +11,30 @@ oper
   mkPrep : Str -> Case -> Prep =
     \s,c -> lin Prep {s=s; c=c};
 
-  masculine = Masc;
-  feminine  = Fem;
-  neuter    = Neut;
+  animate   = AMasc Animate;
+  masculine = AMasc Inanimate;
+  feminine  = AFem;
+  neuter    = ANeut;
 
   mkN = overload {
     mkN : (noun : Str) -> N = smartN ;
-    mkN : (noun : Str) -> Gender -> N = regNouns ;
-    mkN : (noun,gensg : Str) -> Gender -> N = irregNouns ;
+    mkN : (noun : Str) -> AGender -> N = regNouns ;
+    mkN : (noun,gensg : Str) -> AGender -> N = irregNouns ;
     mkN : (noun,gensg,nompl : Str) -> N = irregMasc ;
-    mkN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> N = worstN ;
+    mkN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> AGender -> N = worstN ;
     } ;
 
 --All masculine forms (except those with long pluralstem) are formed here. 
 --Takes the baseform + the genitive singular form + animacy. 
 --In case the genitive singular has an extra vowel in the end, it is dropped before coming here.  
 
-  mascAll : (_,_ : Str) -> N = \oce,ocet ->
-    worstN oce          (ocet + "a")  (ocet + "u")   oce          (ocet + "u")  (ocet + "om") -- Singular
+  mascAll : (_,_ : Str) -> Animacy -> N = \oce,ocet,anim ->
+    let accsg = case anim of {Animate => ocet + "a"; _ => oce}; --Special case: Masc Sg Acc Animate
+    in
+    worstN oce          (ocet + "a")  (ocet + "u")   accsg        (ocet + "u")  (ocet + "om")  -- Singular
            (ocet + "a") (ocet + "ov") (ocet + "oma") (ocet + "a") (ocet + "ih") (ocet + "oma") -- Dual
            (ocet + "i") (ocet + "ov") (ocet + "om")  (ocet + "e") (ocet + "ih") (ocet + "i")   -- Plural
-           masculine ;
+           (AMasc anim) ;
 
 --All neuter forms are formed here, long or normal. 
 --It takes the baseform + the genitive singular form. 
@@ -60,30 +63,30 @@ oper
       _ + "a" => regFem noun ;
       _ + ("ev" | "ost") => regFem noun ;
       _ + ("o"| "e") => let nou = init noun in neutAll noun nou ;
-      _ + #consonant => mascAll noun noun; --Base form used in the rest of the paradigm. 
-      _ => let nou = init noun in mascAll noun nou -- Drops the last vowel for the rest of the paradigm. 
+      _ + #consonant => mascAll noun noun Inanimate; --Base form used in the rest of the paradigm. 
+      _ => let nou = init noun in mascAll noun nou Inanimate -- Drops the last vowel for the rest of the paradigm. 
   } ;
 
 --Send the masculine and neutral nouns with long stem off to the right paradigm. 
 
-  irregNouns : (noun,longform : Str) -> Gender -> N = \noun,longform,gen ->
+  irregNouns : (noun,longform : Str) -> AGender -> N = \noun,longform,gen ->
     case gen of {
-      Masc  => let longfor = init longform in mascAll noun longfor ;
-      Neut  => let longfor = init longform in neutAll noun longfor ;
-      Fem   => regFem noun --There are actually no feminine nouns with long stem. 
+      AMasc anim => let longfor = init longform in mascAll noun longfor anim ;
+      ANeut      => let longfor = init longform in neutAll noun longfor ;
+      AFem       => regFem noun --There are actually no feminine nouns with long stem. 
       } ;
 
 --Regular masculine nouns that do not end with a consonant, drops the vowel in all conjugated forms. 
 --Takes the baseform + animacy. 
 
-  regNouns : (noun : Str) -> Gender -> N = \noun,gen ->
+  regNouns : (noun : Str) -> AGender -> N = \noun,gen ->
     case gen of {
-      Masc  => case noun of {
-                 _ + #consonant => mascAll noun noun ;
-                 _ + #vowel => let nou = init noun in mascAll noun nou
-               };
-      Neut  => let nou = init noun in neutAll noun nou ;
-      Fem   => regFem noun --There are actually no feminine nouns with long stem. 
+      AMasc anim => case noun of {
+                      _ + #consonant => mascAll noun noun anim ;
+                      _ + #vowel => let nou = init noun in mascAll noun nou anim
+                    };
+      ANeut      => let nou = init noun in neutAll noun nou ;
+      AFem       => regFem noun --There are actually no feminine nouns with long stem. 
       } ;
 
 --Irregular masculine nouns with long stem has no special ending in genitive dual and plural, so need a special paradigm. 
@@ -96,7 +99,7 @@ oper
              bogovi        bogov (bogov + "om")  (bogov + "e") (bogov + "ih") (bogov + "i")    -- Plural
              masculine ;
 
-  worstN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> N =
+  worstN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> AGender -> N =
       \nomsg,gensg,datsg,accsg,locsg,instrsg,nomdl,gendl,datdl,accdl,locdl,instrdl,nompl,genpl,datpl,accpl,locpl,instrpl,g -> lin N {
        s = table {
              Nom   => table {Sg=>nomsg; Dl=>nomdl; Pl=>nompl};
@@ -109,7 +112,7 @@ oper
        g = g
     };
 
-  mkPN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> PN =
+  mkPN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> AGender -> PN =
     \nomsg,nomdl,nompl,gensg,gendl,genpl,datsg,datdl,datpl,accsg,accdl,accpl,locsg,locdl,locpl,instrsg,instrdl,instrpl,g -> lin PN {
        s = table {
              Nom   => table {Sg=>nomsg; Dl=>nomdl; Pl=>nompl};

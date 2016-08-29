@@ -6,6 +6,8 @@ param
   Gender = Masc | Fem | Neut ;
   Person = P1 | P2 | P3 ;
   Species = Indef | Def ;
+  Animacy = Animate | Inanimate ;
+  AGender = AMasc Animacy | AFem | ANeut ;
 
   NumAgr = UseNum Number | UseGen;
   DForm = Unit Gender | Teen | Ten | Hundred;
@@ -113,5 +115,12 @@ oper
     
   numAgr2num : NumAgr => Number =
     table {UseNum n => n; UseGen => Pl} ;
+    
+  agender2gender : AGender -> Gender = \ag ->
+    case ag of {
+      AMasc _ => Masc ;
+      AFem    => Fem ;
+      ANeut   => Neut
+    } ;
 
 }

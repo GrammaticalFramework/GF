@@ -2,12 +2,12 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
 
   lin
     DetCN det cn = {
-      s = \\c => det.s ! cn.g ! c ++ 
+      s = \\c => det.s ! agender2gender cn.g ! c ++ 
                  case det.n of {
                    UseNum n => cn.s ! det.spec ! c ! n ;
                    UseGen   => cn.s ! det.spec ! Gen ! Pl
                  } ;
-      a = {g = cn.g ;
+      a = {g = agender2gender cn.g ;
            n = case det.n of {
                  UseNum n => n ;
                  UseGen   => Pl
@@ -53,13 +53,13 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
 
     MassNP n = {
       s = \\c => n.s ! Indef ! c ! Sg ;
-      a = {g=n.g; n=Sg; p=P3}
+      a = {g=agender2gender n.g; n=Sg; p=P3}
       } ;
 
     UseN n = {s = \\_ => n.s; g = n.g} ;
 
     AdjCN ap cn = {
-      s = \\spec,c,n => ap.s ! spec ! cn.g ! c ! n ++ cn.s ! Indef ! c ! n ;
+      s = \\spec,c,n => ap.s ! spec ! agender2gender cn.g ! c ! n ++ cn.s ! Indef ! c ! n ;
       g = cn.g
       } ;
     AdvCN cn ad = {s = \\spec,c,n => cn.s ! spec ! c ! n ++ ad.s ; g = cn.g} ;
