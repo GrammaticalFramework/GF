@@ -1,4 +1,4 @@
-resource ResSlv = open ParamX in {
+resource ResSlv = open ParamX, Prelude in {
 
 param
   Case = Nom | Gen | Dat | Acc | Loc | Instr;
@@ -53,11 +53,15 @@ oper
            Neg => table {Past => "ni"; _ => "ne"}
           } ;
 
-  predV : (VForm => Str) -> Tense => Polarity => Agr => Str =
-    \v -> table {
+  predV : Bool -> (VForm => Str) -> Tense => Polarity => Agr => Str =
+    \ispron,v -> table {
              Pres => \\p,a => neg ! p ! Pres ++ v ! VPres a.n a.p ;
-             Past => \\p,a => neg ! p ! Past +  sem_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
-             Fut  => \\p,a => neg ! p ! Fut  ++ bom_V ! a.n ! a.p ++ v ! VPastPart a.g a.n ;
+             Past => \\p,a => case <ispron,p> of {
+                                <True,Pos> => v ! VPastPart a.g a.n ++ sem_V ! a.n ! a.p ;
+                                <_   ,_  > => neg ! p ! Past +  sem_V ! a.n ! a.p ++ v ! VPastPart a.g a.n } ;
+             Fut  => \\p,a => case <ispron,p> of {
+                                <True,Pos> => v ! VPastPart a.g a.n ++ bom_V ! a.n ! a.p ;
+                                <_   ,_  > => neg ! p ! Fut  ++ bom_V ! a.n ! a.p ++ v ! VPastPart a.g a.n } ;
              Cond => \\p,a => neg ! p ! Cond ++ "bi" ++ v ! VPastPart a.g a.n
           } ;
 
@@ -103,10 +107,13 @@ oper
     s : Tense => Anteriority => Polarity => Str
     } ;
 
-  mkClause : Str -> Agr -> VP -> Clause =
-    \subj,agr,vp -> {
+  mkClause : Str -> Agr -> Bool -> VP -> Clause =
+    \subj,agr,ispron,vp -> {
       s = \\t,a,p => 
-        subj ++ predV vp.s ! t ! p ! agr ++ vp.s2 ! agr
+        case ispron of {
+          False => subj ++ predV ispron vp.s ! t ! p ! agr ++ vp.s2 ! agr ;
+          True  =>         predV ispron vp.s ! t ! p ! agr ++ vp.s2 ! agr
+        }
     } ;
 
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {

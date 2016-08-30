@@ -1,10 +1,11 @@
 concrete ConjunctionSlv of Conjunction = 
-  CatSlv ** open ResSlv in {
+  CatSlv ** open ResSlv, Prelude in {
 
   lin
     ConjNP conj xs = {
       s = \\c => xs.s1 ! c ++ conj.s ++ xs.s2 ! c ;
-      a = {g = xs.a.g; n = conjNumber conj.n xs.a.n; p = xs.a.p}
+      a = {g = xs.a.g; n = conjNumber conj.n xs.a.n; p = xs.a.p} ;
+      isPron = False
     } ;
     ConjAP conj xs = {
       s = \\sp,g,c,n => xs.s1 ! sp ! g ! c ! n ++ conj.s ++ xs.s2 ! sp ! g ! c ! n

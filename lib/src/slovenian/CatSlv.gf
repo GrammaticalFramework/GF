@@ -1,4 +1,4 @@
-concrete CatSlv of Cat = CommonX ** open ResSlv, (P=ParamX) in {
+concrete CatSlv of Cat = CommonX ** open ResSlv, (P=ParamX), Prelude in {
 
 lincat
   -- Sentence
@@ -18,7 +18,7 @@ lincat
 
   -- Noun
   CN = {s : Species => Case => Number => Str; g : AGender} ;
-  NP = {s : Case => Str ; a : Agr} ;
+  NP = {s : Case => Str; a : Agr; isPron : Bool} ;
 
   Pron = {s : Case => Str; poss : Gender => Case => Number => Str; a : Agr} ;
 

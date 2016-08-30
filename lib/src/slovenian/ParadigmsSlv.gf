@@ -590,7 +590,8 @@ oper
                     Loc => loc;
                     Instr=>instr
                   } ;
-            a = {g=Neut; n=n; p=P3}
+            a = {g=Neut; n=n; p=P3} ;
+            isPron = False
            } ;
 
   mkInterj : Str -> Interj =

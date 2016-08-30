@@ -1,4 +1,4 @@
-concrete NounSlv of Noun = CatSlv ** open ResSlv in {
+concrete NounSlv of Noun = CatSlv ** open ResSlv,Prelude in {
 
   lin
     DetCN det cn = {
@@ -13,11 +13,21 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
                  UseGen   => Pl
                } ;
            p = P3
-          }
+          } ;
+      isPron = False
       } ;
 
-    UsePN pn = {s = pn.s; a = {g=agender2gender pn.g; n=Sg; p=P3}} ;
-    UsePron p = p ;
+    UsePN pn = {
+      s = pn.s;
+      a = {g=agender2gender pn.g; n=Sg; p=P3};
+      isPron = False
+      } ;
+
+    UsePron p = {
+      s = p.s;
+      a = p.a;
+      isPron = True
+    } ;
 
     DetQuant quant num = {
       s    = \\g,c => quant.s ! g ! c ! (numAgr2num ! num.n) ++ num.s ! g ! c;
@@ -27,7 +37,8 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
 
     DetNP det = {
       s = det.s ! Masc ;
-      a = {g=Masc; n=case det.n of {UseNum n=>n; UseGen=>Pl}; p=P3};
+      a = {g=Masc; n=case det.n of {UseNum n=>n; UseGen=>Pl}; p=P3} ;
+      isPron = False
       } ;
 
     PossPron p = {
@@ -54,7 +65,8 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
 
     MassNP n = {
       s = \\c => n.s ! Indef ! c ! Sg ;
-      a = {g=agender2gender n.g; n=Sg; p=P3}
+      a = {g=agender2gender n.g; n=Sg; p=P3} ;
+      isPron = False
       } ;
 
     UseN n = {s = \\_ => n.s; g = n.g} ;
