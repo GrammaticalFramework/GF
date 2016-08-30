@@ -2,7 +2,7 @@
 
 import xml.sax
 
-class InkscapeSvgHandler(xml.sax.ContentHandler):
+class SloleksHandler(xml.sax.ContentHandler):
   def __init__(self):
 	self.parents = []
 	self.lemma = None
@@ -91,15 +91,15 @@ class InkscapeSvgHandler(xml.sax.ContentHandler):
 				s = s + "mkPN "
 				if self.forms.has_key("Slmei"):
 					gender = "masculine"
-					tags = ["Slmei", "Slmer", "Slmed", "Slmetd", "Slmem", "Slmeo", "Slmdi", "Slmdr", "Slmdd", "Slmdt", "Slmdm", "Slmdo", "Slmmi", "Slmmr", "Slmmd", "Slmmt", "Slmmm", "Slmmo"]
+					tags = ["Slmei", "Slmer", "Slmed", "Slmetd", "Slmem", "Slmeo"]
 					if self.forms.has_key("Slmetn"):
 						tags[3] = "Slmetn"
 				elif self.forms.has_key("Slzei"):
 					gender = "feminine"
-					tags = ["Slzei", "Slzer", "Slzed", "Slzet", "Slzem", "Slzeo", "Slzdi", "Slzdr", "Slzdd", "Slzdt", "Slzdm", "Slzdo", "Slzmi", "Slzmr", "Slzmd", "Slzmt", "Slzmm", "Slzmo"]
+					tags = ["Slzei", "Slzer", "Slzed", "Slzet", "Slzem", "Slzeo"]
 				else:
 					gender = "neuter"
-					tags = ["Slsei", "Slser", "Slsed", "Slset", "Slsem", "Slseo", "Slsdi", "Slsdr", "Slsdd", "Slsdt", "Slsdm", "Slsdo", "Slsmi", "Slsmr", "Slsmd", "Slsmt", "Slsmm", "Slsmo"]
+					tags = ["Slsei", "Slser", "Slsed", "Slset", "Slsem", "Slseo"]
 				for msd in tags:
 					if self.forms.has_key(msd):
 						s = s + "\"" + self.forms[msd][min(i,len(self.forms[msd])-1)] + "\" "
@@ -191,7 +191,7 @@ class InkscapeSvgHandler(xml.sax.ContentHandler):
 			self.cncf.write(s.encode("utf-8"))
 
 parser = xml.sax.make_parser()
-handler = InkscapeSvgHandler()
+handler = SloleksHandler()
 parser.setContentHandler(handler)
 parser.parse(open("Sloleks_v1.2.xml","r"))
 handler.close()

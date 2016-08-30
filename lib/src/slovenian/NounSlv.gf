@@ -16,6 +16,7 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv in {
           }
       } ;
 
+    UsePN pn = {s = pn.s; a = {g=agender2gender pn.g; n=Sg; p=P3}} ;
     UsePron p = p ;
 
     DetQuant quant num = {

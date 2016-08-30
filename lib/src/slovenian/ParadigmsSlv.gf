@@ -112,18 +112,24 @@ oper
        g = g
     };
 
-  mkPN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> AGender -> PN =
-    \nomsg,nomdl,nompl,gensg,gendl,genpl,datsg,datdl,datpl,accsg,accdl,accpl,locsg,locdl,locpl,instrsg,instrdl,instrpl,g -> lin PN {
-       s = table {
-             Nom   => table {Sg=>nomsg; Dl=>nomdl; Pl=>nompl};
-             Gen   => table {Sg=>gensg; Dl=>gendl; Pl=>genpl};
-             Dat   => table {Sg=>datsg; Dl=>datdl; Pl=>datpl};
-             Acc   => table {Sg=>accsg; Dl=>accdl; Pl=>accpl};
-             Loc   => table {Sg=>locsg; Dl=>nomdl; Pl=>locpl};
-             Instr => table {Sg=>instrsg; Dl=>instrdl; Pl=>instrpl}
-           };
-       g = g
+  mkPN = overload {
+    mkPN : N -> PN = \noun -> lin PN {
+      s = \\c => noun.s ! c ! Sg ;
+      g = noun.g
     };
+    mkPN : (_,_,_,_,_,_ : Str) -> AGender -> PN =
+      \nom,gen,dat,acc,loc,instr,g -> lin PN {
+         s = table {
+               Nom   => nom;
+               Gen   => gen;
+               Dat   => dat;
+               Acc   => acc;
+               Loc   => loc;
+               Instr => instr
+             };
+         g = g
+      };
+    } ;
 
   mkV = overload {
     mkV : (inf,stem : Str) -> V = regV ; 
