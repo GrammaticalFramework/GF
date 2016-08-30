@@ -4,7 +4,7 @@ lin
     PredVP np vp = mkClause (np.s ! Nom) np.a np.isPron vp ;
 
     ImpVP vp = {
-      s = \\pol,g,n => vp.s ! VImper2 n ++ vp.s2 ! {g=g; n=n; p=P2} ;
+      s = \\p,g,n => vp.s ! p ! VImper2 n ++ vp.s2 ! {g=g; n=n; p=P2} ;
     } ;
 
     UseCl  t p cl = {

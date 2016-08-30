@@ -1,4 +1,4 @@
-concrete PhraseSlv of Phrase = CatSlv ** open Prelude, ResSlv in {
+concrete PhraseSlv of Phrase = CatSlv ** open Prelude, ResSlv, (P=ParamX) in {
 
   lin
     PhrUtt pconj utt voc = {s = pconj.s ++ utt.s ++ voc.s} ;
@@ -10,7 +10,7 @@ concrete PhraseSlv of Phrase = CatSlv ** open Prelude, ResSlv in {
     UttImpPol pol imp = {s = pol.s ++ imp.s ! pol.p ! Masc ! Sg} ;
 
     UttNP np = {s = np.s ! Nom} ;
-    UttVP vp = {s = vp.s ! VInf ++ vp.s2 ! {g=Masc; n=Sg; p=P3}} ;
+    UttVP vp = {s = vp.s ! P.Pos ! VInf ++ vp.s2 ! {g=Masc; n=Sg; p=P3}} ;
     UttAdv adv = adv ;
     UttCN n = {s = n.s ! Indef ! Nom ! Sg} ;
     UttCard n = {s = n.s ! Fem ! Nom} ;

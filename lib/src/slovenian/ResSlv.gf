@@ -46,43 +46,64 @@ oper
     p = b.p
   } ;
 
-  VP = {s : VForm => Str; s2 : Agr => Str} ;
+  VP = {s : Polarity => VForm => Str; s2 : Agr => Str; isCop : Bool} ;
 
-  neg : Polarity => Tense => Str =
-    table {Pos => \\_ => "" ;
-           Neg => table {Past => "ni"; _ => "ne"}
+  ne : Polarity => Str =
+    table {Pos => "" ;
+           Neg => "ne"
+          } ;
+          
+  ni : Polarity => Str =
+    table {Pos => "" ;
+           Neg => "ni"
           } ;
 
-  predV : Bool -> (VForm => Str) -> Tense => Polarity => Agr => Str =
-    \ispron,v -> table {
-             Pres => \\p,a => neg ! p ! Pres ++ v ! VPres a.n a.p ;
+  predV : Bool -> Bool -> (Polarity => VForm => Str) -> Tense => Polarity => Agr => Str =
+    \ispron,iscop,v -> table {
+             Pres => \\p,a => v ! p ! VPres a.n a.p ;
              Past => \\p,a => case <ispron,p> of {
-                                <True,Pos> => v ! VPastPart a.g a.n ++ sem_V ! a.n ! a.p ;
-                                <_   ,_  > => neg ! p ! Past +  sem_V ! a.n ! a.p ++ v ! VPastPart a.g a.n } ;
+                                <True,Pos> => v ! Pos ! VPastPart a.g a.n ++ copula ! p ! VPres a.n a.p ;
+                                <_   ,_  > => copula ! p ! VPres a.n a.p ++ v ! Pos ! VPastPart a.g a.n } ;
              Fut  => \\p,a => case <ispron,p> of {
-                                <True,Pos> => v ! VPastPart a.g a.n ++ bom_V ! a.n ! a.p ;
-                                <_   ,_  > => neg ! p ! Fut  ++ bom_V ! a.n ! a.p ++ v ! VPastPart a.g a.n } ;
-             Cond => \\p,a => neg ! p ! Cond ++ "bi" ++ v ! VPastPart a.g a.n
+                                <True,Pos> => case iscop of {
+                                                False => v ! Pos ! VPastPart a.g a.n ++ bom_V ! a.n ! a.p ;
+                                                True  => bom_V ! a.n ! a.p
+                                              } ;
+                                <_   ,_  > => case iscop of {
+                                                False => ne ! p ++ bom_V ! a.n ! a.p ++ v ! Pos ! VPastPart a.g a.n ;
+                                                True  => ne ! p ++ bom_V ! a.n ! a.p
+                                              } } ;
+             Cond => \\p,a => ne ! p ++ "bi" ++ v ! Pos ! VPastPart a.g a.n
           } ;
 
-  sem_V : Number => Person => Str =
+  copula : Polarity => VForm => Str = \\p =>
     table {
-      Sg => table {
-              P1 => "sem" ;
-              P2 => "si" ;
-              P3 => "je"
-            } ;
-      Dl => table {
-              P1 => "sva" ;
-              P2 => "sta" ;
-              P3 => "sta"
-            } ;
-      Pl => table {
-              P1 => "smo" ;
-              P2 => "ste" ;
-              P3 => "so"
-            }
-    } ;
+      VInf              => ne ! p ++ "biti";
+      VSup              => ne ! p ++ "bit";
+      VPastPart Masc Sg => ne ! p ++ "bil";
+      VPastPart Masc Dl => ne ! p ++ "bila";
+      VPastPart Masc Pl => ne ! p ++ "bili";
+      VPastPart Fem  Sg => ne ! p ++ "bila";
+      VPastPart Fem  Dl => ne ! p ++ "bili";
+      VPastPart Fem  Pl => ne ! p ++ "bile";
+      VPastPart Neut Sg => ne ! p ++ "bilo";
+      VPastPart Neut Dl => ne ! p ++ "bili";
+      VPastPart Neut Pl => ne ! p ++ "bila";
+      VPres Sg P1       => ni ! p + "sem";
+      VPres Sg P2       => ni ! p + "si";
+      VPres Sg P3       => case p of {Pos=>"je"; Neg=>"ni"};
+      VPres Dl P1       => ni ! p + "sva";
+      VPres Dl P2       => ni ! p + "sta";
+      VPres Dl P3       => ni ! p + "sta";
+      VPres Pl P1       => ni ! p + "smo";
+      VPres Pl P2       => ni ! p + "ste";
+      VPres Pl P3       => ni ! p + "so"; 
+      VImper1Sg         => ne ! p ++ "bodita";
+      VImper1Dl         => ne ! p ++ "bodite";
+      VImper2 Sg        => ne ! p ++ "bodi";
+      VImper2 Dl        => ne ! p ++ "bodiva";
+      VImper2 Pl        => ne ! p ++ "bodimo"
+    };
 
   bom_V : Number => Person => Str =
     table {
@@ -111,8 +132,11 @@ oper
     \subj,agr,ispron,vp -> {
       s = \\t,a,p => 
         case ispron of {
-          False => subj ++ predV ispron vp.s ! t ! p ! agr ++ vp.s2 ! agr ;
-          True  =>         predV ispron vp.s ! t ! p ! agr ++ vp.s2 ! agr
+          False => subj ++ predV ispron vp.isCop vp.s ! t ! p ! agr ++ vp.s2 ! agr ;
+          True  => case vp.isCop of {
+                     False => predV ispron vp.isCop vp.s ! t ! p ! agr ++ vp.s2 ! agr ;
+                     True  => vp.s2 ! agr ++ predV ispron vp.isCop vp.s ! t ! p ! agr
+                   }
         }
     } ;
 
@@ -128,6 +152,13 @@ oper
       AMasc _ => Masc ;
       AFem    => Fem ;
       ANeut   => Neut
+    } ;
+
+  inanimateGender : Gender -> AGender = \g ->
+    case g of {
+      Masc => AMasc Inanimate ;
+      Fem  => AFem ;
+      Neut => ANeut
     } ;
 
 }
