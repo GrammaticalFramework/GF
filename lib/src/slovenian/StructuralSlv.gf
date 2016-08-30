@@ -1,7 +1,10 @@
 concrete StructuralSlv of Structural = CatSlv ** open ResSlv, ParadigmsSlv in {
 
 lin
+  although_Subj = {s="čeprav"} ;
   and_Conj = mkConj "in" Pl ;
+  because_Subj = {s="zato ket"} ;
+  can_VV = {s = \\vform => case vform of {_ => "lahko"} };  
   he_Pron = mkPron "òn" "njêga" "njêga" "njêmu" "njêm" "njím"
                    "njegôv"  "njegôvega" "njegôvemu" ("njegôv"|"njegôvega") "njegôvem" "njegôvim" 
                    "njegôva" "njegôvih"  "njegôvima"  "njegôva"             "njegôvih" "njegôvima"
@@ -12,6 +15,7 @@ lin
                    "njegôve" "njegôvega" "njegôvemu"  "njegôvo"             "njegôvem" "njegôvim"
                    "njegôvi" "njegôvih"  "njegôvima"  "njegôvi"             "njegôvih" "njegôvima"
                    "njegôva" "njegôvih"  "njegôvim"   "njegôva"             "njegôvih" "njegôvimi" Masc Sg P3 ;
+  here_Adv = {s="tukaj"} ;
   i_Pron  = mkPron "jàz" "méne" "méne" "méni" "méni" ("menój"|"máno")
                    "mój"  "mòjega" "mòjemu" ("mòj"|"mòjega") "mòjem" "mòjim" 
                    "mòja" "mòjih"  "mòjima"  "mòja"          "mòjih" "mòjima"
@@ -22,6 +26,7 @@ lin
                    "mòje" "mòjega" "mòjemu"  "mòjo"          "mòjem" "mòjim"
                    "mòji" "mòjih"  "mòjima"  "mòji"          "mòjih" "mòjima"
                    "mòja" "mòjih"  "mòjim"   "mòja"          "mòjih" "mòjimi" Masc Sg P1 ;
+  in_Prep = mkPrep "v" locative ;
   it_Pron  = mkPron "ôno" "njêga" "njêga" "njêmu" "njêm" "njím" 
                    ("njegôv"|"njegòv")  "njegôvega" "njegôvemu" ("njegôv"|"njegôvega") "njegôvem" "njegôvim" 
                     "njegôva"           "njegôvih"  "njegôvima"  "njegôva"             "njegôvih" "njegôvima"
@@ -32,6 +37,7 @@ lin
                     "njegôve"           "njegôvega" "njegôvemu"  "njegôvo"             "njegôvem" "njegôvim"
                     "njegôvi"           "njegôvih"  "njegôvima"  "njegôvi"             "njegôvih" "njegôvima"
                     "njegôva"           "njegôvih"  "njegôvim"   "njegôva"             "njegôvih" "njegôvimi" Neut Sg P3 ;
+  must_VV = regV "morati" "mora" ;
   she_Pron = variants {mkPron "ôna" "njó" "njé" "njéj" "njéj" "njó" ;
                        mkPron "ôna" "njó" "njé" "njèj" "njèj" "njó" ;
                        mkPron "ôna" "njó" "njé" "njì"  "njì"  "njó"}
@@ -72,6 +78,7 @@ lin
                        "tȏ" "tȇga" "tȇmu" "tȏ"          "tȇm" "tȇm"
                        "tî" "tȇh"  "tȇma" "tî"          "tȇh" "tȇma"
                        "tȃ" "tȇh"  "tȇm"  "tȃ"          "tȇh" "tȇmi" Def ;
+  want_VV = regV "želeti" "želi"; 
   we_Pron = mkPron "mí" "nàs" "nàs" "nàm" "nàs" "nàmi" 
                    "nàš"  "nášega" "nášemu" ("náši"|"nášega") "nášem" "nášim"
                    "náša" "náših"  "nášima" "náša"            "náših" "nášima"     
@@ -82,6 +89,11 @@ lin
                    "náše" "nášega" "nášemu" "náše"            "nášem" "nášim"
                    "náši" "náših"  "nášima" "náši"            "náših" "nášima"
                    "náša" "náših"  "nášim"  "náša"            "náših" "nášimi" Masc Pl P1 ;
+  when_IAdv = {s="kdaj"} ;
+  when_Subj = {s="medtem ko"} ;
+  where_IAdv = {s="kje"} ;
+  why_IAdv = {s="zakaj"} ;
+  with_Prep = mkPrep "z" instrumental ;
   youSg_Pron = mkPron "tí" "tébe" "tébe" "tébi" "tébi" ("tebój"|"tábo")
                       "tvój"  "tvòjega" "tvòjemu" ("tvòj"|"tvòjega") "tvòjem" "tvòjim" 
                       "tvòja" "tvòjih"  "tvòjima"  "tvòja"           "tvòjih" "tvòjima"

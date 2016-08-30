@@ -229,6 +229,9 @@ oper
     mkV2 : V -> Prep -> V2 = \v,p -> lin V2 (v ** {c2 = p}) ;
   } ;
 
+  mkVS : V -> VS ;
+  mkVS v = lin VS v ;
+
   mkVQ : V -> VQ ;
   mkVQ v = lin VQ v ;
 

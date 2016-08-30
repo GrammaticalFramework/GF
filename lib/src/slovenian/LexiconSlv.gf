@@ -23,6 +23,7 @@ lin
   green_A = mkA "zelen" "zelenejši" ;
   good_A = mkA "dober" "boljši" ;
   house_N = mkN "hiša" ;
+  know_VS = mkVS (mkV "vedeti" "vedet" "vedel" "vedela" "vedeli" "vedela" "vedeli" "vedele" "vedelo" "vedeli" "vedela" "vem" "veš" "ve" "veva" "vesta" "vesta" "vemo" "veste" "vedo" "vediva" "vedimo" "vedi" "vedita" "vedite") ;
   love_V2 = mkV2 (mkV "ljubiti" "ljubi") ;
   man_N = mkN "fant" animate ;
   name_N = mkN "ime" "imena" neuter ;
