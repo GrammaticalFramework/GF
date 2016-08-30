@@ -30,6 +30,6 @@ concrete ConjunctionSlv of Conjunction =
 
   lincat
     [NP] = {s1,s2 : Case => Str; a : Agr} ;
-    [AP] = {s1,s2 : Species => Gender => Case => Number => Str} ;
+    [AP] = {s1,s2 : Species => AGender => Case => Number => Str} ;
 
 }

@@ -14,7 +14,7 @@ lincat
   Comp = {s : Agr => Str} ; 
 
   -- Adjective
-  AP = {s : Species => Gender => Case => Number => Str} ;
+  AP = {s : Species => AGender => Case => Number => Str} ;
 
   -- Noun
   CN = {s : Species => Case => Number => Str; g : AGender} ;
