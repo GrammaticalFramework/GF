@@ -2,10 +2,18 @@ C_SOURCES = jpgf.c jsg.c jni_utils.c
 JAVA_SOURCES = $(wildcard org/grammaticalframework/pgf/*.java) \
                $(wildcard org/grammaticalframework/sg/*.java)
 
+v v v v v v v
+JNI_PATH = /usr/lib/jvm/default-java/include
+=============
+#JNI_PATH = /usr/lib/jvm/default-java/include
+JNI_PATH = /System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/
+*************
 JNI_PATH = $(if $(wildcard /usr/lib/jvm/default-java/include/.*), /usr/lib/jvm/default-java/include, \
            $(if $(wildcard /System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/.*), /System/Library/Frameworks/JavaVM.framework/Versions/A/Headers, \
            $(error No JNI headers found)))
+^ ^ ^ ^ ^ ^ ^
 INSTALL_PATH = /usr/local/lib
+LIBTOOL = glibtool --tag=CC
 
 LIBTOOL = $(if $(shell command -v glibtool 2>/dev/null), glibtool --tag=CC, libtool)
 

@@ -66,11 +66,18 @@ getSourceModule opts file0 =
 getBNFCRules :: Options -> FilePath -> IOE [BNFCRule]
 getBNFCRules opts fpath = do
   raw <- liftIO (BS.readFile fpath)
+---- debug  BS.putStrLn $ raws
   (optCoding,parsed) <- parseSource opts pBNFCRules raw
   case parsed of
-    Left (Pn l c,msg) -> do cwd <- getCurrentDirectory
-                            let location = makeRelative cwd fpath++":"++show l++":"++show c
-                            raise (location++":\n   "++msg)
+    Left _ -> do
+      let ifToChange s ss = if (BS.all (\c -> elem c [' ','\t']) s || BS.last s == ';')  then s else ss  -- change if not all space or end with ';'
+      let raws = BS.concat $ map (\s -> ifToChange s $ BS.concat [s,BS.singleton ';']) $ BS.split '\n' raw   -- add semicolon to each line to be able to parse the format in GF book
+      (optCoding,parseds) <- parseSource opts pBNFCRules raws
+      case parseds of
+        Left (Pn l c,msg) -> do cwd <- getCurrentDirectory
+                                let location = makeRelative cwd fpath++":"++show l++":"++show c
+                                raise (location++":\n   "++msg)
+        Right rules       -> return rules
     Right rules       -> return rules
 
 getEBNFRules :: Options -> FilePath -> IOE [ERule]
