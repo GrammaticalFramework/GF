@@ -149,6 +149,8 @@ TRANSLATE10=TranslateEng.pgf TranslateBul.pgf TranslateChi.pgf TranslateGer.pgf 
 
 TRANSLATE11=$(TRANSLATE10) TranslateDut.pgf
 
+TRANSLATE15=$(TRANSLATE10) TranslateDut.pgf TranslateCat.pgf TranslateEst.pgf TranslateTha.pgf TranslateJpn.pgf
+
 # Without dependencies:
 Translate10:
 	$(GFMKT) -name=Translate10 $(TRANSLATE10) +RTS -K32M
@@ -173,6 +175,9 @@ Translate8:
 Translate8.pgf: $(TRANSLATE8)
 	$(GFMKT) -name=Translate8 $(TRANSLATE8) +RTS -K32M
 
+Translate15.pgf: $(TRANSLATE15)
+	$(GFMKT) -name=Translate15 $(TRANSLATE15) +RTS -K32M
+
 # Translate grammars for individual languages
 TranslateEng.pgf:: ; $(GFMKT) -name=TranslateEng translator/TranslateEng.gf
 TranslateBul.pgf:: ; $(GFMKT) -name=TranslateBul translator/TranslateBul.gf
@@ -185,6 +190,10 @@ TranslateFre.pgf:: ; $(GFMKT) -name=TranslateFre translator/TranslateFre.gf +RTS
 TranslateSwe.pgf:: ; $(GFMKT) -name=TranslateSwe translator/TranslateSwe.gf
 TranslateIta.pgf:: ; $(GFMKT) -name=TranslateIta translator/TranslateIta.gf +RTS -K64M
 TranslateSpa.pgf:: ; $(GFMKT) -name=TranslateSpa translator/TranslateSpa.gf +RTS -K64M
+TranslateCat.pgf:: ; $(GFMKT) -name=TranslateCat translator/TranslateCat.gf +RTS -K64M
+TranslateEst.pgf:: ; $(GFMKT) -name=TranslateEst translator/TranslateEst.gf +RTS -K64M
+TranslateTha.pgf:: ; $(GFMKT) -name=TranslateTha translator/TranslateTha.gf +RTS -K64M
+TranslateJpn.pgf:: ; $(GFMKT) -name=TranslateJpn translator/TranslateJpn.gf +RTS -K64M
 
 # Selected language pairs:
 TranslateEngFin: ; $(GFMKT) -name=TranslateEngFin TranslateEng.pgf TranslateFin.pgf
