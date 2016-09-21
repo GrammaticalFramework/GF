@@ -7,41 +7,54 @@ oper
 
   mkTag = overload {
     mkTag : Str -> Tag = \t -> "+" + t ;
-    mkTag : Str -> Str -> Tag = \t,v -> t ++ "=" + v ;
+    mkTag : Str -> Str -> Tag = \t,v -> t + "=" + v ;
     } ;
-    
+
+  consTag = overload {
+    consTag : (_,_ : Str) -> Tag = \t,u -> t + "|" + u ;
+    consTag : (_,_,_ : Str) -> Tag = \t,u,v -> t + "|" + u + "|" + v  ;
+    consTag : (_,_,_,_ : Str) -> Tag = \t,u,v,x -> t + "|" + u + "|" + v + "|" + x ;
+    consTag : (_,_,_,_,_ : Str) -> Tag = \t,u,v,x,y -> t + "|" + u + "|" + v + "|" + x + "|" + y ;
+    consTag : (_,_,_,_,_,_ : Str) -> Tag = \t,u,v,x,y,z -> t + "|" + u + "|" + v + "|" + x + "|" + y + "|" + z ;
+    } ;
+
   tagNForm : NForm -> Str = \nf -> case nf of {
-    NCase n c     => tagNumber n  ++ tagCase c ; 
-    NComit        => tagNumber Pl ++ mkTag "Com" ;
-    NInstruct     => tagNumber Pl ++ mkTag "Ins" ; 
-    NPossNom n    => tagNumber n  ++ tagCase Nom ;
-    NPossGen n    => tagNumber n  ++ tagCase Gen ;
-    NPossTransl n => tagNumber n  ++ tagCase Transl ;
-    NPossIllat n  => tagNumber n  ++ tagCase Illat ;
-    NCompound     => mkTag "Comp"
+    NCase n c     => consTag (tagCase c) (tagNumber n) ;
+    NComit        => consTag (mkTag "Case" "Com") (tagNumber Pl) ; 
+    NInstruct     => consTag (mkTag "Case" "Ins") (tagNumber Pl) ; 
+    NPossNom n    => consTag (tagCase Nom) (tagNumber n) ; 
+    NPossGen n    => consTag (tagCase Gen) (tagNumber n) ; 
+    NPossTransl n => consTag (tagCase Transl) (tagNumber n) ; 
+    NPossIllat n  => consTag (tagCase Illat) (tagNumber n) ; 
+    NCompound     => mkTag "Comp" ----
     } ;
 
   tagAForm : AForm -> Str = \af -> case af of {
     AN nf => tagNForm nf ;
-    AAdv => mkTag "Adv"
+    AAdv => adverbTag
     } ;
 
   tagVForm : VForm -> Str = \vf -> case vf of {
     Inf    infform  => tagInfForm infform ;
-    Presn  num pers => activeTag ++ presentTag ++ tagNumber num ++ tagPerson pers ;
-    Impf   num pers => activeTag ++ imperfectTag ++ tagNumber num ++ tagPerson pers ;
-    Condit num pers => activeTag ++ conditionalTag ++ tagNumber num ++ tagPerson pers ;
-    Potent num pers => activeTag ++ potentialTag  ++ tagNumber num ++ tagPerson pers ;
-    PotentNeg       => activeTag ++ potentialTag  ++ negativeTag ;
-    Imper  num      => activeTag ++ imperativeTag ++ tagNumber num ++ tagPerson P2 ;
-    ImperP3 num     => activeTag ++ imperativeTag ++ tagNumber num ++ tagPerson P3 ;
-    ImperP1Pl       => activeTag ++ imperativeTag ++ tagNumber Pl  ++ tagPerson P1 ;
-    ImpNegPl        => activeTag ++ imperativeTag ++ negativeTag ++ tagNumber Pl ;
-    PassPresn bool  => passiveTag ++ presentTag ++ tagBool bool ;
-    PassImpf  bool  => passiveTag ++ presentTag ++ tagBool bool ;
-    PassCondit bool => passiveTag ++ imperfectTag ++ tagBool bool ;
-    PassPotent bool => passiveTag ++ potentialTag ++ tagBool bool ;
-    PassImper bool  => passiveTag ++ imperativeTag ++ tagBool bool ;
+    Presn  num pers => consTag indicativeTag  (tagNumber num) (tagPerson pers) presentTag finiteTag activeTag ;
+    Impf   num pers => consTag indicativeTag  (tagNumber num) (tagPerson pers) pastTag    finiteTag activeTag ;
+    Condit num pers => consTag conditionalTag (tagNumber num) (tagPerson pers)            finiteTag activeTag ;
+    Potent num pers => consTag potentialTag   (tagNumber num) (tagPerson pers)            finiteTag activeTag ;
+    PotentNeg       => consTag connegativeTag potentialTag                                finiteTag activeTag ;
+    Imper  num      => consTag imperativeTag  (tagNumber num) (tagPerson P2)              finiteTag activeTag ;
+    ImperP3 num     => consTag imperativeTag  (tagNumber num) (tagPerson P3)              finiteTag activeTag ;
+    ImperP1Pl       => consTag imperativeTag  (tagNumber Pl)  (tagPerson P3)              finiteTag activeTag ;
+    ImpNegPl        => consTag connegativeTag imperativeTag                               finiteTag ; ---- Active not in UD??
+    PassPresn True  => consTag                indicativeTag  presentTag finiteTag passiveTag ;
+    PassPresn False => consTag connegativeTag indicativeTag  presentTag finiteTag passiveTag ;
+    PassImpf  True  => consTag                indicativeTag  pastTag    finiteTag passiveTag ;
+    PassImpf  False => consTag connegativeTag indicativeTag  pastTag    finiteTag passiveTag ;
+    PassCondit True => consTag                conditionalTag            finiteTag passiveTag ;
+    PassCondit False => consTag connegativeTag conditionalTag           finiteTag passiveTag ;
+    PassPotent True => consTag                potentialTag              finiteTag passiveTag ;
+    PassPotent False => consTag connegativeTag potentialTag             finiteTag passiveTag ;
+    PassImper True  => consTag                imperativeTag             finiteTag passiveTag ;
+    PassImper False => consTag connegativeTag imperativeTag             finiteTag passiveTag ;
     PastPartAct af  => participleTag ++ activeTag ++ pastTag ++ tagAForm af ;
     PastPartPass af => participleTag ++ activeTag ++ pastTag ++ tagAForm af ;
     PresPartAct af  => participleTag ++ activeTag ++ presentTag ++ tagAForm af ;
@@ -70,57 +83,58 @@ oper
     } ;
 
 
-  nounTag = mkTag "N" ;
-  adjectiveTag = mkTag "A" ;
-  verbTag = mkTag "V" ;
-  adverbTag = mkTag "Adv" ;
+  nounTag = mkTag "NOUN" ;
+  adjectiveTag = mkTag "ADJ" ;
+  verbTag = mkTag "VERB" ;
+  adverbTag = mkTag "ADV" ;
 
-  activeTag = mkTag "Act" ;
-  passiveTag = mkTag "Pass" ;
+  activeTag = mkTag "Voice" "Act" ;
+  passiveTag = mkTag "Voice" "Pass" ;
   
-  imperativeTag = mkTag "Imp" ;
+  imperativeTag = mkTag "Mood" "Imp" ;
+  indicativeTag = mkTag "Mood" "Ind" ;
   participleTag = mkTag "Part" ;
   agentTag = mkTag "Agent" ;
   infinitiveTag = mkTag "Inf" ;
+  finiteTag = mkTag "VerbForm" "Fin" ;
   
-  negativeTag = mkTag "Neg" ;
+  connegativeTag = mkTag "Connegative" "Yes" ;
   
-  presentTag = mkTag "Pres" ;
-  imperfectTag = mkTag "Impf" ;
-  conditionalTag = mkTag "Cond" ;
-  potentialTag = mkTag "Pot" ;
-  pastTag = mkTag "Past" ; -- for participles
+  presentTag = mkTag "Tense" "Pres" ;
+  conditionalTag = mkTag "Mood" "Cnd" ;
+  potentialTag = mkTag "Mood" "Pot" ;
+  pastTag = mkTag "Tense" "Past" ;
 
-  tagCase : Case -> Tag = \c -> case c of {
-    Nom => mkTag "Nom" ;
-    Gen => mkTag "Gen" ;
-    Part => mkTag "Par" ;
-    Transl => mkTag "Tra" ;
-    Ess => mkTag "Ess" ;
-    Iness => mkTag "Ine" ;
-    Elat => mkTag "Ela" ;
-    Illat => mkTag "Ill" ;
-    Adess => mkTag "Ade" ;
-    Ablat => mkTag "Abl" ;
-    Allat => mkTag "All" ;
-    Abess => mkTag "Abe" 
+  tagCase : Case -> Tag = \c -> let k = "Case" in case c of {
+    Nom => mkTag k "Nom" ;
+    Gen => mkTag k "Gen" ;
+    Part => mkTag k "Par" ;
+    Transl => mkTag k "Tra" ;
+    Ess => mkTag k "Ess" ;
+    Iness => mkTag k "Ine" ;
+    Elat => mkTag k "Ela" ;
+    Illat => mkTag k "Ill" ;
+    Adess => mkTag k "Ade" ;
+    Ablat => mkTag k "Abl" ;
+    Allat => mkTag k "All" ;
+    Abess => mkTag k "Abe" 
     } ;
     
-  tagNumber : Number -> Tag = \n -> case n of {
-    Sg => mkTag "Sg" ;
-    Pl => mkTag "Pl"
+  tagNumber : Number -> Tag = \n -> let k = "Number" in case n of {
+    Sg => mkTag k "Sing" ;
+    Pl => mkTag k "Plur"
     } ;
     
-  tagDegree : Degree -> Tag = \n -> case n of {
-    Posit  => mkTag "Pos" ;
-    Compar => mkTag "Com" ;
-    Superl => mkTag "Sup"
+  tagDegree : Degree -> Tag = \n -> let d = "Degree" in case n of {
+    Posit  => mkTag d "Pos" ;
+    Compar => mkTag d "Cmp" ;
+    Superl => mkTag d "Sup"
     } ;
 
-  tagPerson : Person -> Tag = \p -> case p of {
-    P1 => mkTag "Person1" ;
-    P2 => mkTag "Person2" ;
-    P3 => mkTag "Person3"
+  tagPerson : Person -> Tag = \p -> let k = "Person" in case p of {
+    P1 => mkTag k "1" ;
+    P2 => mkTag k "2" ;
+    P3 => mkTag k "3"
     } ;
 
   tagBool : Bool -> Tag = \b -> case b of {

@@ -59,7 +59,7 @@ oper
    sANGen : (SAForm => Str) -> Str = \a -> a ! 0 ;
 
     mkAdj : (hyva,parempi,paras : SNoun) -> (hyvin,paremmin,parhaiten : Str) -> {s : Degree => SAForm => Str ; h : Harmony} = \h,p,ps,hn,pn,ph -> {
-      s = \\degr,aform => tagWord (adjectiveTag ++ tagDegree degr) (h.s ! 0) ;  ---- where is AForm added?
+      s = \\degr,aform => tagWord (adjectiveTag ++ tagDegree degr) (h.s ! 0) ; ---- AForm ? ; order diff in UD
       h = h.h  --- not needed
       } ;
 
