@@ -5,15 +5,20 @@ resource StemFin = open TagFin, MorphoFin, Prelude in {
 flags coding = utf8 ;
 
 oper
-  SNForm : Type = Predef.Ints 0 ;
-  SNoun : Type = {s : SNForm => Str ; h : Harmony } ;
+  SNForm : Type = Predef.Ints 0 ; --- not really needed
+  SNoun  : Type = {s : SNForm => Str ; h : Harmony} ; --- Harmony needed only for API compatibility
 
-  nforms2snoun : NForms -> SNoun = \nfs -> {s = nfs ; h = Back} ;
+  mkSNoun : Str -> SNoun = \s -> {s = \\_ => s ; h = Back} ; --- Harmony not used
+
+  nforms2snoun : NForms -> SNoun = \nfs -> mkSNoun (nfs ! 0) ;
 
     snoun2nounBind : SNoun -> Noun = snoun2noun True ;
     snoun2nounSep  : SNoun -> Noun = snoun2noun False ;
 
-    snoun2noun : Bool -> SNoun -> Noun = \b,sn -> {s = \\nf => sn.s ! 0++ mkTag "N" + tagNForm nf ; h = Back} ;
+    snoun2noun : Bool -> SNoun -> Noun = \b,sn -> {
+      s = \\nf => tagWord (nounTag ++ tagNForm nf) (sn.s ! 0) ;
+      h = sn.h --- not used
+      } ;
 
 
 
@@ -35,78 +40,54 @@ oper
 
   snoun2spn : SNoun -> SPN = \n -> {s = \\c => n.s ! 0 ++ tagCase c} ;
 
-  exceptNomSNoun : SNoun -> Str -> SNoun = \noun,nom -> {
-      s = \\_ => nom ;
-      h = noun.h 
-      } ;
+  exceptNomSNoun : SNoun -> Str -> SNoun = \noun,nom -> mkSNoun nom ;
 
 
 
 -- Adjectives --- could be made more compact by pressing comparison forms down to a few
 
 oper
-  SAForm : Type = AForm ;
-
-oper
-  SAdj = {s : SAForm => Str ; h : Harmony} ;
+  SAForm : Type = SNForm ;
+  SAdj : Type = SNoun ;
 
   snoun2sadj : SNoun -> SAdj = snoun2sadjComp True ;
 
-  snoun2sadjComp : Bool -> SNoun -> SAdj = \isPos,tuore ->
-    let 
-      tuoree = init (tuore.s ! 0) ;
-      tuoreesti  = tuoree + "sti" ; 
-      tuoreemmin =  init tuoree ;
-    in {s = table {
-         AN f => tuoree ;
-         AAdv => if_then_Str isPos tuoreesti tuoreemmin
-         } ;
-        h = Back
-       } ;
+  snoun2sadjComp : Bool -> SNoun -> SAdj = \_,tuore -> tuore ;
 
-   sAN : SNForm -> SAForm = \n -> AN (NCase Sg Nom) ;  ---- without eta exp gives internal error 6/8/2013
-   sAAdv : SAForm = AAdv ;
-   sANGen : (SAForm => Str) -> Str = \a -> a ! AN (NCase Sg Gen) ;
+   sAN : SNForm -> SAForm = \n -> n ;
+   sAAdv : SAForm = 0 ;
+   sANGen : (SAForm => Str) -> Str = \a -> a ! 0 ;
 
     mkAdj : (hyva,parempi,paras : SNoun) -> (hyvin,paremmin,parhaiten : Str) -> {s : Degree => SAForm => Str ; h : Harmony} = \h,p,ps,hn,pn,ph -> {
-      s = table {
-        Posit => table {
-           AN nf => h.s ! 0 ++ tagNForm nf ;
-           AAdv  => hn
-           } ; 
-        Compar => table {
-           AN nf => p.s ! 0 ++ tagNForm nf ;
-           AAdv  => pn
-           } ; 
-        Superl => table {
-           AN nf => ps.s ! 0 ++ tagNForm nf ;
-           AAdv  => ph
-           }
-        } ;
-      h = Back  ---- TODO: just get rid of h ?
+      s = \\degr,aform => tagWord (adjectiveTag ++ tagDegree degr) (h.s ! 0) ;  ---- where is AForm added?
+      h = h.h  --- not needed
       } ;
 
-  snoun2compar : SNoun -> Str = \n -> n.s ! 0 + "Comp" ; ---- TODO
-  snoun2superl : SNoun -> Str = \n -> n.s ! 0 + "Superl" ; ---- TODO
+---- where are these needed?
+  snoun2compar : SNoun -> Str = \n -> n.s ! 0 ++ "?Comp" ; ---- TODO
+  snoun2superl : SNoun -> Str = \n -> n.s ! 0 ++ "?Superl" ; ---- TODO
 
 -- verbs
 
 oper
-  SVForm : Type = VForm ;
-  SVerb : Type = {s : SVForm => Str ; h : Harmony} ;
+  SVForm : Type = SNForm ;
+  SVerb : Type = SNoun ;
 
-  ollaSVerbForms : SVForm => Str = verbOlla.s ;
+  mkSVerb = mkSNoun ;
+
+  ollaSVerbForms : SVForm => Str = \\_ => "olla" ;
 
   -- used in Cat
-  SVerb1 = {s : SVForm => Str ; sc : SubjCase ; h : Harmony ; p : Str} ;
+  SVerb1 = SVerb ** {sc : SubjCase ; p : Str} ;
 
   sverb2verbBind : SVerb -> Verb = sverb2verb True ;
   sverb2verbSep  : SVerb -> Verb = sverb2verb False ;
 
-  vforms2sverb : VForms -> SVerb = \v -> 
-    {s = (vforms2V v).s ; h = case (last (v ! 0)) of {"a" => Back ; _ => Front}} ;
+  vforms2sverb : VForms -> SVerb = \v -> mkSVerb (v ! 0) ;
 
-  sverb2verb : Bool -> SVerb -> Verb = \b,sverb -> {s = sverb.s} ;
+  sverb2verb : Bool -> SVerb -> Verb = \b,sverb -> {
+    s = \\vf => tagWord (verbTag ++ tagVForm vf) (sverb.s ! 0)
+    } ;
 
   predSV : SVerb1 -> VP = \sv ->
     predV sv ; 
@@ -114,8 +95,9 @@ oper
 
 -- word formation functions
 
+
   sverb2snoun : SVerb1 -> SNoun = \v ->    -- syöminen
-    let tekem = Predef.tk 4 (v.s ! Inf Inf3Iness) in 
+    let tekem = Predef.tk 4 ((sverb2verb True v).s ! Inf Inf3Iness) in 
     nforms2snoun (dNainen (tekem + "inen")) ;
 
 {-
@@ -181,11 +163,11 @@ oper
 
   defaultVPTyp = {isNeg = False ; isPass = False} ;
     
-  HVerb : Type = Verb ** {sc : SubjCase ; h : Harmony ; p : Str} ;
+  HVerb : Type = SVerb1 ;
  
   predV : HVerb -> VP = \verb -> {
-    s = verb ;
-    s2 = \\_,_,_ => [] ;
+    s   = verb ;
+    s2  = \\_,_,_ => [] ;
     adv = \\_ => verb.p ; -- the particle of the verb
     ext = [] ;
     vptyp = defaultVPTyp ;
@@ -203,7 +185,7 @@ oper
 
   vp2old_vp : VP -> old_VP = \vp -> 
     let 
-     verb = vp.s ; 
+     verb = vp.s ** sverb2verb True vp.s ; 
      sverb :  VIForm => Anteriority => Polarity => Agr => {fin, inf : Str} = \\vi,ant,b,agr0 => 
       let
         agr = verbAgr agr0 ;
@@ -396,7 +378,7 @@ oper
             } ;
           verb = case ipol of {
             Pos => <vp.s ! VIInf vi ! Simul ! Pos ! agr, []> ; -- nähdä/näkemään
-            Neg => <(vp2old_vp (predV (verbOlla ** {sc = SCNom ; h = Back ; p = []}))).s ! VIInf vi ! Simul ! Pos ! agr,
+            Neg => <(vp2old_vp (predV vpVerbOlla)).s ! VIInf vi ! Simul ! Pos ! agr,
                     (vp.s ! VIInf Inf3Abess ! Simul ! Pos ! agr).fin> -- olla/olemaan näkemättä
             } ;
           vph = vp.h ;
@@ -410,6 +392,6 @@ oper
 
   infVP : SubjCase -> Polarity -> Agr -> VP -> InfForm -> Str = infVPGen Pos ;
 
-  vpVerbOlla : HVerb = verbOlla ** {sc = SCNom ; h = Back ; p = []} ;
+  vpVerbOlla : HVerb = {s = \\_ => "olla" ; sc = SCNom ; h = Back ; p = []} ;
 
 }
