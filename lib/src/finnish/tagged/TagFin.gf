@@ -73,6 +73,7 @@ oper
   nounTag = mkTag "N" ;
   adjectiveTag = mkTag "A" ;
   verbTag = mkTag "V" ;
+  adverbTag = mkTag "Adv" ;
 
   activeTag = mkTag "Act" ;
   passiveTag = mkTag "Pass" ;
