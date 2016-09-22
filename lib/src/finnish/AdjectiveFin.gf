@@ -6,10 +6,10 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in 
   lin
 
     PositA  a = {
-      s = \\_ => (snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s
+      s = \\_ => sAdjFull2nforms Posit a ;
       } ;
     ComparA a np = 
-      let acomp = (snoun2nounSep {s = \\f => a.s ! Compar ! sAN f ; h = a.h}).s in {
+      let acomp = sAdjFull2nforms Compar a in {
       s = \\isMod,af => case isMod of {
         True => np.s ! NPCase Part ++ acomp ! af ;        -- minua isompi
         _    => acomp ! af ++ "kuin" ++ np.s ! NPSep -- isompi kuin minä
@@ -19,7 +19,7 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in 
       s = \\m,af => ad.s ++ ap.s ! m ! af ++ ad.p ++ np.s ! NPSep 
       } ;
     UseComparA a = {
-      s = \\_ => (snoun2nounSep {s = \\f => a.s ! Compar ! sAN f ; h = a.h}).s
+      s = \\_ => sAdjFull2nforms Compar a
       } ;
 
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
@@ -30,13 +30,13 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in 
 
     ComplA2 a np = {
       s = \\isMod,af => 
-          preOrPost isMod (appCompl True Pos a.c2 np)  ((snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s ! af)
+          preOrPost isMod (appCompl True Pos a.c2 np)  (sAdjFull2nforms Posit a ! af)
       } ;
 
     ReflA2 a = {
       s = \\isMod,af => 
           preOrPost isMod 
-            (appCompl True Pos a.c2 (reflPron (agrP3 Sg))) ((snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s ! af)
+            (appCompl True Pos a.c2 (reflPron (agrP3 Sg))) (sAdjFull2nforms Posit a ! af)
       } ;
 
     SentAP ap sc = {
@@ -52,7 +52,7 @@ concrete AdjectiveFin of Adjective = CatFin ** open ResFin, StemFin, Prelude in 
       } ;
 
     UseA2 a = {
-      s = \\_ => (snoun2nounSep {s = \\f => a.s ! Posit ! sAN f ; h = a.h}).s
+      s = \\_ => sAdjFull2nforms Posit a
       } ;
 
 }

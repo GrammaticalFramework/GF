@@ -51,6 +51,9 @@ oper
 
 oper
   SAdj = {s : SAForm => Str ; h : Harmony} ;
+  SAdjFull = {s : Degree => SAForm => Str ; h : Harmony} ;
+
+  sAdjFull2nforms : Degree -> SAdjFull -> NForm => Str = \d,a -> (snoun2nounSep {s = \\nc => a.s ! d ! sAN nc ; h = a.h}).s ;
 
   snoun2sadj : SNoun -> SAdj = snoun2sadjComp True ;
 
@@ -70,7 +73,7 @@ oper
    sAAdv : SAForm = AAdv ;
    sANGen : (SAForm => Str) -> Str = \a -> a ! AN (NCase Sg Gen) ;
 
-    mkAdj : (hyva,parempi,paras : SNoun) -> (hyvin,paremmin,parhaiten : Str) -> {s : Degree => SAForm => Str ; h : Harmony} = \h,p,ps,hn,pn,ph -> {
+    mkAdj : (hyva,parempi,paras : SNoun) -> (hyvin,paremmin,parhaiten : Str) -> SAdjFull = \h,p,ps,hn,pn,ph -> {
       s = table {
         Posit => table {
            AN nf => h.s ! nf ;

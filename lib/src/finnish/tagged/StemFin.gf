@@ -49,6 +49,10 @@ oper
 oper
   SAForm : Type = SNForm ;
   SAdj : Type = SNoun ;
+  SAdjFull = {s : Degree => SAForm => Str ; h : Harmony} ;
+
+  sAdjFull2nforms : Degree -> SAdjFull -> NForm => Str = \d,a ->
+    \\nf => tagWord (adjectiveTag ++ consTag (tagDegree d) (tagNForm nf)) (a.s ! Posit ! 0) ; ---- order diff from UD
 
   snoun2sadj : SNoun -> SAdj = snoun2sadjComp True ;
 

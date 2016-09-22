@@ -125,6 +125,9 @@ param
 
 oper
   SAdj = {s : SAForm => Str ; h : Harmony} ;
+  SAdjFull = {s : Degree => SAForm => Str ; h : Harmony} ;
+
+  sAdjFull2nforms : Degree -> SAdjFull -> NForm => Str = \d,a -> (snoun2nounSep {s = \\nc => a.s ! d ! sAN nc ; h = a.h}).s ;
 
   snoun2sadj : SNoun -> SAdj = snoun2sadjComp True ;
 
