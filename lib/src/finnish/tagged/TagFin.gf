@@ -18,20 +18,24 @@ oper
     consTag : (_,_,_,_,_,_ : Str) -> Tag = \t,u,v,x,y,z -> t + "|" + u + "|" + v + "|" + x + "|" + y + "|" + z ;
     } ;
 
-  tagNForm : NForm -> Str = \nf -> case nf of {
-    NCase n c     => consTag (tagCase c) (tagNumber n) ;
-    NComit        => consTag (mkTag "Case" "Com") (tagNumber Pl) ; 
-    NInstruct     => consTag (mkTag "Case" "Ins") (tagNumber Pl) ; 
-    NPossNom n    => consTag (tagCase Nom) (tagNumber n) ; 
-    NPossGen n    => consTag (tagCase Gen) (tagNumber n) ; 
-    NPossTransl n => consTag (tagCase Transl) (tagNumber n) ; 
-    NPossIllat n  => consTag (tagCase Illat) (tagNumber n) ; 
-    NCompound     => mkTag "Comp" ----
+  pairTag : Tag -> Tag -> Tag * Tag = \t,u -> <t,u> ;
+
+  tagNForm : NForm -> Tag = \nf -> let ts = tagNForms nf in consTag ts.p1 ts.p2 ;
+  
+  tagNForms : NForm -> Tag * Tag = \nf -> case nf of {  -- keep separate in order to squeeze in Degree of adjectives
+    NCase n c     => pairTag (tagCase c) (tagNumber n) ;
+    NComit        => pairTag (mkTag "Case" "Com") (tagNumber Pl) ; 
+    NInstruct     => pairTag (mkTag "Case" "Ins") (tagNumber Pl) ; 
+    NPossNom n    => pairTag (tagCase Nom) (tagNumber n) ; 
+    NPossGen n    => pairTag (tagCase Gen) (tagNumber n) ; 
+    NPossTransl n => pairTag (tagCase Transl) (tagNumber n) ; 
+    NPossIllat n  => pairTag (tagCase Illat) (tagNumber n) ; 
+    NCompound     => pairTag (mkTag "Form" "Comp") (tagNumber Sg) ---- TODO: how is this in UD?
     } ;
 
-  tagAForm : AForm -> Str = \af -> case af of {
-    AN nf => tagNForm nf ;
-    AAdv => adverbTag
+  tagDegreeAForm : Degree -> AForm -> Str = \d,af -> case af of {
+    AN nf => let ts = tagNForms nf in consTag ts.p1 (tagDegree d) ts.p2 ;
+    AAdv  => consTag adverbTag (tagDegree d)  ---- TODO: how is this in UD?
     } ;
 
   tagVForm : VForm -> Str = \vf -> case vf of {
@@ -55,33 +59,43 @@ oper
     PassPotent False => consTag connegativeTag potentialTag             finiteTag passiveTag ;
     PassImper True  => consTag                imperativeTag             finiteTag passiveTag ;
     PassImper False => consTag connegativeTag imperativeTag             finiteTag passiveTag ;
-    PastPartAct af  => participleTag ++ activeTag ++ pastTag ++ tagAForm af ;
-    PastPartPass af => participleTag ++ activeTag ++ pastTag ++ tagAForm af ;
-    PresPartAct af  => participleTag ++ activeTag ++ presentTag ++ tagAForm af ;
-    PresPartPass af => participleTag ++ activeTag ++ presentTag ++ tagAForm af ;
-    AgentPart af    => participleTag ++ agentTag  ++ tagAForm af
+    PastPartAct af  => consTag (tagDegreeAForm Posit af) (tagPartForm "Past") participleTag activeTag ;
+    PastPartPass af => consTag (tagDegreeAForm Posit af) (tagPartForm "Past") participleTag passiveTag ;
+    PresPartAct af  => consTag (tagDegreeAForm Posit af) (tagPartForm "Pres") participleTag activeTag ;
+    PresPartPass af => consTag (tagDegreeAForm Posit af) (tagPartForm "Pres") participleTag passiveTag ;
+    AgentPart af    => consTag (tagDegreeAForm Posit af) (tagPartForm "Agt")  participleTag activeTag
     } ;
 
   tagInfForm : InfForm -> Str = \vf -> case vf of {
-    Inf1           => infinitiveTag ;
-    Inf1Long       => infinitiveTag ;
-    Inf2Iness      => infinitiveTag ;
-    Inf2Instr      => infinitiveTag ;
-    Inf2InessPass  => infinitiveTag ;
-    Inf3Iness      => infinitiveTag ;
-    Inf3Elat       => infinitiveTag ;
-    Inf3Illat      => infinitiveTag ;
-    Inf3Adess      => infinitiveTag ;
-    Inf3Abess      => infinitiveTag ;
-    Inf3Instr      => infinitiveTag ;
-    Inf3InstrPass  => infinitiveTag ;
-    Inf4Nom        => infinitiveTag ;
-    Inf4Part       => infinitiveTag ;
-    Inf5           => infinitiveTag ;
-    InfPresPart    => infinitiveTag ;
-    InfPresPartAgr => infinitiveTag 
+    Inf1           => infinitiveTag "1" ;
+    Inf1Long       => infinitiveTag "1" ;       --- insert Person[psor]=3 when used with poss suff
+    Inf2Iness      => infinitiveTag "Ine" "2" ;
+    Inf2Instr      => infinitiveTag "Ins" "2" ;
+    Inf2InessPass  => infinitiveTag "Ins" "2" "Pass" ;   
+    Inf3Iness      => infinitiveTag "Ine" "3" ;
+    Inf3Elat       => infinitiveTag "Ela" "3" ;
+    Inf3Illat      => infinitiveTag "Ill" "3" ;
+    Inf3Adess      => infinitiveTag "Ade" "3" ;
+    Inf3Abess      => infinitiveTag "Abe" "3" ;
+    Inf3Instr      => infinitiveTag "Ins" "3" ; 
+    Inf3InstrPass  => infinitiveTag "Ins" "3" "Pass" ;
+    Inf4Nom        => infinitiveTag "Nom" "4" ;
+    Inf4Part       => infinitiveTag "Par" "4" ;
+    Inf5           => infinitiveTag "5" ; ---- not in UD
+    InfPresPart    => consTag (tagDegreeAForm Posit (AN (NCase Sg Nom))) (tagPartForm "Pres") participleTag activeTag ;
+    InfPresPartAgr => consTag (tagDegreeAForm Posit (AN (NCase Sg Nom))) (tagPartForm "Pres") participleTag activeTag --- poss to add
     } ;
 
+  infinitiveTag = overload {
+    infinitiveTag : Str -> Tag = \i ->
+      consTag (mkTag "InfForm" i) (tagNumber Sg) (mkTag "VerbForm" "Inf") activeTag ;  --- UD wants voice and number
+    infinitiveTag : Str -> Str -> Tag = \c,i ->
+      consTag (mkTag "Case" c) (mkTag "InfForm" i) (tagNumber Sg) (mkTag "VerbForm" "Inf") activeTag ;
+    infinitiveTag : Str -> Str -> Str -> Tag = \c,i,v ->
+      consTag (mkTag "Case" c) (mkTag "InfForm" i) (tagNumber Sg) (mkTag "VerbForm" "Inf") (mkTag "Voice" v) ;
+    } ;
+
+  tagPartForm : Str -> Tag = \pf -> mkTag "PartForm" pf ;
 
   nounTag = mkTag "NOUN" ;
   adjectiveTag = mkTag "ADJ" ;
@@ -93,9 +107,8 @@ oper
   
   imperativeTag = mkTag "Mood" "Imp" ;
   indicativeTag = mkTag "Mood" "Ind" ;
-  participleTag = mkTag "Part" ;
+  participleTag = mkTag "VerbForm" "Part" ;
   agentTag = mkTag "Agent" ;
-  infinitiveTag = mkTag "Inf" ;
   finiteTag = mkTag "VerbForm" "Fin" ;
   
   connegativeTag = mkTag "Connegative" "Yes" ;

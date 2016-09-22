@@ -766,8 +766,8 @@ mkVS = overload {
   dirV2 v = mk2V2 v accPrep ;
 
   mkAdv = overload { 
-    mkAdv : Str -> Adv = \s -> {s = s ; lock_Adv = <>} ;
-    mkAdv : AdvK -> Adv = \s -> {s = s.s ; lock_Adv = <>} ;
+    mkAdv : Str -> Adv = \s -> {s = tagPOS "ADV" s ; lock_Adv = <>} ;
+    mkAdv : AdvK -> Adv = \s -> {s = tagPOS "ADV" s.s ; lock_Adv = <>} ;
     } ;
 
   mkV2 = overload {

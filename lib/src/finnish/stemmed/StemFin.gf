@@ -5,6 +5,12 @@ resource StemFin = open MorphoFin, Prelude in {
 flags coding = utf8 ;
 
 oper
+-- other classes not treated below are POS tagged when the grammar is used with Omorfi
+
+  tagPOS : Str -> Str -> Str = \_,s -> s ;
+
+
+oper
   SNForm : Type = Predef.Ints 10 ;
   SNoun : Type = {s : SNForm => Str ; h : Harmony} ;
 
