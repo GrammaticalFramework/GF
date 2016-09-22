@@ -15,6 +15,18 @@ abstract LargeFinAbs =
   Structural,
   Tense,
   ExtraFinAbs,
-  WordsFinAbs
-  ;
+  WordsFinAbs ** {
+
+flags startcat = Top ;
+
+cat
+  Top ;
+  Punct ;
+fun
+  PhrPunctTop : Phr -> Punct -> Top ;
+  PhrTop : Phr -> Top ;
+  fullstopPunct : Punct ;
+  
+}
+
 

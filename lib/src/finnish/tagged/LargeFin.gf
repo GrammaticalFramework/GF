@@ -17,6 +17,14 @@ concrete LargeFin of LargeFinAbs =
   IdiomFin,
   TenseX,
   ExtraFin,
-  WordsFin
-  ;
+  WordsFin ** open TagFin, StemFin in {
 
+lincat
+  Top = {s : Str} ;
+  Punct = {s : Str} ;
+lin
+  PhrPunctTop phr pu = {s = phr.s ++ pu.s} ;
+  PhrTop phr = phr ;
+  
+  fullstopPunct = {s = tagPOS "PUNCT" "."} ;
+}
