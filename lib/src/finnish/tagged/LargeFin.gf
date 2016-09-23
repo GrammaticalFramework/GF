@@ -44,6 +44,9 @@ lin
   pl2Pron = mkPron Pl P2 ;
   pl3Pron = mkPron Pl P3 ;
 
+  theConj = {s1 = [] ; s2 = tagPOS "CONJ" [] ; n = Sg} ;
+  theDistrConj = {s1,s2 = tagPOS "CONJ" [] ; n = Sg} ;
+  theSubj = {s = tagPOS "SCONJ" []} ;
   
 
 oper

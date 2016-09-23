@@ -38,9 +38,9 @@ fun
   sg1Pron : Pron ;
   sg2Pron : Pron ;
   sg3Pron : Pron ;
-  sg4Pron : Pron ;
-  sg5Pron : Pron ;
-  sg6Pron : Pron ;
+  pl1Pron : Pron ;
+  pl2Pron : Pron ;
+  pl3Pron : Pron ;
 
   theConj : Conj ;
   theDistrConj : Conj ;
