@@ -7,17 +7,18 @@ concrete LargeFin of LargeFinAbs =
   VerbFin, 
   AdjectiveFin,
   AdverbFin,
-  NumeralFin,
+--  NumeralFin,
   SentenceFin, 
   QuestionFin,
   RelativeFin,
   ConjunctionFin,
   PhraseFin,
-  StructuralFin,
+--  StructuralFin - [mkPronoun],
   IdiomFin,
-  TenseX,
-  ExtraFin,
-  WordsFin ** open TagFin, StemFin in {
+  TenseX
+----  ,ExtraFin
+--  ,WordsFin
+  ** open TagFin, StemFin, ResFin, ParadigmsFin, Prelude in {
 
 lincat
   Top = {s : Str} ;
@@ -26,5 +27,32 @@ lin
   PhrPunctTop phr pu = {s = phr.s ++ pu.s} ;
   PhrTop phr = phr ;
   
-  fullstopPunct = {s = tagPOS "PUNCT" "."} ;
+  thePunct = {s = tagPOS "PUNCT" ""} ;
+
+lin
+  theN = mkN [] ;
+  theA = mkA [] ;
+  theV = mkSVerb [] ** {sc = SCNom ; p = []} ;
+  theAdv = mkAdv [] ;
+
+  theV2 = mkV2 theV ; ---- plus other complement cases?
+
+  sg1Pron = mkPron Sg P1 ;
+  sg2Pron = mkPron Sg P2 ;
+  sg3Pron = mkPron Sg P3 ;
+  pl1Pron = mkPron Pl P1 ;
+  pl2Pron = mkPron Pl P2 ;
+  pl3Pron = mkPron Pl P3 ;
+
+  
+
+oper
+  mkPron : Number -> Person -> Pron = \n,p -> lin Pron {
+    s = \\npf => tagWord (tagPron "Prs" (Ag n p) npf) (mkTag "PRON")  ;
+    a = Ag n p ;
+    hasPoss = True ;
+    poss = [] ; ----
+    } ;
+
+
 }

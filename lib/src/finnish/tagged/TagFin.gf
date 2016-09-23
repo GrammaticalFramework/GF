@@ -33,6 +33,20 @@ oper
     NCompound     => pairTag (mkTag "Form" "Comp") (tagNumber Sg) ---- TODO: how is this in UD?
     } ;
 
+  tagPron : Str -> Agr -> NPForm -> Tag = \typ,agr,npf ->
+    let tagr : Number * Person = case agr of {
+      Ag n p => <n, p> ;
+      AgPol => <Pl, P2> ---- Plur in ud?
+      } ;
+      n = tagr.p1 ; p = tagr.p2 ;
+      pt : Tag = mkTag "PronType" typ ; -- Dem Ind Int Prs Rel
+    in
+    case npf of {
+      NPCase c => consTag (tagNForm (NCase n c))(tagPerson p) pt ;
+      NPAcc    => consTag (mkTag "Case" "Acc") (tagNumber n) (tagPerson p) pt ; ---- effect for pronouns only?
+      NPSep    => consTag (tagNForm (NCase n Nom))(tagPerson p) pt              ---- correct pro-drop effect?
+    } ;
+
   tagDegreeAForm : Degree -> AForm -> Str = \d,af -> case af of {
     AN nf => let ts = tagNForms nf in consTag ts.p1 (tagDegree d) ts.p2 ;
     AAdv  => consTag adverbTag (tagDegree d)  ---- TODO: how is this in UD?

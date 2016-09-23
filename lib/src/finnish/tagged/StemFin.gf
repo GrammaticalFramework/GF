@@ -8,6 +8,7 @@ oper
 -- other classes not treated below are POS tagged when the grammar is used with Omorfi
 
   tagPOS : Str -> Str -> Str = \p,s -> tagWord ("+" + p) s ;
+  tagFeature : Str -> Str -> Str -> Str = \s,f,v -> s ++ mkTag f v ;
 
 oper
   SNForm : Type = Predef.Ints 0 ; --- not really needed

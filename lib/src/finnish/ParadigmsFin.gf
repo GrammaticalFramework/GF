@@ -387,7 +387,7 @@ mkVS = overload {
   infFirst = Inf1 ; infElat = Inf3Elat ; infIllat = Inf3Illat ; infIness = Inf3Iness ; infPresPart = InfPresPart ; infPresPartAgr = InfPresPartAgr ;
 
   prePrep  : Case -> Str -> Prep = 
-    \c,p -> lin Prep {c = NPCase c ; s = <p, [],\\_ => []>} ; -- no possessive suffix
+    \c,p -> lin Prep {c = NPCase c ; s = <tagFeature (tagPOS "ADP" p) "AdvType" "Pre", [],\\_ => []>} ; -- no possessive suffix
 
   postPrep : Case -> Str -> Prep =
     \c,p -> 
@@ -397,9 +397,10 @@ mkVS = overload {
            Gen => \\a => p ++ possSuffixGen h a ;
            _ => \\a => p 
            } ;
+	 pt = tagFeature (tagPOS "ADP" p) "AdvType" "Post" ;
        in case p of {
-         mukaa + "n" => lin Prep {c = NPCase c ; s = <[],p, a2p>} ;
-         _           => lin Prep {c = NPCase c ; s = <[],p, a2p>}
+         mukaa + "n" => lin Prep {c = NPCase c ; s = <[],pt, a2p>} ; ---- p --> mukaa
+         _           => lin Prep {c = NPCase c ; s = <[],pt, a2p>}
          } ;
 
   postGenPrep = postPrep genitive ;

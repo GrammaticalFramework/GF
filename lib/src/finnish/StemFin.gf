@@ -8,6 +8,7 @@ oper
 -- other classes not treated below are POS tagged when the grammar is used with Omorfi
 
   tagPOS : Str -> Str -> Str = \_,s -> s ;
+  tagFeature : Str -> Str -> Str -> Str = \s,_,_ -> s ;
 
 oper
   SNForm : Type = NForm ;
