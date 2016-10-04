@@ -138,6 +138,8 @@ oper
     mkV : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x25 : Str) -> V = worstV ;
     } ;
 
+  particleV : V -> Str -> V = \v,p -> v ** {p = p} ;
+
 -- Regular verbs are formed from two forms. Infinitive and 3rd person singular presens. 
 
   regV : (_,_ : Str) -> V = \hoditi,hodi ->  
@@ -209,7 +211,8 @@ oper
              VImper2 Sg        => imp2sg;
              VImper2 Dl        => imp2dl;
              VImper2 Pl        => imp2pl
-           }
+           } ;
+	   p = [] ;  ----AR: +p
     };
 
 --Imperative forms are formed separetely. Pattern matching performed on thirdpersonsingular verbform. 

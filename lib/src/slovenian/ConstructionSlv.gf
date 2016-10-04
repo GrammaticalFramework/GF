@@ -1,5 +1,5 @@
 concrete ConstructionSlv of Construction = CatSlv ** 
-  open ParadigmsSlv in {
+  open ParadigmsSlv, ResSlv in {
 
 flags
   coding=utf8;
@@ -33,4 +33,12 @@ lin
   october_Month = mkN "oktober" "oktobra" "oktobru" "oktober" "oktobru" "oktobrom" "oktobra" "oktobrov" "oktobroma" "oktobra" "oktobrih" "oktobroma" "oktobri" "oktobrov" "oktobrom" "oktobre" "oktobrih" "oktobri" masculine ;
   november_Month = mkN "november" "novembra" "novembru" "november" "novembru" "novembrom" "novembra" "novembrov" "novembroma" "novembra" "novembrih" "novembroma" "novembri" "novembrov" "novembrom" "novembre" "novembrih" "novembri" masculine ;
   december_Month = mkN "december" "decembra" "decembru" "december" "decembru" "decembrom" "decembra" "decembrov" "decembroma" "decembra" "decembrih" "decembroma" "decembri" "decembrov" "decembrom" "decembre" "decembrih" "decembri" masculine ;
+
+  weekdayPunctualAdv w = {s = "v" ++ w.s ! Acc ! Sg} ; ----AR
+  weekdayHabitualAdv w = {s = "ob" ++ w.s ! Loc ! Pl} ; ----AR
+  weekdayNextAdv w = {s = "naslednjo" ++ w.s ! Acc ! Sg} ; ----AR
+  weekdayLastAdv w = {s = "prejšnjo" ++ w.s ! Acc ! Sg} ; ----AR
+
+  monthAdv w = {s = "w" ++ w.s ! Loc ! Sg} ; ----AR
+
 }

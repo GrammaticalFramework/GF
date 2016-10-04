@@ -29,6 +29,7 @@ lin
                    "mòje" "mòjega" "mòjemu"  "mòjo"          "mòjem" "mòjim"
                    "mòji" "mòjih"  "mòjima"  "mòji"          "mòjih" "mòjima"
                    "mòja" "mòjih"  "mòjim"   "mòja"          "mòjih" "mòjimi" Masc Sg P1 ;
+  if_Subj = ss "če" ;
   in_Prep = mkPrep "v" locative ;
   it_Pron  = mkPron "ôno" "njêga" "njêga" "njêmu" "njêm" "njím" 
                    ("njegôv"|"njegòv")  "njegôvega" "njegôvemu" ("njegôv"|"njegôvega") "njegôvem" "njegôvim" 
@@ -41,6 +42,8 @@ lin
                     "njegôvi"           "njegôvih"  "njegôvima"  "njegôvi"             "njegôvih" "njegôvima"
                     "njegôva"           "njegôvih"  "njegôvim"   "njegôva"             "njegôvih" "njegôvimi" Neut Sg P3 ;
   must_VV = regV "morati" "mora" ;
+  or_Conj = mkConj "ali" Sg ;
+
   she_Pron = variants {mkPron "ôna" "njó" "njé" "njéj" "njéj" "njó" ;
                        mkPron "ôna" "njó" "njé" "njèj" "njèj" "njó" ;
                        mkPron "ôna" "njó" "njé" "njì"  "njì"  "njó"}
@@ -81,6 +84,7 @@ lin
                        "tȏ" "tȇga" "tȇmu" "tȏ"          "tȇm" "tȇm"
                        "tî" "tȇh"  "tȇma" "tî"          "tȇh" "tȇma"
                        "tȃ" "tȇh"  "tȇm"  "tȃ"          "tȇh" "tȇmi" Def ;
+  very_AdA = {s = "zelo"} ; ----AR
   want_VV = regV "želeti" "želi"; 
   we_Pron = mkPron "mí" "nàs" "nàs" "nàm" "nàs" "nàmi" 
                    "nàš"  "nášega" "nášemu" ("náši"|"nášega") "nášem" "nášim"
@@ -96,7 +100,7 @@ lin
   when_Subj = {s="medtem ko"} ;
   where_IAdv = {s="kje"} ;
 
-  whatSg_NP = mkNP "káj" "káj" "čésa" "čému" "čém" "čím" Neut Sg ; ----AR
+  whatSg_IP = mkNP "káj" "káj" "čésa" "čému" "čém" "čím" Neut Sg ; ----AR
   whoSg_IP = mkNP "kdó" "kóga" "kóga" "kómu" "kóm" "kóm" Masc Sg ; ----AR
 
   why_IAdv = {s="zakaj"} ;

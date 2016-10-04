@@ -4,6 +4,7 @@ lincat
   -- Sentence
   Cl = {s : P.Tense => P.Anteriority => P.Polarity => Str} ;
   Imp = {s : P.Polarity => Gender => Number => Str} ;
+  ClSlash = {s : P.Tense => P.Anteriority => P.Polarity => Str ; c2 : Prep} ; ----AR
 
   -- Question
   QCl = {s : P.Tense => P.Anteriority => P.Polarity => Str} ;
@@ -36,11 +37,11 @@ lincat
   Prep = {s : Str; c : Case} ;
 
   -- Open lexical classes, e.g. Lexicon
-  V  = {s : VForm => Str};
-  VS = {s : VForm => Str};
+  V  = {s : VForm => Str ; p : Str}; ----AR: +p particle
+  VS = {s : VForm => Str ; p : Str};
   VQ = {s : VForm => Str};
   VV = {s : VForm => Str};
-  V2 = {s : VForm => Str; c2 : Prep};
+  V2 = {s : VForm => Str; c2 : Prep ; p : Str};  ----AR: +p particle
 
   A = {s : AForm => Str};
   
