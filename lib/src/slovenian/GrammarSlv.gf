@@ -13,7 +13,7 @@ concrete GrammarSlv of Grammar =
   PhraseSlv,
   TextX - [Pol,PPos,PNeg],
   StructuralSlv,
-{-  IdiomSlv,  -}
+  IdiomSlv,  ----AR
   TenseX
   ** {
 

@@ -7,6 +7,7 @@ lincat
 
   -- Question
   QCl = {s : P.Tense => P.Anteriority => P.Polarity => Str} ;
+  IP =  {s : Case => Str; a : Agr} ; ----AR
 
   -- Verb
   VP = ResSlv.VP ;

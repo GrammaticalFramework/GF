@@ -187,4 +187,50 @@ oper mkDigit2 : (_,_,_,_,_,_ : Str) -> Gender => Case => Str;
          Loc   => s+"ih" ;
          Instr => s+"imi"
        } ;
+
+-----------------------------------------AR BEGIN ; copied from Italian
+-- numerals as sequences of digits
+
+  lincat 
+    Dig = TDigit ;
+
+  lin
+    IDig d = d ;
+
+    IIDig d i = {
+      s = d.s ++ BIND ++ i.s ;
+----      s = \\o => d.s ! NCard Masc ++ BIND ++ i.s ! o ;
+      n = Pl
+    } ;
+
+    D_0 = mkDig "0" ;
+    D_1 = mk2Dig "1"  Sg ; ---- gender
+    D_2 = mkDig "2" ;
+    D_3 = mkDig "3" ;
+    D_4 = mkDig "4" ;
+    D_5 = mkDig "5" ;
+    D_6 = mkDig "6" ;
+    D_7 = mkDig "7" ;
+    D_8 = mkDig "8" ;
+    D_9 = mkDig "9" ;
+
+  oper
+    mkDig : Str -> TDigit = \c -> mk2Dig c Pl ;
+    
+    mk2Dig : Str -> Number -> TDigit = \c,n -> {
+      s = c ; ----
+----      s = table {NCard _ => c ; 
+----                 NOrd Masc Sg => c + ":o" ; NOrd Fem Sg => c + ":a" ;
+----                 NOrd Masc Pl => c + ":i" ; NOrd Fem Pl => c + ":e"
+----                 } ; 
+      n = n
+      } ;
+
+    TDigit = {
+      n : Number ;
+      s : Str ; ---- CardOrd => Str
+    } ;
+
+---------------------AR END
+
 }

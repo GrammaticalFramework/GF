@@ -1,10 +1,12 @@
-concrete StructuralSlv of Structural = CatSlv ** open ResSlv, ParadigmsSlv in {
+concrete StructuralSlv of Structural = CatSlv ** open ResSlv, ParadigmsSlv, Prelude in {
 
 lin
   although_Subj = {s="čeprav"} ;
   and_Conj = mkConj "in" Pl ;
   because_Subj = {s="zato ket"} ;
-  can_VV = {s = \\vform => case vform of {_ => "lahko"} };  
+  can_VV = {s = \\vform => case vform of {_ => "lahko"} };
+  have_V2 = mkV2 (mkV "iméti" "imá") ; ----AR
+
   he_Pron = mkPron "òn" "njêga" "njêga" "njêmu" "njêm" "njím"
                    "njegôv"  "njegôvega" "njegôvemu" ("njegôv"|"njegôvega") "njegôvem" "njegôvim" 
                    "njegôva" "njegôvih"  "njegôvima"  "njegôva"             "njegôvih" "njegôvima"
@@ -16,6 +18,7 @@ lin
                    "njegôvi" "njegôvih"  "njegôvima"  "njegôvi"             "njegôvih" "njegôvima"
                    "njegôva" "njegôvih"  "njegôvim"   "njegôva"             "njegôvih" "njegôvimi" Masc Sg P3 ;
   here_Adv = {s="tukaj"} ;
+  how8much_IAdv = ss "koliko" ;
   i_Pron  = mkPron "jàz" "méne" "méne" "méni" "méni" ("menój"|"máno")
                    "mój"  "mòjega" "mòjemu" ("mòj"|"mòjega") "mòjem" "mòjim" 
                    "mòja" "mòjih"  "mòjima"  "mòja"          "mòjih" "mòjima"
@@ -92,8 +95,13 @@ lin
   when_IAdv = {s="kdaj"} ;
   when_Subj = {s="medtem ko"} ;
   where_IAdv = {s="kje"} ;
+
+  whatSg_NP = mkNP "káj" "káj" "čésa" "čému" "čém" "čím" Neut Sg ; ----AR
+  whoSg_IP = mkNP "kdó" "kóga" "kóga" "kómu" "kóm" "kóm" Masc Sg ; ----AR
+
   why_IAdv = {s="zakaj"} ;
   with_Prep = mkPrep "z" instrumental ;
+  without_Prep = mkPrep "brez" genitive ; ----AR
   youSg_Pron = mkPron "tí" "tébe" "tébe" "tébi" "tébi" ("tebój"|"tábo")
                       "tvój"  "tvòjega" "tvòjemu" ("tvòj"|"tvòjega") "tvòjem" "tvòjim" 
                       "tvòja" "tvòjih"  "tvòjima"  "tvòja"           "tvòjih" "tvòjima"
