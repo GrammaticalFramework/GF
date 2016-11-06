@@ -64,7 +64,8 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer, Coordination in {
             insertObj (\\_ => appPrepNP v.c2 np) (
               predVGen v.isAux v)))) ** {c2 = v.c2} ;
 
-    UseComp comp = insertObj comp.s (predV sein_V) ; -- agr not used
+    UseComp comp =
+       insertExtrapos comp.ext (insertObj comp.s (predV sein_V)) ; -- agr not used
     -- adj slot not used here for e.g. "ich bin alt" but same behaviour as NPs?
 	-- "ich bin nicht alt" "ich bin nicht Doris" 
 
