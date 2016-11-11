@@ -39,6 +39,8 @@ lin
   weekdayNextAdv w = {s = "naslednjo" ++ w.s ! Acc ! Sg} ; ----AR
   weekdayLastAdv w = {s = "prejšnjo" ++ w.s ! Acc ! Sg} ; ----AR
 
-  monthAdv w = {s = "w" ++ w.s ! Loc ! Sg} ; ----AR
+  monthAdv w = {s = "v" ++ w.s ! Loc ! Sg} ; ----AR
+
+  --hungry_VP = UseComp (mkComp "lačen") ; --AE
 
 }

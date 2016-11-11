@@ -7,7 +7,11 @@ concrete IdiomSlv of Idiom = CatSlv **
       mkClause [] np.a False {
         s  = \\p,vform => ne ! p ++ (mkV "obstajati" "obstaja").s ! vform ;
         s2 = \\a => np.s ! Nom ;
-        isCop = False
+        isCop = False ;
+        refl = []
       } ;
+
+    
+
 }
 ----AR END

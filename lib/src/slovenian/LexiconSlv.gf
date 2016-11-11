@@ -35,6 +35,6 @@ lin
   tree_N = mkN "drevo" "drevesa" neuter ;
   walk_V = mkV "hoditi" "hodi" ;
   woman_N = mkN "ženska" ;
-  write_V2 = mkV2 (mkV "pisati" "piše" "pisal") ;
+  write_V2 = mkV2 (mkV "pisati" "piše" "pisal");
 
 } ;

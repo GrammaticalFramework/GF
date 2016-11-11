@@ -37,11 +37,12 @@ lincat
   Prep = {s : Str; c : Case} ;
 
   -- Open lexical classes, e.g. Lexicon
-  V  = {s : VForm => Str ; p : Str}; ----AR: +p particle
-  VS = {s : VForm => Str ; p : Str};
+  V  = {s : VForm => Str ; p : Str ; refl : Str}; ----AR: +p particle
+  VS = {s : VForm => Str ; p : Str ; refl : Str};
   VQ = {s : VForm => Str};
   VV = {s : VForm => Str};
-  V2 = {s : VForm => Str; c2 : Prep ; p : Str};  ----AR: +p particle
+  V2 = {s : VForm => Str; c2 : Prep ; p : Str ; refl : Str};  ----AR: +p particle
+  V3 = {s : VForm => Str; c2 : Prep ; c3 : Prep ; p : Str ; refl : Str};
 
   A = {s : AForm => Str};
   

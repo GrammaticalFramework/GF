@@ -16,6 +16,13 @@ oper
   feminine  = AFem;
   neuter    = ANeut;
 
+  singular : Number = Sg ;
+  dual : Number = Dl ;
+  plural : Number = Pl ;
+
+  definite : Species = Def ;
+  indefinite : Species = Indef ; 
+
   mkN = overload {
     mkN : (noun : Str) -> N = smartN ;
     mkN : (noun : Str) -> AGender -> N = regNouns ;
@@ -54,6 +61,12 @@ oper
       worstN punca        (punc + "e") (punc + "i")   (punc + "o") (punc + "i")  (punc + "o")   -- Singular
              (punc + "i") punc         (punc + "ama") (punc + "i") (punc + "am") (punc + "ama") -- Dual
              (punc + "e") punc         (punc + "am")  (punc + "e") (punc + "am") (punc + "ami") -- Plural
+             feminine ;
+
+  iFem : (_ : Str) -> N = \stran -> 
+      worstN stran        (stran + "i") (stran + "i")  stran (stran + "i")  (stran + "jo")   -- Singular
+             (stran + "i") (stran + "i") (stran + "ema") (stran + "i") (stran + "eh") (stran + "ema") -- Dual
+             (stran + "i") (stran + "i") (stran + "em")  (stran + "i") (stran + "eh") (stran + "mi") -- Plural
              feminine ;
 
 --This is a smart paradigm for regular nouns. 
@@ -117,6 +130,10 @@ oper
       s = \\c => noun.s ! c ! Sg ;
       g = noun.g
     };
+    mkPN : N -> Number -> PN = \noun,nr -> lin PN {
+      s = \\c => noun.s ! c ! nr ;
+      g = noun.g
+    }; 
     mkPN : (_,_,_,_,_,_ : Str) -> AGender -> PN =
       \nom,gen,dat,acc,loc,instr,g -> lin PN {
          s = table {
@@ -135,8 +152,11 @@ oper
     mkV : (inf,stem : Str) -> V = regV ; 
     mkV : (inf,stem,lstem : Str) -> V = irregVa ; 
     mkV : (inf,stem,lstem,imp : Str) -> V = irregVb ; 
+    mkV : (inf,stem,lstem,femstem,imp : Str) -> V = irregVc ; 
     mkV : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x25 : Str) -> V = worstV ;
     } ;
+
+  mkReflV : V -> Case -> V = \v,c -> v ** {refl = reflexive ! c} ;
 
   particleV : V -> Str -> V = \v,p -> v ** {p = p} ;
 
@@ -166,6 +186,14 @@ oper
           lfem = looseVowel gledal
         in 
         mkAllV gledati gleda gledal lfem glej;
+
+--This one was added as a workaround the special case of "videti" where the feminine stem is equal to the masculine lform.
+
+  irregVc : (_,_,_,_,_ : Str) -> V = \videti,vidi,videl,videla,vidimp -> 
+        let 
+          femvidel = init videla
+        in 
+        mkAllV videti vidi videl femvidel vidimp;
 
 --The final paradigm-generator for all verbforms. Takes the infinitive,thirdpersonsingular in present tense,
 --masculine l-form, feminine l-form and the imperative base form. 
@@ -213,6 +241,7 @@ oper
              VImper2 Pl        => imp2pl
            } ;
 	   p = [] ;  ----AR: +p
+     refl = [] ;   
     };
 
 --Imperative forms are formed separetely. Pattern matching performed on thirdpersonsingular verbform. 
@@ -232,6 +261,14 @@ oper
     mkV2 : V -> Prep -> V2 = \v,p -> lin V2 (v ** {c2 = p}) ;
   } ;
 
+  mkV3 = overload {
+    mkV3 : V -> V3 = \v -> lin V2 (v ** {c2 = lin Prep {s=""; c=Acc}; c3 = lin Prep {s=""; c=Acc}}) ;
+    mkV3 : V -> Case -> Case -> V3 = \v,c2,c3 -> lin V2 (v ** {c2 = lin Prep {s=""; c=c2}; c3 = lin Prep {s=""; c=c3}}) ;
+    mkV3 : V -> Case -> Prep -> V3 = \v,c2,p3 -> lin V2 (v ** {c2 = lin Prep {s=""; c=c2}; c3 = p3}) ;
+    mkV3 : V -> Prep -> Case -> V3 = \v,p2,c3 -> lin V2 (v ** {c2 = p2 ; c3 = lin Prep {s=""; c=c3}}) ;
+    mkV3 : V -> Prep -> Prep -> V3 = \v,p2,p3 -> lin V2 (v ** {c2 = p2 ; c3 = p3}) ;
+  } ; 
+
   mkVS : V -> VS ;
   mkVS v = lin VS v ;
 
@@ -244,7 +281,7 @@ oper
 -- Adjectives
 
   mkA = overload {
-    mkA : (_,_:Str) -> A = regA ;
+    mkA : (_,_:Str) -> A = regA ; 
     mkA : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x166 : Str) -> A = worstA ;
     } ;
 
@@ -257,8 +294,8 @@ oper
              APositDefNom      => mkAdjForm star ! Nom ! Masc ! Pl ;
              APositIndefAcc    => mkAdjForm star ! Nom ! Masc ! Sg ;
              APositDefAcc      => mkAdjForm star ! Nom ! Masc ! Pl ;
-             AComparDefAcc     => mkAdjForm starejs ! Nom ! Masc ! Sg ;
-             ASuperlDefAcc     => mkAdjForm ("naj" + starejs) ! Nom ! Masc ! Sg
+             AComparDefNom     => mkAdjForm starejs ! Nom ! Masc ! Pl ;
+             ASuperlDefNom     => mkAdjForm ("naj" + starejs) ! Nom ! Masc ! Pl
            }
     } ;
 
@@ -506,6 +543,19 @@ oper
 
   mkAdA : Str -> AdA = \s -> lin AdA {s=s} ;
 
+
+  regPron: (x1,_,_,_,_,_,x7:Str) -> Gender -> Number -> Person -> Pron = \nom,acc,gen,dat,loc,inst,poss,g,n,p -> lin Pron {
+       s = table {  Nom => nom;
+                    Acc => acc;
+                    Gen => gen;
+                    Dat => dat;
+                    Loc => loc;
+                    Instr=>inst
+                  } ;
+      poss = \\g,c,nr => mkAdjForm poss ! c ! g ! nr ; 
+      a = {g=g; n=n; p=p}
+    };
+
   mkPron : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> Gender -> Number -> Person -> Pron =
     \nom,acc,gen,dat,loc,instr,
      mSgNom,mSgGen,mSgDat,mSgAcc,mSgLoc,mSgInstr,
@@ -586,6 +636,14 @@ oper
        spec = spec
      };
 
+  adjDet : Str -> Number -> Species -> Det = 
+    \en,nr,sp -> lin Det {
+      s = \\g,c => mkAdjForm en ! c ! g ! nr ; 
+      spec = sp ;
+      n = (UseNum nr)
+    } ;
+
+
   mkNP : (_,_,_,_,_,_ : Str) -> Gender -> Number -> NP =
     \nom,acc,gen,dat,loc,instr,g,n ->
     lin NP {s = table {
@@ -606,14 +664,29 @@ oper
   mkConj : Str -> Number -> Conj =
     \s,n -> lin Conj {s=s; n=n} ;
 
+  --  Comp = {s : Agr => Str} ; 
+
+  mkComp : Str -> Comp = 
+    \str -> lin Comp { 
+      s = \\agr => mkAdjForm str ! Nom ! agr.g ! agr.n 
+        } ; 
+
 --Helper function that drops the loose vowel that has to go in many conjugations. 
 
   looseVowel : (_:Str) -> Str = \vowel ->
     case vowel of {
         _ + "sak" => vowel ;
         _ + "er" => Predef.tk 2 vowel + "r" ;
-        _ + "an" => Predef.tk 2 vowel + "n" ;
-        --_ + "en" => Predef.tk 2 vowel + "n" ; --this is wrong, right?
+        _ + "čan" => Predef.tk 2 vowel + "n" ;
+        _ + "ten" => Predef.tk 2 vowel + "n" ;
+        --_ + "len" => Predef.tk 2 vowel + "n" ;
+        --_ + "čen" => Predef.tk 2 vowel + "n" ;
+        --_ + "zen" => Predef.tk 2 vowel + "n" ;
+        --_ + "ven" => Predef.tk 2 vowel + "n" ;
+        --_ + "den" => Predef.tk 2 vowel + "n" ;
+        --_ + "šen" => Predef.tk 2 vowel + "n" ;
+        _ + "en" => Predef.tk 2 vowel + "n" ; --not yet tested for overgeneration
+        --_ + "ec" => Predef.tk 2 vowel + "c" ; --not yet tested for overgeneration
         _ + "el" => Predef.tk 2 vowel + "l" ;
         _ + "ek" => Predef.tk 2 vowel + "k" ;
         _ + "ak" => Predef.tk 2 vowel + "k" ;
@@ -622,5 +695,5 @@ oper
     } ;
     
   vowel : pattern Str = #("a"|"e"|"i"|"o"|"u") ;
-  consonant : pattern Str = #("b"|"d"|"g"|"m"|"n"|"p"|"t") ;
+  consonant : pattern Str = #("b"|"c"|"d"|"f"|"g"|"h"|"j"|"k"|"l"|"m"|"n"|"p"|"r"|"s"|"t"|"v"|"x"|"z") ;
 }

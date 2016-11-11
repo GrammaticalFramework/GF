@@ -5,6 +5,7 @@ concrete AdjectiveSlv of Adjective = CatSlv ** open ResSlv in {
       s = \\spec,g,c,n => 
         case <spec,g,n,c> of {
           <Def,AMasc _,    Sg,Nom> => a.s ! APositDefNom ;
+          <Def,AMasc _,    Sg,Acc> => a.s ! APositDefNom ;
           <_,AMasc Animate,Sg,Acc> => a.s ! APosit Masc Sg Gen ;
           _                        => a.s ! APosit (agender2gender g) n c
         }
@@ -12,7 +13,8 @@ concrete AdjectiveSlv of Adjective = CatSlv ** open ResSlv in {
     UseComparA a = {
       s = \\spec,g,c,n => 
         case <spec,g,n,c> of {
-          <Def,AMasc _,Sg,Acc> => a.s ! AComparDefAcc ;
+          <Def,AMasc _,Sg,Nom> => a.s ! AComparDefNom ;
+          <Def,AMasc _,Sg,Acc> => a.s ! AComparDefNom ;
           _                    => a.s ! ACompar (agender2gender g) n c
         }
       } ;

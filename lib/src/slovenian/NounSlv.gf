@@ -47,6 +47,7 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv,Prelude in {
       } ;
 
     NumSg = {s = \\_,_ => []; n = UseNum Sg} ;
+    NumDl = {s = \\_,_ => []; n = UseNum Dl} ; --not working?
     NumPl = {s = \\_,_ => []; n = UseNum Pl} ;
 
     NumCard n = n ;

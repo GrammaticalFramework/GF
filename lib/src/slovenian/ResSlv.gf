@@ -28,11 +28,15 @@ param
         | APositDefNom
         | APositIndefAcc
         | APositDefAcc
-        | AComparDefAcc
-        | ASuperlDefAcc ;
+        | AComparDefNom
+        | ASuperlDefNom ;
 
 oper
   Agr = {g : Gender; n : Number; p : Person} ;
+
+  Conj = {s : Str; n : Number} ;
+
+  mkConj : Str -> Number -> Conj = \str,nr -> { s = str ; n = nr } ;
 
   conjNumber : Number -> Number -> Number = \m,n -> 
     case m of {
@@ -46,7 +50,7 @@ oper
     p = b.p
   } ;
 
-  VP = {s : Polarity => VForm => Str; s2 : Agr => Str; isCop : Bool} ;
+  VP = {s : Polarity => VForm => Str; s2 : Agr => Str; isCop : Bool ; refl : Str} ;
 
   ne : Polarity => Str =
     table {Pos => "" ;
@@ -58,37 +62,40 @@ oper
            Neg => "ni"
           } ;
 
-  predV : Bool -> Bool -> (Polarity => VForm => Str) -> Tense => Polarity => Agr => Str =
-    \ispron,iscop,v -> table {
-             Pres => \\p,a => v ! p ! VPres a.n a.p ;
+
+  --Added the position of the reflexive particle. Needs testing. 
+
+  predV : Bool -> Bool -> Str -> (Polarity => VForm => Str) -> Tense => Polarity => Agr => Str =
+    \ispron,iscop,refl,v -> table {
+             Pres => \\p,a => v ! p ! VPres a.n a.p ++ refl ;
              Past => \\p,a => case <ispron,p> of {
-                                <True,Pos> => v ! Pos ! VPastPart a.g a.n ++ copula ! p ! VPres a.n a.p ;
-                                <_   ,_  > => copula ! p ! VPres a.n a.p ++ v ! Pos ! VPastPart a.g a.n } ;
+                                <True,Pos> => v ! Pos ! VPastPart a.g a.n ++ refl ++ copula ! p ! VPres a.n a.p ;
+                                <_   ,_  > => copula ! p ! VPres a.n a.p ++ refl ++ v ! Pos ! VPastPart a.g a.n } ;
              Fut  => \\p,a => case <ispron,p> of {
                                 <True,Pos> => case iscop of {
-                                                False => v ! Pos ! VPastPart a.g a.n ++ bom_V ! a.n ! a.p ;
+                                                False => v ! Pos ! VPastPart a.g a.n ++ refl ++ bom_V ! a.n ! a.p ;
                                                 True  => bom_V ! a.n ! a.p
                                               } ;
                                 <_   ,_  > => case iscop of {
-                                                False => ne ! p ++ bom_V ! a.n ! a.p ++ v ! Pos ! VPastPart a.g a.n ;
+                                                False => refl ++ ne ! p ++ bom_V ! a.n ! a.p ++ v ! Pos ! VPastPart a.g a.n ;
                                                 True  => ne ! p ++ bom_V ! a.n ! a.p
                                               } } ;
-             Cond => \\p,a => ne ! p ++ "bi" ++ v ! Pos ! VPastPart a.g a.n
+             Cond => \\p,a => ne ! p ++ "bi" ++ refl ++ v ! Pos ! VPastPart a.g a.n
           } ;
 
   copula : Polarity => VForm => Str = \\p =>
     table {
       VInf              => ne ! p ++ "biti";
       VSup              => ne ! p ++ "bit";
-      VPastPart Masc Sg => ne ! p ++ "bil";
-      VPastPart Masc Dl => ne ! p ++ "bila";
-      VPastPart Masc Pl => ne ! p ++ "bili";
-      VPastPart Fem  Sg => ne ! p ++ "bila";
-      VPastPart Fem  Dl => ne ! p ++ "bili";
-      VPastPart Fem  Pl => ne ! p ++ "bile";
-      VPastPart Neut Sg => ne ! p ++ "bilo";
-      VPastPart Neut Dl => ne ! p ++ "bili";
-      VPastPart Neut Pl => ne ! p ++ "bila";
+      VPastPart Masc Sg => ni ! p ++ "bil";
+      VPastPart Masc Dl => ni ! p ++ "bila";
+      VPastPart Masc Pl => ni ! p ++ "bili";
+      VPastPart Fem  Sg => ni ! p ++ "bila";
+      VPastPart Fem  Dl => ni ! p ++ "bili";
+      VPastPart Fem  Pl => ni ! p ++ "bile";
+      VPastPart Neut Sg => ni ! p ++ "bilo";
+      VPastPart Neut Dl => ni ! p ++ "bili";
+      VPastPart Neut Pl => ni ! p ++ "bila";
       VPres Sg P1       => ni ! p + "sem";
       VPres Sg P2       => ni ! p + "si";
       VPres Sg P3       => case p of {Pos=>"je"; Neg=>"ni"};
@@ -124,18 +131,30 @@ oper
             }
     } ;
 
+  reflexive : Case => Str = 
+    table {
+      (Acc | Gen) => "se" ;
+      (Loc | Dat) => "si" ;
+      Instr       => "sabo" ;
+      _           => "wrong" --we should never get here
+    } ;
+
+
   Clause : Type = {
     s : Tense => Anteriority => Polarity => Str
     } ;
+
+
+-- Ändra här så att vi kan fixa in det reflexiva pronomenet. Ändra även så att vi har en V2Slash med ett särskilt fält för reflexiv? 
 
   mkClause : Str -> Agr -> Bool -> VP -> Clause =
     \subj,agr,ispron,vp -> {
       s = \\t,a,p => 
         case ispron of {
-          False => subj ++ predV ispron vp.isCop vp.s ! t ! p ! agr ++ vp.s2 ! agr ;
+          False => subj ++ predV ispron vp.isCop vp.refl vp.s ! t ! p ! agr ++ vp.s2 ! agr ;
           True  => case vp.isCop of {
-                     False => predV ispron vp.isCop vp.s ! t ! p ! agr ++ vp.s2 ! agr ;
-                     True  => vp.s2 ! agr ++ predV ispron vp.isCop vp.s ! t ! p ! agr
+                     False => predV ispron vp.isCop vp.refl vp.s ! t ! p ! agr ++ vp.s2 ! agr ;
+                     True  => vp.s2 ! agr ++ predV ispron vp.isCop vp.refl vp.s ! t ! p ! agr
                    }
         }
     } ;

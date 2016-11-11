@@ -3,7 +3,7 @@ concrete StructuralSlv of Structural = CatSlv ** open ResSlv, ParadigmsSlv, Prel
 lin
   although_Subj = {s="čeprav"} ;
   and_Conj = mkConj "in" Pl ;
-  because_Subj = {s="zato ket"} ;
+  because_Subj = {s="zato ker"} ;
   can_VV = {s = \\vform => case vform of {_ => "lahko"} };
   have_V2 = mkV2 (mkV "iméti" "imá") ; ----AR
 
