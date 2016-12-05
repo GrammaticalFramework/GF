@@ -96,7 +96,8 @@ oper
     case gen of {
       AMasc anim => case noun of {
                       _ + #consonant => mascAll noun noun anim ;
-                      _ + #vowel => let nou = init noun in mascAll noun nou anim
+                      _ + #vowel     => let nou = init noun in mascAll noun nou anim ;
+                      _              => mascAll noun noun anim  -- KA: catch all
                     };
       ANeut      => let nou = init noun in neutAll noun nou ;
       AFem       => regFem noun --There are actually no feminine nouns with long stem. 
