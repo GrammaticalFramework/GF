@@ -129,14 +129,16 @@ oper
   mkPN = overload {
     mkPN : N -> PN = \noun -> lin PN {
       s = \\c => noun.s ! c ! Sg ;
-      g = noun.g
+      g = noun.g ;
+      n = Sg
     };
     mkPN : N -> Number -> PN = \noun,nr -> lin PN {
       s = \\c => noun.s ! c ! nr ;
-      g = noun.g
+      g = noun.g ;
+      n = nr
     }; 
-    mkPN : (_,_,_,_,_,_ : Str) -> AGender -> PN =
-      \nom,gen,dat,acc,loc,instr,g -> lin PN {
+    mkPN : (_,_,_,_,_,_ : Str) -> AGender -> Number -> PN =
+      \nom,gen,dat,acc,loc,instr,g,n -> lin PN {
          s = table {
                Nom   => nom;
                Gen   => gen;
@@ -145,7 +147,8 @@ oper
                Loc   => loc;
                Instr => instr
              };
-         g = g
+         g = g ;
+         n = n
       };
     } ;
 

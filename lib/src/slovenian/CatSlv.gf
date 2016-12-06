@@ -47,6 +47,6 @@ lincat
   A = {s : AForm => Str};
   
   N = {s : Case => Number => Str; g : AGender};
-  PN = {s : Case => Str; g : AGender};
+  PN = {s : Case => Str; g : AGender; n : Number};
 
 }

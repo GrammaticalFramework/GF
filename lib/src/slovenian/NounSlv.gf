@@ -19,7 +19,7 @@ concrete NounSlv of Noun = CatSlv ** open ResSlv,Prelude in {
 
     UsePN pn = {
       s = pn.s;
-      a = {g=agender2gender pn.g; n=Sg; p=P3};
+      a = {g=agender2gender pn.g; n=pn.n; p=P3};
       isPron = False
       } ;
 
