@@ -28,8 +28,8 @@ param
         | APositDefNom
         | APositIndefAcc
         | APositDefAcc
-        | AComparDefNom
-        | ASuperlDefNom ;
+        | AComparDefAcc
+        | ASuperlDefAcc ;
 
 oper
   Agr = {g : Gender; n : Number; p : Person} ;

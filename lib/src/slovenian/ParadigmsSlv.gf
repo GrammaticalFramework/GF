@@ -120,7 +120,7 @@ oper
              Gen   => table {Sg=>gensg; Dl=>gendl; Pl=>genpl};
              Dat   => table {Sg=>datsg; Dl=>datdl; Pl=>datpl};
              Acc   => table {Sg=>accsg; Dl=>accdl; Pl=>accpl};
-             Loc   => table {Sg=>locsg; Dl=>nomdl; Pl=>locpl};
+             Loc   => table {Sg=>locsg; Dl=>locdl; Pl=>locpl};
              Instr => table {Sg=>instrsg; Dl=>instrdl; Pl=>instrpl}
            };
        g = g
@@ -216,7 +216,7 @@ oper
                     (imp + "va") (imp+"mo") imp (imp +"ta") (imp + "te"); --Imper P1 Dl Pl + P2 Sg Dl Pl
 
   worstV : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> V =
-    \inf,sup,partsgm,partdlm,partplm,partsgf,partdlf,partplf,partsgn,partdln,partpln,pres1sg,pres2sg,pres3sg,pres1dl,pres2dl,pres3dl,pres1pl,pres2pl,pres3pl,imp1dl,imp1pl,imp2sg,imp2dl,imp2pl -> lin V {
+    \inf,sup,partsgm,partdlm,partplm,partsgf,partdlf,partplf,partsgn,partdln,partpln,pres1sg,pres2sg,pres3sg,pres1dl,pres2dl,pres3dl,pres1pl,pres2pl,pres3pl,imp1pl,imp1sg,imp2sg,imp2dl,imp2pl -> lin V {
        s = table {
              VInf              => inf;
              VSup              => sup;
@@ -238,7 +238,7 @@ oper
              VPres Pl P1       => pres1pl;
              VPres Pl P2       => pres2pl;
              VPres Pl P3       => pres3pl;
-             VImper1Sg         => imp1dl;
+             VImper1Sg         => imp1sg;
              VImper1Dl         => imp1pl;
              VImper2 Sg        => imp2sg;
              VImper2 Dl        => imp2dl;
