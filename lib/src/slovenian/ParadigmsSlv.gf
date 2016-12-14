@@ -1,4 +1,4 @@
-resource ParadigmsSlv = open CatSlv, ResSlv, Prelude in {
+resource ParadigmsSlv = open CatSlv, ResSlv, Prelude, Predef in {
 
 oper
   nominative : Case = Nom ;
@@ -37,45 +37,69 @@ oper
 
   mascAll : (_,_ : Str) -> Animacy -> N = \oce,ocet,anim ->
     let accsg = case anim of {Animate => ocet + "a"; _ => oce}; --Special case: Masc Sg Acc Animate
+        oceto : Str
+              = case ocet of {
+                  _ + ("c"|"j"|"ž"|"š"|"č") => ocet+"e" ;
+                  _                         => ocet+"o"
+                } ;
     in
-    worstN oce          (ocet + "a")  (ocet + "u")   accsg        (ocet + "u")  (ocet + "om")  -- Singular
-           (ocet + "a") (ocet + "ov") (ocet + "oma") (ocet + "a") (ocet + "ih") (ocet + "oma") -- Dual
-           (ocet + "i") (ocet + "ov") (ocet + "om")  (ocet + "e") (ocet + "ih") (ocet + "i")   -- Plural
+    worstN oce          (ocet + "a")  (ocet + "u")   accsg        (ocet + "u")  (oceto + "m")  -- Singular
+           (ocet + "a") (oceto + "v") (oceto + "ma") (ocet + "a") (ocet + "ih") (oceto + "ma") -- Dual
+           (ocet + "i") (oceto + "v") (oceto + "m")  (ocet + "e") (ocet + "ih") (ocet + "i")   -- Plural
            (AMasc anim) ;
 
 --All neuter forms are formed here, long or normal. 
 --It takes the baseform + the genitive singular form. 
 --In case the genitive singular has an extra vowel in the end, it is dropped before coming here. 
 
-  neutAll : (_,_ : Str) -> N = \drevo,dreves ->
-    worstN drevo          (dreves + "a") (dreves + "u")   drevo            (dreves + "u")  (dreves + "om")  -- Singular
-           (dreves + "i") dreves         (dreves + "oma") (dreves + "i")   (dreves + "ih") (dreves + "oma") -- Dual
-           (dreves + "a") dreves         (dreves + "om")  (dreves + "a")   (dreves + "ih") (dreves + "i")   -- Plural
-           neuter ;
+  neutAll : (_,_,_ : Str) -> N = \drevo,dreves,dreves2 ->
+    let dreveso = dreves + last drevo ;
+    in worstN drevo          (dreves + "a") (dreves + "u")   drevo            (dreves + "u")  (dreveso + "m")  -- Singular
+              (dreves + "i") dreves2        (dreveso + "ma") (dreves + "i")   (dreves + "ih") (dreveso + "ma") -- Dual
+              (dreves + "a") dreves2        (dreveso + "m")  (dreves + "a")   (dreves + "ih") (dreves + "i")   -- Plural
+              neuter ;
 
 --Regular feminine nouns are formed from the baseform. Always inanimate. 
 
-  regFem : (_ : Str) -> N = \punca -> 
-      let punc = init punca 
+  regFem_a : (_ : Str) -> N = \punca -> 
+      let punc = init punca
+      in irregFem punca (punc+"e") punc ;
+
+  regFem_st : (_ : Str) -> N = \posevnost -> 
+      worstN posevnost         (posevnost + "i")  (posevnost + "i")   posevnost        (posevnost + "i")  (posevnost + "jo") -- Singular
+             (posevnost + "i") (posevnost + "i")  (posevnost + "ma") (posevnost + "i") (posevnost + "ih") (posevnost + "ma") -- Dual
+             (posevnost + "i") (posevnost + "i")  (posevnost + "im") (posevnost + "i") (posevnost + "ih") (posevnost + "mi") -- Plural
+             feminine ;
+
+  regFem_ev : (_ : Str) -> N = \vsaditev -> 
+      let vsaditv = tk 2 vsaditev + "v"
       in
-      worstN punca        (punc + "e") (punc + "i")   (punc + "o") (punc + "i")  (punc + "o")   -- Singular
-             (punc + "i") punc         (punc + "ama") (punc + "i") (punc + "am") (punc + "ama") -- Dual
-             (punc + "e") punc         (punc + "am")  (punc + "e") (punc + "am") (punc + "ami") -- Plural
+      worstN vsaditev       (vsaditv + "e") (vsaditv + "i")   vsaditev        (vsaditv + "i")  (vsaditv + "ijo") -- Singular
+             (vsaditv + "i") vsaditev       (vsaditv + "ama") (vsaditv + "i") (vsaditv + "ah") (vsaditv + "ama") -- Dual
+             (vsaditv + "e") vsaditev       (vsaditv + "am")  (vsaditv + "e") (vsaditv + "ah") (vsaditv + "ami") -- Plural
              feminine ;
 
   iFem : (_ : Str) -> N = \stran -> 
-      worstN stran        (stran + "i") (stran + "i")  stran (stran + "i")  (stran + "jo")   -- Singular
-             (stran + "i") (stran + "i") (stran + "ema") (stran + "i") (stran + "eh") (stran + "ema") -- Dual
-             (stran + "i") (stran + "i") (stran + "em")  (stran + "i") (stran + "eh") (stran + "mi") -- Plural
+      let stran'  = looseVowel stran ;
+          stran'' : Str
+                  = case stran' of {
+                      _ + "n" => stran'+"i" ;
+                      _       => stran'
+                    }
+      in
+      worstN stran          (stran' + "i") (stran' + "i")   stran          (stran' + "i")  (stran'' + "jo")  -- Singular
+             (stran' + "i") (stran' + "i") (stran' + "ema") (stran' + "i") (stran' + "eh") (stran' + "ema")  -- Dual
+             (stran' + "i") (stran' + "i") (stran' + "em")  (stran' + "i") (stran' + "eh") (stran' + "mi")   -- Plural
              feminine ;
 
 --This is a smart paradigm for regular nouns. 
 
   smartN : (noun: Str) -> N =
     \noun -> case noun of {
-      _ + "a" => regFem noun ;
-      _ + ("ev" | "ost") => regFem noun ;
-      _ + ("o"| "e") => let nou = init noun in neutAll noun nou ;
+      _ + "a" => regFem_a noun ;
+      _ + ("o"| "e") + "st" => regFem_st noun ;
+      _ + "ev"  => regFem_ev noun ;
+      _ + ("o"| "e") => let nou = init noun in neutAll noun nou nou ;
       _ + #consonant => mascAll noun noun Inanimate; --Base form used in the rest of the paradigm. 
       _ => let nou = init noun in mascAll noun nou Inanimate -- Drops the last vowel for the rest of the paradigm. 
   } ;
@@ -85,8 +109,8 @@ oper
   irregNouns : (noun,longform : Str) -> AGender -> N = \noun,longform,gen ->
     case gen of {
       AMasc anim => let longfor = init longform in mascAll noun longfor anim ;
-      ANeut      => let longfor = init longform in neutAll noun longfor ;
-      AFem       => regFem noun --There are actually no feminine nouns with long stem. 
+      ANeut      => let longfor = init longform in neutAll noun longfor longfor ;
+      AFem       => regFem_a noun --There are actually no feminine nouns with long stem. 
       } ;
 
 --Regular masculine nouns that do not end with a consonant, drops the vowel in all conjugated forms. 
@@ -99,8 +123,13 @@ oper
                       _ + #vowel     => let nou = init noun in mascAll noun nou anim ;
                       _              => mascAll noun noun anim  -- KA: catch all
                     };
-      ANeut      => let nou = init noun in neutAll noun nou ;
-      AFem       => regFem noun --There are actually no feminine nouns with long stem. 
+      ANeut      => let nou = init noun in neutAll noun nou nou ;
+      AFem       => case noun of {
+                      _ + "a"  => regFem_a noun ;
+                      _ + ("o"| "e") + "st" => regFem_st noun ;
+                      _ + "ev" => regFem_ev noun ;
+                      _        => regFem_a noun
+                    }
       } ;
 
 --Irregular masculine nouns with long stem has no special ending in genitive dual and plural, so need a special paradigm. 
@@ -112,6 +141,17 @@ oper
              (bogov + "a") bogov (bogov + "oma") (bogov + "a") (bogov + "ih") (bogov + "oma")  -- Dual
              bogovi        bogov (bogov + "om")  (bogov + "e") (bogov + "ih") (bogov + "i")    -- Plural
              masculine ;
+
+  irregFem : (noun,gensg,genpl : Str) -> N = \noun,gensg,genpl ->
+      let nou = init gensg
+      in
+      worstN noun        gensg (nou + "i")   (nou + "o") (nou + "i")  (nou + "o")   -- Singular
+             (nou + "i") genpl (nou + "ama") (nou + "i") (nou + "ah") (nou + "ama") -- Dual
+             (nou + "e") genpl (nou + "am")  (nou + "e") (nou + "ah") (nou + "ami") -- Plural
+             feminine ;
+
+  irregNeut : (noun,gensg,plstem : Str) -> N = \cislo,cisla,cisel ->
+      neutAll cislo (init cisla) cisel ;
 
   worstN : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> AGender -> N =
       \nomsg,gensg,datsg,accsg,locsg,instrsg,nomdl,gendl,datdl,accdl,locdl,instrdl,nompl,genpl,datpl,accpl,locpl,instrpl,g -> lin N {
@@ -137,6 +177,12 @@ oper
       g = noun.g ;
       n = nr
     }; 
+    mkPN : Str -> AGender -> Number -> PN =
+      \s,g,n -> lin PN {
+         s = \\_ => s ;
+         g = g ;
+         n = n
+      };
     mkPN : (_,_,_,_,_,_ : Str) -> AGender -> Number -> PN =
       \nom,gen,dat,acc,loc,instr,g,n -> lin PN {
          s = table {
@@ -285,61 +331,100 @@ oper
 -- Adjectives
 
   mkA = overload {
-    mkA : (_:Str) -> A = \s -> regA s ("bolj"++s) ;
-    mkA : (_,_:Str) -> A = regA ;
+    mkA : (_:Str) -> A = \s -> irregA s (looseVowel s+"a") (looseVowel s+"o") ("bolj"++s) ("bolj"++looseVowel s+"a") ("bolj"++looseVowel s+"o") ;
+    mkA : (_,_:Str) -> A = \star,starejsi -> irregA star (looseVowel star+"a") (looseVowel star+"o") starejsi (looseVowel starejsi+"a") (looseVowel starejsi+"e") ;
+    mkA : (_,_,_:Str) -> A = \m,f,n -> irregA m f n ("bolj"++m) ("bolj"++f) ("bolj"++n);
+    mkA : (_,_,_,_,_,_:Str) -> A = irregA ;
+    mkA : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x57 : Str) -> A = positA ;
     mkA : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x166 : Str) -> A = worstA ;
     } ;
 
-  regA : (_,_ :Str) -> A = \star,starejsi -> lin A {
-    s = let starejs = init starejsi
-        in table {
-             APosit  gen num c => mkAdjForm star ! c ! gen ! num ;
-             ACompar gen num c => mkAdjForm starejs ! c ! gen ! num ;
-             ASuperl gen num c => mkAdjForm ("naj" + starejs) ! c ! gen ! num ;
-             APositDefNom      => mkAdjForm star ! Nom ! Masc ! Pl ;
-             APositIndefAcc    => mkAdjForm star ! Nom ! Masc ! Sg ;
-             APositDefAcc      => mkAdjForm star ! Nom ! Masc ! Pl ;
-             AComparDefNom     => mkAdjForm starejs ! Nom ! Masc ! Pl ;
-             ASuperlDefNom     => mkAdjForm ("naj" + starejs) ! Nom ! Masc ! Pl
-           }
+  irregA : (_,_,_,_,_,_ :Str) -> A = \masc,fem,neut,mascC,femC,neutC -> lin A {
+    s = table {
+          APosit  gen num c => mkAdjForm masc fem neut ! c ! gen ! num ;
+          ACompar gen num c => mkAdjForm mascC femC neutC ! c ! gen ! num ;
+          ASuperl gen num c => mkAdjForm ("naj" + mascC) ("naj" + femC) ("naj" + neutC) ! c ! gen ! num ;
+          APositDefNom      => mkAdjForm masc fem neut ! Nom ! Masc ! Pl ;
+          APositIndefAcc    => mkAdjForm masc fem neut ! Nom ! Masc ! Sg ;
+          APositDefAcc      => mkAdjForm masc fem neut ! Nom ! Masc ! Pl ;
+          AComparDefAcc     => mkAdjForm mascC femC neutC ! Nom ! Masc ! Pl ;
+          ASuperlDefAcc     => mkAdjForm ("naj" + mascC) ("naj" + femC) ("naj" + neutC) ! Nom ! Masc ! Pl
+        }
     } ;
 
-  mkAdjForm : Str -> Case => Gender => Number => Str = \lep ->
-    let 
-      lp = looseVowel lep --checks for loosewovel in the stem. if there is none, the string comes back the same. 
+  mkAdjForm : (_,_,_ : Str) -> Case => Gender => Number => Str = \lep,lpa,lpo ->
+    let lp = init lpa
     in
       table {
         Nom   => table {
-                   Fem  => table {Sg=> (lp + "a"); Dl=>(lp + "i"); Pl=>(lp +"e")}; 
-                   Masc => table {Sg=> lep;        Dl=>(lp + "a"); Pl=>(lp +"i")}; 
-                   Neut => table {Sg=>(lp + "o");  Dl=>(lp + "i"); Pl=>(lp + "a")} 
+                   Masc => table {Sg=> lep;       Dl=>(lp + "a"); Pl=>(lp +"i")};
+                   Fem  => table {Sg=> lpa;       Dl=>(lp + "i"); Pl=>(lp +"e")};
+                   Neut => table {Sg=> lpo;       Dl=>(lp + "i"); Pl=>(lp + "a")} 
                  };
         Acc   => table {
-                   Fem  => table {Sg=>(lp + "o");  Dl=>(lp + "i"); Pl=>(lp + "e")}; 
-                   Masc => table {Sg=>lep;         Dl=>(lp + "a"); Pl=>(lp + "e")}; 
-                   Neut => table {Sg=>(lp + "o");  Dl=>(lp + "i"); Pl=>(lp +"a")}
+                   Masc => table {Sg=>lp+"ega";   Dl=>(lp + "a"); Pl=>(lp + "e")};
+                   Fem  => table {Sg=>(lp + "o"); Dl=>(lp + "i"); Pl=>(lp + "e")};
+                   Neut => table {Sg=>lpo;        Dl=>(lp + "i"); Pl=>(lp +"a")}
                  };
         Gen   => table {
-                   Fem  => table {Sg=>(lp + "e");   Dl=>(lp +"ih"); Pl=>(lp +"ih")}; 
                    Masc => table {Sg=>(lp + "ega"); Dl=>(lp +"ih"); Pl=>(lp +"ih")}; 
-                   Neut => table {Sg=>(lp + "ega"); Dl=>(lp +"ih"); Pl=>(lp +"ih")} 
+                   Fem  => table {Sg=>(lp + "e");   Dl=>(lp +"ih"); Pl=>(lp +"ih")};
+                   Neut => table {Sg=>(lp + "ega"); Dl=>(lp +"ih"); Pl=>(lp +"ih")}
                  };
         Loc   => table {
-                   Fem  => table {Sg=>(lp + "i");  Dl=>(lp +"ih"); Pl=>(lp +"ih")}; 
-                   Masc => table {Sg=>(lp + "em"); Dl=>(lp +"ih"); Pl=>(lp +"ih")}; 
+                   Masc => table {Sg=>(lp + "em"); Dl=>(lp +"ih"); Pl=>(lp +"ih")};
+                   Fem  => table {Sg=>(lp + "i");  Dl=>(lp +"ih"); Pl=>(lp +"ih")};
                    Neut => table {Sg=>(lp + "em"); Dl=>(lp +"ih"); Pl=>(lp +"ih")} 
                  };
         Dat   => table {
-                   Fem  => table {Sg=>(lp + "i");   Dl=>(lp +"ima"); Pl=>(lp +"im")}; 
-                   Masc => table {Sg=>(lp + "emu"); Dl=>(lp +"ima"); Pl=>(lp +"im")}; 
+                   Masc => table {Sg=>(lp + "emu"); Dl=>(lp +"ima"); Pl=>(lp +"im")};
+                   Fem  => table {Sg=>(lp + "i");   Dl=>(lp +"ima"); Pl=>(lp +"im")};
                    Neut => table {Sg=>(lp + "emu"); Dl=>(lp +"ima"); Pl=>(lp +"im")} 
                  };
         Instr => table {
-                   Fem  => table {Sg=>(lp + "o");  Dl=>(lp +"ima"); Pl=>(lp +"imi")}; 
-                   Masc => table {Sg=>(lp + "im"); Dl=>(lp +"ima"); Pl=>(lp +"imi")}; 
-                   Neut => table {Sg=>(lp + "im"); Dl=>(lp +"ima"); Pl=>(lp +"imi")} 
+                   Masc => table {Sg=>(lp + "im"); Dl=>(lp +"ima"); Pl=>(lp +"imi")};
+                   Fem  => table {Sg=>(lp + "o");  Dl=>(lp +"ima"); Pl=>(lp +"imi")};
+                   Neut => table {Sg=>(lp + "im"); Dl=>(lp +"ima"); Pl=>(lp +"imi")}
                  }
       } ;
+
+  positA : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> A =
+    \positMSgNom,positMSgNomDef,positMSgGen,positMSgDat,positMSgAcc,positMSgAccIndef,positMSgAccDef,positMSgLoc,positMSgInstr,
+     positMDlNom,positMDlGen,positMDlDat,positMDlAcc,positMDlLoc,positMDlInstr,
+     positMPlNom,positMPlGen,positMPlDat,positMPlAcc,positMPlLoc,positMPlInstr,
+     positFSgNom,positFSgGen,positFSgDat,positFSgAcc,positFSgLoc,positFSgInstr,
+     positFDlNom,positFDlGen,positFDlDat,positFDlAcc,positFDlLoc,positFDlInstr,
+     positFPlNom,positFPlGen,positFPlDat,positFPlAcc,positFPlLoc,positFPlInstr,
+     positNSgNom,positNSgGen,positNSgDat,positNSgAcc,positNSgLoc,positNSgInstr,
+     positNDlNom,positNDlGen,positNDlDat,positNDlAcc,positNDlLoc,positNDlInstr,
+     positNPlNom,positNPlGen,positNPlDat,positNPlAcc,positNPlLoc,positNPlInstr ->
+       worstA positMSgNom positMSgNomDef positMSgGen positMSgDat positMSgAcc positMSgAccIndef positMSgAccDef positMSgLoc positMSgInstr
+              positMDlNom positMDlGen positMDlDat positMDlAcc positMDlLoc positMDlInstr
+              positMPlNom positMPlGen positMPlDat positMPlAcc positMPlLoc positMPlInstr
+              positFSgNom positFSgGen positFSgDat positFSgAcc positFSgLoc positFSgInstr
+              positFDlNom positFDlGen positFDlDat positFDlAcc positFDlLoc positFDlInstr
+              positFPlNom positFPlGen positFPlDat positFPlAcc positFPlLoc positFPlInstr
+              positNSgNom positNSgGen positNSgDat positNSgAcc positNSgLoc positNSgInstr
+              positNDlNom positNDlGen positNDlDat positNDlAcc positNDlLoc positNDlInstr
+              positNPlNom positNPlGen positNPlDat positNPlAcc positNPlLoc positNPlInstr
+              ("boli"++positMSgNom) ("boli"++positMSgGen) ("boli"++positMSgDat) ("boli"++positMSgAcc) ("boli"++positMSgAccDef) ("boli"++positMSgLoc) ("boli"++positMSgInstr)
+              ("boli"++positMDlNom) ("boli"++positMDlGen) ("boli"++positMDlDat) ("boli"++positMDlAcc) ("boli"++positMDlLoc) ("boli"++positMDlInstr)
+              ("boli"++positMPlNom) ("boli"++positMPlGen) ("boli"++positMPlDat) ("boli"++positMPlAcc) ("boli"++positMPlLoc) ("boli"++positMPlInstr)
+              ("boli"++positFSgNom) ("boli"++positFSgGen) ("boli"++positFSgDat) ("boli"++positFSgAcc) ("boli"++positFSgLoc) ("boli"++positFSgInstr)
+              ("boli"++positFDlNom) ("boli"++positFDlGen) ("boli"++positFDlDat) ("boli"++positFDlAcc) ("boli"++positFDlLoc) ("boli"++positFDlInstr)
+              ("boli"++positFPlNom) ("boli"++positFPlGen) ("boli"++positFPlDat) ("boli"++positFPlAcc) ("boli"++positFPlLoc) ("boli"++positFPlInstr)
+              ("boli"++positNSgNom) ("boli"++positNSgGen) ("boli"++positNSgDat) ("boli"++positNSgAcc) ("boli"++positNSgLoc) ("boli"++positNSgInstr)
+              ("boli"++positNDlNom) ("boli"++positNDlGen) ("boli"++positNDlDat) ("boli"++positNDlAcc) ("boli"++positNDlLoc) ("boli"++positNDlInstr)
+              ("boli"++positNPlNom) ("boli"++positNPlGen) ("boli"++positNPlDat) ("boli"++positNPlAcc) ("boli"++positNPlLoc) ("boli"++positNPlInstr)
+              ("najboli"++positMSgNom) ("najboli"++positMSgGen) ("najboli"++positMSgDat) ("najboli"++positMSgAcc) ("najboli"++positMSgAccDef) ("najboli"++positMSgLoc) ("najboli"++positMSgInstr)
+              ("najboli"++positMDlNom) ("najboli"++positMDlGen) ("najboli"++positMDlDat) ("najboli"++positMDlAcc) ("najboli"++positMDlLoc) ("najboli"++positMDlInstr)
+              ("najboli"++positMPlNom) ("najboli"++positMPlGen) ("najboli"++positMPlDat) ("najboli"++positMPlAcc) ("najboli"++positMPlLoc) ("najboli"++positMPlInstr)
+              ("najboli"++positFSgNom) ("najboli"++positFSgGen) ("najboli"++positFSgDat) ("najboli"++positFSgAcc) ("najboli"++positFSgLoc) ("najboli"++positFSgInstr)
+              ("najboli"++positFDlNom) ("najboli"++positFDlGen) ("najboli"++positFDlDat) ("najboli"++positFDlAcc) ("najboli"++positFDlLoc) ("najboli"++positFDlInstr)
+              ("najboli"++positFPlNom) ("najboli"++positFPlGen) ("najboli"++positFPlDat) ("najboli"++positFPlAcc) ("najboli"++positFPlLoc) ("najboli"++positFPlInstr)
+              ("najboli"++positNSgNom) ("najboli"++positNSgGen) ("najboli"++positNSgDat) ("najboli"++positNSgAcc) ("najboli"++positNSgLoc) ("najboli"++positNSgInstr)
+              ("najboli"++positNDlNom) ("najboli"++positNDlGen) ("najboli"++positNDlDat) ("najboli"++positNDlAcc) ("najboli"++positNDlLoc) ("najboli"++positNDlInstr)
+              ("najboli"++positNPlNom) ("najboli"++positNPlGen) ("najboli"++positNPlDat) ("najboli"++positNPlAcc) ("najboli"++positNPlLoc) ("najboli"++positNPlInstr) ;
 
   worstA : (_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_ : Str) -> A =
     \positMSgNom,positMSgNomDef,positMSgGen,positMSgDat,positMSgAcc,positMSgAccIndef,positMSgAccDef,positMSgLoc,positMSgInstr,
@@ -557,7 +642,7 @@ oper
                     Loc => loc;
                     Instr=>inst
                   } ;
-      poss = \\g,c,nr => mkAdjForm poss ! c ! g ! nr ; 
+      poss = \\g,c,nr => mkAdjForm poss (looseVowel poss+"a") (looseVowel poss+"o") ! c ! g ! nr ; 
       a = {g=g; n=n; p=p}
     };
 
@@ -643,7 +728,7 @@ oper
 
   adjDet : Str -> Number -> Species -> Det = 
     \en,nr,sp -> lin Det {
-      s = \\g,c => mkAdjForm en ! c ! g ! nr ; 
+      s = \\g,c => mkAdjForm en (looseVowel en+"a") (looseVowel en+"o") ! c ! g ! nr ; 
       spec = sp ;
       n = (UseNum nr)
     } ;
@@ -673,7 +758,7 @@ oper
 
   mkComp : Str -> Comp = 
     \str -> lin Comp { 
-      s = \\agr => mkAdjForm str ! Nom ! agr.g ! agr.n 
+      s = \\agr => mkAdjForm str (looseVowel str+"a") (looseVowel str+"o") ! Nom ! agr.g ! agr.n 
         } ; 
 
 --Helper function that drops the loose vowel that has to go in many conjugations. 
@@ -687,7 +772,7 @@ oper
         --_ + "len" => Predef.tk 2 vowel + "n" ;
         --_ + "čen" => Predef.tk 2 vowel + "n" ;
         --_ + "zen" => Predef.tk 2 vowel + "n" ;
-        --_ + "ven" => Predef.tk 2 vowel + "n" ;
+        _ + "stven" => vowel ;
         --_ + "den" => Predef.tk 2 vowel + "n" ;
         --_ + "šen" => Predef.tk 2 vowel + "n" ;
         _ + "en" => Predef.tk 2 vowel + "n" ; --not yet tested for overgeneration
