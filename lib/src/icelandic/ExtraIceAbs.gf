@@ -1,0 +1,1 @@
+abstract ExtraIceAbs = Extra - [ProDrop] ** {}
