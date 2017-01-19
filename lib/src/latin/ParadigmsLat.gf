@@ -79,6 +79,9 @@ oper
   feminine = Fem ;
   neuter = Neutr ;
 
+  mkAdv : Str -> Adv
+    = \s -> lin Adv {s = s} ;
+
 -- To be implemented, just place holders
   mkPN : N -> PN = \n -> lin PN n ;
   mkN2 : N -> Prep -> N2 = \n,p -> lin N2 ( n ** { c = p } );
