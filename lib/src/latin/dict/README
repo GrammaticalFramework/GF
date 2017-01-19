@@ -1,0 +1,33 @@
+Aarne Ranta 2017-01-19
+
+A script for building a Latin dictionary from William Whitaker's Words
+
+Source: http://archives.nd.edu/whitaker/dictpage.zip
+
+See also: https://en.wikipedia.org/wiki/William_Whitaker's_Words
+
+License: BSD for the script. Unknown for the source, therefore not redistributed here.
+
+Usage:
+
+  runghc MkLatin.hs
+
+Output:
+
+  DictLatAbs.gf
+  DictLat.gf
+
+Uses Herbert Lange's RGL implementation of Latin (darcs version of 2017-01-19 with ParadigmsLat.mkAdv added by AR)
+
+Coverage of first version: 90%; 3938 missing out of 39227 entries. Marked with leading "--"
+Reasons for uncovered entries
+- uncommon category (e.g. structural words)
+- missing case in ParadigmsLat.gf, e.g. deponent verbs
+
+Matching for adjectives (A) uncertain, because we only use ParadigmsLat.gf.mkA : Str -> A
+
+Verb subcat information is uncertain, too. It is based on the src's TRANS and INTRANS flags.
+
+
+
+
