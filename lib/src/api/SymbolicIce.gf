@@ -1,4 +1,4 @@
---# -path=.:../english:../common:../abstract:../prelude
+--# -path=.:../icelandic:../common:../abstract:../prelude
 
 resource SymbolicIce = Symbolic with 
   (Symbol = SymbolIce),

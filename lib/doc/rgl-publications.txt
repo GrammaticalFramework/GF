@@ -258,6 +258,15 @@ on South and Southeast Asian NLP, COLING 2012. //Reprinted in Shafqat's thesis//
 
 
 
+===Icelandic===
+
+- **Source**: http://www.grammaticalframework.org/lib/src/icelandic (Bjarki Traustason)
+
+**Publications**
+
+Bjarki Traustason, MSc thesis, Chalmers
+
+
 ===Interlingua===
 
 - **Source**: http://www.grammaticalframework.org/lib/src/interlingua (Jean-Philippe Bernardy)
@@ -350,9 +359,15 @@ http://publications.lib.chalmers.se/records/fulltext/161384.pdf
 
 
 
-===Norwegian===
+===Norwegian (bokmål)===
 
 - **Source**: http://www.grammaticalframework.org/lib/src/norwegian  http://www.grammaticalframework.org/lib/src/scandinavian (Aarne Ranta)
+
+%- **Publications**
+
+===Norwegian (nynorsk)===
+
+- **Source**: http://www.grammaticalframework.org/lib/src/nynorsk (Stian Rødven Eide) http://www.grammaticalframework.org/lib/src/scandinavian (Aarne Ranta)
 
 %- **Publications**
 

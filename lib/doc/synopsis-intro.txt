@@ -8,7 +8,7 @@
 =Introduction=
 
 The GF Resource Grammar Library is the standard library for Grammatical Framework.
-It covers the morphology and basic syntax of currently 30 languages:
+It covers the morphology and basic syntax of currently 32 languages:
 Afrikaans,
 Bulgarian,
 Catalan,
@@ -22,13 +22,15 @@ French,
 German,
 Greek,
 Hindi,
+Icelandic,
 Japanese,
 Italian,
 Latvian,
 Maltese,
 Mongolian,
 Nepali,
-Norwegian bokmål,
+Norwegian (bokmål),
+Norwegial (nynorsk),
 Persian,
 Polish,
 Punjabi,
@@ -53,12 +55,12 @@ constructing trees in them.
 - [Chapter 2 #toc5]: syntactic construction functions, with cross-links and
 examples. 
 - [Chapter 3 #toc84]: morphological paradigms.
-- [Chapter 4 #toc114]: additional libraries.
-- [Chapter 5 #toc120]: how to "browse" the library by 
+- [Chapter 4 #toc116]: additional libraries.
+- [Chapter 5 #toc122]: how to "browse" the library by 
 loading the grammars into the ``gf`` command editor.
-- [Chapter 6 #toc121]: a brief example of how application grammars can
+- [Chapter 6 #toc123]: a brief example of how application grammars can
 use the resource modules. 
-- [Detailed table of contents #toc122].
+- [Detailed table of contents #toc124].
 
 
 Other relevant documents:

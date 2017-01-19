@@ -2,7 +2,7 @@ The Status of the GF Resource Grammar Library
 Aarne Ranta
 %%date
 
-
+%!Encoding:utf8
 
 The following table gives the languages currently available in the
 GF Resource Grammar Library.
@@ -33,20 +33,22 @@ are marked in the table
 | Grc   | Greek(anc)   | -     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | +      | *HLe
 | Heb   | Hebrew       | +     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | +      | *DD
 | Hin   | Hindi        | +     | +    | ++    | +   | +    | +   | +    | -     | -    | + | +      | +      | *SV,*KP,MH,AR,PK
+| Ice   | Icelandic    | +     | -    | ++    | +   | +    | +   | -    | -     | -    | - | -      | +      | *BT
 | Ina   | Interlingua  | +     | +    | ++    | +   | +    | -   | -    | -     | -    | - | -      | -      | JB
 | Ita   | Italian      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | + | ++     | -      | *AR,*RE,GP
 | Jpn   | Japanese     | +     | -    | ++    | +   | +    | +   | -    | -     | -    | + | +      | +      | *LZ
-| Lat   | Latin        | +     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | -      | *AR,*HLa
+| Lat   | Latin        | +     | -    | -     | -   | -    | -   | -    | -     | +    | - | -      | -      | *AR,*HLa
 | Lav   | Latvian      | +     | -    | ++    | +   | +    | +   | -    | -     | -    | - | +      | +      | *NG,*PP
 | Mlt   | Maltese      | +     | +    | ++    | +   | +    | +   | +    | -     | -    | - | -      | +      | *JC
 | Mon   | Mongolian    | +     | -    | ++    | +   | +    | +   | -    | -     | +    | - | -      | +      | *NE
 | Nep   | Nepali       | +     | +    | ++    | +   | +    | -   | -    | -     | -    | - | -      | +      | *DS
+| Nno   | Norwegian(n) | +     | +    | ++    | +   | +    | +   | +    | +     | -    | - | -      | -      | *SRE
 | Nor   | Norwegian(b) | +     | +    | ++    | +   | +    | +   | +    | +     | -    | - | +      | -      | *AR
 | Pes   | Persian      | +     | -    | +     | +   | +    | +   | -    | -     | -    | - | +      | +      | *SV,*EA,SM
 | Pnb   | Punjabi      | +     | +    | +     | +   | +    | +   | +    | -     | -    | - | -      | +      | *SV,MH
 | Pol   | Polish       | +     | +    | +     | +   | +    | +   | +    | -     | -    | - | +      | +      | IN,*AS
 | Ron   | Romanian     | +     | +    | ++    | +   | +    | +   | +    | -     | -    | - | +      | +      | *RE
-| Rus   | Russian      | +     | +    | ++    | +   | +    | +   | -    | -     | -    | - | -      | +      | JK,*NF
+| Rus   | Russian      | +     | +    | ++    | +   | +    | +   | -    | -     | +    | + | -      | +      | JK,*NF
 | Snd   | Sindhi       | +     | +    | ++    | +   | +    | +   | +    | -     | -    | - | -      | +      | *SV,*JD
 | Spa   | Spanish      | +     | +    | ++    | +   | +    | +   | +    | +     | -    | + | ++     | -      | *AR,IA,TS,*IL
 | Swa   | Swahili      | +     | -    | -     | -   | -    | -   | -    | -     | -    | - | -      | +      | *WN,JM
@@ -93,15 +95,16 @@ AB Ansu Berg,
 AD Ali El Dada,
 AR Aarne Ranta,
 AS Adam Slaski,
-BB Björn Bringert,
+BB BjÃ¶rn Bringert,
+BT Bjarki Traustason,
 CK Chotiros Kairoje,
 CP Chen Peng,
-DD Dana Dannélls,
+DD Dana DannÃ©lls,
 DS Dinesh Simk,
 EA Elnaz Abolahrar,
-EG Erzsébet Galgóczy
+EG ErzsÃ©bet GalgÃ³czy
 FJ Femke Johansson,
-HH Harald Hammarström,
+HH Harald HammarstrÃ¶m,
 HLa Herbert Lange,
 HLe Hans Leiss,
 GP Gabriele Paganelli,
@@ -133,8 +136,9 @@ RE Ramona Enache,
 PP Peteris Paikens,
 SC Server Cimen,
 SM Sofy Moradi,
+SRE Stian RÃ¸dven Eide,
 SV Shafqat Virk,
-TH Therese Söderberg,
+TH Therese SÃ¶derberg,
 WN Wanjiku Ng'ang'a,
 ZL Zhuo Lin Qiqige
 

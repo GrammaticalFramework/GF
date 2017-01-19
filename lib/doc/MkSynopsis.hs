@@ -19,7 +19,7 @@ revealedLang = "Eng"
 -- all languages shown
 apiExxFiles = ["api-examples-" ++ lang ++ ".txt" | lang <- words
 --   "Eng Chi"
-  "Afr Bul Cat Chi Dan Dut Eng Est Fin Fre Ger Gre Hin Ita Jpn Lav Mlt Mon Nep Nor Pes Pnb Pol Ron Rus Snd Spa Swe Tha Urd"
+  "Afr Bul Cat Chi Dan Dut Eng Est Fin Fre Ger Gre Hin Ice Ita Jpn Lav Mlt Mon Nep Nor Nno Pes Pnb Pol Ron Rus Snd Spa Swe Tha Urd"
    ]
 
 main = do
@@ -252,6 +252,7 @@ paradigmFiles = [
   ("German",  srcPath "/german/ParadigmsGer.gf"),
   ("Greek",  srcPath "/greek/ParadigmsGre.gf"),
   ("Hindi", srcPath "/hindi/ParadigmsHin.gf"),
+  ("Icelandic", srcPath "/icelandic/ParadigmsIce.gf"),
 --  ("Interlingua", srcPath "/interlingua/ParadigmsIna.gf"),
   ("Italian",  srcPath "/italian/ParadigmsIta.gf"),
   ("Japanese",  srcPath "/japanese/ParadigmsJpn.gf"),
@@ -260,6 +261,7 @@ paradigmFiles = [
   ("Mongolian",  srcPath "/mongolian/ParadigmsMon.gf"),
   ("Nepali", srcPath "/nepali/ParadigmsNep.gf"),
   ("Norwegian", srcPath "/norwegian/ParadigmsNor.gf"),
+  ("Nynorsk", srcPath "/nynorsk/ParadigmsNno.gf"),
   ("Polish", srcPath "/polish/ParadigmsPol.gf"),
   ("Punjabi", srcPath "/punjabi/ParadigmsPnb.gf"),
   ("Romanian", srcPath "/romanian/ParadigmsRon.gf"),

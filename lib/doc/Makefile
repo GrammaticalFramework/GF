@@ -34,6 +34,7 @@ exx: exx-script
 	gf -retain -s $(GF_alltenses)/TryGer.gfo <api-examples.gfs >api-examples-Ger.txt
 	gf -retain -s $(GF_alltenses)/TryGre.gfo <api-examples.gfs >api-examples-Gre.txt
 	gf -retain -s $(GF_alltenses)/TryHin.gfo <api-examples.gfs >api-examples-Hin.txt
+	gf -retain -s $(GF_alltenses)/TryIce.gfo <api-examples.gfs >api-examples-Ice.txt
 	gf -retain -s $(GF_alltenses)/TryIta.gfo <api-examples.gfs >api-examples-Ita.txt
 	gf -retain -s $(GF_alltenses)/TryJpn.gfo <api-examples.gfs >api-examples-Jpn.txt
 	gf -retain -s $(GF_alltenses)/TryLav.gfo <api-examples.gfs >api-examples-Lav.txt
@@ -41,6 +42,7 @@ exx: exx-script
 	gf -retain -s $(GF_alltenses)/TryMon.gfo <api-examples.gfs >api-examples-Mon.txt
 	gf -retain -s $(GF_alltenses)/TryNep.gfo <api-examples.gfs >api-examples-Nep.txt
 	gf -retain -s $(GF_alltenses)/TryNor.gfo <api-examples.gfs >api-examples-Nor.txt
+	gf -retain -s $(GF_alltenses)/TryNno.gfo <api-examples.gfs >api-examples-Nno.txt
 	gf -retain -s $(GF_alltenses)/TryPes.gfo <api-examples.gfs >api-examples-Pes.txt
 	gf -retain -s $(GF_alltenses)/TryPnb.gfo <api-examples.gfs >api-examples-Pnb.txt
 	gf -retain -s $(GF_alltenses)/TryPol.gfo <api-examples.gfs >api-examples-Pol.txt
