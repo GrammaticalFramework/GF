@@ -1,4 +1,5 @@
 import Data.Char
+import Data.List
 
 main = mkLatin
 
@@ -18,6 +19,13 @@ mkLatin = do
   appendFile "DictLat.gf" (unlines ls)
   appendFile "DictLat.gf" "}"
 
+  let es = [unwords [status st ++ "lin",f,"=",mkEng cat eng,";"] | [st, f,cat,_,eng] <- fcs]
+  writeFile  "DictLatEng.gf" "concrete DictLatEng of DictLatAbs = CatEng ** open ParadigmsEng in {"
+  appendFile "DictLatEng.gf" "\n-- extracted from http://archives.nd.edu/whitaker/dictpage.htm\n"
+  appendFile "DictLatEng.gf" (unlines es)
+  appendFile "DictLatEng.gf" "}"
+
+
 ---  putStrLn $ unlines ls
 
 mkDict :: [String] -> [[String]] -- fun, cat, lat, eng
@@ -34,7 +42,7 @@ mkDict = map mkOne . zip [10001 ..] . map cleanUp
      x:"ADV":_     -> ok [x, "Adv", lin "mkAdv" [show x]]
      x:y:z:u:"V":_:"INTRANS":_ -> okv   [y, "V",                     lin "mkV" [show y,show x,show z,show u]]
      x:y:z:u:"V":_:"TRANS":_   -> okv   [y, "V2", lin "mkV2" ["(" ++ lin "mkV" [show y,show x,show z,show u] ++ ")"]]
-     x:y:z:u:"V":_:"DEP":_     -> todo [y, "V",  lin "depV" ["(" ++ lin "mkV" [show y,show x,show z,show u] ++ ")"]]
+     x:y:z:u:"V":_:"DEP":_     -> todo  [y, "V",  lin "depV" ["(" ++ lin "mkV" [show y,show x,show z,show u] ++ ")"]]
      x:y:z:u:"V":_             -> okv   [y, "V",                     lin "mkV" [show y,show x,show z,show u]]
 
      _ -> todo ["TODO","",unwords lws]
@@ -58,3 +66,16 @@ status st = case st of
   "0" -> ""
   _ -> "-- "
 
+
+-- build an English version: TODO better analysis of the notation
+mkEng cat eng = unwords $ intersperse "|" $ map mkOne engs
+  where 
+    mkOne s = unwords ["mk" ++ cat, show s]
+    engs = [clean (takeWhile (flip notElem "\r,;") (drop 11 eng))] ---- TODO
+    clean s = case s of
+      '\\':r:cs -> clean cs
+      c:cs -> c:clean cs
+      _ -> s
+
+--  [DXXFS] :: counting-board; side-board; slab table; panel; square stone on top of column;
+--  [EEQEE] :: Father; (Aramaic); bishop of Syriac/Coptic church; (false read obba/decanter);
