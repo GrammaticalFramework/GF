@@ -42,6 +42,9 @@ public class Concr {
 	/** Computes the linearization of the abstract expression. */
 	public native String linearize(Expr expr);
 
+	/** Computes all linearizations of the abstract expression and returns an iterator over the alternatives. */
+	public native Iterable<String> linearizeAll(Expr expr);
+
 	/** Linearizes the expression as an inflection table.
 	 * @return a map from the name of the inflection form to its value.
 	 */

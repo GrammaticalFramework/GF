@@ -695,6 +695,68 @@ Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, job
 	return jstr;
 }
 
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_Concr_linearizeAll(JNIEnv* env, jobject self, jobject jexpr)
+{
+	PgfConcr* concr = get_ref(env, self);
+	
+	jclass list_class = (*env)->FindClass(env, "java/util/ArrayList");
+	jmethodID list_constrId = (*env)->GetMethodID(env, list_class, "<init>", "()V");
+	jobject strings = (*env)->NewObject(env, list_class, list_constrId);
+	
+	jmethodID addId = (*env)->GetMethodID(env, list_class, "add", "(Ljava/lang/Object;)Z");
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_exn(tmp_pool);
+	
+	GuEnum* cts =
+		pgf_lzr_concretize(concr,
+		                   gu_variant_from_ptr((void*) get_ref(env, jexpr)),
+		                   err, tmp_pool);
+	if (!gu_ok(err)) {
+		gu_pool_free(tmp_pool);
+		return NULL;
+	}
+
+	for (;;) {
+		PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
+		if (gu_variant_is_null(ctree))
+			break;
+
+		GuPool* step_pool = gu_local_pool();
+		GuStringBuf* sbuf = gu_string_buf(step_pool);
+		GuOut* out = gu_string_buf_out(sbuf);
+
+		ctree = pgf_lzr_wrap_linref(ctree, step_pool);
+		pgf_lzr_linearize_simple(concr, ctree, 0, out, err, step_pool);
+		if (!gu_ok(err)) {
+			gu_pool_free(step_pool);
+
+			if (gu_exn_caught(err, PgfLinNonExist)) {				
+				continue;
+			} else if (gu_exn_caught(err, PgfExn)) {
+				GuString msg = (GuString) gu_exn_caught_data(err);
+				throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
+			} else {
+				throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be linearized");
+			}
+			gu_pool_free(tmp_pool);
+			return NULL;
+		}
+
+		GuString str = gu_string_buf_freeze(sbuf, step_pool);
+		jstring jstr = gu2j_string(env, str);
+		
+		(*env)->CallBooleanMethod(env, strings, addId, jstr);
+		
+		gu_pool_free(step_pool);
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return strings;
+}
+
 JNIEXPORT jobject JNICALL 
 Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject self, jobject jexpr)
 {
