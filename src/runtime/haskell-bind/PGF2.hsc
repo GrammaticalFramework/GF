@@ -171,7 +171,7 @@ functionType p fn =
                        return ((bt,cid,ty) : hs)
       | otherwise = return []
 
-    toBindType :: Int -> BindType
+    toBindType :: CInt -> BindType
     toBindType (#const PGF_BIND_TYPE_EXPLICIT) = Explicit
     toBindType (#const PGF_BIND_TYPE_IMPLICIT) = Implicit
 
