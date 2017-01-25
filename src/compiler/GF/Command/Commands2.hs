@@ -844,7 +844,7 @@ pgfCommands = Map.fromList [
             ts = [hsExpr t|Right ts<-rs,(t,p)<-takeOptNum opts ts]
             msgs = concatMap (either err ok) rs
             err msg = ["Parse failed: "++msg]
-            ok = map (C.showExpr . fst).takeOptNum opts
+            ok = map (C.showExpr [] . fst).takeOptNum opts
 
    cLins env@(pgf,cncs) opts ts =
        [l|t<-ts,l<-[abs++": "++show t|treebank]++[l|cnc<-cncs,l<-lin cnc t]]
@@ -975,7 +975,11 @@ pgfCommands = Map.fromList [
 
    optFile opts = valStrOpts "file" "_gftmp" opts
 -}
-   optCat pgf opts = valStrOpts "cat" (C.startCat pgf) opts
+   optCat pgf opts = 
+     case listFlags "cat" opts of
+       v:_ -> C.DTyp [] (valueString v) []
+       _   -> C.startCat pgf
+
 {-
    optType pgf opts =
      let str = valStrOpts "cat" (H.showCId $ H.lookStartCat pgf) opts

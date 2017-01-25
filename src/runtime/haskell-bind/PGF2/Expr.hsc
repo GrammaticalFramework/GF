@@ -8,14 +8,17 @@ import Foreign hiding (unsafePerformIO)
 import Foreign.C
 import qualified Text.PrettyPrint as PP
 import PGF2.FFI
+import Data.List(mapAccumL)
 
+-- | An data type that represents
+-- identifiers for functions and categories in PGF.
 type CId = String
 
 ppCId = PP.text
 wildCId = "_" :: CId
 
-type Cat = String -- ^ Name of syntactic category
-type Fun = String -- ^ Name of function
+type Cat = CId -- ^ Name of syntactic category
+type Fun = CId -- ^ Name of function
 
 -----------------------------------------------------------------------------
 -- Expressions
@@ -28,8 +31,9 @@ type Fun = String -- ^ Name of function
 data Expr = forall a . Expr {expr :: PgfExpr, exprMaster :: a}
 
 instance Show Expr where
-  show = showExpr
+  show = showExpr []
 
+-- | Constructs an expression by applying a function to a list of expressions
 mkApp :: Fun -> [Expr] -> Expr
 mkApp fun args =
   unsafePerformIO $
@@ -45,6 +49,7 @@ mkApp fun args =
   where
     len = length args
 
+-- | Decomposes an expression into an application of a function
 unApp :: Expr -> Maybe (Fun,[Expr])
 unApp (Expr expr master) =
   unsafePerformIO $
@@ -58,6 +63,7 @@ unApp (Expr expr master) =
            c_args <- peekArray (fromIntegral arity) (appl `plusPtr` (#offset PgfApplication, args))
            return $ Just (fun, [Expr c_arg master | c_arg <- c_args])
 
+-- | Constructs an expression from a string literal
 mkStr :: String -> Expr
 mkStr str =
   unsafePerformIO $
@@ -67,6 +73,7 @@ mkStr str =
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
       return (Expr c_expr exprFPl)
 
+-- | Constructs an expression from an integer literal
 mkInt :: Int -> Expr
 mkInt val =
   unsafePerformIO $ do
@@ -75,6 +82,7 @@ mkInt val =
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
       return (Expr c_expr exprFPl)
 
+-- | Constructs an expression from a real number
 mkFloat :: Double -> Expr
 mkFloat val =
   unsafePerformIO $ do
@@ -83,6 +91,7 @@ mkFloat val =
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
       return (Expr c_expr exprFPl)
 
+-- | parses a 'String' as an expression
 readExpr :: String -> Maybe Expr
 readExpr str =
   unsafePerformIO $
@@ -99,11 +108,15 @@ readExpr str =
                 else do gu_pool_free exprPl
                         return Nothing
 
-ppExpr :: Int -> Expr -> PP.Doc
-ppExpr d e = ppParens (d>0) (PP.text (showExpr e)) -- just a quick hack !!!
+ppExpr :: Int -> [CId] -> Expr -> PP.Doc
+ppExpr d xs e = ppParens (d>0) (PP.text (showExpr xs e)) -- just a quick hack !!!
 
-showExpr :: Expr -> String
-showExpr e = 
+-- | renders an expression as a 'String'. The list
+-- of identifiers is the list of all free variables
+-- in the expression in order reverse to the order
+-- of binding.
+showExpr :: [CId] -> Expr -> String
+showExpr scope e = 
   unsafePerformIO $
     withGuPool $ \tmpPl ->
       do (sb,out) <- newOut tmpPl
@@ -131,25 +144,38 @@ type Hypo = (BindType,CId,Type)
 
 -- | renders type as 'String'.
 showType :: Type -> String
-showType = PP.render . ppType 0
+showType = PP.render . ppType 0 []
 
-ppType :: Int -> Type -> PP.Doc
-ppType d (DTyp hyps cat args)
-  | null hyps = ppRes cat args
-  | otherwise = let hdocs = map (ppHypo 1) hyps
-                in ppParens (d > 0) (foldr (\hdoc doc -> hdoc PP.<+> PP.text "->" PP.<+> doc) (ppRes cat args) hdocs)
+ppType :: Int -> [CId] -> Type -> PP.Doc
+ppType d scope (DTyp hyps cat args)
+  | null hyps = ppRes scope cat args
+  | otherwise = let (scope',hdocs) = mapAccumL (ppHypo 1) scope hyps
+                in ppParens (d > 0) (foldr (\hdoc doc -> hdoc PP.<+> PP.text "->" PP.<+> doc) (ppRes scope cat args) hdocs)
   where
-    ppRes cat es
+    ppRes scope cat es
       | null es   = ppCId cat
-      | otherwise = ppParens (d > 3) (ppCId cat PP.<+> PP.hsep (map (ppExpr 4) es))
+      | otherwise = ppParens (d > 3) (ppCId cat PP.<+> PP.hsep (map (ppExpr 4 scope) es))
 
-ppHypo :: Int -> (BindType,CId,Type) -> PP.Doc
-ppHypo d (Explicit,x,typ) =
+ppHypo :: Int -> [CId]-> (BindType,CId,Type) -> ([CId],PP.Doc)
+ppHypo d scope (Explicit,x,typ) =
     if x == wildCId
-    then ppType d typ
-    else PP.parens (ppCId x PP.<+> PP.char ':' PP.<+> ppType 0 typ)
-ppHypo d (Implicit,x,typ) =
-    PP.parens (PP.braces (ppCId x) PP.<+> PP.char ':' PP.<+> ppType 0 typ)
+    then (scope, ppType d scope typ)
+    else let y = freshName x scope
+         in (y:scope, PP.parens (ppCId x PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
+ppHypo d scope (Implicit,x,typ) =
+    if x == wildCId
+    then (scope,PP.parens (PP.braces (ppCId x) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
+    else let y = freshName x scope
+         in (y:scope,PP.parens (PP.braces (ppCId x) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
+
+freshName :: CId -> [CId] -> CId
+freshName x xs0 = loop 1 x
+  where
+    xs = wildCId : xs0
+
+    loop i y
+      | elem y xs = loop (i+1) (x++show i)
+      | otherwise = y
 
 ppParens True  = PP.parens
 ppParens False = id

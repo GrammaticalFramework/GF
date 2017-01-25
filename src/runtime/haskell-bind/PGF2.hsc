@@ -1,36 +1,56 @@
 {-# LANGUAGE ExistentialQuantification, DeriveDataTypeable, ScopedTypeVariables #-}
 -------------------------------------------------
 -- |
+-- Module      : PGF2
 -- Maintainer  : Krasimir Angelov
 -- Stability   : stable
 -- Portability : portable
 --
--- This is the Haskell binding to the C run-time system for
--- loading and interpreting grammars compiled in Portable Grammar Format (PGF).
+-- This module is an Application Programming Interface to
+-- load and interpret grammars compiled in the Portable Grammar Format (PGF).
+-- The PGF format is produced as the final output from the GF compiler.
+-- The API is meant to be used for embedding GF grammars in Haskell
+-- programs
 -------------------------------------------------
+
 #include <pgf/pgf.h>
 #include <gu/enum.h>
 #include <gu/exn.h>
 
-module PGF2 (-- * CId
+module PGF2 (-- * PGF
+             PGF,readPGF,
+
+             -- * Identifiers
              CId,
-             -- * PGF
-             PGF,readPGF,AbsName,abstractName,Cat,startCat,categories,
+
+             -- * Abstract syntax
+             AbsName,abstractName,
+             -- ** Categories
+             Cat,startCat,categories,
+             -- ** Functions
+             Fun,functions, functionsByCat, functionType, hasLinearization,
+             -- ** Expressions
+             Expr,showExpr,readExpr,mkApp,unApp,mkStr,mkInt,mkFloat,
+             -- ** Types
+             Type(..), Hypo, BindType(..), showType,
+
              -- * Concrete syntax
-             ConcName,Concr,languages,parse,
-             parseWithHeuristics, parseWithOracle,
-             hasLinearization,linearize,linearizeAll,alignWords,
-             -- * Types
-             Type(..), Hypo, BindType(..), showType, functionType,
-             -- * Trees
-             Expr,Fun,readExpr,showExpr,mkApp,unApp,mkStr,mkInt,mkFloat,
-             graphvizAbstractTree,graphvizParseTree,
-             -- * Morphology
+             ConcName,Concr,languages,
+             -- ** Linearization
+             linearize,linearizeAll,
+             alignWords,
+             -- ** Parsing
+             parse, parseWithHeuristics,
+			 -- ** Generation
+             generateAll,
+             -- ** Morphological Analysis
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
-             -- * Generation
-             functions, functionsByCat, generateAll,
+			 -- ** Visualizations
+             graphvizAbstractTree,graphvizParseTree,
+
              -- * Exceptions
              PGFError(..),
+
              -- * Grammar specific callbacks
              LiteralCallback,literalCallbacks
             ) where
@@ -61,9 +81,13 @@ import Data.Function(on)
 -- to Concr but has lost its reference to PGF.
 
 
-type AbsName = String -- ^ Name of abstract syntax
-type ConcName = String -- ^ Name of concrete syntax
+type AbsName  = CId -- ^ Name of abstract syntax
+type ConcName = CId -- ^ Name of concrete syntax
 
+-- | Reads file in Portable Grammar Format and produces
+-- 'PGF' structure. The file is usually produced with:
+--
+-- > $ gf -make <grammar file name>
 readPGF :: FilePath -> IO PGF
 readPGF fpath =
   do pool <- gu_new_pool
@@ -85,6 +109,7 @@ readPGF fpath =
      master <- newForeignPtr gu_pool_finalizer pool
      return PGF {pgf = pgf, pgfMaster = master}
 
+-- | List of all languages available in the grammar.
 languages :: PGF -> Map.Map ConcName Concr
 languages p =
   unsafePerformIO $
@@ -103,8 +128,11 @@ languages p =
       concr <- fmap (\ptr -> Concr ptr p) $ peek (castPtr value)
       writeIORef ref $! Map.insert name concr langs
 
-generateAll :: PGF -> Cat -> [(Expr,Float)]
-generateAll p cat =
+-- | Generates an exhaustive possibly infinite list of
+-- all abstract syntax expressions of the given type. 
+-- The expressions are ordered by their probability.
+generateAll :: PGF -> Type -> [(Expr,Float)]
+generateAll p (DTyp _ cat _) =
   unsafePerformIO $
     do genPl  <- gu_new_pool
        exprPl <- gu_new_pool
@@ -115,11 +143,21 @@ generateAll p cat =
        exprFPl <- newForeignPtr gu_pool_finalizer exprPl
        fromPgfExprEnum enum genFPl (p,exprFPl)
 
+-- | The abstract language name is the name of the top-level
+-- abstract module
 abstractName :: PGF -> AbsName
 abstractName p = unsafePerformIO (peekUtf8CString =<< pgf_abstract_name (pgf p))
 
-startCat :: PGF -> Cat
-startCat p = unsafePerformIO (peekUtf8CString =<< pgf_start_cat (pgf p))
+-- | The start category is defined in the grammar with
+-- the \'startcat\' flag. This is usually the sentence category
+-- but it is not necessary. Despite that there is a start category
+-- defined you can parse with any category. The start category
+-- definition is just for convenience.
+startCat :: PGF -> Type
+startCat p = unsafePerformIO $ do
+  cat <- pgf_start_cat (pgf p)
+  cat <- peekUtf8CString cat
+  return (DTyp [] cat [])
 
 loadConcr :: Concr -> FilePath -> IO ()
 loadConcr c fpath =
@@ -143,7 +181,8 @@ loadConcr c fpath =
 unloadConcr :: Concr -> IO ()
 unloadConcr c = pgf_concrete_unload (concr c)
 
-functionType :: PGF -> CId -> Type
+-- | The type of a function
+functionType :: PGF -> Fun -> Type
 functionType p fn =
   unsafePerformIO $
   withGuPool $ \tmpPl -> do
@@ -185,6 +224,7 @@ functionType p fn =
 -----------------------------------------------------------------------------
 -- Graphviz
 
+-- | Renders an abstract syntax tree in a Graphviz format.
 graphvizAbstractTree :: PGF -> Expr -> String
 graphvizAbstractTree p e =
   unsafePerformIO $
@@ -259,11 +299,11 @@ getAnalysis ref self c_lemma c_anal prob exn = do
   anal  <- peekUtf8CString c_anal
   writeIORef ref ((lemma, anal, prob):ans)
 
-parse :: Concr -> Cat -> String -> Either String [(Expr,Float)]
-parse lang cat sent = parseWithHeuristics lang cat sent (-1.0) []
+parse :: Concr -> Type -> String -> Either String [(Expr,Float)]
+parse lang ty sent = parseWithHeuristics lang ty sent (-1.0) []
 
 parseWithHeuristics :: Concr      -- ^ the language with which we parse
-                    -> Cat        -- ^ the start category
+                    -> Type       -- ^ the start category
                     -> String     -- ^ the input sentence
                     -> Double     -- ^ the heuristic factor. 
                                   -- A negative value tells the parser 
@@ -277,7 +317,7 @@ parseWithHeuristics :: Concr      -- ^ the language with which we parse
                                   -- If a literal has been recognized then the output should
                                   -- be Just (expr,probability,end_offset)
                     -> Either String [(Expr,Float)]
-parseWithHeuristics lang cat sent heuristic callbacks =
+parseWithHeuristics lang (DTyp _ cat _) sent heuristic callbacks =
   unsafePerformIO $
     do exprPl  <- gu_new_pool
        parsePl <- gu_new_pool
@@ -427,11 +467,13 @@ parseWithOracle lang cat sent (predict,complete,literal) =
                          return ep
         Nothing    -> do return nullPtr
 
+-- | Returns True if there is a linearization defined for that function in that language
 hasLinearization :: Concr -> Fun -> Bool
 hasLinearization lang id = unsafePerformIO $
   withGuPool $ \pl ->
     newUtf8CString id pl >>= pgf_has_linearization (concr lang)
 
+-- | Linearizes an expression as a string in the language
 linearize :: Concr -> Expr -> String
 linearize lang e = unsafePerformIO $
   withGuPool $ \pl ->
@@ -452,6 +494,7 @@ linearize lang e = unsafePerformIO $
          else do lin <- gu_string_buf_freeze sb pl
                  peekUtf8CString lin
 
+-- | Generates all possible linearizations of an expression
 linearizeAll :: Concr -> Expr -> [String]
 linearizeAll lang e = unsafePerformIO $
   do pl <- gu_new_pool
@@ -520,6 +563,7 @@ alignWords lang e = unsafePerformIO $
       (fids :: [CInt]) <- peekArray (fromIntegral (n_fids :: CInt)) (ptr `plusPtr` (#offset PgfAlignmentPhrase, fids))
       return (phrase, map fromIntegral fids)
 
+-- | List of all functions defined in the abstract syntax
 functions :: PGF -> [Fun]
 functions p =
   unsafePerformIO $
@@ -540,6 +584,7 @@ functions p =
       name  <- peekUtf8CString (castPtr key)
       writeIORef ref $! (name : names)
 
+-- | List of all functions defined for a category
 functionsByCat :: PGF -> Cat -> [Fun]
 functionsByCat p cat =
   unsafePerformIO $
@@ -561,6 +606,9 @@ functionsByCat p cat =
       name  <- peekUtf8CString (castPtr key)
       writeIORef ref $! (name : names)
 
+-- | List of all categories defined in the grammar.
+-- The categories are defined in the abstract syntax
+-- with the \'cat\' keyword.
 categories :: PGF -> [Cat]
 categories pgf = -- !!! quick hack
     nub [cat | f<-functions pgf, let DTyp _ cat _=functionType pgf f]

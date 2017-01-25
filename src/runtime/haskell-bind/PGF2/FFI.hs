@@ -10,6 +10,8 @@ import Control.Exception
 import GHC.Ptr
 import Data.Int(Int32)
 
+-- | An abstract data type representing multilingual grammar
+-- in Portable Grammar Format.
 data PGF = PGF {pgf :: Ptr PgfPGF, pgfMaster :: ForeignPtr GuPool}
 data Concr = Concr {concr :: Ptr PgfConcr, concrMaster :: PGF}
 
