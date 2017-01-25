@@ -28,7 +28,7 @@ module PGF2 (-- * CId
              -- * Morphology
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
              -- * Generation
-             functions, generateAll,
+             functions, functionsByCat, generateAll,
              -- * Exceptions
              PGFError(..),
              -- * Grammar specific callbacks
@@ -530,6 +530,27 @@ functions p =
       fptr <- wrapMapItorCallback (getFunctions ref)
       (#poke GuMapItor, fn) itor fptr
       pgf_iter_functions (pgf p) itor exn
+      freeHaskellFunPtr fptr
+      fs <- readIORef ref
+      return (reverse fs)
+  where
+    getFunctions :: IORef [String] -> MapItorCallback
+    getFunctions ref itor key value exn = do
+      names <- readIORef ref
+      name  <- peekUtf8CString (castPtr key)
+      writeIORef ref $! (name : names)
+
+functionsByCat :: PGF -> Cat -> [Fun]
+functionsByCat p cat =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+    allocaBytes (#size GuMapItor) $ \itor -> do
+      exn <- gu_new_exn tmpPl
+      ref <- newIORef []
+      fptr <- wrapMapItorCallback (getFunctions ref)
+      (#poke GuMapItor, fn) itor fptr
+      ccat <- newUtf8CString cat tmpPl
+      pgf_iter_functions_by_cat (pgf p) ccat itor exn
       freeHaskellFunPtr fptr
       fs <- readIORef ref
       return (reverse fs)

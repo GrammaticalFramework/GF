@@ -170,7 +170,7 @@ foreign import ccall "pgf/pgf.h pgf_iter_functions"
   pgf_iter_functions :: Ptr PgfPGF -> Ptr GuMapItor -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_iter_functions_by_cat"
-  pgf_iter_functions_by_cat :: Ptr PgfPGF -> Ptr GuMapItor -> Ptr GuExn -> IO ()
+  pgf_iter_functions_by_cat :: Ptr PgfPGF -> CString -> Ptr GuMapItor -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_function_type"
    pgf_function_type :: Ptr PgfPGF -> CString -> IO (Ptr PgfType)
