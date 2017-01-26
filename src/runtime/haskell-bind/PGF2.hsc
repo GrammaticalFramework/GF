@@ -26,13 +26,13 @@ module PGF2 (-- * PGF
              -- * Abstract syntax
              AbsName,abstractName,
              -- ** Categories
-             Cat,startCat,categories,
+             Cat,categories,
              -- ** Functions
              Fun,functions, functionsByCat, functionType, hasLinearization,
              -- ** Expressions
              Expr,showExpr,readExpr,mkApp,unApp,mkStr,unStr,mkInt,unInt,mkFloat,unFloat,
              -- ** Types
-             Type(..), Hypo, BindType(..), showType,
+             Type(..), Hypo, BindType(..), startCat, showType,
 
              -- * Concrete syntax
              ConcName,Concr,languages,
