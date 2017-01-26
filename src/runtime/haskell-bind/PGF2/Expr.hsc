@@ -33,6 +33,37 @@ data Expr = forall a . Expr {expr :: PgfExpr, exprMaster :: a}
 instance Show Expr where
   show = showExpr []
 
+-- | Constructs an expression by lambda abstraction
+mkAbs :: BindType -> CId -> Expr -> Expr
+mkAbs bind_type var (Expr body master) =
+  unsafePerformIO $ do
+      exprPl <- gu_new_pool
+      cvar <- newUtf8CString var exprPl
+      c_expr <- pgf_expr_abs cbind_type cvar body exprPl
+      exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+      return (Expr c_expr (exprFPl,body))
+  where
+    cbind_type = 
+      case bind_type of
+        Explicit -> (#const PGF_BIND_TYPE_EXPLICIT)
+        Implicit -> (#const PGF_BIND_TYPE_IMPLICIT)
+
+-- | Decomposes an expression into an abstraction and a body
+unAbs :: Expr -> Maybe (BindType, CId, Expr)
+unAbs (Expr expr master) =
+  unsafePerformIO $ do
+      c_abs <- pgf_expr_unabs expr
+      if c_abs == nullPtr
+        then return Nothing
+        else do bt  <- fmap toBindType ((#peek PgfExprAbs, bind_type) c_abs)
+                var <- (#peek PgfExprAbs, id) c_abs >>= peekUtf8CString
+                c_body <- (#peek PgfExprAbs, body) c_abs
+                return (Just (bt, var, Expr c_body master))
+  where
+    toBindType :: CInt -> BindType
+    toBindType (#const PGF_BIND_TYPE_EXPLICIT) = Explicit
+    toBindType (#const PGF_BIND_TYPE_IMPLICIT) = Implicit
+
 -- | Constructs an expression by applying a function to a list of expressions
 mkApp :: Fun -> [Expr] -> Expr
 mkApp fun args =

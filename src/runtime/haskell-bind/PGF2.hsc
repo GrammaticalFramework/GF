@@ -30,7 +30,8 @@ module PGF2 (-- * PGF
              -- ** Functions
              Fun,functions, functionsByCat, functionType, hasLinearization,
              -- ** Expressions
-             Expr,showExpr,readExpr,mkApp,unApp,mkStr,unStr,mkInt,unInt,mkFloat,unFloat,
+             Expr,showExpr,readExpr,
+             mkAbs,unAbs,mkApp,unApp,mkStr,unStr,mkInt,unInt,mkFloat,unFloat,
              -- ** Types
              Type(..), Hypo, BindType(..), startCat, showType,
 
