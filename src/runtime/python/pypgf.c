@@ -1455,18 +1455,34 @@ pypgf_new_callbacks_map(PgfConcr* concr, PyObject *py_callbacks,
 	return callbacks;
 }
 
+static PgfType*
+pgf_type_from_object(PyObject* obj, GuPool* pool) {
+	if (PyString_Check(obj)) {
+		PgfType* type = gu_new_flex(pool, PgfType, exprs, 0);
+		type->hypos   = gu_empty_seq();
+		type->cid     = "";
+		type->n_exprs = 0;
+		return type;
+	} else if (obj->ob_type == &pgf_TypeType) {
+		return ((TypeObject*) obj)->type;
+	} else {
+		PyErr_SetString(PyExc_TypeError, "the start category should be a string or a type");
+		return NULL;
+	}
+}
+
 static IterObject*
 Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 {
 	static char *kwlist[] = {"sentence", "cat", "n", "heuristics", "callbacks", NULL};
 
 	const char *sentence = NULL;
-	PgfCId catname = NULL;
+	PyObject* start = NULL;
 	int max_count = -1;
 	double heuristics = -1;
 	PyObject* py_callbacks = NULL;
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s|sidO!", kwlist,
-                                     &sentence, &catname, &max_count,
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s|OidO!", kwlist,
+                                     &sentence, &start, &max_count,
                                      &heuristics,
                                      &PyList_Type, &py_callbacks))
         return NULL;
@@ -1495,19 +1511,22 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 
 	PgfCallbacksMap* callbacks =
 		pypgf_new_callbacks_map(self->concr, py_callbacks, pyres->pool);
-	if (callbacks == NULL)
+	if (callbacks == NULL) {
+		Py_DECREF(pyres);
 		return NULL;
+	}
 
 	sentence = gu_string_copy(sentence, pyres->pool);
 
 	PgfType* type;
-	if (catname == NULL) {
+	if (start == NULL) {
 		type = pgf_start_cat(self->grammar->pgf, pyres->pool);
 	} else {
-		type = gu_new_flex(pyres->pool, PgfType, exprs, 0);
-		type->hypos   = gu_empty_seq();
-		type->cid     = catname;
-		type->n_exprs = 0;
+		type = pgf_type_from_object(start, pyres->pool);
+	}
+	if (type == NULL) {
+		Py_DECREF(pyres);
+		return NULL;
 	}
 
 	pyres->res =
@@ -1540,11 +1559,11 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 	static char *kwlist[] = {"sentence", "cat", "prefix", "n", NULL};
 
 	const char *sentence = NULL;
-	GuString catname = NULL;
+	PyObject* start = NULL;
 	GuString prefix = "";
 	int max_count = -1;
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s|ssi", kwlist,
-                                     &sentence, &catname,
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s|Osi", kwlist,
+                                     &sentence, &start,
                                      &prefix, &max_count))
         return NULL;
 
@@ -1569,13 +1588,14 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 	GuExn* parse_err = gu_new_exn(tmp_pool);
 
 	PgfType* type;
-	if (catname == NULL) {
+	if (start == NULL) {
 		type = pgf_start_cat(self->grammar->pgf, pyres->pool);
 	} else {
-		type = gu_new_flex(pyres->pool, PgfType, exprs, 0);
-		type->hypos   = gu_empty_seq();
-		type->cid     = catname;
-		type->n_exprs = 0;
+		type = pgf_type_from_object(start, pyres->pool);
+	}
+	if (type == NULL) {
+		Py_DECREF(pyres);
+		return NULL;
 	}
 
 	pyres->res =
@@ -1605,8 +1625,8 @@ Concr_complete(ConcrObject* self, PyObject *args, PyObject *keywds)
 static PyObject*
 Concr_parseval(ConcrObject* self, PyObject *args) {
 	ExprObject* pyexpr = NULL;
-	PgfCId cat = "";
-	if (!PyArg_ParseTuple(args, "O!s", &pgf_ExprType, &pyexpr, &cat))
+	PyObject* start = NULL;
+	if (!PyArg_ParseTuple(args, "O!s", &pgf_ExprType, &pyexpr, &start))
         return NULL;
         
     GuPool* tmp_pool = gu_local_pool();
@@ -1615,10 +1635,10 @@ Concr_parseval(ConcrObject* self, PyObject *args) {
 	double recall = 0;
 	double exact = 0;
 
-	PgfType* type = gu_new_flex(tmp_pool, PgfType, exprs, 0);
-	type->hypos   = gu_empty_seq();
-	type->cid     = cat;
-	type->n_exprs = 0;
+	PgfType* type = pgf_type_from_object(start, tmp_pool);
+	if (type == NULL) {
+		return NULL;
+	}
 
     if (!pgf_parseval(self->concr, pyexpr->expr, type, 
                       &precision, &recall, &exact))
@@ -2628,14 +2648,24 @@ PGF_getCategories(PGFObject *self, void *closure)
     return categories;
 }
 
-static PyObject*
+static TypeObject*
 PGF_getStartCat(PGFObject *self, void *closure)
 {
-	GuPool* tmp_pool = gu_local_pool();
-	PgfType* type = pgf_start_cat(self->pgf, tmp_pool);
-	PyObject* pycat = PyString_FromString(type->cid);
-	gu_pool_free(tmp_pool);
-	return pycat;
+	TypeObject* pytype = (TypeObject*) pgf_TypeType.tp_alloc(&pgf_TypeType, 0);
+	if (pytype == NULL)
+		return NULL;
+
+	pytype->pool = gu_new_pool();
+	pytype->type = pgf_start_cat(self->pgf, pytype->pool);
+	pytype->master = NULL;
+
+	if (pytype->type == NULL) {
+		PyErr_SetString(PGFError, "The start category cannot be found");
+		Py_DECREF(pytype);
+		return NULL;
+	}
+
+    return pytype;
 }
 
 static void
@@ -2744,10 +2774,10 @@ PGF_generateAll(PGFObject* self, PyObject *args, PyObject *keywds)
 {
 	static char *kwlist[] = {"cat", "n", NULL};
 
-	PgfCId catname;
+	PyObject* start = NULL;
 	int max_count = -1;
-    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s|i", kwlist,
-                                     &catname, &max_count))
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "O|i", kwlist,
+                                     &start, &max_count))
         return NULL;
 
 	IterObject* pyres = (IterObject*)
@@ -2772,10 +2802,11 @@ PGF_generateAll(PGFObject* self, PyObject *args, PyObject *keywds)
 
 	GuExn* err = gu_exn(pyres->pool);
 
-	PgfType* type = gu_new_flex(pyres->pool, PgfType, exprs, 0);
-	type->hypos   = gu_empty_seq();
-	type->cid     = catname;
-	type->n_exprs = 0;
+	PgfType* type = pgf_type_from_object(start, pyres->pool);
+	if (type == NULL) {
+		Py_DECREF(pyres);
+		return NULL;
+	}
 
 	pyres->res =
 		pgf_generate_all(self->pgf, type, err, pyres->pool, out_pool);
