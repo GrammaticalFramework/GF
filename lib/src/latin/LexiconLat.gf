@@ -12,9 +12,9 @@
 -- Stowasser)
 
 concrete LexiconLat of Lexicon = CatLat ** open 
-  ParadigmsLat, 
+  ParadigmsLat,
+  (R = ResLat),
   IrregLat,
-  ResLat,
   StructuralLat,
   NounLat,
   AdjectiveLat,
@@ -26,11 +26,11 @@ flags
   coding = utf8;
 lin
   airplane_N = mkN "aeroplanum" ; -- -i n. (http://la.wikipedia.org/wiki/A%C3%ABroplanum / Pons)
-  answer_V2S = mkV2S ( mkV "respondere" ) Dat_Prep ; -- -spondeo, -spondi, -sponsum 2 (Langenscheidts) alicui; ad, contra, adversus aliquid (Stowasser)
+  answer_V2S = mkV2S ( mkV "respondere" ) R.Dat_Prep ; -- -spondeo, -spondi, -sponsum 2 (Langenscheidts) alicui; ad, contra, adversus aliquid (Stowasser)
   apartment_N = mkN "domicilium" ; -- -i n. (Langenscheidts)
   apple_N = mkN "malum" ; -- -i n. (Langenscheidts)
   art_N = mkN "ars" "artis" feminine ; -- Ranta; artis f. (Langenscheidts)
-  ask_V2Q = mkV2Q ( mkV "rogare" ) Acc_Prep ; -- rogo 1 (Langenscheidts) aliquem aliquid (Stowasser)
+  ask_V2Q = mkV2Q ( mkV "rogare" ) R.Acc_Prep ; -- rogo 1 (Langenscheidts) aliquem aliquid (Stowasser)
   baby_N = mkN "infans" "infantis" ( variants { feminine ; masculine } );  -- Ranta; -antis m./f. (Langenscheidts)
   bad_A = mkA "malus" ; -- Ranta; peior, pessimus 3 (Langenscheidts)
   bank_N = mkN "argentaria" ; -- -ae f. (http://la.wikipedia.org/wiki/Argentaria / Pons)
@@ -51,7 +51,7 @@ lin
   bread_N = variants { (mkN "panis" "panis" masculine ) ; (mkN "pane" "panis" neuter ) } ; -- -is m./n. (Langenscheidts)
   break_V2 = mkV2 ( mkV "rumpere" "rumpo" "rupi" "ruptum" ) ; -- Ranta; 3 (Langenscheidts) aliquem (Bayer-Lindauer 110)
   broad_A = mkA "latus" ; -- 3 (Langenscheidts)
-  brother_N2 = mkN2 ( mkN "frater" "fratris" masculine ) Gen_Prep; -- -tris m. (Langenscheidts) alicuius (Bayer-Lindauer 125.2)
+  brother_N2 = mkN2 ( mkN "frater" "fratris" masculine ) R.Gen_Prep; -- -tris m. (Langenscheidts) alicuius (Bayer-Lindauer 125.2)
   brown_A = mkA "fulvus" ; -- 3 (Langenscheidts)
   butter_N = mkN "butyrum" ; -- -i n. (http://la.wikipedia.org/wiki/Butyrum / Pons)
   buy_V2 = mkV2 (mkV "emere") ; -- emo, emi, emptum 3 (Langenscheidts) (Stowasser) ab, de aliquo (Stowasser)
@@ -90,7 +90,7 @@ lin
   empty_A = mkA "vacuus" ; -- 3 (Langenscheidts)
   enemy_N = mkN "hostis" "hostis" ( variants { masculine ; feminine } ) ; -- -is m./f. (Langenscheidts)
   factory_N = mkN "officina" ; -- -ae f. (Langenscheidts)
-  father_N2 = mkN2 (mkN "pater" "patris" masculine ) Gen_Prep ; -- -tris m. gen pl -um (Langenscheidts) alicuius (Bayer-Lindauer 125.2)
+  father_N2 = mkN2 (mkN "pater" "patris" masculine ) R.Gen_Prep ; -- -tris m. gen pl -um (Langenscheidts) alicuius (Bayer-Lindauer 125.2)
   fear_VS = mkVS (mkV "timere") ; -- timeo, timui, --- 2 (Langenscheidts)
   find_V2 = mkV2 (mkV "reperire") ; -- reperio, repperi, repertum 4 (Langenscheidts) aliquem
   fish_N = mkN "piscis" "piscis" masculine ; -- -is m. (Langenscheidts)
@@ -108,7 +108,7 @@ lin
   go_V = IrregLat.go_V ; -- eo, i(v)i, itum (Langenscheidts)
   green_A = mkA "viridis" "viride"; -- -e (Langenscheidts)
   harbour_N = mkN "portus" "portus" masculine ; -- -us m. (Langenscheidts)
-  hate_V2 = mkV2 IrregLat.hate_V Acc_Prep ; -- odi, osurus/odivi (Langenscheidts)
+  hate_V2 = mkV2 IrregLat.hate_V R.Acc_Prep ; -- odi, osurus/odivi (Langenscheidts)
   hat_N = mkN "petasus" ; -- -i m. (Langenscheidts)
   hear_V2 = mkV2 (mkV "audire") ; -- 4 (Langenscheidts)
   hill_N = mkN "collis" "collis" masculine ; -- -is m. (Langenscheidts)
@@ -141,7 +141,7 @@ lin
   meat_N = mkN "carnis" "carnis" feminine ; -- -is f. (Langenscheidts)
   milk_N = mkN "lac" "lactis" neuter ; -- -- lactis n. (Langenscheidts)
   moon_N = mkN "luna" ; -- -ae f. (Langenscheidts)
-  mother_N2 = mkN2 ( mkN "mater" "matris" feminine ) Gen_Prep ; -- matris f. (Langenscheidts)
+  mother_N2 = mkN2 ( mkN "mater" "matris" feminine ) R.Gen_Prep ; -- matris f. (Langenscheidts)
   mountain_N = mkN "mons" "montis" masculine ; -- montis m. (Langenscheidts)
   music_N = mkN "musica" ; -- -ae f. L..
   narrow_A = mkA "angustus" ; -- 3 (Langenscheidts)
@@ -150,7 +150,7 @@ lin
   oil_N = mkN "oleum" ; -- -i n. (Langenscheidts)
   old_A = mkA "vetus" "veteris"; -- (Langenscheidts)
   open_V2 = mkV2 (mkV "aperire") ; -- aperio, aperui, apertum 4 (Langenscheidts)
-  paint_V2A = mkV2A (mkV "pingere" "pingo" "pinxi" "pictum" ) Acc_Prep ; -- pingo, pinxi, pictum 3 (Langenscheidts)
+  paint_V2A = mkV2A (mkV "pingere" "pingo" "pinxi" "pictum" ) R.Acc_Prep ; -- pingo, pinxi, pictum 3 (Langenscheidts)
   paper_N = mkN "charta" ; -- -ae f. (http://la.wikipedia.org/wiki/Charta / Pons)
   paris_PN = mkPN (mkN "Lutetia") ; -- -ae f. (http://la.wikipedia.org/wiki/Lutetia)
   peace_N = mkN "pax" "pacis" feminine ; -- pacis f. (Langenscheidts)
@@ -176,12 +176,12 @@ lin
   say_VS = mkVS (mkV "dicere" "dico" "dixi" "dictum") ; -- dico, dixi, dictum 3 (Langenscheidts)
   school_N = mkN "schola" ; -- -ae f. (Langenscheidts)
   -- Irregular
-  science_N = pluralN (mkN "litera" ) ; -- only pl. (Langenscheidts)
+  science_N = R.pluralN (mkN "litera" ) ; -- only pl. (Langenscheidts)
   sea_N = mkN "mare" "maris" neuter ; -- -is n. (Langenscheidts)
   seek_V2 = mkV2 (mkV "quaerere" "quaero" "quaesivi" "quaesitum" ) ; -- quaero, quaesivi, quaesitum 3 (Langenscheidts)
   see_V2 = mkV2 (mkV "videre") ; -- video, vidi, visum 2 (Langenscheidts)
-  sell_V3 = mkV3 ( mkV "vendere" "vendo" "vendidi" "venditum" ) Acc_Prep Dat_Prep ; -- vendo, vendidi, venditum 3 (Langenscheidts)
-  send_V3 = mkV3 ( mkV "mittere" "mitto" "misi" "missum" ) Acc_Prep Dat_Prep ; -- mitto, misi, missum 3 (Langenscheidts)
+  sell_V3 = mkV3 ( mkV "vendere" "vendo" "vendidi" "venditum" ) R.Acc_Prep R.Dat_Prep ; -- vendo, vendidi, venditum 3 (Langenscheidts)
+  send_V3 = mkV3 ( mkV "mittere" "mitto" "misi" "missum" ) R.Acc_Prep R.Dat_Prep ; -- mitto, misi, missum 3 (Langenscheidts)
   sheep_N = mkN "ovis" "ovis" feminine ; -- -is f. (Langenscheidts)
   ship_N = mkN "navis" "navis" feminine ; -- -is f. acc. -em (-im) abl meist -i (Langenscheidts)
   shirt_N = mkN "tunica" ; -- -ae f. (Langenscheidts)
@@ -206,14 +206,14 @@ lin
   switch8off_V2 = mkV2 (mkV "accendere") ; -- -cendo, -cendi, -censum 3 (Langenscheidts)
   switch8on_V2 = mkV2 (mkV ( variants { "exstinguere" ; "extinguere" } ) ); -- -ingo, -inxi, -inctum 3 (Langenscheidts)
   table_N = mkN "mensa" ; -- -ae f. (Langenscheidts)
-  talk_V3 = mkV3 ( lin V speak_V2 ) Dat_Prep Acc_Prep ;
+  talk_V3 = mkV3 ( lin V speak_V2 ) R.Dat_Prep R.Acc_Prep ;
   teacher_N = mkN "magister" "magistri" masculine ; -- -tri m. (Langenscheidts)
   teach_V2 = mkV2 (mkV "docere") ; -- doceo, docui, doctum 2 (Langenscheidts)
   television_N = mkN "televisio" "televisionis" feminine ; -- -onis f. (Pons)
   thick_A = mkA "crassus" ; -- 3 (Langenscheidts)
   thin_A = mkA "tenuis" "tenue" ; -- -e (Langenscheidts)
   train_N = mkN "hamaxostichus" ; -- -i m. (http://la.wikipedia.org/wiki/Hamaxostichus)
-  travel_V = ResLat.useVPasV ( ComplSlash ( SlashV2a ( mkV2 "facere" ) ) ( DetCN ( DetQuant IndefArt NumSg ) ( UseN ( mkN "iter" "itineris" Neutr ) ) ) ) ; -- facio, feci, factum 3
+  travel_V = ResLat.useVPasV ( ComplSlash ( SlashV2a ( mkV2 "facere" ) ) ( DetCN ( DetQuant IndefArt NumSg ) ( UseN ( mkN "iter" "itineris" neuter ) ) ) ) ; -- facio, feci, factum 3
   tree_N = mkN "arbor" "arboris" feminine ; -- -oris f.
   -- Not even in English implemented
 ---- trousers_N = mkN "trousers" ;
@@ -242,7 +242,7 @@ lin
   now_Adv = mkAdv "nunc" ; -- (Langenscheidts)
   already_Adv = mkAdv "iam" ; -- (Langenscheidts)
   song_N = mkN "carmen" "carminis" neuter ; -- -inis n. (Langenscheidts)
-  add_V3 = mkV3 ( mkV "addere" "addo" "addidi" "additum" ) Acc_Prep to_P ; -- addo, addidi, additum 3 (Langenscheidts)
+  add_V3 = mkV3 ( mkV "addere" "addo" "addidi" "additum" ) R.Acc_Prep R.to_P ; -- addo, addidi, additum 3 (Langenscheidts)
   number_N = mkN "numerus" ; -- -i m.
   put_V2 = mkV2 (mkV "ponere" "pono" "posui" "positum" ) ; -- pono, posui, positum 3 (Langenscheidts)
   stop_V = mkV "sistere" "sisto" "steti" "statum" ; -- sisto, stiti/steti, statum 3 (Langenscheidts)
