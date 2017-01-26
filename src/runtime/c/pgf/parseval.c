@@ -129,7 +129,7 @@ static PgfLinFuncs pgf_metrics_lin_funcs2 = {
 };
 
 bool
-pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat, 
+pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfType* type, 
              double *precision, double *recall, double *exact)
 {
 	GuPool* pool = gu_new_pool();
@@ -174,7 +174,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat,
 		gu_string_buf_freeze(sbuf, pool);
 
 	GuEnum* en_trees =
-		pgf_parse(concr, cat, sentence,
+		pgf_parse(concr, type, sentence,
 		          state.err, pool, pool);
 	PgfExprProb* ep = gu_next(en_trees, PgfExprProb*, pool);
 	if (ep == NULL) {

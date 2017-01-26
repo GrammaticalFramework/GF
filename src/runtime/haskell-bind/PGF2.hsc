@@ -38,7 +38,9 @@ module PGF2 (-- * PGF
              mkFloat,unFloat,
              mkMeta,unMeta,
              -- ** Types
-             Type(..), Hypo, BindType(..), startCat, showType,
+             Type, Hypo, BindType(..), startCat,
+             readType, showType,
+             mkType, unType,
 
              -- * Concrete syntax
              ConcName,Concr,languages,
@@ -69,6 +71,7 @@ import Control.Monad(forM_)
 import System.IO.Unsafe(unsafePerformIO,unsafeInterleaveIO)
 import Text.PrettyPrint
 import PGF2.Expr
+import PGF2.Type
 import PGF2.FFI
 
 import Foreign hiding ( Pool, newPool, unsafePerformIO )
@@ -141,13 +144,12 @@ languages p =
 -- all abstract syntax expressions of the given type. 
 -- The expressions are ordered by their probability.
 generateAll :: PGF -> Type -> [(Expr,Float)]
-generateAll p (DTyp _ cat _) =
+generateAll p (Type ctype _) =
   unsafePerformIO $
     do genPl  <- gu_new_pool
        exprPl <- gu_new_pool
-       cat    <- newUtf8CString cat genPl
        exn    <- gu_new_exn genPl
-       enum   <- pgf_generate_all (pgf p) cat exn genPl exprPl
+       enum   <- pgf_generate_all (pgf p) ctype exn genPl exprPl
        genFPl  <- newForeignPtr gu_pool_finalizer genPl
        exprFPl <- newForeignPtr gu_pool_finalizer exprPl
        fromPgfExprEnum enum genFPl (p,exprFPl)
@@ -164,9 +166,9 @@ abstractName p = unsafePerformIO (peekUtf8CString =<< pgf_abstract_name (pgf p))
 -- definition is just for convenience.
 startCat :: PGF -> Type
 startCat p = unsafePerformIO $ do
-  cat <- pgf_start_cat (pgf p)
-  cat <- peekUtf8CString cat
-  return (DTyp [] cat [])
+  typPl <- gu_new_pool
+  c_type <- pgf_start_cat (pgf p) typPl
+  return (Type c_type typPl)
 
 loadConcr :: Concr -> FilePath -> IO ()
 loadConcr c fpath =
@@ -199,36 +201,7 @@ functionType p fn =
     c_type <- pgf_function_type (pgf p) c_fn
     if c_type == nullPtr
       then throwIO (PGFError ("Function '"++fn++"' is not defined"))
-      else peekType c_type
-  where
-    peekType c_type = do
-      cid <- (#peek PgfType, cid) c_type >>= peekUtf8CString
-      c_hypos <- (#peek PgfType, hypos) c_type
-      n_hypos <- (#peek GuSeq, len) c_hypos
-      hs <- peekHypos (c_hypos `plusPtr` (#offset GuSeq, data)) 0 n_hypos
-      n_exprs <- (#peek PgfType, n_exprs) c_type
-      es <- peekExprs (c_type `plusPtr` (#offset PgfType, exprs)) 0 n_exprs
-      return (DTyp hs cid es)
-
-    peekHypos :: Ptr a -> Int -> Int -> IO [Hypo]
-    peekHypos c_hypo i n
-      | i < n     = do cid <- (#peek PgfHypo, cid) c_hypo >>= peekUtf8CString
-                       ty  <- (#peek PgfHypo, type) c_hypo >>= peekType
-                       bt  <- fmap toBindType ((#peek PgfHypo, bind_type) c_hypo)
-                       hs <- peekHypos (plusPtr c_hypo (#size PgfHypo)) (i+1) n
-                       return ((bt,cid,ty) : hs)
-      | otherwise = return []
-
-    toBindType :: CInt -> BindType
-    toBindType (#const PGF_BIND_TYPE_EXPLICIT) = Explicit
-    toBindType (#const PGF_BIND_TYPE_IMPLICIT) = Implicit
-
-    peekExprs ptr i n
-      | i < n     = do e  <- peekElemOff ptr i
-                       es <- peekExprs ptr (i+1) n
-                       return (Expr e p : es)
-      | otherwise = return []
-
+      else return (Type c_type (pgfMaster p))
 
 -----------------------------------------------------------------------------
 -- Graphviz
@@ -326,15 +299,14 @@ parseWithHeuristics :: Concr      -- ^ the language with which we parse
                                   -- If a literal has been recognized then the output should
                                   -- be Just (expr,probability,end_offset)
                     -> Either String [(Expr,Float)]
-parseWithHeuristics lang (DTyp _ cat _) sent heuristic callbacks =
+parseWithHeuristics lang (Type ctype _) sent heuristic callbacks =
   unsafePerformIO $
     do exprPl  <- gu_new_pool
        parsePl <- gu_new_pool
        exn     <- gu_new_exn parsePl
-       cat     <- newUtf8CString cat  parsePl
        sent    <- newUtf8CString sent parsePl
        callbacks_map <- mkCallbacksMap (concr lang) callbacks parsePl
-       enum    <- pgf_parse_with_heuristics (concr lang) cat sent heuristic callbacks_map exn parsePl exprPl
+       enum    <- pgf_parse_with_heuristics (concr lang) ctype sent heuristic callbacks_map exn parsePl exprPl
        failed  <- gu_exn_is_raised exn
        if failed
          then do is_parse_error <- gu_exn_caught exn gu_exn_type_PgfParseError
@@ -574,7 +546,7 @@ showBracketedString :: BracketedString -> String
 showBracketedString = render . ppBracketedString
 
 ppBracketedString (Leaf t) = text t
-ppBracketedString (Bracket cat fid index _ bss) = parens (ppCId cat <> colon <> int fid <+> hsep (map ppBracketedString bss))
+ppBracketedString (Bracket cat fid index _ bss) = parens (text cat <> colon <> int fid <+> hsep (map ppBracketedString bss))
 
 -- | Extracts the sequence of tokens from the bracketed string
 flattenBracketedString :: BracketedString -> [String]
@@ -657,7 +629,7 @@ functionsByCat p cat =
 -- with the \'cat\' keyword.
 categories :: PGF -> [Cat]
 categories pgf = -- !!! quick hack
-    nub [cat | f<-functions pgf, let DTyp _ cat _=functionType pgf f]
+    nub [cat | f<-functions pgf, let (_, cat, _) = unType (functionType pgf f)]
 
 categoryContext :: PGF -> Cat -> Maybe [Hypo]
 categoryContext pgf cat = Nothing -- !!! not implemented yet TODO
@@ -729,7 +701,7 @@ nerc pgf (lang,concr) sentence lin_idx offset =
         Just (y,xs') -> (y:ys,xs'')
           where (ys,xs'') = consume munch xs'
 
-    functionCat f = case functionType pgf f of DTyp _ cat _ -> cat
+    functionCat f = case unType (functionType pgf f) of (_,cat,_) -> cat
 
 -- | Callback to parse arbitrary words as chunks (from
 -- ../java/org/grammaticalframework/pgf/UnknownLiteralCallback.java)

@@ -53,8 +53,8 @@ pgf_language_code(PgfConcr* concr);
 void
 pgf_iter_categories(PgfPGF* pgf, GuMapItor* itor, GuExn* err);
 
-PgfCId
-pgf_start_cat(PgfPGF* pgf);
+PgfType*
+pgf_start_cat(PgfPGF* pgf, GuPool* pool);
 
 void
 pgf_iter_functions(PgfPGF* pgf, GuMapItor* itor, GuExn* err);
@@ -89,7 +89,7 @@ pgf_align_words(PgfConcr* concr, PgfExpr expr,
                 GuExn* err, GuPool* pool);
 
 bool
-pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfCId cat, 
+pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfType* type, 
              double *precision, double *recall, double *exact);
 
 PgfExpr
@@ -97,11 +97,11 @@ pgf_compute(PgfPGF* pgf, PgfExpr expr, GuExn* err,
             GuPool* pool, GuPool* out_pool);
 
 PgfExprEnum*
-pgf_generate_all(PgfPGF* pgf, PgfCId cat,
+pgf_generate_all(PgfPGF* pgf, PgfType* ty,
                  GuExn* err, GuPool* pool, GuPool* out_pool);
 
 PgfExprEnum*
-pgf_parse(PgfConcr* concr, PgfCId cat, GuString sentence,
+pgf_parse(PgfConcr* concr, PgfType* typ, GuString sentence,
           GuExn* err, GuPool* pool, GuPool* out_pool);
 
 typedef struct PgfMorphoCallback PgfMorphoCallback;
@@ -134,7 +134,7 @@ pgf_lookup_word_prefix(PgfConcr *concr, GuString prefix,
 typedef GuMap PgfCallbacksMap;
 
 PgfExprEnum*
-pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, 
+pgf_parse_with_heuristics(PgfConcr* concr, PgfType* typ, 
                           GuString sentence, double heuristics,
                           PgfCallbacksMap* callbacks,
                           GuExn* err,
@@ -159,7 +159,7 @@ struct PgfOracleCallback {
 };
 
 PgfExprEnum*
-pgf_parse_with_oracle(PgfConcr* concr, PgfCId cat, 
+pgf_parse_with_oracle(PgfConcr* concr, PgfType* typ,
                       GuString sentence,
                       PgfOracleCallback* oracle,
                       GuExn* err,
@@ -172,7 +172,7 @@ typedef struct {
 } PgfTokenProb;
 
 GuEnum*
-pgf_complete(PgfConcr* concr, PgfCId cat, GuString string, 
+pgf_complete(PgfConcr* concr, PgfType* type, GuString string, 
              GuString prefix, GuExn* err, GuPool* pool);
 
 typedef struct PgfLiteralCallback PgfLiteralCallback;

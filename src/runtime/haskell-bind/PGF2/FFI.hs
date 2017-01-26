@@ -85,6 +85,9 @@ foreign import ccall unsafe "gu/utf8.h gu_utf8_decode"
 foreign import ccall unsafe "gu/utf8.h gu_utf8_encode"
   gu_utf8_encode :: Int32 -> Ptr CString -> IO ()
 
+foreign import ccall unsafe "gu/seq.h gu_make_seq"
+  gu_make_seq :: CInt -> CInt -> Ptr GuPool -> IO (Ptr GuSeq)
+
 withGuPool :: (Ptr GuPool -> IO a) -> IO a
 withGuPool f = bracket gu_new_pool gu_pool_free f
 
@@ -133,7 +136,7 @@ data PgfExprProb
 data PgfFullFormEntry
 data PgfMorphoCallback
 data PgfPrintContext
-data PgfType
+type PgfType = Ptr ()
 data PgfCallbacksMap
 data PgfOracleCallback
 data PgfCncTree
@@ -166,7 +169,7 @@ foreign import ccall "pgf/pgf.h pgf_iter_categories"
   pgf_iter_categories :: Ptr PgfPGF -> Ptr GuMapItor -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_start_cat"
-  pgf_start_cat :: Ptr PgfPGF -> IO CString
+  pgf_start_cat :: Ptr PgfPGF -> Ptr GuPool -> IO PgfType
 
 foreign import ccall "pgf/pgf.h pgf_iter_functions"
   pgf_iter_functions :: Ptr PgfPGF -> Ptr GuMapItor -> Ptr GuExn -> IO ()
@@ -175,7 +178,7 @@ foreign import ccall "pgf/pgf.h pgf_iter_functions_by_cat"
   pgf_iter_functions_by_cat :: Ptr PgfPGF -> CString -> Ptr GuMapItor -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_function_type"
-   pgf_function_type :: Ptr PgfPGF -> CString -> IO (Ptr PgfType)
+   pgf_function_type :: Ptr PgfPGF -> CString -> IO PgfType
 
 foreign import ccall "pgf/pgf.h pgf_print_name"
   pgf_print_name :: Ptr PgfConcr -> CString -> IO CString
@@ -199,7 +202,7 @@ foreign import ccall "pgf/pgf.h pgf_align_words"
   pgf_align_words :: Ptr PgfConcr -> PgfExpr -> Ptr GuExn -> Ptr GuPool -> IO (Ptr GuSeq)
 
 foreign import ccall "pgf/pgf.h pgf_parse_with_heuristics"
-  pgf_parse_with_heuristics :: Ptr PgfConcr -> CString -> CString -> Double -> Ptr PgfCallbacksMap -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
+  pgf_parse_with_heuristics :: Ptr PgfConcr -> PgfType -> CString -> Double -> Ptr PgfCallbacksMap -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
 
 type LiteralMatchCallback = CInt -> Ptr CInt -> Ptr GuPool -> IO (Ptr PgfExprProb)
 
@@ -293,8 +296,11 @@ foreign import ccall "pgf/expr.h pgf_print_expr"
 foreign import ccall "pgf/expr.h pgf_print_expr_tuple"
   pgf_print_expr_tuple :: CInt -> Ptr PgfExpr -> Ptr PgfPrintContext -> Ptr GuOut -> Ptr GuExn -> IO ()
 
+foreign import ccall "pgf/expr.h pgf_print_type"
+  pgf_print_type :: PgfType -> Ptr PgfPrintContext -> CInt -> Ptr GuOut -> Ptr GuExn -> IO ()
+
 foreign import ccall "pgf/pgf.h pgf_generate_all"
-  pgf_generate_all :: Ptr PgfPGF -> CString -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
+  pgf_generate_all :: Ptr PgfPGF -> PgfType -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
 
 foreign import ccall "pgf/pgf.h pgf_print"
   pgf_print :: Ptr PgfPGF -> Ptr GuOut -> Ptr GuExn -> IO ()
@@ -307,6 +313,9 @@ foreign import ccall "pgf/expr.h pgf_read_expr_tuple"
 
 foreign import ccall "pgf/expr.h pgf_read_expr_matrix"
   pgf_read_expr_matrix :: Ptr GuIn -> CInt -> Ptr GuPool -> Ptr GuExn -> IO (Ptr GuSeq)
+
+foreign import ccall "pgf/expr.h pgf_read_type"
+  pgf_read_type :: Ptr GuIn -> Ptr GuPool -> Ptr GuExn -> IO PgfType
 
 foreign import ccall "pgf/graphviz.h pgf_graphviz_abstract_tree"
   pgf_graphviz_abstract_tree :: Ptr PgfPGF -> PgfExpr -> Ptr GuOut -> Ptr GuExn -> IO ()

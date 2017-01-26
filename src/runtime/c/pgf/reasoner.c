@@ -454,7 +454,7 @@ pgf_new_reasoner(PgfPGF* pgf, GuExn* err, GuPool* pool, GuPool* out_pool)
 }
 
 PgfExprEnum*
-pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuExn* err, GuPool* pool, GuPool* out_pool)
+pgf_generate_all(PgfPGF* pgf, PgfType* typ, GuExn* err, GuPool* pool, GuPool* out_pool)
 {
 	PgfReasoner* rs = pgf_new_reasoner(pgf, err, pool, out_pool);
 
@@ -462,9 +462,9 @@ pgf_generate_all(PgfPGF* pgf, PgfCId cat, GuExn* err, GuPool* pool, GuPool* out_
 	answers->parents = gu_new_buf(PgfExprState*, rs->pool);
 	answers->exprs   = rs->exprs;
 	answers->outside_prob = 0;
-	gu_map_put(rs->table, cat, PgfAnswers*, answers);
+	gu_map_put(rs->table, typ->cid, PgfAnswers*, answers);
 
-	PgfAbsCat* abscat = gu_seq_binsearch(rs->abstract->cats, pgf_abscat_order, PgfAbsCat, cat);
+	PgfAbsCat* abscat = gu_seq_binsearch(rs->abstract->cats, pgf_abscat_order, PgfAbsCat, typ->cid);
 	if (abscat != NULL) {
 		rs->start = gu_new(PgfClosure, rs->pool);
 		rs->start->code = abscat->predicate;

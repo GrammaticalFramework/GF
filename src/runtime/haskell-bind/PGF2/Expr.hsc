@@ -6,19 +6,21 @@ module PGF2.Expr where
 import System.IO.Unsafe(unsafePerformIO)
 import Foreign hiding (unsafePerformIO)
 import Foreign.C
-import qualified Text.PrettyPrint as PP
 import PGF2.FFI
-import Data.List(mapAccumL)
 
 -- | An data type that represents
 -- identifiers for functions and categories in PGF.
 type CId = String
 
-ppCId = PP.text
 wildCId = "_" :: CId
 
 type Cat = CId -- ^ Name of syntactic category
 type Fun = CId -- ^ Name of function
+
+data BindType = 
+    Explicit
+  | Implicit
+  deriving Show
 
 -----------------------------------------------------------------------------
 -- Expressions
@@ -177,19 +179,16 @@ readExpr str =
   unsafePerformIO $
     do exprPl <- gu_new_pool
        withGuPool $ \tmpPl ->
-         withCString str $ \c_str ->
-           do guin <- gu_string_in c_str tmpPl
-              exn <- gu_new_exn tmpPl
-              c_expr <- pgf_read_expr guin exprPl exn
-              status <- gu_exn_is_raised exn
-              if (not status && c_expr /= nullPtr)
-                then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-                        return $ Just (Expr c_expr exprFPl)
-                else do gu_pool_free exprPl
-                        return Nothing
-
-ppExpr :: Int -> [CId] -> Expr -> PP.Doc
-ppExpr d xs e = ppParens (d>0) (PP.text (showExpr xs e)) -- just a quick hack !!!
+         do c_str <- newUtf8CString str tmpPl
+            guin <- gu_string_in c_str tmpPl
+            exn <- gu_new_exn tmpPl
+            c_expr <- pgf_read_expr guin exprPl exn
+            status <- gu_exn_is_raised exn
+            if (not status && c_expr /= nullPtr)
+              then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+                      return $ Just (Expr c_expr exprFPl)
+              else do gu_pool_free exprPl
+                      return Nothing
 
 -- | renders an expression as a 'String'. The list
 -- of identifiers is the list of all free variables
@@ -200,62 +199,16 @@ showExpr scope e =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
       do (sb,out) <- newOut tmpPl
-         let printCtxt = nullPtr
+         printCtxt <- newPrintCtxt scope tmpPl
          exn <- gu_new_exn tmpPl
          pgf_print_expr (expr e) printCtxt 1 out exn
          s <- gu_string_buf_freeze sb tmpPl
-         peekCString s
+         peekUtf8CString s
 
-
------------------------------------------------------------------------------
--- Types
-
-data Type =
-   DTyp [Hypo] CId [Expr]
-  deriving Show
-
-data BindType = 
-    Explicit
-  | Implicit
-  deriving Show
-
--- | 'Hypo' represents a hypothesis in a type i.e. in the type A -> B, A is the hypothesis
-type Hypo = (BindType,CId,Type)
-
--- | renders type as 'String'.
-showType :: Type -> String
-showType = PP.render . ppType 0 []
-
-ppType :: Int -> [CId] -> Type -> PP.Doc
-ppType d scope (DTyp hyps cat args)
-  | null hyps = ppRes scope cat args
-  | otherwise = let (scope',hdocs) = mapAccumL (ppHypo 1) scope hyps
-                in ppParens (d > 0) (foldr (\hdoc doc -> hdoc PP.<+> PP.text "->" PP.<+> doc) (ppRes scope cat args) hdocs)
-  where
-    ppRes scope cat es
-      | null es   = ppCId cat
-      | otherwise = ppParens (d > 3) (ppCId cat PP.<+> PP.hsep (map (ppExpr 4 scope) es))
-
-ppHypo :: Int -> [CId]-> (BindType,CId,Type) -> ([CId],PP.Doc)
-ppHypo d scope (Explicit,x,typ) =
-    if x == wildCId
-    then (scope, ppType d scope typ)
-    else let y = freshName x scope
-         in (y:scope, PP.parens (ppCId x PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
-ppHypo d scope (Implicit,x,typ) =
-    if x == wildCId
-    then (scope,PP.parens (PP.braces (ppCId x) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
-    else let y = freshName x scope
-         in (y:scope,PP.parens (PP.braces (ppCId x) PP.<+> PP.char ':' PP.<+> ppType 0 scope typ))
-
-freshName :: CId -> [CId] -> CId
-freshName x xs0 = loop 1 x
-  where
-    xs = wildCId : xs0
-
-    loop i y
-      | elem y xs = loop (i+1) (x++show i)
-      | otherwise = y
-
-ppParens True  = PP.parens
-ppParens False = id
+newPrintCtxt :: [String] -> Ptr GuPool -> IO (Ptr PgfPrintContext)
+newPrintCtxt []     pool = return nullPtr
+newPrintCtxt (x:xs) pool = do
+  pctxt <- gu_malloc pool (#size PgfPrintContext)
+  newUtf8CString x  pool >>= (#poke PgfPrintContext, name) pctxt
+  newPrintCtxt   xs pool >>= (#poke PgfPrintContext, next) pctxt
+  return pctxt

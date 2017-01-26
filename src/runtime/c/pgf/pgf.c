@@ -86,24 +86,35 @@ pgf_iter_categories(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 	}
 }
 
-PgfCId
-pgf_start_cat(PgfPGF* pgf)
+PgfType*
+pgf_start_cat(PgfPGF* pgf, GuPool* pool)
 {
 	PgfFlag* flag =
 		gu_seq_binsearch(pgf->abstract.aflags, pgf_flag_order, PgfFlag, "startcat");
 
-	if (flag == NULL)
-		return "S";
-
-	GuVariantInfo i = gu_variant_open(flag->value);
-	switch (i.tag) {
-	case PGF_LITERAL_STR: {
-		PgfLiteralStr *lstr = (PgfLiteralStr *) i.data;
-		return lstr->val;
+	if (flag != NULL) {
+		GuVariantInfo i = gu_variant_open(flag->value);
+		switch (i.tag) {
+		case PGF_LITERAL_STR: {
+			PgfLiteralStr *lstr = (PgfLiteralStr *) i.data;
+			
+			GuPool* tmp_pool = gu_local_pool();
+			GuIn* in = gu_string_in(lstr->val,tmp_pool);
+			GuExn* err = gu_new_exn(tmp_pool);
+			PgfType *type = pgf_read_type(in, pool, err);
+			if (!gu_ok(err))
+				break;
+			gu_pool_free(tmp_pool);
+			return type;
+		}
+		}
 	}
-	}
 
-	return "S";
+	PgfType* type = gu_new_flex(pool, PgfType, exprs, 0);
+	type->hypos   = gu_empty_seq();
+	type->cid     = "S";
+	type->n_exprs = 0;
+	return type;
 }
 
 GuString

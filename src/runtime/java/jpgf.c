@@ -156,7 +156,11 @@ Java_org_grammaticalframework_pgf_PGF_getAbstractName(JNIEnv* env, jobject self)
 JNIEXPORT jstring JNICALL
 Java_org_grammaticalframework_pgf_PGF_getStartCat(JNIEnv* env, jobject self)
 {
-	return gu2j_string(env, pgf_start_cat(get_ref(env, self)));
+	GuPool* tmp_pool = gu_local_pool();
+	PgfType* type = pgf_start_cat(get_ref(env, self), tmp_pool);
+	jstring jcat = gu2j_string(env, type->cid);
+	gu_pool_free(tmp_pool);
+	return jcat;
 }
 
 JNIEXPORT jobject JNICALL
@@ -570,8 +574,13 @@ Java_org_grammaticalframework_pgf_Parser_parseWithHeuristics
     GuString s = j2gu_string(env, js, pool);
     GuExn* parse_err = gu_new_exn(pool);
 
+	PgfType* type = gu_new_flex(pool, PgfType, exprs, 0);
+	type->hypos   = gu_empty_seq();
+	type->cid     = startCat;
+	type->n_exprs = 0;
+
 	GuEnum* res =
-		pgf_parse_with_heuristics(get_ref(env, jconcr), startCat, s, heuristics, l2p(callbacksRef), parse_err, pool, out_pool);
+		pgf_parse_with_heuristics(get_ref(env, jconcr), type, s, heuristics, l2p(callbacksRef), parse_err, pool, out_pool);
 
 	if (!gu_ok(parse_err)) {
 		if (gu_exn_caught(parse_err, PgfExn)) {
@@ -606,8 +615,13 @@ Java_org_grammaticalframework_pgf_Completer_complete(JNIEnv* env, jclass clazz, 
     GuString prefix = j2gu_string(env, jprefix, pool);
     GuExn* parse_err = gu_new_exn(pool);
 
+	PgfType* type = gu_new_flex(pool, PgfType, exprs, 0);
+	type->hypos   = gu_empty_seq();
+	type->cid     = startCat;
+	type->n_exprs = 0;
+
 	GuEnum* res =
-		pgf_complete(get_ref(env, jconcr), startCat, s, prefix, parse_err, pool);
+		pgf_complete(get_ref(env, jconcr), type, s, prefix, parse_err, pool);
 
 	if (!gu_ok(parse_err)) {
 		if (gu_exn_caught(parse_err, PgfExn)) {
@@ -1290,8 +1304,13 @@ Java_org_grammaticalframework_pgf_Generator_generateAll(JNIEnv* env, jclass claz
     GuString startCat = j2gu_string(env, jstartCat, pool);
     GuExn* err = gu_exn(pool);
 
+	PgfType* type = gu_new_flex(pool, PgfType, exprs, 0);
+	type->hypos   = gu_empty_seq();
+	type->cid     = startCat;
+	type->n_exprs = 0;
+
 	GuEnum* res =
-		pgf_generate_all(get_ref(env, jpgf), startCat, err, pool, out_pool);
+		pgf_generate_all(get_ref(env, jpgf), type, err, pool, out_pool);
 	if (res == NULL) {
 		throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The generation failed");
 		gu_pool_free(pool);

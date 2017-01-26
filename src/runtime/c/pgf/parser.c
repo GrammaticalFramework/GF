@@ -2106,16 +2106,16 @@ pgf_parsing_last_token(PgfParsing* ps, GuPool* pool)
 }
 
 GuEnum*
-pgf_parse(PgfConcr* concr, PgfCId cat, GuString sentence,
+pgf_parse(PgfConcr* concr, PgfType* typ, GuString sentence,
           GuExn* err, 
           GuPool* pool, GuPool* out_pool)
 {
 	PgfCallbacksMap* callbacks = pgf_new_callbacks_map(concr, out_pool); 
-    return pgf_parse_with_heuristics(concr, cat, sentence, -1.0, callbacks, err, pool, out_pool);
+    return pgf_parse_with_heuristics(concr, typ, sentence, -1.0, callbacks, err, pool, out_pool);
 }
 
 GuEnum*
-pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, GuString sentence,
+pgf_parse_with_heuristics(PgfConcr* concr, PgfType* typ, GuString sentence,
                           double heuristics,
                           PgfCallbacksMap* callbacks,
                           GuExn* err,
@@ -2132,7 +2132,7 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, GuString sentence,
 
 	// Begin parsing a sentence with the specified category
 	PgfParsing* ps =
-		pgf_parsing_init(concr, cat, 0, sentence, heuristics, callbacks, NULL, err, pool, out_pool);
+		pgf_parsing_init(concr, typ->cid, 0, sentence, heuristics, callbacks, NULL, err, pool, out_pool);
 	if (ps == NULL) {
 		return NULL;
 	}
@@ -2159,7 +2159,7 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfCId cat, GuString sentence,
 }
 
 PgfExprEnum*
-pgf_parse_with_oracle(PgfConcr* concr, PgfCId cat,
+pgf_parse_with_oracle(PgfConcr* concr, PgfType* typ,
                       GuString sentence,
                       PgfOracleCallback* oracle,
                       GuExn* err,
@@ -2177,7 +2177,7 @@ pgf_parse_with_oracle(PgfConcr* concr, PgfCId cat,
 	// Begin parsing a sentence with the specified category
 	PgfCallbacksMap* callbacks = pgf_new_callbacks_map(concr, out_pool); 
 	PgfParsing* ps =
-		pgf_parsing_init(concr, cat, 0, sentence, -1, callbacks, oracle, err, pool, out_pool);
+		pgf_parsing_init(concr, typ->cid, 0, sentence, -1, callbacks, oracle, err, pool, out_pool);
 	if (ps == NULL) {
 		return NULL;
 	}
@@ -2223,7 +2223,7 @@ pgf_parser_completions_next(GuEnum* self, void* to, GuPool* pool)
 }
 
 GuEnum*
-pgf_complete(PgfConcr* concr, PgfCId cat, GuString sentence, 
+pgf_complete(PgfConcr* concr, PgfType* type, GuString sentence, 
              GuString prefix, GuExn *err, GuPool* pool)
 {
 	if (concr->sequences == NULL ||
@@ -2239,7 +2239,7 @@ pgf_complete(PgfConcr* concr, PgfCId cat, GuString sentence,
 	PgfCallbacksMap* callbacks =
 		pgf_new_callbacks_map(concr, pool);
 	PgfParsing* ps =
-		pgf_parsing_init(concr, cat, 0, sentence, -1.0, callbacks, NULL, err, pool, pool);
+		pgf_parsing_init(concr, type->cid, 0, sentence, -1.0, callbacks, NULL, err, pool, pool);
 	if (ps == NULL) {
 		return NULL;
 	}
