@@ -61,6 +61,8 @@ gu_exn_type_PgfExn = Ptr "PgfExn"# :: CString
 
 gu_exn_type_PgfParseError = Ptr "PgfParseError"# :: CString
 
+gu_exn_type_PgfTypeError = Ptr "PgfTypeError"# :: CString
+
 foreign import ccall "gu/string.h gu_string_in"
   gu_string_in :: CString -> Ptr GuPool -> IO (Ptr GuIn)
 
@@ -289,6 +291,16 @@ foreign import ccall "pgf/pgf.h pgf_expr_unlit"
 
 foreign import ccall "pgf/expr.h pgf_expr_arity"
   pgf_expr_arity :: PgfExpr -> IO CInt
+
+foreign import ccall "pgf/expr.h pgf_check_expr"
+  pgf_check_expr :: Ptr PgfPGF -> Ptr PgfExpr -> PgfType -> Ptr GuExn -> Ptr GuPool -> IO ()
+
+foreign import ccall "pgf/expr.h pgf_infer_expr"
+  pgf_infer_expr :: Ptr PgfPGF -> Ptr PgfExpr -> Ptr GuExn -> Ptr GuPool -> IO PgfType
+
+foreign import ccall "pgf/expr.h pgf_check_type"
+  pgf_check_type :: Ptr PgfPGF -> Ptr PgfType -> Ptr GuExn -> Ptr GuPool -> IO ()
+
 
 foreign import ccall "pgf/expr.h pgf_print_expr"
   pgf_print_expr :: PgfExpr -> Ptr PgfPrintContext -> CInt -> Ptr GuOut -> Ptr GuExn -> IO ()

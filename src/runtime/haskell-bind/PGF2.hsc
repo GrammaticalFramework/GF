@@ -42,6 +42,9 @@ module PGF2 (-- * PGF
              readType, showType,
              mkType, unType,
 
+             -- ** Type checking
+             checkExpr, inferExpr, checkType,
+
              -- * Concrete syntax
              ConcName,Concr,languages,
              -- ** Linearization
@@ -66,7 +69,7 @@ module PGF2 (-- * PGF
             ) where
 
 import Prelude hiding (fromEnum)
-import Control.Exception(Exception,throwIO)
+import Control.Exception(Exception,throwIO,throw)
 import Control.Monad(forM_)
 import System.IO.Unsafe(unsafePerformIO,unsafeInterleaveIO)
 import Text.PrettyPrint
@@ -202,6 +205,79 @@ functionType p fn =
     if c_type == nullPtr
       then throwIO (PGFError ("Function '"++fn++"' is not defined"))
       else return (Type c_type (pgfMaster p))
+
+-- | Checks an expression against a specified type.
+checkExpr :: PGF -> Expr -> Type -> Either String Expr
+checkExpr (PGF p _) (Expr c_expr _) (Type c_ty _) =
+  unsafePerformIO $
+  alloca $ \pexpr ->
+  withGuPool $ \tmpPl -> do
+    exn <- gu_new_exn tmpPl
+    exprPl <- gu_new_pool
+    poke pexpr c_expr
+    pgf_check_expr p pexpr c_ty exn exprPl
+    status <- gu_exn_is_raised exn
+    if not status
+      then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+              c_expr <- peek pexpr
+              return (Right (Expr c_expr exprFPl))
+      else do is_tyerr <- gu_exn_caught exn gu_exn_type_PgfTypeError
+              c_msg <- (#peek GuExn, data.data) exn
+              msg <- peekUtf8CString c_msg
+              gu_pool_free exprPl
+              if is_tyerr
+                then return (Left msg)
+                else throw (PGFError msg)
+
+-- | Tries to infer the type of an expression. Note that
+-- even if the expression is type correct it is not always
+-- possible to infer its type in the GF type system.
+-- In this case the function returns an error.
+inferExpr :: PGF -> Expr -> Either String (Expr, Type)
+inferExpr (PGF p _) (Expr c_expr _) =
+  unsafePerformIO $
+  alloca $ \pexpr ->
+  withGuPool $ \tmpPl -> do
+    exn <- gu_new_exn tmpPl
+    exprPl <- gu_new_pool
+    poke pexpr c_expr
+    c_ty <- pgf_infer_expr p pexpr exn exprPl
+    status <- gu_exn_is_raised exn
+    if not status
+      then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+              c_expr <- peek pexpr
+              return (Right (Expr c_expr exprFPl, Type c_ty exprFPl))
+      else do is_tyerr <- gu_exn_caught exn gu_exn_type_PgfTypeError
+              c_msg <- (#peek GuExn, data.data) exn
+              msg <- peekUtf8CString c_msg
+              gu_pool_free exprPl
+              if is_tyerr
+                then return (Left msg)
+                else throw (PGFError msg)
+
+-- | Check whether a type is consistent with the abstract
+-- syntax of the grammar.
+checkType :: PGF -> Type -> Either String Type
+checkType (PGF p _) (Type c_ty _) =
+  unsafePerformIO $
+  alloca $ \pty ->
+  withGuPool $ \tmpPl -> do
+    exn <- gu_new_exn tmpPl
+    typePl <- gu_new_pool
+    poke pty c_ty
+    pgf_check_type p pty exn typePl
+    status <- gu_exn_is_raised exn
+    if not status
+      then do typeFPl <- newForeignPtr gu_pool_finalizer typePl
+              c_ty <- peek pty
+              return (Right (Type c_ty typeFPl))
+      else do is_tyerr <- gu_exn_caught exn gu_exn_type_PgfTypeError
+              c_msg <- (#peek GuExn, data.data) exn
+              msg <- peekUtf8CString c_msg
+              gu_pool_free typePl
+              if is_tyerr
+                then return (Left msg)
+                else throw (PGFError msg)
 
 -----------------------------------------------------------------------------
 -- Graphviz
