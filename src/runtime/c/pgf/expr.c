@@ -98,6 +98,46 @@ pgf_expr_apply(PgfApplication* app, GuPool* pool)
 }
 
 PgfExpr
+pgf_expr_abs(PgfBindType bind_type, PgfCId id, PgfExpr body, GuPool* pool)
+{
+	return gu_new_variant_i(pool, 
+				            PGF_EXPR_ABS, PgfExprAbs,
+						    .bind_type = bind_type,
+						    .id = id,
+						    .body = body);
+}
+
+PgfExprAbs*
+pgf_expr_unabs(PgfExpr expr)
+{
+	GuVariantInfo i = gu_variant_open(expr);
+	if (i.tag == PGF_EXPR_ABS) {
+		return (PgfExprAbs*) i.data;
+	}
+
+	return NULL;
+}
+
+PgfExpr
+pgf_expr_meta(int id, GuPool* pool)
+{
+	return gu_new_variant_i(pool, 
+				            PGF_EXPR_META, PgfExprMeta,
+						    .id = id);
+}
+
+PgfExprMeta*
+pgf_expr_unmeta(PgfExpr expr)
+{
+	GuVariantInfo i = gu_variant_open(expr);
+	if (i.tag == PGF_EXPR_META) {
+		return (PgfExprMeta*) i.data;
+	}
+
+	return NULL;
+}
+
+PgfExpr
 pgf_expr_string(GuString str, GuPool* pool)
 {
 	PgfLiteral lit;
@@ -141,6 +181,22 @@ pgf_expr_float(double val, GuPool* pool)
 	                        PGF_EXPR_LIT,
 	                        PgfExprLit,
 	                        lit);
+}
+
+void*
+pgf_expr_unlit(PgfExpr expr, int lit_tag)
+{
+	expr = pgf_expr_unwrap(expr);
+	GuVariantInfo i = gu_variant_open(expr);
+	if (i.tag == PGF_EXPR_LIT) {
+		PgfExprLit* elit = i.data;
+		GuVariantInfo i2 = gu_variant_open(elit->lit);
+		if (i2.tag == lit_tag) {
+			return i2.data;
+		}
+	}
+		
+	return NULL;
 }
 
 typedef struct PgfExprParser PgfExprParser;

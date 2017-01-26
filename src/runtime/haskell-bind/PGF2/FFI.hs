@@ -266,6 +266,12 @@ foreign import ccall "pgf/pgf.h pgf_expr_abs"
 foreign import ccall "pgf/pgf.h pgf_expr_unabs"
   pgf_expr_unabs :: PgfExpr -> IO (Ptr a)
 
+foreign import ccall "pgf/pgf.h pgf_expr_meta"
+  pgf_expr_meta :: CInt -> Ptr GuPool -> IO PgfExpr
+
+foreign import ccall "pgf/pgf.h pgf_expr_unmeta"
+  pgf_expr_unmeta :: PgfExpr -> IO (Ptr a)
+
 foreign import ccall "pgf/pgf.h pgf_expr_string"
   pgf_expr_string :: CString -> Ptr GuPool -> IO PgfExpr
 

@@ -31,7 +31,12 @@ module PGF2 (-- * PGF
              Fun,functions, functionsByCat, functionType, hasLinearization,
              -- ** Expressions
              Expr,showExpr,readExpr,
-             mkAbs,unAbs,mkApp,unApp,mkStr,unStr,mkInt,unInt,mkFloat,unFloat,
+             mkAbs,unAbs,
+             mkApp,unApp,
+             mkStr,unStr,
+             mkInt,unInt,
+             mkFloat,unFloat,
+             mkMeta,unMeta,
              -- ** Types
              Type(..), Hypo, BindType(..), startCat, showType,
 

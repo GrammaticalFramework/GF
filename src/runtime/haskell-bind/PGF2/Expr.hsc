@@ -152,6 +152,25 @@ unFloat (Expr expr master) =
       else do n <- peek (plit `plusPtr` (#offset PgfLiteralFlt, val))
               return (Just (realToFrac (n :: CDouble)))
 
+-- | Constructs a meta variable as an expression
+mkMeta :: Int -> Expr
+mkMeta id =
+  unsafePerformIO $ do
+      exprPl <- gu_new_pool
+      c_expr <- pgf_expr_meta (fromIntegral id) exprPl
+      exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+      return (Expr c_expr exprFPl)
+
+-- | Decomposes an expression into a meta variable
+unMeta :: Expr -> Maybe Int
+unMeta (Expr expr master) =
+  unsafePerformIO $ do
+      c_meta <- pgf_expr_unmeta expr
+      if c_meta == nullPtr
+        then return Nothing
+        else do id <- (#peek PgfExprMeta, id) c_meta
+                return (Just (fromIntegral (id :: CInt)))
+
 -- | parses a 'String' as an expression
 readExpr :: String -> Maybe Expr
 readExpr str =

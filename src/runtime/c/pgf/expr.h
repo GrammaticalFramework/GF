@@ -147,6 +147,12 @@ PgfExpr
 pgf_expr_apply(PgfApplication*, GuPool* pool);
 
 PgfExpr
+pgf_expr_abs(PgfBindType bind_type, PgfCId id, PgfExpr body, GuPool* pool);
+
+PgfExprAbs*
+pgf_expr_unabs(PgfExpr expr);
+
+PgfExpr
 pgf_expr_string(GuString, GuPool* pool);
 
 PgfExpr
@@ -154,6 +160,15 @@ pgf_expr_int(int val, GuPool* pool);
 
 PgfExpr
 pgf_expr_float(double val, GuPool* pool);
+
+void*
+pgf_expr_unlit(PgfExpr expr, int lit_tag);
+
+PgfExpr
+pgf_expr_meta(int id, GuPool* pool);
+
+PgfExprMeta*
+pgf_expr_unmeta(PgfExpr expr);
 
 PgfExpr
 pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err);
