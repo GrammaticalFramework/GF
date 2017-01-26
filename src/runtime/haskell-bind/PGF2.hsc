@@ -628,8 +628,24 @@ functionsByCat p cat =
 -- The categories are defined in the abstract syntax
 -- with the \'cat\' keyword.
 categories :: PGF -> [Cat]
-categories pgf = -- !!! quick hack
-    nub [cat | f<-functions pgf, let (_, cat, _) = unType (functionType pgf f)]
+categories p =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+    allocaBytes (#size GuMapItor) $ \itor -> do
+      exn <- gu_new_exn tmpPl
+      ref <- newIORef []
+      fptr <- wrapMapItorCallback (getCategories ref)
+      (#poke GuMapItor, fn) itor fptr
+      pgf_iter_categories (pgf p) itor exn
+      freeHaskellFunPtr fptr
+      cs <- readIORef ref
+      return (reverse cs)
+  where
+    getCategories :: IORef [String] -> MapItorCallback
+    getCategories ref itor key value exn = do
+      names <- readIORef ref
+      name  <- peekUtf8CString (castPtr key)
+      writeIORef ref $! (name : names)
 
 categoryContext :: PGF -> Cat -> Maybe [Hypo]
 categoryContext pgf cat = Nothing -- !!! not implemented yet TODO
