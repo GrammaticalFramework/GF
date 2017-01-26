@@ -44,6 +44,8 @@ module PGF2 (-- * PGF
              ConcName,Concr,languages,
              -- ** Linearization
              linearize,linearizeAll,
+             FId, LIndex, BracketedString(..), showBracketedString, flattenBracketedString,
+
              alignWords,
              -- ** Parsing
              parse, parseWithHeuristics,
@@ -65,6 +67,7 @@ import Prelude hiding (fromEnum)
 import Control.Exception(Exception,throwIO)
 import Control.Monad(forM_)
 import System.IO.Unsafe(unsafePerformIO,unsafeInterleaveIO)
+import Text.PrettyPrint
 import PGF2.Expr
 import PGF2.FFI
 
@@ -540,6 +543,43 @@ linearizeAll lang e = unsafePerformIO $
                 throwIO (PGFError msg)
         else do gu_pool_free pl
                 throwIO (PGFError "The abstract tree cannot be linearized")
+
+type FId    = Int
+type LIndex = Int
+
+-- | BracketedString represents a sentence that is linearized
+-- as usual but we also want to retain the ''brackets'' that
+-- mark the beginning and the end of each constituent.
+data BracketedString
+  = Leaf String                                                                -- ^ this is the leaf i.e. a single token
+  | Bracket CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex CId [BracketedString]
+                                                                               -- ^ this is a bracket. The 'CId' is the category of
+                                                                               -- the phrase. The 'FId' is an unique identifier for
+                                                                               -- every phrase in the sentence. For context-free grammars
+                                                                               -- i.e. without discontinuous constituents this identifier
+                                                                               -- is also unique for every bracket. When there are discontinuous 
+                                                                               -- phrases then the identifiers are unique for every phrase but
+                                                                               -- not for every bracket since the bracket represents a constituent.
+                                                                               -- The different constituents could still be distinguished by using
+                                                                               -- the constituent index i.e. 'LIndex'. If the grammar is reduplicating
+                                                                               -- then the constituent indices will be the same for all brackets
+                                                                               -- that represents the same constituent.
+                                                                               -- The second 'CId' is the name of the abstract function that generated
+                                                                               -- this phrase.
+
+-- | Renders the bracketed string as a string where 
+-- the brackets are shown as @(S ...)@ where
+-- @S@ is the category.
+showBracketedString :: BracketedString -> String
+showBracketedString = render . ppBracketedString
+
+ppBracketedString (Leaf t) = text t
+ppBracketedString (Bracket cat fid index _ bss) = parens (ppCId cat <> colon <> int fid <+> hsep (map ppBracketedString bss))
+
+-- | Extracts the sequence of tokens from the bracketed string
+flattenBracketedString :: BracketedString -> [String]
+flattenBracketedString (Leaf w)              = [w]
+flattenBracketedString (Bracket _ _ _ _ bss) = concatMap flattenBracketedString bss
 
 alignWords :: Concr -> Expr -> [(String, [Int])]
 alignWords lang e = unsafePerformIO $
