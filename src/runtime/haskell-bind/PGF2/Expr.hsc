@@ -73,6 +73,16 @@ mkStr str =
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
       return (Expr c_expr exprFPl)
 
+-- | Decomposes an expression into a string literal
+unStr :: Expr -> Maybe String
+unStr (Expr expr master) =
+  unsafePerformIO $ do
+    plit <- pgf_expr_unlit expr (#const PGF_LITERAL_STR)
+    if plit == nullPtr
+      then return Nothing
+      else do s <- peekUtf8CString (plit `plusPtr` (#offset PgfLiteralStr, val))
+              return (Just s)
+
 -- | Constructs an expression from an integer literal
 mkInt :: Int -> Expr
 mkInt val =
@@ -82,6 +92,16 @@ mkInt val =
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
       return (Expr c_expr exprFPl)
 
+-- | Decomposes an expression into an integer literal
+unInt :: Expr -> Maybe Int
+unInt (Expr expr master) =
+  unsafePerformIO $ do
+    plit <- pgf_expr_unlit expr (#const PGF_LITERAL_INT)
+    if plit == nullPtr
+      then return Nothing
+      else do n <- peek (plit `plusPtr` (#offset PgfLiteralInt, val))
+              return (Just (fromIntegral (n :: CInt)))
+
 -- | Constructs an expression from a real number
 mkFloat :: Double -> Expr
 mkFloat val =
@@ -90,6 +110,16 @@ mkFloat val =
       c_expr <- pgf_expr_float (realToFrac val) exprPl
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
       return (Expr c_expr exprFPl)
+
+-- | Decomposes an expression into a real number literal
+unFloat :: Expr -> Maybe Double
+unFloat (Expr expr master) =
+  unsafePerformIO $ do
+    plit <- pgf_expr_unlit expr (#const PGF_LITERAL_FLT)
+    if plit == nullPtr
+      then return Nothing
+      else do n <- peek (plit `plusPtr` (#offset PgfLiteralFlt, val))
+              return (Just (realToFrac (n :: CDouble)))
 
 -- | parses a 'String' as an expression
 readExpr :: String -> Maybe Expr

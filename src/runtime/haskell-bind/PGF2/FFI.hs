@@ -266,6 +266,9 @@ foreign import ccall "pgf/pgf.h pgf_expr_int"
 foreign import ccall "pgf/pgf.h pgf_expr_float"
   pgf_expr_float :: CDouble -> Ptr GuPool -> IO PgfExpr
 
+foreign import ccall "pgf/pgf.h pgf_expr_unlit"
+  pgf_expr_unlit :: PgfExpr -> CInt -> IO (Ptr a)
+
 foreign import ccall "pgf/pgf.h pgf_expr_unapply"
   pgf_expr_unapply :: PgfExpr -> Ptr GuPool -> IO (Ptr PgfApplication)
 
