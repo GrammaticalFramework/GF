@@ -45,6 +45,9 @@ module PGF2 (-- * PGF
              -- ** Type checking
              checkExpr, inferExpr, checkType,
 
+             -- ** Computing
+             compute,
+
              -- * Concrete syntax
              ConcName,Concr,languages,
              -- ** Linearization
@@ -278,6 +281,22 @@ checkType (PGF p _) (Type c_ty _) =
               if is_tyerr
                 then return (Left msg)
                 else throwIO (PGFError msg)
+
+compute :: PGF -> Expr -> Expr
+compute (PGF p _) (Expr c_expr _) =
+  unsafePerformIO $
+  withGuPool $ \tmpPl -> do
+    exn <- gu_new_exn tmpPl
+    exprPl <- gu_new_pool
+    c_expr <- pgf_compute p c_expr exn tmpPl exprPl
+    status <- gu_exn_is_raised exn
+    if not status
+      then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+              return (Expr c_expr exprFPl)
+      else do c_msg <- (#peek GuExn, data.data) exn
+              msg <- peekUtf8CString c_msg
+              gu_pool_free exprPl
+              throwIO (PGFError msg)
 
 -----------------------------------------------------------------------------
 -- Graphviz

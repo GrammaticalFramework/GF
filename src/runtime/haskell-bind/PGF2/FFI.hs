@@ -301,6 +301,8 @@ foreign import ccall "pgf/expr.h pgf_infer_expr"
 foreign import ccall "pgf/expr.h pgf_check_type"
   pgf_check_type :: Ptr PgfPGF -> Ptr PgfType -> Ptr GuExn -> Ptr GuPool -> IO ()
 
+foreign import ccall "pgf/expr.h pgf_compute"
+  pgf_compute :: Ptr PgfPGF -> PgfExpr -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO PgfExpr
 
 foreign import ccall "pgf/expr.h pgf_print_expr"
   pgf_print_expr :: PgfExpr -> Ptr PgfPrintContext -> CInt -> Ptr GuOut -> Ptr GuExn -> IO ()
