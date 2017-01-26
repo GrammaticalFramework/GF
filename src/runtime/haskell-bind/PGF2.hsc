@@ -69,7 +69,7 @@ module PGF2 (-- * PGF
             ) where
 
 import Prelude hiding (fromEnum)
-import Control.Exception(Exception,throwIO,throw)
+import Control.Exception(Exception,throwIO)
 import Control.Monad(forM_)
 import System.IO.Unsafe(unsafePerformIO,unsafeInterleaveIO)
 import Text.PrettyPrint
@@ -227,7 +227,7 @@ checkExpr (PGF p _) (Expr c_expr _) (Type c_ty _) =
               gu_pool_free exprPl
               if is_tyerr
                 then return (Left msg)
-                else throw (PGFError msg)
+                else throwIO (PGFError msg)
 
 -- | Tries to infer the type of an expression. Note that
 -- even if the expression is type correct it is not always
@@ -253,7 +253,7 @@ inferExpr (PGF p _) (Expr c_expr _) =
               gu_pool_free exprPl
               if is_tyerr
                 then return (Left msg)
-                else throw (PGFError msg)
+                else throwIO (PGFError msg)
 
 -- | Check whether a type is consistent with the abstract
 -- syntax of the grammar.
@@ -277,7 +277,7 @@ checkType (PGF p _) (Type c_ty _) =
               gu_pool_free typePl
               if is_tyerr
                 then return (Left msg)
-                else throw (PGFError msg)
+                else throwIO (PGFError msg)
 
 -----------------------------------------------------------------------------
 -- Graphviz
