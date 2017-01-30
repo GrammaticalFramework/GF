@@ -205,7 +205,7 @@ concrete ExtraGer of ExtraGerAbs = CatGer **
 -- "es wird gelacht"; generating formal sentences
 
   lincat
-	FClause = VP ** {subj : NP} ;
+	FClause = ResGer.VP ** {subj : ResGer.NP} ;
 
 
   lin
