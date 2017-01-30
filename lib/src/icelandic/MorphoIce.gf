@@ -306,13 +306,13 @@ resource MorphoIce = ResIce ** open Prelude, (Predef=Predef), ResIce in {
 	-- Noun Construction -- 
 	-----------------------
 
-		nForms2NeutrNoun : NForms -> N = \nfs -> nForms2Noun nfs (nForms2Suffix nfs Neutr) Neutr ;
+		nForms2NeutrNoun : NForms -> Noun = \nfs -> nForms2Noun nfs (nForms2Suffix nfs Neutr) Neutr ;
 
-		nForms2MascNoun : NForms -> N = \nfs -> nForms2Noun nfs (nForms2Suffix nfs Masc) Masc ;
+		nForms2MascNoun : NForms -> Noun = \nfs -> nForms2Noun nfs (nForms2Suffix nfs Masc) Masc ;
 
-		nForms2FemNoun : NForms -> N = \nfs -> nForms2Noun nfs (nForms2Suffix nfs Fem) Fem ;
+		nForms2FemNoun : NForms -> Noun = \nfs -> nForms2Noun nfs (nForms2Suffix nfs Fem) Fem ;
 
-		nForms2Noun : NForms -> NForms -> Gender -> N = \free,suffix,g -> {
+		nForms2Noun : NForms -> NForms -> Gender -> Noun = \free,suffix,g -> {
 				s = table {
 					Sg => table {
 						Suffix	=> caseList (suffix ! 0) (suffix ! 1) (suffix ! 2) (suffix ! 3) ;
@@ -693,7 +693,7 @@ resource MorphoIce = ResIce ** open Prelude, (Predef=Predef), ResIce in {
 	-- Adjective Construction -- 
 	----------------------------
 
-		aForms2Adjective : (x1,_,_,_,x5 : AForms) -> Str -> A = \positw,posits,compar,superlw,superls,aadv -> {
+		aForms2Adjective : (x1,_,_,_,x5 : AForms) -> Str -> Adj = \positw,posits,compar,superlw,superls,aadv -> {
 				s = table {
 					APosit Weak Sg Masc c		=> caseList (positw ! Masc ! 0) (positw ! Masc ! 1) (positw ! Masc ! 2) (positw ! Masc ! 3) ! c ;
 					APosit Weak Sg Fem c		=> caseList (positw ! Fem ! 0) (positw ! Fem ! 1) (positw ! Fem ! 2) (positw ! Fem ! 3) ! c ;
@@ -896,7 +896,7 @@ resource MorphoIce = ResIce ** open Prelude, (Predef=Predef), ResIce in {
 	-- Verb Construction -- 
 	-----------------------
 
-		vForms2Verb : Str -> MForms -> (x5,x6,x7,x8 : Str) -> (x9,x10 : AForms) -> V = 
+		vForms2Verb : Str -> MForms -> (x5,x6,x7,x8 : Str) -> (x9,x10 : AForms) -> Verb = 
 			\inf,mforms,impSg,impPl,presPart,sup,pastPartW,pastPartS -> 
 			let
 				presInd = mforms ! Indicative ! DPres ;

@@ -18,7 +18,7 @@ concrete CatIce of Cat = CommonX ** open ResIce, Prelude in {
 		Cl = ResIce.Cl ;
 
 		ClSlash = {
-			s : Tense => Anteriority => Polarity => Order => Str ;
+			s : ResIce.Tense => Anteriority => Polarity => Order => Str ;
 			c2 : Preposition
 		} ;
 
@@ -32,7 +32,7 @@ concrete CatIce of Cat = CommonX ** open ResIce, Prelude in {
 
 		--2 Questions and interrogatives
 
-		QCl = {s : Tense => Anteriority => Polarity => QForm => Str} ;
+		QCl = {s : ResIce.Tense => Anteriority => Polarity => QForm => Str} ;
 
 		IP = {
 			s : Gender => Case => Str ; 
@@ -48,7 +48,7 @@ concrete CatIce of Cat = CommonX ** open ResIce, Prelude in {
 
 		--2 Relative clauses and pronouns
 
-		RCl = {s : Tense => Anteriority => Polarity => Agr => Str} ;
+		RCl = {s : ResIce.Tense => Anteriority => Polarity => Agr => Str} ;
 
 		RP = {s : Str} ;
 
@@ -136,15 +136,15 @@ concrete CatIce of Cat = CommonX ** open ResIce, Prelude in {
 
 		--2 Words of open classes
 
-		V, VS, VQ, VA = ResIce.V;
-		VV, V2, V2A, V2S, V2Q = ResIce.V ** {c2 : Preposition} ;
-		V3, V2V = ResIce.V ** {c2,c3 : Preposition} ;
+		V, VS, VQ, VA = ResIce.Verb;
+		VV, V2, V2A, V2S, V2Q = ResIce.Verb ** {c2 : Preposition} ;
+		V3, V2V = ResIce.Verb ** {c2,c3 : Preposition} ;
 
-		A = ResIce.A ;
-		A2 = ResIce.A ** {c2 : Preposition} ;
+		A = ResIce.Adj ;
+		A2 = ResIce.Adj ** {c2 : Preposition} ;
 
-		N = ResIce.N ;
-		N2 = ResIce.N ** {c2 : Preposition} ;
-		N3 = ResIce.N ** {c2,c3 : Preposition} ;
+		N = ResIce.Noun ;
+		N2 = ResIce.Noun ** {c2 : Preposition} ;
+		N3 = ResIce.Noun ** {c2,c3 : Preposition} ;
 		PN = {s : Case => Str ; g : Gender} ;
 }

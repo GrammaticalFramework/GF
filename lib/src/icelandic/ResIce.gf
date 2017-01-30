@@ -104,7 +104,7 @@ resource ResIce = ParamX ** open Prelude in {
 
 		-- For $Nouns$
 
-		N : Type = { 
+		Noun : Type = { 
 			s : Number => Species => Case => Str ;
 			g : Gender
 		} ;
@@ -117,14 +117,14 @@ resource ResIce = ParamX ** open Prelude in {
 
 		-- For $Adjectives$
 
-		A : Type = {
+		Adj : Type = {
 			s : AForm => Str ;
 			adv : Str
 		} ;
 
 		-- For $Verb$.
 
-		V : Type = {
+		Verb : Type = {
 			s : VForm => Str ;
 			p : PForm => Str ;
 			sup : Voice => Str
@@ -143,7 +143,7 @@ resource ResIce = ParamX ** open Prelude in {
 		} ;
 
 		-- is this needed for anything else but the auxiliary verbs below?
-		mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x59 : Str) -> V =
+		mkVerb : (x1,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,x59 : Str) -> Verb =
 			\fljúga1,flýg,flýgur2,flýgur3,fljúgum,fljúgið,fljúga2,flaug1,flaugst,flaug2,flugum,fluguð,flugu,
 			fljúgi1,fljúgir,fljúgi3,fljúgumS,fljúgiðS,fljúgi,flygi1,flygir,flygi2,flygjum,flygjuð,flygju,
 			fljúgðu,fljúgið,fljúgandi,floginn,sgMascAcc,sgMascDat,sgMascGen,sgFemNom,sgFemAcc,sgFemDat,sgFemGen,
@@ -225,7 +225,7 @@ resource ResIce = ParamX ** open Prelude in {
 				<_,True>	=> s.fin ++ s.a1.p1 ++ s.inf ++ ind ++ dir ++ s.a1.p2 ++ vp.a2
 			} ;
 
-		predV : V -> VP = \v -> {
+		predV : Verb -> VP = \v -> {
 			s = \\vpform,pol,agr => case vpform of {
 				VPInf	=> vf (v.s ! VInf) [] (negation pol) False ;
 				VPImp	=> vf (v.s ! VImp Active agr.n) [] (negation pol) False ;
@@ -257,7 +257,7 @@ resource ResIce = ParamX ** open Prelude in {
 				} ;
 		} ;
 
-		vff : V -> Tense -> Anteriority -> Polarity -> Agr -> {fin,inf : Str ; a1 : Str * Str} 
+		vff : Verb -> Tense -> Anteriority -> Polarity -> Agr -> {fin,inf : Str ; a1 : Str * Str} 
 			=\v,ten,ant,pol,agr -> case <ten,ant> of {
 			-- hann sefur []/ekki - he []/doesn't sleep
 			<Pres,Simul>	=> vf (v.s ! VPres Active Indicative agr.n agr.p) [] (negation pol) False;
@@ -286,26 +286,26 @@ resource ResIce = ParamX ** open Prelude in {
 		-- participle nor does it exist in the middle voice or passive voice. Therefore, I will (for the time being)
 		-- fill in the remaining with the infinitive "vera". This goes also for the rest of the auxileries.
 
-		verbBe : V = mkVerb "vera" "er" "ert" "er" "erum" "eruð" "eru" "var" "varst" "var" "vorum" "voruð" "voru"
+		verbBe : Verb = mkVerb "vera" "er" "ert" "er" "erum" "eruð" "eru" "var" "varst" "var" "vorum" "voruð" "voru"
 					"sé" "sért" "sé" "séum" "séuð" "séu" "væri" "værir" "væri" "værum" "voruð" "væru"
 					"vertu" "verið" "verandi" "vera" "vera" "vera" "vera" "vera" "vera" "vera" "vera"
 					"vera" "vera" "vera" "vera" "vera" "vera" "vera" "vera"
 					"vera" "vera" "vera" "vera" "vera" "vera" "vera" "vera"
 					"vera" "vera" "vera" "vera" "vera" "vera" "verið" ;
 
-		verbBecome : V = mkVerb "verða" "verð" "verður" "verður" "verðum" "verðið" "verða" "varð" "varðst" "varð" "urðum" "urðuð" "urðu"
+		verbBecome : Verb = mkVerb "verða" "verð" "verður" "verður" "verðum" "verðið" "verða" "varð" "varðst" "varð" "urðum" "urðuð" "urðu"
 					"verði" "verðir" "verði" "verðum" "verðið" "verði" "yrði" "yrðir" "yrði" "yrðum" "yrðuð" "yrðu"
 					"verðið" "verðið" "verðandi" "orðinn" "orðinn" "orðnum" "orðsins" "orðin" "orðna" "orðinni" "orðinnar"
 					"orðið" "orðið" "orðnu" "orðins" "orðnir" "orðna" "orðnum" "orðinna" "orðnar" "orðnar" "orðnum" "orðinna"
 					"orðin" "orðin" "orðnum" "orðinna" "orðni" "orðna" "orðna" "orðnu" "orðna" "orðnu" "orðið" ;
 
-		verbHave : V = mkVerb "hafa" "hef" "hefur" "hefur" "höfum" "hafið" "hafa" "hafði" "hafðir" "hafði" "höfðum" "höfðuð" "höfðu"
+		verbHave : Verb = mkVerb "hafa" "hef" "hefur" "hefur" "höfum" "hafið" "hafa" "hafði" "hafðir" "hafði" "höfðum" "höfðuð" "höfðu"
 					"hafi" "hafir" "hafi" "höfðum" "hafið" "hafi" "hefði" "hefðir" "hefði" "hefðum" "hefðuð" "hefðu"
 					"hafðu" "hafið" "hafandi" "hafður" "hafðan" "höfðum" "hafðs" "höfð" "hafða" "hafðri" "hafðrar" "haft"
 					"haft" "höfðu" "hafðs" "hafðir" "hafða" "höfðum" "hafðra" "hafðar" "hafðar" "höfðum" "hafðra" "höfð"
 					"höfð" "höfðum" "hafðra" "hafa" "hafa" "hafa" "hafa" "hafa" "hafa" "haft" ;
 
-		verbWill : V = mkVerb "munu" "mun" "munt" "mun" "munum" "munuð" "munu" "munu" "munu" "munu" "munu" "munu" "munu"
+		verbWill : Verb = mkVerb "munu" "mun" "munt" "mun" "munum" "munuð" "munu" "munu" "munu" "munu" "munu" "munu" "munu"
 					"muni" "munir" "muni" "munum" "munið" "muni" "myndi" "myndir" "myndi" "myndum" "mynduð" "myndu"
 					"munu" "munu" "munu" "munu" "munu" "munu" "munu" "munu" "munu" "munu" "munu" "munu"
 					"munu" "munu" "munu" "munu" "munu" "munu" "munu" "munu" "munu" "munu" "munu" "munu"
@@ -313,7 +313,7 @@ resource ResIce = ParamX ** open Prelude in {
 
 		-- Not really an axuilary verb but then again there is no exclusive club of axuilary verbs in Icelandic (or so have I been told).
 		-- verbLet is nevertheless needed in Idiom. - or is it?
-		verbLet : V = mkVerb "láta" "læt" "lætur" "lætur" "látum" "látið" "láta" "lét" "lést" "lét" "létum" "létuð" "létu"
+		verbLet : Verb = mkVerb "láta" "læt" "lætur" "lætur" "látum" "látið" "láta" "lét" "lést" "lét" "létum" "létuð" "létu"
 					"láti" "látir" "láti" "látum" "látið" "láti" "léti" "létir" "léti" "létum" "létuð" "létu" "láttu" "látið"
 					"látandi" "látinn" "látinn" "látnum" "látins" "látin" "látna" "látinni" "látinnar" "látið" "látið"
 					"látnu" "látins" "látnir" "látna" "látnum" "látinna" "látnar" "látnar" "látnum" "látinnar" "látin"
