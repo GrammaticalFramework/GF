@@ -130,7 +130,7 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
         acn = DetCN (DetQuant IndefArt NumSg) cn
       in {
         s = table {
-          NPCase Nom | NPAcc => acn.s ! NPCase Part ;
+          NPCase Nom | NPAcc => acn.s ! NPCase ResEst.Part ;
           c => acn.s ! c
           } ; 
         a = acn.a ;
