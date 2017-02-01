@@ -4810,7 +4810,7 @@ instance Gf GQuestion where
       DTr [] (AC (CId "Prime")) [x1] -> GPrime (fg x1)
       _ -> error ("no Question " ++ show t)
 ```
-For the programmer, it is enougo to know:
+For the programmer, it is enough to know:
 - all GF names are in Haskell prefixed with ``G``
 - ``gf`` translates from Haskell objects to GF trees
 - ``fg`` translates from GF trees to Haskell objects
