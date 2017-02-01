@@ -339,8 +339,8 @@ as explained <a href="#oldgf">here</a>.
 Every source file, suffixed <CODE>.gf</CODE>, is compiled to a "GF object file",
 suffixed <CODE>.gfo</CODE> (as of GF Version 3.0 and later). For runtime grammar objects
 used for parsing and linearization, a set of <CODE>.gfo</CODE> files is linked to
-a single file suffixed <CODE>.gfcc</CODE>. While <CODE>.gf</CODE> and <CODE>.gfo</CODE> files may contain
-modules of any kinds, a <CODE>.gfcc</CODE> file always contains a multilingual grammar
+a single file suffixed <CODE>.pgf</CODE>. While <CODE>.gf</CODE> and <CODE>.gfo</CODE> files may contain
+modules of any kinds, a <CODE>.pgf</CODE> file always contains a multilingual grammar
 with one abstract and a set of concrete syntaxes.
 </P>
 <P>
@@ -358,10 +358,10 @@ The following diagram summarizes the files involved in the compilation process.
 ==>
 </P>
 <P>
-grammar.gfcc
+grammar.pgf
 </center>
 Both <CODE>.gf</CODE> and <CODE>.gfo</CODE> files are written in the GF source language;
-<CODE>.gfcc</CODE> files are written in a lower-level format. The process of translating
+<CODE>.pgf</CODE> files are written in a lower-level format. The process of translating
 <CODE>.gf</CODE> to <CODE>.gfo</CODE> consists of <B>name resolution</B>, <B>type annotation</B>,
 <B>partial evaluation</B>, and <B>optimization</B>. 
 There is a great advantage in the possibility to do this
@@ -3151,7 +3151,7 @@ modules, and therefore does not need to be opened explicitly.
 </P>
 <P>
 The flag <CODE>coding</CODE> in concrete syntax sets the <B>character encoding</B>
-used in the grammar. Internally, GF uses unicode, and <CODE>.gfcc</CODE> files
+used in the grammar. Internally, GF uses unicode, and <CODE>.pgf</CODE> files
 are always written in UTF8 encoding. The presence of the flag
 <CODE>coding=utf8</CODE> prevents GF from encoding an already encoded
 file.
