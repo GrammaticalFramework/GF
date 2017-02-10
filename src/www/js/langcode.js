@@ -17,11 +17,13 @@ var languages =
 	var ls
 	//  [ISO-639-2 code "/"] language name ":" ISO 639-1 code
 	ls=["Afrikaans:af","Amharic:am","Arabic:ar","Bulgarian:bg","Catalan:ca",
-	    "Chinese:zh","Danish:da","Dutch:nl","English:en","Estonian:et",
-	    "Finnish:fi","French:fr","German:de","Greek:el","Hindi:hi",
-	    "Ina/Interlingua:ia","Italian:it","Jpn/Japanese:ja","Latin:la",
-	    "Lav/Latvian:lv","Mlt/Maltese:mt","Mongolian:mn",
-	    "Norwegian:nb","Pes/Persian:fa","Polish:pl","Pnb/Punjabi:pa",
+	    "Chinese:zh","Czech:cs","Danish:da","Dutch:nl","English:en",
+	    "Estonian:et","Finnish:fi","French:fr","German:de","Greek:el",
+	    "Hebrew:he","Hindi:hi","Ina/Interlingua:ia",
+	    "Icelandic:is","Gle/Irish:ga","Italian:it","Jpn/Japanese:ja",
+	    "Latin:la","Lav/Latvian:lv","Mlt/Maltese:mt","Mongolian:mn",
+	    "Nepali:ne","Norwegian:nb","Pes/Persian:fa","Polish:pl",
+	    "Portuguese:pt","Pnb/Punjabi:pa",
 	    "Ron/Romanian:ro","Russian:ru","Snd/Sindhi:sd","Spanish:es",
 	    "Swedish:sv","Thai:th","Turkish:tr","Urdu:ur"]
 	// GF uses nonstd 3-letter codes? Pes/Persian:fa, Pnb/Punjabi:pa
