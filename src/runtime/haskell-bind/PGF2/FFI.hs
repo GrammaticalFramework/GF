@@ -10,10 +10,12 @@ import Control.Exception
 import GHC.Ptr
 import Data.Int(Int32)
 
+type Touch = IO ()
+
 -- | An abstract data type representing multilingual grammar
 -- in Portable Grammar Format.
-data PGF = PGF {pgf :: Ptr PgfPGF, pgfMaster :: ForeignPtr GuPool}
-data Concr = Concr {concr :: Ptr PgfConcr, concrMaster :: PGF}
+data PGF = PGF {pgf :: Ptr PgfPGF, touchPGF :: Touch}
+data Concr = Concr {concr :: Ptr PgfConcr, touchConcr :: Touch}
 
 ------------------------------------------------------------------
 -- libgu API

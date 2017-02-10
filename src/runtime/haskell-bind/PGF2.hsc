@@ -124,8 +124,8 @@ readPGF fpath =
                              else do gu_pool_free pool
                                      throwIO (PGFError "The grammar cannot be loaded")
                    else return pgf
-     master <- newForeignPtr gu_pool_finalizer pool
-     return PGF {pgf = pgf, pgfMaster = master}
+     pgfFPtr <- newForeignPtr gu_pool_finalizer pool
+     return (PGF pgf (touchForeignPtr pgfFPtr))
 
 -- | List of all languages available in the grammar.
 languages :: PGF -> Map.Map ConcName Concr
@@ -143,7 +143,7 @@ languages p =
     getLanguages ref itor key value exn = do
       langs <- readIORef ref
       name  <- peekUtf8CString (castPtr key)
-      concr <- fmap (\ptr -> Concr ptr p) $ peek (castPtr value)
+      concr <- fmap (\ptr -> Concr ptr (touchPGF p)) $ peek (castPtr value)
       writeIORef ref $! Map.insert name concr langs
 
 -- | Generates an exhaustive possibly infinite list of
@@ -158,7 +158,7 @@ generateAll p (Type ctype _) =
        enum   <- pgf_generate_all (pgf p) ctype exn genPl exprPl
        genFPl  <- newForeignPtr gu_pool_finalizer genPl
        exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-       fromPgfExprEnum enum genFPl (p,exprFPl)
+       fromPgfExprEnum enum genFPl (touchPGF p >> touchForeignPtr exprFPl)
 
 -- | The abstract language name is the name of the top-level
 -- abstract module
@@ -174,7 +174,8 @@ startCat :: PGF -> Type
 startCat p = unsafePerformIO $ do
   typPl <- gu_new_pool
   c_type <- pgf_start_cat (pgf p) typPl
-  return (Type c_type typPl)
+  typeFPl <- newForeignPtr gu_pool_finalizer typPl
+  return (Type c_type (touchForeignPtr typeFPl))
 
 loadConcr :: Concr -> FilePath -> IO ()
 loadConcr c fpath =
@@ -207,11 +208,11 @@ functionType p fn =
     c_type <- pgf_function_type (pgf p) c_fn
     if c_type == nullPtr
       then throwIO (PGFError ("Function '"++fn++"' is not defined"))
-      else return (Type c_type (pgfMaster p))
+      else return (Type c_type (touchPGF p))
 
 -- | Checks an expression against a specified type.
 checkExpr :: PGF -> Expr -> Type -> Either String Expr
-checkExpr (PGF p _) (Expr c_expr _) (Type c_ty _) =
+checkExpr (PGF p _) (Expr c_expr touch1) (Type c_ty touch2) =
   unsafePerformIO $
   alloca $ \pexpr ->
   withGuPool $ \tmpPl -> do
@@ -219,11 +220,12 @@ checkExpr (PGF p _) (Expr c_expr _) (Type c_ty _) =
     exprPl <- gu_new_pool
     poke pexpr c_expr
     pgf_check_expr p pexpr c_ty exn exprPl
+    touch1 >> touch2
     status <- gu_exn_is_raised exn
     if not status
       then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
               c_expr <- peek pexpr
-              return (Right (Expr c_expr exprFPl))
+              return (Right (Expr c_expr (touchForeignPtr exprFPl)))
       else do is_tyerr <- gu_exn_caught exn gu_exn_type_PgfTypeError
               c_msg <- (#peek GuExn, data.data) exn
               msg <- peekUtf8CString c_msg
@@ -237,7 +239,7 @@ checkExpr (PGF p _) (Expr c_expr _) (Type c_ty _) =
 -- possible to infer its type in the GF type system.
 -- In this case the function returns an error.
 inferExpr :: PGF -> Expr -> Either String (Expr, Type)
-inferExpr (PGF p _) (Expr c_expr _) =
+inferExpr (PGF p _) (Expr c_expr touch1) =
   unsafePerformIO $
   alloca $ \pexpr ->
   withGuPool $ \tmpPl -> do
@@ -245,11 +247,13 @@ inferExpr (PGF p _) (Expr c_expr _) =
     exprPl <- gu_new_pool
     poke pexpr c_expr
     c_ty <- pgf_infer_expr p pexpr exn exprPl
+    touch1
     status <- gu_exn_is_raised exn
     if not status
       then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+              let touch = touchForeignPtr exprFPl
               c_expr <- peek pexpr
-              return (Right (Expr c_expr exprFPl, Type c_ty exprFPl))
+              return (Right (Expr c_expr touch, Type c_ty touch))
       else do is_tyerr <- gu_exn_caught exn gu_exn_type_PgfTypeError
               c_msg <- (#peek GuExn, data.data) exn
               msg <- peekUtf8CString c_msg
@@ -261,7 +265,7 @@ inferExpr (PGF p _) (Expr c_expr _) =
 -- | Check whether a type is consistent with the abstract
 -- syntax of the grammar.
 checkType :: PGF -> Type -> Either String Type
-checkType (PGF p _) (Type c_ty _) =
+checkType (PGF p _) (Type c_ty touch1) =
   unsafePerformIO $
   alloca $ \pty ->
   withGuPool $ \tmpPl -> do
@@ -269,11 +273,12 @@ checkType (PGF p _) (Type c_ty _) =
     typePl <- gu_new_pool
     poke pty c_ty
     pgf_check_type p pty exn typePl
+    touch1
     status <- gu_exn_is_raised exn
     if not status
       then do typeFPl <- newForeignPtr gu_pool_finalizer typePl
               c_ty <- peek pty
-              return (Right (Type c_ty typeFPl))
+              return (Right (Type c_ty (touchForeignPtr typeFPl)))
       else do is_tyerr <- gu_exn_caught exn gu_exn_type_PgfTypeError
               c_msg <- (#peek GuExn, data.data) exn
               msg <- peekUtf8CString c_msg
@@ -283,16 +288,17 @@ checkType (PGF p _) (Type c_ty _) =
                 else throwIO (PGFError msg)
 
 compute :: PGF -> Expr -> Expr
-compute (PGF p _) (Expr c_expr _) =
+compute (PGF p _) (Expr c_expr touch1) =
   unsafePerformIO $
   withGuPool $ \tmpPl -> do
     exn <- gu_new_exn tmpPl
     exprPl <- gu_new_pool
     c_expr <- pgf_compute p c_expr exn tmpPl exprPl
+    touch1
     status <- gu_exn_is_raised exn
     if not status
       then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-              return (Expr c_expr exprFPl)
+              return (Expr c_expr (touchForeignPtr exprFPl))
       else do c_msg <- (#peek GuExn, data.data) exn
               msg <- peekUtf8CString c_msg
               gu_pool_free exprPl
@@ -309,6 +315,7 @@ graphvizAbstractTree p e =
       do (sb,out) <- newOut tmpPl
          exn <- gu_new_exn tmpPl
          pgf_graphviz_abstract_tree (pgf p) (expr e) out exn
+         touchExpr e
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s
 
@@ -320,6 +327,7 @@ graphvizParseTree c e =
       do (sb,out) <- newOut tmpPl
          exn <- gu_new_exn tmpPl
          pgf_graphviz_parse_tree (concr c) (expr e) out exn
+         touchExpr e
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s
 
@@ -358,6 +366,7 @@ fullFormLexicon lang =
                            peek ptr
          if ffEntry == nullPtr
            then do finalizeForeignPtr fpl
+                   touchConcr lang
                    return []
            else do tok  <- peekUtf8CString =<< pgf_fullform_get_string ffEntry
                    ref  <- newIORef []
@@ -423,7 +432,7 @@ parseWithHeuristics lang (Type ctype _) sent heuristic callbacks =
                                      throwIO (PGFError "Parsing failed")
          else do parseFPl <- newForeignPtr gu_pool_finalizer parsePl
                  exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
-                 exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
+                 exprs    <- fromPgfExprEnum enum parseFPl (touchConcr lang >> touchForeignPtr exprFPl)
                  return (Right exprs)
 
 mkCallbacksMap :: Ptr PgfConcr -> [(String, Int -> Int -> Maybe (Expr,Float,Int))] -> Ptr GuPool -> IO (Ptr PgfCallbacksMap)
@@ -509,7 +518,7 @@ parseWithOracle lang cat sent (predict,complete,literal) =
                                      throwIO (PGFError "Parsing failed")
          else do parseFPl <- newForeignPtr gu_pool_finalizer parsePl
                  exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
-                 exprs    <- fromPgfExprEnum enum parseFPl (lang,exprFPl)
+                 exprs    <- fromPgfExprEnum enum parseFPl (touchConcr lang >> touchForeignPtr exprFPl)
                  return (Right exprs)
   where
     oracleWrapper oracle catPtr lblPtr offset = do
@@ -556,6 +565,7 @@ linearize lang e = unsafePerformIO $
     do (sb,out) <- newOut pl
        exn <- gu_new_exn pl
        pgf_linearize (concr lang) (expr e) out exn
+       touchExpr e
        failed <- gu_exn_is_raised exn
        if failed
          then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
@@ -586,6 +596,7 @@ linearizeAll lang e = unsafePerformIO $
                                    peek ptr
       if ctree == nullPtr
         then do gu_pool_free pl
+                touchExpr e
                 return []
         else do (sb,out) <- newOut tmpPl
                 ctree <- pgf_lzr_wrap_linref ctree tmpPl
@@ -598,7 +609,7 @@ linearizeAll lang e = unsafePerformIO $
                             else throwExn exn pl
                   else do lin <- gu_string_buf_freeze sb tmpPl
                           s <- peekUtf8CString lin
-                          ss <- unsafeInterleaveIO (collect cts exn pl)
+                          ss <- collect cts exn pl
                           return (s:ss)
 
     throwExn exn pl = do
@@ -653,6 +664,7 @@ alignWords lang e = unsafePerformIO $
   withGuPool $ \pl ->
     do exn <- gu_new_exn pl
        seq <- pgf_align_words (concr lang) (expr e) exn pl
+       touchExpr e
        failed <- gu_exn_is_raised exn
        if failed
          then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
@@ -687,6 +699,7 @@ functions p =
       fptr <- wrapMapItorCallback (getFunctions ref)
       (#poke GuMapItor, fn) itor fptr
       pgf_iter_functions (pgf p) itor exn
+      touchPGF p
       freeHaskellFunPtr fptr
       fs <- readIORef ref
       return (reverse fs)
@@ -709,6 +722,7 @@ functionsByCat p cat =
       (#poke GuMapItor, fn) itor fptr
       ccat <- newUtf8CString cat tmpPl
       pgf_iter_functions_by_cat (pgf p) ccat itor exn
+      touchPGF p
       freeHaskellFunPtr fptr
       fs <- readIORef ref
       return (reverse fs)
@@ -732,6 +746,7 @@ categories p =
       fptr <- wrapMapItorCallback (getCategories ref)
       (#poke GuMapItor, fn) itor fptr
       pgf_iter_categories (pgf p) itor exn
+      touchPGF p
       freeHaskellFunPtr fptr
       cs <- readIORef ref
       return (reverse cs)
@@ -748,8 +763,8 @@ categoryContext pgf cat = Nothing -- !!! not implemented yet TODO
 -----------------------------------------------------------------------------
 -- Helper functions
 
-fromPgfExprEnum :: Ptr GuEnum -> ForeignPtr GuPool -> a -> IO [(Expr, Float)]
-fromPgfExprEnum enum fpl master =
+fromPgfExprEnum :: Ptr GuEnum -> ForeignPtr GuPool -> IO () -> IO [(Expr, Float)]
+fromPgfExprEnum enum fpl touch =
   do pgfExprProb <- alloca $ \ptr ->
                       withForeignPtr fpl $ \pl ->
                         do gu_enum_next enum ptr pl
@@ -758,9 +773,9 @@ fromPgfExprEnum enum fpl master =
        then do finalizeForeignPtr fpl
                return []
        else do expr <- (#peek PgfExprProb, expr) pgfExprProb
-               ts <- unsafeInterleaveIO (fromPgfExprEnum enum fpl master)
+               ts <- unsafeInterleaveIO (fromPgfExprEnum enum fpl touch)
                prob <- (#peek PgfExprProb, prob) pgfExprProb
-               return ((Expr expr master,prob) : ts)
+               return ((Expr expr touch,prob) : ts)
 
 -----------------------------------------------------------------------
 -- Exceptions

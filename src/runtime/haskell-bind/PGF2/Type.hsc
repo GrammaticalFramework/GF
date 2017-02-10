@@ -1,4 +1,3 @@
-{-# LANGUAGE ExistentialQuantification #-}
 #include <pgf/pgf.h>
 
 module PGF2.Type where
@@ -15,7 +14,7 @@ import PGF2.FFI
 -- which are allocated from other pools. In order to ensure that
 -- they are not released prematurely we use the exprMaster to
 -- store references to other Haskell objects
-data Type = forall a . Type {typ :: PgfExpr, typMaster :: a}
+data Type = Type {typ :: PgfExpr, touchType :: Touch}
 
 -- | 'Hypo' represents a hypothesis in a type i.e. in the type A -> B, A is the hypothesis
 type Hypo = (BindType,CId,Type)
@@ -36,7 +35,7 @@ readType str =
             status <- gu_exn_is_raised exn
             if (not status && c_type /= nullPtr)
               then do typFPl <- newForeignPtr gu_pool_finalizer typPl
-                      return $ Just (Type c_type typFPl)
+                      return $ Just (Type c_type (touchForeignPtr typFPl))
               else do gu_pool_free typPl
                       return Nothing
 
@@ -45,13 +44,14 @@ readType str =
 -- in the type in order reverse to the order
 -- of binding.
 showType :: [CId] -> Type -> String
-showType scope (Type ty master) = 
+showType scope (Type ty touch) = 
   unsafePerformIO $
     withGuPool $ \tmpPl ->
       do (sb,out) <- newOut tmpPl
          printCtxt <- newPrintCtxt scope tmpPl
          exn <- gu_new_exn tmpPl
          pgf_print_type ty printCtxt 1 out exn
+         touch
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s
 
@@ -72,7 +72,7 @@ mkType hypos cat exprs = unsafePerformIO $ do
   (#poke PgfType, n_exprs) c_type n_exprs
   pokeExprs (c_type `plusPtr` (#offset PgfType, exprs)) exprs
   typFPl <- newForeignPtr gu_pool_finalizer typPl
-  return (Type c_type (typFPl,hypos,exprs))
+  return (Type c_type (mapM_ touchHypo hypos >> mapM_ touchExpr exprs >> touchForeignPtr typFPl))
   where
     pokeHypos :: Ptr a -> [Hypo] -> Ptr GuPool -> IO ()
     pokeHypos c_hypo []                                    typPl = return ()
@@ -93,10 +93,12 @@ mkType hypos cat exprs = unsafePerformIO $ do
       poke ptr e
       pokeExprs (plusPtr ptr (#size PgfExpr)) es
 
+    touchHypo (_,_,ty) = touchType ty
+
 -- | Decomposes a type into a list of hypothesises, a category and 
 -- a list of arguments for the category.
 unType :: Type -> ([Hypo],CId,[Expr])
-unType (Type c_type master) = unsafePerformIO $ do
+unType (Type c_type touch) = unsafePerformIO $ do
   cid <- (#peek PgfType, cid) c_type >>= peekUtf8CString
   c_hypos <- (#peek PgfType, hypos) c_type
   n_hypos <- (#peek GuSeq, len) c_hypos
@@ -111,7 +113,7 @@ unType (Type c_type master) = unsafePerformIO $ do
                        c_ty <- (#peek PgfHypo, type) c_hypo
                        bt  <- fmap toBindType ((#peek PgfHypo, bind_type) c_hypo)
                        hs <- peekHypos (plusPtr c_hypo (#size PgfHypo)) (i+1) n
-                       return ((bt,cid,Type c_ty master) : hs)
+                       return ((bt,cid,Type c_ty touch) : hs)
       | otherwise = return []
 
     toBindType :: CInt -> BindType
@@ -121,5 +123,5 @@ unType (Type c_type master) = unsafePerformIO $ do
     peekExprs ptr i n
       | i < n     = do e  <- peekElemOff ptr i
                        es <- peekExprs ptr (i+1) n
-                       return (Expr e master : es)
+                       return (Expr e touch : es)
       | otherwise = return []

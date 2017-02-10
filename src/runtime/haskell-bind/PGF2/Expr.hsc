@@ -1,4 +1,3 @@
-{-# LANGUAGE ExistentialQuantification #-}
 #include <pgf/pgf.h>
 
 module PGF2.Expr where
@@ -30,20 +29,20 @@ data BindType =
 -- they are not released prematurely we use the exprMaster to
 -- store references to other Haskell objects
 
-data Expr = forall a . Expr {expr :: PgfExpr, exprMaster :: a}
+data Expr = Expr {expr :: PgfExpr, touchExpr :: Touch}
 
 instance Show Expr where
   show = showExpr []
 
 -- | Constructs an expression by lambda abstraction
 mkAbs :: BindType -> CId -> Expr -> Expr
-mkAbs bind_type var (Expr body master) =
+mkAbs bind_type var (Expr body bodyTouch) =
   unsafePerformIO $ do
       exprPl <- gu_new_pool
       cvar <- newUtf8CString var exprPl
       c_expr <- pgf_expr_abs cbind_type cvar body exprPl
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-      return (Expr c_expr (exprFPl,body))
+      return (Expr c_expr (bodyTouch >> touchForeignPtr exprFPl))
   where
     cbind_type = 
       case bind_type of
@@ -52,7 +51,7 @@ mkAbs bind_type var (Expr body master) =
 
 -- | Decomposes an expression into an abstraction and a body
 unAbs :: Expr -> Maybe (BindType, CId, Expr)
-unAbs (Expr expr master) =
+unAbs (Expr expr touch) =
   unsafePerformIO $ do
       c_abs <- pgf_expr_unabs expr
       if c_abs == nullPtr
@@ -60,7 +59,7 @@ unAbs (Expr expr master) =
         else do bt  <- fmap toBindType ((#peek PgfExprAbs, bind_type) c_abs)
                 var <- (#peek PgfExprAbs, id) c_abs >>= peekUtf8CString
                 c_body <- (#peek PgfExprAbs, body) c_abs
-                return (Just (bt, var, Expr c_body master))
+                return (Just (bt, var, Expr c_body touch))
   where
     toBindType :: CInt -> BindType
     toBindType (#const PGF_BIND_TYPE_EXPLICIT) = Explicit
@@ -78,13 +77,13 @@ mkApp fun args =
       exprPl <- gu_new_pool
       c_expr <- pgf_expr_apply papp exprPl
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-      return (Expr c_expr (exprFPl,args))
+      return (Expr c_expr (mapM_ touchExpr args >> touchForeignPtr exprFPl))
   where
     len = length args
 
 -- | Decomposes an expression into an application of a function
 unApp :: Expr -> Maybe (Fun,[Expr])
-unApp (Expr expr master) =
+unApp (Expr expr touch) =
   unsafePerformIO $
     withGuPool $ \pl -> do
       appl <- pgf_expr_unapply expr pl
@@ -94,7 +93,7 @@ unApp (Expr expr master) =
            fun <- peekCString =<< (#peek PgfApplication, fun) appl
            arity <- (#peek PgfApplication, n_args) appl :: IO CInt 
            c_args <- peekArray (fromIntegral arity) (appl `plusPtr` (#offset PgfApplication, args))
-           return $ Just (fun, [Expr c_arg master | c_arg <- c_args])
+           return $ Just (fun, [Expr c_arg touch | c_arg <- c_args])
 
 -- | Constructs an expression from a string literal
 mkStr :: String -> Expr
@@ -104,16 +103,17 @@ mkStr str =
       exprPl <- gu_new_pool
       c_expr <- pgf_expr_string cstr exprPl
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-      return (Expr c_expr exprFPl)
+      return (Expr c_expr (touchForeignPtr exprFPl))
 
 -- | Decomposes an expression into a string literal
 unStr :: Expr -> Maybe String
-unStr (Expr expr master) =
+unStr (Expr expr touch) =
   unsafePerformIO $ do
     plit <- pgf_expr_unlit expr (#const PGF_LITERAL_STR)
     if plit == nullPtr
       then return Nothing
       else do s <- peekUtf8CString (plit `plusPtr` (#offset PgfLiteralStr, val))
+              touch
               return (Just s)
 
 -- | Constructs an expression from an integer literal
@@ -123,16 +123,17 @@ mkInt val =
       exprPl <- gu_new_pool
       c_expr <- pgf_expr_int (fromIntegral val) exprPl
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-      return (Expr c_expr exprFPl)
+      return (Expr c_expr (touchForeignPtr exprFPl))
 
 -- | Decomposes an expression into an integer literal
 unInt :: Expr -> Maybe Int
-unInt (Expr expr master) =
+unInt (Expr expr touch) =
   unsafePerformIO $ do
     plit <- pgf_expr_unlit expr (#const PGF_LITERAL_INT)
     if plit == nullPtr
       then return Nothing
       else do n <- peek (plit `plusPtr` (#offset PgfLiteralInt, val))
+              touch
               return (Just (fromIntegral (n :: CInt)))
 
 -- | Constructs an expression from a real number
@@ -142,16 +143,17 @@ mkFloat val =
       exprPl <- gu_new_pool
       c_expr <- pgf_expr_float (realToFrac val) exprPl
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-      return (Expr c_expr exprFPl)
+      return (Expr c_expr (touchForeignPtr exprFPl))
 
 -- | Decomposes an expression into a real number literal
 unFloat :: Expr -> Maybe Double
-unFloat (Expr expr master) =
+unFloat (Expr expr touch) =
   unsafePerformIO $ do
     plit <- pgf_expr_unlit expr (#const PGF_LITERAL_FLT)
     if plit == nullPtr
       then return Nothing
       else do n <- peek (plit `plusPtr` (#offset PgfLiteralFlt, val))
+              touch
               return (Just (realToFrac (n :: CDouble)))
 
 -- | Constructs a meta variable as an expression
@@ -161,16 +163,17 @@ mkMeta id =
       exprPl <- gu_new_pool
       c_expr <- pgf_expr_meta (fromIntegral id) exprPl
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-      return (Expr c_expr exprFPl)
+      return (Expr c_expr (touchForeignPtr exprFPl))
 
 -- | Decomposes an expression into a meta variable
 unMeta :: Expr -> Maybe Int
-unMeta (Expr expr master) =
+unMeta (Expr expr touch) =
   unsafePerformIO $ do
       c_meta <- pgf_expr_unmeta expr
       if c_meta == nullPtr
         then return Nothing
         else do id <- (#peek PgfExprMeta, id) c_meta
+                touch
                 return (Just (fromIntegral (id :: CInt)))
 
 -- | parses a 'String' as an expression
@@ -186,7 +189,7 @@ readExpr str =
             status <- gu_exn_is_raised exn
             if (not status && c_expr /= nullPtr)
               then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-                      return $ Just (Expr c_expr exprFPl)
+                      return $ Just (Expr c_expr (touchForeignPtr exprFPl))
               else do gu_pool_free exprPl
                       return Nothing
 
@@ -202,6 +205,7 @@ showExpr scope e =
          printCtxt <- newPrintCtxt scope tmpPl
          exn <- gu_new_exn tmpPl
          pgf_print_expr (expr e) printCtxt 1 out exn
+         touchExpr e
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s
 

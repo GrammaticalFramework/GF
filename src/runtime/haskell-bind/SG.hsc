@@ -89,10 +89,11 @@ inTransaction sg f =
 -- Expressions
 
 insertExpr :: SG -> Expr -> IO SgId
-insertExpr (SG sg) (Expr expr _) =
+insertExpr (SG sg) (Expr expr touch) =
   withGuPool $ \tmpPl -> do
     exn <- gu_new_exn tmpPl
     id <- sg_insert_expr sg expr 1 exn
+    touch
     handle_sg_exn exn
     return id
 
@@ -107,13 +108,14 @@ getExpr (SG sg) id = do
     if c_expr == nullPtr
       then do touchForeignPtr exprFPl
               return Nothing
-      else do return $ Just (Expr c_expr exprFPl)
+      else do return $ Just (Expr c_expr (touchForeignPtr exprFPl))
 
 queryExpr :: SG -> Expr -> IO [(SgId,Expr)]
-queryExpr (SG sg) (Expr query _) =
+queryExpr (SG sg) (Expr query touch) =
   withGuPool $ \tmpPl -> do
     exn <- gu_new_exn tmpPl
     res <- sg_query_expr sg query tmpPl exn
+    touch
     handle_sg_exn exn
     fetchResults res exn
   where
@@ -135,7 +137,7 @@ queryExpr (SG sg) (Expr query _) =
                        return []
                else do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
                        rest <- fetchResults res exn
-                       return ((key,Expr c_expr exprFPl) : rest)
+                       return ((key,Expr c_expr (touchForeignPtr exprFPl)) : rest)
 
 updateFtsIndex :: SG -> PGF -> IO ()
 updateFtsIndex (SG sg) p = do
@@ -163,7 +165,7 @@ queryLinearization (SG sg) query = do
       handle_sg_exn exn
       if c_expr == nullPtr
         then getExprs exprFPl exprPl exn ids
-        else do let e = Expr c_expr exprFPl
+        else do let e = Expr c_expr (touchForeignPtr exprFPl)
                 es <- getExprs exprFPl exprPl exn ids
                 return (e:es)
 
@@ -191,7 +193,7 @@ readTriple str =
                           return Nothing
 
 showTriple :: Expr -> Expr -> Expr -> String
-showTriple (Expr expr1 _) (Expr expr2 _) (Expr expr3 _) =
+showTriple (Expr expr1 touch1) (Expr expr2 touch2) (Expr expr3 touch3) =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
       withTriple $ \triple -> do
@@ -202,11 +204,12 @@ showTriple (Expr expr1 _) (Expr expr2 _) (Expr expr3 _) =
          pokeElemOff triple 1 expr2
          pokeElemOff triple 2 expr3
          pgf_print_expr_tuple 3 triple printCtxt out exn
+         touch1 >> touch2 >> touch3
          s <- gu_string_buf_freeze sb tmpPl
          peekCString s
 
 insertTriple :: SG -> Expr -> Expr -> Expr -> IO SgId
-insertTriple (SG sg) (Expr expr1 _) (Expr expr2 _) (Expr expr3 _) =
+insertTriple (SG sg) (Expr expr1 touch1) (Expr expr2 touch2) (Expr expr3 touch3) =
   withGuPool $ \tmpPl -> 
   withTriple $ \triple -> do
     exn <- gu_new_exn tmpPl
@@ -214,6 +217,7 @@ insertTriple (SG sg) (Expr expr1 _) (Expr expr2 _) (Expr expr3 _) =
     pokeElemOff triple 1 expr2
     pokeElemOff triple 2 expr3
     id <- sg_insert_triple sg triple exn
+    touch1 >> touch2 >> touch3
     handle_sg_exn exn
     return id
 
@@ -221,6 +225,7 @@ getTriple :: SG -> SgId -> IO (Maybe (Expr,Expr,Expr))
 getTriple (SG sg) id = do
   exprPl <- gu_new_pool
   exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+  let touch = touchForeignPtr exprFPl
   withGuPool $ \tmpPl ->
    withTriple $ \triple -> do
      exn <- gu_new_exn tmpPl
@@ -230,11 +235,11 @@ getTriple (SG sg) id = do
        then do c_expr1 <- peekElemOff triple 0
                c_expr2 <- peekElemOff triple 1
                c_expr3 <- peekElemOff triple 2
-               return (Just (Expr c_expr1 exprFPl
-                            ,Expr c_expr2 exprFPl
-                            ,Expr c_expr3 exprFPl
+               return (Just (Expr c_expr1 touch
+                            ,Expr c_expr2 touch
+                            ,Expr c_expr3 touch
                             ))
-       else do touchForeignPtr exprFPl
+       else do touch
                return Nothing
 
 queryTriple :: SG -> Maybe Expr -> Maybe Expr -> Maybe Expr -> IO [(SgId,Expr,Expr,Expr)]
@@ -252,8 +257,8 @@ queryTriple (SG sg) mb_expr1 mb_expr2 mb_expr3 =
     toCExpr Nothing              = nullPtr
     toCExpr (Just (Expr expr _)) = expr
 
-    fromCExpr c_expr exprFPl Nothing  = Expr c_expr exprFPl
-    fromCExpr c_expr exprFPl (Just e) = e
+    fromCExpr c_expr touch Nothing  = Expr c_expr touch
+    fromCExpr c_expr touch (Just e) = e
 
     fetchResults res = do
       exprPl  <- gu_new_pool
@@ -273,15 +278,15 @@ queryTriple (SG sg) mb_expr1 mb_expr2 mb_expr3 =
                            sg_triple_result_close res exn
                            return []
                    else do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+                           let touch = touchForeignPtr exprFPl
                            c_expr1 <- peekElemOff triple 0
                            c_expr2 <- peekElemOff triple 1
                            c_expr3 <- peekElemOff triple 2
                            key <- peek pKey
                            rest <- unsafeInterleaveIO (fetchResults res)
-                           return ((key,fromCExpr c_expr1 exprFPl mb_expr1
-                                       ,fromCExpr c_expr2 exprFPl mb_expr2
-                                       ,fromCExpr c_expr3 exprFPl mb_expr3) : rest)
-
+                           return ((key,fromCExpr c_expr1 touch mb_expr1
+                                       ,fromCExpr c_expr2 touch mb_expr2
+                                       ,fromCExpr c_expr3 touch mb_expr3) : rest)
 
 data Query = forall a . Query {query :: Ptr SgQuery, queryMaster :: a}
 
