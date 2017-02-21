@@ -812,7 +812,8 @@ pgfCommands = Map.fromList [
                          unlines [showFun' f ty|f<-funs,
                                                 let ty=C.functionType pgf f,
                                                 target ty == c]
-             target (C.DTyp _ c _) = c
+           --target (C.DTyp _ c _) = c
+             target t = case C.unType t of (_,c,_) -> c
 {-
          [e]         -> case H.inferExpr pgf e of
                           Left tcErr   -> error $ render (H.ppTcError tcErr)
@@ -977,7 +978,8 @@ pgfCommands = Map.fromList [
 -}
    optCat pgf opts = 
      case listFlags "cat" opts of
-       v:_ -> C.DTyp [] (valueString v) []
+     --v:_ -> C.DTyp [] (valueString v) []
+       v:_ -> C.mkType [] (valueString v) []
        _   -> C.startCat pgf
 
 {-
@@ -1029,7 +1031,7 @@ pgfCommands = Map.fromList [
      | otherwise = return void -- TODO implement more options
 
    showFun pgf f = showFun' f (C.functionType pgf f)
-   showFun' f ty = "fun "++f++" : "++C.showType ty
+   showFun' f ty = "fun "++f++" : "++C.showType [] ty
 
 {-
    prGrammar env@(pgf,mos) opts

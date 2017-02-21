@@ -167,7 +167,7 @@ cpgfMain qsem command (t,(pgf,pc)) =
     grammar = showJSON $ makeObj
                  ["name".=C.abstractName pgf,
                   "lastmodified".=show t,
-                  "startcat".=C.startCat pgf,
+                  "startcat".=C.showType [] (C.startCat pgf),
                   "languages".=languages]
       where
         languages = [makeObj ["name".= l] | (l,_)<-Map.toList langs]
@@ -313,7 +313,7 @@ instance JSON C.CId where
 -}
 instance JSON C.Expr where
     readJSON x = readJSON x >>= maybe (fail "Bad expression.") return . C.readExpr
-    showJSON = showJSON . C.showExpr
+    showJSON = showJSON . C.showExpr []
 
 
 -- | Convert a 'Tree' to an 'ATree'

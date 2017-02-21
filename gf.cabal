@@ -136,11 +136,11 @@ Library
 
   if flag(c-runtime)
     exposed-modules: PGF2
-    other-modules:   PGF2.FFI PGF2.Expr
+    other-modules:   PGF2.FFI PGF2.Expr PGF2.Type
                      GF.Interactive2 GF.Command.Commands2
     hs-source-dirs:  src/runtime/haskell-bind
     build-tools:     hsc2hs
-    extra-libraries: gu pgf
+    extra-libraries: pgf gu
     c-sources:       src/runtime/haskell-bind/utils.c
     cc-options:      -std=c99
 
