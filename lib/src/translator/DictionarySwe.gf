@@ -1300,7 +1300,7 @@ lin agree_V = mkV I.hålla_V "med" ;
 lin agree_VS = mkVS (mkV I.hålla_V "med") ;
 lin agree_VV = mkVV (mkV (mkV "komma" "kom" "kommit") "överens om") ;
 lin agree_on_V = mkV "enar" ; -- comment=6
-lin agree_with_V2 = prepV2 OP_agree_V OP_with_Prep ; -- guess-p-verb
+lin agree_with_V2 = mkV2 I.hålla_V (mkPrep "med") ;
 lin agreeable_A = mkA "angenäm" ; -- comment=7
 lin agreeableness_N = mkN "behag" neutrum ;
 lin agreed_A = variants {} ; --
@@ -64354,7 +64354,6 @@ oper OP_clear_Adv : Adv = mkAdv "ren" ; -- comment=2
 oper OP_account_V : V = mkV "nyttar" ; -- comment=5
 oper OP_act_V : V = mkV "agerar" ;
 oper OP_add_V : V = mkV "adderar" ;
-oper OP_agree_V : V = mkV I.hålla_V "med" ;
 oper OP_aim_V : V = mkV "siktar" ;
 oper OP_answer_V : V = mkV "svara" ;
 oper OP_apply_V : V = mkV "passar" ;
