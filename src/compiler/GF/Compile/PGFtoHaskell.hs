@@ -240,7 +240,7 @@ fInstance gId lexical m (cat,rules) =
     then "    " ++ gId cat ++ " (fgs t) where\n     fgs t = case unApp t of"
     else "    case unApp t of") ++++
   unlines [mkInst f xx | (f,xx) <- nonLexicalRules (lexical cat) rules] ++++
-  (if lexical cat then "      (i,[]) -> " ++ lexicalConstructor cat +++ "(prCId i)" else "") ++++
+  (if lexical cat then "      Just (i,[]) -> " ++ lexicalConstructor cat +++ "(showCId i)" else "") ++++
   "      _ -> error (\"no" +++ cat ++ " \" ++ show t)"
    where
     isList = isListCat (cat,rules)
