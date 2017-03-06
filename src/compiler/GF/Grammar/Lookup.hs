@@ -22,6 +22,7 @@ module GF.Grammar.Lookup (
            lookupResDef, lookupResDefLoc,
            lookupResType, 
            lookupOverload,
+           lookupOverloadTypes,
            lookupParamValues, 
            allParamValues,
            lookupAbsDef, 
@@ -100,6 +101,28 @@ lookupResType gr (m,c) = do
     ResParam _ _      -> return typePType
     ResValue (L _ t)  -> return t
     _   -> raise $ render (c <+> "has no type defined in resource" <+> m)
+
+lookupOverloadTypes :: ErrorMonad m => Grammar -> QIdent -> m [(Term,Type)]
+lookupOverloadTypes gr id@(m,c) = do
+  info <- lookupQIdentInfo gr (m,c)
+  case info of
+    ResOper (Just (L _ ty)) _ -> ret ty
+
+    -- used in reused concrete
+    CncCat _ _ _ _ _ -> ret typeType
+    CncFun (Just (cat,cont,val)) _ _ _ -> do
+          val' <- lock cat val 
+          ret $ mkProd cont val' []
+    ResParam _ _      -> ret typePType
+    ResValue (L _ t)  -> ret t
+    ResOverload os tysts -> do
+            tss <- mapM (\x -> lookupOverloadTypes gr (x,c)) os
+            return $ [(tr,ty) | (L _ ty,L _ tr) <- tysts] ++
+                     concat tss
+    AnyInd _ n   -> lookupOverloadTypes gr (n,c)
+    _            -> raise $ render (c <+> "has no types defined in resource" <+> m)
+  where
+    ret ty = return [(Q id,ty)]
 
 lookupOverload :: ErrorMonad m => Grammar -> QIdent -> m [([Type],(Type,Term))]
 lookupOverload gr (m,c) = do

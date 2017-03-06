@@ -59,32 +59,18 @@ tcRho ge scope t@(Vr v)     mb_ty = do                          -- VAR
   case lookup v scope of
     Just v_sigma -> instSigma ge scope t v_sigma mb_ty
     Nothing      -> tcError ("Unknown variable" <+> v)
-tcRho ge scope t@(Q id)     mb_ty =                             -- VAR (global)
-  case lookupResType (geGrammar ge) id of
-    Ok ty   -> do vty <- liftErr (eval ge [] ty)
-                  instSigma ge scope t vty mb_ty
-    Bad err -> tcError (pp err)
-tcRho ge scope t@(QC id)     mb_ty =                            -- VAR (global)
-  case lookupResType (geGrammar ge) id of
-    Ok ty   -> do vty <- liftErr (eval ge [] ty)
-                  instSigma ge scope t vty mb_ty
-    Bad err -> tcError (pp err)
-tcRho ge scope t@(App fun (ImplArg arg)) mb_ty = do             -- APP1
-  (fun,fun_ty) <- tcRho ge scope fun Nothing
-  (bt, arg_ty, res_ty) <- unifyFun ge scope fun_ty
-  if (bt == Implicit)
-    then return ()
-    else tcError (ppTerm Unqualified 0 t <+> "is an implicit argument application, but no implicit argument is expected")
-  (arg,_) <- tcRho ge scope arg (Just arg_ty)
-  varg <- liftErr (eval ge (scopeEnv scope) arg)
-  instSigma ge scope (App fun (ImplArg arg)) (res_ty varg) mb_ty
-tcRho ge scope (App fun arg) mb_ty = do                         -- APP2
-  (fun,fun_ty) <- tcRho ge scope fun Nothing
-  (fun,fun_ty) <- instantiate scope fun fun_ty
-  (_, arg_ty, res_ty) <- unifyFun ge scope fun_ty
-  (arg,_) <- tcRho ge scope arg (Just arg_ty)
-  varg <- liftErr (eval ge (scopeEnv scope) arg)
-  instSigma ge scope (App fun arg) (res_ty varg) mb_ty
+tcRho ge scope t@(Q id)     mb_ty =
+  runTcA (tcOverloadFailed t) $
+    tcApp ge scope t `bindTcA` \(t,ty) ->
+      instSigma ge scope t ty mb_ty
+tcRho ge scope t@(QC id)     mb_ty =
+  runTcA (tcOverloadFailed t) $
+    tcApp ge scope t `bindTcA` \(t,ty) ->
+      instSigma ge scope t ty mb_ty
+tcRho ge scope t@(App fun arg) mb_ty = do
+  runTcA (tcOverloadFailed t) $
+    tcApp ge scope t `bindTcA` \(t,ty) ->
+      instSigma ge scope t ty mb_ty
 tcRho ge scope (Abs bt var body) Nothing = do                   -- ABS1
   i <- newMeta scope vtypeType
   let arg_ty = VMeta i (scopeEnv scope) []
@@ -257,6 +243,39 @@ tcCases ge scope ((p,t):cs) p_ty mb_res_ty = do
   (t,res_ty)     <- tcRho ge scope' t mb_res_ty
   (cs,mb_res_ty) <- tcCases ge scope cs p_ty (Just res_ty)
   return ((p,t):cs,mb_res_ty)
+
+
+tcApp ge scope t@(App fun (ImplArg arg)) = do                   -- APP1
+  tcApp ge scope fun `bindTcA` \(fun,fun_ty) ->
+     do (bt, arg_ty, res_ty) <- unifyFun ge scope fun_ty
+        if (bt == Implicit)
+          then return ()
+          else tcError (ppTerm Unqualified 0 t <+> "is an implicit argument application, but no implicit argument is expected")
+        (arg,_) <- tcRho ge scope arg (Just arg_ty)
+        varg <- liftErr (eval ge (scopeEnv scope) arg)
+        return (App fun (ImplArg arg), res_ty varg)
+tcApp ge scope (App fun arg) =                                  -- APP2
+  tcApp ge scope fun `bindTcA` \(fun,fun_ty) ->
+     do (fun,fun_ty) <- instantiate scope fun fun_ty
+        (_, arg_ty, res_ty) <- unifyFun ge scope fun_ty
+        (arg,_) <- tcRho ge scope arg (Just arg_ty)
+        varg <- liftErr (eval ge (scopeEnv scope) arg)
+        return (App fun arg, res_ty varg)
+tcApp ge scope (Q id) =                                          -- VAR (global)
+  mkTcA (lookupOverloadTypes (geGrammar ge) id) `bindTcA` \(t,ty) -> 
+     do ty <- liftErr (eval ge [] ty)
+        return (t,ty)
+tcApp ge scope (QC id) =                                         -- VAR (global)
+  mkTcA (lookupOverloadTypes (geGrammar ge) id) `bindTcA` \(t,ty) -> 
+     do ty <- liftErr (eval ge [] ty)
+        return (t,ty)
+
+
+tcOverloadFailed t ttys =
+  tcError ("Overload resolution failed" $$
+           "term " <+> pp t $$
+           "types" <+> vcat [pp ty | (_,ty) <- ttys])
+
 
 tcPatt ge scope PW        ty0 =
   return scope
@@ -623,6 +642,7 @@ tcWarn msg = TcM (\ms msgs -> TcOk () ms (msg : msgs))
 
 unimplemented str = fail ("Unimplemented: "++str)
 
+
 runTcM :: TcM a -> Check a
 runTcM f = case unTcM f IntMap.empty [] of
              TcOk x _ msgs -> do checkWarnings msgs; return x
@@ -709,3 +729,32 @@ tc_value2term loc xs v =
   case value2term loc xs v of
     Left i  -> tcError ("Variable #" <+> pp i <+> "has escaped")
     Right t -> return t
+
+
+
+data TcA x a 
+  = TcSingle   (MetaStore -> [Message] -> TcResult a)
+  | TcMany [x] (MetaStore -> [Message] -> [(a,MetaStore,[Message])])
+
+mkTcA :: Err [a] -> TcA a a
+mkTcA f = case f of
+            Bad msg -> TcSingle  (\ms msgs -> TcFail (pp msg : msgs))
+            Ok  [x] -> TcSingle  (\ms msgs -> TcOk x ms msgs)
+            Ok  xs  -> TcMany xs (\ms msgs -> [(x,ms,msgs) | x <- xs])
+
+bindTcA :: TcA x a -> (a -> TcM b) -> TcA x b
+bindTcA f g = case f of
+                TcSingle  f -> TcSingle (unTcM (TcM f >>= g))
+                TcMany xs f -> TcMany xs (\ms msgs -> foldr add [] (f ms msgs))
+  where
+    add (y,ms,msgs) rs =
+      case unTcM (g y) ms msgs of
+        TcFail _       -> rs
+        TcOk y ms msgs -> (y,ms,msgs):rs
+
+runTcA :: ([x] -> TcM a) -> TcA x a -> TcM a
+runTcA g f = TcM (\ms msgs -> case f of
+                                TcMany xs f -> case f ms msgs of
+                                                 [(x,ms,msgs)] -> TcOk x ms msgs
+                                                 rs            -> unTcM (g xs) ms msgs
+                                TcSingle f                     -> f ms msgs)
