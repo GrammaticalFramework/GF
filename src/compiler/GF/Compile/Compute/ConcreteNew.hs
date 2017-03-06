@@ -189,6 +189,8 @@ value env t0 =
     Glue t1 t2 -> ((ok2p (glue env).) # both id) # both (value env) (t1,t2)
     ELin c r -> (unlockVRec (gloc env) c.) # value env r
     EPatt p  -> return $ const (VPatt p) -- hmm
+    EPattType ty -> do vt <- value env ty
+                       return (VPattType . vt)
     Typed t ty -> value env t
     t -> fail.render $ "value"<+>ppTerm Unqualified 10 t $$ show t
 
@@ -510,8 +512,8 @@ value2term' stop loc xs v0 =
     VC v1 v2       -> liftM2 C (v2t v1) (v2t v2)
     VS v1 v2       -> liftM2 S (v2t v1) (v2t v2)
     VP v l         -> v2t v >>= \t -> return (P t l)
-    VPatt p        -> return (EPatt p) -- hmm
---  VPattType v    -> ...
+    VPatt p        -> return (EPatt p)
+    VPattType v    -> v2t v >>= return . EPattType
     VAlts v vvs    -> liftM2 Alts (v2t v) (mapM (\(x,y) -> liftM2 (,) (v2t x) (v2t y)) vvs)
     VStrs vs       -> liftM  Strs (mapM v2t vs)
 --  VGlue v1 v2    -> Glue (v2t v1) (v2t v2)
