@@ -238,13 +238,16 @@ tcRho ge scope (Strs ss) mb_ty = do
 tcRho ge scope (EPattType ty) mb_ty = do
   (ty, _) <- tcRho ge scope ty (Just vtypeType)
   instSigma ge scope (EPattType ty) vtypeType mb_ty
-tcRho ge scope (EPatt p) mb_ty = do
-  ty <- case mb_ty of
-          Nothing -> do i <- newMeta scope vtypeType
-                        return (VMeta i (scopeEnv scope) [])
-          Just ty -> unifyPatt ge scope ty
+tcRho ge scope t@(EPatt p) mb_ty = do
+  (scope,f,ty) <- case mb_ty of
+                    Nothing -> do i <- newMeta scope vtypeType
+                                  return (scope,id,VMeta i (scopeEnv scope) [])
+                    Just ty -> do (scope,f,ty) <- skolemise ge scope ty
+                                  case ty of
+                                    VPattType ty -> return (scope,f,ty)
+                                    _            -> tcError (ppTerm Unqualified 0 t <+> "must be of pattern type but" <+> ppTerm Unqualified 0 t <+> "is expected")
   tcPatt ge scope p ty
-  return (EPatt p, ty)
+  return (f (EPatt p), ty)
 tcRho gr scope t _ = unimplemented ("tcRho "++show t)
 
 tcCases ge scope []         p_ty mb_res_ty = return ([],mb_res_ty)
@@ -520,14 +523,6 @@ unifyTbl ge scope tau = do
   res <- fmap mk_val $ newMeta scope vtypeType
   unify ge scope tau (VTblType arg res)
   return (arg,res)
-
-unifyPatt ge scope (VPattType ty) =
-  return ty
-unifyPatt ge scope ty = do
-  i <- newMeta scope vtypeType
-  let ty = VMeta i (scopeEnv scope) []
-  unify ge scope ty (VPattType ty)
-  return ty
 
 unify ge scope (VApp f1 vs1)      (VApp f2 vs2)
   | f1 == f2                   = sequence_ (zipWith (unify ge scope) vs1 vs2)
