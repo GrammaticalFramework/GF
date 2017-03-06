@@ -238,6 +238,13 @@ tcRho ge scope (Strs ss) mb_ty = do
 tcRho ge scope (EPattType ty) mb_ty = do
   (ty, _) <- tcRho ge scope ty (Just vtypeType)
   instSigma ge scope (EPattType ty) vtypeType mb_ty
+tcRho ge scope (EPatt p) mb_ty = do
+  ty <- case mb_ty of
+          Nothing -> do i <- newMeta scope vtypeType
+                        return (VMeta i (scopeEnv scope) [])
+          Just ty -> unifyPatt ge scope ty
+  tcPatt ge scope p ty
+  return (EPatt p, ty)
 tcRho gr scope t _ = unimplemented ("tcRho "++show t)
 
 tcCases ge scope []         p_ty mb_res_ty = return ([],mb_res_ty)
@@ -508,11 +515,19 @@ unifyTbl :: GlobalEnv -> Scope -> Rho -> TcM (Sigma, Rho)
 unifyTbl ge scope (VTblType arg res) =
   return (arg,res)
 unifyTbl ge scope tau = do
-  let mk_val ty = VMeta ty [] []
+  let mk_val ty = VMeta ty (scopeEnv scope) []
   arg <- fmap mk_val $ newMeta scope vtypePType
   res <- fmap mk_val $ newMeta scope vtypeType
   unify ge scope tau (VTblType arg res)
   return (arg,res)
+
+unifyPatt ge scope (VPattType ty) =
+  return ty
+unifyPatt ge scope ty = do
+  i <- newMeta scope vtypeType
+  let ty = VMeta i (scopeEnv scope) []
+  unify ge scope ty (VPattType ty)
+  return ty
 
 unify ge scope (VApp f1 vs1)      (VApp f2 vs2)
   | f1 == f2                   = sequence_ (zipWith (unify ge scope) vs1 vs2)
