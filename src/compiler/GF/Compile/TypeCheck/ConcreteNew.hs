@@ -235,6 +235,9 @@ tcRho ge scope (Strs ss) mb_ty = do
            (t,_) <- tcRho ge scope t (Just vtypeStr)
            return t
   instSigma ge scope (Strs ss) vtypeStrs mb_ty
+tcRho ge scope (EPattType ty) mb_ty = do
+  (ty, _) <- tcRho ge scope ty (Just vtypeType)
+  instSigma ge scope (EPattType ty) vtypeType mb_ty
 tcRho gr scope t _ = unimplemented ("tcRho "++show t)
 
 tcCases ge scope []         p_ty mb_res_ty = return ([],mb_res_ty)
@@ -269,6 +272,8 @@ tcApp ge scope (QC id) =                                         -- VAR (global)
   mkTcA (lookupOverloadTypes (geGrammar ge) id) `bindTcA` \(t,ty) -> 
      do ty <- liftErr (eval ge [] ty)
         return (t,ty)
+tcApp ge scope t =
+  singleTcA (tcRho ge scope t Nothing)
 
 
 tcOverloadFailed t ttys =
@@ -319,10 +324,18 @@ tcPatt ge scope (PR rs) ty0 = do
   ltys <- mk_ltys rs
   subsCheckRho ge scope (EPatt (PR rs)) (VRecType [(l,ty) | (l,p,ty) <- ltys]) ty0
   go scope ltys
-tcPatt gr scope (PAlt p1 p2) ty0 = do
-  tcPatt gr scope p1 ty0
-  tcPatt gr scope p2 ty0
+tcPatt ge scope (PAlt p1 p2) ty0 = do
+  tcPatt ge scope p1 ty0
+  tcPatt ge scope p2 ty0
   return scope
+tcPatt ge scope (PM q) ty0 = do
+  case lookupResType (geGrammar ge) q of
+    Ok (EPattType ty)
+            -> do vty <- liftErr (eval ge [] ty)
+                  unify ge scope ty0 vty
+                  return scope
+    Ok ty   -> tcError ("Pattern type expected but " <+> pp ty <+> " found.")
+    Bad err -> tcError (pp err)
 tcPatt ge scope p ty = unimplemented ("tcPatt "++show p)
 
 inferRecFields ge scope rs = 
@@ -741,6 +754,9 @@ mkTcA f = case f of
             Bad msg -> TcSingle  (\ms msgs -> TcFail (pp msg : msgs))
             Ok  [x] -> TcSingle  (\ms msgs -> TcOk x ms msgs)
             Ok  xs  -> TcMany xs (\ms msgs -> [(x,ms,msgs) | x <- xs])
+
+singleTcA :: TcM a -> TcA x a
+singleTcA = TcSingle . unTcM
 
 bindTcA :: TcA x a -> (a -> TcM b) -> TcA x b
 bindTcA f g = case f of
