@@ -12,6 +12,7 @@ resource Predef = {
   param PBool = PTrue | PFalse ;
 
   oper Error : Type = variants {} ;          -- the empty type
+  oper Float : Type = variants {} ;          -- the type of floats
   oper Int   : Type = variants {} ;          -- the type of integers
   oper Ints  : Int -> PType = variants {} ;  -- the type of integers from 0 to n
 
