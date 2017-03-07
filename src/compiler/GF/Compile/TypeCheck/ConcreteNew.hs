@@ -63,7 +63,7 @@ tcRho ge scope t@(Q id)     mb_ty =
   runTcA (tcOverloadFailed t) $
     tcApp ge scope t `bindTcA` \(t,ty) ->
       instSigma ge scope t ty mb_ty
-tcRho ge scope t@(QC id)     mb_ty =
+tcRho ge scope t@(QC id)    mb_ty =
   runTcA (tcOverloadFailed t) $
     tcApp ge scope t `bindTcA` \(t,ty) ->
       instSigma ge scope t ty mb_ty
@@ -476,7 +476,12 @@ subsCheckRho ge scope t ty1@(VRecType rs1) ty2@(VRecType rs2) = do      -- Rule 
         return (l, (mb_ty,t))
 
   (scope,mkProj,mkWrap) <- mkAccess scope t
-  rs <- sequence [mkField scope l t ty1 ty2 | (l,ty2) <- rs2, Just ty1 <- [lookup l rs1], Just t <- [mkProj l]]
+
+  let fields = [(l,ty2,lookup l rs1) | (l,ty2) <- rs2]
+  case [l | (l,_,Nothing) <- fields] of
+    []      -> return ()
+    missing -> tcError ("Missing fields:" <+> hsep missing)
+  rs <- sequence [mkField scope l t ty1 ty2 | (l,ty2,Just ty1) <- fields, Just t <- [mkProj l]]
   return (mkWrap (R rs))
 subsCheckRho ge scope t tau1 tau2 = do                                  -- Rule EQ
   unify ge scope tau1 tau2                                 -- Revert to ordinary unification
