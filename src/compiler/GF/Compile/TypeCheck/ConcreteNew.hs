@@ -480,7 +480,8 @@ subsCheckRho ge scope t ty1@(VRecType rs1) ty2@(VRecType rs2) = do      -- Rule 
   let fields = [(l,ty2,lookup l rs1) | (l,ty2) <- rs2]
   case [l | (l,_,Nothing) <- fields] of
     []      -> return ()
-    missing -> tcError ("Missing fields:" <+> hsep missing)
+    missing -> tcError ("In the term" <+> pp t $$
+                        "there are no values for fields:" <+> hsep missing)
   rs <- sequence [mkField scope l t ty1 ty2 | (l,ty2,Just ty1) <- fields, Just t <- [mkProj l]]
   return (mkWrap (R rs))
 subsCheckRho ge scope t tau1 tau2 = do                                  -- Rule EQ
