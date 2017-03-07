@@ -288,8 +288,8 @@ tcApp ge scope t =
 
 tcOverloadFailed t ttys =
   tcError ("Overload resolution failed" $$
-           "term " <+> pp t $$
-           "types" <+> vcat [pp ty | (_,ty) <- ttys])
+           "of term   " <+> pp t $$
+           "with types" <+> vcat [ppTerm Terse 0 ty | (_,ty) <- ttys])
 
 
 tcPatt ge scope PW        ty0 =

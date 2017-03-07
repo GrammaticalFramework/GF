@@ -425,7 +425,7 @@ checkLType gr g trm typ0 = do
                        then checkLType gr ((bt,x,a):g) c b
                        else do b' <- checkIn (pp "abs") $ substituteLType [(bt',z,Vr x)] b
                                checkLType gr ((bt,x,a):g) c b'
-          return $ (Abs bt x c', Prod bt' x a b')
+          return $ (Abs bt x c', Prod bt' z a b')
         _ -> checkError $ "function type expected instead of" <+> ppType typ
 
     App f a -> do

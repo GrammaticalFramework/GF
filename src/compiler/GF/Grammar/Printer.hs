@@ -39,7 +39,7 @@ import qualified Data.Map as Map
 import qualified Data.Array.IArray as Array
 
 data TermPrintQual 
-  = Unqualified | Qualified | Internal
+  = Terse | Unqualified | Qualified | Internal
   deriving Eq                 
 
 instance Pretty Grammar where
@@ -229,7 +229,13 @@ ppTerm q d (R [])      = pp "<>" -- to distinguish from {} empty RecType
 ppTerm q d (R xs)      = braces (fsep (punctuate ';' [l <+> 
                                                        fsep [case mb_t of {Just t -> ':' <+> ppTerm q 0 t; Nothing -> empty},
                                                              '=' <+> ppTerm q 0 e] | (l,(mb_t,e)) <- xs]))
-ppTerm q d (RecType xs)= braces (fsep (punctuate ';' [l <+> ':' <+> ppTerm q 0 t | (l,t) <- xs]))
+ppTerm q d (RecType xs)
+  | q == Terse         = case [cat | (l,_) <- xs, let (p,cat) = splitAt 5 (showIdent (label2ident l)), p == "lock_"] of
+                           [cat] -> pp cat
+                           _     -> doc
+  | otherwise          = doc
+  where
+    doc = braces (fsep (punctuate ';' [l <+> ':' <+> ppTerm q 0 t | (l,t) <- xs]))
 ppTerm q d (Typed e t) = '<' <> ppTerm q 0 e <+> ':' <+> ppTerm q 0 t <> '>'
 ppTerm q d (ImplArg e) = braces (ppTerm q 0 e)
 ppTerm q d (ELincat cat t) = prec d 4 ("lincat" <+> cat <+> ppTerm q 5 t)
@@ -296,6 +302,7 @@ ppDDecl q (_,id,typ)
 ppQIdent :: TermPrintQual -> QIdent -> Doc
 ppQIdent q (m,id) =
   case q of
+    Terse       ->          pp id
     Unqualified ->          pp id
     Qualified   -> m <> '.' <> id
     Internal    -> m <> '.' <> id
