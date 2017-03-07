@@ -51,6 +51,6 @@ data Predefined = Drop | Take | Tk | Dp | EqStr | Occur | Occurs | ToUpper
              {- | Show | Read | ToStr | MapStr | EqVal -}
                 | Error | Trace
                 -- Canonical values below:
-                | PBool | PFalse | PTrue | Int | Ints | NonExist 
+                | PBool | PFalse | PTrue | Int | Float | Ints | NonExist 
                 | BIND | SOFT_BIND | SOFT_SPACE | CAPIT | ALL_CAPIT
                 deriving (Show,Eq,Ord,Ix,Bounded,Enum)

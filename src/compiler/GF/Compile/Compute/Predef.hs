@@ -75,7 +75,7 @@ predefList =
      -- cShow, cRead, cMapStr, cEqVal
      (cError,Error),(cTrace,Trace),
      -- Canonical values:
-     (cPBool,PBool),(cPFalse,PFalse),(cPTrue,PTrue),(cInt,Int),
+     (cPBool,PBool),(cPFalse,PFalse),(cPTrue,PTrue),(cInt,Int),(cFloat,Float),
      (cInts,Ints),(cNonExist,NonExist)
      ,(cBIND,BIND),(cSOFT_BIND,SOFT_BIND),(cSOFT_SPACE,SOFT_SPACE)
      ,(cCAPIT,CAPIT),(cALL_CAPIT,ALL_CAPIT)]
@@ -103,6 +103,7 @@ delta f vs =
       -- Canonical values:
       PBool   -> canonical
       Int     -> canonical
+      Float   -> canonical
       Ints    -> canonical
       PFalse  -> canonical
       PTrue   -> canonical
