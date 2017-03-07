@@ -549,11 +549,11 @@ mkInterj : Str -> Interj
     _ => regV s
     } ;
 
-  prepV2 v p = lin V2 {s = v.s ; p = v.p ; s1 = v.s1 ; c2 = p.s ; isRefl = v.isRefl} ;
+  prepV2 v p = lin V2 {s = v.s ; p = v.p ; c2 = p.s ; isRefl = v.isRefl} ;
   dirV2 v = prepV2 v noPrep ;
 
   prepPrepV3 v p q = 
-    lin V3 {s = v.s ; p = v.p ; s1 = v.s1 ; c2 = p.s ; c3 = q.s ; isRefl = v.isRefl} ;
+    lin V3 {s = v.s ; p = v.p ; c2 = p.s ; c3 = q.s ; isRefl = v.isRefl} ;
   dirV3 v p = prepPrepV3 v noPrep p ;
   dirdirV3 v = dirV3 v noPrep ;
 
