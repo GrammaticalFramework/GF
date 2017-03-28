@@ -9,7 +9,7 @@ concrete GrammarLat of Grammar =
   SentenceLat,
   QuestionLat,
 --  RelativeLat,
---  ConjunctionLat,
+  ConjunctionLat,
   PhraseLat,
   TextX,
   TenseX,
