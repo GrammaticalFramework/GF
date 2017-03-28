@@ -153,5 +153,9 @@ oper
     _ => s
     } ;
 
+-- handling errors caused by temporarily missing definitions
+
+  notYet : Str -> Predef.Error = \s ->
+    Predef.error ("NOT YET IMPLEMENTED:" ++ s) ;
 
 }
