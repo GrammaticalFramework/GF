@@ -3,7 +3,7 @@
 concrete LangLat of Lang = 
   GrammarLat,
   ParadigmsLat,
-  ConjunctionLat,
+--  ConjunctionLat,
   LexiconLat
   ** {
 
