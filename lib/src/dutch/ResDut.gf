@@ -217,6 +217,7 @@ param
       
     in
     case lop of {
+        #vowel + #consonant => loop ;
     	_+ #consonant + #vowel + #consonant => loop ; 
     	_+ ("bb" | "dd" | "ff" | "gg" | "kk" | "ll" | "mm" | "nn" | "pp" | 
             "rr" | "ss" | "tt")    => zeg ;
