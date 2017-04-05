@@ -3,22 +3,18 @@ module PGF.Generate
          , generateFrom,        generateFromDepth
          , generateRandom,      generateRandomDepth
          , generateRandomFrom,  generateRandomFromDepth
+         , generateOntology,    generateOntologyDepth
          , prove
          ) where
 
 import PGF.CId
 import PGF.Data
---import PGF.Macros
 import PGF.TypeCheck
---import PGF.Probabilistic
-
---import Data.Maybe (fromMaybe)
---import qualified Data.Map as Map
---import qualified Data.IntMap as IntMap
 import Control.Monad
+import Control.Monad.State
 import Control.Monad.Identity
 import System.Random
-
+import Data.Maybe(isNothing)
 
 ------------------------------------------------------------------------------
 -- The API
@@ -70,6 +66,16 @@ generateRandomFromDepth g pgf e dp =
                                                  (generateForMetas (prove dp) e)
                                                  emptyMetaStore (Identity g)])
 
+generateOntology :: RandomGen g => g -> PGF -> Type -> [(Maybe Expr, Type)] -> [Expr]
+generateOntology g pgf ty args = generateOntologyDepth g pgf ty args Nothing
+
+generateOntologyDepth :: RandomGen g => g -> PGF -> Type -> [(Maybe Expr, Type)] -> Maybe Int -> [Expr]
+generateOntologyDepth g pgf ty args dp =
+  restart g (\g -> [e | (_,(Ontology args' _),e) <- snd $ runTcM (abstract pgf)
+                                                                 (prove dp emptyScope (TTyp [] ty) >>= checkResolvedMetaStore emptyScope)
+                                                                 emptyMetaStore
+                                                                 (Ontology args g),
+                        all (isNothing . fst) args'])
 
 ------------------------------------------------------------------------------
 -- The main generation algorithm
@@ -79,6 +85,7 @@ generate sel pgf ty dp =
   [e | (_,ms,e) <- snd $ runTcM (abstract pgf)
                                 (prove dp emptyScope (TTyp [] ty) >>= checkResolvedMetaStore emptyScope)
                                 emptyMetaStore sel]
+
 
 prove :: Selector sel => Maybe Int -> Scope -> TType -> TcM sel Expr
 prove dp scope (TTyp env1 (DTyp hypos1 cat es1)) = do
@@ -171,3 +178,39 @@ instance RandomGen g => Selector (Identity g) where
         | d < p || null gens = (p,(e,ty),gens)
         | otherwise = let (p',e_ty',gens') = hit (d-p) gens
                       in (p',e_ty',gen:gens')
+
+
+data Ontology a = Ontology [(Maybe Expr, Type)] a
+
+instance RandomGen g => Selector (Ontology g) where
+  splitSelector (Ontology args g) = let (g1,g2) = split g
+                                    in (Ontology args g1, Ontology args g2)
+
+  select cat scope dp = do
+    Ontology args g <- get
+    case pickArg [] cat args of
+      []   -> do gens <- typeGenerators scope cat
+                 TcM (\abstr k h -> iter k 1.0 gens)
+      alts -> msum [  case mb_e of
+                        Just e  -> do put (Ontology args g)
+                                      return (e, TTyp [] ty)
+                        Nothing -> mzero
+                    | (mb_e,ty,args) <- alts]
+    where
+      iter k p []   ms (Ontology ce g) = id
+      iter k p gens ms (Ontology ce g) =
+        let (d,g')    = randomR (0.0,p) g
+            (g1,g2)   = split g'
+            (p',e_ty,gens') = hit d gens
+        in k e_ty ms (Ontology ce g1) . iter k (p-p') gens' ms (Ontology ce g2)
+
+      hit :: Double -> [(Double,Expr,TType)] -> (Double,(Expr,TType),[(Double,Expr,TType)])
+      hit d (gen@(p,e,ty):gens) | d < p || null gens = (p,(e,ty),gens)
+                                | otherwise          = let (p',e_ty',gens') = hit (d-p) gens
+                                                       in (p',e_ty',gen:gens')
+
+      pickArg args' cat' [] = []
+      pickArg args' cat' (arg@(mb_e,ty@(DTyp _ cat _)):args)
+        | cat' == cat = (mb_e, ty, foldl (flip (:)) args args') : 
+                        pickArg (arg:args') cat' args
+        | otherwise   = pickArg (arg:args') cat' args
