@@ -1,0 +1,7 @@
+* {"not"} PART neg head 
+* {"has","had","have","will","would","do","does","did"} AUX aux head 
+UseComp {"is","are","am","was","been","be"} VERB cop head
+CompCN {"a","an"} DET det head
+ComplVV {"to"} PART mark xcomp
+
+

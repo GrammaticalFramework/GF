@@ -1,0 +1,6 @@
+* {"inte"} PART neg head 
+* {"ha","hade","har","ska","skulle"} AUX aux head 
+* {"kan","kunde","kunnat","måste"} AUX aux head 
+UseComp {"är","var","varit"} VERB cop head
+CompCN {"en","ett"} DET det head
+ComplVV {"att"} PART mark xcomp
