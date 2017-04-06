@@ -17,6 +17,7 @@ module PGF.VisualizeTree
              , graphvizParseTreeDep
              , graphvizDependencyTree
              , Labels, getDepLabels
+             , CncLabels, getCncDepLabels
              , graphvizBracketedString
              , graphvizAlignment
              , gizaAlignment
@@ -33,7 +34,7 @@ import PGF.Macros (lookValCat, BracketedString(..))
 
 import qualified Data.Map as Map
 --import qualified Data.IntMap as IntMap
-import Data.List (intersperse,nub,mapAccumL,find)
+import Data.List (intersperse,nub,mapAccumL,find,groupBy)
 --import Data.Char (isDigit)
 import Data.Maybe (fromMaybe)
 import Text.PrettyPrint
@@ -119,17 +120,17 @@ type Labels = Map.Map CId [String]
 graphvizDependencyTree
   :: String -- ^ Output format: @"latex"@, @"conll"@, @"malt_tab"@, @"malt_input"@ or @"dot"@
   -> Bool -- ^ Include extra information (debug)
-  -> Maybe Labels -- ^ Label information obtained with 'getDepLabels'
-  -> unused -- ^ not used (was: @Maybe String@)
+  -> Maybe Labels -- ^ abstract label information obtained with 'getDepLabels'
+  -> Maybe CncLabels -- ^ concrete label information obtained with ' ' (was: unused (was: @Maybe String@))
   -> PGF
   -> CId -- ^ The language of analysis
   -> Tree
   -> String -- ^ Rendered output in the specified format
-graphvizDependencyTree format debug mlab ms pgf lang t = 
+graphvizDependencyTree format debug mlab mclab pgf lang t = 
   case format of
     "latex"      -> render . ppLaTeX $ conll2latex' conll
     "svg"        -> render . ppSVG . toSVG $ conll2latex' conll
-    "conll"      -> render $ vcat (map (hcat . intersperse (char '\t')         ) wnodes)
+    "conll"      -> printCoNLL conll
     "malt_tab"   -> render $ vcat (map (hcat . intersperse (char '\t') . (\ws -> [ws !! 0,ws !! 1,ws !! 3,ws !! 6,ws !! 7])) wnodes)
     "malt_input" -> render $ vcat (map (hcat . intersperse (char '\t') . take 6) wnodes)
     _            -> render $ text "digraph {" $$
@@ -140,7 +141,8 @@ graphvizDependencyTree format debug mlab ms pgf lang t =
                             vcat links) $$
                     text "}"
   where
-    conll  = (map.map) render wnodes
+    conll  = maybe conll0 (\ls -> fixCoNLL ls conll0) mclab
+    conll0 = (map.map) render wnodes
     nodes  = map mkNode leaves
     links  = map mkLink [(fid, fromMaybe (dep_lbl,nil) (lookup fid deps)) | ((cat,fid,fun),_,w) <- tail leaves]
 
@@ -185,7 +187,8 @@ graphvizDependencyTree format debug mlab ms pgf lang t =
 
     mkLink (x,(lbl,y)) = tag y <+> text "->" <+> tag x  <+> text "[label = " <> doubleQuotes (text lbl) <> text "] ;"
 
-    labels = maybe Map.empty id mlab
+    labels  = maybe Map.empty id mlab
+    clabels = maybe [] id mclab
 
     posCat cat = case Map.lookup cat labels of
         Just [p] -> mkCId p
@@ -737,3 +740,53 @@ ppSVG svg =
         '<' -> "&lt;"++r
         '>' -> "&gt;"++r
         _ -> c:r
+
+
+----------------------------------
+-- concrete syntax annotations (local) on top of conll
+-- examples of annotations:
+-- UseComp {"not"} PART neg head 
+-- UseComp {*} AUX cop head
+
+type CncLabels = [(String, String -> Maybe (String -> String,String,String))]
+-- (fun, word -> (pos,label,target))
+-- the pos can remain unchanged, as in the current notation in the article
+
+fixCoNLL :: CncLabels -> CoNLL -> CoNLL
+fixCoNLL labels conll = map fixc conll where
+  fixc row = case row of
+    (i:word:fun:pos:cat:x_:j:label:xs) -> case look (fun,word) of
+      Just (pos',label',"head") -> (i:word:fun:pos' pos:cat:x_:j :label':xs)
+      Just (pos',label',target) -> (i:word:fun:pos' pos:cat:x_: getDep j target:label':xs)
+      _ -> row
+    _ -> row
+    
+  look (fun,word) = case lookup fun labels of
+    Just relabel -> relabel word
+    _ -> Nothing
+  
+  getDep j label = maybe j id $ lookup (label,j) [((label,j),i) | i:word:fun:pos:cat:x_:j:label:xs <- conll]
+
+getCncDepLabels :: String -> CncLabels
+getCncDepLabels = map merge .  groupBy (\ (x,_) (a,_) -> x == a) . concatMap analyse . filter choose . lines where
+  --- choose is for compatibility with the general notation
+  choose line = notElem '(' line && elem '{' line --- ignoring non-local (with "(") and abstract (without "{") rules
+  
+  analyse line = case break (=='{') line of
+    (beg,_:ws) -> case break (=='}') ws of
+      (toks,_:target) -> case (words beg, words target) of
+        (fun:_,[    label,j]) -> [(fun, (tok, (id,       label,j))) | tok <- getToks toks]
+        (fun:_,[pos,label,j]) -> [(fun, (tok, (const pos,label,j))) | tok <- getToks toks]
+        _ -> []
+      _ -> []
+    _ -> []
+  merge rules@((fun,_):_) = (fun, \tok ->
+    case lookup tok (map snd rules) of
+      Just new -> return new
+      _ -> lookup "*"  (map snd rules)
+    )
+  getToks = words . map (\c -> if elem c "\"," then ' ' else c)
+
+printCoNLL :: CoNLL -> String
+printCoNLL = unlines . map (concat . intersperse "\t")
+

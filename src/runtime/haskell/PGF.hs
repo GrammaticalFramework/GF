@@ -132,6 +132,7 @@ module PGF(
            conlls2latexDoc,
            -- extra:
            Labels, getDepLabels,
+           CncLabels, getCncDepLabels,
  
            -- * Probabilities
            Probabilities,

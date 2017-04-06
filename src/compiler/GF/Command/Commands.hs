@@ -545,15 +545,20 @@ pgfCommands = Map.fromList [
        "See also 'vp -showdep' for another visualization of dependencies." 
        ],
      exec = getEnv $ \ opts arg (Env pgf mos) -> do
+         let absname = abstractName pgf
          let es = toExprs arg
          let debug = isOpt "v" opts
-         let file = valStrOpts "file" "" opts
+         let abslabels = valStrOpts "abslabels" (valStrOpts "file" "" opts) opts
+         let cnclabels = valStrOpts "cnclabels" "" opts
          let outp = valStrOpts "output" "dot" opts
-         mlab <- case file of
+         mlab <- case abslabels of
            "" -> return Nothing
-           _  -> (Just . getDepLabels) `fmap` restricted (readFile file)
+           _  -> (Just . getDepLabels) `fmap` restricted (readFile abslabels)
+         mclab <- case cnclabels of
+           "" -> return Nothing
+           _  -> (Just . getCncDepLabels) `fmap` restricted (readFile cnclabels)
          let lang = optLang pgf opts
-         let grphs = map (graphvizDependencyTree outp debug mlab Nothing pgf lang) es
+         let grphs = map (graphvizDependencyTree outp debug mlab mclab pgf lang) es
          if isOpt "conll2latex" opts
            then return $ fromString $ conlls2latexDoc $ stanzas $ unlines $ toStrings arg
            else if isFlag "view" opts && valStrOpts "output" "" opts == "latex"
@@ -568,10 +573,9 @@ pgfCommands = Map.fromList [
                else return $ fromString $ unlines $ intersperse "" grphs,
      examples = [
        mkEx "gr | vd              -- generate a tree and show dependency tree in .dot",
-       mkEx "gr | vd -view=open   -- generate a tree and display dependency tree on a Mac",
-       mkEx "gr | vd -view=open -output=latex   -- generate a tree and display latex dependency tree on a Mac",
-       mkEx "gr -number=1000 | vd -file=dep.labels -output=conll     -- generate training treebank",
-       mkEx "gr -number=100 | vd -file=dep.labels -output=malt_input -- generate test sentences",
+       mkEx "gr | vd -view=open   -- generate a tree and display dependency tree on with Mac's 'open'",
+       mkEx "gr | vd -view=open -output=latex   -- generate a tree and display latex dependency tree with Mac's 'open'",
+       mkEx "gr -number=1000 | vd -abslabels=Lang.labels -cnclabels=LangSwe.labels -output=conll  -- generate a random treebank",
        mkEx "rf -file=ex.conll | vd -conll2latex | wf -file=ex.tex   -- convert conll file to latex"
        ],
      options = [
@@ -579,11 +583,13 @@ pgfCommands = Map.fromList [
        ("conll2latex", "convert conll to latex")
        ],
      flags = [
-       ("file","configuration file for labels, format per line 'fun label*'"),
-       ("format","format of the visualization file using dot (default \"png\")"),
-       ("output","output format of graph source (dot (default), malt_input, conll)"),
-       ("view","program to open the resulting file (default \"open\")"),
-       ("lang","the language of analysis")
+       ("abslabels","abstract configuration file for labels, format per line 'fun label*'"),
+       ("cnclabels","concrete configuration file for labels, format per line 'fun {words|*} pos label head'"),
+       ("file",     "same as abslabels (abstract configuration file)"),
+       ("format",   "format of the visualization file using dot (default \"png\")"),
+       ("output",   "output format of graph source (latex, conll, dot (default but deprecated))"),
+       ("view",     "program to open the resulting graph file (default \"open\")"),
+       ("lang",     "the language of analysis")
        ]
     }),
 

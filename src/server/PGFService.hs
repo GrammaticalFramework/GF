@@ -794,7 +794,7 @@ parseTree pgf lang opts tree = PGF.graphvizParseTree pgf lang opts tree
 
 doDepTree lc path pgf fmt lang tree =
   do (_,lbls) <- liftIO $ getLabels lc path pgf
-     let vis = PGF.graphvizDependencyTree fmt False (Just lbls) () pgf lang tree
+     let vis = PGF.graphvizDependencyTree fmt False (Just lbls) Nothing pgf lang tree ---- TODO: CncLabels
      if fmt `elem` ["png","gif","gv"]
        then outputGraphviz vis
        else if fmt=="svg"
