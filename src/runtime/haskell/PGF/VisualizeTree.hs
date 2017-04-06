@@ -169,8 +169,9 @@ graphvizDependencyTree format debug mlab mclab pgf lang t =
              in (h,(dep_lbl,nil)):deps
 
     groupAndIndexIt id []          = []
-    groupAndIndexIt id ((p,w):pws) = let (ws,pws1) = collect pws
-                                     in (p,id,unwords (w:ws)) : groupAndIndexIt (id+1) pws1
+    groupAndIndexIt id ((p,w):pws) = (p,id,w) : groupAndIndexIt (id+1) pws
+---    groupAndIndexIt id ((p,w):pws) = let (ws,pws1) = collect pws
+---                                     in (p,id,unwords (w:ws)) : groupAndIndexIt (id+1) pws1
       where
         collect pws@((p1,w):pws1)
           | p == p1   = let (ws,pws2) = collect pws1
@@ -755,6 +756,7 @@ type CncLabels = [(String, String -> Maybe (String -> String,String,String))]
 fixCoNLL :: CncLabels -> CoNLL -> CoNLL
 fixCoNLL labels conll = map fixc conll where
   fixc row = case row of
+    (i:word:fun:pos:cat:x_:"0":"dep":xs) -> (i:word:fun:pos:cat:x_:"0":"root":xs) --- change the root label from dep to root 
     (i:word:fun:pos:cat:x_:j:label:xs) -> case look (fun,word) of
       Just (pos',label',"head") -> (i:word:fun:pos' pos:cat:x_:j :label':xs)
       Just (pos',label',target) -> (i:word:fun:pos' pos:cat:x_: getDep j target:label':xs)
@@ -762,8 +764,14 @@ fixCoNLL labels conll = map fixc conll where
     _ -> row
     
   look (fun,word) = case lookup fun labels of
-    Just relabel -> relabel word
-    _ -> Nothing
+    Just relabel -> case relabel word of
+      Just row -> Just row
+      _ -> case lookup "*" labels of
+        Just starlabel -> starlabel word
+        _ -> Nothing
+    _ -> case lookup "*" labels of
+        Just starlabel -> starlabel word
+        _ -> Nothing
   
   getDep j label = maybe j id $ lookup (label,j) [((label,j),i) | i:word:fun:pos:cat:x_:j:label:xs <- conll]
 
