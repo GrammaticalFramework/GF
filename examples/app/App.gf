@@ -22,7 +22,7 @@ abstract App =
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
---P  ,Phrasebook
+  ,Phrasebook
 
               ** {
 flags
@@ -30,8 +30,8 @@ flags
   heuristic_search_factor=0.80; -- doesn't seem to affect speed or quality much
 
 fun
---P  PhrasePhr : Phrase -> Phr ;
---P  Phrase_Chunk : Phrase -> Chunk ;
+  PhrasePhr : Phrase -> Phr ;
+  Phrase_Chunk : Phrase -> Chunk ;
 
   ComplV2 : V2 -> NP -> VP ;  -- sees him
   

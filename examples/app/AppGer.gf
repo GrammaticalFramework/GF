@@ -22,6 +22,8 @@ concrete AppGer of App =
   -- Construction
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
-  ]
+  ],
+   PhrasebookGer - [open_Adv,closed_A,open_A,at_Prep]
+   
 
    ** AppFunctor with (Syntax = SyntaxGer) ;

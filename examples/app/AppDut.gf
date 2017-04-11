@@ -22,6 +22,7 @@ concrete AppDut of App =
   -- Construction
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
-  ]
+  ],
+   PhrasebookDut - [open_Adv,closed_A,open_A]
 
    ** AppFunctor with (Syntax = SyntaxDut) ;

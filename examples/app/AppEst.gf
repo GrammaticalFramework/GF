@@ -23,5 +23,7 @@ concrete AppEst of App =
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
+   ,PhrasebookEst - [open_Adv,closed_A,open_A,at_Prep]
+   
 
    ** AppFunctor with (Syntax = SyntaxEst) ;

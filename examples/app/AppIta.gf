@@ -23,5 +23,7 @@ concrete AppIta of App =
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
+   ,PhrasebookIta - [open_Adv,closed_A,open_A,at_Prep]
+   
 
    ** AppFunctor with (Syntax = SyntaxIta) ;

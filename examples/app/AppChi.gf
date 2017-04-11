@@ -22,6 +22,7 @@ concrete AppChi of App =
   -- Construction
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
-  ]
-
+  ],
+   PhrasebookChi - [open_Adv,closed_A,open_A,at_Prep,by_Prep]
+   
    ** AppFunctor with (Syntax = SyntaxChi) ;

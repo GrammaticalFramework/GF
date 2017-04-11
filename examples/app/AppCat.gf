@@ -23,5 +23,6 @@ concrete AppCat of App =
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
-
+   ,PhrasebookCat - [open_Adv,closed_A,open_A,at_Prep,cheap_A,expensive_A,stateCopula]
+   
    ** AppFunctor with (Syntax = SyntaxCat) ;

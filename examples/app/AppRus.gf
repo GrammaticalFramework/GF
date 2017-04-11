@@ -23,5 +23,7 @@ concrete AppRus of App =
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
+   ,PhrasebookRus - [open_Adv,closed_A,open_A,at_Prep,cost_V]
+   
 
    ** AppFunctor with (Syntax = SyntaxRus) ;

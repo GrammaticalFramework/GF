@@ -21,6 +21,7 @@ concrete AppSwe of App =
   -- Construction
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
-  ]
+  ],
+   PhrasebookSwe - [open_Adv,closed_A,open_A]
 
    ** AppFunctor with (Syntax = SyntaxSwe) ;

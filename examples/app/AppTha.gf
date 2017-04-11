@@ -22,7 +22,9 @@ concrete AppTha of App =
   -- Construction
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
-  ]
+  ],
+   PhrasebookTha - [open_Adv,closed_A,open_A,at_Prep]
+   
 
    ** AppFunctor with (Syntax = SyntaxTha) ;
 

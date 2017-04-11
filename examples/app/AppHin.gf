@@ -22,6 +22,8 @@ concrete AppHin of App =
   -- Construction
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
-  ]
+  ],
+   PhrasebookHin - [open_Adv,closed_A,open_A,at_Prep]
+   
 
    ** AppFunctor with (Syntax = SyntaxHin) ;

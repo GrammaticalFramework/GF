@@ -24,5 +24,7 @@ concrete AppSpa of App =
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
   ]
+   ,PhrasebookSpa - [open_Adv,closed_A,open_A,at_Prep,cheap_A,expensive_A,stateCopula]
+   
 
    ** AppFunctor with (Syntax = SyntaxSpa) ;

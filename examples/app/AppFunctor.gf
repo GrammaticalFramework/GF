@@ -20,14 +20,19 @@ incomplete concrete AppFunctor of App =
   -- Construction
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
-  ]
+  ],
+ Phrasebook - [open_Adv]
 
    ** open Syntax in {
 
 flags
   literal=Symb ;
+  case_sensitive=off ;
 
 lin
+  PhrasePhr p = {s = "+" ++ p.s} | p ;
+  Phrase_Chunk p = p ;
+
   ComplV2 v np = mkVP v np ;
 
   ComplV2V v np vp = mkVP v np vp ;

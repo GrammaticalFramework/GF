@@ -34,7 +34,7 @@ App16.pgf: $(APP16)
 
 # Without dependencies:
 App11:
-	$(GFMKT) -name=App12 $(APP11) +RTS -K200M
+	$(GFMKT) -name=App11 $(APP11) +RTS -K200M
 App12:
 	$(GFMKT) -name=App12 $(APP12) +RTS -K200M
 App13:
@@ -43,6 +43,8 @@ App14:
 	$(GFMKT) -name=App14 $(APP14) +RTS -K200M
 App15:
 	$(GFMKT) -name=App15 $(APP15) +RTS -K200M
+App16:
+	$(GFMKT) -name=App16 $(APP16) +RTS -K200M
 
 # App grammars for individual languages
 AppEng.pgf:: ; $(GFMKT) -name=AppEng AppEng.gf

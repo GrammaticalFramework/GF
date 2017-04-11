@@ -22,7 +22,8 @@ concrete AppEng of App =
   -- Construction
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
-  ]
+  ],
+  PhrasebookEng - [open_Adv]
 
    ** AppFunctor with (Syntax = SyntaxEng) ;
 

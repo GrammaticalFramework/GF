@@ -22,7 +22,8 @@ concrete AppBul of App =
   -- Construction
   -- Extensions
     PassVPSlash, PassAgentVPSlash -- not reachable anyway
-  ]
+  ],
+   PhrasebookBul - [open_Adv,closed_A,open_A]
 
    ** AppFunctor with (Syntax = SyntaxBul) ;
 
