@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.grammaticalframework.ui.android"
-    android:versionCode="14"
-    android:versionName="1.2.1"
+    android:versionCode="15"
+    android:versionName="1.2.2"
     android:installLocation="auto" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
