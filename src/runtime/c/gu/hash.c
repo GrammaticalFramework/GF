@@ -25,7 +25,7 @@ gu_int_hash_fn(GuHasher* self, const void* p)
 	return (GuHash) *(const int*) p;
 }
 
-GuHasher gu_int_hasher[1] = {
+GU_API_DATA GuHasher gu_int_hasher[1] = {
 	{
 		{ gu_int_eq_fn },
 		gu_int_hash_fn
@@ -46,7 +46,7 @@ gu_addr_hash_fn(GuHasher* self, const void* p)
 	return (GuHash) (uintptr_t) p;
 }
 
-GuHasher gu_addr_hasher[1] = {
+GU_API_DATA GuHasher gu_addr_hasher[1] = {
 	{
 		{ gu_addr_eq_fn },
 		gu_addr_hash_fn
@@ -69,7 +69,7 @@ gu_word_hash_fn(GuHasher* self, const void* p)
 	return (GuHash) (uintptr_t) p;
 }
 
-GuHasher gu_word_hasher[1] = {
+GU_API_DATA GuHasher gu_word_hasher[1] = {
 	{
 		{ gu_word_eq_fn },
 		gu_word_hash_fn

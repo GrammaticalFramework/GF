@@ -25,6 +25,24 @@
 #ifndef GU_DEFS_H_
 #define GU_DEFS_H_
 
+// MSVC requires explicit export/import of
+// symbols in DLLs. CMake takes care of this
+// for functions, but not for data/variables.
+#if defined(_MSC_VER)
+#if defined(COMPILING_GU)
+#define GU_API_DATA_DECL __declspec(dllexport)
+#define GU_API_DATA __declspec(dllexport)
+#else
+#define GU_API_DATA_DECL __declspec(dllimport)
+#define GU_API_DATA ERROR_NOT_COMPILING_LIBGU
+#endif
+
+#else
+#define GU_API_DATA_DECL extern
+#define GU_API_DATA
+#endif
+// end MSVC workaround
+
 #include <stddef.h>
 #include <inttypes.h>
 #include <stdbool.h>
@@ -154,7 +172,7 @@ extern void* const gu_null;
 // Dummy struct used for generic struct pointers
 typedef struct GuStruct GuStruct;
 
-extern GuStruct* const gu_null_struct;
+GU_API_DATA_DECL GuStruct* const gu_null_struct;
 
 typedef uintptr_t GuWord;
 

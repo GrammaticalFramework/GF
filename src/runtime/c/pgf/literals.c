@@ -334,7 +334,7 @@ pgf_match_name_lit(PgfLiteralCallback* self, PgfConcr* concr,
 	return ep;
 }
 
-PgfLiteralCallback pgf_nerc_literal_callback =
+PGF_API_DATA PgfLiteralCallback pgf_nerc_literal_callback =
   { pgf_match_name_lit, pgf_predict_empty } ;
 
 static void
@@ -419,7 +419,7 @@ pgf_match_unknown_lit(PgfLiteralCallback* self, PgfConcr* concr,
 	return ep;
 }
 
-PgfLiteralCallback pgf_unknown_literal_callback =
+PGF_API_DATA PgfLiteralCallback pgf_unknown_literal_callback =
   { pgf_match_unknown_lit, pgf_predict_empty } ;
 
 PgfCallbacksMap*

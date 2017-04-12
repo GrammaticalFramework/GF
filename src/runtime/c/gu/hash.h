@@ -31,10 +31,10 @@ struct GuHasher {
 };
 
 
-extern GuHasher gu_int_hasher[1];
+GU_API_DATA GuHasher gu_int_hasher[1];
 
-extern GuHasher gu_addr_hasher[1];
+GU_API_DATA GuHasher gu_addr_hasher[1];
 
-extern GuHasher gu_word_hasher[1];
+GU_API_DATA GuHasher gu_word_hasher[1];
 
 #endif // GU_HASH_H_

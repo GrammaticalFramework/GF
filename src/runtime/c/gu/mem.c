@@ -8,7 +8,9 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #endif
+#if !defined(_MSC_VER)
 #include <unistd.h>
+#endif
 #include <fcntl.h>
 
 #ifdef USE_VALGRIND

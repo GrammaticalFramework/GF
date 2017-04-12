@@ -56,7 +56,7 @@ typedef struct {
 	PgfPatt patt;
 } PgfPattAs;
 
-typedef void PgfPattWild;
+typedef char PgfPattWild;
 
 typedef struct {
 	PgfPatt patt;
@@ -241,12 +241,15 @@ typedef struct PgfSymbolKP
 } PgfSymbolKP;
 
 typedef struct {
+	char nothing[0]; // Empty struct
 } PgfSymbolNE;
 
 typedef struct {
+	char nothing[0]; // Empty struct
 } PgfSymbolBIND;
 
 typedef struct {
+	char nothing[0]; // Empty struct
 } PgfSymbolCAPIT;
 
 typedef GuBuf PgfProductionIdx;

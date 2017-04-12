@@ -29,6 +29,7 @@ PgfCncTreeEnum*
 pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuExn* err, GuPool* pool);
 
 typedef struct {
+	char nothing[0]; // Empty struct
 } PgfLinNonExist;
 
 PgfCncTree

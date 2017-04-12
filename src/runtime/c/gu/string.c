@@ -5,7 +5,7 @@
 #include <gu/utf8.h>
 #include <gu/assert.h>
 #include <stdlib.h>
-#ifdef __MINGW32__
+#if defined(__MINGW32__) || defined(_MSC_VER)
 #include <malloc.h>
 #endif
 
@@ -273,7 +273,7 @@ gu_string_eq_fn(GuEquality* self, const void* p1, const void* p2)
 	return strcmp((GuString) p1, (GuString) p2) == 0;
 }
 
-GuEquality gu_string_equality[1] = { { gu_string_eq_fn } };
+GU_API_DATA GuEquality gu_string_equality[1] = { { gu_string_eq_fn } };
 
 static int
 gu_string_cmp_fn(GuOrder* self, const void* p1, const void* p2)
@@ -282,7 +282,7 @@ gu_string_cmp_fn(GuOrder* self, const void* p1, const void* p2)
 	return strcmp((GuString) p1, (GuString) p2);
 }
 
-GuOrder gu_string_order[1] = { { gu_string_cmp_fn } };
+GU_API_DATA GuOrder gu_string_order[1] = { { gu_string_cmp_fn } };
 
 static GuHash
 gu_string_hasher_hash(GuHasher* self, const void* p)
@@ -291,7 +291,7 @@ gu_string_hasher_hash(GuHasher* self, const void* p)
 	return gu_string_hash(0, (GuString) p);
 }
 
-GuHasher gu_string_hasher[1] = {
+GU_API_DATA GuHasher gu_string_hasher[1] = {
 	{
 		.eq = { gu_string_eq_fn },
 		.hash = gu_string_hasher_hash

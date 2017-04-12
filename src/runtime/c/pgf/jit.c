@@ -5,7 +5,7 @@
 #include <pgf/reasoner.h>
 #include <pgf/reader.h>
 #include "lightning.h"
-#ifdef __MINGW32__
+#if defined(__MINGW32__) || defined(_MSC_VER)
 #include <malloc.h>
 #endif
 
@@ -43,7 +43,7 @@ typedef struct {
 #define JIT_VSTATE JIT_V1
 #define JIT_VCLOS  JIT_V2
 
-#if defined(__MINGW32__)
+#if defined(__MINGW32__) || defined(_MSC_VER)
 #include <windows.h>
 
 static int
@@ -71,7 +71,7 @@ pgf_jit_alloc_page(PgfReader* rdr)
 
 #if defined(ANDROID)
 	if ((page = memalign(page_size, page_size)) == NULL) {	
-#elif defined(__MINGW32__)
+#elif defined(__MINGW32__) || defined(_MSC_VER)
 	if ((page = malloc(page_size)) == NULL) {
 #else
 	if (posix_memalign(&page, page_size, page_size) != 0) {

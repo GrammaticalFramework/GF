@@ -437,7 +437,7 @@ pgf_evaluate_accum_init_flt(PgfReasoner* rs,
 					   rs->pool);
 	lit_flt->val = val;
 	accum->enter_stack_ptr = rs->enter_stack_ptr;
-	rs->enter_stack_ptr = ((void*)accum)-sizeof(void*)*2;
+	rs->enter_stack_ptr = ((char*)accum)-sizeof(char*)*2;
 	accum->consts = NULL;
 }
 

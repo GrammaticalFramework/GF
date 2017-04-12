@@ -108,4 +108,4 @@ gu_variant_intval(GuVariant variant)
 	return (variant / GU_VARIANT_ALIGNMENT);
 }
 
-const GuVariant gu_null_variant = { (GuWord) NULL };
+GU_API_DATA const GuVariant gu_null_variant = { (GuWord) NULL };
