@@ -27,7 +27,7 @@ incomplete concrete AppFunctor of App =
 
 flags
   literal=Symb ;
-  case_sensitive=off ;
+--  case_sensitive=off ;
 
 lin
   PhrasePhr p = {s = "+" ++ p.s} | p ;
