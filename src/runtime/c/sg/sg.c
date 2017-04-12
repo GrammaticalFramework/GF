@@ -2146,8 +2146,7 @@ load_vars(SgQueryResult* qres, BtCursor* crsTriples, SgPattern pattern)
 }
 
 int
-sg_query_result_fetch(SgQueryResult* qres, PgfExpr* res, 
-                      GuPool* out_pool, GuExn* err)
+query_result_next(SgQueryResult* qres, GuExn* err)
 {
 	if (qres->is_empty)
 		return 0;
@@ -2203,23 +2202,182 @@ sg_query_result_fetch(SgQueryResult* qres, PgfExpr* res,
 		}
 	}
 
+close:
+	qres->is_empty = true;
+	return 0;
+}
+
+int
+sg_query_result_fetch(SgQueryResult* qres, PgfExpr* res, 
+                      GuPool* out_pool, GuExn* err)
+{
+	if (!query_result_next(qres, err))
+		return 0;
+
 	for (size_t i = 0; i < qres->n_sels; i++) {
-		rc = load_expr(qres->ectxt.crsExprs,
-		               qres->vars[qres->sels[i]].id,
-		               &res[i], out_pool);
+		int rc = load_expr(qres->ectxt.crsExprs,
+		                   qres->vars[qres->sels[i]].id,
+		                   &res[i], out_pool);
 		if (rc != SQLITE_OK) {
 			sg_raise_sqlite(rc, err);
-			goto close;
+			qres->is_empty = true;
+			return 0;
 		}
 	}
 
-	return true;
-	
-close:
-	qres->is_empty = true;
-	return false;
+	return 1;
 }
 
+static PgfExpr
+instantiate_expr(SgQueryResult* qres, PgfExpr expr,
+                 GuPool* out_pool, GuExn* err)
+{
+	PgfExpr new_expr = gu_null_variant;
+
+	GuVariantInfo ei = gu_variant_open(expr);
+	switch (ei.tag) {
+	case PGF_EXPR_ABS: {
+		PgfExprAbs* abs = ei.data;
+
+		PgfExprAbs* new_abs =
+			gu_new_variant(PGF_EXPR_ABS,
+			               PgfExprAbs,
+			               &new_expr, out_pool);
+		new_abs->bind_type = abs->bind_type;
+		new_abs->id        = gu_string_copy(abs->id, out_pool);
+		new_abs->body      = instantiate_expr(qres, abs->body, out_pool, err);
+		break;
+	}
+	case PGF_EXPR_APP: {
+		PgfExprApp* app = ei.data;
+		
+		PgfExprApp* new_app =
+			gu_new_variant(PGF_EXPR_APP,
+			               PgfExprApp,
+			               &new_expr, out_pool);
+		new_app->fun = instantiate_expr(qres, app->fun, out_pool, err);
+		new_app->arg = instantiate_expr(qres, app->arg, out_pool, err);
+		break;
+	}
+	case PGF_EXPR_LIT: {
+		PgfExprLit* lit = ei.data;
+
+		PgfExprLit* new_lit =
+			gu_new_variant(PGF_EXPR_LIT,
+			               PgfExprLit,
+			               &new_expr, out_pool);
+
+		GuVariantInfo i = gu_variant_open(lit->lit);
+		switch (i.tag) {
+		case PGF_LITERAL_STR: {
+			PgfLiteralStr* lstr = i.data;
+
+			PgfLiteralStr* new_lstr =
+				gu_new_flex_variant(PGF_LITERAL_STR,
+				                    PgfLiteralStr,
+				                    val, strlen(lstr->val)+1,
+				                    &new_lit->lit, out_pool);
+			strcpy(new_lstr->val, lstr->val);
+			break;
+		}
+		case PGF_LITERAL_INT: {
+			PgfLiteralInt* lint = i.data;
+
+			PgfLiteralInt* new_lint =
+				gu_new_variant(PGF_LITERAL_INT,
+				               PgfLiteralInt,
+				               &new_lit->lit, out_pool);
+			new_lint->val = lint->val;
+			break;
+		}
+		case PGF_LITERAL_FLT: {
+			PgfLiteralFlt* lflt = i.data;
+
+			PgfLiteralFlt* new_lflt =
+				gu_new_variant(PGF_LITERAL_FLT,
+				               PgfLiteralFlt,
+				               &new_lit->lit, out_pool);
+			new_lflt->val = lflt->val;
+			break;
+		}
+		default:
+			gu_impossible();
+		}
+
+		break;
+	}
+	case PGF_EXPR_META: {
+		new_expr = expr;
+
+		size_t j = 0;
+		while (j < qres->n_vars) {
+			if (pgf_expr_eq(expr, qres->vars[j].expr)) {
+				
+				int rc = load_expr(qres->ectxt.crsExprs,
+		                           qres->vars[j].id,
+		                           &new_expr, out_pool);
+				if (rc != SQLITE_OK) {
+					sg_raise_sqlite(rc, err);
+					qres->is_empty = true;
+					return new_expr;
+				}
+				break;
+			}
+			j++;
+		}
+
+		break;
+	}
+	case PGF_EXPR_FUN: {
+		PgfExprFun* fun = ei.data;
+		
+		PgfExprFun *new_fun =
+			gu_new_flex_variant(PGF_EXPR_FUN,
+			                    PgfExprFun,
+			                    fun, strlen(fun->fun)+1,
+			                    &new_expr, out_pool);
+		strcpy(new_fun->fun, fun->fun);
+		break;
+	}
+	case PGF_EXPR_VAR: {
+		PgfExprVar* var = ei.data;
+
+		PgfExprVar* new_var =
+			gu_new_variant(PGF_EXPR_VAR,
+						   PgfExprVar,
+						   &new_expr, out_pool);
+		new_var->var = var->var;
+		break;
+	}
+	case PGF_EXPR_TYPED: {
+		break;
+	}
+	case PGF_EXPR_IMPL_ARG: {
+		PgfExprImplArg* impl = ei.data;
+		
+		PgfExprImplArg* new_impl =
+			gu_new_variant(PGF_EXPR_IMPL_ARG,
+			               PgfExprImplArg,
+			               &new_expr, out_pool);
+		new_impl->expr = instantiate_expr(qres, impl->expr, out_pool, err);
+		break;
+	}
+	default:
+		gu_impossible();
+	}
+	
+	return new_expr;
+}
+
+PgfExpr
+sg_query_result_fetch_expr(SgQueryResult* qres, PgfExpr expr,
+                           GuPool* out_pool, GuExn* err)
+{
+	if (!query_result_next(qres, err))
+		return gu_null_variant;
+
+	return instantiate_expr(qres, expr, out_pool, err);
+}
 
 void
 sg_query_result_close(SgQueryResult* qres, GuExn* err)

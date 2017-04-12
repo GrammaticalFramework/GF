@@ -81,7 +81,12 @@ size_t
 sg_query_result_columns(SgQueryResult* qres);
 
 int
-sg_query_result_fetch(SgQueryResult* qres, PgfExpr* res, GuPool* out_pool, GuExn* err);
+sg_query_result_fetch_columns(SgQueryResult* qres, PgfExpr* res,
+                              GuPool* out_pool, GuExn* err);
+
+PgfExpr
+sg_query_result_fetch_expr(SgQueryResult* qres, PgfExpr expr,
+                           GuPool* out_pool, GuExn* err);
 
 void
 sg_query_result_close(SgQueryResult* qres, GuExn* err);
