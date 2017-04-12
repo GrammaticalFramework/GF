@@ -13,7 +13,7 @@ module SG( SG, openSG, closeSG
          , readTriple, showTriple
          , insertTriple, getTriple
          , queryTriple
-         , prepareQuery
+         , query
          ) where
 
 import Foreign hiding (unsafePerformIO)
@@ -47,7 +47,7 @@ openSG fpath =
                 else do is_sgerr <- gu_exn_caught exn gu_exn_type_SgError
                         if is_sgerr
                           then do c_msg <- (#peek GuExn, data.data) exn
-                                  msg <- peekCString c_msg
+                                  msg <- peekUtf8CString c_msg
                                   throwIO (SGError msg)
                           else throwIO (SGError "The database cannot be opened")
       else return (SG sg)
@@ -150,8 +150,8 @@ queryLinearization :: SG -> String -> IO [Expr]
 queryLinearization (SG sg) query = do
   exprPl  <- gu_new_pool
   exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-  (withCString query $ \c_query ->
-   withGuPool $ \tmpPl -> do
+  (withGuPool $ \tmpPl -> do
+     c_query <- newUtf8CString query tmpPl
      exn <- gu_new_exn tmpPl
      seq <- sg_query_linearization sg c_query tmpPl exn
      handle_sg_exn exn
@@ -177,20 +177,21 @@ readTriple str =
   unsafePerformIO $
     do exprPl <- gu_new_pool
        withGuPool $ \tmpPl ->
-         withCString str $ \c_str ->
-           withTriple $ \triple ->
-             do guin <- gu_string_in c_str tmpPl
-                exn <- gu_new_exn tmpPl
-                ok <- pgf_read_expr_tuple guin 3 triple exprPl exn
-                status <- gu_exn_is_raised exn
-                if (ok == 1 && not status)
-                  then do c_expr1 <- peekElemOff triple 0
-                          c_expr2 <- peekElemOff triple 1
-                          c_expr3 <- peekElemOff triple 2
-                          exprFPl <- newForeignPtr gu_pool_finalizer exprPl
-                          return $ Just (Expr c_expr1 exprFPl,Expr c_expr2 exprFPl,Expr c_expr3 exprFPl)
-                  else do gu_pool_free exprPl
-                          return Nothing
+         withTriple $ \triple ->
+           do c_str <- newUtf8CString str tmpPl
+              guin <- gu_string_in c_str tmpPl
+              exn <- gu_new_exn tmpPl
+              ok <- pgf_read_expr_tuple guin 3 triple exprPl exn
+              status <- gu_exn_is_raised exn
+              if (ok == 1 && not status)
+                then do c_expr1 <- peekElemOff triple 0
+                        c_expr2 <- peekElemOff triple 1
+                        c_expr3 <- peekElemOff triple 2
+                        exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+                        let touch = touchForeignPtr exprFPl
+                        return $ Just (Expr c_expr1 touch,Expr c_expr2 touch,Expr c_expr3 touch)
+                else do gu_pool_free exprPl
+                        return Nothing
 
 showTriple :: Expr -> Expr -> Expr -> String
 showTriple (Expr expr1 touch1) (Expr expr2 touch2) (Expr expr3 touch3) =
@@ -206,7 +207,7 @@ showTriple (Expr expr1 touch1) (Expr expr2 touch2) (Expr expr3 touch3) =
          pgf_print_expr_tuple 3 triple printCtxt out exn
          touch1 >> touch2 >> touch3
          s <- gu_string_buf_freeze sb tmpPl
-         peekCString s
+         peekUtf8CString s
 
 insertTriple :: SG -> Expr -> Expr -> Expr -> IO SgId
 insertTriple (SG sg) (Expr expr1 touch1) (Expr expr2 touch2) (Expr expr3 touch3) =
@@ -288,34 +289,43 @@ queryTriple (SG sg) mb_expr1 mb_expr2 mb_expr3 =
                                        ,fromCExpr c_expr2 touch mb_expr2
                                        ,fromCExpr c_expr3 touch mb_expr3) : rest)
 
-data Query = forall a . Query {query :: Ptr SgQuery, queryMaster :: a}
 
-prepareQuery :: SG -> String -> IO (Maybe Query)
-prepareQuery (SG sg) str =
+query :: SG -> String -> IO [[Expr]]
+query (SG sg) str =
   withGuPool $ \tmpPl ->
-  withCString str $ \c_str ->
-    do guin <- gu_string_in c_str tmpPl
+    do c_str <- newUtf8CString str tmpPl
+       guin <- gu_string_in c_str tmpPl
        exn <- gu_new_exn tmpPl
-       queryPl <- gu_new_pool
-       q <- do seq <- pgf_read_expr_matrix guin 3 queryPl exn
-               if seq /= nullPtr
-                 then do count <- (#peek GuSeq, len) seq
-                         sg_prepare_query sg (count `div` 3) (seq `plusPtr` (#offset GuSeq, data)) queryPl exn
-                 else return nullPtr
-       failed <- gu_exn_is_raised exn
-       if failed
-         then do gu_pool_free queryPl
-                 is_sgerr <- gu_exn_caught exn gu_exn_type_SgError
-                 if is_sgerr
-                   then do c_msg <- (#peek GuExn, data.data) exn
-                           msg <- peekCString c_msg
-                           throwIO (SGError msg)
-                   else throwIO (SGError "Unknown database error")
-         else if q == nullPtr
-                then do gu_pool_free queryPl
-                        return Nothing
-                else do queryFPl <- newForeignPtr gu_pool_finalizer queryPl
-                        return (Just (Query q queryFPl))
+       seq <- pgf_read_expr_matrix guin 3 tmpPl exn
+       if seq /= nullPtr
+         then do count <- (#peek GuSeq, len) seq
+                 q <- sg_query sg (count `div` 3) (seq `plusPtr` (#offset GuSeq, data)) exn
+                 handle_sg_exn exn
+                 n_cols <- sg_query_result_columns q
+                 unsafeInterleaveIO (fetchResults q n_cols)
+         else return []
+  where
+    fetchResults q n_cols =
+      withGuPool $ \tmpPl -> do
+        exn    <- gu_new_exn tmpPl
+        pExprs <- gu_malloc tmpPl ((#size PgfExpr) * n_cols)
+        exprPl <- gu_new_pool
+        res <- sg_query_result_fetch q pExprs exprPl exn
+        failed <- gu_exn_is_raised exn
+        if failed
+          then do gu_pool_free exprPl
+                  sg_query_result_close q exn
+                  handle_sg_exn exn
+                  return []
+          else if res /= 0
+                 then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+                         let touch = touchForeignPtr exprFPl
+                         row  <- fmap (map (flip Expr touch)) $ peekArray (fromIntegral n_cols) pExprs
+                         rows <- unsafeInterleaveIO (fetchResults q n_cols)
+                         return (row:rows)
+                 else do gu_pool_free exprPl
+                         sg_query_result_close q exn
+                         return []
 
 -----------------------------------------------------------------------
 -- Exceptions
@@ -331,7 +341,7 @@ handle_sg_exn exn = do
     then do is_sgerr <- gu_exn_caught exn gu_exn_type_SgError
             if is_sgerr
               then do c_msg <- (#peek GuExn, data.data) exn
-                      msg <- peekCString c_msg
+                      msg <- peekUtf8CString c_msg
                       throwIO (SGError msg)
               else throwIO (SGError "Unknown database error")
     else return ()

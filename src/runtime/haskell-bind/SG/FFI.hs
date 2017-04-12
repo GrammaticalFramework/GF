@@ -10,7 +10,6 @@ import Data.Int
 data SgSG
 data SgQueryExprResult
 data SgTripleResult
-data SgQuery
 data SgQueryResult
 type SgId = Int64
 
@@ -65,13 +64,17 @@ foreign import ccall "sg/sg.h sg_triple_result_fetch"
 foreign import ccall "sg/sg.h sg_triple_result_close"
   sg_triple_result_close :: Ptr SgTripleResult -> Ptr GuExn -> IO ()
 
-foreign import ccall "sg/sg.h sg_prepare_query"
-  sg_prepare_query :: Ptr SgSG -> CInt -> Ptr PgfExpr -> Ptr GuPool -> Ptr GuExn -> IO (Ptr SgQuery)
-
 foreign import ccall "sg/sg.h sg_query"
-  sg_query :: Ptr SgSG -> Ptr SgQuery -> Ptr GuExn -> IO (Ptr SgQueryResult)
+  sg_query :: Ptr SgSG -> CInt -> Ptr PgfExpr -> Ptr GuExn -> IO (Ptr SgQueryResult)
 
+foreign import ccall "sg/sg.h sg_query_result_columns"
+  sg_query_result_columns :: Ptr SgQueryResult -> IO CInt
 
+foreign import ccall "sg/sg.h sg_query_result_fetch"
+  sg_query_result_fetch :: Ptr SgQueryResult -> Ptr PgfExpr -> Ptr GuPool -> Ptr GuExn -> IO CInt
+
+foreign import ccall "sg/sg.h sg_query_result_close"
+  sg_query_result_close :: Ptr SgQueryResult -> Ptr GuExn -> IO ()
 
 type SgTriple = Ptr PgfExpr
 
