@@ -96,11 +96,8 @@ bin_PROGRAMS =
 
 AUTOMAKE_OPTIONS = foreign subdir-objects dist-bzip2
 ACLOCAL_AMFLAGS = -I m4
-include doxygen.am
 
 EXTRA_DIST = \
-	Doxyfile \
-	DoxygenLayout.xml \
 	libgu.pc.in \
 	libpgf.pc.in \
 	libsg.pc.in

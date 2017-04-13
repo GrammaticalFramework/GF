@@ -48,22 +48,6 @@ case "$target_cpu" in
 	*)	 AC_MSG_ERROR([cpu $target_cpu not supported])	;;
 esac
 
-dnl Doxygen support
-DX_PS_FEATURE(OFF)	
-DX_PDF_FEATURE(OFF)	
-AC_DEFUN([DX_FEATURE_dev],   OFF)
-DX_ARG_ABLE(dev, [include internal development documentation],
-            [],
-            [],
-	    [],
-	    [DX_ENV_APPEND(DEVDOC, YES)]
-	    [DX_ENV_APPEND(INPUT, $srcdir)],
-	    [DX_ENV_APPEND(DEVDOC, NO)
-	     DX_ENV_APPEND(INPUT, 
-	     [\$(guinclude_HEADERS) \$(pgfinclude_HEADERS)])])
-DX_INIT_DOXYGEN(libpgf)
-
-
 cpu_dir=pgf/lightning/$cpu
 AC_CONFIG_LINKS(pgf/lightning/asm.h:$cpu_dir/asm.h			dnl
                 pgf/lightning/fp.h:$cpu_dir/fp.h			dnl
