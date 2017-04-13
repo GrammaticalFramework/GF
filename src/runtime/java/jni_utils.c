@@ -33,6 +33,29 @@ gu2j_string(JNIEnv *env, GuString s) {
 	return (*env)->NewString(env, utf16, dst-utf16);
 }
 
+jstring
+gu2j_string_buf(JNIEnv *env, GuStringBuf* sbuf) {
+	const char* s    = gu_string_buf_data(sbuf);
+	const char* utf8 = s;
+	size_t len = gu_string_buf_length(sbuf);
+
+	jchar* utf16 = alloca(len*sizeof(jchar));
+	jchar* dst   = utf16;
+	while (s-utf8 < len) {
+		GuUCS ucs = gu_utf8_decode((const uint8_t**) &s);
+
+		if (ucs <= 0xFFFF) {
+			*dst++ = ucs;
+		} else {
+			ucs -= 0x10000;
+			*dst++ = 0xD800+((ucs >> 10) & 0x3FF);
+			*dst++ = 0xDC00+(ucs & 0x3FF);
+		}
+	}
+
+	return (*env)->NewString(env, utf16, dst-utf16);
+}
+
 GuString
 j2gu_string(JNIEnv *env, jstring s, GuPool* pool) {
 	GuString str = (*env)->GetStringUTFChars(env, s, 0);

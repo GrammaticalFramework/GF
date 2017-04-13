@@ -472,13 +472,14 @@ jpgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
 		GuPool* tmp_pool = gu_local_pool();
 
 		GuExn* err = gu_exn(tmp_pool);
-		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+		GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 		GuOut* out = gu_string_buf_out(sbuf);
 
 		pgf_print_expr(ep->expr, NULL, 0, out, err);
 
-		GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-		GuIn* in = gu_data_in((uint8_t*) str, strlen(str), tmp_pool);
+		GuString str = gu_string_buf_data(sbuf);
+		size_t   len = gu_string_buf_length(sbuf);
+		GuIn* in = gu_data_in((uint8_t*) str, len, tmp_pool);
 
 		ep->expr = pgf_read_expr(in, out_pool, err);
 		if (!gu_ok(err) || gu_variant_is_null(ep->expr)) {
@@ -683,7 +684,7 @@ Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, job
 {
 	GuPool* tmp_pool = gu_local_pool();
 	GuExn* err = gu_exn(tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
 	pgf_linearize(get_ref(env, self), gu_variant_from_ptr((void*) get_ref(env, jexpr)), out, err);
@@ -701,8 +702,7 @@ Java_org_grammaticalframework_pgf_Concr_linearize(JNIEnv* env, jobject self, job
 		return NULL;
 	}
 
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	jstring jstr = gu2j_string(env, str);
+	jstring jstr = gu2j_string_buf(env, sbuf);
 
 	gu_pool_free(tmp_pool);
 	
@@ -738,7 +738,7 @@ Java_org_grammaticalframework_pgf_Concr_linearizeAll(JNIEnv* env, jobject self, 
 			break;
 
 		GuPool* step_pool = gu_local_pool();
-		GuStringBuf* sbuf = gu_string_buf(step_pool);
+		GuStringBuf* sbuf = gu_new_string_buf(step_pool);
 		GuOut* out = gu_string_buf_out(sbuf);
 
 		ctree = pgf_lzr_wrap_linref(ctree, step_pool);
@@ -758,9 +758,8 @@ Java_org_grammaticalframework_pgf_Concr_linearizeAll(JNIEnv* env, jobject self, 
 			return NULL;
 		}
 
-		GuString str = gu_string_buf_freeze(sbuf, step_pool);
-		jstring jstr = gu2j_string(env, str);
-		
+		jstring jstr = gu2j_string_buf(env, sbuf);
+
 		(*env)->CallBooleanMethod(env, strings, addId, jstr);
 		
 		gu_pool_free(step_pool);
@@ -820,15 +819,14 @@ Java_org_grammaticalframework_pgf_Concr_tabularLinearize(JNIEnv* env, jobject se
 	pgf_lzr_get_table(concr, ctree, &n_lins, &labels);
 
 	for (size_t lin_idx = 0; lin_idx < n_lins; lin_idx++) {
-		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+		GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 		GuOut* out = gu_string_buf_out(sbuf);
 
 		pgf_lzr_linearize_simple(concr, ctree, lin_idx, out, err, tmp_pool);
 
 		jstring jstr = NULL;
 		if (gu_ok(err)) {
-			GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-			jstr = gu2j_string(env, str);
+			jstr = gu2j_string_buf(env, sbuf);
 		} else {
 			gu_exn_clear(err);
 		}
@@ -1159,13 +1157,12 @@ Java_org_grammaticalframework_pgf_Expr_showExpr(JNIEnv* env, jclass clazz, jlong
 	GuPool* tmp_pool = gu_local_pool();
 
 	GuExn* err = gu_exn(tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 
 	pgf_print_expr(gu_variant_from_ptr(l2p(ref)), NULL, 0, out, err);
 
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	jstring jstr = gu2j_string(env, str);
+	jstring jstr = gu2j_string_buf(env, sbuf);
 
 	gu_pool_free(tmp_pool);
 	return jstr;
@@ -1284,13 +1281,12 @@ Java_org_grammaticalframework_pgf_Type_toString(JNIEnv* env, jobject self)
 	GuPool* tmp_pool = gu_local_pool();
 
 	GuExn* err = gu_exn(tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 
 	pgf_print_type(get_ref(env, self), NULL, 0, out, err);
 
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	jstring jstr = gu2j_string(env, str);
+	jstring jstr = gu2j_string_buf(env, sbuf);
 
 	gu_pool_free(tmp_pool);
 	return jstr;

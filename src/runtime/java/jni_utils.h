@@ -7,6 +7,9 @@
 jstring
 gu2j_string(JNIEnv *env, GuString s);
 
+jstring
+gu2j_string_buf(JNIEnv *env, GuStringBuf* sbuf);
+
 GuString
 j2gu_string(JNIEnv *env, jstring s, GuPool* pool);
 
