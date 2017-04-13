@@ -904,7 +904,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 				jit_stxi_p(curr_offset*sizeof(void*), JIT_VHEAP, JIT_R0);
 				curr_offset++;
 
-				PgfLiteral lit;
+				PgfLiteral lit = gu_null_variant;
 				switch (mod) {
 				case 0: {
 					PgfLiteralInt *lit_int =
