@@ -58,9 +58,9 @@ gu_string_is_prefix(GuString s1, GuString s2);
 
 #if defined(GU_FUN_H_) && !defined(GU_STRING_H_FUN_)
 #define GU_STRING_H_FUN_
-GU_API_DATA GuEquality gu_string_equality[1];
+GU_API_DATA_DECL GuEquality gu_string_equality[1];
 
-GU_API_DATA GuOrder gu_string_order[1];
+GU_API_DATA_DECL GuOrder gu_string_order[1];
 #endif
 
 #if defined(GU_HASH_H_) && !defined(GU_STRING_H_HASH_)
