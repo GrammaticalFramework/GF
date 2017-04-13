@@ -33,6 +33,12 @@ gu_string_buf_out(GuStringBuf* sb);
 GuString
 gu_string_buf_freeze(GuStringBuf* sb, GuPool* pool);
 
+char*
+gu_string_buf_data(GuStringBuf* sb);
+
+size_t
+gu_string_buf_length(GuStringBuf* sb);
+
 void
 gu_string_buf_flush(GuStringBuf* sb);
 

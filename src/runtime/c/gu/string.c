@@ -82,6 +82,20 @@ gu_string_buf_freeze(GuStringBuf* sb, GuPool* pool)
 	return p;
 }
 
+char*
+gu_string_buf_data(GuStringBuf* sb)
+{
+	gu_out_flush(sb->out, NULL);
+	return gu_buf_data(sb->buf);
+}
+
+size_t
+gu_string_buf_length(GuStringBuf* sb)
+{
+	gu_out_flush(sb->out, NULL);
+	return gu_buf_length(sb->buf);
+}
+
 void
 gu_string_buf_flush(GuStringBuf* sb)
 {
