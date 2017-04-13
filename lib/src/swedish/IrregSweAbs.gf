@@ -159,6 +159,7 @@ abstract IrregSweAbs = Cat ** {
   svika_V : V ;
   sy_V : V ;
   sätta_V : V ;
+  ta_V : V ;
   taga_V : V ;
   tiga_V : V ;
   tillåta_V : V ;

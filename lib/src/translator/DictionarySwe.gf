@@ -56113,7 +56113,7 @@ lin taiwanese_A = mkA "taiwanesisk" ; -- status=guess
 lin taiyuan_PN = mkPN "Taiyuan" neutrum ; -- src=geonames status=guess
 lin taka_N = variants {} ; -- status=guess
 lin take_N = mkN "tro" ; -- comment=5
-lin take_V2 = mkV2 I.taga_V ;
+lin take_V2 = mkV2 (mkV "ta" "tar" "ta" "tog" "tagit" "tagen") | mkV2 I.taga_V ;
 lin take_after_V2 = dirV2 (partV (mkV "ta" "tar" "ta" "tog" "tagit" "tagen")"ut") ; -- comment=6
 lin take_apart_V2 = dirV2 (partV (mkV "ta" "tar" "ta" "tog" "tagit" "tagen")"ut") ; -- comment=6
 lin take_aside_V2 = dirV2 (partV (mkV "ta" "tar" "ta" "tog" "tagit" "tagen")"ut") ; -- comment=6

@@ -84,6 +84,8 @@ SentAP 	amod acl
 
 DetQuantOrd 	head nummod amod     -- quite wrong; again for same reason as DetQuant function
 DetCN 	det head
+IDetCN 	det head
+IDetQuant head empty
 CountNP 	det head
 PredetNP 	det head
 PPartNP		head amod	-- only in core RGL
@@ -183,6 +185,7 @@ Det	DET
 Digits	NUM
 IAdv	ADV
 IDet	DET
+IQuant	DET
 IP	PRON
 Interj	INTJ
 N	NOUN
