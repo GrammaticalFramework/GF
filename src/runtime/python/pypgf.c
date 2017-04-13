@@ -28,6 +28,7 @@
 #if PY_MAJOR_VERSION >= 3
 	#define PyString_Check				 PyUnicode_Check
 	#define PyString_FromString		 	 PyUnicode_FromString
+	#define PyString_FromStringAndSize 	 PyUnicode_FromStringAndSize
 	#define PyString_FromFormat		 	 PyUnicode_FromFormat
 	#define PyString_Concat(ps,s)		 {PyObject* tmp = *(ps); *(ps) = PyUnicode_Concat(tmp,s); Py_DECREF(tmp);}
 #endif
@@ -138,8 +139,8 @@ Expr_repr(ExprObject *self)
 
 	pgf_print_expr(self->expr, NULL, 0, out, err);
 
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = PyString_FromString(str);
+	PyObject* pystr = PyString_FromStringAndSize(gu_string_buf_data(sbuf),
+	                                             gu_string_buf_length(sbuf));
 	
 	gu_pool_free(tmp_pool);
 	return pystr;
@@ -881,9 +882,9 @@ Type_repr(TypeObject *self)
 
 	pgf_print_type(self->type, NULL, 0, out, err);
 
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = PyString_FromString(str);
-	
+	PyObject* pystr = PyString_FromStringAndSize(gu_string_buf_data(sbuf),
+	                                             gu_string_buf_length(sbuf));
+
 	gu_pool_free(tmp_pool);
 	return pystr;
 }
@@ -1382,8 +1383,9 @@ pypgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
 
 		pgf_print_expr(ep->expr, NULL, 0, out, err);
 
-		GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-		GuIn* in = gu_data_in((uint8_t*) str, strlen(str), tmp_pool);
+		GuIn* in = gu_data_in((uint8_t*) gu_string_buf_data(sbuf),
+		                      gu_string_buf_length(sbuf),
+		                      tmp_pool);
 
 		ep->expr = pgf_read_expr(in, out_pool, err);
 		if (!gu_ok(err) || gu_variant_is_null(ep->expr)) {
@@ -1679,9 +1681,9 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 		}
 	}
 
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = PyString_FromString(str);
-	
+	PyObject* pystr = PyString_FromStringAndSize(gu_string_buf_data(sbuf),
+	                                             gu_string_buf_length(sbuf));
+
 	gu_pool_free(tmp_pool);
 	return pystr;
 }
@@ -1728,8 +1730,8 @@ restart:;
 		}
     }
 
-    GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-    PyObject* pystr = PyString_FromString(str);
+    PyObject* pystr = PyString_FromStringAndSize(gu_string_buf_data(sbuf),
+	                                             gu_string_buf_length(sbuf));
     gu_pool_free(tmp_pool);
     return pystr;
 }
@@ -1822,28 +1824,32 @@ Concr_tabularLinearize(ConcrObject* self, PyObject *args)
 	GuString* labels;
 	pgf_lzr_get_table(self->concr, ctree, &n_lins, &labels);
 
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
+	GuOut* out = gu_string_buf_out(sbuf);
+
 	for (size_t lin_idx = 0; lin_idx < n_lins; lin_idx++) {
-		GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
-		GuOut* out = gu_string_buf_out(sbuf);
+		
 
 		pgf_lzr_linearize_simple(self->concr, ctree, lin_idx, out, err, tmp_pool);
 
 		PyObject* pystr = NULL;
 		if (gu_ok(err)) {
-			GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-			pystr = PyString_FromString(str);
+			pystr = PyString_FromStringAndSize(gu_string_buf_data(sbuf),
+			                                   gu_string_buf_length(sbuf));
 		} else {
 			gu_exn_clear(err);
 			pystr = Py_None;
 			Py_INCREF(pystr);
 		}
 
+		gu_string_buf_flush(sbuf);
+
 		if (PyDict_SetItemString(table, labels[lin_idx], pystr) < 0)
 			return NULL;
 
 		Py_XDECREF(pystr);
 	}
-	
+
 	gu_pool_free(tmp_pool);
 
 	return table;
@@ -2223,8 +2229,8 @@ Concr_graphvizParseTree(ConcrObject* self, PyObject *args) {
 		return NULL;
 	}
 
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = PyString_FromString(str);
+	PyObject* pystr = PyString_FromStringAndSize(gu_string_buf_data(sbuf),
+	                                             gu_string_buf_length(sbuf));
 
 	gu_pool_free(tmp_pool);
 	return pystr;
@@ -3005,8 +3011,8 @@ PGF_graphvizAbstractTree(PGFObject* self, PyObject *args) {
 		return NULL;
 	}
 
-	GuString str = gu_string_buf_freeze(sbuf, tmp_pool);
-	PyObject* pystr = PyString_FromString(str);
+	PyObject* pystr = PyString_FromStringAndSize(gu_string_buf_data(sbuf),
+	                                             gu_string_buf_length(sbuf));
 
 	gu_pool_free(tmp_pool);
 	return pystr;
