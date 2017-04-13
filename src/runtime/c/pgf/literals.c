@@ -234,7 +234,7 @@ pgf_match_name_lit(PgfLiteralCallback* self, PgfConcr* concr,
 		return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
-	GuStringBuf *sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf *sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	GuExn* err = gu_new_exn(tmp_pool);
 
@@ -361,7 +361,7 @@ pgf_match_unknown_lit(PgfLiteralCallback* self, PgfConcr* concr,
 	GuUCS ucs = gu_utf8_decode(&p);
 	if (!gu_ucs_is_upper(ucs)) {
 		GuPool* tmp_pool = gu_local_pool();
-		GuStringBuf *sbuf = gu_string_buf(tmp_pool);
+		GuStringBuf *sbuf = gu_new_string_buf(tmp_pool);
 		GuOut* out = gu_string_buf_out(sbuf);
 		GuExn* err = gu_new_exn(tmp_pool);
 

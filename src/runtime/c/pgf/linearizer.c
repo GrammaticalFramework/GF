@@ -460,7 +460,7 @@ pgf_cnc_resolve(PgfCnc* cnc,
 
 				GuPool* tmp_pool = gu_local_pool();
 				GuExn* err = gu_new_exn(tmp_pool);
-				GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+				GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 				GuOut* out = gu_string_buf_out(sbuf);
 
 				gu_putc('[', out, err);
@@ -1209,7 +1209,7 @@ pgf_get_tokens(PgfSymbols* syms, uint16_t sym_idx, GuPool* pool)
 {
 	GuPool* tmp_pool = gu_new_pool();
 	GuExn* err = gu_new_exn(tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 
 	PgfSimpleLin flin = {

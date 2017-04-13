@@ -150,7 +150,7 @@ pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfType* type,
 	}
 
 	GuStringBuf* sbuf =
-		gu_string_buf(pool);
+		gu_new_string_buf(pool);
 
 	PgfMetricsLznState state;
 	state.bind = true;

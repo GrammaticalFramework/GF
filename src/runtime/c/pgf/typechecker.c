@@ -101,7 +101,7 @@ pgf_tc_mk_print_context(PgfTypeChecker* checker, PgfContext* ctxt)
 static void
 pgf_tc_err_cannot_infer(PgfTypeChecker* checker, PgfContext* ctxt, PgfExpr e)
 {
-	GuStringBuf* sbuf = gu_string_buf(checker->tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(checker->tmp_pool);
     GuOut* out = gu_string_buf_out(sbuf);
     GuExn* err = gu_exn(checker->tmp_pool);
 
@@ -117,7 +117,7 @@ static void
 pgf_tc_err_exp_fun_type_1(PgfTypeChecker* checker, PgfContext* ctxt, 
                           PgfExpr e, PgfType* ty)
 {
-	GuStringBuf* sbuf = gu_string_buf(checker->tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(checker->tmp_pool);
     GuOut* out = gu_string_buf_out(sbuf);
     GuExn* err = gu_exn(checker->tmp_pool);
 
@@ -137,7 +137,7 @@ static void
 pgf_tc_err_exp_fun_type_2(PgfTypeChecker* checker, PgfContext* ctxt, 
                           PgfExpr e, PgfType* ty)
 {
-	GuStringBuf* sbuf = gu_string_buf(checker->tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(checker->tmp_pool);
     GuOut* out = gu_string_buf_out(sbuf);
     GuExn* err = gu_exn(checker->tmp_pool);
 
@@ -170,7 +170,7 @@ pgf_tc_err_type_mismatch(PgfTypeChecker* checker,
                          PgfContext* ctxt,
                          PgfExpr e, PgfCFType ty1, PgfCFType ty2)
 {
-	GuStringBuf* sbuf = gu_string_buf(checker->tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(checker->tmp_pool);
     GuOut* out = gu_string_buf_out(sbuf);
     GuExn* err = gu_exn(checker->tmp_pool);
 

@@ -133,7 +133,7 @@ Expr_repr(ExprObject *self)
 	GuPool* tmp_pool = gu_local_pool();
 
 	GuExn* err = gu_exn(tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 
 	pgf_print_expr(self->expr, NULL, 0, out, err);
@@ -876,7 +876,7 @@ Type_repr(TypeObject *self)
 	GuPool* tmp_pool = gu_local_pool();
 
 	GuExn* err = gu_exn(tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 
 	pgf_print_type(self->type, NULL, 0, out, err);
@@ -1377,7 +1377,7 @@ pypgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
 		GuPool* tmp_pool = gu_local_pool();
 
 		GuExn* err = gu_exn(tmp_pool);
-		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+		GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 		GuOut* out = gu_string_buf_out(sbuf);
 
 		pgf_print_expr(ep->expr, NULL, 0, out, err);
@@ -1658,7 +1658,7 @@ Concr_linearize(ConcrObject* self, PyObject *args)
 
 	GuPool* tmp_pool = gu_local_pool();
 	GuExn* err = gu_exn(tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
 	pgf_linearize(self->concr, pyexpr->expr, out, err);
@@ -1693,7 +1693,7 @@ Iter_fetch_linearization(IterObject* self)
 	GuExn* err = gu_new_exn(tmp_pool);
 
 restart:;
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
 
@@ -1823,7 +1823,7 @@ Concr_tabularLinearize(ConcrObject* self, PyObject *args)
 	pgf_lzr_get_table(self->concr, ctree, &n_lins, &labels);
 
 	for (size_t lin_idx = 0; lin_idx < n_lins; lin_idx++) {
-		GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+		GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 		GuOut* out = gu_string_buf_out(sbuf);
 
 		pgf_lzr_linearize_simple(self->concr, ctree, lin_idx, out, err, tmp_pool);
@@ -2209,7 +2209,7 @@ Concr_graphvizParseTree(ConcrObject* self, PyObject *args) {
 
 	GuPool* tmp_pool = gu_local_pool();
 	GuExn* err = gu_exn(tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
 	pgf_graphviz_parse_tree(self->concr, pyexpr->expr, out, err);
@@ -2996,7 +2996,7 @@ PGF_graphvizAbstractTree(PGFObject* self, PyObject *args) {
 
 	GuPool* tmp_pool = gu_local_pool();
 	GuExn* err = gu_new_exn(tmp_pool);
-	GuStringBuf* sbuf = gu_string_buf(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
 	pgf_graphviz_abstract_tree(self->pgf, pyexpr->expr, out, err);

@@ -68,8 +68,8 @@ gu_exn_type_PgfTypeError = Ptr "PgfTypeError"# :: CString
 foreign import ccall "gu/string.h gu_string_in"
   gu_string_in :: CString -> Ptr GuPool -> IO (Ptr GuIn)
 
-foreign import ccall "gu/string.h gu_string_buf"
-  gu_string_buf :: Ptr GuPool -> IO (Ptr GuStringBuf)
+foreign import ccall "gu/string.h gu_new_string_buf"
+  gu_new_string_buf :: Ptr GuPool -> IO (Ptr GuStringBuf)
 
 foreign import ccall "gu/string.h gu_string_buf_out"
   gu_string_buf_out :: Ptr GuStringBuf -> IO (Ptr GuOut)
@@ -97,7 +97,7 @@ withGuPool f = bracket gu_new_pool gu_pool_free f
 
 newOut :: Ptr GuPool -> IO (Ptr GuStringBuf, Ptr GuOut)
 newOut pool =
-   do sb <- gu_string_buf pool
+   do sb  <- gu_new_string_buf pool
       out <- gu_string_buf_out sb
       return (sb,out)
 

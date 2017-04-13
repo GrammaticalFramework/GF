@@ -350,7 +350,7 @@ pgf_expr_parser_token(PgfExprParser* parser)
 	case '\'':
 		pgf_expr_parser_getc(parser);
 
-		GuStringBuf* chars = gu_string_buf(parser->tmp_pool);
+		GuStringBuf* chars = gu_new_string_buf(parser->tmp_pool);
 		while (parser->ch != '\'' && parser->ch != EOF) {
 			if (parser->ch == '\\') {
 				pgf_expr_parser_getc(parser);
@@ -366,7 +366,7 @@ pgf_expr_parser_token(PgfExprParser* parser)
 		}
 		break;
 	default: {
-		GuStringBuf* chars = gu_string_buf(parser->tmp_pool);
+		GuStringBuf* chars = gu_new_string_buf(parser->tmp_pool);
 
 		if (pgf_is_ident_first(parser->ch)) {
 			do {

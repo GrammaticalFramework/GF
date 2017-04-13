@@ -50,7 +50,7 @@ gu_string_buf_end(GuOutStream* stream, size_t sz, GuExn* err)
 }
 
 GuStringBuf*
-gu_string_buf(GuPool* pool)
+gu_new_string_buf(GuPool* pool)
 {
 	GuStringBuf* sbuf = gu_new(GuStringBuf, pool);
 	sbuf->stream.output = gu_string_buf_output;
@@ -152,7 +152,7 @@ GuString
 gu_format_string_v(const char* fmt, va_list args, GuPool* pool)
 {
 	GuPool* tmp_pool = gu_local_pool();
-	GuStringBuf* sb = gu_string_buf(tmp_pool);
+	GuStringBuf* sb = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sb);
 	gu_vprintf(fmt, args, out, NULL);
 	gu_out_flush(out, NULL);

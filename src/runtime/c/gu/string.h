@@ -25,7 +25,7 @@ gu_string_in(GuString string, GuPool* pool);
 typedef struct GuStringBuf GuStringBuf;
 
 GuStringBuf*
-gu_string_buf(GuPool* pool);
+gu_new_string_buf(GuPool* pool);
 
 GuOut*
 gu_string_buf_out(GuStringBuf* sb);
