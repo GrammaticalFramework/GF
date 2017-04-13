@@ -1,5 +1,9 @@
-Libpgf was written by:
+libpgf is written by:
 
+Krasimir Angelov <krasimir@chalmers.se>
 Lauri Alanko <lealanko@ling.helsinki.fi>
 
-Based on the original PGF implementation by Krasimir Angelov.
+with some contributions from:
+
+Prasanth Kolachina <prasanth.kolachina@cse.gu.se>
+Bjørnar Luteberget <luteberget@gmail.com>
