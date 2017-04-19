@@ -18,7 +18,13 @@
 #define GU_API ERROR_NOT_COMPILING_LIBGU
 #endif
 
+#define GU_INTERNAL_DECL
+#define GU_INTERNAL
+
+#define restrict __restrict
+
 #else
+
 #define GU_API_DECL
 #define GU_API
 

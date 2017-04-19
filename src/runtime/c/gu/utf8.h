@@ -13,7 +13,7 @@ gu_in_utf8(GuIn* in, GuExn* err)
 		gu_in_consume(in, 1);
 		return (GuUCS) i;
 	}
-	extern GuUCS gu_in_utf8_(GuIn* in, GuExn* err);
+	GU_API_DECL GuUCS gu_in_utf8_(GuIn* in, GuExn* err);
 	return gu_in_utf8_(in, err);
 }
 
@@ -24,7 +24,7 @@ gu_out_utf8(GuUCS ucs, GuOut* out, GuExn* err)
 	if (GU_LIKELY(ucs < 0x80)) {
 		gu_out_u8(out, ucs, err);
 	} else {
-		extern void gu_out_utf8_(GuUCS ucs, GuOut* out, GuExn* err);
+		GU_API_DECL void gu_out_utf8_(GuUCS ucs, GuOut* out, GuExn* err);
 		gu_out_utf8_(ucs, out, err);
 	}
 }

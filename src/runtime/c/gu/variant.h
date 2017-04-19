@@ -35,10 +35,12 @@
 typedef uintptr_t GuVariant;
 
 
+GU_API_DECL
 void* gu_alloc_variant(uint8_t tag, 
 		       size_t size, size_t align, 
 		       GuVariant* variant_out, GuPool* pool);
 
+GU_API_DECL
 GuVariant gu_make_variant(uint8_t tag, 
 			  size_t size, size_t align, 
 			  const void* init, GuPool* pool);
@@ -68,8 +70,10 @@ enum {
 	GU_VARIANT_NULL = -1
 };
 
+GU_API_DECL
 int gu_variant_tag(GuVariant variant);
 
+GU_API_DECL
 void* gu_variant_data(GuVariant variant);
 
 
@@ -80,8 +84,8 @@ struct GuVariantInfo {
 	void* data;
 };
 
-GuVariantInfo gu_variant_open(GuVariant variant);
-GuVariant gu_variant_close(GuVariantInfo info);
+GU_API_DECL GuVariantInfo gu_variant_open(GuVariant variant);
+GU_API_DECL GuVariant gu_variant_close(GuVariantInfo info);
 
 /** @} */
 

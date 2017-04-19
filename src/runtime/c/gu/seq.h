@@ -15,28 +15,28 @@ typedef struct {
 	GuFinalizer fin;
 } GuBuf;
 
-GuSeq*
+GU_API_DECL GuSeq*
 gu_empty_seq();
 
-GuSeq*
+GU_API_DECL GuSeq*
 gu_make_seq(size_t elem_size, size_t len, GuPool* pool);
 
 #define gu_new_seq(T, N, POOL)			\
 	gu_make_seq(sizeof(T), (N), (POOL))
 
-GuSeq*
+GU_API_DECL GuSeq*
 gu_alloc_seq_(size_t elem_size, size_t length);
 
 #define gu_alloc_seq(T, N)			\
 	gu_alloc_seq_(sizeof(T), (N))
 
-GuSeq*
+GU_API_DECL GuSeq*
 gu_realloc_seq_(GuSeq* seq, size_t elem_size, size_t length);
 
 #define gu_realloc_seq(S, T, N)			\
 	gu_realloc_seq_(S, sizeof(T), (N))
 
-void
+GU_API_DECL void
 gu_seq_free(GuSeq* seq);
 
 inline size_t
@@ -63,7 +63,7 @@ gu_seq_data(GuSeq* seq)
 	GU_END
 
 
-GuBuf*
+GU_API_DECL GuBuf*
 gu_make_buf(size_t elem_size, GuPool* pool);
 
 #define gu_new_buf(T, POOL)			\
@@ -104,10 +104,10 @@ gu_buf_data_seq(GuBuf* buf)
 	(*gu_buf_index(BUF, T, I) = (V));	\
 	GU_END
 
-void
+GU_API_DECL void
 gu_buf_push_n(GuBuf* buf, const void* elems, size_t n_elems);
 
-void*
+GU_API_DECL void*
 gu_buf_extend_n(GuBuf* buf, size_t n_elems);
 
 inline void*
@@ -121,7 +121,7 @@ gu_buf_extend(GuBuf* buf)
 	((*(T*)gu_buf_extend(BUF)) = (VAL));	\
 	GU_END
 
-void
+GU_API_DECL void
 gu_buf_pop_n(GuBuf* buf, size_t n_elems, void* data_out);
 
 #define gu_buf_get_last(BUF, T)			\
@@ -130,7 +130,7 @@ gu_buf_pop_n(GuBuf* buf, size_t n_elems, void* data_out);
 #define gu_buf_index_last(BUF, T)		\
 	(&((T*)gu_buf_data(BUF))[(BUF)->seq->len-1])
 
-const void*
+GU_API_DECL const void*
 gu_buf_trim_n(GuBuf* buf, size_t n_elems);
 
 inline const void*
@@ -139,7 +139,7 @@ gu_buf_trim(GuBuf* buf)
 	return gu_buf_trim_n(buf, 1);
 }
 
-void*
+GU_API_DECL void*
 gu_buf_insert(GuBuf* buf, size_t n_index);
 
 inline void
@@ -151,40 +151,40 @@ gu_buf_flush(GuBuf* buf)
 #define gu_buf_pop(BUF, T)			\
 	(*(T*)gu_buf_trim(BUF))
 
-void
+GU_API_DECL void
 gu_buf_sort(GuBuf *buf, GuOrder *order);
 
 #define gu_seq_binsearch(S, O, T, V) \
 	((T*) gu_seq_binsearch_(S, O, sizeof(T), V))
 
-void*
+GU_API_DECL void*
 gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, const void *key);
 
 #define gu_seq_binsearch_index(S, O, T, V, PI) \
 	gu_seq_binsearch_index_(S, O, sizeof(T), V, PI)
 
-bool
+GU_API_DECL bool
 gu_seq_binsearch_index_(GuSeq *seq, GuOrder *order, size_t elem_size, 
                         const void *key, size_t *pindex);
 
 // Using a buffer as a heap
-void
+GU_API_DECL void
 gu_buf_heap_push(GuBuf *buf, GuOrder *order, void *value);
 
-void
+GU_API_DECL void
 gu_buf_heap_pop(GuBuf *buf, GuOrder *order, void* data_out);
 
-void
+GU_API_DECL void
 gu_buf_heap_replace(GuBuf *buf, GuOrder *order, void *value, void *data_out);
 
-void
+GU_API_DECL void
 gu_buf_heapify(GuBuf *buf, GuOrder *order);
 
-GuSeq*
+GU_API_DECL GuSeq*
 gu_buf_freeze(GuBuf* buf, GuPool* pool);
 #endif // GU_SEQ_H_
 
 #ifdef GU_STRING_H_
-void
+GU_INTERNAL_DECL void
 gu_buf_require(GuBuf* buf, size_t req_len);
 #endif // GU_STRING_H_

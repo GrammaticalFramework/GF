@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 2.8)
 
 set(GNU_LIGHTNING_ARCH "i386" CACHE STRING "Target architecture for GNU Lightning JIT")
 #set(ADD_CFLAGS "-Wall -Wextra -Wno-missing-field-initializers -Wno-unused-parameter -Wno-unused-value" CACHE STRING "Additional C compiler options")
-set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-no-undefined")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 ${ADD_CFLAGS}")
 

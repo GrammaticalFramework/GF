@@ -21,7 +21,7 @@ typedef struct GuPool GuPool;
 
 
 /// Create a new memory pool.
-GU_ONLY GuPool*
+GU_API_DECL GuPool*
 gu_new_pool(void);
 
 /**< 

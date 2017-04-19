@@ -101,7 +101,7 @@ inline void
 gu_out_u8(GuOut* restrict out, uint8_t u, GuExn* err)
 {
 	if (GU_UNLIKELY(!gu_out_try_u8_(out, u))) {
-		extern void gu_out_u8_(GuOut* restrict out, uint8_t u, 
+		GU_API_DECL void gu_out_u8_(GuOut* restrict out, uint8_t u, 
 				       GuExn* err);
 		gu_out_u8_(out, u, err);
 	}

@@ -44,7 +44,7 @@ gu_in_bytes(GuIn* in, uint8_t* buf, size_t sz, GuExn* err)
 	ptrdiff_t curr = in->buf_curr;
 	ptrdiff_t new_curr = curr + (ptrdiff_t) sz;
 	if (GU_UNLIKELY(new_curr > 0)) {
-		extern void gu_in_bytes_(GuIn* in, uint8_t* buf, size_t sz, 
+		GU_API_DECL void gu_in_bytes_(GuIn* in, uint8_t* buf, size_t sz, 
 					 GuExn* err);
 		gu_in_bytes_(in, buf, sz, err);
 		return;
@@ -73,7 +73,7 @@ inline uint8_t
 gu_in_u8(GuIn* restrict in, GuExn* err)
 {
 	if (GU_UNLIKELY(in->buf_curr == 0)) {
-		extern uint8_t gu_in_u8_(GuIn* restrict in, GuExn* err);
+		GU_API_DECL uint8_t gu_in_u8_(GuIn* restrict in, GuExn* err);
 		return gu_in_u8_(in, err);
 	}
 	return in->buf_end[in->buf_curr++];

@@ -20,7 +20,7 @@ gu_hash_byte(GuHash h, uint8_t u)
 }
 
 
-GU_API GuHash
+GU_API_DECL GuHash
 gu_hash_bytes(GuHash h, const uint8_t* buf, size_t len);
 
 typedef const struct GuHasher GuHasher;
