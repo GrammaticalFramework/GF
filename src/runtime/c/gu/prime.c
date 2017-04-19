@@ -50,7 +50,7 @@ gu_is_wheel_prime(int u)
 	return true;
 }
 
-int
+GU_INTERNAL int
 gu_prime_inf(int i)
 {
 	if (i < 2) {
@@ -75,7 +75,7 @@ gu_prime_inf(int i)
 	return d;
 }
 
-int
+GU_INTERNAL int
 gu_prime_sup(int i)
 {
 	if (i <= 2) {
@@ -100,7 +100,7 @@ gu_prime_sup(int i)
 	return d;
 }
 
-bool
+GU_INTERNAL bool
 gu_is_prime(int i)
 {
 	if (i < 2) {
@@ -114,13 +114,13 @@ gu_is_prime(int i)
 	}
 }
 
-bool
+GU_INTERNAL bool
 gu_is_twin_prime(int i)
 {
 	return gu_is_prime(i) && gu_is_prime(i - 2);
 }
 
-int
+GU_INTERNAL int
 gu_twin_prime_inf(int i)
 {
 	while (true) {
@@ -135,7 +135,7 @@ gu_twin_prime_inf(int i)
 	return i;
 }
 
-int
+GU_INTERNAL int
 gu_twin_prime_sup(int i)
 {
 	if (i <= 5) {

@@ -2,7 +2,7 @@
 #include <gu/assert.h>
 #include <stdlib.h>
 
-bool
+GU_API bool
 gu_char_is_valid(char c)
 {
 	if (c < 0) {
@@ -18,7 +18,7 @@ gu_char_is_valid(char c)
 	return UINT64_C(0x7ffffffefffffffe) & (UINT64_C(1) << (c - 64));
 }
 
-char
+GU_API char
 gu_ucs_char(GuUCS uc, GuExn* err)
 {
 	if (0 <= uc && uc <= 127) {
@@ -31,7 +31,7 @@ gu_ucs_char(GuUCS uc, GuExn* err)
 	return 0;
 }
 
-size_t
+GU_API size_t
 gu_str_to_ucs(const char* cbuf, size_t len, GuUCS* ubuf, GuExn* err)
 {
 	size_t n = 0;
@@ -47,7 +47,7 @@ gu_str_to_ucs(const char* cbuf, size_t len, GuUCS* ubuf, GuExn* err)
 	return n;
 }
 
-size_t
+GU_API size_t
 gu_ucs_to_str(const GuUCS* ubuf, size_t len, char* cbuf, GuExn* err)
 {
 	size_t n = 0;
@@ -66,7 +66,7 @@ gu_ucs_to_str(const GuUCS* ubuf, size_t len, char* cbuf, GuExn* err)
 extern inline bool
 gu_ucs_valid(GuUCS ucs);
 
-GuUCS
+GU_API GuUCS
 gu_char_ucs(char c)
 {
 	gu_require(gu_char_is_valid(c));
@@ -4789,14 +4789,14 @@ bool gu_ucs_is_space(GuUCS c)
 }
 
 
-unipred(gu_ucs_is_cntrl,GENCAT_CC)
-unipred(gu_ucs_is_print, (GENCAT_MC | GENCAT_NO | GENCAT_SK | GENCAT_ME | GENCAT_ND |   GENCAT_PO | GENCAT_LT | GENCAT_PC | GENCAT_SM | GENCAT_ZS |   GENCAT_LU | GENCAT_PD | GENCAT_SO | GENCAT_PE | GENCAT_PF |   GENCAT_PS | GENCAT_SC | GENCAT_LL | GENCAT_LM | GENCAT_PI |   GENCAT_NL | GENCAT_MN | GENCAT_LO))
-unipred(gu_ucs_is_upper,(GENCAT_LU|GENCAT_LT))
-unipred(gu_ucs_is_lower,GENCAT_LL)
-unipred(gu_ucs_is_alpha,(GENCAT_LL|GENCAT_LU|GENCAT_LT|GENCAT_LM|GENCAT_LO))
-unipred(gu_ucs_is_digit,GENCAT_ND)
+GU_API unipred(gu_ucs_is_cntrl,GENCAT_CC)
+GU_API unipred(gu_ucs_is_print, (GENCAT_MC | GENCAT_NO | GENCAT_SK | GENCAT_ME | GENCAT_ND |   GENCAT_PO | GENCAT_LT | GENCAT_PC | GENCAT_SM | GENCAT_ZS |   GENCAT_LU | GENCAT_PD | GENCAT_SO | GENCAT_PE | GENCAT_PF |   GENCAT_PS | GENCAT_SC | GENCAT_LL | GENCAT_LM | GENCAT_PI |   GENCAT_NL | GENCAT_MN | GENCAT_LO))
+GU_API unipred(gu_ucs_is_upper,(GENCAT_LU|GENCAT_LT))
+GU_API unipred(gu_ucs_is_lower,GENCAT_LL)
+GU_API unipred(gu_ucs_is_alpha,(GENCAT_LL|GENCAT_LU|GENCAT_LT|GENCAT_LM|GENCAT_LO))
+GU_API unipred(gu_ucs_is_digit,GENCAT_ND)
 
-unipred(gu_ucs_is_alnum,(GENCAT_LT|GENCAT_LU|GENCAT_LL|GENCAT_LM|GENCAT_LO|
+GU_API unipred(gu_ucs_is_alnum,(GENCAT_LT|GENCAT_LU|GENCAT_LL|GENCAT_LM|GENCAT_LO|
 		    GENCAT_MC|GENCAT_ME|GENCAT_MN|
 		    GENCAT_NO|GENCAT_ND|GENCAT_NL))
 
@@ -4808,11 +4808,11 @@ GuUCS p(GuUCS c) \
 	return c+rule->to;\
 }
 
-caseconv(gu_ucs_to_upper,updist)
-caseconv(gu_ucs_to_lower,lowdist)
-caseconv(gu_ucs_to_title,titledist)
+GU_API caseconv(gu_ucs_to_upper,updist)
+GU_API caseconv(gu_ucs_to_lower,lowdist)
+GU_API caseconv(gu_ucs_to_title,titledist)
 
-int gu_ucs_gen_cat(GuUCS c)
+GU_API int gu_ucs_gen_cat(GuUCS c)
 {
 	return getrule(allchars,NUM_BLOCKS,c)->catnumber;
 }

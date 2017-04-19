@@ -1,7 +1,7 @@
 #include <gu/assert.h>
 #include <gu/utf8.h>
 
-GuUCS
+GU_API GuUCS
 gu_utf8_decode(const uint8_t** src_inout)
 {
 	const uint8_t* src = *src_inout;
@@ -26,7 +26,7 @@ gu_utf8_decode(const uint8_t** src_inout)
 	return (GuUCS) u;
 }
 
-GuUCS
+GU_API GuUCS
 gu_in_utf8_(GuIn* in, GuExn* err)
 {
 	uint8_t c = gu_in_u8(in, err);
@@ -79,7 +79,7 @@ fail:
 extern inline GuUCS
 gu_in_utf8(GuIn* in, GuExn* err);
 
-void
+GU_API void
 gu_in_utf8_buf(uint8_t** buf, GuIn* in, GuExn* err)
 {
 	uint8_t* p = *buf;
@@ -122,7 +122,7 @@ fail:
 	return;
 }
 
-void
+GU_API void
 gu_utf8_encode(GuUCS ucs, uint8_t** buf)
 {
 	gu_require(gu_ucs_valid(ucs));
@@ -163,7 +163,7 @@ gu_utf8_encode(GuUCS ucs, uint8_t** buf)
 	}
 }
 
-void
+GU_API void
 gu_out_utf8_(GuUCS ucs, GuOut* out, GuExn* err)
 {
 	uint8_t buf[6];

@@ -23,7 +23,7 @@
 static const size_t
 // Maximum request size for a chunk. The actual maximum chunk size
 // may be somewhat larger.
-gu_mem_chunk_max_size = 1024 * sizeof(void*),
+    gu_mem_chunk_max_size = 1024 * sizeof(void*),
 
 // number of bytes to allocate in the pool when it is created
 	gu_mem_pool_initial_size = 24 * sizeof(void*),
@@ -90,7 +90,7 @@ gu_mem_padovan(size_t min)
 	return a;
 }
 
-void*
+GU_API void*
 gu_mem_buf_realloc(void* old_buf, size_t min_size, size_t* real_size_out)
 {
 	size_t min_blocks = ((min_size + gu_malloc_overhead - 1) /
@@ -101,13 +101,14 @@ gu_mem_buf_realloc(void* old_buf, size_t min_size, size_t* real_size_out)
 	*real_size_out = buf ? size : 0;
 	return buf;
 }
-void*
+
+GU_API void*
 gu_mem_buf_alloc(size_t min_size, size_t* real_size_out)
 {
 	return gu_mem_buf_realloc(NULL, min_size, real_size_out);
 }
 
-void
+GU_API void
 gu_mem_buf_free(void* buf)
 {
 	gu_mem_free(buf);
@@ -162,7 +163,7 @@ gu_init_pool(uint8_t* buf, size_t sz)
 	return pool;
 }
 
-GuPool*
+GU_API GuPool*
 gu_local_pool_(uint8_t* buf, size_t sz)
 {
 	GuPool* pool = gu_init_pool(buf, sz);
@@ -170,7 +171,7 @@ gu_local_pool_(uint8_t* buf, size_t sz)
 	return pool;
 }
 
-GuPool* 
+GU_API GuPool* 
 gu_new_pool(void)
 {
 	size_t sz = GU_FLEX_SIZE(GuPool, init_buf, gu_mem_pool_initial_size);
@@ -179,7 +180,7 @@ gu_new_pool(void)
 	return pool;
 }
 
-GuPool* 
+GU_API GuPool* 
 gu_mmap_pool(char* fpath, void* addr, size_t size, void**pptr)
 {
 #if !defined(_WIN32) && !defined(_WIN64)
@@ -281,7 +282,7 @@ gu_pool_avail(GuPool* pool)
 	return (size_t) pool->right_edge - (size_t) pool->left_edge;
 }
 
-void*
+GU_API void*
 gu_pool_malloc_unaligned(GuPool* pool, size_t size)
 {
 	if (size > gu_pool_avail(pool)) {
@@ -294,7 +295,7 @@ gu_pool_malloc_unaligned(GuPool* pool, size_t size)
 	return addr;
 }
 
-void*
+GU_API void*
 gu_malloc_prefixed(GuPool* pool, size_t pre_align, size_t pre_size,
 		   size_t align, size_t size)
 {
@@ -327,14 +328,13 @@ gu_malloc_prefixed(GuPool* pool, size_t pre_align, size_t pre_size,
 	return ret;
 }
 
-void*
+GU_API void*
 gu_malloc_aligned(GuPool* pool, size_t size, size_t align)
 {
 	return gu_malloc_prefixed(pool, 1, 0, align, size);
 }
 
-
-void 
+GU_API void 
 gu_pool_finally(GuPool* pool, GuFinalizer* finalizer)
 {
 	gu_require(pool->type != GU_POOL_MMAP);
@@ -344,7 +344,7 @@ gu_pool_finally(GuPool* pool, GuFinalizer* finalizer)
 	pool->finalizers = node;
 }
 
-void
+GU_API void
 gu_pool_free(GuPool* pool)
 {
 	GuFinalizerNode* node = pool->finalizers;

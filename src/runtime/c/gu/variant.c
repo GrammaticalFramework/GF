@@ -1,22 +1,3 @@
-/* 
- * Copyright 2010 University of Helsinki.
- *   
- * This file is part of libgu.
- * 
- * Libgu is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Libgu is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with libgu. If not, see <http://www.gnu.org/licenses/>.
- */
-
 #include "variant.h"
 #include "bits.h"
 
@@ -24,7 +5,7 @@ enum {
 	GU_VARIANT_ALIGNMENT = sizeof(uintptr_t)
 };
 
-void* 
+GU_API void*
 gu_alloc_variant(uint8_t tag, size_t size, 
 		 size_t align, GuVariant* variant_out, GuPool* pool)
 {
@@ -41,7 +22,7 @@ gu_alloc_variant(uint8_t tag, size_t size,
 	return p;
 }
 
-GuVariant 
+GU_API GuVariant 
 gu_make_variant(uint8_t tag, size_t size, size_t align, const void* init,
 		GuPool* pool)
 {
@@ -51,7 +32,7 @@ gu_make_variant(uint8_t tag, size_t size, size_t align, const void* init,
 	return v;
 }
 
-int
+GU_API int
 gu_variant_tag(GuVariant variant)
 {
 	if (gu_variant_is_null(variant)) {
@@ -65,7 +46,7 @@ gu_variant_tag(GuVariant variant)
 	return u - 1;
 }
 
-void*
+GU_API void*
 gu_variant_data(GuVariant variant)
 {
 	if (gu_variant_is_null(variant)) {
@@ -74,7 +55,8 @@ gu_variant_data(GuVariant variant)
 	return (void*)gu_align_backward(variant, GU_VARIANT_ALIGNMENT);
 }
 
-GuVariantInfo gu_variant_open(GuVariant variant)
+GU_API GuVariantInfo
+gu_variant_open(GuVariant variant)
 {
 	GuVariantInfo info = {
 		.tag = gu_variant_tag(variant),
@@ -83,7 +65,8 @@ GuVariantInfo gu_variant_open(GuVariant variant)
 	return info;
 }
 
-GuVariant gu_variant_close(GuVariantInfo info)
+GU_API GuVariant
+gu_variant_close(GuVariantInfo info)
 {
 	GuVariant variant;
 
@@ -97,7 +80,7 @@ GuVariant gu_variant_close(GuVariantInfo info)
 	return variant;
 }
 
-int 
+GU_API int 
 gu_variant_intval(GuVariant variant)
 {
 	int u = variant % GU_VARIANT_ALIGNMENT;
@@ -108,4 +91,4 @@ gu_variant_intval(GuVariant variant)
 	return (variant / GU_VARIANT_ALIGNMENT);
 }
 
-GU_API_DATA const GuVariant gu_null_variant = { (GuWord) NULL };
+GU_API const GuVariant gu_null_variant = { (GuWord) NULL };

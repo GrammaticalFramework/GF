@@ -49,7 +49,7 @@ gu_string_buf_end(GuOutStream* stream, size_t sz, GuExn* err)
 	sbuf->buf->seq->len = len + sz;
 }
 
-GuStringBuf*
+GU_API GuStringBuf*
 gu_new_string_buf(GuPool* pool)
 {
 	GuStringBuf* sbuf = gu_new(GuStringBuf, pool);
@@ -62,13 +62,13 @@ gu_new_string_buf(GuPool* pool)
 	return sbuf;
 }
 
-GuOut*
+GU_API GuOut*
 gu_string_buf_out(GuStringBuf* sb)
 {
 	return sb->out;
 }
 
-GuString
+GU_API GuString
 gu_string_buf_freeze(GuStringBuf* sb, GuPool* pool)
 {
 	gu_out_flush(sb->out, NULL);
@@ -82,33 +82,33 @@ gu_string_buf_freeze(GuStringBuf* sb, GuPool* pool)
 	return p;
 }
 
-char*
+GU_API char*
 gu_string_buf_data(GuStringBuf* sb)
 {
 	gu_out_flush(sb->out, NULL);
 	return gu_buf_data(sb->buf);
 }
 
-size_t
+GU_API size_t
 gu_string_buf_length(GuStringBuf* sb)
 {
 	gu_out_flush(sb->out, NULL);
 	return gu_buf_length(sb->buf);
 }
 
-void
+GU_API void
 gu_string_buf_flush(GuStringBuf* sb)
 {
 	gu_buf_flush(sb->buf);
 }
 
-GuIn*
+GU_API GuIn*
 gu_string_in(GuString s, GuPool* pool)
 {
 	return gu_data_in((uint8_t*) s, strlen(s), pool);
 }
 
-GuString
+GU_API GuString
 gu_string_copy(GuString string, GuPool* pool)
 {
 	size_t len = strlen(string);
@@ -117,13 +117,13 @@ gu_string_copy(GuString string, GuPool* pool)
 	return p;
 }
 
-void
+GU_API void
 gu_string_write(GuString s, GuOut* out, GuExn* err)
 {
 	gu_out_bytes(out, (uint8_t*) s, strlen(s), err);
 }
 
-GuString
+GU_API GuString
 gu_string_read(size_t len, GuPool* pool, GuIn* in, GuExn* err)
 {
 	char* buf = alloca(len*6+1);
@@ -139,7 +139,7 @@ gu_string_read(size_t len, GuPool* pool, GuIn* in, GuExn* err)
 	return p;
 }
 
-GuString
+GU_API GuString
 gu_string_read_latin1(size_t len, GuPool* pool, GuIn* in, GuExn* err)
 {
 	char* p = gu_malloc_aligned(pool, len+1, 2);
@@ -148,7 +148,7 @@ gu_string_read_latin1(size_t len, GuPool* pool, GuIn* in, GuExn* err)
 	return p;
 }
 
-GuString
+GU_API GuString
 gu_format_string_v(const char* fmt, va_list args, GuPool* pool)
 {
 	GuPool* tmp_pool = gu_local_pool();
@@ -161,7 +161,7 @@ gu_format_string_v(const char* fmt, va_list args, GuPool* pool)
 	return s;
 }
 
-GuString
+GU_API GuString
 gu_format_string(GuPool* pool, const char* fmt, ...)
 {
 	va_list args;
@@ -171,7 +171,7 @@ gu_format_string(GuPool* pool, const char* fmt, ...)
 	return s;
 }
 
-bool
+GU_API bool
 gu_string_to_int(GuString s, int *res)
 {
 	bool neg = false;
@@ -195,7 +195,7 @@ gu_string_to_int(GuString s, int *res)
 	return true;
 }
 
-bool
+GU_API bool
 gu_string_to_double(GuString s, double *res)
 {
 	bool neg = false;
@@ -231,7 +231,7 @@ gu_string_to_double(GuString s, double *res)
 	return true;
 }
 
-void
+GU_API void
 gu_double_to_string(double val, GuOut* out, GuExn* err)
 {
 	int ival = (int) val;
@@ -254,7 +254,7 @@ gu_double_to_string(double val, GuOut* out, GuExn* err)
 	}
 }
 
-bool
+GU_API bool
 gu_string_is_prefix(GuString s1, GuString s2)
 {
 	size_t len1 = strlen(s1);
@@ -274,7 +274,7 @@ gu_string_is_prefix(GuString s1, GuString s2)
 	return true;
 }
 
-GuHash
+GU_API GuHash
 gu_string_hash(GuHash h, GuString s)
 {
 	return gu_hash_bytes(h, (uint8_t*)s, strlen(s));
@@ -287,7 +287,7 @@ gu_string_eq_fn(GuEquality* self, const void* p1, const void* p2)
 	return strcmp((GuString) p1, (GuString) p2) == 0;
 }
 
-GU_API_DATA GuEquality gu_string_equality[1] = { { gu_string_eq_fn } };
+GU_API GuEquality gu_string_equality[1] = { { gu_string_eq_fn } };
 
 static int
 gu_string_cmp_fn(GuOrder* self, const void* p1, const void* p2)
@@ -296,7 +296,7 @@ gu_string_cmp_fn(GuOrder* self, const void* p1, const void* p2)
 	return strcmp((GuString) p1, (GuString) p2);
 }
 
-GU_API_DATA GuOrder gu_string_order[1] = { { gu_string_cmp_fn } };
+GU_API GuOrder gu_string_order[1] = { { gu_string_cmp_fn } };
 
 static GuHash
 gu_string_hasher_hash(GuHasher* self, const void* p)
@@ -305,7 +305,7 @@ gu_string_hasher_hash(GuHasher* self, const void* p)
 	return gu_string_hash(0, (GuString) p);
 }
 
-GU_API_DATA GuHasher gu_string_hasher[1] = {
+GU_API GuHasher gu_string_hasher[1] = {
 	{
 		.eq = { gu_string_eq_fn },
 		.hash = gu_string_hasher_hash

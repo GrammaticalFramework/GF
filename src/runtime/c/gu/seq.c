@@ -15,7 +15,7 @@ gu_buf_fini(GuFinalizer* fin)
 		gu_mem_buf_free(buf->seq);
 }
 
-GuBuf*
+GU_API GuBuf*
 gu_make_buf(size_t elem_size, GuPool* pool)
 {
 	GuBuf* buf = gu_new(GuBuf, pool);
@@ -50,12 +50,12 @@ gu_buf_flush(GuBuf* buf);
 
 static GuSeq gu_empty_seq_ = {0};
 
-GuSeq*
+GU_API GuSeq*
 gu_empty_seq() {
 	return &gu_empty_seq_;
 }
 
-GuSeq*
+GU_API GuSeq*
 gu_make_seq(size_t elem_size, size_t length, GuPool* pool)
 {
 	GuSeq* seq = gu_malloc(pool, sizeof(GuSeq) + elem_size * length);
@@ -69,7 +69,7 @@ gu_seq_length(GuSeq* seq);
 extern void*
 gu_seq_data(GuSeq* seq);
 
-GuSeq*
+GU_API GuSeq*
 gu_alloc_seq_(size_t elem_size, size_t length)
 {
 	if (length == 0)
@@ -81,7 +81,7 @@ gu_alloc_seq_(size_t elem_size, size_t length)
 	return seq;
 }
 
-GuSeq*
+GU_API GuSeq*
 gu_realloc_seq_(GuSeq* seq, size_t elem_size, size_t length)
 {
 	size_t real_size;
@@ -92,7 +92,7 @@ gu_realloc_seq_(GuSeq* seq, size_t elem_size, size_t length)
 	return new_seq;
 }
 
-void
+GU_API void
 gu_seq_free(GuSeq* seq)
 {
 	if (seq == NULL || seq == gu_empty_seq())
@@ -100,7 +100,7 @@ gu_seq_free(GuSeq* seq)
 	gu_mem_buf_free(seq);
 }
 
-void
+GU_API void
 gu_buf_require(GuBuf* buf, size_t req_len)
 {
 	if (req_len <= buf->avail_len) {
@@ -120,7 +120,7 @@ gu_buf_require(GuBuf* buf, size_t req_len)
 	buf->avail_len = (real_size - sizeof(GuSeq)) / buf->elem_size;
 }
 
-void*
+GU_API void*
 gu_buf_extend_n(GuBuf* buf, size_t n_elems)
 {
 	size_t len = gu_buf_length(buf);
@@ -130,14 +130,14 @@ gu_buf_extend_n(GuBuf* buf, size_t n_elems)
 	return &buf->seq->data[buf->elem_size * len];
 }
 
-void
+GU_API void
 gu_buf_push_n(GuBuf* buf, const void* data, size_t n_elems)
 {
 	void* p = gu_buf_extend_n(buf, n_elems);
 	memcpy(p, data, buf->elem_size * n_elems);
 }
 
-const void*
+GU_API const void*
 gu_buf_trim_n(GuBuf* buf, size_t n_elems)
 {
 	gu_require(n_elems <= gu_buf_length(buf));
@@ -146,14 +146,14 @@ gu_buf_trim_n(GuBuf* buf, size_t n_elems)
 	return &buf->seq->data[buf->elem_size * new_len];
 }
 
-void
+GU_API void
 gu_buf_pop_n(GuBuf* buf, size_t n_elems, void* data_out)
 {
 	const void* p = gu_buf_trim_n(buf, n_elems);
 	memcpy(data_out, p, buf->elem_size * n_elems);
 }
 
-GuSeq*
+GU_API GuSeq*
 gu_buf_freeze(GuBuf* buf, GuPool* pool)
 {
 	size_t len = gu_buf_length(buf);
@@ -164,7 +164,7 @@ gu_buf_freeze(GuBuf* buf, GuPool* pool)
 	return seq;
 }
 
-void*
+GU_API void*
 gu_buf_insert(GuBuf* buf, size_t index)
 {
 	size_t len = buf->seq->len;
@@ -225,13 +225,13 @@ gu_quick_sort(GuBuf *buf, GuOrder *order, int left, int right)
 		gu_quick_sort(buf, order, index+1, right);
 }
 
-void
+GU_API void
 gu_buf_sort(GuBuf *buf, GuOrder *order)
 {
 	gu_quick_sort(buf, order, 0, gu_buf_length(buf) - 1);
 }
 
-void*
+GU_API void*
 gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, const void *key)
 {
 	int i = 0;
@@ -254,7 +254,7 @@ gu_seq_binsearch_(GuSeq *seq, GuOrder *order, size_t elem_size, const void *key)
 	return NULL;
 }
 
-bool
+GU_API bool
 gu_seq_binsearch_index_(GuSeq *seq, GuOrder *order, size_t elem_size,
                         const void *key, size_t *pindex)
 {
@@ -324,14 +324,14 @@ gu_heap_siftup(GuBuf *buf, GuOrder *order,
    gu_heap_siftdown(buf, order, value, startpos, pos);
 }
 
-void
+GU_API void
 gu_buf_heap_push(GuBuf *buf, GuOrder *order, void *value)
 {
 	gu_buf_extend(buf);
 	gu_heap_siftdown(buf, order, value, 0, gu_buf_length(buf)-1);
 }
 
-void
+GU_API void
 gu_buf_heap_pop(GuBuf *buf, GuOrder *order, void* data_out)
 {
 	const void* last = gu_buf_trim(buf); // raises an error if empty
@@ -344,7 +344,7 @@ gu_buf_heap_pop(GuBuf *buf, GuOrder *order, void* data_out)
 	}
 }
 
-void
+GU_API void
 gu_buf_heap_replace(GuBuf *buf, GuOrder *order, void *value, void *data_out)
 {
 	gu_require(gu_buf_length(buf) > 0);
@@ -353,7 +353,7 @@ gu_buf_heap_replace(GuBuf *buf, GuOrder *order, void *value, void *data_out)
 	gu_heap_siftup(buf, order, value, 0);
 }
 
-void
+GU_API void
 gu_buf_heapify(GuBuf *buf, GuOrder *order)
 {
 	size_t middle = gu_buf_length(buf) / 2;

@@ -7,19 +7,19 @@ typedef struct GuChoice GuChoice;
 
 typedef struct GuChoiceMark GuChoiceMark;
 
-GuChoice*
+GU_API_DECL GuChoice*
 gu_new_choice(GuPool* pool);
 
-int
+GU_API_DECL int
 gu_choice_next(GuChoice* ch, int n_choices);
 
-GuChoiceMark
+GU_API_DECL GuChoiceMark
 gu_choice_mark(GuChoice* ch);
 
-void
+GU_API_DECL void
 gu_choice_reset(GuChoice* ch, GuChoiceMark mark);
 
-bool
+GU_API_DECL bool
 gu_choice_advance(GuChoice* ch);
 
 

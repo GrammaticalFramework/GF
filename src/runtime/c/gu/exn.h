@@ -64,11 +64,11 @@ struct GuExn {
 
 
 /// Allocate a new exception frame.
-GuExn*
+GU_API_DECL GuExn*
 gu_new_exn(GuPool* pool);
 
 
-bool
+GU_API_DECL bool
 gu_exn_is_raised(GuExn* err);
 
 static inline void
@@ -80,7 +80,7 @@ gu_exn_clear(GuExn* err) {
 #define gu_exn_caught(err, type) \
 	(err->caught && strcmp(err->caught, #type) == 0)
 	
-bool
+GU_API_DECL bool
 gu_exn_caught_(GuExn* err, const char* type);
 
 static inline const void*
@@ -90,19 +90,19 @@ gu_exn_caught_data(GuExn* err)
 }
 
 /// Temporarily block a raised exception.
-void
+GU_API_DECL void
 gu_exn_block(GuExn* err);
 
 /// Show again a blocked exception.
-void
+GU_API_DECL void
 gu_exn_unblock(GuExn* err);
 
 //@private
-GuExnData*
+GU_API_DECL GuExnData*
 gu_exn_raise_(GuExn* err, const char* type);
 
 //@private
-GuExnData*
+GU_API_DECL GuExnData*
 gu_exn_raise_debug_(GuExn* err, const char* type,
 		      const char* filename, const char* func, int lineno);
 
@@ -163,7 +163,7 @@ gu_ok(GuExn* exn) {
 
 typedef int GuErrno;
 
-void
+GU_API_DECL void
 gu_raise_errno(GuExn* err);
 
 /** @} */

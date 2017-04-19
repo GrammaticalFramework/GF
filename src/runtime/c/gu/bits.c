@@ -7,7 +7,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-unsigned gu_ceil2e(unsigned u)  
+GU_INTERNAL unsigned
+gu_ceil2e(unsigned u)  
 {
 	u--;
 	u |= u >> 1;
@@ -24,7 +25,7 @@ unsigned gu_ceil2e(unsigned u)
 	return u;
 }
 
-double 
+GU_INTERNAL double
 gu_decode_double(uint64_t u)
 {
 	bool sign = u >> 63;

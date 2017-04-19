@@ -15,7 +15,7 @@ struct GuMapItor {
 
 typedef struct GuMap GuMap;
 
-GuMap*
+GU_API_DECL GuMap*
 gu_make_map(size_t key_size, GuHasher* hasher,
 	    size_t value_size, const void* default_value,
 	    size_t init_size,
@@ -32,19 +32,19 @@ gu_make_map(size_t key_size, GuHasher* hasher,
 #define gu_new_addr_map(K, V, DV, POOL)				\
 	(gu_make_map(sizeof(K), gu_addr_hasher, sizeof(V), (DV), GU_MAP_DEFAULT_INIT_SIZE, (POOL)))
 
-size_t
+GU_API_DECL size_t
 gu_map_count(GuMap* map);
 
-void*
+GU_API_DECL void*
 gu_map_find_full(GuMap* ht, void* key_inout);
 
-const void*
+GU_API_DECL const void*
 gu_map_find_default(GuMap* ht, const void* key);
 
 #define gu_map_get(MAP, KEYP, V)		\
 	(*(V*)gu_map_find_default((MAP), (KEYP)))
 
-void*
+GU_API_DECL void*
 gu_map_find(GuMap* ht, const void* key);
 
 #define gu_map_set(MAP, KEYP, V, VAL)				\
@@ -53,13 +53,13 @@ gu_map_find(GuMap* ht, const void* key);
 	*gu_map_set_p_ = (VAL);					\
 	GU_END
 
-const void*
+GU_API_DECL const void*
 gu_map_find_key(GuMap* ht, const void* key);
 
-bool
+GU_API_DECL bool
 gu_map_has(GuMap* ht, const void* key);
 
-void*
+GU_API_DECL void*
 gu_map_insert(GuMap* ht, const void* key);
 
 #define gu_map_put(MAP, KEYP, V, VAL)				\
@@ -68,7 +68,7 @@ gu_map_insert(GuMap* ht, const void* key);
 	*gu_map_put_p_ = (VAL);					\
 	GU_END
 
-void
+GU_API_DECL void
 gu_map_iter(GuMap* ht, GuMapItor* itor, GuExn* err);
 
 typedef struct {
@@ -76,7 +76,7 @@ typedef struct {
 	void* value;
 } GuMapKeyValue;
 
-GuEnum*
+GU_API_DECL GuEnum*
 gu_map_enum(GuMap* ht, GuPool* pool);
 
 typedef GuMap GuIntMap;

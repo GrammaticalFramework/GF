@@ -1,22 +1,3 @@
-/* 
- * Copyright 2010 University of Helsinki.
- *   
- * This file is part of libgu.
- * 
- * Libgu is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Libgu is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with libgu. If not, see <http://www.gnu.org/licenses/>.
- */
-
 /** @file
  *
  * Miscellaneous macros.
@@ -30,16 +11,19 @@
 // for functions, but not for data/variables.
 #if defined(_MSC_VER)
 #if defined(COMPILING_GU)
-#define GU_API_DATA_DECL __declspec(dllexport)
-#define GU_API_DATA __declspec(dllexport)
+#define GU_API_DECL __declspec(dllexport)
+#define GU_API __declspec(dllexport)
 #else
-#define GU_API_DATA_DECL __declspec(dllimport)
-#define GU_API_DATA ERROR_NOT_COMPILING_LIBGU
+#define GU_API_DECL __declspec(dllimport)
+#define GU_API ERROR_NOT_COMPILING_LIBGU
 #endif
 
 #else
-#define GU_API_DATA_DECL extern
-#define GU_API_DATA
+#define GU_API_DECL
+#define GU_API
+
+#define GU_INTERNAL_DECL  __attribute__ ((visibility ("hidden")))
+#define GU_INTERNAL       __attribute__ ((visibility ("hidden")))
 #endif
 // end MSVC workaround
 
@@ -172,7 +156,7 @@ extern void* const gu_null;
 // Dummy struct used for generic struct pointers
 typedef struct GuStruct GuStruct;
 
-GU_API_DATA_DECL GuStruct* const gu_null_struct;
+GU_API_DECL extern GuStruct* const gu_null_struct;
 
 typedef uintptr_t GuWord;
 

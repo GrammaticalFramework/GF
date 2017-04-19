@@ -10,12 +10,12 @@ typedef enum {
 	GU_ASSERT_NEVER
 } GuAssertMode;
 
-void
+GU_API_DECL void
 gu_abort_v_(GuAssertMode mode, 
 	    const char* file, const char* func, int line,
 	    const char* msg_fmt, va_list args);
 
-void
+GU_API_DECL void
 gu_abort_(GuAssertMode mode, 
 	  const char* file, const char* func, int line,
 	  const char* msg_fmt, ...);
@@ -55,7 +55,7 @@ gu_abort_(GuAssertMode mode,
 #define gu_impossible()				\
 	gu_impossible_msg(NULL)
 
-void 
+GU_API_DECL void
 gu_fatal(const char* fmt, ...);
 
 #endif /* GU_ASSERT_H_ */

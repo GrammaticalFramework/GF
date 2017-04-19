@@ -25,16 +25,16 @@ struct GuIn {
 	GuFinalizer fini;
 };
 
-GuIn*
+GU_API_DECL GuIn*
 gu_new_in(GuInStream* stream, GuPool* pool);
 
-const uint8_t*
+GU_API_DECL const uint8_t*
 gu_in_begin_span(GuIn* in, size_t *sz_out, GuExn* err);
 
-void
+GU_API_DECL void
 gu_in_end_span(GuIn* in, size_t consumed);
 
-size_t
+GU_API_DECL size_t
 gu_in_some(GuIn* in, uint8_t* buf, size_t max_len, GuExn* err);
 
 inline void
@@ -69,7 +69,6 @@ gu_in_consume(GuIn* restrict in, size_t sz)
 	in->buf_curr += sz;
 }
 
-
 inline uint8_t 
 gu_in_u8(GuIn* restrict in, GuExn* err)
 {
@@ -80,55 +79,55 @@ gu_in_u8(GuIn* restrict in, GuExn* err)
 	return in->buf_end[in->buf_curr++];
 }
 
-int8_t 
+GU_API_DECL int8_t 
 gu_in_s8(GuIn* in, GuExn* err);
 
-uint16_t
+GU_API_DECL uint16_t
 gu_in_u16le(GuIn* in, GuExn* err);
 
-uint16_t
+GU_API_DECL uint16_t
 gu_in_u16be(GuIn* in, GuExn* err);
 
-int16_t
+GU_API_DECL int16_t
 gu_in_s16le(GuIn* in, GuExn* err);
 
-int16_t
+GU_API_DECL int16_t
 gu_in_s16be(GuIn* in, GuExn* err);
 
-uint32_t
+GU_API_DECL uint32_t
 gu_in_u32le(GuIn* in, GuExn* err);
 
-uint32_t
+GU_API_DECL uint32_t
 gu_in_u32be(GuIn* in, GuExn* err);
 
-int32_t
+GU_API_DECL int32_t
 gu_in_s32le(GuIn* in, GuExn* err);
 
-int32_t
+GU_API_DECL int32_t
 gu_in_s32be(GuIn* in, GuExn* err);
 
-uint64_t
+GU_API_DECL uint64_t
 gu_in_u64le(GuIn* in, GuExn* err);
 
-uint64_t
+GU_API_DECL uint64_t
 gu_in_u64be(GuIn* in, GuExn* err);
 
-int64_t
+GU_API_DECL int64_t
 gu_in_s64le(GuIn* in, GuExn* err);
 
-int64_t
+GU_API_DECL int64_t
 gu_in_s64be(GuIn* in, GuExn* err);
 
-double
+GU_API_DECL double
 gu_in_f64le(GuIn* in, GuExn* err);
 
-double
+GU_API_DECL double
 gu_in_f64be(GuIn* in, GuExn* err);
 
-GuIn*
+GU_API_DECL GuIn*
 gu_buffered_in(GuIn* in, size_t sz, GuPool* pool);
 
-GuIn*
+GU_API_DECL GuIn*
 gu_data_in(const uint8_t* buf, size_t size, GuPool* pool);
 
 

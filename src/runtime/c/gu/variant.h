@@ -97,7 +97,7 @@ gu_variant_from_ptr(const void* p)
 	return (uintptr_t) p;
 }
 
-GU_API_DATA_DECL const GuVariant gu_null_variant;
+GU_API_DECL extern const GuVariant gu_null_variant;
 
 static inline bool
 gu_variant_is_null(GuVariant v) {

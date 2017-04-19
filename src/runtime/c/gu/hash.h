@@ -20,7 +20,7 @@ gu_hash_byte(GuHash h, uint8_t u)
 }
 
 
-GuHash
+GU_API GuHash
 gu_hash_bytes(GuHash h, const uint8_t* buf, size_t len);
 
 typedef const struct GuHasher GuHasher;
@@ -31,10 +31,10 @@ struct GuHasher {
 };
 
 
-GU_API_DATA_DECL GuHasher gu_int_hasher[1];
+GU_API_DECL extern GuHasher gu_int_hasher[1];
 
-GU_API_DATA_DECL GuHasher gu_addr_hasher[1];
+GU_API_DECL extern GuHasher gu_addr_hasher[1];
 
-GU_API_DATA_DECL GuHasher gu_word_hasher[1];
+GU_API_DECL extern GuHasher gu_word_hasher[1];
 
 #endif // GU_HASH_H_

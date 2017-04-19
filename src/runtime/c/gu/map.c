@@ -222,7 +222,7 @@ gu_map_maybe_resize(GuMap* map)
 	return false;
 }
 
-void*
+GU_API void*
 gu_map_find(GuMap* map, const void* key)
 {
 	size_t idx;
@@ -233,14 +233,14 @@ gu_map_find(GuMap* map, const void* key)
 	return NULL;
 }
 
-const void*
+GU_API const void*
 gu_map_find_default(GuMap* map, const void* key)
 {
 	void* p = gu_map_find(map, key);
 	return p ? p : map->default_value;
 }
 
-const void*
+GU_API const void*
 gu_map_find_key(GuMap* map, const void* key)
 {
 	size_t idx;
@@ -251,14 +251,14 @@ gu_map_find_key(GuMap* map, const void* key)
 	return NULL;
 }
 
-bool
+GU_API bool
 gu_map_has(GuMap* ht, const void* key)
 {
 	size_t idx;
 	return gu_map_lookup(ht, key, &idx);
 }
 
-void*
+GU_API void*
 gu_map_insert(GuMap* map, const void* key)
 {
 	size_t idx;
@@ -289,7 +289,7 @@ gu_map_insert(GuMap* map, const void* key)
 	return &map->data.values[idx * map->value_size];
 }
 
-void
+GU_API void
 gu_map_iter(GuMap* map, GuMapItor* itor, GuExn* err)
 {
 	for (size_t i = 0; i < map->data.n_entries && gu_ok(err); i++) {
@@ -340,7 +340,7 @@ gu_map_enum_next(GuEnum* self, void* to, GuPool* pool)
 	en->i = i+1;
 }
 
-GuEnum*
+GU_API GuEnum*
 gu_map_enum(GuMap* ht, GuPool* pool)
 {
 	GuMapEnum* en = gu_new(GuMapEnum, pool);
@@ -350,7 +350,7 @@ gu_map_enum(GuMap* ht, GuPool* pool)
 	return &en->en;
 }
 
-size_t
+GU_API size_t
 gu_map_count(GuMap* map)
 {
 	size_t count = 0;
@@ -365,7 +365,7 @@ gu_map_count(GuMap* map)
 
 static const uint8_t gu_map_no_values[1] = { 0 };
 
-GuMap*
+GU_API GuMap*
 gu_make_map(size_t key_size, GuHasher* hasher,
 	    size_t value_size, const void* default_value,
 	    size_t init_size,

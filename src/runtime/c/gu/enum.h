@@ -9,7 +9,7 @@ struct GuEnum {
 	void (*next)(GuEnum* self, void* to, GuPool* pool);
 };
 
-void
+GU_API_DECL void
 gu_enum_next(GuEnum* en, void* to, GuPool* pool);
 
 #ifdef GU_GNUC

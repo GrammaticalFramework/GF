@@ -7,7 +7,7 @@ struct GuChoice {
 	size_t path_idx;
 };
 
-GuChoice*
+GU_API GuChoice*
 gu_new_choice(GuPool* pool)
 {
 	GuChoice* ch = gu_new(GuChoice, pool);
@@ -16,14 +16,14 @@ gu_new_choice(GuPool* pool)
 	return ch;
 }
 
-GuChoiceMark
+GU_API GuChoiceMark
 gu_choice_mark(GuChoice* ch)
 {
 	gu_assert(ch->path_idx <= gu_buf_length(ch->path));
 	return (GuChoiceMark){ch->path_idx};
 }
 
-void
+GU_API void
 gu_choice_reset(GuChoice* ch, GuChoiceMark mark)
 {
 	gu_assert(ch->path_idx <= gu_buf_length(ch->path));
@@ -31,7 +31,7 @@ gu_choice_reset(GuChoice* ch, GuChoiceMark mark)
 	ch->path_idx = mark.path_idx;
 }
 
-int
+GU_API int
 gu_choice_next(GuChoice* ch, int n_choices)
 {
 	gu_assert(n_choices >= 0);
@@ -52,7 +52,7 @@ gu_choice_next(GuChoice* ch, int n_choices)
 	return ret;
 }
 
-bool
+GU_API bool
 gu_choice_advance(GuChoice* ch)
 {
 	gu_assert(ch->path_idx <= gu_buf_length(ch->path));

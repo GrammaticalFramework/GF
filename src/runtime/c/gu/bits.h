@@ -13,6 +13,7 @@
  * <http://graphics.stanford.edu/~seander/bithacks.html>
  */
 
+GU_INTERNAL_DECL
 unsigned gu_ceil2e(unsigned i);
 
 static inline int
@@ -140,7 +141,7 @@ gu_decode_2c64(uint64_t u, GuExn* err)
 			     UINT64_C(0x7fffffffffffffff), INT64_MIN, err);
 }
 
-double
+GU_INTERNAL_DECL double
 gu_decode_double(uint64_t u);
 
 

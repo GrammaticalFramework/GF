@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-const char*
+static const char*
 gu_assert_mode_descs[] = {
 	[GU_ASSERT_PRECOND] = "precondition failed",
 	[GU_ASSERT_POSTCOND] = "postcondition failed",
@@ -11,7 +11,7 @@ gu_assert_mode_descs[] = {
 	[GU_ASSERT_NEVER] = "control should not reach here",
 };
 
-void
+GU_API void
 gu_abort_v_(GuAssertMode mode,
 	    const char* file, const char* func, int line,
 	    const char* msg_fmt, va_list args)
@@ -26,7 +26,7 @@ gu_abort_v_(GuAssertMode mode,
 	abort();
 }
 
-void
+GU_API void
 gu_abort_(GuAssertMode mode,
 	  const char* file, const char* func, int line,
 	  const char* msg_fmt, ...)
@@ -36,9 +36,8 @@ gu_abort_(GuAssertMode mode,
 	gu_abort_v_(mode, file, func, line, msg_fmt, args);
 	va_end(args);
 }
-	
 
-void 
+GU_API void 
 gu_fatal(const char* fmt, ...)
 {
 	va_list args;

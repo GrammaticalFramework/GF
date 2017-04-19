@@ -2,7 +2,7 @@
 #include <gu/assert.h>
 
 
-GuExn*
+GU_API GuExn*
 gu_new_exn(GuPool* pool)
 {
 	GuExn* exn = gu_new(GuExn, pool);
@@ -13,18 +13,18 @@ gu_new_exn(GuPool* pool)
 	return exn;
 }
 
-bool
+GU_API bool
 gu_exn_is_raised(GuExn* err) {
 	return err && (err->state == GU_EXN_RAISED);
 }
 
-bool
+GU_API bool
 gu_exn_caught_(GuExn* err, const char* type)
 {
 	return (err->caught && strcmp(err->caught, type) == 0);
 }
 
-void
+GU_API void
 gu_exn_block(GuExn* err)
 {
 	if (err && err->state == GU_EXN_RAISED) {
@@ -32,7 +32,7 @@ gu_exn_block(GuExn* err)
 	}
 }
 
-void
+GU_API void
 gu_exn_unblock(GuExn* err)
 {
 	if (err && err->state == GU_EXN_BLOCKED) {
@@ -40,7 +40,7 @@ gu_exn_unblock(GuExn* err)
 	}
 }
 
-GuExnData*
+GU_API GuExnData*
 gu_exn_raise_debug_(GuExn* err, const char* type, 
 		            const char* filename, const char* func, int lineno)
 {
@@ -60,13 +60,13 @@ gu_exn_raise_debug_(GuExn* err, const char* type,
 	return NULL;
 }
 
-GuExnData*
+GU_API GuExnData*
 gu_exn_raise_(GuExn* base, const char* type)
 {
 	return gu_exn_raise_debug_(base, type, NULL, NULL, -1);
 }
 
-void
+GU_API void
 gu_raise_errno(GuExn* err)
 {
 	GuExnData* err_data = gu_raise(err, GuErrno);

@@ -65,7 +65,7 @@ gu_out_fini(GuFinalizer* self)
 	}
 }
 
-GuOut*
+GU_API GuOut*
 gu_new_out(GuOutStream* stream, GuPool* pool)
 {
 	gu_require(stream != NULL);
@@ -82,7 +82,6 @@ gu_new_out(GuOutStream* stream, GuPool* pool)
 extern inline bool
 gu_out_try_buf_(GuOut* out, const uint8_t* src, size_t len);
 
-
 extern inline size_t
 gu_out_bytes(GuOut* out, const uint8_t* buf, size_t len, GuExn* err);
 
@@ -96,10 +95,7 @@ gu_out_output(GuOut* out, const uint8_t* src, size_t len, GuExn* err)
 	return out->stream->output(out->stream, src, len, err);
 }
 
-
-
-
-void 
+GU_API void 
 gu_out_flush(GuOut* out, GuExn* err)
 {
 	GuOutStream* stream = out->stream;
@@ -114,7 +110,7 @@ gu_out_flush(GuOut* out, GuExn* err)
 	}
 }
 
-uint8_t*
+GU_API uint8_t*
 gu_out_begin_span(GuOut* out, size_t req, size_t* sz_out, GuExn* err)
 {
 	if (!out->buf_end && !gu_out_begin_buf(out, req, err)) {
@@ -124,7 +120,7 @@ gu_out_begin_span(GuOut* out, size_t req, size_t* sz_out, GuExn* err)
 	return &out->buf_end[out->buf_curr];
 }
 
-void
+GU_API void
 gu_out_end_span(GuOut* out, size_t sz)
 {
 	ptrdiff_t new_curr = (ptrdiff_t) sz + out->buf_curr;
@@ -132,7 +128,7 @@ gu_out_end_span(GuOut* out, size_t sz)
 	out->buf_curr = new_curr;
 }
 
-size_t
+GU_API size_t
 gu_out_bytes_(GuOut* restrict out, const uint8_t* restrict src, size_t len, 
 	      GuExn* err)
 {
@@ -149,8 +145,8 @@ gu_out_bytes_(GuOut* restrict out, const uint8_t* restrict src, size_t len,
 	return gu_out_output(out, src, len, err);
 }
 
-
-void gu_out_u8_(GuOut* restrict out, uint8_t u, GuExn* err)
+GU_API void
+gu_out_u8_(GuOut* restrict out, uint8_t u, GuExn* err)
 {
 	if (gu_out_begin_buf(out, 1, err)) {
 		if (gu_out_try_u8_(out, u)) {
@@ -159,7 +155,6 @@ void gu_out_u8_(GuOut* restrict out, uint8_t u, GuExn* err)
 	}
 	gu_out_output(out, &u, 1, err);
 }
-
 
 extern inline void
 gu_out_u8(GuOut* restrict out, uint8_t u, GuExn* err);
@@ -222,7 +217,7 @@ gu_buffered_out_flush(GuOutStream* self, GuExn* err)
 	gu_out_flush(bos->real_out, err);
 }
 
-GuOut*
+GU_API GuOut*
 gu_new_buffered_out(GuOut* out, size_t sz, GuPool* pool)
 {
 	GuBufferedOutStream* b =
@@ -238,7 +233,7 @@ gu_new_buffered_out(GuOut* out, size_t sz, GuPool* pool)
 	return gu_new_out(&b->stream, pool);
 }
 
-GuOut*
+GU_API GuOut*
 gu_out_buffered(GuOut* out, GuPool* pool)
 {
 	if (gu_out_is_buffered(out)) {
@@ -251,13 +246,13 @@ gu_out_buffered(GuOut* out, GuPool* pool)
 extern inline void
 gu_putc(char c, GuOut* out, GuExn* err);
 
-void
+GU_API void
 gu_puts(const char* str, GuOut* out, GuExn* err)
 {
 	gu_out_bytes(out, (const uint8_t*) str, strlen(str), err);
 }
 
-void
+GU_API void
 gu_vprintf(const char* fmt, va_list args, GuOut* out, GuExn* err)
 {
 	GuPool* tmp_pool = gu_local_pool();
@@ -274,7 +269,7 @@ gu_vprintf(const char* fmt, va_list args, GuOut* out, GuExn* err)
 	gu_pool_free(tmp_pool);
 }
 
-void
+GU_API void
 gu_printf(GuOut* out, GuExn* err, const char* fmt, ...)
 {
 	va_list args;

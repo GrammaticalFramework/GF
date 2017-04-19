@@ -1,22 +1,3 @@
-/* 
- * Copyright 2010 University of Helsinki.
- *   
- * This file is part of libgu.
- * 
- * Libgu is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- * 
- * Libgu is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
- * License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with libgu. If not, see <http://www.gnu.org/licenses/>.
- */
-
 /** @file
  *
  * Memory allocation tools.
@@ -49,7 +30,7 @@ gu_new_pool(void);
 
 
 //@private
-GuPool*
+GU_API_DECL GuPool*
 gu_local_pool_(uint8_t* init_buf, size_t sz);
 
 //@private
@@ -75,7 +56,7 @@ gu_local_pool_(uint8_t* init_buf, size_t sz);
  */
 
 /// Create a pool stored in a memory mapped file.
-GuPool* 
+GU_API_DECL GuPool* 
 gu_mmap_pool(char* fpath, void* addr, size_t size, void**pptr);
 
 //@}
@@ -84,7 +65,7 @@ gu_mmap_pool(char* fpath, void* addr, size_t size, void**pptr);
 
 
 /// Free a memory pool and all objects allocated from it.
-void
+GU_API_DECL void
 gu_pool_free(GU_ONLY GuPool* pool);
 /**<
  * When the pool is freed, all finalizers registered by
@@ -100,10 +81,10 @@ gu_pool_free(GU_ONLY GuPool* pool);
  
 
 /// Allocate memory with a specified alignment.
-void* 
+GU_API_DECL void* 
 gu_malloc_aligned(GuPool* pool, size_t size, size_t alignment); 
 
-void*
+GU_API_DECL void*
 gu_malloc_prefixed(GuPool* pool, size_t pre_align, size_t pre_size,
 		   size_t align, size_t size);
 
@@ -173,7 +154,7 @@ struct GuFinalizer {
 };
 
 /// Register a finalizer.
-void gu_pool_finally(GuPool* pool, GuFinalizer* fini);
+GU_API_DECL void gu_pool_finally(GuPool* pool, GuFinalizer* fini);
 
 /**< Register \p fini to be called when \p pool is destroyed. The
  * finalizers are called in reverse order of registration.
@@ -197,7 +178,7 @@ void gu_pool_finally(GuPool* pool, GuFinalizer* fini);
 
 
 /// Allocate a new memory buffer.
-GU_ONLY void*
+GU_API_DECL void*
 gu_mem_buf_alloc(size_t min_size, size_t* real_size);
 /**<
  * @param min_size The minimum acceptable size for a returned memory block.
@@ -210,7 +191,7 @@ gu_mem_buf_alloc(size_t min_size, size_t* real_size);
 
 
 /// Allocate a new memory buffer to replace an old one.
-GU_ONLY void*
+GU_API_DECL void*
 gu_mem_buf_realloc(
 	GU_NULL GU_ONLY GU_RETURNED
 	void* buf,
@@ -219,7 +200,7 @@ gu_mem_buf_realloc(
 
 
 /// Free a memory buffer.
-void
+GU_API_DECL void
 gu_mem_buf_free(GU_ONLY void* buf);
 
 
