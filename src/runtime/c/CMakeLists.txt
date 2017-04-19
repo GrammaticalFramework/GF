@@ -86,3 +86,5 @@ target_link_libraries(pgf gu)
 if(UNIX)
   target_link_libraries(pgf m)
 endif(UNIX)
+
+install(TARGETS gu pgf DESTINATION lib)
