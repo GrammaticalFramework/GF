@@ -146,7 +146,7 @@ Expr_repr(ExprObject *self)
 	return pystr;
 }
 
-PyObject *
+static PyObject *
 Expr_richcompare(ExprObject *e1, ExprObject *e2, int op)
 {
 	bool cmp = pgf_expr_eq(e1->expr,e2->expr);
@@ -889,7 +889,7 @@ Type_repr(TypeObject *self)
 	return pystr;
 }
 
-PyObject *
+static PyObject *
 Type_richcompare(TypeObject *t1, TypeObject *t2, int op)
 {
 	bool cmp = pgf_type_eq(t1->type,t2->type);
@@ -1321,7 +1321,7 @@ Concr_printName(ConcrObject* self, PyObject *args)
 
 #define PGF_CONTAINER_NAME "pgf.Container"
 
-void pypgf_container_descructor(PyObject *capsule)
+static void pypgf_container_descructor(PyObject *capsule)
 {
 	GuPool* pool = PyCapsule_GetPointer(capsule, PGF_CONTAINER_NAME);
 	gu_pool_free(pool);
@@ -2291,7 +2291,7 @@ Concr_lookupMorpho(ConcrObject* self, PyObject *args) {
     return analyses;
 }
 
-PyObject*
+static PyObject*
 Iter_fetch_fullform(IterObject* self)
 {
 	PgfFullFormEntry* entry = 
