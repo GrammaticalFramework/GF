@@ -526,7 +526,7 @@ pgf_inf_expr(PgfTypeChecker* checker, PgfContext* ctxt, PgfExpr* pe)
 	return null_cf_type;
 }
 
-void
+PGF_API void
 pgf_check_expr(PgfPGF* gr, PgfExpr* pe, PgfType* ty,
                GuExn* exn, GuPool* pool)
 {
@@ -544,7 +544,7 @@ pgf_check_expr(PgfPGF* gr, PgfExpr* pe, PgfType* ty,
 	gu_pool_free(tmp_pool);
 }
 
-PgfType*
+PGF_API PgfType*
 pgf_infer_expr(PgfPGF* gr, PgfExpr* pe,
                GuExn* exn, GuPool* pool)
 {
@@ -569,7 +569,7 @@ pgf_infer_expr(PgfPGF* gr, PgfExpr* pe,
 	return ty;
 }
 
-void
+PGF_API void
 pgf_check_type(PgfPGF* gr, PgfType** pty, 
                GuExn* exn, GuPool* pool)
 {

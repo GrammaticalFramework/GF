@@ -7,6 +7,28 @@
 #include <gu/enum.h>
 #include <gu/string.h>
 
+#if defined(_MSC_VER)
+
+#if defined(COMPILING_PGF)
+#define PGF_API_DECL __declspec(dllexport)
+#define PGF_API      __declspec(dllexport)
+#else
+#define PGF_API_DECL __declspec(dllimport)
+#define PGF_API      ERROR_NOT_COMPILING_LIBPGF
+#endif
+#define PGF_INTERNAL_DECL
+#define PGF_INTERNAL
+
+#else
+
+#define PGF_API_DECL
+#define PGF_API
+
+#define PGF_INTERNAL_DECL  __attribute__ ((visibility ("hidden")))
+#define PGF_INTERNAL       __attribute__ ((visibility ("hidden")))
+
+#endif
+
 
 typedef GuString PgfCId;
 
@@ -21,61 +43,61 @@ typedef struct PgfConcr PgfConcr;
 
 typedef GuEnum PgfExprEnum;
 
-PgfPGF*
+PGF_API_DECL PgfPGF*
 pgf_read(const char* fpath,
          GuPool* pool, GuExn* err);
 
-PgfPGF*
+PGF_API_DECL PgfPGF*
 pgf_read_in(GuIn* in,
             GuPool* pool, GuPool* tmp_pool, GuExn* err);
 
-void
+PGF_API_DECL void
 pgf_concrete_load(PgfConcr* concr, GuIn* in, GuExn* err);
 
-void
+PGF_API_DECL void
 pgf_concrete_unload(PgfConcr* concr);
 
-GuString
+PGF_API_DECL GuString
 pgf_abstract_name(PgfPGF*);
 
-void
+PGF_API_DECL void
 pgf_iter_languages(PgfPGF*, GuMapItor* itor, GuExn* err);
 
-PgfConcr*
+PGF_API_DECL PgfConcr*
 pgf_get_language(PgfPGF*, PgfCId lang);
 
-GuString
+PGF_API_DECL GuString
 pgf_concrete_name(PgfConcr*);
 
-GuString
+PGF_API_DECL GuString
 pgf_language_code(PgfConcr* concr);
 
-void
+PGF_API_DECL void
 pgf_iter_categories(PgfPGF* pgf, GuMapItor* itor, GuExn* err);
 
-PgfType*
+PGF_API_DECL PgfType*
 pgf_start_cat(PgfPGF* pgf, GuPool* pool);
 
-void
+PGF_API_DECL void
 pgf_iter_functions(PgfPGF* pgf, GuMapItor* itor, GuExn* err);
 
-void
+PGF_API_DECL void
 pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname,
                           GuMapItor* itor, GuExn* err);
 
-PgfType*
+PGF_API_DECL PgfType*
 pgf_function_type(PgfPGF* pgf, PgfCId funname);
 
-double
+PGF_API_DECL double
 pgf_function_prob(PgfPGF* pgf, PgfCId funname);
 
-GuString
+PGF_API_DECL GuString
 pgf_print_name(PgfConcr*, PgfCId id);
 
-bool
+PGF_API_DECL bool
 pgf_has_linearization(PgfConcr* concr, PgfCId id);
 
-void
+PGF_API_DECL void
 pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err);
 
 typedef struct {
@@ -84,23 +106,23 @@ typedef struct {
 	int fids[];
 } PgfAlignmentPhrase;
 
-GuSeq*
+PGF_API_DECL GuSeq*
 pgf_align_words(PgfConcr* concr, PgfExpr expr,
                 GuExn* err, GuPool* pool);
 
-bool
+PGF_API_DECL bool
 pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfType* type, 
              double *precision, double *recall, double *exact);
 
-PgfExpr
+PGF_API_DECL PgfExpr
 pgf_compute(PgfPGF* pgf, PgfExpr expr, GuExn* err,
             GuPool* pool, GuPool* out_pool);
 
-PgfExprEnum*
+PGF_API_DECL PgfExprEnum*
 pgf_generate_all(PgfPGF* pgf, PgfType* ty,
                  GuExn* err, GuPool* pool, GuPool* out_pool);
 
-PgfExprEnum*
+PGF_API_DECL PgfExprEnum*
 pgf_parse(PgfConcr* concr, PgfType* typ, GuString sentence,
           GuExn* err, GuPool* pool, GuPool* out_pool);
 
@@ -111,29 +133,29 @@ struct PgfMorphoCallback {
 	                 GuExn* err);
 };
 
-void
+PGF_API_DECL void
 pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
                   PgfMorphoCallback* callback, GuExn* err);
 
 typedef struct PgfFullFormEntry PgfFullFormEntry;
 
-GuEnum*
+PGF_API_DECL GuEnum*
 pgf_fullform_lexicon(PgfConcr *concr, GuPool* pool);
 
-GuString
+PGF_API_DECL GuString
 pgf_fullform_get_string(PgfFullFormEntry* entry);
 
-void
+PGF_API_DECL void
 pgf_fullform_get_analyses(PgfFullFormEntry* entry,
                           PgfMorphoCallback* callback, GuExn* err);
 
-GuEnum*
+PGF_API_DECL GuEnum*
 pgf_lookup_word_prefix(PgfConcr *concr, GuString prefix,
                        GuPool* pool, GuExn* err);
 
 typedef GuMap PgfCallbacksMap;
 
-PgfExprEnum*
+PGF_API_DECL PgfExprEnum*
 pgf_parse_with_heuristics(PgfConcr* concr, PgfType* typ, 
                           GuString sentence, double heuristics,
                           PgfCallbacksMap* callbacks,
@@ -158,7 +180,7 @@ struct PgfOracleCallback {
 	                        GuPool *out_pool);
 };
 
-PgfExprEnum*
+PGF_API_DECL PgfExprEnum*
 pgf_parse_with_oracle(PgfConcr* concr, PgfType* typ,
                       GuString sentence,
                       PgfOracleCallback* oracle,
@@ -171,7 +193,7 @@ typedef struct {
 	prob_t prob;
 } PgfTokenProb;
 
-GuEnum*
+PGF_API_DECL GuEnum*
 pgf_complete(PgfConcr* concr, PgfType* type, GuString string, 
              GuString prefix, GuExn* err, GuPool* pool);
 
@@ -188,30 +210,30 @@ struct PgfLiteralCallback {
 	                      GuPool *out_pool);
 };
 
-PgfCallbacksMap*
+PGF_API_DECL PgfCallbacksMap*
 pgf_new_callbacks_map(PgfConcr* concr, GuPool *pool);
 
-void
+PGF_API_DECL void
 pgf_callbacks_map_add_literal(PgfConcr* concr, PgfCallbacksMap* callbacks,
                               PgfCId cat, PgfLiteralCallback* callback);
 
-void
+PGF_API_DECL void
 pgf_print(PgfPGF* pgf, GuOut* out, GuExn* err); 
 
-void
+PGF_API_DECL void
 pgf_check_expr(PgfPGF* gr, PgfExpr* pe, PgfType* ty,
                GuExn* exn, GuPool* pool);
 
-PgfType*
+PGF_API_DECL PgfType*
 pgf_infer_expr(PgfPGF* gr, PgfExpr* pe, 
                GuExn* exn, GuPool* pool);
 
-void
+PGF_API_DECL void
 pgf_check_type(PgfPGF* gr, PgfType** ty,
                GuExn* exn, GuPool* pool);
 
 // internal
-PgfExprProb*
+PGF_API_DECL PgfExprProb*
 pgf_fun_get_ep(void* value);
 
 #endif // PGF_H_

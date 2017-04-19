@@ -22,7 +22,7 @@ pgf_mk_pap(PgfReasoner* rs, PgfClosure* fun,
 	return fun;
 }
 
-PgfClosure*
+PGF_INTERNAL PgfClosure*
 pgf_evaluate_expr_thunk(PgfReasoner* rs, PgfExprThunk* thunk)
 {
 	PgfEnv* env  = thunk->env;
@@ -190,7 +190,7 @@ repeat:;
 	return res;
 }
 
-PgfClosure*
+PGF_INTERNAL PgfClosure*
 pgf_evaluate_lambda_application(PgfReasoner* rs, PgfExprThunk* lambda,
                                 PgfClosure* arg)
 {
@@ -382,7 +382,7 @@ pgf_value2expr(PgfReasoner* rs, int level, PgfClosure* clos)
 	return expr;
 }
 
-PgfExpr
+PGF_API PgfExpr
 pgf_compute(PgfPGF* pgf, PgfExpr expr, GuExn* err, GuPool* pool, GuPool* out_pool)
 {
 	PgfReasoner* rs =
@@ -397,7 +397,7 @@ pgf_compute(PgfPGF* pgf, PgfExpr expr, GuExn* err, GuPool* pool, GuPool* out_poo
 	return pgf_value2expr(rs, 0, &thunk->header);
 }
 
-void
+PGF_INTERNAL void
 pgf_evaluate_accum_init_int(PgfReasoner* rs, 
                             PgfEvalAccum* accum, int val)
 {
@@ -410,7 +410,7 @@ pgf_evaluate_accum_init_int(PgfReasoner* rs,
 	accum->consts = NULL;
 }
 
-void
+PGF_INTERNAL void
 pgf_evaluate_accum_init_str(PgfReasoner* rs, 
                             PgfEvalAccum* accum, GuString val)
 {
@@ -426,7 +426,7 @@ pgf_evaluate_accum_init_str(PgfReasoner* rs,
 	accum->consts = NULL;
 }
 
-void
+PGF_INTERNAL void
 pgf_evaluate_accum_init_flt(PgfReasoner* rs, 
                             PgfEvalAccum* accum, float val)
 {
@@ -463,7 +463,7 @@ pgf_evaluate_accum_add_helper(PgfEvalAccum* accum, PgfLiteral lit)
 	}
 }
 
-void
+PGF_INTERNAL void
 pgf_evaluate_accum_add(PgfReasoner* rs,
                        PgfEvalAccum* accum, PgfClosure* closure)
 {
@@ -493,7 +493,7 @@ pgf_evaluate_accum_add(PgfReasoner* rs,
 	}
 }
 
-PgfClosure*
+PGF_INTERNAL PgfClosure*
 pgf_evaluate_accum_done(PgfReasoner* rs, PgfEvalAccum* accum)
 {
 	rs->enter_stack_ptr = accum->enter_stack_ptr;

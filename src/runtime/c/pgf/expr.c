@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 
-PgfExpr
+static PgfExpr
 pgf_expr_unwrap(PgfExpr expr)
 {
 	while (true) {
@@ -29,7 +29,7 @@ pgf_expr_unwrap(PgfExpr expr)
 	}
 }
 
-int
+PGF_API int
 pgf_expr_arity(PgfExpr expr)
 {
 	int n = 0;
@@ -51,7 +51,7 @@ pgf_expr_arity(PgfExpr expr)
 	}
 }
 
-PgfApplication*
+PGF_API PgfApplication*
 pgf_expr_unapply(PgfExpr expr, GuPool* pool)
 {
 	int arity = pgf_expr_arity(expr);
@@ -74,7 +74,7 @@ pgf_expr_unapply(PgfExpr expr, GuPool* pool)
 	return appl;
 }
 
-PgfExpr
+PGF_API PgfExpr
 pgf_expr_apply(PgfApplication* app, GuPool* pool)
 {
 	PgfExpr expr;
@@ -97,7 +97,7 @@ pgf_expr_apply(PgfApplication* app, GuPool* pool)
 	return expr;
 }
 
-PgfExpr
+PGF_API PgfExpr
 pgf_expr_abs(PgfBindType bind_type, PgfCId id, PgfExpr body, GuPool* pool)
 {
 	return gu_new_variant_i(pool, 
@@ -107,7 +107,7 @@ pgf_expr_abs(PgfBindType bind_type, PgfCId id, PgfExpr body, GuPool* pool)
 						    .body = body);
 }
 
-PgfExprAbs*
+PGF_API PgfExprAbs*
 pgf_expr_unabs(PgfExpr expr)
 {
 	GuVariantInfo i = gu_variant_open(expr);
@@ -118,7 +118,7 @@ pgf_expr_unabs(PgfExpr expr)
 	return NULL;
 }
 
-PgfExpr
+PGF_API PgfExpr
 pgf_expr_meta(int id, GuPool* pool)
 {
 	return gu_new_variant_i(pool, 
@@ -126,7 +126,7 @@ pgf_expr_meta(int id, GuPool* pool)
 						    .id = id);
 }
 
-PgfExprMeta*
+PGF_API PgfExprMeta*
 pgf_expr_unmeta(PgfExpr expr)
 {
 	GuVariantInfo i = gu_variant_open(expr);
@@ -137,7 +137,7 @@ pgf_expr_unmeta(PgfExpr expr)
 	return NULL;
 }
 
-PgfExpr
+PGF_API PgfExpr
 pgf_expr_string(GuString str, GuPool* pool)
 {
 	PgfLiteral lit;
@@ -153,7 +153,7 @@ pgf_expr_string(GuString str, GuPool* pool)
 	                        lit);
 }
 
-PgfExpr
+PGF_API PgfExpr
 pgf_expr_int(int val, GuPool* pool)
 {
 	PgfLiteral lit;
@@ -168,7 +168,7 @@ pgf_expr_int(int val, GuPool* pool)
 	                        lit);
 }
 
-PgfExpr
+PGF_API PgfExpr
 pgf_expr_float(double val, GuPool* pool)
 {
 	PgfLiteral lit;
@@ -183,7 +183,7 @@ pgf_expr_float(double val, GuPool* pool)
 	                        lit);
 }
 
-void*
+PGF_API void*
 pgf_expr_unlit(PgfExpr expr, int lit_tag)
 {
 	expr = pgf_expr_unwrap(expr);
@@ -890,7 +890,7 @@ pgf_new_parser(GuIn* in, GuPool* pool, GuPool* tmp_pool, GuExn* err)
 	return parser;
 }
 
-PgfExpr
+PGF_API PgfExpr
 pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err)
 {
 	GuPool* tmp_pool = gu_new_pool();
@@ -903,7 +903,7 @@ pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err)
 	return expr;
 }
 
-int
+PGF_API int
 pgf_read_expr_tuple(GuIn* in,
                     size_t n_exprs, PgfExpr exprs[],
                     GuPool* pool, GuExn* err)
@@ -939,7 +939,7 @@ fail:
 	return 0;
 }
 
-GuSeq*
+PGF_API GuSeq*
 pgf_read_expr_matrix(GuIn* in,
                      size_t n_exprs,
                      GuPool* pool, GuExn* err)
@@ -991,7 +991,7 @@ fail:
 	return NULL;
 }
 
-PgfType*
+PGF_API PgfType*
 pgf_read_type(GuIn* in, GuPool* pool, GuExn* err)
 {
 	GuPool* tmp_pool = gu_new_pool();
@@ -1004,7 +1004,7 @@ pgf_read_type(GuIn* in, GuPool* pool, GuExn* err)
 	return type;
 }
 
-bool
+PGF_API bool
 pgf_literal_eq(PgfLiteral lit1, PgfLiteral lit2)
 {
 	GuVariantInfo ei1 = gu_variant_open(lit1);
@@ -1036,7 +1036,7 @@ pgf_literal_eq(PgfLiteral lit1, PgfLiteral lit2)
     return false;
 }
 
-bool
+PGF_API bool
 pgf_expr_eq(PgfExpr e1, PgfExpr e2)
 {
 	GuVariantInfo ei1 = gu_variant_open(e1);
@@ -1096,7 +1096,7 @@ pgf_expr_eq(PgfExpr e1, PgfExpr e2)
 	return false;
 }
 
-GuHash
+PGF_API GuHash
 pgf_literal_hash(GuHash h, PgfLiteral lit)
 {
 	GuVariantInfo i = gu_variant_open(lit);
@@ -1124,7 +1124,7 @@ pgf_literal_hash(GuHash h, PgfLiteral lit)
 	return h;
 }
 
-GuHash
+PGF_API GuHash
 pgf_expr_hash(GuHash h, PgfExpr e)
 {
 	GuVariantInfo ei = gu_variant_open(e);
@@ -1176,7 +1176,7 @@ pgf_expr_hash(GuHash h, PgfExpr e)
 	return h;
 }
 
-void
+PGF_API void
 pgf_print_cid(PgfCId id,
 			  GuOut* out, GuExn* err)
 {
@@ -1200,7 +1200,7 @@ pgf_print_cid(PgfCId id,
 	}
 }
 
-void
+PGF_API void
 pgf_print_literal(PgfLiteral lit,
 			      GuOut* out, GuExn* err)
 {
@@ -1253,7 +1253,7 @@ pgf_print_literal(PgfLiteral lit,
     }
 }
 
-void
+PGF_API void
 pgf_print_expr(PgfExpr expr, PgfPrintContext* ctxt, int prec,
                GuOut* out, GuExn* err)
 {
@@ -1374,7 +1374,7 @@ pgf_print_expr(PgfExpr expr, PgfPrintContext* ctxt, int prec,
 	}
 }
 
-PgfPrintContext*
+PGF_API PgfPrintContext*
 pgf_print_hypo(PgfHypo *hypo, PgfPrintContext* ctxt, int prec,
                GuOut *out, GuExn *err)
 {
@@ -1406,7 +1406,7 @@ pgf_print_hypo(PgfHypo *hypo, PgfPrintContext* ctxt, int prec,
 	return new_ctxt;
 }
 
-void
+PGF_API void
 pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
                GuOut *out, GuExn *err)
 {
@@ -1453,7 +1453,7 @@ pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
 	}
 }
 
-void
+PGF_API void
 pgf_print_expr_tuple(size_t n_exprs, PgfExpr exprs[], PgfPrintContext* ctxt,
                      GuOut* out, GuExn* err)
 {
@@ -1466,7 +1466,7 @@ pgf_print_expr_tuple(size_t n_exprs, PgfExpr exprs[], PgfPrintContext* ctxt,
 	gu_putc('>', out, err);
 }
 
-bool
+PGF_API bool
 pgf_type_eq(PgfType* t1, PgfType* t2)
 {
 	if (gu_seq_length(t1->hypos) != gu_seq_length(t2->hypos))

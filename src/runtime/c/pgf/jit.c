@@ -87,7 +87,7 @@ pgf_jit_alloc_page(PgfReader* rdr)
 	jit_set_ip(rdr->jit_state->buf+sizeof(GuFinalizer));
 }
 
-PgfJitState*
+PGF_INTERNAL PgfJitState*
 pgf_new_jit(PgfReader* rdr)
 {
 	PgfJitState* state = gu_new(PgfJitState, rdr->tmp_pool);
@@ -134,7 +134,7 @@ pgf_jit_read_absfun(PgfReader* rdr, PgfAbstr* abstr)
 	return absfun;
 }
 
-void
+PGF_INTERNAL void
 pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
                   PgfAbsCat* abscat)
 {
@@ -360,7 +360,7 @@ pgf_jit_finalize_cafs(GuFinalizer* self)
 		gu_seq_free(gates->cafs);
 }
 
-PgfEvalGates*
+PGF_INTERNAL PgfEvalGates*
 pgf_jit_gates(PgfReader* rdr)
 {
 	PgfEvalGates* gates = gu_new(PgfEvalGates, rdr->opool);
@@ -672,7 +672,7 @@ pgf_jit_gates(PgfReader* rdr)
 
 #define PGF_CAFS_DELTA 20
 
-void
+PGF_INTERNAL void
 pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
                  PgfAbsFun* absfun)
 {
@@ -1330,7 +1330,7 @@ pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
 	}
 }
 
-void
+PGF_INTERNAL void
 pgf_jit_done(PgfReader* rdr, PgfAbstr* abstr)
 {
 	size_t n_patches = gu_buf_length(rdr->jit_state->call_patches);

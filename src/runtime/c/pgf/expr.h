@@ -126,11 +126,8 @@ typedef struct {
 	PgfExpr expr;
 } PgfExprProb;
 
-int
+PGF_API_DECL int
 pgf_expr_arity(PgfExpr expr);
-
-PgfExpr
-pgf_expr_unwrap(PgfExpr expr);
 
 typedef struct PgfApplication PgfApplication;
 
@@ -140,64 +137,64 @@ struct PgfApplication {
 	PgfExpr args[];
 };
 
-PgfApplication*
+PGF_API_DECL PgfApplication*
 pgf_expr_unapply(PgfExpr expr, GuPool* pool);
 
-PgfExpr
+PGF_API_DECL PgfExpr
 pgf_expr_apply(PgfApplication*, GuPool* pool);
 
-PgfExpr
+PGF_API_DECL PgfExpr
 pgf_expr_abs(PgfBindType bind_type, PgfCId id, PgfExpr body, GuPool* pool);
 
-PgfExprAbs*
+PGF_API_DECL PgfExprAbs*
 pgf_expr_unabs(PgfExpr expr);
 
-PgfExpr
+PGF_API_DECL PgfExpr
 pgf_expr_string(GuString, GuPool* pool);
 
-PgfExpr
+PGF_API_DECL PgfExpr
 pgf_expr_int(int val, GuPool* pool);
 
-PgfExpr
+PGF_API_DECL PgfExpr
 pgf_expr_float(double val, GuPool* pool);
 
-void*
+PGF_API_DECL void*
 pgf_expr_unlit(PgfExpr expr, int lit_tag);
 
-PgfExpr
+PGF_API_DECL PgfExpr
 pgf_expr_meta(int id, GuPool* pool);
 
-PgfExprMeta*
+PGF_API_DECL PgfExprMeta*
 pgf_expr_unmeta(PgfExpr expr);
 
-PgfExpr
+PGF_API_DECL PgfExpr
 pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err);
 
-int
+PGF_API_DECL int
 pgf_read_expr_tuple(GuIn* in,
                     size_t n_exprs, PgfExpr exprs[],
                     GuPool* pool, GuExn* err);
 
-GuSeq*
+PGF_API_DECL GuSeq*
 pgf_read_expr_matrix(GuIn* in, size_t n_exprs,
                      GuPool* pool, GuExn* err);
 
-PgfType*
+PGF_API_DECL PgfType*
 pgf_read_type(GuIn* in, GuPool* pool, GuExn* err);
 
-bool
+PGF_API_DECL bool
 pgf_literal_eq(PgfLiteral lit1, PgfLiteral lit2);
 
-bool
+PGF_API_DECL bool
 pgf_expr_eq(PgfExpr e1, PgfExpr e2);
 
-bool
+PGF_API_DECL bool
 pgf_type_eq(PgfType* t1, PgfType* t2);
 
-GuHash
+PGF_API_DECL GuHash
 pgf_literal_hash(GuHash h, PgfLiteral lit);
 
-GuHash
+PGF_API_DECL GuHash
 pgf_expr_hash(GuHash h, PgfExpr e);
 
 typedef struct PgfPrintContext PgfPrintContext;
@@ -207,25 +204,25 @@ struct PgfPrintContext {
 	PgfPrintContext* next;
 };
 
-void
+PGF_API_DECL void
 pgf_print_cid(PgfCId id, GuOut* out, GuExn* err);
 
-void
+PGF_API_DECL void
 pgf_print_literal(PgfLiteral lit, GuOut* out, GuExn* err);
 
-void
+PGF_API_DECL void
 pgf_print_expr(PgfExpr expr, PgfPrintContext* ctxt, int prec, 
                GuOut* out, GuExn* err);
 
-PgfPrintContext*
+PGF_API_DECL PgfPrintContext*
 pgf_print_hypo(PgfHypo *hypo, PgfPrintContext* ctxt, int prec,
                GuOut* out, GuExn *err);
 
-void
+PGF_API_DECL void
 pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
                GuOut* out, GuExn *err);
 
-void
+PGF_API_DECL void
 pgf_print_expr_tuple(size_t n_exprs, PgfExpr exprs[], PgfPrintContext* ctxt,
                      GuOut* out, GuExn* err);
 

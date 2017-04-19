@@ -128,7 +128,7 @@ static PgfLinFuncs pgf_metrics_lin_funcs2 = {
 	.symbol_capit = NULL
 };
 
-bool
+PGF_API bool
 pgf_parseval(PgfConcr* concr, PgfExpr expr, PgfType* type, 
              double *precision, double *recall, double *exact)
 {

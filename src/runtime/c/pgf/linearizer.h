@@ -25,14 +25,14 @@ typedef GuVariant PgfCncTree;
 typedef GuEnum PgfCncTreeEnum;
 
 /// Begin enumerating concrete syntax variants.
-PgfCncTreeEnum*
+PGF_API_DECL PgfCncTreeEnum*
 pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuExn* err, GuPool* pool);
 
 typedef struct {
 	char nothing[0]; // Empty struct
 } PgfLinNonExist;
 
-PgfCncTree
+PGF_API_DECL PgfCncTree
 pgf_lzr_wrap_linref(PgfCncTree ctree, GuPool* pool);
 
 
@@ -68,24 +68,24 @@ struct PgfLinFuncs
 };
 
 /// Linearize a concrete syntax tree.
-void
+PGF_API_DECL void
 pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, 
                   PgfLinFuncs** funcs, GuPool* tmp_pool);
 
 /// Linearize a concrete syntax tree as space-separated tokens.
-void
+PGF_API_DECL void
 pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, 
                          GuOut* out, GuExn* err,
                          GuPool* tmp_pool);
 
 
-void
+PGF_API_DECL void
 pgf_lzr_get_table(PgfConcr* concr, PgfCncTree ctree, 
                   size_t* n_lins, GuString** labels);
 
 #ifdef PGF_DATA_H_
 // Used internally in the parser
-GuString
+PGF_INTERNAL_DECL GuString
 pgf_get_tokens(PgfSymbols* sym, uint16_t sym_idx, GuPool* pool);
 #endif
 

@@ -334,7 +334,7 @@ pgf_print_production(int fid, PgfProduction prod,
     }
 }
 
-void
+PGF_INTERNAL_DECL void
 pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err);
 
 static void
@@ -1723,7 +1723,8 @@ pgf_new_parsing(PgfConcr* concr, GuString sentence,
 }
 
 #ifdef PGF_COUNTS_DEBUG
-void pgf_parsing_print_counts(PgfParsing* ps)
+static void 
+pgf_parsing_print_counts(PgfParsing* ps)
 {
 	printf("%d\t%d\t%d\t%d\t%d\n", 
 		ps->item_full_count, 
@@ -2105,7 +2106,7 @@ pgf_parsing_last_token(PgfParsing* ps, GuPool* pool)
 	return tok;
 }
 
-GuEnum*
+PGF_API GuEnum*
 pgf_parse(PgfConcr* concr, PgfType* typ, GuString sentence,
           GuExn* err, 
           GuPool* pool, GuPool* out_pool)
@@ -2114,7 +2115,7 @@ pgf_parse(PgfConcr* concr, PgfType* typ, GuString sentence,
     return pgf_parse_with_heuristics(concr, typ, sentence, -1.0, callbacks, err, pool, out_pool);
 }
 
-GuEnum*
+PGF_API GuEnum*
 pgf_parse_with_heuristics(PgfConcr* concr, PgfType* typ, GuString sentence,
                           double heuristics,
                           PgfCallbacksMap* callbacks,
@@ -2158,7 +2159,7 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfType* typ, GuString sentence,
 	return &ps->en;
 }
 
-PgfExprEnum*
+PGF_API PgfExprEnum*
 pgf_parse_with_oracle(PgfConcr* concr, PgfType* typ,
                       GuString sentence,
                       PgfOracleCallback* oracle,
@@ -2222,7 +2223,7 @@ pgf_parser_completions_next(GuEnum* self, void* to, GuPool* pool)
 	*((PgfTokenProb**)to) = ps->tp;
 }
 
-GuEnum*
+PGF_API GuEnum*
 pgf_complete(PgfConcr* concr, PgfType* type, GuString sentence, 
              GuString prefix, GuExn *err, GuPool* pool)
 {
@@ -2310,7 +2311,7 @@ pgf_sequence_cmp_fn(GuOrder* order, const void* p1, const void* p2)
 	return res;
 }
 
-void
+PGF_API void
 pgf_lookup_morpho(PgfConcr *concr, GuString sentence,
                   PgfMorphoCallback* callback, GuExn* err)
 {
@@ -2379,7 +2380,7 @@ gu_fullform_enum_next(GuEnum* self, void* to, GuPool* pool)
 	*((PgfFullFormEntry**) to) = entry;
 }
 
-GuEnum*
+PGF_API GuEnum*
 pgf_fullform_lexicon(PgfConcr *concr, GuPool* pool)
 {
 	PgfFullFormState* st = gu_new(PgfFullFormState, pool);
@@ -2390,20 +2391,20 @@ pgf_fullform_lexicon(PgfConcr *concr, GuPool* pool)
 	return &st->en;
 }
 
-GuString
+PGF_API GuString
 pgf_fullform_get_string(PgfFullFormEntry* entry)
 {
 	return entry->tokens;
 }
 
-void
+PGF_API void
 pgf_fullform_get_analyses(PgfFullFormEntry* entry,
                           PgfMorphoCallback* callback, GuExn* err)
 {
 	pgf_morpho_iter(entry->idx, callback, err);
 }
 
-GuEnum*
+PGF_API GuEnum*
 pgf_lookup_word_prefix(PgfConcr *concr, GuString prefix,
                        GuPool* pool, GuExn* err)
 {
@@ -2434,7 +2435,7 @@ pgf_lookup_word_prefix(PgfConcr *concr, GuString prefix,
 	return &state->en;
 }
 
-void
+PGF_INTERNAL void
 pgf_parser_index(PgfConcr* concr, 
                  PgfCCat* ccat, PgfProduction prod,
                  bool is_lexical,
@@ -2479,7 +2480,7 @@ pgf_parser_index(PgfConcr* concr,
 	}
 }
 
-prob_t
+PGF_INTERNAL prob_t
 pgf_ccat_set_viterbi_prob(PgfCCat* ccat) {
 	if (ccat->fid < 0)
 		return 0;

@@ -28,13 +28,13 @@ struct PgfReadTagExn {
 	int tag;
 };
 
-uint8_t
+PGF_INTERNAL uint8_t
 pgf_read_tag(PgfReader* rdr)
 {
 	return gu_in_u8(rdr->in, rdr->err);
 }
 
-uint32_t
+PGF_INTERNAL uint32_t
 pgf_read_uint(PgfReader* rdr)
 {
 	uint32_t u = 0;
@@ -49,14 +49,14 @@ pgf_read_uint(PgfReader* rdr)
 	return u;
 }
 
-int32_t
+PGF_INTERNAL int32_t
 pgf_read_int(PgfReader* rdr)
 {
 	uint32_t u = pgf_read_uint(rdr);
 	return gu_decode_2c32(u, rdr->err);
 }
 
-size_t
+PGF_INTERNAL size_t
 pgf_read_len(PgfReader* rdr)
 {
 	int32_t len = pgf_read_int(rdr);
@@ -77,21 +77,21 @@ pgf_read_len(PgfReader* rdr)
 	return len;
 }
 
-PgfCId
+PGF_INTERNAL PgfCId
 pgf_read_cid(PgfReader* rdr, GuPool* pool)
 {
 	size_t len = pgf_read_len(rdr);
 	return gu_string_read_latin1(len, pool, rdr->in, rdr->err);
 }
 
-GuString
+PGF_INTERNAL GuString
 pgf_read_string(PgfReader* rdr)
 {	
 	size_t len = pgf_read_len(rdr);
 	return gu_string_read(len, rdr->opool, rdr->in, rdr->err);
 }
 
-double
+PGF_INTERNAL double
 pgf_read_double(PgfReader* rdr)
 {
 	return gu_in_f64be(rdr->in, rdr->err);
@@ -1179,7 +1179,7 @@ pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 //	pgf_ccat_set_viterbi_prob(ccat);
 }
 
-void
+static void
 pgf_read_concrete_content(PgfReader* rdr, PgfConcr* concr)
 {
 	concr->printnames =
@@ -1263,7 +1263,7 @@ pgf_read_concrete(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, bool with_co
 	return concr;
 }
 
-void
+PGF_API void
 pgf_concrete_load(PgfConcr* concr, GuIn* in, GuExn* err)
 {
 	if (concr->fin.fn == NULL || concr->pool != NULL)
@@ -1302,7 +1302,7 @@ end:
 	gu_pool_free(tmp_pool);
 }
 
-void
+PGF_API void
 pgf_concrete_unload(PgfConcr* concr)
 {
 	if (concr->fin.fn == NULL)
@@ -1328,7 +1328,7 @@ pgf_read_concretes(PgfReader* rdr, PgfAbstr* abstr, bool with_content)
 	return concretes;
 }
 
-PgfPGF*
+PGF_INTERNAL PgfPGF*
 pgf_read_pgf(PgfReader* rdr) {
 	PgfPGF* pgf = gu_new(PgfPGF, rdr->opool);
 	
@@ -1354,7 +1354,7 @@ pgf_read_pgf(PgfReader* rdr) {
 	return pgf;
 }
 
-PgfReader*
+PGF_INTERNAL PgfReader*
 pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 {
 	PgfReader* rdr = gu_new(PgfReader, tmp_pool);
@@ -1367,7 +1367,7 @@ pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err)
 	return rdr;
 }
 
-void
+PGF_INTERNAL void
 pgf_reader_done(PgfReader* rdr, PgfPGF* pgf)
 {
 	if (pgf == NULL)

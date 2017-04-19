@@ -3,7 +3,7 @@
 #include <gu/assert.h>
 #include <math.h>
 
-bool 
+PGF_INTERNAL bool 
 pgf_tokens_equal(PgfTokens* t1, PgfTokens* t2)
 {
 	size_t len1 = gu_seq_length(t1);
@@ -28,7 +28,7 @@ pgf_flag_cmp_fn(GuOrder* self, const void* p1, const void* p2)
 	return strcmp((GuString) p1, ((PgfFlag*) p2)->name);
 }
 
-GuOrder pgf_flag_order[1] = { { pgf_flag_cmp_fn } };
+PGF_INTERNAL GuOrder pgf_flag_order[1] = { { pgf_flag_cmp_fn } };
 
 static int
 pgf_abscat_cmp_fn(GuOrder* self, const void* p1, const void* p2)
@@ -37,7 +37,7 @@ pgf_abscat_cmp_fn(GuOrder* self, const void* p1, const void* p2)
 	return strcmp((GuString) p1, ((PgfAbsCat*) p2)->name);
 }
 
-GuOrder pgf_abscat_order[1] = { { pgf_abscat_cmp_fn } };
+PGF_INTERNAL GuOrder pgf_abscat_order[1] = { { pgf_abscat_cmp_fn } };
 
 static int
 pgf_absfun_cmp_fn(GuOrder* self, const void* p1, const void* p2)
@@ -46,7 +46,7 @@ pgf_absfun_cmp_fn(GuOrder* self, const void* p1, const void* p2)
 	return strcmp((GuString) p1, ((PgfAbsFun*) p2)->name);
 }
 
-GuOrder pgf_absfun_order[1] = { { pgf_absfun_cmp_fn } };
+PGF_INTERNAL GuOrder pgf_absfun_order[1] = { { pgf_absfun_cmp_fn } };
 
 static int
 pgf_concr_cmp_fn(GuOrder* self, const void* p1, const void* p2)
@@ -55,4 +55,4 @@ pgf_concr_cmp_fn(GuOrder* self, const void* p1, const void* p2)
 	return strcmp((GuString) p1, ((PgfConcr*) p2)->name);
 }
 
-GuOrder pgf_concr_order[1] = { { pgf_concr_cmp_fn } };
+PGF_INTERNAL GuOrder pgf_concr_order[1] = { { pgf_concr_cmp_fn } };

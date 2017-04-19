@@ -83,7 +83,7 @@ pgf_graphviz_abstract_tree_(PgfExpr expr, int *pid,
 	return id;
 }
 
-void
+PGF_API void
 pgf_graphviz_abstract_tree(PgfPGF* pgf, PgfExpr expr, GuOut* out, GuExn* err)
 {
 	int id = 0;
@@ -219,7 +219,7 @@ pgf_graphviz_parse_level(GuBuf* level, GuOut* out, GuExn* err)
 	}
 }
 
-void
+PGF_API void
 pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 {
 	GuPool* tmp_pool = gu_local_pool();

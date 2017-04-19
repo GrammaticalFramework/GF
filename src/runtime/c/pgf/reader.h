@@ -16,34 +16,34 @@ typedef struct {
 	struct PgfJitState* jit_state;
 } PgfReader;
 
-PgfReader*
+PGF_INTERNAL_DECL  PgfReader*
 pgf_new_reader(GuIn* in, GuPool* opool, GuPool* tmp_pool, GuExn* err);
 
-uint8_t
+PGF_INTERNAL_DECL uint8_t
 pgf_read_tag(PgfReader* rdr);
 
-uint32_t
+PGF_INTERNAL_DECL uint32_t
 pgf_read_uint(PgfReader* rdr);
 
-int32_t
+PGF_INTERNAL_DECL int32_t
 pgf_read_int(PgfReader* rdr);
 
-GuString
+PGF_INTERNAL_DECL GuString
 pgf_read_string(PgfReader* rdr);
 
-double
+PGF_INTERNAL_DECL double
 pgf_read_double(PgfReader* rdr);
 
-size_t
+PGF_INTERNAL_DECL size_t
 pgf_read_len(PgfReader* rdr);
 
-PgfCId
+PGF_INTERNAL_DECL PgfCId
 pgf_read_cid(PgfReader* rdr, GuPool* pool);
 
-PgfPGF*
+PGF_INTERNAL_DECL PgfPGF*
 pgf_read_pgf(PgfReader* rdr);
 
-void
+PGF_INTERNAL_DECL void
 pgf_reader_done(PgfReader* rdr, PgfPGF* pgf);
 
 
@@ -52,21 +52,21 @@ pgf_reader_done(PgfReader* rdr, PgfPGF* pgf);
 
 typedef struct PgfJitState PgfJitState;
 
-PgfJitState*
+PGF_INTERNAL_DECL PgfJitState*
 pgf_new_jit(PgfReader* rdr);
 
-PgfEvalGates*
+PGF_INTERNAL_DECL PgfEvalGates*
 pgf_jit_gates(PgfReader* rdr);
 
-void
+PGF_INTERNAL_DECL void
 pgf_jit_predicate(PgfReader* rdr, PgfAbstr* abstr,
                   PgfAbsCat* abscat);
 
-void
+PGF_INTERNAL_DECL void
 pgf_jit_function(PgfReader* rdr, PgfAbstr* abstr,
                  PgfAbsFun* absfun);
 
-void
+PGF_INTERNAL_DECL void
 pgf_jit_done(PgfReader* state, PgfAbstr* abstr);
 
 #endif

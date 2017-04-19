@@ -6,7 +6,7 @@ typedef struct {
 	GuOut* out;
 } PgfPrintFn;
 
-void
+static void
 pgf_print_flags(PgfFlags* flags, GuOut *out, GuExn* err)
 {
 	size_t n_flags = gu_seq_length(flags);
@@ -21,7 +21,7 @@ pgf_print_flags(PgfFlags* flags, GuOut *out, GuExn* err)
 	}
 }
 
-void
+static void
 pgf_print_abscats(PgfAbsCats* abscats, GuOut *out, GuExn* err)
 {
 	size_t n_cats = gu_seq_length(abscats);
@@ -49,7 +49,7 @@ pgf_print_abscats(PgfAbsCats* abscats, GuOut *out, GuExn* err)
 	}
 }
 
-void
+static void
 pgf_print_absfuns(PgfAbsFuns* absfuns, GuOut *out, GuExn* err)
 {
 	size_t n_funs = gu_seq_length(absfuns);
@@ -215,7 +215,7 @@ pgf_print_token(PgfToken tok, GuOut *out, GuExn *err)
 static void
 pgf_print_symbols(PgfSymbols* syms, GuOut *out, GuExn *err);
 
-void
+PGF_INTERNAL void
 pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err)
 {
 	switch (gu_variant_tag(sym)) {
@@ -378,7 +378,7 @@ pgf_print_concrete(PgfConcr* concr, GuOut* out, GuExn* err)
 	gu_puts("}\n", out, err);
 }
 
-void
+PGF_API void
 pgf_print(PgfPGF* pgf, GuOut* out, GuExn* err)
 {
 	pgf_print_abstract(&pgf->abstract, out, err);

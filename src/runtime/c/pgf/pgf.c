@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <math.h>
 
-PgfPGF*
+PGF_API PgfPGF*
 pgf_read(const char* fpath,
          GuPool* pool, GuExn* err)
 {
@@ -34,7 +34,7 @@ pgf_read(const char* fpath,
 	return pgf;
 }
 
-PgfPGF*
+PGF_API PgfPGF*
 pgf_read_in(GuIn* in,
             GuPool* pool, GuPool* tmp_pool, GuExn* err)
 {
@@ -44,13 +44,13 @@ pgf_read_in(GuIn* in,
 	return pgf;
 }
 
-GuString
+PGF_API GuString
 pgf_abstract_name(PgfPGF* pgf)
 {
 	return pgf->abstract.name;
 }
 
-void
+PGF_API void
 pgf_iter_languages(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 {
 	size_t n_concrs = gu_seq_length(pgf->concretes);
@@ -62,19 +62,19 @@ pgf_iter_languages(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 	}
 }
 
-PgfConcr*
+PGF_API PgfConcr*
 pgf_get_language(PgfPGF* pgf, PgfCId lang)
 {
 	return gu_seq_binsearch(pgf->concretes, pgf_concr_order, PgfConcr, lang);
 }
 
-GuString
+PGF_API GuString
 pgf_concrete_name(PgfConcr* concr)
 {
 	return concr->name;
 }
 
-void
+PGF_API void
 pgf_iter_categories(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 {
 	size_t n_cats = gu_seq_length(pgf->abstract.cats);
@@ -86,7 +86,7 @@ pgf_iter_categories(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 	}
 }
 
-PgfType*
+PGF_API PgfType*
 pgf_start_cat(PgfPGF* pgf, GuPool* pool)
 {
 	PgfFlag* flag =
@@ -117,7 +117,7 @@ pgf_start_cat(PgfPGF* pgf, GuPool* pool)
 	return type;
 }
 
-GuString
+PGF_API GuString
 pgf_language_code(PgfConcr* concr)
 {
 	PgfFlag* flag =
@@ -137,7 +137,7 @@ pgf_language_code(PgfConcr* concr)
 	return "";
 }
 
-void
+PGF_API void
 pgf_iter_functions(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 {
 	size_t n_funs = gu_seq_length(pgf->abstract.funs);
@@ -149,7 +149,7 @@ pgf_iter_functions(PgfPGF* pgf, GuMapItor* itor, GuExn* err)
 	}
 }
 
-void
+PGF_API void
 pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname, 
                           GuMapItor* itor, GuExn* err) 
 {
@@ -165,7 +165,7 @@ pgf_iter_functions_by_cat(PgfPGF* pgf, PgfCId catname,
 	}
 }
 
-PgfType*
+PGF_API PgfType*
 pgf_function_type(PgfPGF* pgf, PgfCId funname) 
 {
 	PgfAbsFun* absfun =
@@ -176,7 +176,7 @@ pgf_function_type(PgfPGF* pgf, PgfCId funname)
 	return absfun->type;
 }
 
-double
+PGF_API double
 pgf_function_prob(PgfPGF* pgf, PgfCId funname) 
 {
 	PgfAbsFun* absfun =
@@ -187,7 +187,7 @@ pgf_function_prob(PgfPGF* pgf, PgfCId funname)
 	return absfun->ep.prob;
 }
 
-GuString
+PGF_API GuString
 pgf_print_name(PgfConcr* concr, PgfCId id)
 {
 	PgfCId name =
@@ -197,7 +197,7 @@ pgf_print_name(PgfConcr* concr, PgfCId id)
 	return name;
 }
 
-bool
+PGF_API bool
 pgf_has_linearization(PgfConcr* concr, PgfCId id)
 {
 	PgfCncOverloadMap* overl_table =
@@ -205,7 +205,7 @@ pgf_has_linearization(PgfConcr* concr, PgfCId id)
 	return (overl_table != NULL);
 }
 
-PgfExprProb*
+PGF_API PgfExprProb*
 pgf_fun_get_ep(void* value)
 {
 	PgfAbsFun* absfun = *((PgfAbsFun**) value);

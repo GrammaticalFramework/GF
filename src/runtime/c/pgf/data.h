@@ -20,7 +20,7 @@ typedef struct {
 
 typedef GuSeq PgfFlags;
 
-extern GuOrder pgf_flag_order[1];
+PGF_INTERNAL_DECL extern GuOrder pgf_flag_order[1];
 
 // PgfPatt
 
@@ -94,7 +94,7 @@ typedef struct {
 
 typedef GuSeq PgfAbsFuns;
 
-extern GuOrder pgf_absfun_order[1];
+PGF_INTERNAL_DECL extern GuOrder pgf_absfun_order[1];
 
 typedef GuMap PgfMetaChildMap;
 
@@ -109,7 +109,7 @@ typedef struct {
 
 typedef GuSeq PgfAbsCats;
 
-extern GuOrder pgf_abscat_order[1];
+PGF_INTERNAL_DECL extern GuOrder pgf_abscat_order[1];
 
 
 typedef struct PgfEvalGates PgfEvalGates;
@@ -148,7 +148,7 @@ typedef enum {
 
 typedef GuSeq PgfConcrs;
 
-extern GuOrder pgf_concr_order[1];
+PGF_INTERNAL_DECL extern GuOrder pgf_concr_order[1];
 
 struct PgfPGF {
 	uint16_t major_version;
@@ -175,7 +175,7 @@ typedef struct {
 
 typedef GuSeq PgfTokens;
 
-bool
+PGF_INTERNAL_DECL bool
 pgf_tokens_equal(PgfTokens* t1, PgfTokens* t2);
 
 typedef GuSeq PgfSymbols;

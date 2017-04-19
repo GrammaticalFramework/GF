@@ -115,60 +115,60 @@ struct PgfEvalGates {
 	GuSeq* cafs;
 };
 
-PgfReasoner*
+PGF_INTERNAL_DECL PgfReasoner*
 pgf_new_reasoner(PgfPGF* pgf, GuExn* err, GuPool* pool, GuPool* out_pool);
 
-void
+PGF_INTERNAL_DECL void
 pgf_reasoner_try_first(PgfReasoner* rs, PgfExprState* parent, PgfAbsFun* absfun);
 
-void
+PGF_INTERNAL_DECL void
 pgf_reasoner_try_else(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun);
 
-void
+PGF_INTERNAL_DECL void
 pgf_reasoner_combine1(PgfReasoner* rs, PgfClosure* closure);
 
-void
+PGF_INTERNAL_DECL void
 pgf_reasoner_combine2(PgfReasoner* rs, PgfClosure* closure);
 
-void
+PGF_INTERNAL_DECL void
 pgf_reasoner_complete(PgfReasoner* rs, PgfExprState* st);
 
-void
+PGF_INTERNAL_DECL void
 pgf_reasoner_try_constant(PgfReasoner* rs, PgfExprState* prev, PgfAbsFun* absfun);
 
-void
+PGF_INTERNAL_DECL void
 pgf_reasoner_mk_string(PgfReasoner* rs, PgfExprState* parent);
 
-void
+PGF_INTERNAL_DECL void
 pgf_reasoner_mk_int(PgfReasoner* rs, PgfExprState* parent);
 
-void
+PGF_INTERNAL_DECL void
 pgf_reasoner_mk_float(PgfReasoner* rs, PgfExprState* parent);
 
-PgfClosure*
+PGF_INTERNAL_DECL PgfClosure*
 pgf_evaluate_expr_thunk(PgfReasoner* rs, PgfExprThunk* thunk);
 
-PgfClosure*
+PGF_INTERNAL_DECL PgfClosure*
 pgf_evaluate_lambda_application(PgfReasoner* rs, PgfExprThunk* lambda,
                                                  PgfClosure* arg);
 
-void
+PGF_INTERNAL_DECL void
 pgf_evaluate_accum_init_int(PgfReasoner* rs, 
                             PgfEvalAccum* accum, int val);
 
-void
+PGF_INTERNAL_DECL void
 pgf_evaluate_accum_init_str(PgfReasoner* rs, 
                             PgfEvalAccum* accum, GuString val);
                             
-void
+PGF_INTERNAL_DECL void
 pgf_evaluate_accum_init_flt(PgfReasoner* rs, 
                             PgfEvalAccum* accum, float val);
 
-void
+PGF_INTERNAL_DECL void
 pgf_evaluate_accum_add(PgfReasoner* rs, 
                        PgfEvalAccum* accum, PgfClosure* closure);
 
-PgfClosure*
+PGF_INTERNAL_DECL PgfClosure*
 pgf_evaluate_accum_done(PgfReasoner* rs, PgfEvalAccum* accum);
 
 #endif

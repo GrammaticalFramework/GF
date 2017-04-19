@@ -30,7 +30,7 @@ pgf_lzr_add_overl_entry(PgfCncOverloadMap* overl_table,
 	gu_buf_push(entries, void*, entry);
 }
 
-void
+PGF_INTERNAL void
 pgf_lzr_index(PgfConcr* concr, 
               PgfCCat* ccat, PgfProduction prod,
               bool is_lexical,
@@ -109,7 +109,7 @@ typedef struct {
 } PgfCncTreeLit;
 
 #ifdef PGF_LINEARIZER_DEBUG
-void
+static void
 pgf_print_cnc_tree_vars(size_t n_vars, PgfPrintContext* context,
                         GuOut* out, GuExn* err)
 {
@@ -128,7 +128,7 @@ pgf_print_cnc_tree_vars(size_t n_vars, PgfPrintContext* context,
 	}
 }
 
-void
+static void
 pgf_print_cnc_tree(PgfCncTree ctree, GuOut* out, GuExn* err)
 {
 	GuVariantInfo ti = gu_variant_open(ctree);
@@ -321,7 +321,7 @@ pgf_cnc_cat_resolve_itor(GuMapItor* fn, const void* key, void* value, GuExn* err
 	clo->index--;
 }
 
-PgfCncTree
+PGF_API PgfCncTree
 pgf_lzr_wrap_linref(PgfCncTree ctree, GuPool* pool)
 {
 	GuVariantInfo cti = gu_variant_open(ctree);
@@ -611,7 +611,7 @@ pgf_cnc_tree_enum_next(GuEnum* self, void* to, GuPool* pool)
 	}
 }
 
-PgfCncTreeEnum*
+PGF_API PgfCncTreeEnum*
 pgf_lzr_concretize(PgfConcr* concr, PgfExpr expr, GuExn* err, GuPool* pool)
 {
 	if (concr->fun_indices == NULL ||
@@ -1043,7 +1043,7 @@ pgf_lzr_linearize_tree(PgfLzr* lzr, PgfCncTree ctree, size_t lin_idx)
 	}
 }
 
-void
+PGF_API void
 pgf_lzr_linearize(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx, 
                   PgfLinFuncs** funcs, GuPool* tmp_pool)
 {
@@ -1139,7 +1139,7 @@ static PgfLinFuncs pgf_file_lin_funcs = {
 	.symbol_capit = pgf_file_lzn_symbol_capit
 };
 
-void
+PGF_API void
 pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
                          GuOut* out, GuExn* err,
                          GuPool* tmp_pool)
@@ -1154,7 +1154,7 @@ pgf_lzr_linearize_simple(PgfConcr* concr, PgfCncTree ctree, size_t lin_idx,
 	pgf_lzr_linearize(concr, ctree, lin_idx, &flin.funcs, tmp_pool);
 }
 
-void
+PGF_API void
 pgf_lzr_get_table(PgfConcr* concr, PgfCncTree ctree, 
                   size_t* n_lins, GuString** labels)
 {
@@ -1183,7 +1183,7 @@ pgf_lzr_get_table(PgfConcr* concr, PgfCncTree ctree,
 
 }
 
-void
+PGF_API void
 pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 {
 	GuPool* tmp_pool = gu_local_pool();
@@ -1204,7 +1204,7 @@ pgf_linearize(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 	gu_pool_free(tmp_pool);
 }
 
-GuString
+PGF_INTERNAL GuString
 pgf_get_tokens(PgfSymbols* syms, uint16_t sym_idx, GuPool* pool)
 {
 	GuPool* tmp_pool = gu_new_pool();
