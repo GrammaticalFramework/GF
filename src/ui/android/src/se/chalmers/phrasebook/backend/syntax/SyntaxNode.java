@@ -1,6 +1,7 @@
 package se.chalmers.phrasebook.backend.syntax;
 
 import java.io.Serializable;
+import org.grammaticalframework.pgf.Expr;
 
 public class SyntaxNode implements Serializable {
     private String desc;

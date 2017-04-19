@@ -1,10 +1,21 @@
 import SG
+import PGF2
 import Data.Char
 import Data.List
 
 main = do
-  ls <- fmap lines $ readFile "../../../lib/src/translator/Dictionary.gf"
-  writeFile "assets/glosses.txt" (unlines [x | Just (fn,gloss) <- map gloss ls, x <- glossTriples fn gloss])
+  db <- openSG "assets/semantics.db"
+  inTransaction db $ do
+    ls <- fmap lines $ readFile "../../../lib/src/translator/Dictionary.gf"
+    let glosses = [x | Just (fn,gloss) <- map gloss ls, x <- glossTriples fn gloss]
+    topics <- fmap (map toTriple . lines) $ readFile "topics.txt"
+    sequence_ [insertTriple db s p o | (s,p,o) <- glosses++topics]
+  closeSG db
+
+toTriple l =
+  case readTriple l of
+    Just t  -> t
+    Nothing -> error ("topics.txt: "++l)
 
 gloss l = 
   case words l of
@@ -14,9 +25,12 @@ gloss l =
     _            -> Nothing
 
 glossTriples fn s =
-  (if null gs then [] else ["<"++fn++",gloss,"++show (merge gs)++">"])++
-  (if null es then [] else ["<"++fn++",example,"++show (merge (map (init . tail) es))++">"])
+  (if null gs then [] else [(fn_e,gloss,mkStr (merge gs))])++
+  (if null es then [] else [(fn_e,example,mkStr (merge (map (init . tail) es)))])
   where
+    fn_e    = mkApp fn []
+    gloss   = mkApp "gloss"   []
+    example = mkApp "example" []
     (es,gs) = partition isExample (splitGloss s)
 
 splitGloss s =

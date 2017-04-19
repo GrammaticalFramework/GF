@@ -2,6 +2,7 @@ package org.grammaticalframework.ui.android;
 
 import java.io.*;
 import android.content.Context;
+import android.util.Log;
 
 import org.grammaticalframework.sg.*;
 import org.grammaticalframework.pgf.*;
@@ -10,8 +11,6 @@ public class SemanticGraphManager implements Closeable {
     private final Context mContext;
     private SG mDB;
 
-	public static final String GLOSSES_FILE_NAME = "glosses.txt";
-	public static final String TOPICS_FILE_NAME  = "topics.txt";
 	public static final String DATABASE_FILE_NAME = "semantics.db";
 
     public SemanticGraphManager(Context context) {
@@ -40,38 +39,51 @@ public class SemanticGraphManager implements Closeable {
 		if (!dir.exists()) {
 			dir.mkdir();
 		}
-		
+
+		if (!extractDatabase(file))
+			return;
+
 		mDB = SG.openSG(path);
 		if (exists)
 			return;
-
-		loadFile(GLOSSES_FILE_NAME);
-		loadFile(TOPICS_FILE_NAME);
     }
 
-	private void loadFile(String assetName) throws IOException {
-		BufferedReader br = new BufferedReader(
-			new InputStreamReader(
-				mContext.getAssets().open(assetName)));
+	private boolean extractDatabase(File outFile) {
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+          in = mContext.getAssets().open(DATABASE_FILE_NAME);
+          out = new FileOutputStream(outFile);
+          copyFile(in, out);
+          return true;
+        } catch(IOException e) {
+            Log.e("tag", "Failed to copy asset file: " + DATABASE_FILE_NAME, e);
+        }
+        finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // NOOP
+                }
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    // NOOP
+                }
+            }
+        }
+        
+        return false;
+    }
 
-		try {
-			mDB.beginTrans();
-
-			String line;
-			while ((line = br.readLine()) != null) {
-				Expr[] triple = SG.readTriple(line);
-				mDB.insertTriple(triple[0],triple[1],triple[2]);
-			}
-
-			mDB.commit();
-		} catch (IOException e) {
-			mDB.rollback();
-			throw e;
-		} catch (SGError e) {
-			mDB.rollback();
-			throw e;
-		} finally {
-			br.close();
+	private void copyFile(InputStream in, OutputStream out) throws IOException {
+		byte[] buffer = new byte[1024];
+		int read;
+		while((read = in.read(buffer)) != -1){
+			out.write(buffer, 0, read);
 		}
 	}
 
