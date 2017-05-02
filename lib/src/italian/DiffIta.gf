@@ -72,12 +72,15 @@ instance DiffIta of DiffRomance - [contractInf] = open CommonRomance, PhonoIta, 
       } ;
 
     possCase = artDef False ;
-
+    
+    partitive = \_,c -> prepCase c ;
+    
+{-
     partitive = \g,c -> case c of {
       CPrep P_di => "di" ;
       _ => prepCase c ++ artDef False g Sg (CPrep P_di)
       } ;
-
+-}
     conjunctCase : Case -> Case = \c -> case c of {
       Nom => Nom ;
       _ => Acc 

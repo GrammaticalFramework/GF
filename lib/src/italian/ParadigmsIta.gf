@@ -75,7 +75,10 @@ oper
 
 -- other prepositions
 
-  mkPrep : Str -> Prep ; -- other prepositions, e.g. "dopo"
+  mkPrep : overload {
+    mkPrep : Str -> Prep  ;         -- simple preposition (other than a, di, con, da, in, su)
+    mkPrep : Str -> Prep -> Prep ;  -- complex preposition e.g. "vicino a"
+    } ;
 
 
 --2 Nouns
@@ -328,7 +331,11 @@ oper
   accusative = lin Prep complAcc ;
   genitive, di_Prep = lin Prep complGen ;
   dative, a_Prep = lin Prep complDat ;
-  mkPrep p = lin Prep {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
+
+  mkPrep = overload {
+    mkPrep : Str -> Prep  = \p -> {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
+    mkPrep : Str -> Prep -> Prep = \s,c-> {s = s ; c = c.c ; isDir = False ; lock_Prep = <>}
+    } ;
 
   con_Prep = {s = [] ; c = CPrep P_con ; isDir = False ; lock_Prep = <>} ;
   da_Prep = {s = [] ; c = CPrep P_da ; isDir = False ; lock_Prep = <>} ;

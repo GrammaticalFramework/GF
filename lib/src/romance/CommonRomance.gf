@@ -57,6 +57,10 @@ oper
     AF _ n => n ;
     _      => Sg -- "le plus lentement"
     } ;
+  aform2aagr : AForm -> AAgr = \a -> case a of {
+    AF g n => aagr g n ;
+    _      => aagr Masc Sg -- "le plus lentement"
+    } ;
   
   conjGender : Gender -> Gender -> Gender = \m,n -> 
     case m of {
