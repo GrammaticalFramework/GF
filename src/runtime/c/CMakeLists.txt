@@ -49,6 +49,7 @@ set(libpgf_la_SOURCES
 	pgf/expr.c 
 	pgf/expr.h 
 	pgf/parser.c 
+	pgf/lookup.c
 	pgf/jit.c 
 	pgf/parseval.c 
 	pgf/literals.c 

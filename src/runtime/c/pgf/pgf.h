@@ -126,6 +126,9 @@ PGF_API_DECL PgfExprEnum*
 pgf_parse(PgfConcr* concr, PgfType* typ, GuString sentence,
           GuExn* err, GuPool* pool, GuPool* out_pool);
 
+PGF_API_DECL GuEnum*
+pgf_lookup_sentence(PgfConcr* concr, GuString sentence, GuPool* pool, GuPool* out_pool);
+
 typedef struct PgfMorphoCallback PgfMorphoCallback;
 struct PgfMorphoCallback {
 	void (*callback)(PgfMorphoCallback* self,
