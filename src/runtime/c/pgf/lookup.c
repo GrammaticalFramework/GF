@@ -318,9 +318,9 @@ static GuBuf*
 pgf_lookup_merge(PgfMetaId cat_id1, GuBuf* spine1,
                  PgfMetaId cat_id2, GuBuf* spine2,
                  PgfMetaId* cat_id,
-                 GuPool* pool)
+                 GuPool* pool, GuPool* out_pool)
 {
-	GuBuf* spine = gu_new_buf(GuBuf*, pool);
+	GuBuf* spine = gu_new_buf(GuBuf*, out_pool);
 	gu_buf_push(spine, GuBuf*, NULL);
 
 	GuMap* pairs = gu_new_map(PgfPair, pgf_pair_hasher, PgfMetaId, &gu_null_struct, pool);
@@ -329,7 +329,7 @@ pgf_lookup_merge(PgfMetaId cat_id1, GuBuf* spine1,
 		pgf_lookup_merge_cats(spine, pairs,
 		                      cat_id1, spine1,
 		                      cat_id2, spine2,
-		                      pool);
+		                      out_pool);
 
 	return spine;
 }
@@ -369,8 +369,10 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 	}
 	///////////////////////////////
 
+	GuPool *work_pool = gu_new_pool();
+
 	PgfMetaId cat_id1 = 0;
-	GuBuf* join = gu_new_buf(GuBuf*, pool);
+	GuBuf* join = gu_new_buf(GuBuf*, work_pool);
 	gu_buf_push(join, GuBuf*, NULL);
 
 	GuUCS c = ' ';
@@ -389,7 +391,7 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 		const uint8_t* end   = p-1;
 		
 		size_t len = end-start;
-		GuString tok = gu_malloc(pool, len+1);
+		GuString tok = gu_malloc(work_pool, len+1);
 		memcpy((uint8_t*) tok, start, len);
 		((uint8_t*) tok)[len] = 0;
 
@@ -397,9 +399,15 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 		GuBuf* spine =
 			pgf_lookup_build_spine(lexicon_idx, function_idx,
 			                       tok, typ, &cat_id2,
-			                       pool);
+			                       work_pool);
 
-		join = pgf_lookup_merge(cat_id1, join, cat_id2, spine, &cat_id1, pool);
+		GuPool *work_pool2 = gu_new_pool();
+		
+		join = pgf_lookup_merge(cat_id1, join, cat_id2, spine, &cat_id1, work_pool, work_pool2);
+		
+		gu_pool_free(work_pool);
+		
+		work_pool = work_pool2;
 	}
 
 #ifdef PGF_LOOKUP_DEBUG
@@ -410,6 +418,8 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 	gu_putc('\n',out,err);
 	gu_pool_free(tmp_pool);
 #endif
+
+	gu_pool_free(work_pool);
 
 	return NULL;
 }
