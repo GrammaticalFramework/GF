@@ -1,5 +1,6 @@
 #include <gu/map.h>
 #include <gu/mem.h>
+#include <gu/utf8.h>
 #include <gu/file.h>
 #include <gu/string.h>
 #include <pgf/data.h>
@@ -29,6 +30,22 @@ pgf_print_abs_production(PgfMetaId id,
 		gu_printf(out,err," ?%d", prod->args[i]);
 	}
 	gu_putc('\n',out,err);
+}
+
+static void
+pgf_print_abs_productions(GuBuf* prods,
+                          GuOut* out, GuExn* err)
+{
+	size_t n_prods = gu_buf_length(prods);
+	for (size_t id = 1; id < n_prods; id++) {
+		GuBuf* id_prods = gu_buf_get(prods, GuBuf*, id);
+		size_t n_id_prods = gu_buf_length(id_prods);
+		for (size_t i = 0; i < n_id_prods; i++) {
+			PgfAbsProduction* prod = 
+				gu_buf_get(id_prods, PgfAbsProduction*, i);
+			pgf_print_abs_production(id, prod, out, err);
+		}
+	}
 }
 #endif
 
@@ -70,19 +87,26 @@ pgf_lookup_index_syms(GuMap* lexicon_idx, PgfSymbols* syms, PgfProductionIdx* id
 typedef struct {
 	GuMap* function_idx;
 	GuMap* cat_ids;
-	PgfMetaId next_id;
+	GuBuf* spine;
 	GuPool* pool;
 } PgfSpineBuilder;
 
 static PgfAbsProduction*
-pgf_lookup_new_production(PgfSpineBuilder* builder, PgfAbsFun* fun) {
+pgf_lookup_new_production(PgfAbsFun* fun, GuPool *pool) {
 	size_t n_hypos = gu_seq_length(fun->type->hypos);
-	PgfAbsProduction* prod = gu_new_flex(builder->pool, PgfAbsProduction, args, n_hypos);
+	PgfAbsProduction* prod = gu_new_flex(pool, PgfAbsProduction, args, n_hypos);
 	prod->fun = fun;
 	for (size_t i = 0; i < n_hypos; i++) {
 		prod->args[i] = 0;
 	}
 	return prod;
+}
+
+static void
+pgf_lookup_add_production(PgfSpineBuilder* builder, PgfMetaId id, PgfAbsProduction* prod)
+{
+	GuBuf* prods = gu_buf_get(builder->spine, GuBuf*, id);
+	gu_buf_push(prods, PgfAbsProduction*, prod);
 }
 
 static PgfMetaId
@@ -92,7 +116,9 @@ pgf_lookup_add_spine_nodes(PgfSpineBuilder* builder, PgfCId cat) {
 		return cat_id;
 	}
 
-	cat_id = ++builder->next_id;
+	cat_id = gu_buf_length(builder->spine);
+	gu_buf_push(builder->spine, GuBuf*, gu_new_buf(PgfAbsProduction*, builder->pool));
+
 	gu_map_put(builder->cat_ids, cat, PgfMetaId, cat_id);
 
 	GuBuf* entries = gu_map_get(builder->function_idx, cat, GuBuf*);
@@ -103,16 +129,10 @@ pgf_lookup_add_spine_nodes(PgfSpineBuilder* builder, PgfCId cat) {
 
 			PgfMetaId id = pgf_lookup_add_spine_nodes(builder, entry->fun->type->cid);
 			
-			PgfAbsProduction* prod = pgf_lookup_new_production(builder, entry->fun);
+			PgfAbsProduction* prod = pgf_lookup_new_production(entry->fun, builder->pool);
 			prod->args[entry->arg_idx] = cat_id;
-
-#ifdef PGF_LOOKUP_DEBUG
-			GuPool* tmp_pool = gu_new_pool();
-			GuOut* out = gu_file_out(stderr, tmp_pool);
-			GuExn* err = gu_exn(tmp_pool);
-			pgf_print_abs_production(id, prod, out, err);
-			gu_pool_free(tmp_pool);
-#endif
+			
+			pgf_lookup_add_production(builder, id, prod);
 		}
 	}
 
@@ -123,19 +143,189 @@ static void
 pgf_lookup_add_spine_leaf(PgfSpineBuilder* builder, PgfAbsFun *fun)
 {	
 	PgfMetaId id = pgf_lookup_add_spine_nodes(builder, fun->type->cid);
-	PgfAbsProduction* prod = pgf_lookup_new_production(builder, fun);
+	PgfAbsProduction* prod = pgf_lookup_new_production(fun, builder->pool);
+	
+	pgf_lookup_add_production(builder, id, prod);
+}
 
-#ifdef PGF_LOOKUP_DEBUG
-	GuPool* tmp_pool = gu_new_pool();
-	GuOut* out = gu_file_out(stderr, tmp_pool);
-	GuExn* err = gu_exn(tmp_pool);
-	pgf_print_abs_production(id, prod, out, err);
-	gu_pool_free(tmp_pool);
-#endif	
+static GuBuf*
+pgf_lookup_build_spine(GuMap* lexicon_idx, GuMap* function_idx,
+                       GuString tok, PgfType* typ, PgfMetaId* cat_id,
+                       GuPool* pool)
+{
+	PgfSpineBuilder builder;
+	builder.function_idx = function_idx;
+	builder.cat_ids      = gu_new_string_map(PgfMetaId, &gu_null_struct, pool);
+	builder.spine        = gu_new_buf(GuBuf*, pool);
+	builder.pool         = pool;
+	
+	gu_buf_push(builder.spine, GuBuf*, NULL);
+
+	GuBuf* funs = gu_map_get(lexicon_idx, tok, GuBuf*);
+	if (funs != NULL) {
+		size_t n_funs = gu_buf_length(funs);
+		for (size_t i = 0; i < n_funs; i++) {
+			PgfAbsFun* absfun =
+				gu_buf_get(funs, PgfAbsFun*, i);
+			pgf_lookup_add_spine_leaf(&builder, absfun);
+		}
+	}
+
+	*cat_id = gu_map_get(builder.cat_ids, typ->cid, PgfMetaId);
+
+	return builder.spine;
+}
+
+typedef PgfMetaId PgfPair[2];
+
+static bool
+pgf_pair_eq_fn(GuEquality* self, const void* p1, const void* p2)
+{
+	(void) self;
+	const PgfMetaId* ip1 = p1;
+	const PgfMetaId* ip2 = p2;
+	return (ip1[0] == ip2[0] && ip1[1] == ip2[1]);
+}
+
+static GuHash
+pgf_pair_hash_fn(GuHasher* self, const void* p)
+{
+	(void) self;
+	const PgfMetaId* ip = p;
+	return (GuHash) (((ip[1] & 0xFFFF) << 16) | (ip[0] & 0xFFFF));
+}
+
+static GuHasher
+pgf_pair_hasher[1] = {
+	{
+		{ pgf_pair_eq_fn },
+		pgf_pair_hash_fn
+	}
+};
+
+static PgfMetaId
+pgf_lookup_merge_cats(GuBuf* spine, GuMap* pairs,
+                      PgfMetaId cat_id1, GuBuf* spine1,
+                      PgfMetaId cat_id2, GuBuf* spine2,
+                      GuPool* pool)
+{
+	if (cat_id1 == 0 && cat_id2 == 0)
+		return 0;
+
+	PgfPair pair;
+	pair[0] = cat_id1;
+	pair[1] = cat_id2;
+	PgfMetaId cat_id = gu_map_get(pairs, &pair, PgfMetaId);
+	if (cat_id != 0)
+		return cat_id;
+
+	cat_id = gu_buf_length(spine);
+	GuBuf* id_prods = gu_new_buf(PgfAbsProduction*, pool);
+	gu_buf_push(spine, GuBuf*, id_prods);
+
+	gu_map_put(pairs, &pair, PgfMetaId, cat_id);
+
+	GuBuf* id_prods1 = gu_buf_get(spine1, GuBuf*, cat_id1);
+	GuBuf* id_prods2 = gu_buf_get(spine2, GuBuf*, cat_id2);
+	size_t n_id_prods1 = (cat_id1 == 0) ? 0 : gu_buf_length(id_prods1);
+	size_t n_id_prods2 = (cat_id2 == 0) ? 0 : gu_buf_length(id_prods2);
+
+	if (cat_id1 != 0) {
+		for (size_t i = 0; i < n_id_prods1; i++) {
+			PgfAbsProduction* prod1 =
+				gu_buf_get(id_prods1, PgfAbsProduction*, i);
+			int count = 0;
+			for (size_t j = 0; j < n_id_prods2; j++) {
+				PgfAbsProduction* prod2 =
+					gu_buf_get(id_prods2, PgfAbsProduction*, j);
+				if (prod1->fun == prod2->fun) {
+					PgfAbsProduction* prod =
+						pgf_lookup_new_production(prod1->fun, pool);
+					size_t n_hypos = gu_seq_length(prod->fun->type->hypos);
+					for (size_t l = 0; l < n_hypos; l++) {
+						prod->args[l] =
+							pgf_lookup_merge_cats(spine, pairs,
+						                          prod1->args[l], spine1,
+						                          prod2->args[l], spine2,
+                                                  pool);
+					}
+					gu_buf_push(id_prods, PgfAbsProduction*, prod);
+					
+					count++;
+				}
+			}
+
+			if (count == 0) {
+				PgfAbsProduction* prod =
+					pgf_lookup_new_production(prod1->fun, pool);
+				size_t n_hypos = gu_seq_length(prod->fun->type->hypos);
+				for (size_t l = 0; l < n_hypos; l++) {
+					prod->args[l] =
+						pgf_lookup_merge_cats(spine, pairs,
+											  prod1->args[l], spine1,
+											  0,              spine2,
+											  pool);
+				}
+				gu_buf_push(id_prods, PgfAbsProduction*, prod);
+			}
+		}
+	}
+
+	if (cat_id2 != 0) {
+		for (size_t i = 0; i < n_id_prods2; i++) {
+			PgfAbsProduction* prod2 =
+				gu_buf_get(id_prods2, PgfAbsProduction*, i);
+			bool found = false;
+			for (size_t j = 0; j < n_id_prods1; j++) {
+				PgfAbsProduction* prod1 =
+					gu_buf_get(id_prods1, PgfAbsProduction*, j);
+				if (prod1->fun == prod2->fun) {
+					found = true;
+					break;
+				}
+			}
+			
+			if (!found) {
+				PgfAbsProduction* prod =
+					pgf_lookup_new_production(prod2->fun, pool);
+				size_t n_hypos = gu_seq_length(prod->fun->type->hypos);
+				for (size_t l = 0; l < n_hypos; l++) {
+					prod->args[l] =
+						pgf_lookup_merge_cats(spine, pairs,
+											  0,              spine1,
+											  prod2->args[l], spine2,
+											  pool);
+				}
+				gu_buf_push(id_prods, PgfAbsProduction*, prod);
+			}
+		}
+	}
+
+	return cat_id;
+}
+
+static GuBuf*
+pgf_lookup_merge(PgfMetaId cat_id1, GuBuf* spine1,
+                 PgfMetaId cat_id2, GuBuf* spine2,
+                 PgfMetaId* cat_id,
+                 GuPool* pool)
+{
+	GuBuf* spine = gu_new_buf(GuBuf*, pool);
+	gu_buf_push(spine, GuBuf*, NULL);
+
+	GuMap* pairs = gu_new_map(PgfPair, pgf_pair_hasher, PgfMetaId, &gu_null_struct, pool);
+
+	*cat_id =
+		pgf_lookup_merge_cats(spine, pairs,
+		                      cat_id1, spine1,
+		                      cat_id2, spine2,
+		                      pool);
+
+	return spine;
 }
 
 PGF_API GuEnum*
-pgf_lookup_sentence(PgfConcr* concr, GuString sentence, GuPool* pool, GuPool* out_pool)
+pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* pool, GuPool* out_pool)
 {
 	//// building search indices //
 	GuMap* lexicon_idx = gu_new_string_map(GuBuf*, &gu_null_struct, pool);
@@ -168,21 +358,48 @@ pgf_lookup_sentence(PgfConcr* concr, GuString sentence, GuPool* pool, GuPool* ou
 		}
 	}
 	///////////////////////////////
-	
-	PgfSpineBuilder builder;
-	builder.function_idx = function_idx;
-	builder.cat_ids      = gu_new_string_map(PgfMetaId, &gu_null_struct, pool);
-	builder.next_id      = 0;
-	builder.pool         = pool;
 
-	GuBuf* funs = gu_map_get(lexicon_idx, sentence, GuBuf*);
-	if (funs != NULL) {
-		size_t n_funs = gu_buf_length(funs);
-		for (size_t i = 0; i < n_funs; i++) {
-			PgfAbsFun* absfun =
-				gu_buf_get(funs, PgfAbsFun*, i);
-			pgf_lookup_add_spine_leaf(&builder, absfun);
+	PgfMetaId cat_id1 = 0;
+	GuBuf* join = gu_new_buf(GuBuf*, pool);
+	gu_buf_push(join, GuBuf*, NULL);
+
+	GuUCS c = ' ';
+	const uint8_t* p = (const uint8_t*) sentence;
+	for (;;) {
+		while (gu_ucs_is_space(c)) {
+			c = gu_utf8_decode(&p);
 		}
+		if (c == 0)
+			break;
+
+		const uint8_t* start = p-1;
+		while (c != 0 && !gu_ucs_is_space(c)) {
+			c = gu_utf8_decode(&p);
+		}
+		const uint8_t* end   = p-1;
+		
+		size_t len = end-start;
+		GuString tok = gu_malloc(pool, len+1);
+		memcpy((uint8_t*) tok, start, len);
+		((uint8_t*) tok)[len] = 0;
+
+		PgfMetaId cat_id2 = 0;
+		GuBuf* spine =
+			pgf_lookup_build_spine(lexicon_idx, function_idx,
+			                       tok, typ, &cat_id2,
+			                       pool);
+
+		join = pgf_lookup_merge(cat_id1, join, cat_id2, spine, &cat_id1, pool);
 	}
+
+#ifdef PGF_LOOKUP_DEBUG
+	GuPool* tmp_pool = gu_new_pool();
+	GuOut* out = gu_file_out(stderr, tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
+	pgf_print_abs_productions(join, out, err);
+	gu_putc('\n',out,err);
+	gu_pool_free(tmp_pool);
+#endif
+
 	return NULL;
 }
