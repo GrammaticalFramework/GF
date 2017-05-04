@@ -76,7 +76,17 @@ pgf_lookup_index_syms(GuMap* lexicon_idx, PgfSymbols* syms, PgfProductionIdx* id
 			for (size_t k = 0; k < n_idx; k++) {
 				PgfProductionIdxEntry* entry =
 					gu_buf_index(idx, PgfProductionIdxEntry, k);
-				gu_buf_push(funs, PgfAbsFun*, entry->papp->fun->absfun);
+				bool found = false;
+				size_t n_funs = gu_buf_length(funs);
+				for (size_t l = 0; l < n_funs; l++) {
+					PgfAbsFun* fun = gu_buf_get(funs, PgfAbsFun*, l);
+					if (fun == entry->papp->fun->absfun) {
+						found = true;
+						break;
+					}
+				}
+				if (!found)
+					gu_buf_push(funs, PgfAbsFun*, entry->papp->fun->absfun);
 			}
 			break;
 		}
