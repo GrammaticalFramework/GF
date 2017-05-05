@@ -2,5 +2,9 @@
 * {"ha","hade","har","ska","skulle"} AUX aux head 
 * {"kan","kunde","kunnat","måste"} AUX aux head 
 UseComp {"är","var","varit"} VERB cop head
+CompAdv {"är","var","varit"} VERB cop head
+CompAP {"är","var","varit"} VERB cop head
+CompNP {"är","var","varit"} VERB cop head
+CompCN {"är","var","varit"} VERB cop head
 CompCN {"en","ett"} DET det head
 ComplVV {"att"} PART mark xcomp

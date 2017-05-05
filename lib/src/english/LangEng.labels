@@ -1,5 +1,9 @@
 * {"not"} PART neg head 
 * {"has","had","have","will","would","do","does","did"} AUX aux head 
+CompAP {"is","are","am","was","been","be"} VERB cop head
+CompCN {"is","are","am","was","been","be"} VERB cop head
+CompAP {"is","are","am","was","been","be"} VERB cop head
+CompAdv {"is","are","am","was","been","be"} VERB cop head
 UseComp {"is","are","am","was","been","be"} VERB cop head
 CompCN {"a","an"} DET det head
 ComplVV {"to"} PART mark xcomp
