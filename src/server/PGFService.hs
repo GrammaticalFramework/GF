@@ -3,7 +3,7 @@ module PGFService(cgiMain,cgiMain',getPath,
                   logFile,stderrToFile,
                   Caches,pgfCache,newPGFCache,flushPGFCache,listPGFCache) where
 
-import PGF (PGF,Labels)
+import PGF (PGF,Labels,CncLabels)
 import qualified PGF
 import PGF.Lexing
 import Cache
@@ -63,6 +63,7 @@ logFile = "pgf-error.log"
 #ifdef C_RUNTIME
 data Caches = Caches { pgfCache::Cache PGF,
                        labelsCache::Cache Labels,
+                       cncLabelsCache::Cache CncLabels,
                        cpgfCache::(Cache (C.PGF,({-MVar ParseCache-})),QSem) }
 --type Caches = (Cache PGF,Cache (C.PGF,({-MVar ParseCache-})))
 --type ParseCache = Map.Map (String,String) (ParseResult,UTCTime)
@@ -70,26 +71,32 @@ data Caches = Caches { pgfCache::Cache PGF,
 
 newPGFCache jobs = do pgfCache <- newCache' PGF.readPGF
                       lblCache <- newCache' (fmap PGF.getDepLabels . readFile)
+                      clblCache <- newCache'(fmap PGF.getCncDepLabels .readFile)
                       let n = maybe 4 id jobs
                       qsem <- newQSem n
                       cCache <- newCache' $ \ path -> do pgf <- C.readPGF path
                                                        --pc <- newMVar Map.empty
                                                          return (pgf,({-pc-}))
-                      return $ Caches pgfCache lblCache (cCache,qsem)
+                      return $ Caches pgfCache lblCache clblCache (cCache,qsem)
 flushPGFCache c = do flushCache (pgfCache c)
                      flushCache (labelsCache c)
                      flushCache (fst (cpgfCache c))
 listPGFCache c = (,) # listCache (pgfCache c) % listCache (fst (cpgfCache c))
 #else
-data Caches = Caches { pgfCache::Cache PGF, labelsCache::Cache Labels}
+data Caches = Caches { pgfCache::Cache PGF,
+                       labelsCache::Cache Labels,
+                       cncLabelsCache::Cache CncLabels }
 newPGFCache _ = do pgfCache <- newCache' PGF.readPGF
                    lblCache <- newCache' (fmap PGF.getDepLabels . readFile)
-                   return $ Caches pgfCache lblCache
+                      clblCache <- newCache'(fmap PGF.getCncDepLabels .readFile)
+                   return $ Caches pgfCache lblCache clblCache
 flushPGFCache c = flushCache (pgfCache c)
 
 listPGFCache :: Caches -> IO ([(FilePath,UTCTime)],[(FilePath,UTCTime)])
 listPGFCache c = (,) # listCache (pgfCache c) % return []
 #endif
+
+labelsCaches c = (labelsCache c,cncLabelsCache c)
 
 newCache' rd = do c <- newCache rd
                   forkIO $ forever $ clean c
@@ -116,7 +123,7 @@ cgiMain' cache path =
          "download" -> outputBinary =<< getFile BS.readFile path
          'c':'-':_  -> optionalCpgfMain cache path command
          _ -> do tpgf <- getFile (readCache' (pgfCache cache)) path
-                 pgfMain (labelsCache cache) path command tpgf
+                 pgfMain (labelsCaches cache) path command tpgf
 
 optionalCpgfMain cache path command =
 #ifdef C_RUNTIME
@@ -392,7 +399,7 @@ unlexerH = maybe (return doBind) unlexerfun =<< getInput "unlexer"
 -- * Haskell run-time functionality
 
 --pgfMain :: Cache Labels -> FilePath -> String -> PGF -> CGI CGIResult
-pgfMain lc path command tpgf@(t,pgf) =
+pgfMain lcs@(alc,clc) path command tpgf@(t,pgf) =
     case command of
       "parse"          -> o =<< doParse pgf # input % cat % limit % treeopts
       "complete"       -> o =<< doComplete pgf # input % cat % limit % full
@@ -405,12 +412,12 @@ pgfMain lc path command tpgf@(t,pgf) =
       "translategroup" -> o =<< doTranslateGroup pgf # input % cat % to % limit
       "lookupmorpho"   -> o =<< doLookupMorpho pgf # from1 % textInput
       "grammar"        -> join $ doGrammar tpgf
-                                        # liftIO (E.try (getLabels lc path pgf))
-                                        % requestAcceptLanguage
+                                       # liftIO (E.try (getLabels alc path pgf))
+                                       % requestAcceptLanguage
       "abstrtree"      -> outputGraphviz =<< abstrTree pgf # graphvizOptions % tree
       "alignment"      -> outputGraphviz =<< alignment pgf # tree % to
       "parsetree"      -> outputGraphviz =<< parseTree pgf # from1 % graphvizOptions % tree
-      "deptree"        -> join $ doDepTree lc path pgf # format "dot" % to1 % tree
+      "deptree"        -> join $ doDepTree lcs path pgf # format "dot" % to1 % tree
       "abstrjson"      -> o . jsonExpr =<< tree
       "browse"         -> join $ doBrowse pgf # optId % cssClass % href % format "html" % getIncludePrintNames
       "external"       -> do cmd <- getInput "external"
@@ -792,9 +799,10 @@ abstrTree pgf      opts tree = PGF.graphvizAbstractTree pgf opts' tree
 
 parseTree pgf lang opts tree = PGF.graphvizParseTree pgf lang opts tree
 
-doDepTree lc path pgf fmt lang tree =
-  do (_,lbls) <- liftIO $ getLabels lc path pgf
-     let vis = PGF.graphvizDependencyTree fmt False (Just lbls) Nothing pgf lang tree ---- TODO: CncLabels
+doDepTree (alc,clc) path pgf fmt lang tree =
+  do (_,lbls) <- liftIO $ getLabels alc path pgf
+     clbls <- liftIO $ getCncLabels clc path pgf lang
+     let vis = PGF.graphvizDependencyTree fmt False (Just lbls) clbls pgf lang tree
      if fmt `elem` ["png","gif","gv"]
        then outputGraphviz vis
        else if fmt=="svg"
@@ -808,6 +816,21 @@ getLabels lc path pgf =
   --path1 = dir</> ...labels flag from abstract syntax...
     path2 = dir</>PGF.showCId (PGF.abstractName pgf)<.>"labels"
     path3 = dropExtension path <.> "labels"
+
+getCncLabels lc path pgf lang =
+    either fail ok =<< tryIO (readCache lc path2)
+  where
+    ok ls  = do logError ("Found "++show (length ls)++" CncLabels for "++show lang++" in "++path2)
+                return (Just ls)
+    fail _ = do logError ("No CncLabels for "++show lang++" in "++path2)
+                return Nothing
+    dir = takeDirectory path
+  --path1 = dir</> ...labels flag from concrete syntax...
+    path2 = dir</>PGF.showCId lang<.>"labels"
+  --path3 = ...
+
+tryIO :: IO a -> IO (Either IOError a)
+tryIO = E.try
 
 alignment pgf tree (tos,unlex) = PGF.graphvizAlignment pgf tos' tree
   where tos' = if null tos then PGF.languages pgf else tos
