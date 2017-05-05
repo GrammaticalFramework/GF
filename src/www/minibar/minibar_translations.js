@@ -225,7 +225,6 @@ Translations.prototype.show_translations=function(translationResults) {
 			    var hdr=title("Switch input language to "+langcode,
 					  button(langcode,act(lin[i])))
 			    //hdr.disabled=lin[i].to==current.from
-			    var btn=parsetree_button(t.tree,lin[i].to,grammar)
 			    tbody.appendChild(
 				tr([th(hdr),show_lin(langcode,lin[i],t.tree)]));
 			}
