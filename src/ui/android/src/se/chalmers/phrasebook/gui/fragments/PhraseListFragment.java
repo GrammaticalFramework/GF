@@ -2,7 +2,7 @@ package se.chalmers.phrasebook.gui.fragments;
 
 import android.os.Bundle;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -31,11 +31,21 @@ public class PhraseListFragment extends Fragment {
 
     protected Model model;
     private String title;
+    private String id;
 
-    public static PhraseListFragment newInstance(String title) {
+	public static PhraseListFragment newInstance(String title) {
         PhraseListFragment fragment = new PhraseListFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static PhraseListFragment newInstance(String title, String id) {
+        PhraseListFragment fragment = new PhraseListFragment();
+        Bundle args = new Bundle();
+        args.putString("title", title);
+        args.putString("id",    id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,6 +56,7 @@ public class PhraseListFragment extends Fragment {
 
         model = Model.getInstance();
         title = getArguments().getString("title");
+        id    = getArguments().getString("id");
     }
 
     @Override
@@ -55,15 +66,16 @@ public class PhraseListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_phrase_list, container, false);
         getActivity().getActionBar().setTitle(title);
 
-        ArrayAdapter<SyntaxTree> adapter = new ArrayAdapter<SyntaxTree>(getActivity(), R.layout.phrase_list_item, model.getSentences());
+		final List<SyntaxTree> sentences = (id == null) ? model.getSentences() : model.getGroup(id);
+        ArrayAdapter<SyntaxTree> adapter = new ArrayAdapter<SyntaxTree>(getActivity(), R.layout.phrase_list_item, sentences);
 
         final ListView phraseListView = (ListView) view.findViewById(R.id.phrase_listView);
         phraseListView.setAdapter(adapter);
 
         phraseListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SyntaxTree phrase = model.getSentences().get(position);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long item_id) {
+                SyntaxTree phrase = sentences.get(position);
                 getActivity().getActionBar().setTitle(phrase.getDesc());
                 ((NavigationActivity) getActivity()).setToTranslationFragment(phrase);
             }

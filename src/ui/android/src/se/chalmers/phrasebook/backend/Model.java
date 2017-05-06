@@ -17,13 +17,14 @@ public class Model {
     private static Model model;
 
     private List<SyntaxTree> phrases;
+    private Map<String,List<SyntaxTree>> groups;
 
     private Model() {
         try {
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             InputStream is = GFTranslator.get().getAssets().open("phrases.xml");
 			Document document = documentBuilder.parse(is);
-			phrases = parseSentencesData(document);
+			parseSentencesData(document);
             is.close();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -48,8 +49,13 @@ public class Model {
 		return phrases;
 	}
 
-    private List<SyntaxTree> parseSentencesData(Document document) {
-		List<SyntaxTree> sentences = new ArrayList<SyntaxTree>();
+    public List<SyntaxTree> getGroup(String id) {
+		return groups.get(id);
+	}
+
+    private void parseSentencesData(Document document) {
+		phrases = new ArrayList<SyntaxTree>();
+		groups  = new HashMap<String,List<SyntaxTree>>();
 		Map<String,SyntaxNode> ids = new HashMap<String,SyntaxNode>();
 		List<SyntaxNodeCall> calls = new ArrayList<SyntaxNodeCall>();
 
@@ -72,7 +78,51 @@ public class Model {
 
 				SyntaxNode[] nodes = constructSyntaxNodeList(node, ids, calls);
 				if (nodes.length > 0)
-					sentences.add(new SyntaxTree(desc, nodes[0]));
+					phrases.add(new SyntaxTree(desc, nodes[0]));
+			} else if (node != null &&
+			           node.getNodeType() == Node.ELEMENT_NODE &&
+			           node.getNodeName().equals("group")) {
+
+				NamedNodeMap attributes = node.getAttributes();
+				if (attributes == null)
+					continue;
+
+				String id = null;
+				if (attributes.getNamedItem("id") != null) {
+					id = attributes.getNamedItem("id").getNodeValue();
+				}
+				if (id == null)
+					continue;
+
+				List<SyntaxTree> group_phrases = new ArrayList<SyntaxTree>();
+
+				NodeList nodesList2 = node.getChildNodes();
+				for (int j = 0; j < nodesList2.getLength(); j++) {
+					node = nodesList2.item(j);
+
+					if (node != null &&
+						node.getNodeType() == Node.ELEMENT_NODE &&
+						node.getNodeName().equals("sentence")) {
+						attributes = node.getAttributes();
+
+						if (attributes == null)
+							continue;
+
+						String desc = "";
+						if (attributes.getNamedItem("desc") != null) {
+							desc = attributes.getNamedItem("desc").getNodeValue();
+						}
+
+						SyntaxNode[] nodes = constructSyntaxNodeList(node, ids, calls);
+						if (nodes.length > 0) {
+							SyntaxTree tree = new SyntaxTree(desc, nodes[0]);
+							phrases.add(tree);
+							group_phrases.add(tree);
+						}
+					}
+				}
+				
+				groups.put(id, group_phrases);
 			} else if (node.getAttributes() != null && node.getAttributes().getNamedItem("id") != null) {
 				String id = node.getAttributes().getNamedItem("id").getNodeValue();
 				SyntaxNode snode = constructSyntaxNode(node, ids, calls);
@@ -86,7 +136,6 @@ public class Model {
         for (SyntaxNodeCall call : calls) {
 			call.bind(ids);
 		}
-        return sentences;
     }
 
     private SyntaxNode constructSyntaxNode(Node node, Map<String,SyntaxNode> ids, List<SyntaxNodeCall> calls) {
