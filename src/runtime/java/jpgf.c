@@ -1281,10 +1281,16 @@ Java_org_grammaticalframework_pgf_Type_getHypos(JNIEnv* env, jobject self)
 	PgfType* tp = get_ref(env, self);
 
 	jclass hypo_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Hypo");
+	jmethodID constrId = (*env)->GetMethodID(env, hypo_class, "<init>", "(Ljava/lang/Object;J)V");
 
 	size_t n_hypos = gu_seq_length(tp->hypos);
-	jobjectArray jhypos = (*env)->NewObjectArray(env, n_hypos, hypo_class, NULL);
-	
+	jobjectArray jhypos = (*env)->NewObjectArray(env, n_hypos, hypo_class, NULL);	
+	for (size_t i = 0; i < n_hypos; i++) {
+		PgfHypo *hypo = gu_seq_index(tp->hypos, PgfHypo, i);
+		jobject jhypo = (*env)->NewObject(env, hypo_class, constrId, self, p2l(hypo));
+		(*env)->SetObjectArrayElement(env, jhypos, i, jhypo);
+		(*env)->DeleteLocalRef(env, jhypo);
+	}
 	return jhypos;
 }
 
@@ -1303,6 +1309,18 @@ Java_org_grammaticalframework_pgf_Type_toString(JNIEnv* env, jobject self)
 
 	gu_pool_free(tmp_pool);
 	return jstr;
+}
+
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_Hypo_getType(JNIEnv* env, jobject self)
+{
+	PgfHypo* hypo = get_ref(env, self);
+
+	jclass type_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Type");
+	jmethodID constrId = (*env)->GetMethodID(env, type_class, "<init>", "(Ljava/lang/Object;J)V");
+	jobject jtype = (*env)->NewObject(env, type_class, constrId, self, p2l(hypo->type));
+
+	return jtype;
 }
 
 JNIEXPORT jobject JNICALL

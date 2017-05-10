@@ -8,4 +8,15 @@ public class Hypo {
 	
 	/** The type for this hypothesis */
 	public native Type getType();
+
+	//////////////////////////////////////////////////////////////////
+	// private stuff
+
+	private Object master;
+	private long ref;
+
+	private Hypo(Object master, long ref) {
+		this.master = master;
+		this.ref    = ref;
+	}
 }
