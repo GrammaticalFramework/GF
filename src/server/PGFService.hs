@@ -88,7 +88,7 @@ data Caches = Caches { pgfCache::Cache PGF,
                        cncLabelsCache::Cache CncLabels }
 newPGFCache _ = do pgfCache <- newCache' PGF.readPGF
                    lblCache <- newCache' (fmap PGF.getDepLabels . readFile)
-                      clblCache <- newCache'(fmap PGF.getCncDepLabels .readFile)
+                   clblCache <- newCache'(fmap PGF.getCncDepLabels .readFile)
                    return $ Caches pgfCache lblCache clblCache
 flushPGFCache c = flushCache (pgfCache c)
 
