@@ -1275,6 +1275,19 @@ Java_org_grammaticalframework_pgf_Type_getCategory(JNIEnv* env, jobject self)
 	return gu2j_string(env, tp->cid);
 }
 
+JNIEXPORT jobjectArray JNICALL
+Java_org_grammaticalframework_pgf_Type_getHypos(JNIEnv* env, jobject self)
+{
+	PgfType* tp = get_ref(env, self);
+
+	jclass hypo_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Hypo");
+
+	size_t n_hypos = gu_seq_length(tp->hypos);
+	jobjectArray jhypos = (*env)->NewObjectArray(env, n_hypos, hypo_class, NULL);
+	
+	return jhypos;
+}
+
 JNIEXPORT jstring JNICALL
 Java_org_grammaticalframework_pgf_Type_toString(JNIEnv* env, jobject self)
 {
