@@ -44,8 +44,29 @@ public class Expr implements Serializable {
 			}
 
 			this.pool   = new Pool();
-			this.master = Arrays.copyOf(args, args.length);
+			this.master = args;
 			this.ref    = initApp(fun, args, pool.ref);
+		}
+
+		/** Constructs an expression which is an application
+		 * of the first expression to a list of arguments.
+		 */
+		public static Expr apply(Expr fun, Expr... args) {
+			if (fun == null)
+				throw new IllegalArgumentException("fun == null");
+			for (int i = 0; i < args.length; i++) {
+				if (args[i] == null)
+					throw new IllegalArgumentException("the "+(i+1)+"th argument is null");
+			}
+
+			Object[] master = new Object[args.length+1];
+			master[0] = fun;
+			for (int i = 0; i < args.length; i++) {
+				master[i+1] = args[i].master;
+			}
+
+            Pool pool = new Pool();
+			return new Expr(pool, master, initApp(fun, args, pool.ref));
 		}
 
 		/** Returns the expression as a string in the GF syntax */
@@ -64,6 +85,7 @@ public class Expr implements Serializable {
 		private static native String showExpr(long ref);
 
 		private static native long initStringLit(String s, long pool);
+		private static native long initApp(Expr   fun, Expr[] args, long pool);
 		private static native long initApp(String fun, Expr[] args, long pool);
 
 		private void writeObject(ObjectOutputStream out) throws IOException {

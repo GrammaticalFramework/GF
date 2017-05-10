@@ -1226,8 +1226,32 @@ Java_org_grammaticalframework_pgf_Expr_initStringLit(JNIEnv* env, jclass clazz, 
 	return expr;
 }
 
+JNIEXPORT jlong JNICALL
+Java_org_grammaticalframework_pgf_Expr_initApp__Lorg_grammaticalframework_pgf_Expr_2_3Lorg_grammaticalframework_pgf_Expr_2J
+(JNIEnv* env, jclass clazz, jobject jfun, jobjectArray args, jlong jpool)
+{
+	GuPool* pool = l2p(jpool);
+	PgfExpr expr = gu_variant_from_ptr(get_ref(env, jfun));
+
+	size_t n_args = (*env)->GetArrayLength(env, args);
+	for (size_t i = 0; i < n_args; i++) {
+		PgfExpr fun = expr;
+		PgfExpr arg = gu_variant_from_ptr(get_ref(env, (*env)->GetObjectArrayElement(env, args, i)));
+
+		PgfExprApp* e =
+			gu_new_variant(PGF_EXPR_APP,
+						   PgfExprApp,
+						   &expr, pool);
+		e->fun = fun;
+		e->arg = arg;
+	}
+
+	return expr;
+}
+
 JNIEXPORT jlong JNICALL 
-Java_org_grammaticalframework_pgf_Expr_initApp(JNIEnv* env, jclass clazz, jstring jfun, jobjectArray args, jlong jpool)
+Java_org_grammaticalframework_pgf_Expr_initApp__Ljava_lang_String_2_3Lorg_grammaticalframework_pgf_Expr_2J
+(JNIEnv* env, jclass clazz, jstring jfun, jobjectArray args, jlong jpool)
 {
 	GuPool* pool = l2p(jpool);
 	PgfExpr expr;
