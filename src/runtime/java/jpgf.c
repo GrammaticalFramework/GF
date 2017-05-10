@@ -261,7 +261,7 @@ pgf_collect_names(GuMapItor* fn, const void* key, void* value, GuExn* err)
 
 	jstring jname = gu2j_string(clo->env, name);
 
-	(*clo->env)->CallObjectMethod(clo->env, clo->object, clo->method_id, jname);
+	(*clo->env)->CallBooleanMethod(clo->env, clo->object, clo->method_id, jname);
 }
 
 JNIEXPORT jobject JNICALL
