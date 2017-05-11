@@ -31,6 +31,20 @@ public class Expr implements Serializable {
 			this.ref    = initStringLit(s, pool.ref);  
 		}
 
+		/** Constructs an expression which represents an integer literal */
+		public Expr(int d) {
+			this.pool   = new Pool();
+			this.master = null;
+			this.ref    = initIntLit(d, pool.ref);  
+		}
+
+		/** Constructs an expression which represents a floating point literal */
+		public Expr(double f) {
+			this.pool   = new Pool();
+			this.master = null;
+			this.ref    = initFloatLit(f, pool.ref);  
+		}
+
 		/** Constructs an expression which is a function application
 		 * @param fun The name of the top-level function.
 		 * @param args the arguments for the function.
@@ -85,6 +99,8 @@ public class Expr implements Serializable {
 		private static native String showExpr(long ref);
 
 		private static native long initStringLit(String s, long pool);
+		private static native long initIntLit(int d, long pool);
+		private static native long initFloatLit(double f, long pool);
 		private static native long initApp(Expr   fun, Expr[] args, long pool);
 		private static native long initApp(String fun, Expr[] args, long pool);
 

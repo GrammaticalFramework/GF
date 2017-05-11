@@ -1226,6 +1226,46 @@ Java_org_grammaticalframework_pgf_Expr_initStringLit(JNIEnv* env, jclass clazz, 
 	return expr;
 }
 
+JNIEXPORT jlong JNICALL 
+Java_org_grammaticalframework_pgf_Expr_initIntLit(JNIEnv* env, jclass clazz, jint jd, jlong jpool)
+{
+	GuPool* pool = l2p(jpool);
+	PgfExpr expr;
+
+	PgfExprLit* e =
+		gu_new_variant(PGF_EXPR_LIT,
+					   PgfExprLit,
+					   &expr, pool);
+
+	PgfLiteralInt* nlit =
+		gu_new_variant(PGF_LITERAL_INT,
+					   PgfLiteralInt,
+					   &e->lit, pool);
+	nlit->val = jd;
+
+	return expr;
+}
+
+JNIEXPORT jlong JNICALL 
+Java_org_grammaticalframework_pgf_Expr_initFloatLit(JNIEnv* env, jclass clazz, jdouble jf, jlong jpool)
+{
+	GuPool* pool = l2p(jpool);
+	PgfExpr expr;
+
+	PgfExprLit* e =
+		gu_new_variant(PGF_EXPR_LIT,
+					   PgfExprLit,
+					   &expr, pool);
+
+	PgfLiteralFlt* flit =
+		gu_new_variant(PGF_LITERAL_FLT,
+					   PgfLiteralFlt,
+					   &e->lit, pool);
+	flit->val = jf;
+
+	return expr;
+}
+
 JNIEXPORT jlong JNICALL
 Java_org_grammaticalframework_pgf_Expr_initApp__Lorg_grammaticalframework_pgf_Expr_2_3Lorg_grammaticalframework_pgf_Expr_2J
 (JNIEnv* env, jclass clazz, jobject jfun, jobjectArray args, jlong jpool)
