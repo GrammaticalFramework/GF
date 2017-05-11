@@ -1303,11 +1303,15 @@ Concr_init(ConcrObject *self, PyObject *args, PyObject *kwds)
 static PyObject*
 Concr_printName(ConcrObject* self, PyObject *args)
 {
-	GuString name;
-    if (!PyArg_ParseTuple(args, "s", &name))
+	GuString id;
+    if (!PyArg_ParseTuple(args, "s", &id))
         return NULL;
 
-	return PyString_FromString(pgf_print_name(self->concr, name));
+	GuString name = pgf_print_name(self->concr, id);
+	if (name == NULL)
+		Py_RETURN_NONE;
+
+	return PyString_FromString(name);
 }
 
 #if (    (PY_VERSION_HEX <  0x02070000) \

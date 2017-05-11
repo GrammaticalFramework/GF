@@ -79,6 +79,10 @@ public class Concr {
 	 */
 	public native boolean hasLinearization(String fun);
 
+	/** returns the print name for that function or category.
+	 */
+	public native String getPrintName(String id);
+
 	/** If the concrete syntaxes in the grammar are stored in external
 	 * files then this method can be used to load the current syntax
 	 * in memory.

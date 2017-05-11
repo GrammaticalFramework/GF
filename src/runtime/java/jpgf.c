@@ -1146,6 +1146,19 @@ Java_org_grammaticalframework_pgf_Concr_hasLinearization(JNIEnv* env, jobject se
 	return res;
 }
 
+JNIEXPORT jstring JNICALL
+Java_org_grammaticalframework_pgf_Concr_getPrintName(JNIEnv* env, jobject self, jstring jid)
+{
+	PgfConcr* concr = get_ref(env, self);
+	GuPool* tmp_pool = gu_local_pool();
+	PgfCId id = j2gu_string(env, jid, tmp_pool);
+	GuString name = pgf_print_name(concr, id);
+	jstring jname = (name == NULL) ? NULL : gu2j_string(env, name);
+	gu_pool_free(tmp_pool);
+
+	return jname;
+}
+
 JNIEXPORT jlong JNICALL
 Java_org_grammaticalframework_pgf_Pool_alloc(JNIEnv* env, jclass clazz)
 {

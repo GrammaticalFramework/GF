@@ -191,9 +191,7 @@ PGF_API GuString
 pgf_print_name(PgfConcr* concr, PgfCId id)
 {
 	PgfCId name =
-		gu_map_get(concr->printnames, id, PgfCId);
-	if (*name == 0)
-		name = id;
+		gu_map_get(concr->printnames, id, GuString);
 	return name;
 }
 

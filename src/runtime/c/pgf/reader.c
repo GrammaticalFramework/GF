@@ -565,7 +565,7 @@ pgf_read_abstract(PgfReader* rdr, PgfAbstr* abstract)
 static PgfCIdMap*
 pgf_read_printnames(PgfReader* rdr)
 {
-	PgfCIdMap* printnames = gu_new_string_map(GuString, &"", rdr->opool);
+	PgfCIdMap* printnames = gu_new_string_map(GuString, &gu_null_struct, rdr->opool);
 
 	size_t len = pgf_read_len(rdr);
 	gu_return_on_exn(rdr->err, NULL);
