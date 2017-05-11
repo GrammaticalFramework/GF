@@ -1334,6 +1334,42 @@ Java_org_grammaticalframework_pgf_Expr_initApp__Ljava_lang_String_2_3Lorg_gramma
 	return expr;
 }
 
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_Expr_unApply(JNIEnv* env, jobject self)
+{
+	jclass expr_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Expr");
+	if (!expr_class)
+		return NULL;
+	jmethodID expr_constrId = (*env)->GetMethodID(env, expr_class, "<init>", "(Lorg/grammaticalframework/pgf/Pool;Ljava/lang/Object;J)V");
+	jclass app_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/ExprApplication");
+	if (!app_class)
+		return NULL;
+	jmethodID app_constrId = (*env)->GetMethodID(env, app_class, "<init>", "(Ljava/lang/String;[Lorg/grammaticalframework/pgf/Expr;)V");
+	if (!app_constrId)
+		return NULL;
+
+	PgfExpr expr = gu_variant_from_ptr(get_ref(env, self));
+	
+	GuPool* tmp_pool = gu_local_pool();
+	PgfApplication* app = pgf_expr_unapply(expr, tmp_pool);
+	
+	jobject japp = NULL;
+	if (app != NULL) {
+		jstring jfun = gu2j_string(env, app->fun);
+		jobject jargs = (*env)->NewObjectArray(env, app->n_args, expr_class, NULL);
+		for (size_t i = 0; i < app->n_args; i++) {
+			jobject jarg = (*env)->NewObject(env, expr_class, expr_constrId, NULL, self, p2l(app->args[i]));
+			(*env)->SetObjectArrayElement(env, jargs, i, jarg);
+			(*env)->DeleteLocalRef(env, jarg);
+		}
+		japp = (*env)->NewObject(env, app_class, app_constrId, jfun, jargs);
+	}
+
+	gu_pool_free(tmp_pool);
+
+	return japp;
+}
+
 JNIEXPORT jboolean JNICALL
 Java_org_grammaticalframework_pgf_Expr_equals(JNIEnv* env, jobject self, jobject other)
 {
@@ -1368,7 +1404,7 @@ Java_org_grammaticalframework_pgf_Type_getHypos(JNIEnv* env, jobject self)
 	jmethodID constrId = (*env)->GetMethodID(env, hypo_class, "<init>", "(Ljava/lang/Object;J)V");
 
 	size_t n_hypos = gu_seq_length(tp->hypos);
-	jobjectArray jhypos = (*env)->NewObjectArray(env, n_hypos, hypo_class, NULL);	
+	jobjectArray jhypos = (*env)->NewObjectArray(env, n_hypos, hypo_class, NULL);
 	for (size_t i = 0; i < n_hypos; i++) {
 		PgfHypo *hypo = gu_seq_index(tp->hypos, PgfHypo, i);
 		jobject jhypo = (*env)->NewObject(env, hypo_class, constrId, self, p2l(hypo));

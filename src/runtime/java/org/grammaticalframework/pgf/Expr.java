@@ -83,6 +83,12 @@ public class Expr implements Serializable {
 			return new Expr(pool, master, initApp(fun, args, pool.ref));
 		}
 
+		/** If the method is called on an expression which is 
+		 * a function application, then it is decomposed into 
+		 * a function name and a list of arguments. If this is not 
+		 * an application then the result is null. */
+		public native ExprApplication unApply();
+
 		/** Returns the expression as a string in the GF syntax */
 		public String toString() {
 			return showExpr(ref);
