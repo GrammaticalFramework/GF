@@ -102,6 +102,8 @@ public class Expr implements Serializable {
 		 * @return True if the expressions are equal. */
 		public native boolean equals(Expr e);
 
+		public native int hashCode();
+
 		private static native String showExpr(long ref);
 
 		private static native long initStringLit(String s, long pool);

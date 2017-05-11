@@ -1388,6 +1388,13 @@ Java_org_grammaticalframework_pgf_Expr_equals(JNIEnv* env, jobject self, jobject
 		return JNI_FALSE;
 }
 
+JNIEXPORT jint JNICALL
+Java_org_grammaticalframework_pgf_Expr_hashCode(JNIEnv* env, jobject self)
+{
+	PgfExpr e = gu_variant_from_ptr(l2p(get_ref(env, self)));
+	return pgf_expr_hash(0, e);
+}
+
 JNIEXPORT jstring JNICALL
 Java_org_grammaticalframework_pgf_Type_getCategory(JNIEnv* env, jobject self)
 {
