@@ -57,11 +57,13 @@ module PGF2 (-- * PGF
              alignWords,
              -- ** Parsing
              parse, parseWithHeuristics,
-			 -- ** Generation
+             -- ** Sentence Lookup
+             lookupSentence,
+             -- ** Generation
              generateAll,
              -- ** Morphological Analysis
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
-			 -- ** Visualizations
+             -- ** Visualizations
              graphvizAbstractTree,graphvizParseTree,
 
              -- * Exceptions
@@ -469,6 +471,22 @@ mkCallbacksMap concr callbacks pool = do
                                     return ep
 
     predict_callback _ _ _ = return nullPtr
+
+lookupSentence :: Concr      -- ^ the language with which we parse
+               -> Type       -- ^ the start category
+               -> String     -- ^ the input sentence
+               -> [(Expr,Float)]
+lookupSentence lang (Type ctype _) sent =
+  unsafePerformIO $
+    do exprPl  <- gu_new_pool
+       parsePl <- gu_new_pool
+       sent    <- newUtf8CString sent parsePl
+       enum    <- pgf_lookup_sentence (concr lang) ctype sent parsePl exprPl
+       parseFPl <- newForeignPtr gu_pool_finalizer parsePl
+       exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
+       exprs    <- fromPgfExprEnum enum parseFPl (touchConcr lang >> touchForeignPtr exprFPl)
+       return exprs
+
 
 -- | The oracle is a triple of functions.
 -- The first two take a category name and a linearization field name
