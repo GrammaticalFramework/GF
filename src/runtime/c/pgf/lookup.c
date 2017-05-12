@@ -342,15 +342,23 @@ pgf_lookup_merge(PgfMetaId cat_id1, GuBuf* spine1,
 }
 
 static bool
-pgf_lookup_filter(GuBuf* join, PgfMetaId cat_id, GuSeq* counts)
+pgf_lookup_filter(GuBuf* join, PgfMetaId cat_id, GuSeq* counts, GuBuf* stack)
 {
 	if (cat_id == 0)
 		return true;
 
+	size_t n_stack = gu_buf_length(stack);
+	for (size_t i = 0; i < n_stack; i++) {
+		PgfMetaId id = gu_buf_get(stack, PgfMetaId, i);
+		if (cat_id == id) {
+			return false;
+		}
+	}
+	gu_buf_push(stack, PgfMetaId, cat_id);
+	
 	size_t count = gu_seq_get(counts, size_t, cat_id);
-	if (count != 0)
-		return false;
-	gu_seq_set(counts, size_t, cat_id, 1);
+	if (count > 0)
+		return true;
 
 	size_t pos = 0;
 	size_t maximum = 0;
@@ -363,7 +371,7 @@ pgf_lookup_filter(GuBuf* join, PgfMetaId cat_id, GuSeq* counts)
 		size_t n_args = gu_seq_length(prod->fun->type->hypos);
 		size_t sum = prod->count;
 		for (size_t j = 0; j < n_args; j++) {
-			if (!pgf_lookup_filter(join, prod->args[j], counts)) {
+			if (!pgf_lookup_filter(join, prod->args[j], counts, stack)) {
 				sum = 0;
 				break;
 			}
@@ -384,6 +392,9 @@ pgf_lookup_filter(GuBuf* join, PgfMetaId cat_id, GuSeq* counts)
 
 	gu_seq_set(counts, size_t, cat_id, maximum);
 	gu_buf_trim_n(id_prods, n_id_prods-pos);
+
+	gu_buf_pop(stack, PgfMetaId);
+
 	return true;
 }
 
@@ -522,12 +533,14 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 		join = pgf_lookup_merge(cat_id1, join, cat_id2, spine, &cat_id1, work_pool, pool);
 	}
 
+
 	size_t n_cats = gu_buf_length(join);
+	GuBuf* stack = gu_new_buf(PgfMetaId, work_pool);
 	GuSeq* counts = gu_new_seq(size_t, n_cats, work_pool);
 	for (size_t i = 0; i < n_cats; i++) {
 		gu_seq_set(counts, size_t, i, 0);
 	}
-	pgf_lookup_filter(join, cat_id1, counts);
+	pgf_lookup_filter(join, cat_id1, counts, stack);
 	for (size_t i = 1; i < n_cats; i++) {
 		if (gu_seq_get(counts, size_t, i) == 0) {
 			GuBuf* id_prods = gu_buf_get(join, GuBuf*, i);
