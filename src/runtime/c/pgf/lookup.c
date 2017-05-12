@@ -7,7 +7,7 @@
 #include <pgf/data.h>
 #include <stdio.h>
 
-#define PGF_LOOKUP_DEBUG
+//#define PGF_LOOKUP_DEBUG
 
 typedef struct {
 	PgfAbsFun* fun;
