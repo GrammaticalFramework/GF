@@ -39,6 +39,10 @@ public class Concr {
 		return new Completer(this, startCat, s, prefix);
 	}
 
+	public Iterable<ExprProb> lookupSentence(String startCat, String s) {
+		return new SentenceExtractor(this, startCat, s);
+	}
+
 	/** Computes the linearization of the abstract expression. */
 	public native String linearize(Expr expr);
 

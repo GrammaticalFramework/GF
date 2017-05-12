@@ -651,6 +651,34 @@ Java_org_grammaticalframework_pgf_Completer_complete(JNIEnv* env, jclass clazz, 
 	return jtokiter;
 }
 
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_SentenceExtractor_lookupSentence
+  (JNIEnv* env, jclass clazz, jobject jconcr, jstring jstartCat, jstring js, jobject jpool)
+{
+	GuPool* pool = get_ref(env, jpool);
+	GuPool* out_pool = gu_new_pool();
+
+    GuString startCat = j2gu_string(env, jstartCat, pool);
+    GuString s = j2gu_string(env, js, pool);
+
+	PgfType* type = gu_new_flex(pool, PgfType, exprs, 0);
+	type->hypos   = gu_empty_seq();
+	type->cid     = startCat;
+	type->n_exprs = 0;
+
+	GuEnum* res =
+		pgf_lookup_sentence(get_ref(env, jconcr), type, s, pool, out_pool);
+
+	jfieldID refId = (*env)->GetFieldID(env, (*env)->GetObjectClass(env, jconcr), "gr", "Lorg/grammaticalframework/pgf/PGF;");
+	jobject jpgf = (*env)->GetObjectField(env, jconcr, refId);
+
+	jclass expiter_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/ExprIterator");
+	jmethodID constrId = (*env)->GetMethodID(env, expiter_class, "<init>", "(Lorg/grammaticalframework/pgf/PGF;Lorg/grammaticalframework/pgf/Pool;JJ)V");
+	jobject jexpiter = (*env)->NewObject(env, expiter_class, constrId, jpgf, jpool, p2l(out_pool), p2l(res));
+
+	return jexpiter;
+}
+
 JNIEXPORT jobject JNICALL 
 Java_org_grammaticalframework_pgf_TokenIterator_fetchTokenProb(JNIEnv* env, jclass clazz, jlong enumRef, jobject jpool)
 {
@@ -669,11 +697,12 @@ Java_org_grammaticalframework_pgf_TokenIterator_fetchTokenProb(JNIEnv* env, jcla
 
 JNIEXPORT jobject JNICALL 
 Java_org_grammaticalframework_pgf_ExprIterator_fetchExprProb
-  (JNIEnv* env, jclass clazz, jlong enumRef, jobject pool, jobject gr)
+  (JNIEnv* env, jclass clazz, jlong enumRef, jobject jpool, jobject gr)
 {
 	GuEnum* res = (GuEnum*) l2p(enumRef);
+	GuPool* pool = get_ref(env, jpool);
 
-	PgfExprProb* ep = gu_next(res, PgfExprProb*, NULL);
+	PgfExprProb* ep = gu_next(res, PgfExprProb*, pool);
 	if (ep == NULL)
 		return NULL;
 
