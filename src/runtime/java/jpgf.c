@@ -710,7 +710,7 @@ Java_org_grammaticalframework_pgf_ExprIterator_fetchExprProb
 	jmethodID methodId = (*env)->GetStaticMethodID(env, expprob_class, "mkExprProb", 
 	           "(Lorg/grammaticalframework/pgf/Pool;Lorg/grammaticalframework/pgf/PGF;JD)Lorg/grammaticalframework/pgf/ExprProb;");
 	jobject jexpprob = (*env)->CallStaticObjectMethod(env, expprob_class, methodId, 
-	           pool, gr, p2l(gu_variant_to_ptr(ep->expr)), (double) ep->prob);
+	           jpool, gr, p2l(gu_variant_to_ptr(ep->expr)), (double) ep->prob);
 
 	return jexpprob;
 }
