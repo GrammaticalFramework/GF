@@ -347,6 +347,10 @@ pgf_lookup_filter(GuBuf* join, PgfMetaId cat_id, GuSeq* counts, GuBuf* stack)
 	if (cat_id == 0)
 		return true;
 
+	size_t count = gu_seq_get(counts, size_t, cat_id);
+	if (count > 0)
+		return true;
+
 	size_t n_stack = gu_buf_length(stack);
 	for (size_t i = 0; i < n_stack; i++) {
 		PgfMetaId id = gu_buf_get(stack, PgfMetaId, i);
@@ -355,10 +359,6 @@ pgf_lookup_filter(GuBuf* join, PgfMetaId cat_id, GuSeq* counts, GuBuf* stack)
 		}
 	}
 	gu_buf_push(stack, PgfMetaId, cat_id);
-	
-	size_t count = gu_seq_get(counts, size_t, cat_id);
-	if (count > 0)
-		return true;
 
 	size_t pos = 0;
 	size_t maximum = 0;
