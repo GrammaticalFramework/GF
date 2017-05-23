@@ -4,22 +4,47 @@
 #include <gu/enum.h>
 
 /// Linearization of abstract syntax trees.
-/// @file
 
-/** @}
- *
- * @name Enumerating concrete syntax trees
- *
- * Because of the \c variants construct in GF, there may be several
- * possible concrete syntax trees that correspond to a given abstract
- * syntax tree. These can be enumerated with #pgf_concretize.
- *
- * @{
- */
-
+//
+// PgfCncTree
+//
 
 /// A concrete syntax tree
 typedef GuVariant PgfCncTree;
+
+typedef enum {
+	PGF_CNC_TREE_APP,
+	PGF_CNC_TREE_CHUNKS,
+	PGF_CNC_TREE_LIT,
+} PgfCncTreeTag;
+
+typedef struct {
+	PgfCCat* ccat;
+	PgfCncFun* fun;
+	int fid;
+
+	size_t n_vars;
+	PgfPrintContext* context;
+
+	size_t n_args;
+	PgfCncTree args[];
+} PgfCncTreeApp;
+
+typedef struct {
+	size_t n_vars;
+	PgfPrintContext* context;
+
+	size_t n_args;
+	PgfCncTree args[];
+} PgfCncTreeChunks;
+
+typedef struct {
+	size_t n_vars;
+	PgfPrintContext* context;
+
+	int fid;
+	PgfLiteral lit;
+} PgfCncTreeLit;
 
 /// An enumeration of #PgfCncTree trees.
 typedef GuEnum PgfCncTreeEnum;

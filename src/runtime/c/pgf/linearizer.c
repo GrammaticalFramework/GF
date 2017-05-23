@@ -70,44 +70,6 @@ typedef struct {
 } PgfCnc;
 
 
-//
-// PgfCncTree
-//
-
-typedef enum {
-	PGF_CNC_TREE_APP,
-	PGF_CNC_TREE_CHUNKS,
-	PGF_CNC_TREE_LIT,
-} PgfCncTreeTag;
-
-typedef struct {
-	PgfCCat* ccat;
-	PgfCncFun* fun;
-	int fid;
-
-	size_t n_vars;
-	PgfPrintContext* context;
-
-	size_t n_args;
-	PgfCncTree args[];
-} PgfCncTreeApp;
-
-typedef struct {
-	size_t n_vars;
-	PgfPrintContext* context;
-
-	size_t n_args;
-	PgfCncTree args[];
-} PgfCncTreeChunks;
-
-typedef struct {
-	size_t n_vars;
-	PgfPrintContext* context;
-
-	int fid;
-	PgfLiteral lit;
-} PgfCncTreeLit;
-
 #ifdef PGF_LINEARIZER_DEBUG
 static void
 pgf_print_cnc_tree_vars(size_t n_vars, PgfPrintContext* context,
@@ -128,7 +90,7 @@ pgf_print_cnc_tree_vars(size_t n_vars, PgfPrintContext* context,
 	}
 }
 
-static void
+PGF_INTERNAL void
 pgf_print_cnc_tree(PgfCncTree ctree, GuOut* out, GuExn* err)
 {
 	GuVariantInfo ti = gu_variant_open(ctree);
