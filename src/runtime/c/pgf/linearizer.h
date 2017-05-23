@@ -2,6 +2,7 @@
 #define PGF_LINEARIZER_H_
 
 #include <gu/enum.h>
+#include <pgf/data.h>
 
 /// Linearization of abstract syntax trees.
 
