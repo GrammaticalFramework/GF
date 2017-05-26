@@ -2,7 +2,6 @@
 #define PGF_LINEARIZER_H_
 
 #include <gu/enum.h>
-#include <pgf/data.h>
 
 /// Linearization of abstract syntax trees.
 
@@ -12,6 +11,8 @@
 
 /// A concrete syntax tree
 typedef GuVariant PgfCncTree;
+
+#ifdef PGF_DATA_H_
 
 typedef enum {
 	PGF_CNC_TREE_APP,
@@ -46,6 +47,8 @@ typedef struct {
 	int fid;
 	PgfLiteral lit;
 } PgfCncTreeLit;
+
+#endif
 
 /// An enumeration of #PgfCncTree trees.
 typedef GuEnum PgfCncTreeEnum;
