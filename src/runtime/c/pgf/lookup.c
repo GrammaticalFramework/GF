@@ -60,7 +60,7 @@ pgf_print_cnc_tree(PgfCncTree ctree, GuOut* out, GuExn* err);
 #endif
 
 static void
-pgf_lookup_index_syms(GuMap* lexicon_idx, PgfSymbols* syms, PgfProductionIdx* idx, GuPool* pool) {
+pgf_lookup_index_syms(GuMap* lexicon_idx, PgfSymbols* syms, PgfAbsFun* absfun, GuPool* pool) {
 	size_t n_syms = gu_seq_length(syms);
 	for (size_t j = 0; j < n_syms; j++) {
 		PgfSymbol sym = gu_seq_get(syms, PgfSymbol, j);
@@ -68,9 +68,9 @@ pgf_lookup_index_syms(GuMap* lexicon_idx, PgfSymbols* syms, PgfProductionIdx* id
 		switch (i.tag) {
 		case PGF_SYMBOL_KP: {
 			PgfSymbolKP* skp = (PgfSymbolKP*) i.data;
-			pgf_lookup_index_syms(lexicon_idx, skp->default_form, idx, pool);
+			pgf_lookup_index_syms(lexicon_idx, skp->default_form, absfun, pool);
 			for (size_t k = 0; k < skp->n_forms; k++) {
-				pgf_lookup_index_syms(lexicon_idx, skp->forms[k].form, idx, pool);
+				pgf_lookup_index_syms(lexicon_idx, skp->forms[k].form, absfun, pool);
 			}
 			break;
 		}
@@ -82,22 +82,17 @@ pgf_lookup_index_syms(GuMap* lexicon_idx, PgfSymbols* syms, PgfProductionIdx* id
 				gu_map_put(lexicon_idx, sks->token, GuBuf*, funs);
 			}
 
-			size_t n_idx = gu_buf_length(idx);
-			for (size_t k = 0; k < n_idx; k++) {
-				PgfProductionIdxEntry* entry =
-					gu_buf_index(idx, PgfProductionIdxEntry, k);
-				bool found = false;
-				size_t n_funs = gu_buf_length(funs);
-				for (size_t l = 0; l < n_funs; l++) {
-					PgfAbsFun* fun = gu_buf_get(funs, PgfAbsFun*, l);
-					if (fun == entry->papp->fun->absfun) {
-						found = true;
-						break;
-					}
+			bool found = false;
+			size_t n_funs = gu_buf_length(funs);
+			for (size_t l = 0; l < n_funs; l++) {
+				PgfAbsFun* absfun1 = gu_buf_get(funs, PgfAbsFun*, l);
+				if (absfun1 == absfun) {
+					found = true;
+					break;
 				}
-				if (!found)
-					gu_buf_push(funs, PgfAbsFun*, entry->papp->fun->absfun);
 			}
+			if (!found)
+				gu_buf_push(funs, PgfAbsFun*, absfun);
 			break;
 		}
 		}
@@ -780,14 +775,14 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 {
 	//// building search indices //
 	GuMap* lexicon_idx = gu_new_string_map(GuBuf*, &gu_null_struct, pool);
-	size_t n_seqs = gu_seq_length(concr->sequences);
-	for (size_t i = 0; i < n_seqs; i++) {
-		PgfSequence* seq = gu_seq_index(concr->sequences, PgfSequence, i);
-		if (seq->idx != NULL) {
-			pgf_lookup_index_syms(lexicon_idx, seq->syms, seq->idx, pool);
+	size_t n_cncfuns = gu_seq_length(concr->cncfuns);
+	for (size_t i = 0; i < n_cncfuns; i++) {
+		PgfCncFun* cncfun = gu_seq_get(concr->cncfuns, PgfCncFun*, i);
+		for (size_t lin_idx = 0; lin_idx < cncfun->n_lins; lin_idx++) {
+			pgf_lookup_index_syms(lexicon_idx, cncfun->lins[lin_idx]->syms, cncfun->absfun, pool);
 		}
 	}
-	
+
 	GuMap* function_idx = gu_new_string_map(GuBuf*, &gu_null_struct, pool);
 	size_t n_funs = gu_seq_length(concr->abstr->funs);
 	for (size_t i = 0; i < n_funs; i++) {
