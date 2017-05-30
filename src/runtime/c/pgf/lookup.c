@@ -20,7 +20,6 @@ typedef struct {
 
 typedef struct {
 	PgfAbsFun* fun;
-	size_t count;
 	PgfMetaId args[0];
 } PgfAbsProduction;
 
@@ -35,7 +34,7 @@ pgf_print_abs_production(PgfMetaId id,
 	for (size_t i = 0; i < n_hypos; i++) {
 		gu_printf(out,err," ?%d", prod->args[i]);
 	}
-	gu_printf(out,err," (%d)\n",prod->count);
+	gu_putc('\n',out,err);
 }
 
 static void
@@ -112,12 +111,18 @@ typedef struct {
 	GuPool* pool;
 } PgfSpineBuilder;
 
+typedef struct {
+	PgfToken token;
+	size_t n_funs;
+	PgfAbsFun** funs;
+} PgfInputToken;
+
 static PgfAbsProduction*
-pgf_lookup_new_production(PgfAbsFun* fun, GuPool *pool) {
+pgf_lookup_new_production(PgfAbsFun* fun, GuPool *pool)
+{
 	size_t n_hypos = gu_seq_length(fun->type->hypos);
 	PgfAbsProduction* prod = gu_new_flex(pool, PgfAbsProduction, args, n_hypos);
-	prod->fun   = fun;
-	prod->count = 0;
+	prod->fun = fun;
 	for (size_t i = 0; i < n_hypos; i++) {
 		prod->args[i] = 0;
 	}
@@ -166,14 +171,13 @@ pgf_lookup_add_spine_leaf(PgfSpineBuilder* builder, PgfAbsFun *fun)
 {	
 	PgfMetaId id = pgf_lookup_add_spine_nodes(builder, fun->type->cid);
 	PgfAbsProduction* prod = pgf_lookup_new_production(fun, builder->pool);
-	prod->count = 1;
 
 	pgf_lookup_add_production(builder, id, prod);
 }
 
 static GuBuf*
-pgf_lookup_build_spine(GuMap* lexicon_idx, GuMap* function_idx,
-                       GuString tok, PgfType* typ, PgfMetaId* meta_id,
+pgf_lookup_build_spine(GuMap* function_idx,
+                       PgfInputToken* tok, PgfType* typ, PgfMetaId* meta_id,
                        GuPool* pool)
 {
 	PgfSpineBuilder builder;
@@ -181,17 +185,11 @@ pgf_lookup_build_spine(GuMap* lexicon_idx, GuMap* function_idx,
 	builder.meta_ids     = gu_new_string_map(PgfMetaId, &gu_null_struct, pool);
 	builder.spine        = gu_new_buf(GuBuf*, pool);
 	builder.pool         = pool;
-	
+
 	gu_buf_push(builder.spine, GuBuf*, NULL);
 
-	GuBuf* funs = gu_map_get(lexicon_idx, tok, GuBuf*);
-	if (funs != NULL) {
-		size_t n_funs = gu_buf_length(funs);
-		for (size_t i = 0; i < n_funs; i++) {
-			PgfAbsFun* absfun =
-				gu_buf_get(funs, PgfAbsFun*, i);
-			pgf_lookup_add_spine_leaf(&builder, absfun);
-		}
+	for (size_t i = 0; i < tok->n_funs; i++) {
+		pgf_lookup_add_spine_leaf(&builder, tok->funs[i]);
 	}
 
 	*meta_id = gu_map_get(builder.meta_ids, typ->cid, PgfMetaId);
@@ -264,7 +262,6 @@ pgf_lookup_merge_cats(GuBuf* spine, GuMap* pairs,
 				if (prod1->fun == prod2->fun) {
 					PgfAbsProduction* prod =
 						pgf_lookup_new_production(prod1->fun, pool);
-					prod->count = prod1->count+prod2->count;
 					size_t n_hypos = gu_seq_length(prod->fun->type->hypos);
 					for (size_t l = 0; l < n_hypos; l++) {
 						prod->args[l] =
@@ -274,7 +271,7 @@ pgf_lookup_merge_cats(GuBuf* spine, GuMap* pairs,
                                                   pool);
 					}
 					gu_buf_push(id_prods, PgfAbsProduction*, prod);
-					
+
 					count++;
 				}
 			}
@@ -282,7 +279,6 @@ pgf_lookup_merge_cats(GuBuf* spine, GuMap* pairs,
 			if (count == 0) {
 				PgfAbsProduction* prod =
 					pgf_lookup_new_production(prod1->fun, pool);
-				prod->count = prod1->count;
 				size_t n_hypos = gu_seq_length(prod->fun->type->hypos);
 				for (size_t l = 0; l < n_hypos; l++) {
 					prod->args[l] =
@@ -309,11 +305,10 @@ pgf_lookup_merge_cats(GuBuf* spine, GuMap* pairs,
 					break;
 				}
 			}
-			
+
 			if (!found) {
 				PgfAbsProduction* prod =
 					pgf_lookup_new_production(prod2->fun, pool);
-				prod->count = prod2->count;
 				size_t n_hypos = gu_seq_length(prod->fun->type->hypos);
 				for (size_t l = 0; l < n_hypos; l++) {
 					prod->args[l] =
@@ -359,7 +354,7 @@ typedef struct {
 	GuBuf* stack;
 	GuBuf* expr_tokens;
 	GuBuf* ctrees;
-	int fid;
+	PgfAbsFun** curr_absfun;
 	GuPool* pool;
 } PgfLookupState;
 
@@ -380,7 +375,6 @@ pgf_lookup_extract_app(PgfLookupState* st,
                        size_t n_args, PgfMetaId* args)
 {
 	GuChoiceMark mark = gu_choice_mark(st->choice);
-	int save_fid = st->fid;
 
 	PgfCncTree ret = gu_null_variant;
 	PgfCncTreeApp* capp =
@@ -417,7 +411,6 @@ redo:;
 		} else {
 			int index = gu_choice_next(st->choice, gu_buf_length(coercions));
 			if (index < 0) {
-				st->fid = save_fid;
 				gu_choice_reset(st->choice, mark);
 				if (!gu_choice_advance(st->choice))
 					return gu_null_variant;
@@ -499,7 +492,7 @@ pgf_lookup_extract(PgfLookupState* st, PgfMetaId meta_id, PgfCCat *ccat)
 			                    args, 1, &ret, st->pool);
 		capp->ccat = ccat;
 		capp->fun = gu_seq_get(ccat->lindefs, PgfCncFun*, index);
-		capp->fid = st->fid++;
+		capp->fid = 0;
 		capp->n_vars = 0;
 		capp->context = NULL;
 		capp->n_args = 1;
@@ -567,12 +560,12 @@ done:
 }
 
 static GuBuf*
-pgf_lookup_tokenize(GuString buf, size_t len, GuPool* pool)
+pgf_lookup_tokenize(GuMap* lexicon_idx, GuString sentence, GuPool* pool)
 {	
-	GuBuf* tokens = gu_new_buf(GuString, pool);
+	GuBuf* tokens = gu_new_buf(PgfInputToken, pool);
 
 	GuUCS c = ' ';
-	const uint8_t* p = (const uint8_t*) buf;
+	const uint8_t* p = (const uint8_t*) sentence;
 	for (;;) {
 		while (gu_ucs_is_space(c)) {
 			c = gu_utf8_decode(&p);
@@ -586,14 +579,23 @@ pgf_lookup_tokenize(GuString buf, size_t len, GuPool* pool)
 		}
 		const uint8_t* end   = p-1;
 
-		size_t len = end-start;
-		GuString tok = gu_malloc(pool, len+1);
-		memcpy((uint8_t*) tok, start, len);
-		((uint8_t*) tok)[len] = 0;
+		PgfInputToken* tok = gu_buf_extend(tokens);
 
-		gu_buf_push(tokens, GuString, tok);
+		size_t len = end-start;
+		tok->token = gu_malloc(pool, len+1);
+		memcpy((uint8_t*) tok->token, start, len);
+		((uint8_t*) tok->token)[len] = 0;
+
+		GuBuf* funs = gu_map_get(lexicon_idx, tok->token, GuBuf*);
+		if (funs != NULL) {
+			tok->n_funs = gu_buf_length(funs);
+			tok->funs   = gu_buf_data(funs);
+		} else {
+			tok->n_funs = 0;
+			tok->funs   = NULL;
+		}
 	}
-	
+
 	return tokens;
 }
 
@@ -610,11 +612,25 @@ pgf_lookup_compute_kernel_helper(GuBuf* sentence_tokens, GuBuf* expr_tokens,
 		for (size_t l = 0; l < i; l++) {
 			matrix[l + dim*j] = score;
 			for (size_t k = j; k > 0; k--) {
-				GuString sentence_token = gu_buf_get(sentence_tokens, GuString, l);
-				GuString expr_token     = gu_buf_get(expr_tokens, GuString, k-1);
+				PgfInputToken* sentence_token = gu_buf_index(sentence_tokens, PgfInputToken, l);
+				PgfInputToken* expr_token     = gu_buf_index(expr_tokens, PgfInputToken, k-1);
 
-				if (strcmp(sentence_token, expr_token) == 0) {
+				if (strcmp(sentence_token->token, expr_token->token) == 0) {
 					score += 1 + pgf_lookup_compute_kernel_helper(sentence_tokens, expr_tokens, matrix, l, k-1);
+				} else {
+					bool match = false;
+					for (size_t i = 0; i < sentence_token->n_funs; i++) {
+						for (size_t j = 0; j < expr_token->n_funs; j++) {
+							if (sentence_token->funs[i] == expr_token->funs[j]) {
+								match = true;
+								goto done;
+							}
+						}
+					}
+				done:
+					if (match) {
+						score += 0.5 + pgf_lookup_compute_kernel_helper(sentence_tokens, expr_tokens, matrix, l, k-1);
+					}
 				}
 			}
 		}
@@ -720,16 +736,40 @@ pgf_lookup_enum_next(GuEnum* self, void* to, GuPool* pool)
 }
 
 static void
-pgf_lookup_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
+pgf_lookup_symbol_token(PgfLinFuncs** self, PgfToken token)
 {
-	PgfLookupState* st = gu_container(funcs, PgfLookupState, funcs);
-	gu_buf_push(st->expr_tokens, PgfToken, tok);
+	PgfLookupState* st = gu_container(self, PgfLookupState, funcs);
+	PgfInputToken* tok = gu_buf_extend(st->expr_tokens);
+	tok->token  = token;
+	tok->n_funs = st->curr_absfun ? 1 : 0;
+	tok->funs   = st->curr_absfun;
+}
+
+static void
+pgf_lookup_begin_phrase(PgfLinFuncs** self, PgfCId cat, int fid, int lindex, PgfCId funname)
+{
+	PgfLookupState* st = gu_container(self, PgfLookupState, funcs);
+	
+	PgfAbsFun* absfun = gu_seq_binsearch(st->concr->abstr->funs, pgf_absfun_order, PgfAbsFun, funname);
+	if (absfun != NULL) {
+		st->curr_absfun = gu_new(PgfAbsFun*, st->pool);
+		*st->curr_absfun = absfun;
+	} else {
+		st->curr_absfun = NULL;
+	}
+}
+
+static void
+pgf_lookup_end_phrase(PgfLinFuncs** self, PgfCId cat, int fid, int lindex, PgfCId fun)
+{
+	PgfLookupState* st = gu_container(self, PgfLookupState, funcs);
+	st->curr_absfun = NULL;
 }
 
 static PgfLinFuncs pgf_lookup_lin_funcs = {
 	.symbol_token = pgf_lookup_symbol_token,
-	.begin_phrase = NULL,
-	.end_phrase   = NULL,
+	.begin_phrase = pgf_lookup_begin_phrase,
+	.end_phrase   = pgf_lookup_end_phrase,
 	.symbol_ne    = NULL,
 	.symbol_bind  = NULL,
 	.symbol_capit = NULL
@@ -773,9 +813,7 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 	GuPool *work_pool = gu_new_pool();
 
 	GuBuf* sentence_tokens =
-		pgf_lookup_tokenize(sentence,
-		                    strlen(sentence),
-		                    work_pool);
+		pgf_lookup_tokenize(lexicon_idx, sentence, work_pool);
 
 	PgfMetaId meta_id1 = 0;
 	GuBuf* join = gu_new_buf(GuBuf*, pool);
@@ -783,11 +821,11 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 
 	size_t n_tokens = gu_buf_length(sentence_tokens);
 	for (size_t i = 0; i < n_tokens; i++) {
-		GuString tok = gu_buf_get(sentence_tokens, GuString, i);
+		PgfInputToken* tok = gu_buf_index(sentence_tokens, PgfInputToken, i);
 
 		PgfMetaId meta_id2 = 0;
 		GuBuf* spine =
-			pgf_lookup_build_spine(lexicon_idx, function_idx,
+			pgf_lookup_build_spine(function_idx,
 			                       tok, typ, &meta_id2,
 			                       work_pool);
 
@@ -810,9 +848,9 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 	st.start_id= meta_id1;
 	st.choice  = gu_new_choice(work_pool);
 	st.stack   = gu_new_buf(PgfMetaId, work_pool);
-	st.expr_tokens=gu_new_buf(GuString, work_pool);
+	st.expr_tokens=gu_new_buf(PgfInputToken, work_pool);
 	st.ctrees  = gu_new_buf(PgfCncTreeScore, pool);
-	st.fid     = 0;
+	st.curr_absfun= NULL;
 	st.pool    = pool;
 
 	GuChoiceMark mark = gu_choice_mark(st.choice);
