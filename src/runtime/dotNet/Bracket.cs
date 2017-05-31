@@ -16,7 +16,10 @@ namespace PGFSharp
 		Bracket AsBracketChild {get;}
 	}
 
-
+	/// <summary>
+	/// A representation for a syntactic constituent in the parse tree
+    /// of a sentence.
+    /// </summary>
 	public class Bracket : IBracketChild
     {
 		public class StringChildBracket : IBracketChild {

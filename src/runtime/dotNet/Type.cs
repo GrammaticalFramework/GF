@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace PGFSharp
 {
     /// <summary>
-    /// A GF type.
+    /// A class for types in the abstract syntax of a grammar.
     /// </summary>
     public class Type
     {

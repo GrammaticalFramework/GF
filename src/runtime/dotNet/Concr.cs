@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 namespace PGFSharp
 {
     /// <summary>
-    /// Concrete grammar. All concrete grammars are available from the (Abstract) <see cref="Grammar"/> class.
+    /// The class for concrete syntaxes.
     /// </summary>
     public class Concr
     {

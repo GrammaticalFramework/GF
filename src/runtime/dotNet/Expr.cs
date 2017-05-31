@@ -16,6 +16,9 @@ namespace PGFSharp
         }
     }
 
+	/// <summary>
+	/// A representation for an abstract syntax tree.
+	/// </summary>
     public abstract class Expr
     {
         internal IntPtr DataPtr => NativeGU.gu_variant_open(_ptr).Data; // PgfExprLit* 
