@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace PGFSharp
 {
     /// <summary>
-    /// Grammatical Framework grammar.
+    /// This is the class for PGF grammars.
     /// </summary>
     public class PGF
     {
@@ -18,10 +18,10 @@ namespace PGFSharp
         NativeGU.NativeMemoryPool pool;
 
         /// <summary>
-        /// Read grammar from PGF file.
+        /// Reads a grammar with the specified file path.
         /// </summary>
-        /// <param name="fn">filename</param>
-        /// <returns></returns>
+        /// <param name="fn">The path to the file.</param>
+        /// <returns>an object representing the grammar in memory.</returns>
         public static PGF ReadPGF(string fn)
         {
             var obj = new PGF();
@@ -76,10 +76,9 @@ namespace PGFSharp
         public IEnumerable<string> Functions => GetStringList(Native.pgf_iter_functions);
 
         /// <summary>
-        /// All functions producing the given category name.
+        /// Returns a list with all functions with a given return category.
         /// </summary>
-        /// <param name="catName"></param>
-        /// <returns></returns>
+        /// <param name="catName">The name of the return category.</param>
         public IEnumerable<string> FunctionByCategory(string catName)
         {
             using (var str = new Native.NativeString(catName))
@@ -89,9 +88,9 @@ namespace PGFSharp
         }
 
         /// <summary>
-        /// Get type from function name.
+        /// Returns the type of the function with the given name.
         /// </summary>
-        /// <param name="funName"></param>
+        /// <param name="funName">The name of the function.</param>
         /// <returns></returns>
         public Type FunctionType(string funName)
         {
@@ -104,10 +103,10 @@ namespace PGFSharp
         }
 
         /// <summary>
-        /// Reduce expression.
+        /// Normalizes an expression to its normal form by using the 'def' rules in the grammar.
         /// </summary>
-        /// <param name="expr"></param>
-        /// <returns></returns>
+        /// <param name="expr">the original expression.</param>
+        /// <returns>the normalized expression.</returns>
         public Expr Compute(Expr expr)
         {
             var tmp_pool = new NativeGU.NativeMemoryPool();
@@ -126,9 +125,11 @@ namespace PGFSharp
         }
 
         /// <summary>
-        /// Enumerate all expressions in the given category.
+        /// Returns an enumerable over the set of all expression in
+        /// the given category. The expressions are enumerated in decreasing
+        /// probability order.
         /// </summary>
-        /// <param name="cat"></param>
+        /// <param name="cat">the start category.</param>
         /// <returns></returns>
         public IEnumerable<Expr> GenerateAll(Type cat = null)
         {
