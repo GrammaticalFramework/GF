@@ -45,6 +45,8 @@ main = do
   append "%!postproc(html): '(SRC=\"categories.png\")'  '\\1 USEMAP=\"#categories\"'"
   append "%!postproc(html): '#LParadigms'  '<a name=\"RParadigms\"></a>'"
   append "%!postproc(tex): '#LParadigms' ''"
+  append "%!postproc(html): '#quicklinks' '<script src=\"quicklinks.js\"></script>'"
+  append "%!postproc(tex): '#quicklinks' ''"
   delimit $ addToolTips cs
   include "synopsis-intro.txt"
   title "Categories"
@@ -94,6 +96,8 @@ main = do
   title "Table of Contents"
   space
   append "%%toc"
+  space
+  append "#quicklinks"
   space
   let format = if isLatex then "tex" else "html"
   system $ "txt2tags -t" ++ format ++ " " ++ " --toc " ++ synopsis
