@@ -863,9 +863,10 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 			cts->ctree = pgf_lzr_wrap_linref(cts->ctree, st.pool);
 			pgf_lzr_linearize(concr, cts->ctree, 0, &st.funcs, st.pool);
 
+			double value = pgf_lookup_compute_kernel(sentence_tokens, st.expr_tokens);
+			double expr_value = pgf_lookup_compute_kernel(st.expr_tokens, st.expr_tokens);
 			cts->score =
-				pgf_lookup_compute_kernel(sentence_tokens, st.expr_tokens) /
-				sqrt(sentence_value * pgf_lookup_compute_kernel(st.expr_tokens, st.expr_tokens));
+				value / sqrt(sentence_value * expr_value);
 
 			gu_buf_flush(st.expr_tokens);
 
@@ -874,8 +875,11 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 				GuPool* tmp_pool = gu_new_pool();
 				GuOut* out = gu_file_out(stderr, tmp_pool);
 				GuExn* err = gu_exn(tmp_pool);
+				pgf_lzr_linearize_simple(concr, cts->ctree, 0,
+                                         out, err, tmp_pool);
+				gu_putc('\n', out, err);
 				pgf_print_cnc_tree(cts->ctree, out, err);
-				gu_printf(out, err, " [%f]\n", cts->score);
+				gu_printf(out, err, " [%.1f/sqrt(%.1f*%.1f)=%f]\n\n", value, sentence_value, expr_value, cts->score);
 				gu_pool_free(tmp_pool);
 			}
 #endif
