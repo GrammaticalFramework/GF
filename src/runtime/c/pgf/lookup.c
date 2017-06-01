@@ -36,7 +36,6 @@ pgf_print_abs_production(PgfMetaId id,
 		gu_printf(out,err," ?%d", prod->args[i]);
 	}
 	gu_printf(out,err," [%d]\n",prod->count);
-	gu_putc('\n',out,err);
 }
 
 static void
