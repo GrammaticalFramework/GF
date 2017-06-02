@@ -34,6 +34,8 @@ bindTok :: [String] -> [String]
 bindTok ws = case ws of
                w1:"&+":w2:ws -> bindTok ((w1++w2):ws)
                "&+":ws       -> bindTok ws
+               "&|":(c:cs):ws-> (toUpper c:cs) : bindTok ws
+               "&|":ws       -> bindTok ws
                w:ws          -> w:bindTok ws
                []            -> []
 
