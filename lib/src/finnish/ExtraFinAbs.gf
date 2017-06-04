@@ -23,7 +23,8 @@ abstract ExtraFinAbs = Extra [
 --    i_implicPron : Pron ;                 -- (minä), minut, ...
     whatPart_IP : IP ;
 
-    PartCN : CN -> NP ;                   -- olutta
+    PartCN   : CN -> NP ;                 -- olutta
+    PartPlCN : CN -> NP ;                 -- jauhoja
 
     vai_Conj : Conj ;                     -- minä vai sinä? ("or" in question)
 

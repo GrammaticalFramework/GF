@@ -143,6 +143,18 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
         a = acn.a ;
         isPron = False ; isNeg = False
         } ;
+	
+    PartPlCN cn = 
+      let 
+        acn = DetCN (DetQuant IndefArt NumPl) cn
+      in {
+        s = table {
+          NPCase Nom | NPAcc => acn.s ! NPCase ResFin.Part ;
+          c => acn.s ! c
+          } ; 
+        a = acn.a ;
+        isPron = False ; isNeg = False
+        } ;
 
     vai_Conj = {s1 = [] ; s2 = "vai" ; n = Sg} ;
 
