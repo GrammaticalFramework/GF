@@ -24,4 +24,10 @@ oper
         a = case b of {True => PAg n ; _ => PAgNone}
         }      
       } ;
+
+ -- e.g. das selbe
+ mmkQuant : Quant -> A -> Quant = \q,a -> q ** {
+   s,sp = \\x,n,g,c => q.s ! x ! n ! g ! c ++ a.s ! Posit ! agrAdj g q.a n ((prepC c).c)   
+   } ;
+
 }

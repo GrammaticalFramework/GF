@@ -327,8 +327,11 @@ mkV2 : overload {
   mkVV  : V -> VV ;  -- with zu
   auxVV : V -> VV ;  -- without zu
 
-  mkVA  : V -> VA ;
-
+  mkVA : overload {
+    mkVA : V -> VA ;
+    mkVA : V -> Prep -> VA ;
+    } ;
+    
   mkVQ  : V -> VQ ;
 
 
@@ -630,7 +633,10 @@ mkV2 : overload {
       = \v,p -> prepV2 v p ** {isAux = False ; lock_V2Q = <>} ;
     } ;
 
-  mkVA  v = v ** {lock_VA = <>} ;
+  mkVA = overload {
+    mkVA : V -> VA = \v -> lin VA (dirV2 v) ;
+    mkVA : V -> Prep -> VA = \v,p -> lin VA (v ** {c2 = p}) ;
+    } ;
 
   mkAS  v = v ** {lock_A = <>} ;
   mkA2S v p = mkA2 v p ** {lock_A = <>} ;

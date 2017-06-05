@@ -19,7 +19,7 @@ concrete VerbGer of Verb = CatGer ** open Prelude, ResGer, Coordination in {
       insertExtrapos (comma ++ conjThat ++ s.s ! Sub) (predV v) ;
     ComplVQ v q = 
       insertExtrapos (comma ++ q.s ! QIndir) (predV v) ;
-    ComplVA v ap = insertAdj (ap.s ! APred) ap.c ap.ext (predV v) ; -- changed
+    ComplVA v ap = insertAdj (v.c2.s ++ ap.s ! APred) ap.c ap.ext (predV v) ; -- changed
 
     SlashV2a v = predV v ** {c2 = v.c2} ; 
       

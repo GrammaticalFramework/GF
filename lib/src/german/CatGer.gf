@@ -86,9 +86,9 @@ concrete CatGer of Cat =
 
 -- Open lexical classes, e.g. Lexicon
 
-    V, VS, VQ, VA = ResGer.Verb ; -- = {s : VForm => Str} ;
+    V, VS, VQ = ResGer.Verb ; -- = {s : VForm => Str} ;
     VV = Verb ** {isAux : Bool} ;
-    V2, V2A, V2S, V2Q = Verb ** {c2 : Preposition} ;
+    V2, VA, V2A, V2S, V2Q = Verb ** {c2 : Preposition} ;
     V2V = Verb ** {c2 : Preposition ; isAux : Bool} ;
     V3 = Verb ** {c2, c3 : Preposition} ;
 
