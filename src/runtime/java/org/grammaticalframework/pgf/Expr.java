@@ -100,7 +100,7 @@ public class Expr implements Serializable {
 
 		/** Compares the current expression with another expression by value. 
 		 * @return True if the expressions are equal. */
-		public native boolean equals(Expr e);
+		public native boolean equals(Object e);
 
 		public native int hashCode();
 
