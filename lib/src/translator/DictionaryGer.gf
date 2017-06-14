@@ -14778,7 +14778,7 @@ lin deactivate_V2 = mkV2 (irregV "deaktivieren" "deaktiviert" "deaktivierte" "de
 lin deactivation_N = variants {} ;
 lin dead_A = mkA "tot" ;
 lin dead_Adv = mkAdv "genau" ; -- status=guess
-lin dead_N = mkN "tote Sprache" "toten Sprachen" feminine ; -- status=guess
+lin dead_N = mkN "Toter" masculine ; -- UNCHK
 lin deaden_V2 = variants {} ;
 lin deadeye_N = variants {} ;
 lin deadhead_N = variants {} ;
@@ -20810,7 +20810,7 @@ lin feedstock_N = variants {} ;
 lin feel_N = variants {} ; --
 lin feel_V = mkV "fühlen" ;
 lin feel_V2 = mkV2 "fühlen" ;
-lin feel_VA = reflV (mkV "fühlen") accusative ;
+lin feel_VA = mkVA (reflV (mkV "fühlen") accusative) ;
 lin feel_VS = mkVS (irregV "denken" "denkt" "dachte" "dächte" "gedacht") ;
 lin feel_out_V = advV OP_feel_V OP_out_Adv ; -- guess-p-verb
 lin feel_up_V2 = prepV2 OP_feel_V OP_up_Prep ; -- guess-p-verb
@@ -24826,7 +24826,7 @@ lin grovel_V = I.kriechen_V | mkV "katzbuckeln" | junkV "auf dem Bauch" ( mkV "r
 lin groveller_N = variants {} ;
 lin grow_V = I.wachsen_V ;
 lin grow_V2 = mkV2 (I.wachsen_V) ;
-lin grow_VA = I.werden_V ;
+lin grow_VA = mkVA I.werden_V ;
 lin grow_apart_V = advV OP_grow_V OP_apart_Adv ; -- guess-p-verb
 lin grow_away_from_V2 = prepV2 (advV OP_grow_V OP_away_Adv ) OP_from_Prep ; -- guess-p-verb
 lin grow_back_V = advV OP_grow_V OP_back_Adv ; -- guess-p-verb
