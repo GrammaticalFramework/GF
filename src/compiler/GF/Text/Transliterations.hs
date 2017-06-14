@@ -174,9 +174,9 @@ transArabic = mkTransliteration "Arabic" allTrans allCodes where
     "W  r  z  s  C S  D  T  Z  c  G "                 ++  -- 0630 - 063a
     "   f  q  k  l  m  n  h  w  y. y a. u. i. a  u "  ++  -- 0641 - 064f
     "i  v2 o  a: V+ V- i: a+ "                        ++  -- 0650 - 0657
-    "A*  "                                                -- 0671 (used by AED) 
+    "A*  q?"                                              -- 0671 (used by AED) 
   allCodes = [0x0621..0x062f] ++ [0x0630..0x063a] ++ 
-             [0x0641..0x064f] ++ [0x0650..0x0657] ++ [0x0671]
+             [0x0641..0x064f] ++ [0x0650..0x0657] ++ [0x0671,0x061f]
 
 transPersian :: Transliteration
 transPersian = (mkTransliteration "Persian/Farsi" allTrans allCodes)
@@ -186,10 +186,10 @@ transPersian = (mkTransliteration "Persian/Farsi" allTrans allCodes)
     "W  r  z  s  C  S  D  T  Z  c  G "                 ++  -- 0630 - 063a
     "   f  q  -  l  m  n  h  v  -  y. a. u. i. a  u "   ++  -- 0640 - 064f
     "i  v2 o  a: V+ V- i: a+ " ++                          -- 0650 - 0657 
-    "p  c^ J  k  g  y "
+    "p  c^ J  k  g  y q? Z0"
   allCodes = [0x0621..0x062f] ++ [0x0630..0x063a] ++ 
              [0x0641..0x064f] ++ [0x0650..0x0657] ++ 
-             [0x067e,0x0686,0x0698,0x06a9,0x06af,0x06cc]
+             [0x067e,0x0686,0x0698,0x06a9,0x06af,0x06cc,0x061f,0x200c]
 
 transNepali :: Transliteration
 transNepali = mkTransliteration "Nepali" allTrans allCodes where
