@@ -1,0 +1,58 @@
+GF 3.9 Release Notes
+August 2017
+
+%!style:../css/notes.css
+%!postproc(html): <TITLE> <meta charset="UTF-8"><meta name = "viewport" content = "width = device-width"> <TITLE>
+%!postproc(html): <H1> <H1><a href="../"><IMG src="../doc/Logos/gf0.png"></a>
+
+==Installation==
+
+See the [download page http://www.grammaticalframework.org/download/index.html].
+
+
+==What's new==
+
+Over 200 changes have been pushed to the source repository since
+[the release of GF 3.8 release-3.8.html] in June 2016.
+
+
+===GF compiler and run-time library===
+
+
+====New features and notable changes====
+
+- ...
+
+
+====Other changes and bug fixes====
+
+- ...
+
+
+====Changes of interest to compiler developers====
+
+- ...
+
+
+===Resource Grammar Library===
+
+- New languages:
+  - ...
+
+
+- Various fixes for several languages.
+  - ...
+
+
+- Numerous fixes in the translation dictionaries.
+  - ...
+
+
+===Apps and Cloud services===
+
+- ...
+
+
+--------------------
+
+[www.grammaticalframework.org http://www.grammaticalframework.org]
