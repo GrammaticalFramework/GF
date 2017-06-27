@@ -35,7 +35,7 @@ pgf_print_abs_production(PgfMetaId id,
 	for (size_t i = 0; i < n_hypos; i++) {
 		gu_printf(out,err," ?%d", prod->args[i]);
 	}
-	gu_printf(out,err," [%d]\n",prod->count);
+	gu_printf(out,err,"  <%d>\n",prod->count);
 }
 
 static void
@@ -359,6 +359,10 @@ typedef struct {
 	GuPool* pool;
 } PgfLookupState;
 
+struct PgfItemConts {
+	size_t count;
+};
+
 typedef struct {
 	GuEnum en;
 	double max;
@@ -366,63 +370,6 @@ typedef struct {
 	GuBuf* ctrees;
 	GuPool* out_pool;
 } PgfLookupEnum;
-
-static bool
-pgf_lookup_filter(GuBuf* join, PgfMetaId meta_id, GuSeq* counts, GuBuf* stack)
-{
-	if (meta_id == 0)
-		return true;
-
-	size_t count = gu_seq_get(counts, size_t, meta_id);
-	if (count > 0)
-		return true;
-
-	size_t n_stack = gu_buf_length(stack);
-	for (size_t i = 0; i < n_stack; i++) {
-		PgfMetaId id = gu_buf_get(stack, PgfMetaId, i);
-		if (meta_id == id) {
-			return false;
-		}
-	}
-	gu_buf_push(stack, PgfMetaId, meta_id);
-
-	size_t pos = 0;
-	size_t maximum = 0;
-	GuBuf* id_prods = gu_buf_get(join, GuBuf*, meta_id);
-	size_t n_id_prods = gu_buf_length(id_prods);
-	for (size_t i = 0; i < n_id_prods; i++) {
-		PgfAbsProduction* prod = 
-			gu_buf_get(id_prods, PgfAbsProduction*, i);
-
-		size_t n_args = gu_seq_length(prod->fun->type->hypos);
-		size_t sum = prod->count;
-		for (size_t j = 0; j < n_args; j++) {
-			if (!pgf_lookup_filter(join, prod->args[j], counts, stack)) {
-				sum = 0;
-				break;
-			}
-			sum += gu_seq_get(counts, size_t, prod->args[j]);
-		}
-
-		if (sum > maximum) {
-			maximum = sum;
-			pos = 0;
-		}
-		if (sum == maximum) {
-			gu_buf_set(id_prods, PgfAbsProduction*, pos, prod);
-			pos++;
-		}
-
-		prod->count = sum;
-	}
-
-	gu_seq_set(counts, size_t, meta_id, maximum);
-	gu_buf_trim_n(id_prods, n_id_prods-pos);
-
-	gu_buf_pop(stack, PgfMetaId);
-
-	return true;
-}
 
 static void
 gu_ccat_fini(GuFinalizer* fin)
@@ -441,7 +388,8 @@ pgf_lookup_new_ccat(PgfLookupState* st, PgfCCat* ccat)
 	new_ccat->linrefs = ccat->linrefs;
 	new_ccat->viterbi_prob = 0;
 	new_ccat->fid = st->max_fid++;
-	new_ccat->conts = NULL;
+	new_ccat->conts = gu_new(PgfItemConts, st->pool);
+	new_ccat->conts->count = 0;
 	new_ccat->answers = NULL;
 	new_ccat->prods = NULL;
 	new_ccat->n_synprods = 0;
@@ -490,17 +438,26 @@ pgf_lookup_concretize_coercions(PgfLookupState* st, GuMap* cache,
 			               &cnc_prod, st->pool);
 		new_pcoerce->coerce = new_coerce;
 
+		size_t count = (new_coerce->conts == NULL) ? 0 : new_coerce->conts->count;
+		if (count > new_ccat->conts->count) {
+			new_ccat->conts->count = new_coerce->conts->count;
+			new_ccat->n_synprods = 0;
+		}
+
 		if (new_ccat->prods == NULL || new_ccat->n_synprods >= gu_seq_length(new_ccat->prods)) {
 			new_ccat->prods = gu_realloc_seq(new_ccat->prods, PgfProduction, new_ccat->n_synprods+(n_coercions-i));
 		}
-		gu_seq_set(new_ccat->prods, PgfProduction, new_ccat->n_synprods++, cnc_prod);
+		
+		if (count == new_ccat->conts->count) {
+			gu_seq_set(new_ccat->prods, PgfProduction, new_ccat->n_synprods++, cnc_prod);
+		}
 
 #ifdef PGF_LOOKUP_DEBUG
 		{
 			GuPool* tmp_pool = gu_new_pool();
 			GuOut* out = gu_file_out(stderr, tmp_pool);
 			GuExn* err = gu_exn(tmp_pool);
-			gu_printf(out,err,"C%d -> _[C%d]\n",new_ccat->fid,new_pcoerce->coerce->fid);
+			gu_printf(out,err,"C%d -> _[C%d]  <%d>\n",new_ccat->fid,new_coerce->fid,new_coerce->conts ? new_coerce->conts->count : 0);
 			gu_pool_free(tmp_pool);
 		}
 #endif
@@ -515,6 +472,8 @@ static PgfCCat*
 pgf_lookup_concretize(PgfLookupState* st, GuMap* cache, PgfMetaId meta_id, PgfCCat *ccat)
 {
 	if (meta_id == 0) {
+		// if there is no lindef for this ccat then we can't use it for 
+		// linearization  of a metavariable
 		if (ccat->lindefs == NULL || gu_seq_length(ccat->lindefs) == 0)
 			return NULL;
 		return ccat;
@@ -524,8 +483,15 @@ pgf_lookup_concretize(PgfLookupState* st, GuMap* cache, PgfMetaId meta_id, PgfCC
 	pair[0] = meta_id;
 	pair[1] = ccat->fid;
 	PgfCCat** pnew_ccat = gu_map_find(cache, &pair);
-	if (pnew_ccat != NULL)
+	if (pnew_ccat != NULL) {
+		// check for loops
+		if (*pnew_ccat == (PgfCCat*) &gu_null_struct)
+			return NULL;
 		return *pnew_ccat;
+	}
+
+	// put a marker to detect loops
+	gu_map_put(cache, &pair, PgfCCat*, (PgfCCat*) &gu_null_struct);
 
 	PgfCCat* new_ccat = NULL;
 
@@ -551,6 +517,8 @@ pgf_lookup_concretize(PgfLookupState* st, GuMap* cache, PgfMetaId meta_id, PgfCC
 			PgfProductionApply* papply =
 				gu_buf_get(buf, PgfProductionApply*, j);
 
+			size_t count = prod->count;
+
 			size_t n_args   = gu_seq_length(papply->args);
 			GuSeq* new_args = gu_new_seq(PgfPArg, n_args, st->pool);
 			for (size_t k = 0; k < n_args; k++) {
@@ -571,6 +539,9 @@ pgf_lookup_concretize(PgfLookupState* st, GuMap* cache, PgfMetaId meta_id, PgfCC
 
 				if (new_parg->ccat == NULL)
 					goto skip;
+
+				if (new_parg->ccat->conts != NULL)
+					count += new_parg->ccat->conts->count;
 			}
 
 			if (new_ccat == NULL) {
@@ -584,11 +555,19 @@ pgf_lookup_concretize(PgfLookupState* st, GuMap* cache, PgfMetaId meta_id, PgfCC
 				               &cnc_prod, st->pool);
 			new_papp->fun  = papply->fun;
 			new_papp->args = new_args;
+			
+			if (count > new_ccat->conts->count) {
+				new_ccat->conts->count = count;
+				new_ccat->n_synprods = 0;
+			}
 
 			if (new_ccat->prods == NULL || new_ccat->n_synprods >= gu_seq_length(new_ccat->prods)) {
 				new_ccat->prods = gu_realloc_seq(new_ccat->prods, PgfProduction, new_ccat->n_synprods+(n_prods-j));
 			}
-			gu_seq_set(new_ccat->prods, PgfProduction, new_ccat->n_synprods++, cnc_prod);
+
+			if (count == new_ccat->conts->count) {
+				gu_seq_set(new_ccat->prods, PgfProduction, new_ccat->n_synprods++, cnc_prod);
+			}
 
 #ifdef PGF_LOOKUP_DEBUG
 			{
@@ -617,7 +596,7 @@ pgf_lookup_concretize(PgfLookupState* st, GuMap* cache, PgfMetaId meta_id, PgfCC
 
 					gu_printf(out,err,"C%d",arg.ccat->fid);
 				}
-				gu_printf(out,err,"]\n");
+				gu_printf(out,err,"]  <%d>\n", count);
 				gu_pool_free(tmp_pool);
 			}
 #endif
@@ -972,20 +951,6 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 			                       work_pool);
 
 		join = pgf_lookup_merge(meta_id1, join, meta_id2, spine, &meta_id1, work_pool, pool);
-	}
-
-	size_t n_cats = gu_buf_length(join);
-	GuBuf* stack = gu_new_buf(PgfMetaId, work_pool);
-	GuSeq* counts = gu_new_seq(size_t, n_cats, work_pool);
-	for (size_t i = 0; i < n_cats; i++) {
-		gu_seq_set(counts, size_t, i, 0);
-	}
-	pgf_lookup_filter(join, meta_id1, counts, stack);
-	for (size_t i = 1; i < n_cats; i++) {
-		if (gu_seq_get(counts, size_t, i) == 0) {
-			GuBuf* id_prods = gu_buf_get(join, GuBuf*, i);
-			gu_buf_flush(id_prods);
-		}
 	}
 
 #ifdef PGF_LOOKUP_DEBUG
