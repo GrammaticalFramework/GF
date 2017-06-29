@@ -42,10 +42,13 @@ data-files: tools/gf.el
 	    www/translator/*.css
 	    www/translator/*.js
 
-source-repository head
-  type:     darcs
-  location: http://www.grammaticalframework.org/
+--source-repository head
+--  type:     darcs
+--  location: http://www.grammaticalframework.org/
 
+source-repository head
+  type:     git
+  location: https://github.com/GrammaticalFramework/GF.git
 
 flag interrupt
   Description: Enable Ctrl+Break in the shell
