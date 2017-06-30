@@ -48,7 +48,7 @@ lin
   SymbS sy = sy ;
 
   SymbNum sy = { s = \\_,_ => sy.s ; num = Pl } ;
-  SymbOrd sy = { s = \\_,_ => sy.s ++ "."} ;
+  SymbOrd sy = { s = \\_,_ => glue sy.s "."} ;
 
 lincat
 

@@ -67,18 +67,19 @@ lin
 
   Symb_Chunk s = lin Utt s ;
 
-  fullstop_Chunk = ss "." ;
-  exclmark_Chunk = ss "!" ;
-  questmark_Chunk = ss "?" ;
-  comma_Chunk = ss "," ;
-  colon_Chunk = ss ":" ;
-  semicolon_Chunk = ss ";" ;
-  quote_Chunk = ss "\"" ;
-  lpar_Chunk = ss "(" ;
-  rpar_Chunk = ss ")" ;
-  dash_Chunk = ss "-" ;
+  fullstop_Chunk = sbSS "." ;
+  exclmark_Chunk = sbSS "!" ;
+  questmark_Chunk = sbSS "?" ;
+  comma_Chunk = sbSS "," ;
+  colon_Chunk = sbSS ":" ;
+  semicolon_Chunk = sbSS ";" ;
+  quote_Chunk = variants {sbSS "\"" ; ss ("\"" ++ SOFT_BIND) } ;
+  lpar_Chunk = ss ("(" ++ SOFT_BIND) ;
+  rpar_Chunk = sbSS ")" ;
+  dash_Chunk = sbSS "-" ;
 
 oper
   emptyNP : NP = Syntax.mkNP (P.mkPN []) ;
 
+  sbSS : Str -> SS = \s -> ss (SOFT_BIND ++ s) ;
 }

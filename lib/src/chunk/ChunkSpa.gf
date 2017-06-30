@@ -40,16 +40,5 @@ lin
   perfect_neg_Chunk = ss "no ha" ;
   past_perfect_Chunk = ss "había" ;
   past_perfect_neg_Chunk = ss "no había" ;
-  
-  fullstop_Chunk = ss "." ;
-  exclmark_Chunk = ss "!" ;
-  questmark_Chunk = ss "?" ;
-  comma_Chunk = ss "," ;
-  colon_Chunk = ss ":" ;
-  semicolon_Chunk = ss ";" ;
-  quote_Chunk = ss "\"" ;
-  lpar_Chunk = ss "(" ;
-  rpar_Chunk = ss ")" ;
-  dash_Chunk = ss "-" ;
 
 }

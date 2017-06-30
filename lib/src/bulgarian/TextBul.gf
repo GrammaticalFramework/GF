@@ -1,5 +1,5 @@
 --# -coding=cp1251
-concrete TextBul of Text = CatBul ** {
+concrete TextBul of Text = CatBul ** open Prelude in {
   flags coding=cp1251 ;
 
 
@@ -7,8 +7,8 @@ concrete TextBul of Text = CatBul ** {
 
   lin
     TEmpty = {s = []} ;
-    TFullStop x xs = {s = x.s ++ "." ++ xs.s} ;
-    TQuestMark x xs = {s = x.s ++ "?" ++ xs.s} ;
-    TExclMark x xs = {s = x.s ++ "!" ++ xs.s} ;
+    TFullStop x xs = {s = x.s ++ SOFT_BIND ++ "." ++ xs.s} ;
+    TQuestMark x xs = {s = x.s ++ SOFT_BIND ++ "?" ++ xs.s} ;
+    TExclMark x xs = {s = x.s ++ SOFT_BIND ++ "!" ++ xs.s} ;
 
 }

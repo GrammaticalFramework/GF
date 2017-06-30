@@ -32,7 +32,7 @@ lin
   SymbS sy = {s = \\_ => sy.s} ;
 
   SymbNum n = {s = \\_,_ => n.s ; isNum = True ; n = Pl} ;
-  SymbOrd n = {s = \\_,_,_,_ => n.s ++ "." ; adv=   table { Posit => " "  ; Compar =>  " " ; Superl =>  " "}} ; 
+  SymbOrd n = {s = \\_,_,_,_ => glue n.s "." ; adv=   table { Posit => " "  ; Compar =>  " " ; Superl =>  " "}} ; 
 
 lincat 
 

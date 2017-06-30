@@ -1,5 +1,5 @@
 concrete ChunkFre of Chunk = CatFre, ExtensionsFre [VPS,VPI] ** 
-  ChunkFunctor - [AP_Chunk, SSlash_Chunk]
+  ChunkFunctor - [AP_Chunk, SSlash_Chunk, quote_Chunk]
     with (Syntax = SyntaxFre), (Extensions = ExtensionsFre) **
   open 
     SyntaxFre, (E = ExtensionsFre), Prelude, 
@@ -9,6 +9,11 @@ lin
   AP_Chunk ap = {s = ap.s ! AF (Masc | Fem) (Sg | Pl)} ;
 
   SSlash_Chunk s = mkUtt <lin S {s = s.s ! {g = Masc ; n = Sg}} : S> ;
+
+  quote_Chunk = variants { ss (SOFT_BIND ++ "\"") ;
+			   ss ("\"" ++ SOFT_BIND) ;
+			   ss ("«" ++ SOFT_BIND) ;
+			   ss (SOFT_BIND ++ "»") } ;
 
 lin
   NP_Acc_Chunk np = ss (np.s ! Acc).ton ;
@@ -41,16 +46,5 @@ lin
   perfect_neg_Chunk = ss "n'a pas" ;
   past_perfect_Chunk = ss "avait" ;
   past_perfect_neg_Chunk = ss "n'avait pas" ;
-
-  fullstop_Chunk = ss "." ;
-  exclmark_Chunk = ss "!" ;
-  questmark_Chunk = ss "?" ;
-  comma_Chunk = ss "," ;
-  colon_Chunk = ss ":" ;
-  semicolon_Chunk = ss ";" ;
-  quote_Chunk = ss "\"" ;
-  lpar_Chunk = ss "(" ;
-  rpar_Chunk = ss ")" ;
-  dash_Chunk = ss "-" ;
 
 }

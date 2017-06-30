@@ -6,6 +6,6 @@ concrete CompatibilityFin of Compatibility = CatFin ** open Prelude, ResFin in {
 
 lin
     NumInt n = {s = \\_,_ => n.s ; isNum = True ; n = Pl} ;
-    OrdInt n = {s = \\_ => n.s ++ "."} ;
+    OrdInt n = {s = \\_ => n.s ++ SOFT_BIND ++ "."} ;
 
 }
