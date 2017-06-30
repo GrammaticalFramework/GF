@@ -146,8 +146,9 @@ bitrot (this is the selfish reason). For more on the economics of opensource see
 
 If you plan to make changes to the source code -- why else would you be reading
 this Developers Guide? -- first [fork https://help.github.com/articles/fork-a-repo/]
-the main GF repository, then clone the fork. Remember to [keep your fork in sync
-https://help.github.com/articles/syncing-a-fork/]. You will need an account on Github.
+the main GF repository, then clone the fork.
+Remember to [keep your fork in sync https://help.github.com/articles/syncing-a-fork/].
+You will need an account on Github.
 
 To clone a fork:
 
@@ -159,8 +160,7 @@ $ git remote add upstream git@github.com:GrammaticalFramework/GF.git
 
 
 If you need help, refer to the [git documentation https://xkcd.com/1597/]. You
-[won't be the first person to be perplexed
-https://stackoverflow.com/questions/tagged/git].
+[won't be the first person to be perplexed https://stackoverflow.com/questions/tagged/git].
 
 
 
@@ -179,8 +179,7 @@ should expect complicated problems to arise from the simplest actions.
 ==== Commit your changes ====
 
 There are three steps to commiting a change to the main repo. First you have to
-record the changes that you want to commit (see [Recording local changes
-#record] above), then push them to your forked repo, then submit a pull request
+record the changes that you want to commit (see [Recording local changes #record] above), then push them to your forked repo, then submit a pull request
 to the main repo.
 
 
@@ -192,8 +191,7 @@ Clone their fork, and maybe merge it into your branch.
 
 ==== Submitting patches ====
 
-To see your changes reflected in the main branch, send a [pull request
-https://help.github.com/articles/about-pull-requests/].
+To see your changes reflected in the main branch, send a [pull request https://help.github.com/articles/about-pull-requests/].
 
 After you demonstrate that you know what you are doing, the GF core dev team may
 grant you read-write access to the main repo, but that just means you can
@@ -477,7 +475,7 @@ make deb
 If get error messages about missing dependencies
 (e.g. ``autoconf``, ``automake``, ``libtool-bin``, ``python-dev``,
 ``java-sdk``, ``txt2tags``)
-use ``apt-get intall`` to install them, then try again.
+use ``apt-get install`` to install them, then try again.
 
 
 === Creating OS X Installer packages ===
