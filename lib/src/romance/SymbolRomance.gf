@@ -25,7 +25,7 @@ lin
   SymbS sy = {s = \\_ => sy.s} ;
 
   SymbNum n = {s = \\_ => n.s ; isNum = True ; n = Pl} ;
-  SymbOrd n = {s = \\_ => n.s ++ "."} ; ---
+  SymbOrd n = {s = \\_ => n.s ++ BIND ++ "º"} ; -- feminine variant ª, also variants 1.º and 1.ª
 
 lincat 
 

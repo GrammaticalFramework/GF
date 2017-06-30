@@ -6,6 +6,6 @@ concrete CompatibilityFre of Compatibility = CatFre ** open Prelude, CommonRoman
 
 lin
     NumInt n = {s = \\_ => n.s ; isNum = True ; n = Pl} ;
-    OrdInt n = {s = \\_ => n.s ++ "."} ; ---
+    OrdInt n = {s = \\_ => n.s ++ SOFT_BIND ++ "."} ; ---
 
 }
