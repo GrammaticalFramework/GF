@@ -15,7 +15,7 @@ that are currently available via http://grammaticalframework.org
 are marked in the table
 
 
-|| ISO  | Language     | Darcs | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | Trans | tested | publ   | authors       ||
+|| ISO  | Language     | Git   | Mini | Parad | Lex | Lang | API | Symb | Irreg | Dict | Trans | tested | publ   | authors       ||
 | Afr   | Afrikaans    | +     | -    | ++    | +   | +    | +   | -    | -     | -    | -     | -      | -      | *LP,LM
 | Amh   | Amharic      | +     | +    | ++    | +   | +    | -   | -    | -     | -    | - | -      | +      | *MK
 | Ara   | Arabic       | +     | +    | +     | +   | -    | -   | -    | -     | -    | - | -      | +      | AD
@@ -61,7 +61,7 @@ are marked in the table
 ISO = 3-letter ISO language code, used in library file names
 (mostly ISO 639-2 B (bibliographic))
 
-Darcs = available in the darcs repository of --http://code.haskell.org/gf-- http://www.grammaticalframework.org/
+Git = available in the Github repository of --http://code.haskell.org/gf-- http://www.grammaticalframework.org/
 
 Mini = minimal resource, compiles with ``make minimal`` (obsolete)
 

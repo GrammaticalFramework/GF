@@ -23,15 +23,15 @@ you are a GF user who just wants to download and install GF
 == Setting up your system for building GF ==
 
 To build GF from source you need to install some tools on your
-system: the //Haskell Platform//, //Darcs// and the //Haskeline library//.
+system: the //Haskell Platform//, //git// and the //Haskeline library//.
 
 **On Linux** the best option is to install the tools via the standard
 software distribution channels, i.e. by using the //Software Center//
 in Ubuntu or the corresponding tool in other popular Linux distributions.
 Or, from a Terminal window, the following command should be enough:
 
-- On Ubuntu: ``sudo apt-get install haskell-platform darcs libghc6-haskeline-dev``
-- On Fedora: ``sudo yum install haskell-platform darcs ghc-haskeline-devel``
+- On Ubuntu: ``sudo apt-get install haskell-platform git libghc6-haskeline-dev``
+- On Fedora: ``sudo yum install haskell-platform git ghc-haskeline-devel``
 
 
 **On Mac OS and Windows**, the tools can be downloaded from their respective
@@ -39,11 +39,12 @@ web sites, as described below.
 
 === The Haskell Platform ===
 
-GF is written in Haskell, so first of all you need
-the //Haskell Platform//, e.g. version 7.10.3. Downloads
-and installation instructions are available from here:
+GF is written in Haskell, so first of all you need the //Haskell Platform//.
+Downloads and installation instructions are available from here:
 
     http://hackage.haskell.org/platform/
+
+GF is known to compile with ghc versions 7.10.3 and 8.0.2.
 
 Once you have installed the Haskell Platform, open a terminal
 (Command Prompt on Windows) and try to execute the following command:
@@ -63,16 +64,16 @@ Other required tools included in the Haskell Platform are
 and
 [Happy http://www.haskell.org/happy/].
 
-=== Darcs ===
+=== Git ===
 
-To get the GF source code, you also need //Darcs//, version 2 or later.
-Darcs 2.10 is recommended (July 2015).
+The GF source code lives in a Github repository
+https://github.com/GrammaticalFramework/GF
+which you access with [git https://git-scm.com/].
 
-//Darcs//
-is a distributed version control system, see http://darcs.net/ for
-more information. There are precompiled packages for many platforms
-available and source code if you want to compile it yourself. Darcs
-is also written in Haskell and so you can use GHC to compile it.
+Before 27 June 2017, it used to live in a Darcs repository. If you previously
+installed the darcs repository, you will need to move that repository aside and
+follow these instructions to get GF from Github. You can then re-apply your
+local changes to your new Git clone.
 
 
 === The haskeline library ===
@@ -88,24 +89,20 @@ required by //haskeline// are installed.  Here is one way to do this:
 
 == Getting the source ==
 
-Once you have all tools in place you can get the GF source code. If you
-just want to compile and use GF then it is enough to have read-only
-access. It is also possible to make changes in the source code but if you
-want these changes to be applied back to the main source repository you will
-have to send the changes to us.  If you plan to work continuously on
-GF then you should consider getting read-write access.
+Once you have all tools in place you can get the GF source code.
+
 
 === Read-only access ===
 
 ==== Getting a fresh copy for read-only access ====
 
-Anyone can get the latest development version of GF by running (all on one line):
+Anyone can get the latest development version of GF by running:
 
 ```
-$ darcs get --lazy --set-scripts-executable http://www.grammaticalframework.org/ gf
+$ git clone https://github.com/GrammaticalFramework/GF.git
 ```
 
-This will create a directory called ``gf`` in the current
+This will create a directory called ``GF`` in the current
 directory.
 
 
@@ -113,11 +110,10 @@ directory.
 
 To get all new patches from the main repo:
 ```
-$ darcs pull -a
+$ git pull
 ```
-This can be done anywhere in your local repository, i.e. in the ``gf``
+This can be done anywhere in your local repository, i.e. in the ``GF``
 directory, or any of its subdirectories.
-Without ``-a``, you can choose which patches you want to get.
 
 
 ==== Recording local changes ====[record]
@@ -129,119 +125,81 @@ If you have added files, you first need to tell your local repository to
 keep them under revision control:
 
 ```
-$ darcs add file1 file2 ...
+$ git add file1 file2 ...
 ```
 
 To record changes, use:
 
 ```
-$ darcs record
+$ git commit
 ```
 
-This creates a patch against the previous version and stores it in your
-local repository. You can record any number of changes before
-pushing them to the main repo. In fact, you don't have to push them at
-all if you want to keep the changes only in your local repo.
-
-If you think there are too many questions about what to record, you
-can answer ``f`` to record all remaining changes in the current file,
-or ``s`` to skip them. Use ``?`` to get a list of more options.
-%use the ``-a`` flag to ``record``. Or answer ``a`` to the first
-%question. Both of these record all the changes you have in your local
-%repository.
-
-
-==== Submitting patches ====
-
-If you are using read-only access, send your patches by email to
-someone with write-access. First record your changes in your local 
-repository, as described above. You can send any number of recorded
-patches as one patch bundle. You create the patch bundle with:
-
-```
-$ darcs send -o mypatch.patch
-$ gzip mypatch.patch
-```
-
-(where ``mypatch`` is hopefully replaced by a slightly more
-descriptive name). Since some e-mail setups change text attachments
-(most likely by changing the newline characters) you need to send
-the patch in some compressed format, such as GZIP, BZIP2 or ZIP.
-
-Send it as an e-mail attachment.
-% If you have
-%sendmail or something equivalent installed, it is possible to send the
-%patch directly from darcs. If so, replace ``-o mypatch.patch`` with
-%``--to=EMAIL`` where ``EMAIL`` is the address to send it to.
-
-
-
+If you're making substantial changes, you should think about submitting your
+patches to the main repository, to allow other people to enjoy the benefit of
+your changes (this is the altruistic reason), and also to allow other people to
+share the burden of maintaining your changes, otherwise your branch will suffer
+bitrot (this is the selfish reason). For more on the economics of opensource see
+[Benkler 2002 http://www.benkler.org/CoasesPenguin.PDF].
 
 
 === Read-write access ===
 
-If you have a user account on ``www.grammaticalframework.org``, you can
-get read-write access over SSH to the GF repository.
+If you plan to make changes to the source code -- why else would you be reading
+this Developers Guide? -- first [fork https://help.github.com/articles/fork-a-repo/]
+the main GF repository, then clone the fork. Remember to [keep your fork in sync
+https://help.github.com/articles/syncing-a-fork/]. You will need an account on Github.
 
-
-==== Getting a fresh copy ====
-
-Get your copy with (all on one line),
-replacing ``user`` with your own user name on ``www.grammaticalframework.org``:
+To clone a fork:
 
 ```
-$ darcs get --lazy --set-scripts-executable user@www.grammaticalframework.org:/usr/local/www/GF/ gf
+$ git clone your-repo-URL
+$ cd GF
+$ git remote add upstream git@github.com:GrammaticalFramework/GF.git
 ```
 
-The option ``--lazy`` means that darcs defers downloading all the
-history for the repository. This saves space, bandwidth and CPU time,
-and most people don't need the full history of all changes in the
-past.
+
+If you need help, refer to the [git documentation https://xkcd.com/1597/]. You
+[won't be the first person to be perplexed
+https://stackoverflow.com/questions/tagged/git].
+
 
 
 ==== Updating your copy ====
 
-Get all new patches from the main repo:
+To get all new patches from the main repo, [try https://help.github.com/articles/syncing-a-fork/]:
 
 ```
-$ darcs pull
+$ git fetch upstream; git checkout master; git merge upstream/master; git push; git pull
 ```
 
-You can add ``-a`` to get all patches without answering yes/no to each patch.
-
+This might not work. It's not your fault. When dealing with version control, you
+should expect complicated problems to arise from the simplest actions.
 
 
 ==== Commit your changes ====
 
-There are two steps to commiting a change to the main repo. First you
-have to record the changes that you want to commit
-(see [Recording local changes #record] above), then you push them
-to the main repo. If you are using ssh-access, all you need to do is:
-
-```
-$ darcs push
-```
-
-If you use the ``-a`` flag to push, all local patches which are not in
-the main repo are pushed.
+There are three steps to commiting a change to the main repo. First you have to
+record the changes that you want to commit (see [Recording local changes
+#record] above), then push them to your forked repo, then submit a pull request
+to the main repo.
 
 
 
 ==== Apply a patch from someone else ====
 
-Use:
-
-```
-$ darcs apply < mypatch.patch
-```
-
-This applies the patch to your local repository. To commit it to the
-main repo, use ``darcs push``.
-
-=== Further information about Darcs ===
+Clone their fork, and maybe merge it into your branch.
 
 
-For more info about what you can do with darcs, see http://darcs.net/manual/
+==== Submitting patches ====
+
+To see your changes reflected in the main branch, send a [pull request
+https://help.github.com/articles/about-pull-requests/].
+
+After you demonstrate that you know what you are doing, the GF core dev team may
+grant you read-write access to the main repo, but that just means you can
+approve pull requests; it is best practice to continue submitting pull requests
+from your repo to upstream.
+
 
 
 == Compilation from source with Cabal ==
@@ -252,7 +210,7 @@ case, all you need to do to compile and install GF, after downloading the
 source code as described above, is
 
 ```
-$ cd gf
+$ cd GF
 $ cabal install
 ```
 
@@ -283,7 +241,7 @@ You can use ``cabal configure --help`` to get a list of configuration options.
 
 The build phase does two things. First it builds the GF compiler from
 the Haskell source code and after that it builds the GF Resource Grammar
-Library using the already build compiler.  The simplest command is:
+Library using the freshly built compiler.  The simplest command is:
 
 ```
 $ cabal build
@@ -363,6 +321,8 @@ The compiled GF Resource Grammar Library will be installed
 under the same prefix, e.g. in
 ``$HOME/.cabal/share/gf-3.3.3/lib`` on Linux and
 in ``C:\Program Files\Haskell\gf-3.3.3\lib`` on Windows.
+
+This is the prefix that you will later export in the environment variable `$GF_LIB_PATH`.
 
 If you want to install in some other place then use the ``--prefix``
 option during the configuration phase.

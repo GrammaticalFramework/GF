@@ -344,21 +344,21 @@ by ``make doc``.
 
 Here are the steps to follow for contributors:
 + Make sure you have the latest sources 
-  from [GF Darcs http://www.grammaticalframework.org/doc/gf-developers.html], 
-  using ``darcs pull``.
-+ Also make sure that you have compiled the library by ``make present`` in ``gf/lib/src/``.
+  from [GF Github http://www.grammaticalframework.org/doc/gf-developers.html], 
+  using ``git pull``.
++ Also make sure that you have compiled the library by ``make present`` in ``GF/lib/src/``.
 + Work in the directory 
-  [``gf/examples/phrasebook/`` http://www.grammaticalframework.org/examples/phrasebook/].
+  [``GF/examples/phrasebook/`` http://www.grammaticalframework.org/examples/phrasebook/].
 + After you've finished your contribution, recompile the phrasebook by ``make pgf``.
-+ Save your changes in ``darcs record .`` (in the ``phrasebook`` subdirectory).
-+ Make a patch file with ``darcs send -o my_phrasebook_patch``, which you can 
-  send to GF maintainers.
++ Save your changes: ``git commit --interactive`` (in the ``phrasebook`` subdirectory).
++ Push your changes: ``git push``.
++ From the Github web site, send a pull request to the GF maintainers.
 + (Recommended:) Test the phrasebook on your local server:
-  + Go to ``gf/src/server/`` and follow the instructions in the
+  + Go to ``GF/src/server/`` and follow the instructions in the
     [project Wiki http://code.google.com/p/grammatical-framework/wiki/LaunchWebDemos].
   + Make sure that ``Phrasebook.pgf`` is available to you GF server (see project wiki).
   + Launch ``lighttpd`` (see project wiki).
-  + How you can open ``gf/examples/phrasebook/www/phrasebook.html`` and use your phrasebook!
+  + How you can open ``GF/examples/phrasebook/www/phrasebook.html`` and use your phrasebook!
 
 
 - Don't delete anything! But you are free to correct incorrect forms.
