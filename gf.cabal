@@ -9,9 +9,9 @@ category: Natural Language Processing, Compiler
 synopsis: Grammatical Framework
 description: GF, Grammatical Framework, is a programming language for multilingual grammar applications
 homepage: http://www.grammaticalframework.org/
-bug-reports: http://code.google.com/p/grammatical-framework/issues/list
+bug-reports: https://github.com/GrammaticalFramework/GF/issues
 maintainer: Thomas Hallgren
-tested-with: GHC==7.6.3, GHC==7.8.3, GHC==7.10.2, GHC==8.0.1
+tested-with: GHC==7.6.3, GHC==7.8.3, GHC==7.10.3, GHC==8.0.2
 
 data-dir: src
 data-files: tools/gf.el
