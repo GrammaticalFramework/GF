@@ -14,8 +14,8 @@ category: Data, Parsing
 tested-with: GHC==7.4.2, GHC==7.8.3
 
 source-repository head
-  type:     darcs
-  location: http://www.grammaticalframework.org/
+  type:     git
+  location: https://github.com/GrammaticalFramework/GF
 
 Library
   default-language:    Haskell2010

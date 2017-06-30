@@ -134,30 +134,8 @@ it is gone.
 
 ==Installing from the latest developer source code==
 
-The first time:
-%, assuming you already have the Haskell Platform and darcs
+See the [GF Developers Guide ../doc/gf-developers.html].
 
-```
-  darcs get --lazy http://www.grammaticalframework.org/ GF
-  cd GF
-  cabal install
-```
-
-Subsequently:
-
-```
-  cd GF
-  darcs pull -a
-  cabal install
-```
-
-Alternatively, you can get the code from the
-[GF GitHub https://github.com/GrammaticalFramework/GF/] mirror, which is
-updated nightly.
-
-The above notes for installing from source apply also in these cases.
-For more info on working with the GF source code, see the
-[GF Developers Guide ../doc/gf-developers.html].
 
 ==Older releases==
 

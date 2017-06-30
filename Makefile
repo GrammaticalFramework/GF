@@ -48,6 +48,7 @@ bintar:
 # Make a source tar.gz distribution using darcs to make sure that everything
 # is included. We put the distribution in dist/ so it is removed on
 # `make clean`
+# NOTE: this may be deprecated after the 2017-06-27 #GithubMigration.
 sdist:
 	test -d dist || mkdir dist
 	darcs dist -d dist/gf-${VERSION}
