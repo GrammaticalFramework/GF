@@ -138,7 +138,7 @@ The first time:
 %, assuming you already have the Haskell Platform and darcs
 
 ```
-  darcs get --lazy http://www.grammaticalframework.org/ GF
+  git clone https://github.com/GrammaticalFramework/GF.git
   cd GF
   cabal install
 ```
@@ -147,13 +147,13 @@ Subsequently:
 
 ```
   cd GF
-  darcs pull -a
+  git pull
   cabal install
 ```
 
-Alternatively, you can get the code from the
-[GF GitHub https://github.com/GrammaticalFramework/GF/] mirror, which is
-updated nightly.
+%Alternatively, you can get the code from the
+%[GF GitHub https://github.com/GrammaticalFramework/GF/] mirror, which is
+%updated nightly.
 
 The above notes for installing from source apply also in these cases.
 For more info on working with the GF source code, see the
