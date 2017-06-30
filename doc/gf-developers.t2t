@@ -23,15 +23,15 @@ you are a GF user who just wants to download and install GF
 == Setting up your system for building GF ==
 
 To build GF from source you need to install some tools on your
-system: the //Haskell Platform//, //Darcs// and the //Haskeline library//.
+system: the //Haskell Platform//, //Git// and the //Haskeline library//.
 
 **On Linux** the best option is to install the tools via the standard
 software distribution channels, i.e. by using the //Software Center//
 in Ubuntu or the corresponding tool in other popular Linux distributions.
 Or, from a Terminal window, the following command should be enough:
 
-- On Ubuntu: ``sudo apt-get install haskell-platform darcs libghc6-haskeline-dev``
-- On Fedora: ``sudo yum install haskell-platform darcs ghc-haskeline-devel``
+- On Ubuntu: ``sudo apt-get install haskell-platform git libghc6-haskeline-dev``
+- On Fedora: ``sudo dnf install haskell-platform git ghc-haskeline-devel``
 
 
 **On Mac OS and Windows**, the tools can be downloaded from their respective
@@ -40,7 +40,7 @@ web sites, as described below.
 === The Haskell Platform ===
 
 GF is written in Haskell, so first of all you need
-the //Haskell Platform//, e.g. version 7.10.3. Downloads
+the //Haskell Platform//, e.g. version 8.0.2 or 7.10.3. Downloads
 and installation instructions are available from here:
 
     http://hackage.haskell.org/platform/
@@ -54,7 +54,7 @@ This command should show you which version of GHC you have. If the installation
 of the Haskell Platform	 was successful you should see a message like:
 
 ```
-The Glorious Glasgow Haskell Compilation System, version 7.8.3
+The Glorious Glasgow Haskell Compilation System, version 8.0.2
 ```
 
 Other required tools included in the Haskell Platform are 
@@ -63,17 +63,23 @@ Other required tools included in the Haskell Platform are
 and
 [Happy http://www.haskell.org/happy/].
 
-=== Darcs ===
+%=== Darcs ===
+%
+%To get the GF source code, you also need //Darcs//, version 2 or later.
+%Darcs 2.10 is recommended (July 2015).
+%
+%//Darcs//
+%is a distributed version control system, see http://darcs.net/ for
+%more information. There are precompiled packages for many platforms
+%available and source code if you want to compile it yourself. Darcs
+%is also written in Haskell and so you can use GHC to compile it.
 
-To get the GF source code, you also need //Darcs//, version 2 or later.
-Darcs 2.10 is recommended (July 2015).
 
-//Darcs//
-is a distributed version control system, see http://darcs.net/ for
-more information. There are precompiled packages for many platforms
-available and source code if you want to compile it yourself. Darcs
-is also written in Haskell and so you can use GHC to compile it.
+=== Git ===
 
+To get the GF source code, you also need //Git//.
+//Git// is a distributed version control system, see
+https://git-scm.com/downloads for more information.
 
 === The haskeline library ===
 
@@ -83,7 +89,7 @@ extra step is needed to make sure the C libraries (terminfo)
 required by //haskeline// are installed.  Here is one way to do this:
 
 - On Ubuntu: ``sudo apt-get install libghc-haskeline-dev``
-- On Fedora: ``sudo yum install ghc-haskeline-devel``
+- On Fedora: ``sudo dnf install ghc-haskeline-devel``
 
 
 == Getting the source ==
@@ -102,10 +108,10 @@ GF then you should consider getting read-write access.
 Anyone can get the latest development version of GF by running (all on one line):
 
 ```
-$ darcs get --lazy --set-scripts-executable http://www.grammaticalframework.org/ gf
+$ git clone https://github.com/GrammaticalFramework/GF.git
 ```
 
-This will create a directory called ``gf`` in the current
+This will create a directory called ``GF`` in the current
 directory.
 
 
@@ -113,11 +119,10 @@ directory.
 
 To get all new patches from the main repo:
 ```
-$ darcs pull -a
+$ git pull
 ```
 This can be done anywhere in your local repository, i.e. in the ``gf``
 directory, or any of its subdirectories.
-Without ``-a``, you can choose which patches you want to get.
 
 
 ==== Recording local changes ====[record]
@@ -129,13 +134,13 @@ If you have added files, you first need to tell your local repository to
 keep them under revision control:
 
 ```
-$ darcs add file1 file2 ...
+$ git add file1 file2 ...
 ```
 
 To record changes, use:
 
 ```
-$ darcs record
+$ git commit file1 file2 ...
 ```
 
 This creates a patch against the previous version and stores it in your
@@ -143,105 +148,51 @@ local repository. You can record any number of changes before
 pushing them to the main repo. In fact, you don't have to push them at
 all if you want to keep the changes only in your local repo.
 
-If you think there are too many questions about what to record, you
-can answer ``f`` to record all remaining changes in the current file,
-or ``s`` to skip them. Use ``?`` to get a list of more options.
-%use the ``-a`` flag to ``record``. Or answer ``a`` to the first
-%question. Both of these record all the changes you have in your local
-%repository.
+Instead of enumerating all modified files on the command line,
+you can use the flag ``-a`` to automatically record //all// modified
+files. You still need to use ``git add`` to add new files.
 
 
-==== Submitting patches ====
-
-If you are using read-only access, send your patches by email to
-someone with write-access. First record your changes in your local 
-repository, as described above. You can send any number of recorded
-patches as one patch bundle. You create the patch bundle with:
-
-```
-$ darcs send -o mypatch.patch
-$ gzip mypatch.patch
-```
-
-(where ``mypatch`` is hopefully replaced by a slightly more
-descriptive name). Since some e-mail setups change text attachments
-(most likely by changing the newline characters) you need to send
-the patch in some compressed format, such as GZIP, BZIP2 or ZIP.
-
-Send it as an e-mail attachment.
-% If you have
-%sendmail or something equivalent installed, it is possible to send the
-%patch directly from darcs. If so, replace ``-o mypatch.patch`` with
-%``--to=EMAIL`` where ``EMAIL`` is the address to send it to.
-
-
-
+%==== Submitting patches ====
+%
+%If you are using read-only access, send your patches by email to
+%someone with write-access. First record your changes in your local 
+%repository, as described above. You can send any number of recorded
+%patches as one patch bundle. You create the patch bundle with:
+%
+%```
+%$ darcs send -o mypatch.patch
+%$ gzip mypatch.patch
+%```
+%
+%(where ``mypatch`` is hopefully replaced by a slightly more
+%descriptive name). Since some e-mail setups change text attachments
+%(most likely by changing the newline characters) you need to send
+%the patch in some compressed format, such as GZIP, BZIP2 or ZIP.
+%
+%Send it as an e-mail attachment.
+%% If you have
+%%sendmail or something equivalent installed, it is possible to send the
+%%patch directly from darcs. If so, replace ``-o mypatch.patch`` with
+%%``--to=EMAIL`` where ``EMAIL`` is the address to send it to.
 
 
 === Read-write access ===
 
-If you have a user account on ``www.grammaticalframework.org``, you can
-get read-write access over SSH to the GF repository.
-
-
-==== Getting a fresh copy ====
-
-Get your copy with (all on one line),
-replacing ``user`` with your own user name on ``www.grammaticalframework.org``:
+If you are a member of the GF project on GitHub, you can push your
+changes directly to the GF git repository on GitHub.
 
 ```
-$ darcs get --lazy --set-scripts-executable user@www.grammaticalframework.org:/usr/local/www/GF/ gf
+$ git push
 ```
 
-The option ``--lazy`` means that darcs defers downloading all the
-history for the repository. This saves space, bandwidth and CPU time,
-and most people don't need the full history of all changes in the
-past.
+It is also possible for anyone else to contribute by
 
+- creating a fork of the GF repository on GitHub,
+- working with local clone of the fork (obtained with ``git clone``),
+- pushing changes to the fork,
+- and finally sending a pull request.
 
-==== Updating your copy ====
-
-Get all new patches from the main repo:
-
-```
-$ darcs pull
-```
-
-You can add ``-a`` to get all patches without answering yes/no to each patch.
-
-
-
-==== Commit your changes ====
-
-There are two steps to commiting a change to the main repo. First you
-have to record the changes that you want to commit
-(see [Recording local changes #record] above), then you push them
-to the main repo. If you are using ssh-access, all you need to do is:
-
-```
-$ darcs push
-```
-
-If you use the ``-a`` flag to push, all local patches which are not in
-the main repo are pushed.
-
-
-
-==== Apply a patch from someone else ====
-
-Use:
-
-```
-$ darcs apply < mypatch.patch
-```
-
-This applies the patch to your local repository. To commit it to the
-main repo, use ``darcs push``.
-
-=== Further information about Darcs ===
-
-
-For more info about what you can do with darcs, see http://darcs.net/manual/
 
 
 == Compilation from source with Cabal ==
@@ -542,7 +493,7 @@ This is possible, but the procedure has not been automated.
 It involves using the cabal-rpm tool,
 
 ```
-sudo yum install cabal-rpm
+sudo dnf install cabal-rpm
 ```
 
 and following the Fedora guide

@@ -12,6 +12,12 @@ See the [download page http://www.grammaticalframework.org/download/index.html].
 
 ==What's new==
 
+The [GF  repository on GitHub https://github.com/GrammaticalFramework/GF/]
+is now our master source repository, not just a read-only mirror.
+Bug reports and feature requests can be submitted to the
+[issue tracker https://github.com/GrammaticalFramework/GF/issues],
+and we also accept pull requests.
+
 Over 200 changes have been pushed to the source repository since
 [the release of GF 3.8 release-3.8.html] in June 2016.
 
