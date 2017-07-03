@@ -3,7 +3,7 @@
   concrete LangJpn of Lang = 
     GrammarJpn, 
     LexiconJpn,
-    ConstructionJpn
-  ,DocumentationJpn --# notpresent
+    ConstructionJpn,
+    DocumentationJpn --# notpresent
     ;
 
