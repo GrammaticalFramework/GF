@@ -64,16 +64,11 @@ flags coding = utf8 ;
       anim = np.anim
       } ;
       
-    PPartNP np v2 = {
+    PPartNP np v2 = np ** {
       s = \\st => v2.pass ! Plain ! TPast ! Pos ++ np.s ! st ;
-      prepositive = np.prepositive ;
-      needPart = np.needPart ;
-      changePolar = np.changePolar ;
-      meaning = np.meaning ;
-      anim = np.anim
       } ;
 
-    AdvNP np adv = {
+    AdvNP np adv = np ** {
       s = \\st => case adv.prepositive of {
         True => np.s ! st ;
         False => adv.s ! st ++ np.s ! st 
@@ -81,22 +76,13 @@ flags coding = utf8 ;
       prepositive = \\st => case adv.prepositive of {
         True => adv.s ! st ;
         False => [] 
-        } ;
-      needPart = np.needPart ;
-      changePolar = np.changePolar ;
-      meaning = np.meaning ;
-      anim = np.anim
+        } 
       } ;
 
     ExtAdvNP = AdvNP ;
     
-    RelNP np rs = {
-      s = \\st => rs.s ! np.anim ! st ++ np.s ! st ;
-      prepositive = np.prepositive ;
-      needPart = np.needPart ; 
-      changePolar = np.changePolar ; 
-      meaning = np.meaning ; 
-      anim = np.anim
+    RelNP np rs = np ** {
+      s = \\st => rs.s ! np.anim ! st ++ np.s ! st 
       } ;
     
     DetNP det = {
@@ -170,23 +156,7 @@ flags coding = utf8 ;
         } 
       } ;
     
-    OrdDigits d = {
-      pred = \\st,t,p => d.s ++ "番目" ++ mkCopula.s ! st ! t ! p ;  -- "banme"
-      attr = d.s ++ "番目の" ;
-      te = \\p => d.s ++ "番目" ++ mkCopula.te ! p ;
-      ba = \\p => d.s ++ "番目" ++ mkCopula.ba ! p ;
-      adv = \\p => d.s ++ "番目" ;
-      dropNaEnging = d.s ++ "番目の"
-      } ;
-    
-    OrdNumeral num = {
-      pred = \\st,t,p => num.s ++ "番目" ++ mkCopula.s ! st ! t ! p ;
-      attr = num.s ++ "番目の" ;
-      te = \\p => num.s ++ "番目" ++ mkCopula.te ! p ;
-      ba = \\p => num.s ++ "番目" ++ mkCopula.ba ! p ;
-      adv = \\p => num.s ++ "番目" ;
-      dropNaEnging = num.s ++ "番目の"
-      } ;
+    OrdDigits, OrdNumeral = mkOrd ; -- "banme"
       
     OrdSuperl a = {
       pred = \\st,t,p => "一番" ++ a.pred ! st ! t ! p ;  -- "ichiban"
@@ -224,97 +194,52 @@ flags coding = utf8 ;
       no = False
       } ;
     
-    UseN n = {
-      s = n.s ;
+    UseN n = n ** {
       object = \\st => [] ;
       prepositive = \\st => [] ;
       hasAttr = False ;
-      anim = n.anim ;
-      counter = n.counter ;
-      counterReplace = n.counterReplace ;
-      counterTsu = n.counterTsu
       } ;
       
-    ComplN2 n2 np = {
-      s = n2.s ;
+    ComplN2 n2 np = n2 ** {
       object = \\st => n2.object ! st ++ np.s ! st ++ n2.prep ;
       prepositive = np.prepositive ;
       hasAttr = False ;
-      anim = n2.anim ;
-      counter = n2.counter ;
-      counterReplace = n2.counterReplace ;
-      counterTsu = n2.counterTsu
       } ;
       
-    ComplN3 n3 np = {
-      s = n3.s ;
+    ComplN3 n3 np = n3 ** {
       object = \\st => np.s ! st ++ n3.prep1 ;
       prepositive = np.prepositive ;
       prep = n3.prep2 ;
-      anim = n3.anim ;
-      counter = n3.counter ;
-      counterReplace = n3.counterReplace ;
-      counterTsu = n3.counterTsu
       } ;
       
-    UseN2 n2 = {
-      s = n2.s ;
-      object = n2.object ;
+    UseN2 n2 = n2 ** {
       prepositive = \\st => [] ;
       hasAttr = False ;
-      anim = n2.anim ;
-      counter = n2.counter ;
-      counterReplace = n2.counterReplace ;
-      counterTsu = n2.counterTsu
       } ;
       
-    Use2N3 n3 = {
-      s = n3.s ;
+    Use2N3 n3 = n3 ** {
       object = \\st => [] ;
       prep = n3.prep1 ;
-      anim = n3.anim ;
-      counter = n3.counter ;
-      counterReplace = n3.counterReplace;
-      counterTsu = n3.counterTsu
       } ;
     
-    Use3N3 n3 = {
-      s = n3.s ;
+    Use3N3 n3 = n3 ** {
       object = \\st => [] ;
       prep = n3.prep2 ;
-      anim = n3.anim ;
-      counter = n3.counter ;
-      counterReplace = n3.counterReplace;
-      counterTsu = n3.counterTsu
       } ;
 
-    AdjCN ap cn = {
+    AdjCN ap cn = cn ** {
       s = \\n,st => case cn.hasAttr of {
         False => ap.attr ! st ++ cn.s ! n ! st ;
         True => ap.te ! st ! Pos ++ cn.s ! n ! st 
         } ;
-      object = cn.object ;
-      prepositive = cn.prepositive ;
       hasAttr = True ;
-      anim = cn.anim ;
-      counter = cn.counter ;
-      counterReplace = cn.counterReplace ;
-      counterTsu = cn.counterTsu
       } ;
 
-    RelCN cn rs = {
-      s = cn.s ;
-      anim = cn.anim ;
-      counter = cn.counter ;
-      counterReplace = cn.counterReplace ;
+    RelCN cn rs = cn ** {
       object = \\st => rs.s ! cn.anim ! st ++ cn.object ! st ;
-      prepositive = cn.prepositive ;
-      hasAttr = cn.hasAttr ;
-      counterTsu = cn.counterTsu
       } ;
                                   
-    AdvCN cn adv = {
-      s = cn.s ;
+    AdvCN cn adv = cn ** {
       object = \\st => case adv.prepositive of {
         True => cn.object ! st ;
         False => adv.s ! st ++ cn.object ! st 
@@ -323,44 +248,18 @@ flags coding = utf8 ;
         True => adv.s ! st ;
         False => []
         } ;
-      hasAttr = cn.hasAttr ;
-      anim = cn.anim ;
-      counter = cn.counter ;
-      counterReplace = cn.counterReplace ;
-      counterTsu = cn.counterTsu
       } ;
       
-    SentCN cn sc = {
-      s = cn.s ;
+    SentCN cn sc = cn ** {
       object = \\st => sc.s ! Ga ! st ++ cn.object ! st ;
-      prepositive = cn.prepositive ;
-      hasAttr = cn.hasAttr ;
-      anim = cn.anim ;
-      counter = cn.counter ;
-      counterReplace = cn.counterReplace;
-      counterTsu = cn.counterTsu
       } ;
     
-    ApposCN cn np = {
+    ApposCN cn np = cn ** {
       s = \\n,st => np.s ! st ++ cn.s ! n ! st ;
-      object = cn.object ;
-      prepositive = cn.prepositive ;
-      hasAttr = cn.hasAttr ;
-      anim = cn.anim ;
-      counter = cn.counter ;
-      counterReplace = cn.counterReplace ;
-      counterTsu = cn.counterTsu
       } ;
 
-    PossNP cn np = {     -- house of Paris, house of mine
+    PossNP cn np = cn ** {     -- house of Paris, house of mine
       s = \\n,st => np.s ! st ++ "の" ++ cn.s ! n ! st ;
-      object = cn.object ;
-      prepositive = cn.prepositive ;
-      hasAttr = cn.hasAttr ;
-      anim = cn.anim ;
-      counter = cn.counter ;
-      counterReplace = cn.counterReplace ;
-      counterTsu = cn.counterTsu
       } ;      
 
     PartNP = PossNP ;
@@ -369,10 +268,7 @@ flags coding = utf8 ;
       s = \\st => np.s ! st ++ "の" ++ det.sp ! st ;
       prepositive = np.prepositive ;
       needPart = True ;
-      changePolar = case det.no of {
-        True => True ;
-        False => False
-        } ;
+      changePolar = det.no ;
       meaning = SomeoneElse ;
       anim = np.anim
       } ;
