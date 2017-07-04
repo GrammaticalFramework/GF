@@ -147,7 +147,17 @@ oper
       } ;
     dropNaEnging = ooki
     } ; 
-    
+
+  -- Added by IL 2017-07. Used in NounJpn and SymbolJpn.
+  mkOrd : SS -> Adj = \symb -> {
+    pred = \\st,t,p => symb.s ++ "番目" ++ mkCopula.s ! st ! t ! p ;  -- "banme"
+    attr = symb.s ++ "番目の" ;
+    te = \\p => symb.s ++ "番目" ++ mkCopula.te ! p ;
+    ba = \\p => symb.s ++ "番目" ++ mkCopula.ba ! p ;
+    adv = \\p => symb.s ++ "番目" ;
+    dropNaEnging = symb.s ++ "番目の"
+      } ;
+
   VerbalA : Str -> Str -> Adj = \kekkonshiteiru,kikonno -> 
     let
       kekkonshite = Predef.tk 2 kekkonshiteiru    
