@@ -3,3 +3,4 @@
 resource SymbolicJpn = Symbolic with 
   (Symbol = SymbolJpn),
   (Grammar = GrammarJpn) ;
+ 
