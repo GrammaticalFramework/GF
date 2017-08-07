@@ -983,7 +983,7 @@ pgf_lookup_sentence(PgfConcr* concr, PgfType* typ, GuString sentence, GuPool* po
 
 	PgfCncCat* cnccat =
 		gu_map_get(concr->cnccats, typ->cid, PgfCncCat*);
-	size_t n_ccats = gu_seq_length(cnccat->cats);
+	size_t n_ccats = (cnccat) ? gu_seq_length(cnccat->cats) : 0;
 	for (size_t i = 0; i < n_ccats; i++) {
 		PgfCCat* ccat = gu_seq_get(cnccat->cats, PgfCCat*, i);
 		PgfCCat* new_ccat = pgf_lookup_concretize(&st, cache, st.start_id, ccat);
