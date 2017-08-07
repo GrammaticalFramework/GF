@@ -33,6 +33,8 @@ typedef struct {
 } PgfCncTreeApp;
 
 typedef struct {
+	PgfMetaId id;
+
 	size_t n_vars;
 	PgfPrintContext* context;
 
@@ -94,6 +96,9 @@ struct PgfLinFuncs
 
 	/// capitalization
 	void (*symbol_capit)(PgfLinFuncs** self, PgfCapitState capit);
+	
+	/// meta variable
+	void (*symbol_meta)(PgfLinFuncs** self, PgfMetaId id);
 };
 
 /// Linearize a concrete syntax tree.

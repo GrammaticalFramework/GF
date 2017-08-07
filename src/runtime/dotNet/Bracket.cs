@@ -52,7 +52,8 @@ namespace PGFSharp
 					end_phrase = EndPhrase,
 					symbol_ne = null,
 					symbol_bind = null,
-					symbol_capit = null
+					symbol_capit = null,
+					symbol_meta = SymbolMeta
 				};
 			}
 
@@ -79,6 +80,10 @@ namespace PGFSharp
 					final = b;
 				else 
 					stack.Peek ().AddChild (b);
+			}
+			
+			private void SymbolMeta(IntPtr self, int meta_id) {
+				stack.Peek().AddChild(new StringChildBracket("?"));
 			}
 
 			public Bracket Build() {

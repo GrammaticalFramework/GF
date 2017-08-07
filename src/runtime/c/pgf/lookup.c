@@ -634,6 +634,7 @@ pgf_lookup_extract(PgfLookupState* st, PgfCCat* ccat)
 			gu_new_flex_variant(PGF_CNC_TREE_CHUNKS,
 			                    PgfCncTreeChunks,
 			                    args, 0, &capp->args[0], st->pool);
+		chunks->id      = 0;
 		chunks->n_vars  = 0;
 		chunks->context = NULL;
 		chunks->n_args  = 0;
@@ -736,7 +737,8 @@ pgf_lookup_compute_kernel_helper(GuBuf* sentence_tokens, GuBuf* expr_tokens,
 				PgfInputToken* sentence_token = gu_buf_index(sentence_tokens, PgfInputToken, l);
 				PgfInputToken* expr_token     = gu_buf_index(expr_tokens, PgfInputToken, k-1);
 
-				if (strcmp(sentence_token->token, expr_token->token) == 0) {
+				if (sentence_token->token != NULL && expr_token->token != NULL &&
+				    strcmp(sentence_token->token, expr_token->token) == 0) {
 					score += 1 + pgf_lookup_compute_kernel_helper(sentence_tokens, expr_tokens, matrix, l, k-1);
 				} else {
 					bool match = false;
@@ -803,10 +805,10 @@ pgf_lookup_ctree_to_expr(PgfCncTree ctree, PgfExprProb* ep,
 		PgfCncTreeChunks* fchunks = cti.data;
 		n_args = fchunks->n_args;
 		args   = fchunks->args;
-		
+
 		ep->expr = gu_new_variant_i(out_pool, 
 		                            PGF_EXPR_META, PgfExprMeta,
-		                            .id = 0);
+		                            .id = fchunks->id);
 		ep->prob = 0;
 		break;
 	}
@@ -887,13 +889,23 @@ pgf_lookup_end_phrase(PgfLinFuncs** self, PgfCId cat, int fid, int lindex, PgfCI
 	st->curr_absfun = NULL;
 }
 
+static void
+pgf_lookup_symbol_meta(PgfLinFuncs** self, PgfMetaId meta_id)
+{
+	PgfLookupState* st = gu_container(self, PgfLookupState, funcs);
+	PgfInputToken* tok = gu_buf_extend(st->expr_tokens);
+	tok->token  = NULL;
+	tok->n_funs = 0;
+}
+
 static PgfLinFuncs pgf_lookup_lin_funcs = {
 	.symbol_token = pgf_lookup_symbol_token,
 	.begin_phrase = pgf_lookup_begin_phrase,
 	.end_phrase   = pgf_lookup_end_phrase,
 	.symbol_ne    = NULL,
 	.symbol_bind  = NULL,
-	.symbol_capit = NULL
+	.symbol_capit = NULL,
+	.symbol_meta  = pgf_lookup_symbol_meta
 };
 
 PGF_API GuEnum*

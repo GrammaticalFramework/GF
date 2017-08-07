@@ -221,6 +221,9 @@ namespace PGFSharp
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void LinFuncSymbolCapitalization(IntPtr self);
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void LinFuncSymbolMeta(IntPtr self, int meta_id);
+
         [StructLayout(LayoutKind.Sequential)]
         public struct PgfLinFuncs
         {
@@ -241,6 +244,9 @@ namespace PGFSharp
 
             [MarshalAs(UnmanagedType.FunctionPtr)]
             public LinFuncSymbolCapitalization symbol_capit;
+            
+            [MarshalAs(UnmanagedType.FunctionPtr)]
+            public LinFuncSymbolMeta symbol_meta;
         }
 
         #endregion

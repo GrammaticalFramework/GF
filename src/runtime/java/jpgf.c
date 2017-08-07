@@ -951,13 +951,20 @@ pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex,
 	state->list = parent;
 }
 
+static void
+pgf_bracket_lzn_symbol_meta(PgfLinFuncs** funcs, PgfMetaId id)
+{
+	pgf_bracket_lzn_symbol_token(funcs, "?");
+}
+
 static PgfLinFuncs pgf_bracket_lin_funcs = {
 	.symbol_token  = pgf_bracket_lzn_symbol_token,
 	.begin_phrase  = pgf_bracket_lzn_begin_phrase,
 	.end_phrase    = pgf_bracket_lzn_end_phrase,
 	.symbol_ne     = NULL,
 	.symbol_bind   = NULL,
-	.symbol_capit  = NULL
+	.symbol_capit  = NULL,
+	.symbol_meta   = pgf_bracket_lzn_symbol_meta
 };
 
 JNIEXPORT jobjectArray JNICALL 

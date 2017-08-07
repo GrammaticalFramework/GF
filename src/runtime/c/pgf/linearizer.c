@@ -111,7 +111,10 @@ pgf_print_cnc_tree(PgfCncTree ctree, GuOut* out, GuExn* err)
 		PgfCncTreeChunks* chunks = ti.data;
 		if (chunks->n_vars+chunks->n_args > 0) gu_putc('(', out, err);
 		pgf_print_cnc_tree_vars(chunks->n_vars, chunks->context, out, err);
-		gu_putc('?', out, err);
+		if (chunks->id > 0)
+			gu_printf(out, err, "?%d", chunks->id);
+		else
+			gu_putc('?', out, err);
 		for (size_t i = 0; i < chunks->n_args; i++) {
 			gu_putc(' ', out, err);
 			pgf_print_cnc_tree(chunks->args[i], out, err);
@@ -361,6 +364,7 @@ pgf_cnc_resolve(PgfCnc* cnc,
 			goto done;
 		}
 		case PGF_EXPR_META: {
+			PgfExprMeta* emeta = i.data;
 			size_t n_args = gu_buf_length(args);
 
 			PgfCncTree chunks_tree;
@@ -368,9 +372,10 @@ pgf_cnc_resolve(PgfCnc* cnc,
 				gu_new_flex_variant(PGF_CNC_TREE_CHUNKS,
 				                    PgfCncTreeChunks,
 				                    args, n_args, &chunks_tree, pool);
+			chunks->id      = emeta->id;
 			chunks->n_vars  = n_vars;
 			chunks->context = context;
-			chunks->n_args = n_args;
+			chunks->n_args  = n_args;
 
 			for (size_t i = 0; i < n_args; i++) {
 				PgfExpr earg = gu_buf_get(args, PgfExpr, n_args-i-1);
@@ -773,13 +778,25 @@ pgf_lzr_cache_symbol_capit(PgfLinFuncs** funcs, PgfCapitState capit)
 	event->tag     = (capit == PGF_CAPIT_ALL) ? PGF_CACHED_ALL_CAPIT : PGF_CACHED_CAPIT;
 }
 
+static void
+pgf_lzr_cache_symbol_meta(PgfLinFuncs** funcs, PgfMetaId id)
+{
+	PgfLzrCache* cache = gu_container(funcs, PgfLzrCache, funcs);
+
+	pgf_lzr_cache_flush(cache, cache->kp->default_form);
+	if ((*cache->lzr->funcs)->symbol_meta) {
+		(*cache->lzr->funcs)->symbol_meta(cache->lzr->funcs, id);
+	}
+}
+
 static PgfLinFuncs pgf_lzr_cache_funcs = {
 	.symbol_token = pgf_lzr_cache_symbol_token,
 	.begin_phrase = pgf_lzr_cache_begin_phrase,
 	.end_phrase   = pgf_lzr_cache_end_phrase,
 	.symbol_ne    = pgf_lzr_cache_symbol_ne,
 	.symbol_bind  = pgf_lzr_cache_symbol_bind,
-	.symbol_capit = pgf_lzr_cache_symbol_capit
+	.symbol_capit = pgf_lzr_cache_symbol_capit,
+	.symbol_meta  = pgf_lzr_cache_symbol_meta
 };
 
 static void
@@ -943,8 +960,8 @@ pgf_lzr_linearize_tree(PgfLzr* lzr, PgfCncTree ctree, size_t lin_idx)
 		PgfCncTreeChunks* fchunks = cti.data;
 
 		if (fchunks->n_args == 0) {
-			if ((*lzr->funcs)->symbol_token) {
-				(*lzr->funcs)->symbol_token(lzr->funcs, "?");
+			if ((*lzr->funcs)->symbol_meta) {
+				(*lzr->funcs)->symbol_meta(lzr->funcs, fchunks->id);
 			}
 		} else {
 			for (size_t i = 0; i < fchunks->n_args; i++) {
@@ -1055,7 +1072,7 @@ pgf_file_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 		gu_string_write(tok, flin->out, flin->err);
 		flin->capit = PGF_CAPIT_NONE;
 		break;
-	}	
+	}
 	case PGF_CAPIT_ALL:
 		flin->capit = PGF_CAPIT_NEXT;
 		// continue
@@ -1092,13 +1109,33 @@ pgf_file_lzn_symbol_capit(PgfLinFuncs** funcs, PgfCapitState capit)
 	flin->capit = capit;
 }
 
+static void
+pgf_file_lzn_symbol_meta(PgfLinFuncs** funcs, PgfMetaId id)
+{
+	PgfSimpleLin* flin = gu_container(funcs, PgfSimpleLin, funcs);
+	if (!gu_ok(flin->err)) {
+		return;
+	}
+
+	if (flin->bind)
+		flin->bind = false;
+	else {
+		gu_putc(' ', flin->out, flin->err);
+		if (flin->capit == PGF_CAPIT_NEXT)
+			flin->capit = PGF_CAPIT_NONE;
+	}
+
+	gu_putc('?', flin->out, flin->err);		
+}
+
 static PgfLinFuncs pgf_file_lin_funcs = {
 	.symbol_token = pgf_file_lzn_symbol_token,
 	.begin_phrase = NULL,
 	.end_phrase   = NULL,
 	.symbol_ne    = pgf_file_lzn_symbol_ne,
 	.symbol_bind  = pgf_file_lzn_symbol_bind,
-	.symbol_capit = pgf_file_lzn_symbol_capit
+	.symbol_capit = pgf_file_lzn_symbol_capit,
+	.symbol_meta  = pgf_file_lzn_symbol_meta
 };
 
 PGF_API void
