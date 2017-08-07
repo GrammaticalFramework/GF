@@ -93,6 +93,11 @@ public class Expr implements Serializable {
 		 * a meta variable, then it will return the variable's id.
 		 * If this is not a meta variable then the result is -1. */
 		public native int unMeta();
+		
+		/** If the method is called on an expression which is 
+		 * a string literal, then it will return the string value.
+		 * If this is not a string literal then the result is null. */
+		public native String unStr();
 
 		/** Returns the expression as a string in the GF syntax */
 		public String toString() {

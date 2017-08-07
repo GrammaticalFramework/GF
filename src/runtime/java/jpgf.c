@@ -1412,6 +1412,19 @@ Java_org_grammaticalframework_pgf_Expr_unMeta(JNIEnv* env, jobject self)
 	return -1;
 }
 
+JNIEXPORT jstring JNICALL
+Java_org_grammaticalframework_pgf_Expr_unStr(JNIEnv* env, jobject self)
+{
+	PgfExpr expr = gu_variant_from_ptr(get_ref(env, self));
+
+	PgfLiteralStr* pstr = pgf_expr_unlit(expr, PGF_LITERAL_STR);
+	if (pstr != NULL) {
+		return gu2j_string(env, pstr->val);
+	}
+
+	return NULL;
+}
+
 JNIEXPORT jboolean JNICALL
 Java_org_grammaticalframework_pgf_Expr_equals(JNIEnv* env, jobject self, jobject other)
 {
