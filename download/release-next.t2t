@@ -27,7 +27,7 @@ Over 200 changes have been pushed to the source repository since
 
 ====New features and notable changes====
 
-- ...
+- support for language-specific depencency configurations (in addition to abstract syntax based ones); see ``help vd`` in the GF shell
 
 
 ====Other changes and bug fixes====
@@ -43,7 +43,15 @@ Over 200 changes have been pushed to the source repository since
 ===Resource Grammar Library===
 
 - New languages:
-  - ...
+  - Icelandic
+  - Norwegian Nynorsk
+
+
+- API now usable for incomplete languages via ``Missing`` modules: implemented for Arabic and Latin.
+- punctuation with BIND and SOFT_BIND tokens for a number of languages
+
+
+
 
 
 - Various fixes for several languages.
