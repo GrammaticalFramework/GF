@@ -7,7 +7,7 @@ module CGIUtils (throwCGIError, handleCGIErrors,
                  outputHTML,outputPlain,outputText) where
 
 import Control.Exception(Exception(..),SomeException(..),throw)
-import Data.Dynamic(Typeable,cast)
+import Data.Typeable(Typeable,cast)
 import Prelude hiding (catch)
 import System.IO(hPutStrLn,stderr)
 #ifndef mingw32_HOST_OS

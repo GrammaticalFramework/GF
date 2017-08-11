@@ -519,7 +519,7 @@ eqValue fail suspend k v1 v2 = do
 
     bind i scope cs env vs0 v = do
       let k  = scopeSize scope
-          vs  = reverse (take k env) ++ vs0
+          vs  = reverse (List.take k env) ++ vs0
           xs  = nub [i | VGen i [] <- vs]
       if length vs /= length xs
         then suspend i (\e -> apply env e vs0 >>= \iv -> eqValue fail suspend k iv v)
