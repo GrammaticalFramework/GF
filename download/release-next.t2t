@@ -24,6 +24,10 @@ Over 200 changes have been pushed to the source repository since
 
 ===GF compiler and run-time library===
 
+- An experimental support for sentence lookup which makes it possible
+to find the sentence from the grammar that matches best a set of keywords.
+Right now it is usable only with controlled languages since it might be
+very innefficient for some grammars.
 
 ====New features and notable changes====
 
