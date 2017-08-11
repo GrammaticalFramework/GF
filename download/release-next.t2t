@@ -29,6 +29,11 @@ to find the sentence from the grammar that matches best a set of keywords.
 Right now it is usable only with controlled languages since it might be
 very innefficient for some grammars.
 
+- A new .NET binding for the GF runtime is available.
+
+- The API in the Java binding is extended and it covers more from 
+the full functionality of the C runtime.
+
 ====New features and notable changes====
 
 - Support for language-specific depencency configurations (in addition to abstract syntax based ones); see ``help vd`` in the GF shell
