@@ -27,7 +27,7 @@ Over 200 changes have been pushed to the source repository since
 
 ====New features and notable changes====
 
-- support for language-specific depencency configurations (in addition to abstract syntax based ones); see ``help vd`` in the GF shell
+- Support for language-specific depencency configurations (in addition to abstract syntax based ones); see ``help vd`` in the GF shell
 
 
 ====Other changes and bug fixes====
@@ -37,7 +37,7 @@ Over 200 changes have been pushed to the source repository since
 
 ====Changes of interest to compiler developers====
 
-- ...
+- The compiler source code has been updated for compatibility with GHC 8.2.1
 
 
 ===Resource Grammar Library===
@@ -47,11 +47,9 @@ Over 200 changes have been pushed to the source repository since
   - Norwegian Nynorsk
 
 
-- API now usable for incomplete languages via ``Missing`` modules: implemented for Arabic and Latin.
-- punctuation with BIND and SOFT_BIND tokens for a number of languages
-
-
-
+- API now usable for incomplete languages via ``Missing`` modules:
+  implemented for Arabic and Latin.
+- Punctuation with ``BIND`` and ``SOFT_BIND`` tokens for a number of languages
 
 
 - Various fixes for several languages.
@@ -64,8 +62,9 @@ Over 200 changes have been pushed to the source repository since
 
 ===Apps and Cloud services===
 
+- PGF service: support for language-specific depencency configurations in
+  ``command=deptree``.
 - ...
-
 
 --------------------
 
