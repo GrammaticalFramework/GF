@@ -6,8 +6,8 @@ import DarcsVersion_gf
 
 {-# NOINLINE buildInfo #-}
 buildInfo =
-    details
-    ++"\nBuilt on "++os++"/"++arch
+    {-details++"\n"++-}
+    "Built on "++os++"/"++arch
     ++" with "++compilerName++"-"++showVersion compilerVersion
     ++", flags:"
 #ifdef USE_INTERRUPT
