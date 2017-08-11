@@ -1,3 +1,9 @@
+gf (3.9-1) vivid xenial zesty; urgency=low
+
+  * GF 3.9
+
+ -- Thomas Hallgren <hallgren@chalmers.se>  Fri, 11 Aug 2017 20:00:00 +0200
+
 gf (3.8-1) precise trusty vivid; urgency=low
 
   * GF 3.8

@@ -24,6 +24,11 @@ Over 200 changes have been pushed to the source repository since
 
 ===GF compiler and run-time library===
 
+
+====New features and notable changes====
+
+- Support for language-specific depencency configurations (in addition to abstract syntax based ones); see ``help vd`` in the GF shell
+
 - An experimental support for sentence lookup which makes it possible
 to find the sentence from the grammar that matches best a set of keywords.
 Right now it is usable only with controlled languages since it might be
@@ -34,19 +39,10 @@ very innefficient for some grammars.
 - The API in the Java binding is extended and it covers more from 
 the full functionality of the C runtime.
 
-====New features and notable changes====
-
-- Support for language-specific depencency configurations (in addition to abstract syntax based ones); see ``help vd`` in the GF shell
-
-
-====Other changes and bug fixes====
-
-- ...
-
 
 ====Changes of interest to compiler developers====
 
-- The compiler source code has been updated for compatibility with GHC 8.2.1
+- The compiler source code has been updated for compatibility with GHC 8.2.1.
 
 
 ===Resource Grammar Library===
@@ -62,18 +58,15 @@ the full functionality of the C runtime.
 
 
 - Various fixes for several languages.
-  - ...
 
-
-- Numerous fixes in the translation dictionaries.
-  - ...
+- Various fixes in the translation dictionaries.
 
 
 ===Apps and Cloud services===
 
 - PGF service: support for language-specific depencency configurations in
   ``command=deptree``.
-- ...
+
 
 --------------------
 
