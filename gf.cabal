@@ -99,7 +99,7 @@ Library
   else
     build-depends: binary, data-binary-ieee754
 
-  ghc-options: -fwarn-unused-imports
+--ghc-options: -fwarn-unused-imports
 --if impl(ghc>=7.8)
 --  ghc-options: +RTS -A20M -RTS
   ghc-prof-options: -fprof-auto
@@ -312,8 +312,7 @@ Library
   else
     build-tools: happy, alex>=3
 
-  if impl(ghc>=7.10)
-    ghc-options: -fno-warn-tabs
+  ghc-options: -fno-warn-tabs
 
   if os(windows)
     build-depends: Win32
@@ -326,7 +325,8 @@ Executable gf
   main-is: gf-main.hs
   default-language:    Haskell2010
   build-depends: gf, base
-  ghc-options: -threaded -fwarn-unused-imports
+  ghc-options: -threaded
+--ghc-options: -fwarn-unused-imports
 
   if impl(ghc>=7.0)
     ghc-options: -rtsopts -with-rtsopts=-I5
