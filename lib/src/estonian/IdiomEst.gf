@@ -9,16 +9,16 @@ concrete IdiomEst of Idiom = CatEst **
         cas : Polarity -> NPForm = \p -> case p of {
           Pos => NPCase Nom ; -- on olemas lammas
           Neg => NPCase Part  -- ei ole olemas lammast
-          }
+          } ;
+        vp = insertObj (\\_,b,_ => "olemas" ++ np.s ! cas b) (predV olla)
       in
-      mkClause noSubj (agrP3 Sg) (insertObj 
-        (\\_,b,_ => "olemas" ++ np.s ! cas b) (predV olla)) ;
+      existClause noSubj (agrP3 Sg) vp ;
 
     ExistIP ip = 
       let
         cas : NPForm = NPCase Nom ; ---- also partitive in Extra
         vp = insertObj (\\_,b,_ => "olemas") (predV olla) ;
-        cl = mkClause (subjForm (ip ** {isPron = False ; a = agrP3 ip.n}) cas) (agrP3 Sg) vp
+        cl = existClause (subjForm (ip ** {isPron = False ; a = agrP3 ip.n}) cas) (agrP3 Sg) vp
       in {
         s = \\t,a,p => cl.s ! t ! a ! p ! SDecl
         } ;
