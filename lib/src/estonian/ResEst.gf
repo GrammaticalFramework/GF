@@ -304,9 +304,8 @@ oper
   -- Not sure if SInv is needed, but keeping it for possible future use.
   -- There's need for an inverted word order with auxiliary verbs; infVP handles that. ComplVV calls infVP, which inverts the word order for the complement VP, and puts it into the resulting VP's `compl' field.
   -- SInv made by mkClause would be for cases where you just need to construct an inverted word order, and then call it from some other place; application grammar (TODO: api oper for SType) or ExtraEst.
-  mkClause : (Polarity -> Str) -> Agr -> VP -> Clause = 
-    \sub,agr,vp -> {
-      s = \\t,a,b => 
+  mkClause : (Polarity -> Str) -> Agr -> VP -> Clause = \sub,agr,vp -> 
+   { s = \\t,a,b => 
       let
         c = (mkClausePlus sub agr vp).s ! t ! a ! b ;
         --                 saan              sinust     aru    0
@@ -322,6 +321,19 @@ oper
            SInv   => invCl 
          }
       } ;
+
+  existClause : (Polarity -> Str) -> Agr -> VP -> Clause = \sub,agr,vp -> 
+   { s = \\t,a,b => 
+      let
+        c = (mkClausePlus sub agr vp).s ! t ! a ! b ;
+        --       (mis)     on       olnud    olemas (lammas)
+        declCl = c.subj ++ c.fin ++ c.inf ++ c.compl ;
+      in 
+         table {
+           SQuest => "kas" ++ declCl ;
+           _      => declCl 
+         }
+    } ;
 
   mkClausePlus : (Polarity -> Str) -> Agr -> VP -> ClausePlus =
     \sub,agr,vp -> {
@@ -341,6 +353,7 @@ oper
             ext  = vp.ext ; 
             }
      } ;
+
 
   insertKinClausePlus : Predef.Ints 1 -> ClausePlus -> ClausePlus = \p,cl -> { 
     s = \\t,a,b =>
@@ -383,7 +396,6 @@ oper
 
   subjForm : NP -> NPForm -> Polarity -> Str = \np,sc,b -> 
     appCompl False b {s = [] ; c = sc ; isPre = True} np ;
-
   infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
     \sc,pol,agr,vp,vi ->
         let 
