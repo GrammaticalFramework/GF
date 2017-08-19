@@ -45,9 +45,7 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
     DForm = unit | ten ;
     CardOrd = NCard | NOrd ;
 
--- For $Numeral$.
   oper
-
     mkPron : (ben,beni,bana,banin,bende,benden,benli,bensiz:Str) -> Number -> Person -> Pron =
      \ben,beni,bana,benim,bende,benden,benli,bensiz,n,p -> {
      s = table {
@@ -62,7 +60,6 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
        } ;
      a = {n=n; p=p} ;
      } ;
-
 
 --Prep
 

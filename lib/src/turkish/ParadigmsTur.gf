@@ -510,6 +510,8 @@ oper
   dat_Case   = mkPrep [] Dat;
   acc_Case   = mkPrep [] Dat;
 
+  mkQuant : Str -> Quant = \s -> lin Quant {s=s} ;
+
 param
   AoristType = PlSyl         -- more than one syllable, takes -ir
 	    | SgSylConIrreg -- one syllable ending with consonant, but takes -ir (here is the list: al-, bil-, bul-, dur-, gel-, gör-, kal-, ol-, öl-, var-, ver-, vur-, san- )
