@@ -21,11 +21,11 @@ concrete IrregTur of IrregTurAbs = CatTur ** open ParadigmsTur, ResTur in {
     see_V = mkV "görmek" SgSylConIrreg ;
 
   oper
-    et_Aux        : Verb = mkV "etmek" "edmek" ;
-    et_Hard_Aux   : Verb = mkV "etmek" ;
-    soyle_Aux     : Verb = mkV "söylemek" ;
-    ol_Aux        : Verb = mkV "olmak" SgSylConIrreg ;
-    koy_Aux       : Verb = mkV "koymak" ;
-    gec_Aux       : Verb = mkV "geçmek" ;
+    et_Aux        : V = mkV "etmek" "edmek" ;
+    et_Hard_Aux   : V = mkV "etmek" ;
+    soyle_Aux     : V = mkV "söylemek" ;
+    ol_Aux        : V = mkV "olmak" SgSylConIrreg ;
+    koy_Aux       : V = mkV "koymak" ;
+    gec_Aux       : V = mkV "geçmek" ;
     against_Prep  : Prep = mkPrep "karşı" Dat;
 }

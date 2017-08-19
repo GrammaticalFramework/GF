@@ -17,69 +17,70 @@ oper
 
   mkV : overload {
     --make regular verbs, one form is enough
-    mkV : (esmek : Str) -> Verb ; 
+    mkV : (esmek : Str) -> V ; 
     -- make verbs of which aorist form is irregular
-    mkV : (gelmek : Str) -> AoristType -> Verb ; 
+    mkV : (gelmek : Str) -> AoristType -> V ; 
     -- make verbs which do not obey softnening rule
-    mkV : (gitmek, gidmek : Str) -> Verb ; 
+    mkV : (gitmek, gidmek : Str) -> V ; 
     -- make verbs which progressive and future forms has "e" to "i" conversion like "yemek" -> "yiyorum" and "demek" -> "diyorum"
     -- two forms are enough but third form is needed to differentiate from the other overloads
-    mkV : (yemek, yemek, yimek : Str) -> Verb ;
+    mkV : (yemek, yemek, yimek : Str) -> V ;
     -- make verbs that is usually formed by a noun and a auxiallary verb
     -- contiguity indicates whether they are written concatenated or separated
-    mkV : (seyr : Str) -> (etmek : Verb) -> (con : Contiguity) -> Verb ;
+    mkV : (seyr : Str) -> (etmek : V) -> (con : Contiguity) -> V ;
     -- same as above, defined to make separated form default
-    mkV : (nefret : Str) -> (etmek : Verb) -> Verb ;
+    mkV : (nefret : Str) -> (etmek : V) -> V ;
   } ;
 
   
 
   mkV2 : overload {
     -- make V2, use default case and preposition which are accusative case and no preposition
-    mkV2 : (sormak : Verb) -> Verb ** {c : Compl} ;
+    mkV2 : (sormak : V) -> V2 ;
     -- make V2, set case explicitly
-    mkV2 : (korkmak : Verb) -> Compl -> Verb ** {c : Compl} ;
+    mkV2 : (korkmak : V) -> Prep -> V2 ;
   } ;
 
   mkV3 : overload {
     -- make V3, use default cases and prepositions which are accusative and dative cases and no preposition.
-    mkV3 : (satmak : Verb) -> Verb ** {c1,c2 : Compl} ;
+    mkV3 : (satmak : V) -> V2 ;
     -- make V3, set cases and prepositions explicitly.
-    mkV3 : (konusmak : Verb) -> Compl -> Compl -> Verb ** {c1,c2 : Compl} ;
+    mkV3 : (konusmak : V) -> Prep -> Prep -> V3 ;
   } ;
 
+  mkV2S : V -> V2S = \verb -> lin V2S (verb ** {c = no_Prep}) ;
 
   -- worst-case function
   -- bases of all forms are required.
-  makeVerb : (inf,base,presBase,pastBase,aoristBase : Str) -> ( futureBase : Softness => Str ) -> Harmony -> Verb ;
+  makeVerb : (inf,base,presBase,pastBase,aoristBase : Str) -> ( futureBase : Softness => Str ) -> Harmony -> V ;
 
   -- make a regular verb
   -- supply infinitive, softened infinitive, future infinitive forms and aorist type
-  regVerb : (inf, softInf, futInf : Str) -> AoristType -> Verb ;
+  regVerb : (inf, softInf, futInf : Str) -> AoristType -> V ;
 
   -- make a regular verb, only infinitive form is needed
-  regV : (inf : Str) -> Verb ;
+  regV : (inf : Str) -> V ;
 
   -- make a verb, aorist type must be specified
   -- see AoristType for list of verbs that has irregular aorist suffix
-  irregV_aor : (inf : Str) -> AoristType -> Verb ;
+  irregV_aor : (inf : Str) -> AoristType -> V ;
 
   -- make a verb from a str (usually a noun) and a auxiallary verb, also specify contiguity (i.e whether they will be concatenated or separated)
-  auxillaryVerb : Str -> Verb -> Contiguity -> Verb ;
+  auxillaryVerb : Str -> Verb -> Contiguity -> V ;
 
   mkV2 = overload {
     -- sormak
-    mkV2 : Verb -> Verb ** {c : Compl} = \verb -> verb ** {c = no_Prep} ;
+    mkV2 : V -> V2 = \verb -> verb ** {c = no_Prep} ;
     -- (bir şeyden) korkmak
-    mkV2 : Verb -> Compl -> Verb ** {c : Compl} = \verb,c -> verb ** {c = c} ;
+    mkV2 : V -> Prep -> V2 = \verb,c -> verb ** {c = c} ;
   } ;
 
   
   mkV3 = overload {
     -- (birine bir şeyi) satmak
-    mkV3 : Verb -> Verb ** {c1,c2 : Compl} = \verb -> verb ** {c1 = no_Prep; c2 = no_Prep} ;
+    mkV3 : V -> V3 = \verb -> verb ** {c1 = no_Prep; c2 = no_Prep} ;
     -- (biri ile bir şeyi) konuşmak
-    mkV3 : Verb -> Compl -> Compl -> Verb ** {c1 : Compl; c2 : Compl} = 
+    mkV3 : V -> Prep -> Prep -> V3 = 
       \verb,c1,c2 -> verb ** {c1 = c1; c2 = c2} ;
   } ;
 
@@ -88,33 +89,33 @@ oper
   -- overload all noun paradigms to mkN
   mkN : overload {
     -- regular noun, only nominative case is needed
-    mkN : (araba : Str) -> Noun ;
+    mkN : (araba : Str) -> N ;
     -- handles three type of irregularities which never overlap
     --	1.Doubling consonant	hak -> hakka
     --	2.Dropping vowel    	burun -> burnu
     --	3.Improper softening	bisiklet -> bisikleti
-    mkN : (burun, burn : Str) -> Noun ;
+    mkN : (burun, burn : Str) -> N ;
     -- in addition to irregularities above, handles vowel harmony irregularities
-    mkN : (divaniharp, divaniharb : Str) -> (ih_har : HarVowP) -> Noun ;
+    mkN : (divaniharp, divaniharb : Str) -> (ih_har : HarVowP) -> N ;
     -- links two noun to form a compound noun
-    mkN : (fotograf, makine : Noun) -> Contiguity -> Noun ;
+    mkN : (fotograf, makine : N) -> Contiguity -> N ;
     -- same as above, make concatenated form default
-    mkN : (zeytin, yag : Noun) -> Noun ;
+    mkN : (zeytin, yag : N) -> N ;
   } ;
   
-  mkN2 : Str -> Noun ** {c : Compl} ;
+  mkN2 : Str -> N2 ;
 
-  mkN3 : Str -> Noun ** {c1,c2 : Compl} ;
+  mkN3 : Str -> N3 ;
 
   -- worst case function
   -- parameters: all singular cases of base, base of genitive table, plural form of base and harmony of base
-  mkNoun : (nom,acc,dat,gen,loc,abl,abessPos,abessNeg,gens,plural : Str) -> Harmony -> Noun ;
+  mkNoun : (nom,acc,dat,gen,loc,abl,abessPos,abessNeg,gens,plural : Str) -> Harmony -> N ;
   --this function is for nouns that has different harmony than their vowels imply
-  irregN_h : (burun, burn : Str) -> HarVowP -> Noun ;
+  irregN_h : (burun, burn : Str) -> HarVowP -> N ;
   -- this function handles all irregularities in nouns, because all irregularities require two forms of noun
-  irregN : HarVowP -> (burun, burn : Str) -> Noun;
+  irregN : HarVowP -> (burun, burn : Str) -> N ;
   -- paradigm for regular noun
-  regN : Str -> Noun ;
+  regN : Str -> N ;
   -- paradigm for proper noun
   regPN : Str -> Noun ;
   -- worst case function for proper nouns
@@ -122,7 +123,7 @@ oper
   -- digits can be seen as proper noun, but we need an additional harmony argument since harmony information can not be extracted from digit string.
   makeHarPN : Str -> Str -> Harmony -> Noun ;
   -- Link two nouns, e.g. zeytin (olive) + yağ (oil) -> zeytinyağı (olive oil)
-  linkNoun : (tere,yag : Noun) -> Species -> Contiguity -> Noun ;
+  linkNoun : (tere,yag : N) -> Species -> Contiguity -> N ;
 
 -- Paradigms for adjactives
   mkA : overload {
@@ -138,10 +139,10 @@ oper
 
   mkA2 : overload {
     -- (biri) ile evli
-    mkA2 : Adjective -> Compl -> Adjective ** {c : Compl};
+    mkA2 : A -> Prep -> A2 ;
   } ;
 
-  mkAdj2 : Adjective -> Compl -> Adjective ** {c : Compl} ;
+  mkAdj2 : A -> Prep -> A2 ;
 
 -- Paradigms for numerals
   mkNum : overload {
@@ -167,22 +168,22 @@ oper
 
   mkV = overload {
     --esmek
-    mkV : Str -> Verb = regV ; 
+    mkV : Str -> V = regV ; 
     --gelmek
-    mkV : Str -> AoristType -> Verb = irregV_aor ; 
+    mkV : Str -> AoristType -> V = irregV_aor ; 
     --gitmek
-    mkV : Str -> Str -> Verb = \inf,softInf -> regVerb inf softInf softInf (getAoristType (tk 3 inf)) ; 
+    mkV : Str -> Str -> V = \inf,softInf -> regVerb inf softInf softInf (getAoristType (tk 3 inf)) ; 
     --yemek
-    mkV : Str -> Str -> Str -> Verb = \inf,softInf,futInf -> regVerb inf softInf futInf (getAoristType (tk 3 inf)) ;
+    mkV : Str -> Str -> Str -> V = \inf,softInf,futInf -> regVerb inf softInf futInf (getAoristType (tk 3 inf)) ;
     --seyretmek
-    mkV : Str -> Verb -> Contiguity -> Verb = auxillaryVerb ;
+    mkV : Str -> V -> Contiguity -> V = auxillaryVerb ;
     --nefret etmek
-    mkV : Str -> Verb -> Verb = \base,v -> auxillaryVerb base v Sep ;
+    mkV : Str -> V -> V = \base,v -> auxillaryVerb base v Sep ;
   } ;
 
   auxillaryVerb prefix verb con = case con of {
-                          Sep => {s = \\t => prefix ++ verb.s ! t} ;
-                          Con => {s = \\t => prefix + verb.s ! t}
+                          Sep => lin V {s = \\t => prefix ++ verb.s ! t} ;
+                          Con => lin V {s = \\t => prefix + verb.s ! t}
                         } ;
   
   regV inf = regVerb inf inf inf (getAoristType (tk 3 inf)) ;
@@ -221,7 +222,7 @@ oper
 	pastHar = {vow = har.vow ; con = SVow} ;
 	futHar = {vow = futht ; con = (SCon Soft)} ;
 	aorHar = {vow = getHarVowP aoristBase ; con = (SCon Soft)} ;
-    in {
+    in lin V {
           s = table {
                VProg agr   => addSuffix progBase   progHar (verbSuffixes ! agr) ;
                VPast agr   => addSuffix pastBase   pastHar (verbSuffixes ! agr) ;
@@ -237,7 +238,7 @@ oper
   mkNoun sn sa sd sg sl sabl sgabPos sgabNeg sgs pln har =
       let plHar = getHarmony pln ;
       in
-     {
+     lin N {
       s   = table {
               Sg => table {
 		      Nom     => sn ;
@@ -335,8 +336,8 @@ oper
           n2pn = n2.s ! Pl ! Nom ;--yağlar
           n2sb = n2.gen ! Sg ! {n = Sg;  p = P3} ;--yağı
           n2pb = n2.gen ! Pl ! {n = Sg;  p = P3} ;--yağları
-	  n2AbessPos = n2. s ! Sg ! Abess Pos ;
-	  n2AbessNeg = n2. s ! Sg ! Abess Neg ;
+          n2AbessPos = n2. s ! Sg ! Abess Pos ;
+          n2AbessNeg = n2. s ! Sg ! Abess Neg ;
           con = case ct of {
                   Con => <n1sn +  n2sn, n1sn +  n2sb, n1sn +  n2pn, n1sn +  n2pb, n1sn +  n2AbessPos, n1sn +  n2AbessNeg> ;
                   Sep => <n1sn ++ n2sn, n1sn ++ n2sb, n1sn ++ n2pn, n1sn ++ n2pb, n1sn ++ n2AbessPos, n1sn ++ n2AbessNeg>
@@ -345,11 +346,11 @@ oper
           sn = con.p2 ;--tereyağı
           pb = con.p3 ;--tereyağlar
           pn = con.p4 ;--tereyağları
-	  sgAbessPos = con.p5 ;
-	  sgAbessNeg = con.p6 ;
+          sgAbessPos = con.p5 ;
+          sgAbessNeg = con.p6 ;
           sgHar = getHarmony sn ;
           plHar = getHarmony pn
-      in {
+      in lin N {
         s   = table {
               Sg => table {
 		      Nom     => sn ; --tereyağı
@@ -380,32 +381,32 @@ oper
     } ;
   
   mkN = overload {
-    mkN : (araba : Str) -> Noun = regN ;
-    mkN : (burun, burn : Str) -> Noun = \sn,sg -> irregN (getComplexHarmony sn sg) sn sg ;
-    mkN : (divaniharp, divaniharb : Str) -> (ih_har : HarVowP) -> Noun = irregN_h ;
-    mkN : (fotograf, makine : Noun) -> Contiguity -> Noun = \n1,n2,c -> linkNoun n1 n2 Indef c ;
-    mkN : (zeytin, yag : Noun) -> Noun = \n1,n2 -> linkNoun n1 n2 Indef Con ;
+    mkN : (araba : Str) -> N = regN ;
+    mkN : (burun, burn : Str) -> N = \sn,sg -> irregN (getComplexHarmony sn sg) sn sg ;
+    mkN : (divaniharp, divaniharb : Str) -> (ih_har : HarVowP) -> N = irregN_h ;
+    mkN : (fotograf, makine : N) -> Contiguity -> Noun = \n1,n2,c -> linkNoun n1 n2 Indef c ;
+    mkN : (zeytin, yag : N) -> N = \n1,n2 -> linkNoun n1 n2 Indef Con ;
   } ;
 
-  mkN2 base = mkN base ** {c = {s=[]; c=Gen}} ;
+  mkN2 base = (mkN base) ** lin N2 {c = lin Prep {s=[]; c=Gen}} ;
 
-  mkN3 base = mkN base ** {c1,c2 = {s=[]; c=Gen}} ;
+  mkN3 base = (mkN base) ** lin N3 {c1,c2 = lin Prep {s=[]; c=Gen}} ;
 
 -- Implementation of adjactive paradigms
   mkA = overload {
     -- güzel
-    mkA : Str -> Adjective = \base -> (mkN base)  ** { adv = addSuffix base (getHarmony base) adjAdvSuffix } ;
+    mkA : Str -> A = \base -> (mkN base) ** { adv = addSuffix base (getHarmony base) adjAdvSuffix; lock_A=<> } ;
     -- ak 
-    mkA : Str -> Str -> Adjective = \base,soft -> (irregN (getComplexHarmony base soft) base soft )  ** { adv = addSuffix base (getHarmony base) adjAdvSuffix } ;
+    mkA : Str -> Str -> A = \base,soft -> (irregN (getComplexHarmony base soft) base soft )  ** { adv = addSuffix base (getHarmony base) adjAdvSuffix } ;
     -- kahve rengi
-    mkA : (zeytin, yag : Noun) -> Adjective = \n1,n2 -> let n = linkNoun n1 n2 Indef Con in n ** {adv = addSuffix (n.s ! Sg ! Nom) (getHarmony (n.s ! Sg ! Nom)) adjAdvSuffix }  ;
+    mkA : (zeytin, yag : N) -> A = \n1,n2 -> let n = linkNoun n1 n2 Indef Con in n ** {adv = addSuffix (n.s ! Sg ! Nom) (getHarmony (n.s ! Sg ! Nom)) adjAdvSuffix }  ;
     -- pürdikkat
-    mkA : (base, base1 : Str) -> (ih_har : HarVowP) -> Adjective = \base,base1,ih_har -> (irregN_h base base ih_har) ** { adv = addSuffix base (mkHar ih_har (getHarConP base)) adjAdvSuffix };
+    mkA : (base, base1 : Str) -> (ih_har : HarVowP) -> A = \base,base1,ih_har -> (irregN_h base base ih_har) ** { adv = addSuffix base (mkHar ih_har (getHarConP base)) adjAdvSuffix };
   } ;
 
 
   mkA2 = overload {
-    mkA2 : Adjective -> Compl -> Adjective ** {c : Compl} = mkAdj2 ;
+    mkA2 : A -> Prep -> A2 = mkAdj2 ;
   } ;
 
   mkAdj2 base c = base ** {c = c} ;
@@ -506,9 +507,9 @@ oper
         Pl => addSuffix base (mkHar harVow SVow) plSuffix
       } ;
 
-  ablat_Case = mkPrep [] Ablat;
-  dat_Case   = mkPrep [] Dat;
-  acc_Case   = mkPrep [] Dat;
+  ablat_Case : Prep = mkPrep [] Ablat;
+  dat_Case   : Prep = mkPrep [] Dat;
+  acc_Case   : Prep = mkPrep [] Dat;
 
   mkQuant : Str -> Quant = \s -> lin Quant {s=s} ;
 

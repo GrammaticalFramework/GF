@@ -248,7 +248,7 @@ concrete LexiconTur of Lexicon = CatTur **
     married_A2 = mkA2 (mkA "evli") with_Prep ;
 --Verbs
     add_V3 = mkV3 (mkV "eklemek") ;
-    answer_V2S = mkV2 (mkV "yanıtlamak") ;
+    answer_V2S = mkV2S (mkV "yanıtlamak") ;
     ask_V2Q = mkV2 (mkV "sormak") ;
     become_VA = mkV "olmak" SgSylConIrreg ;
     beg_V2V = mkV2 (mkV "dilemek") ;
