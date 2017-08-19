@@ -2,6 +2,7 @@
 
 concrete GrammarTur of Grammar = 
   NounTur,
+  AdjectiveTur,
   NumeralTur,
   StructuralTur
   ** {

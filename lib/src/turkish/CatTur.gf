@@ -21,6 +21,10 @@ concrete CatTur of Cat = CommonX ** open ResTur, Prelude in {
     Numeral = {s : CardOrd => Number => Case => Str ; n : Number} ;
     Digits  = {s : CardOrd => Number => Case => Str ; n : Number; tail : DTail} ;
 
+-- Adjective
+
+    AP = {s : Number => Case => Str} ;
+
 -- Open lexical classes, e.g. Lexicon
     V, VS, VQ, VA = Verb ;
     V2, V2Q, V2V, V2A, V2S = Verb ** {c : Compl} ;
