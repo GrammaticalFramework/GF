@@ -6,6 +6,7 @@ concrete ExtendEng of Extend =
     (Grammar = GrammarEng) **
 
   open
+    GrammarEng,
     ResEng,
     Coordination,
     Prelude,
@@ -23,6 +24,9 @@ concrete ExtendEng of Extend =
                    } ;
       a = RAg (agrP3 nu.n)
       } ;
+      
+    GenModNP num np cn = DetCN (DetQuant (GenNP (lin NP np)) num) cn ;
+    GenModIP num ip cn = IdetCN (IdetQuant (GenIP (lin IP ip)) num) cn ;
 
     StrandQuestSlash ip slash = 
       {s = \\t,a,b,q => 
@@ -61,107 +65,86 @@ concrete ExtendEng of Extend =
 
 
   lincat
-    VPS   = {s : Agr => Str} ;
-    [VPS] = {s1,s2 : Agr => Str} ;
+    VPS   = {s : {s : Agr => Str} ; i : {s : VVType => Agr => Str}} ; --- finite and infinite forms separately
+    [VPS] = {s : {s1,s2 : Agr => Str} ; i : {s1,s2 : VVType => Agr => Str}} ;
 
   lin
-    BaseVPS = twoTable Agr ;
-    ConsVPS = consrTable Agr comma ;
+    BaseVPS x y = {s = twoTable Agr x.s y.s ; i = twoTable2 VVType Agr x.i y.i} ;
+    ConsVPS x xs = {s = consrTable Agr comma x.s xs.s ; i = consrTable2 VVType Agr comma x.i xs.i} ;
 
-    PredVPS np vpi = {s = np.s ! npNom ++ vpi.s ! np.a} ;
+    PredVPS np vps = {s = np.s ! npNom ++ vps.s.s ! np.a} ;
 
     MkVPS t p vp = {
-      s = \\a => 
+      s = {s = \\a => 
             let 
               verb = vp.s ! t.t ! t.a ! p.p ! oDir ! a ;
               verbf = verb.aux ++ verb.adv ++ verb.fin ++ verb.inf ;
             in t.s ++ p.s ++ vp.ad ! a ++ verbf ++ vp.p ++ vp.s2 ! a ++ vp.ext
+	   } ;
+      i = {s = table {
+            VVAux      => \\a => vp.ad ! a ++ vp.inf ++ vp.p ++ vp.s2 ! a;
+            VVInf      => \\a => "to" ++ vp.ad ! a ++ vp.inf ++ vp.p ++ vp.s2 ! a;
+            VVPresPart => \\a => vp.ad ! a ++ vp.prp ++ vp.p ++ vp.s2 ! a
+            }
+	  }
       } ;
 
-    ConjVPS = conjunctDistrTable Agr ;
+    ConjVPS c xs = {s = conjunctDistrTable Agr c xs.s ; i = conjunctDistrTable2 VVType Agr c xs.i} ;
+
+    ComplVPIVV vv vpi = 
+      insertObj (\\a => vpi.i.s ! vv.typ ! a) (predVV vv) ;
+
+-----
 
     ICompAP ap = {s = "how" ++ ap.s ! agrP3 Sg} ; ---- IComp should have agr!
 
     IAdvAdv adv = {s = "how" ++ adv.s} ;
 
-    PartVP vp = {
+    PresPartAP vp = {
       s = \\a => vp.ad ! a ++ vp.prp ++ vp.p ++ vp.s2 ! a ++ vp.ext ;
       isPre = vp.isSimple                 -- depends on whether there are complements
       } ;
 
     EmbedPresPart vp = {s = infVP VVPresPart vp Simul CPos (agrP3 Sg)} ; --- agr
 
-    UttVPShort vp = {s = infVP VVAux vp Simul CPos (agrP3 Sg)} ;
-
-  do_VV = {
-    s = table {
-      VVF VInf => ["do"] ;
-      VVF VPres => "does" ;
-      VVF VPPart => ["done"] ; ----
-      VVF VPresPart => ["doing"] ;
-      VVF VPast => ["did"] ;      --# notpresent
-      VVPastNeg => ["didn't"] ;      --# notpresent
-      VVPresNeg => "doesn't"
+   PastPartAP vp = { 
+      s = \\a => vp.ad ! a ++ vp.ptp ++ vp.p ++ vp.c2 ++ vp.s2 ! a ++ vp.ext ;
+      isPre = vp.isSimple                 -- depends on whether there are complements
       } ;
-    p = [] ;
-    typ = VVAux
-    } ;
-
-   may_VV = lin VV {
-     s = table { 
-      VVF VInf => ["be allowed to"] ;
-      VVF VPres => "may" ;
-      VVF VPPart => ["been allowed to"] ;
-      VVF VPresPart => ["being allowed to"] ;
-      VVF VPast => "might" ; --# notpresent
-      VVPastNeg => "mightn't" ; --# notpresent
-      VVPresNeg => "may not"
+   PastPartAgentAP vp np = { 
+      s = \\a => vp.ad ! a ++ vp.ptp ++ vp.p ++ vp.c2 ++ vp.s2 ! a ++ "by" ++ np.s ! NPAcc ++ vp.ext ;
+      isPre = False
       } ;
-    p = [] ;
-    typ = VVAux
-    } ;
 
-   shall_VV = lin VV {
-     s = table { 
-      VVF VInf => ["be obliged to"] ; ---
-      VVF VPres => "shall" ;
-      VVF VPPart => ["been obliged to"] ;
-      VVF VPresPart => ["being obliged to"] ;
-      VVF VPast => "should" ; --# notpresent
-      VVPastNeg => "shouldn't" ; --# notpresent
-      VVPresNeg => "shan't" 
-      } ;
-    p = [] ;
-    typ = VVAux
-    } ;
+   GerundCN vp = {
+     s = \\n,c => vp.ad ! AgP3Sg Neutr ++ vp.prp ++
+                  case <n,c> of {
+                    <Sg,Nom> => "" ;
+                    <Sg,Gen> => Predef.BIND ++ "'s" ;
+                    <Pl,Nom> => Predef.BIND ++ "s" ;
+                    <Pl,Gen> => Predef.BIND ++ "s'"
+                    } ++ 
+                  vp.p ++ vp.s2 ! AgP3Sg Neutr ++ vp.ext ; 
+     g = Neutr
+     } ;
 
-   ought_VV = lin VV {
-     s = table { 
-      VVF VInf => ["be obliged to"] ; ---
-      VVF VPres => "ought to" ;
-      VVF VPPart => ["been obliged to"] ;
-      VVF VPresPart => ["being obliged to"] ;
-      VVF VPast => "ought to" ; --# notpresent
-      VVPastNeg => "oughtn't to" ; --# notpresent
-      VVPresNeg => "oughtn't to"  --- shan't
-      } ;
-    p = [] ;
-    typ = VVAux
-    } ;
+   GerundNP vp = 
+     let a = AgP3Sg Neutr ---- agr
+     in 
+     {s = \\_ => vp.ad ! a ++ vp.prp ++ vp.p ++ vp.s2 ! a ++ vp.ext ; a = a} ;
 
-   used_VV = lin VV {
-     s = table { 
-      VVF VInf => Predef.nonExist ; ---
-      VVF VPres => Predef.nonExist ;
-      VVF VPPart => ["used to"] ;
-      VVF VPresPart => ["being used to"] ;
-      VVF VPast => "used to" ; --# notpresent
-      VVPastNeg => "used not to" ; --# notpresent
-      VVPresNeg => Predef.nonExist 
-      } ;
-    p = [] ;
-    typ = VVAux
-    } ;
+   GerundAdv vp = 
+     let a = AgP3Sg Neutr
+     in 
+     {s = vp.ad ! a ++ vp.prp ++ vp.p ++ vp.s2 ! a ++ vp.ext} ;
+
+   WithoutVP vp = {s = "without" ++ (GerundAdv (lin VP vp)).s} ; 
+
+   InOrderToVP vp = {s = ("in order" | []) ++ infVP VVInf vp Simul CPos (AgP3Sg Neutr)} ;
+
+   PurposeVP vp = {s = infVP VVInf vp Simul CPos (agrP3 Sg)} ; --- agr
+
+   ByVP vp = {s = "by" ++ (GerundAdv (lin VP vp)).s} ; 
 
 
    NominalizeVPSlashNP vpslash np = 
@@ -170,8 +153,6 @@ concrete ExtendEng of Extend =
      in 
      lin NP {s = \\_ => vp.ad ! a ++ vp.prp ++ vp.s2 ! a ; a = a} ;  
 
-lin
-  UncNeg = {s = [] ; p = CNeg False} ; 
 
   oper passVPSlash : VPSlash -> Str -> ResEng.VP = 
    \vps,ag -> 
@@ -191,8 +172,8 @@ lin
     } ;
 
   lin 
-    PassVPSlash vps = passVPSlash vps [] ;
-    PassAgentVPSlash vps np = passVPSlash vps ("by" ++ np.s ! NPAcc) ;
+    PassVPSlash vps = passVPSlash (lin VPS vps) [] ;
+    PassAgentVPSlash vps np = passVPSlash (lin VPS vps) ("by" ++ np.s ! NPAcc) ;
 
    --- AR 7/3/2013
    ComplSlashPartLast vps np = case vps.gapInMiddle of {
@@ -204,19 +185,19 @@ lin
       mkClause "there" (agrP3 (fromAgr np.a).n) 
         (insertObj (\\_ => np.s ! NPAcc) (predV (regV "exist"))) ;
 
-   PurposeVP vp = {s = infVP VVInf vp Simul CPos (agrP3 Sg)} ; --- agr
-
 
    ComplBareVS  v s = insertExtra s.s (predV v) ;
    SlashBareV2S v s = insertExtrac s.s (predVc v) ;
 
-   ContractedUseCl  t p cl = {
-      s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! ODir True
-      } ;
-
-
-
-    CompoundCN a b = {s = \\n,c => a.s ! Sg ! Nom ++ b.s ! n ! c ; g = b.g} ;
+  CompoundN noun cn = {
+    s = (\\n,c => noun.s ! Sg ! Nom ++ cn.s ! n ! c) ;
+    g = cn.g
+  } ;
+  
+  CompoundAP noun adj = {
+    s = (\\_ => noun.s ! Sg ! Nom ++ adj.s ! AAdj Posit Nom) ;
+    isPre = True
+    } ;
 
     FrontExtPredVP np vp = {
       s = \\t,a,b,o => 
@@ -254,6 +235,10 @@ lin
         s = \\n,c => preOrPost ap.isPre (ap.s ! agrgP3 n cn.g) (cn.s ! n ! c) ;
         g = cn.g
         } ;
+    AdjAsNP ap = {
+      s = \\c => ap.s ! agrgP3 Sg nonhuman ; ---- genitive case?
+      a = agrgP3 Sg nonhuman
+      } ;
 
   lincat
     RNP     = {s : Agr => Str} ;
@@ -276,7 +261,17 @@ lin
     
 ---- TODO: RNPList construction
 
+    ComplGenVV v a p vp = insertObj (\\agr => a.s ++ p.s ++ 
+                                         infVP v.typ vp a.a p.p agr)
+                               (predVV v) ;
 
+    CompS s = {s = \\_ => "that" ++ s.s} ;
+    CompQS qs = {s = \\_ => qs.s ! QIndir} ;
+    CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
+                                infVP VVInf vp ant.a p.p a} ;
 
+-- quite specific for English anyway
 
+    UncontractedNeg = {s = [] ; p = CNeg False} ; 
+    UttVPShort vp = {s = infVP VVAux vp Simul CPos (agrP3 Sg)} ;
 }

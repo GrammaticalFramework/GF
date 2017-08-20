@@ -67,10 +67,13 @@ abstract Extend = Cat ** {
     FocusAdV : AdV -> S       -> Utt ;   -- never will I sleep
     FocusAP  : AP  -> NP      -> Utt ;   -- green was the tree
 
-  fun
-    ParticipleAP  : VP -> AP ;   -- (the man) looking at Mary
+  -- participle constructions
+    PresPartAP    : VP -> AP ;   -- (the man) looking at Mary
     EmbedPresPart : VP -> SC ;   -- looking at Mary (is fun)
-
+    
+    PastPartAP      : VPSlash -> AP ;         -- lost (opportunity) ; (opportunity) lost in space
+    PastPartAgentAP : VPSlash -> NP -> AP ;   -- (opportunity) lost by the company
+   
 -- this is a generalization of Verb.PassV2 and should replace it in the future.
 
     PassVPSlash : VPSlash -> VP ; -- be forced to sleep
@@ -80,11 +83,6 @@ abstract Extend = Cat ** {
 
     PassAgentVPSlash : VPSlash -> NP -> VP ;  -- be begged by her to go
 
--- In many languages, the passives use past participles.
-
-    PastPartAP      : VPSlash -> AP ;         -- lost (opportunity) ; (opportunity) lost in space
-    PastPartAgentAP : VPSlash -> NP -> AP ;   -- (opportunity) lost by the company
-   
 -- publishing of the document
 
     NominalizeVPSlashNP : VPSlash -> NP -> NP ;
@@ -142,8 +140,8 @@ abstract Extend = Cat ** {
 
 --- from Extensions
 
-  ComplVV  : VV -> Ant -> Pol -> VP  -> VP ;         -- want not to have slept
-  SlashV2V : V2V -> Ant -> Pol -> VPS -> VPSlash ;   -- force (her) not to have slept
+  ComplGenVV  : VV -> Ant -> Pol -> VP  -> VP ;         -- want not to have slept
+  SlashV2V    : V2V -> Ant -> Pol -> VPS -> VPSlash ;   -- force (her) not to have slept
 
   CompoundN   : N -> N  -> N ;      -- control system / controls system / control-system
   CompoundAP  : N -> A  -> AP ;     -- language independent / language-independent
@@ -166,5 +164,11 @@ abstract Extend = Cat ** {
   CompQS      : QS -> Comp ;                  -- (the question is) who sleeps
   CompVP      : Ant -> Pol -> VP -> Comp ;    -- (she is) to go
 
+-- very language-specific things
+
+--Eng
+  UncontractedNeg : Pol ;      -- do not, etc, as opposed to don't
+  UttVPShort : VP -> Utt ;     -- have fun, as opposed to "to have fun"
+  ComplSlashPartLast : VPSlash -> NP -> VP ;
 
 }

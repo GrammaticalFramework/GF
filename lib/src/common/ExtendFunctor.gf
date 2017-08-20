@@ -1,9 +1,6 @@
-incomplete concrete ExtendFunctor of Extend = open Grammar in {
+incomplete concrete ExtendFunctor of Extend = Cat ** open Grammar in {
 
 lincat
-  VPS = Grammar.VP ;
-  [VPS] = Grammar.VP ;
-
   RNP = Grammar.NP ;
   RNPList = Grammar.ListNP ;
 
@@ -16,22 +13,22 @@ lin
   GenNP = variants {} ;     -- NP -> Quant ; -- this man's
   GenIP = variants {} ;     -- IP -> IQuant ; -- whose
   GenRP = variants {} ;     -- Num -> CN -> RP ; -- whose car
-  GenModNP = variants {} ;     -- Num -> NP -> CN -> NP ; -- this man's car(s)
+  GenModNP num np cn = DetCN (DetQuant DefArt num) (AdvCN cn (PrepNP possess_Prep np)) ;     -- this man's car(s) ; DEFAULT the car of this man
   GenModIP = variants {} ;     -- Num -> IP -> CN -> IP ; -- whose car(s)
-  CompBareCN = variants {} ;     -- CN -> Comp ; -- (est) professeur
-  StrandQuestSlash = variants {} ;     -- IP -> ClSlash -> QCl ; -- whom does John live with
-  StrandRelSlash = variants {} ;     -- RP -> ClSlash -> RCl ; -- that he lives in
-  EmptyRelSlash = variants {} ;     -- ClSlash -> RCl ; -- he lives in
-  MkVPS = variants {} ;     -- Temp -> Pol -> VP -> VPS ; -- to sleep / hasn't slept
+  CompBareCN cn = CompNP (CompCN cn) ; -- (est) professeur ; DEFAULT is a teacher
+  StrandQuestSlash = QuestSlash ; -- whom does John live with ; DEFAULT with whom does John live
+  StrandRelSlash = RelSlash ; -- that he lives in ; DEFAULT in which he lives
+  EmptyRelSlash = RelSlash IdRP ; -- he lives in ; DEFAULT in which he lives
+  MkVPS vp = variants {} ;     -- Temp -> Pol -> VP -> VPS ; -- to sleep / hasn't slept
   ConjVPS = variants {} ;     -- Conj -> [VPS] -> VPS ; -- has walked and won't sleep
   PredVPS = variants {} ;     -- NP -> VPS -> S ; -- she [has walked and won't sleep]
   ComplVPSVV = variants {} ;     -- VV -> VPS -> VP ; -- want to sleep and to walk
   PredVPSVV = variants {} ;     -- NP -> VV -> VPS -> VP ; -- she wants to sleep and to walk
-  ProDrop = variants {} ;     -- Pron -> Pron ; -- unstressed subject pronoun becomes []: "(io) sono stanco"
+  ProDrop pro = pro ;     -- am tired ; DEFAULT I am tired
   ICompAP = variants {} ;     -- AP -> IComp ; -- "how old"
   IAdvAdv = variants {} ;     -- Adv -> IAdv ; -- "how often"
-  CompIQuant = variants {} ;     -- IQuant -> IComp ; -- which (is it) [agreement to NP]
-  PrepCN = variants {} ;     -- Prep -> CN -> Adv ; -- by accident [Prep + CN without article]
+  CompIQuant iquant = CompIP (IdetIP (IdetQuant iquant NumSg)) ;  -- which (is it) [agreement to NP] ; DEFAULT which [no agreement]
+  PrepCN prep cn = PrepNP prep (MassNP cn) ;     -- Prep -> CN -> Adv ; -- by accident [Prep + CN without article] ; DEFAULT CN as mass term
   FocusObj = variants {} ;     -- NP -> SSlash -> Utt ; -- her I love
   FocusAdv = variants {} ;     -- Adv -> S -> Utt ; -- today I will sleep
   FocusAdV = variants {} ;     -- AdV -> S -> Utt ; -- never will I sleep
