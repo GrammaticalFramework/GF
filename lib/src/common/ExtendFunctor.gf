@@ -15,7 +15,7 @@ lin
   GenRP = variants {} ;     -- Num -> CN -> RP ; -- whose car
   GenModNP num np cn = DetCN (DetQuant DefArt num) (AdvCN cn (PrepNP possess_Prep np)) ;     -- this man's car(s) ; DEFAULT the car of this man
   GenModIP = variants {} ;     -- Num -> IP -> CN -> IP ; -- whose car(s)
-  CompBareCN cn = CompNP (CompCN cn) ; -- (est) professeur ; DEFAULT is a teacher
+  CompBareCN cn = CompCN cn ; -- (est) professeur ; DEFAULT is a teacher
   StrandQuestSlash = QuestSlash ; -- whom does John live with ; DEFAULT with whom does John live
   StrandRelSlash = RelSlash ; -- that he lives in ; DEFAULT in which he lives
   EmptyRelSlash = RelSlash IdRP ; -- he lives in ; DEFAULT in which he lives
