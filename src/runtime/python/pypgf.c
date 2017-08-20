@@ -1655,6 +1655,58 @@ Concr_parseval(ConcrObject* self, PyObject *args) {
     return Py_BuildValue("ddd", precision, recall, exact);
 }
 
+static IterObject*
+Concr_lookupSentence(ConcrObject* self, PyObject *args, PyObject *keywds)
+{
+	static char *kwlist[] = {"sentence", "cat", NULL};
+
+	const char *sentence = NULL;
+	PyObject* start = NULL;
+	int max_count = -1;
+    if (!PyArg_ParseTupleAndKeywords(args, keywds, "s|O", kwlist,
+                                     &sentence, &start, &max_count))
+        return NULL;
+
+	IterObject* pyres = (IterObject*) 
+		pgf_IterType.tp_alloc(&pgf_IterType, 0);
+	if (pyres == NULL) {
+		return NULL;
+	}
+
+	pyres->source = (PyObject*) self->grammar;
+	Py_XINCREF(pyres->source);
+
+	GuPool* out_pool = gu_new_pool();
+
+	PyObject* py_pool = PyPool_New(out_pool);
+	pyres->container = PyTuple_Pack(2, pyres->source, py_pool);
+	Py_DECREF(py_pool);
+
+	pyres->pool      = gu_new_pool();
+	pyres->max_count = max_count;
+	pyres->counter   = 0;
+	pyres->fetch     = Iter_fetch_expr;
+
+	sentence = gu_string_copy(sentence, pyres->pool);
+
+	PgfType* type;
+	if (start == NULL) {
+		type = pgf_start_cat(self->grammar->pgf, pyres->pool);
+	} else {
+		type = pgf_type_from_object(start, pyres->pool);
+	}
+	if (type == NULL) {
+		Py_DECREF(pyres);
+		return NULL;
+	}
+
+	pyres->res =
+		pgf_lookup_sentence(self->concr, type, sentence,
+		                          pyres->pool, out_pool);
+
+	return pyres;
+}
+
 static PyObject*
 Concr_linearize(ConcrObject* self, PyObject *args)
 {
@@ -2455,6 +2507,13 @@ static PyMethodDef Concr_methods[] = {
     },
     {"parseval", (PyCFunction)Concr_parseval, METH_VARARGS,
      "Computes precision, recall and exact match for the parser on a given abstract tree"
+    },
+    {"lookupSentence", (PyCFunction)Concr_lookupSentence, METH_VARARGS | METH_KEYWORDS,
+     "Looks up a sentence from the grammar by a sequence of keywords\n\n"
+     "Named arguments:\n"
+     "- sentence (string) or tokens (list of strings)\n"
+     "- cat (string); OPTIONAL, default: the startcat of the grammar\n"
+     "- n (int), max. trees; OPTIONAL, default: extract all trees"
     },
     {"linearize", (PyCFunction)Concr_linearize, METH_VARARGS,
      "Takes an abstract tree and linearizes it to a string"
