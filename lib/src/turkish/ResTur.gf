@@ -63,5 +63,5 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
 --Prep
 
     no_Prep = mkPrep [] Acc;
-    mkPrep : Str -> Case -> {s : Str; c : Case} = \s,c -> {s=s; c=c};
+    mkPrep : Str -> Case -> {s : Str; c : Case; lock_Prep : {}} = \s,c -> lin Prep {s=s; c=c};
 }

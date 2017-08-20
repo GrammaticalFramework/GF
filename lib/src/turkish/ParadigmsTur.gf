@@ -70,18 +70,18 @@ oper
 
   mkV2 = overload {
     -- sormak
-    mkV2 : V -> V2 = \verb -> verb ** {c = no_Prep} ;
+    mkV2 : V -> V2 = \verb -> verb ** lin V2 {c = no_Prep} ;
     -- (bir şeyden) korkmak
-    mkV2 : V -> Prep -> V2 = \verb,c -> verb ** {c = c} ;
+    mkV2 : V -> Prep -> V2 = \verb,c -> verb ** lin V2 {c = c} ;
   } ;
 
   
   mkV3 = overload {
     -- (birine bir şeyi) satmak
-    mkV3 : V -> V3 = \verb -> verb ** {c1 = no_Prep; c2 = no_Prep} ;
+    mkV3 : V -> V3 = \verb -> verb ** lin V3 {c1 = no_Prep; c2 = no_Prep} ;
     -- (biri ile bir şeyi) konuşmak
     mkV3 : V -> Prep -> Prep -> V3 = 
-      \verb,c1,c2 -> verb ** {c1 = c1; c2 = c2} ;
+      \verb,c1,c2 -> verb ** lin V3 {c1 = c1; c2 = c2} ;
   } ;
 
 -- Paradigms for noun
@@ -128,21 +128,19 @@ oper
 -- Paradigms for adjactives
   mkA : overload {
     -- güzel
-    mkA : Str -> Adjective ;
+    mkA : Str -> A ;
     -- ak 
-    mkA : Str -> Str -> Adjective ;
+    mkA : Str -> Str -> A ;
     -- kahve rengi
-    mkA : Noun -> Noun -> Adjective ;
+    mkA : N -> N -> A ;
     -- pürdikkat
-    mkA : Str -> Str -> HarVowP -> Adjective ;
+    mkA : Str -> Str -> HarVowP -> A ;
   } ;
 
   mkA2 : overload {
     -- (biri) ile evli
     mkA2 : A -> Prep -> A2 ;
   } ;
-
-  mkAdj2 : A -> Prep -> A2 ;
 
 -- Paradigms for numerals
   mkNum : overload {
@@ -395,21 +393,19 @@ oper
 -- Implementation of adjactive paradigms
   mkA = overload {
     -- güzel
-    mkA : Str -> A = \base -> (mkN base) ** { adv = addSuffix base (getHarmony base) adjAdvSuffix; lock_A=<> } ;
+    mkA : Str -> A = \base -> (mkN base) ** lin A { adv = addSuffix base (getHarmony base) adjAdvSuffix} ;
     -- ak 
-    mkA : Str -> Str -> A = \base,soft -> (irregN (getComplexHarmony base soft) base soft )  ** { adv = addSuffix base (getHarmony base) adjAdvSuffix } ;
+    mkA : Str -> Str -> A = \base,soft -> (irregN (getComplexHarmony base soft) base soft)  ** lin A { adv = addSuffix base (getHarmony base) adjAdvSuffix} ;
     -- kahve rengi
-    mkA : (zeytin, yag : N) -> A = \n1,n2 -> let n = linkNoun n1 n2 Indef Con in n ** {adv = addSuffix (n.s ! Sg ! Nom) (getHarmony (n.s ! Sg ! Nom)) adjAdvSuffix }  ;
+    mkA : (zeytin, yag : N) -> A = \n1,n2 -> let n = linkNoun n1 n2 Indef Con in n ** lin A {adv = addSuffix (n.s ! Sg ! Nom) (getHarmony (n.s ! Sg ! Nom)) adjAdvSuffix} ;
     -- pürdikkat
-    mkA : (base, base1 : Str) -> (ih_har : HarVowP) -> A = \base,base1,ih_har -> (irregN_h base base ih_har) ** { adv = addSuffix base (mkHar ih_har (getHarConP base)) adjAdvSuffix };
+    mkA : (base, base1 : Str) -> (ih_har : HarVowP) -> A = \base,base1,ih_har -> (irregN_h base base ih_har) ** lin A {adv = addSuffix base (mkHar ih_har (getHarConP base)) adjAdvSuffix};
   } ;
 
 
   mkA2 = overload {
-    mkA2 : A -> Prep -> A2 = mkAdj2 ;
+    mkA2 : A -> Prep -> A2 = \base,c -> base ** lin A2 {c = c} ;
   } ;
-
-  mkAdj2 base c = base ** {c = c} ;
 
 -- Implementation of numeral paradigms
   mkNum = overload {
