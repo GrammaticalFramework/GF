@@ -76,4 +76,18 @@ lin
   CompQS = variants {} ;     -- QS -> Comp ; -- (the question is) who sleeps
   CompVP = variants {} ;     -- Ant -> Pol -> VP -> Comp ; -- (she is) to go
 
+
+  DetNPFem = DetNP ;
+  
+  iFem_Pron = i_Pron ;
+  youFem_Pron = youSg_Pron ;
+  weFem_Pron = we_Pron ;
+  youPlFem_Pron = youPl_Pron ;
+  theyFem_Pron = they_Pron ;
+  youPolFem_Pron = youPol_Pron ;
+  UttAccNP = UttNP ;
+  UttDatNP = UttNP ;
+  UttAccIP = UttIP ;
+  UttDatIP = UttIP ;
+
 }

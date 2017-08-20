@@ -166,9 +166,25 @@ abstract Extend = Cat ** {
 
 -- very language-specific things
 
---Eng
+-- Eng
   UncontractedNeg : Pol ;      -- do not, etc, as opposed to don't
   UttVPShort : VP -> Utt ;     -- have fun, as opposed to "to have fun"
   ComplSlashPartLast : VPSlash -> NP -> VP ;
+
+-- Romance
+  DetNPFem : Det -> NP ;
+  
+  iFem_Pron      : Pron ; -- je (suis vieille)
+  youFem_Pron    : Pron ; -- tu (es vieille)
+  weFem_Pron     : Pron ; -- nous (sommes vieilles)
+  youPlFem_Pron  : Pron ; -- vous (êtes vieilles)
+  theyFem_Pron   : Pron ; -- elles (sont vieilles)
+  youPolFem_Pron : Pron ; -- vous (êtes vieille)
+
+-- German
+  UttAccNP : NP -> Utt ; -- mich
+  UttDatNP : NP -> Utt ; -- mir
+  UttAccIP : NP -> Utt ; -- wen
+  UttDatIP : NP -> Utt ; -- wem
 
 }
