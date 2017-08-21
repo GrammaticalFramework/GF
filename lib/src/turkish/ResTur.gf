@@ -10,7 +10,7 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
   param
     Case = Nom | Acc | Dat | Gen | Loc | Ablat | Abess Polarity ;
     Species = Indef | Def ;
-    Contiguity = Con | Sep ; --Concatanate or Separate
+    Contiguity = Con | Sep ; --Concatenate or Separate
 
   oper
     Agr = {n : Number ; p : Person} ;
