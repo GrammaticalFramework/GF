@@ -1,0 +1,67 @@
+PhrUtt NoPConj (UttNP (AdvNP (DetCN (DetQuant DefArt NumPl) (UseN child_N)) (SubjS when_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron we_Pron) (ComplSlash (SlashV2a see_V2) (UsePron they_Pron))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant IndefArt NumSg) (SentCN (UseN reason_N) (EmbedVP (UseV go_V)))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (ComplSlash (SlashV2a like_V2) (DetCN (DetQuant DefArt NumSg) (SentCN (UseN rule_N) (EmbedS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumPl) (UseN book_N)) (UseComp (CompAP (PositA thin_A)))))))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron i_Pron) (ComplSlash (SlashV2a see_V2) (DetCN (DetQuant DefArt NumSg) (RelCN (UseN man_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (UsePron youSg_Pron) (SlashV2a love_V2)))))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron i_Pron) (ComplSlash (SlashV2a see_V2) (DetCN (DetQuant DefArt NumSg) (RelCN (UseN book_N) (UseRCl (TTAnt TPast ASimul) PPos (RelSlash IdRP (SlashVP (UsePron youSg_Pron) (SlashV2a buy_V2)))))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumSg) (UseN cat_N)) (AdvVP (UseV jump_V) (SubjS when_Subj (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumSg) (UseN dog_N)) (UseV come_V)))))))) NoVoc
+PhrUtt NoPConj (UttS (ExtAdvS (SubjS if_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron youSg_Pron) (ComplVQ know_VQ (UseQCl (TTAnt TPast ASimul) PPos (QuestVP whoSg_IP (ComplSlash (SlashV2a do_V2) (UsePron it_Pron)))))))) (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron youSg_Pron) (ComplVV must_VV (UseV go_V)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron he_Pron) (AdvVP (UseComp (CompAP (PositA ready_A))) (SubjS when_Subj (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron i_Pron) (ComplSlash (SlashV2a see_V2) (UsePron he_Pron))))))))) NoVoc
+PhrUtt NoPConj (UttCN (AdjCN (AdAP (PositAdAAdj clever_A) (PositA correct_A)) (UseN rule_N))) NoVoc
+PhrUtt NoPConj (UttAdv (ComparAdvAdj less_CAdv probable_AS (UsePN john_PN))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a eat_V2) (MassNP (AdjCN (PositA red_A) (UseN meat_N))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres AAnter) PPos (PredVP (UsePN john_PN) (UseV die_V)))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron he_Pron) (ComplVV must_VV (UseV go_V))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres AAnter) PPos (PredVP (UsePN john_PN) (PassV2 kill_V2)))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (PassV2 kill_V2)))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron i_Pron) (ComplSlash (SlashV2a see_V2) (DetCN (DetQuant IndefArt NumSg) (AdvCN (UseN cat_N) (PrepNP in_Prep (DetCN (DetQuant IndefArt NumSg) (UseN hat_N))))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron i_Pron) (AdvVP (ComplSlash (SlashV2a see_V2) (DetCN (DetQuant IndefArt NumSg) (UseN cat_N))) (PrepNP with_Prep (DetCN (DetQuant (PossPron i_Pron) NumPl) (UseN eye_N))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron he_Pron) (UseComp (CompAP (ComplA2 married_A2 (UsePron she_Pron))))))) NoVoc
+PhrUtt (PConjConj and_Conj) (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron we_Pron) (UseV go_V)))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (ConjNP both7and_DConj (BaseNP (DetCN (DetQuant DefArt NumPl) (UseN boy_N)) (DetCN (DetQuant DefArt NumPl) (UseN girl_N)))) (UseComp (CompAdv here_Adv))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron he_Pron) (ComplVS say_VS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron youSg_Pron) (ComplVV want_VV (UseV swim_V)))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (UseComp (CompAP (SentAP (PositA uncertain_A) (EmbedS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron he_Pron) (ComplSlash (SlashV2a do_V2) (UsePron it_Pron))))))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (ComplSlash (SlashV2a have_V2) (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot3 (pot1as2 (pot0as1 (pot0 n4)))))))) (UseN sheep_N)))))) NoVoc
+ChunkPhr (PlusChunk (SSlash_Chunk (UseSlash (TTAnt TPast ASimul) PPos (SlashVP (UsePron i_Pron) (SlashV2a lose_V2)))) (PlusChunk (Symb_Chunk (MkSymb "$")) (PlusChunk (Symb_Chunk (MkSymb "3.2")) (OneChunk (CN_Sg_Chunk (UseN billion_N))))))
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron they_Pron) (ComplSlash (SlashV2a switch8off_V2) (DetCN (DetQuant DefArt NumSg) (UseN television_N)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompAP (ConjAP and_Conj (BaseAP (PositA big_A) (PositA clever_A)))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompCN (AdjCN (PositA clever_A) (UseN man_N))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompAdv (PrepNP from_Prep (DetCN (DetQuant DefArt NumSg) (UseN city_N)))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompAP (PositA clever_A)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron it_Pron) (UseComp (CompAdv today_Adv))))) NoVoc
+PhrUtt NoPConj (UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestIComp (CompIP whatSg_IP) (DetNP (DetQuant that_Quant NumSg))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron it_Pron) (UseComp (CompAdv (SubjS because_Subj (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompAP (PositA clever_A))))))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (ComplVA become_VA (PositA clever_A))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (ProgrVP (UseV sleep_V))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (ExistNPAdv (DetCN (DetQuant IndefArt NumSg) (UseN cow_N)) (PrepNP in_Prep (DetCN (DetQuant DefArt NumSg) (UseN forest_N)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredSCVP (EmbedQS (UseQCl (TTAnt TPast ASimul) PPos (QuestSlash whatSg_IP (SlashVP (UsePron she_Pron) (SlashV2a do_V2))))) (UseComp (CompAP (PositA important_A)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredSCVP (EmbedS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron she_Pron) (UseV sleep_V)))) (AdvVP (PassV2 see_V2) (PrepNP by8agent_Prep (DetNP every_Det)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumSg) (UseN man_N)) (UseComp (CompAdv here_Adv))))) NoVoc
+PhrUtt NoPConj (UttQS (UseQCl (TTAnt TPres ASimul) PPos (QuestSlash (IdetCN (IdetQuant which_IQuant NumSg) (UseN book_N)) (SlashVP (UsePron youSg_Pron) (SlashV2a like_V2))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (PredetNP all_Predet (DetCN (DetQuant DefArt NumPl) (UseN boy_N))) (UseComp (CompAdv here_Adv))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (Slash2V3 give_V3 (UsePron i_Pron)) (DetCN (DetQuant IndefArt NumSg) (UseN apple_N)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (ExistNPAdv (DetCN (DetQuant IndefArt NumSg) (UseN cat_N)) (PrepNP in_Prep (DetCN (DetQuant DefArt NumSg) (UseN house_N)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (Slash2V3 give_V3 (UsePron i_Pron)) (DetCN (DetQuant IndefArt NumSg) (UseN apple_N)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant IndefArt NumPl) (UseN boy_N)) (AdvVP (ProgrVP (UseV swim_V)) (SubjS when_Subj (UseCl (TTAnt TPast ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumPl) (UseN girl_N)) (UseV come_V)))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron he_Pron) (ComplVS say_VS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron youSg_Pron) (ComplVV want_VV (UseV swim_V)))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron i_Pron) (ComplVV want_VV (ComplSlash (SlashV2a eat_V2) (UsePron it_Pron)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompNP (PredetNP not_Predet (DetCN (DetQuant IndefArt NumSg) (UseN doctor_N)))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PNeg (PredVP (UsePN john_PN) (UseV laugh_V)))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a see_V2) (DetCN (DetQuant no_Quant NumPl) (UseN animal_N)))))) NoVoc
+PhrUtt NoPConj (UttNP (DetCN (DetQuant DefArt NumSg) (PossNP (UseN house_N) (DetCN (DetQuant DefArt NumSg) (UseN doctor_N))))) NoVoc
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (ComplSlash (Slash2V3 send_V3 (DetCN (DetQuant DefArt NumPl) (UseN apple_N))) (DetCN (DetQuant DefArt NumPl) (UseN child_N))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumSg) (UseN boy_N)) (has_age_VP (NumDigits (IDig D_6)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetCN (DetQuant DefArt NumSg) (UseN science_N)) (SelfAdVVP (UseComp (CompAP (PositA important_A))))))) NoVoc
+PhrUtt NoPConj (UttS (ExtAdvS today_Adv (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron i_Pron) (AdvVP (UseV swim_V) (PrepNP in_Prep (DetCN (DetQuant DefArt NumSg) (UseN sea_N)))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron youSg_Pron) (AdvVP (ComplVV must_VV (ComplSlash (SlashV2a read_V2) (DetCN (DetQuant DefArt NumSg) (UseN book_N)))) (PrepNP before_Prep (UsePN (weekdayPN monday_Weekday))))))) NoVoc 
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a kill_V2) (UsePron he_Pron))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron he_Pron) (AdvVP (PassV2 kill_V2) (PrepNP by8agent_Prep (UsePN john_PN)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a eat_V2) (DetCN (DetQuant IndefArt (NumCard (NumDigits (IDig D_3)))) (UseN sheep_N)))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePN john_PN) (ComplSlash (SlashV2a find_V2) (DetCN (DetQuant IndefArt (NumCard (NumNumeral (num (pot2as3 (pot1as2 (pot1 n4))))))) (UseN cat_N)))))) NoVoc
+TExclMark (PhrUtt NoPConj (UttImpSg PPos (ImpVP (AdvVP (UseV go_V) (PrepNP to_Prep (DetCN (DetQuant DefArt NumSg) (UseN house_N)))))) NoVoc) TEmpty
+TFullStop (PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (ComplSlash (SlashV2a love_V2) (DetCN (DetQuant IndefArt NumPl) (AdjCN (PositA red_A) (UseN apple_N))))))) NoVoc) TEmpty
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePN john_PN) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA clever_A) (UseN man_N)))))))) NoVoc
+PhrUtt NoPConj (UttImpSg PPos (ImpVP (AdvVP (UseV come_V) here_Adv))) (VocNP (DetCN (DetQuant IndefArt NumPl) (UseN boy_N)))
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron he_Pron) (ComplVS say_VS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron youSg_Pron) (ComplVV want_VV (UseV swim_V)))))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron she_Pron) (ComplSlash (SlashV2V beg_V2V (ComplSlash (SlashV2a find_V2) (DetCN (DetQuant (PossPron she_Pron) NumSg) (UseN dog_N)))) (UsePN john_PN))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (ComplSlash (SlashV2A paint_V2A (PositA red_A)) (UsePron it_Pron))))) NoVoc
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron she_Pron) (ComplVA become_VA (AdAP very_AdA (PositA beautiful_A)))))) NoVoc
