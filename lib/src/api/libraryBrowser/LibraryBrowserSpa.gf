@@ -1,11 +1,11 @@
 --# -path=.:alltenses
 
-concrete LibraryBrowserDut of LibraryBrowser = 
-  GrammarDut - [
+concrete LibraryBrowserSpa of LibraryBrowser = 
+  GrammarSpa - [
     UseCopula
     ], 
-  LexiconDut
-    ** open (S = SyntaxDut) in {
+  LexiconSpa
+    ** open (S = SyntaxSpa) in {
 
   lin
     i_NP = S.i_NP ;

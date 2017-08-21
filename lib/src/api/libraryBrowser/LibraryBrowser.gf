@@ -1,10 +1,12 @@
 abstract LibraryBrowser = 
   Grammar - [
-    n2,n3,n4,n5,n6,n7,n8,D_0,D_1,D_2,D_3,D_4,D_5,D_6,D_7,D_8,
-    UseCopula,
-    UsePron, IndefArt, DefArt, Use2N3, Use3N3
+--    n2,n3,n4,n5,n6,n7,n8,D_0,D_1,D_2,D_3,D_4,D_5,D_6,D_7,D_8,
+    UseCopula
+--    ,UsePron, IndefArt, DefArt, Use2N3, Use3N3
     ], 
-  Lexicon [
+  Lexicon
+{- AR 21/8/2017 removing almost all the restrictions
+  [
     N,   man_N, woman_N, house_N,
     N2,  brother_N2,
     N3,  distance_N3,
@@ -21,7 +23,8 @@ abstract LibraryBrowser =
     V2A, paint_V2A,
     V2S, answer_V2S,
     V2Q, ask_V2Q
-    ] 
+    ]
+-}
   ** {
   flags startcat = Utt ;
 
