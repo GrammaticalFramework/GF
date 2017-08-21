@@ -33,6 +33,9 @@ App15.pgf: $(APP15)
 App16.pgf: $(APP16)
 	$(GFMKT) -name=App16 $(APP16) +RTS -K200M
 
+App17.pgf: $(APP17)
+	$(GFMKT) -name=App16 $(APP17) +RTS -K200M
+
 # Without dependencies:
 App11:
 	$(GFMKT) -name=App11 $(APP11) +RTS -K200M

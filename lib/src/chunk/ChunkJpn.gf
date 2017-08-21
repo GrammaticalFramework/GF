@@ -3,7 +3,7 @@ concrete ChunkJpn of Chunk = CatJpn, ExtensionsJpn [VPS,VPI] **
                AdA_Chunk, AdV_Chunk, AdN_Chunk, PConj_Chunk, Symb_Chunk,
                fullstop_Chunk, exclmark_Chunk, questmark_Chunk, comma_Chunk,
                colon_Chunk, semicolon_Chunk, quote_Chunk, lpar_Chunk,
-               rpar_Chunk, dash_Chunk]
+               rpar_Chunk, dash_Chunk, sbSS]
      with (Syntax = SyntaxJpn), (Extensions = ExtensionsJpn) **
   open 
     SyntaxJpn, (E = ExtensionsJpn), Prelude, 

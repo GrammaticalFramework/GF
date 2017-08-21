@@ -1125,7 +1125,17 @@ pgf_file_lzn_symbol_meta(PgfLinFuncs** funcs, PgfMetaId id)
 			flin->capit = PGF_CAPIT_NONE;
 	}
 
-	gu_putc('?', flin->out, flin->err);		
+	gu_putc('?', flin->out, flin->err);
+
+	switch (flin->capit) {
+	case PGF_CAPIT_FIRST:
+		flin->capit = PGF_CAPIT_NONE;
+		break;
+	case PGF_CAPIT_ALL:
+		flin->capit = PGF_CAPIT_NEXT;
+		break;
+	default:;
+	}
 }
 
 static PgfLinFuncs pgf_file_lin_funcs = {
