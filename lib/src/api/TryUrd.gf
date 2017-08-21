@@ -1,6 +1,6 @@
 --# -path=.:../urdu:../hindustani:../common:../abstract:../prelude
 
-resource TryUrd = SyntaxUrd - [mkAdN] , LexiconUrd, ParadigmsUrd - [mkAdv,mkDet,mkIP,mkAdN] ** 
+resource TryUrd = SyntaxUrd - [mkAdN] , LexiconUrd, ParadigmsUrd - [mkAdv,mkDet,mkIP,mkAdN,mkQuant] ** 
   open (P = ParadigmsUrd) in {
 
 oper
