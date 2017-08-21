@@ -124,11 +124,12 @@ readLanguage = readCId
 showLanguage :: Language -> String
 showLanguage = showCId
 
-fidString, fidInt, fidFloat, fidVar :: FId
+fidString, fidInt, fidFloat, fidVar, fidStart :: FId
 fidString = (-1)
 fidInt    = (-2)
 fidFloat  = (-3)
 fidVar    = (-4)
+fidStart  = (-5)
 
 isPredefFId :: FId -> Bool
 isPredefFId = (`elem` [fidString, fidInt, fidFloat, fidVar])

@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, BangPatterns #-}
+{-# LANGUAGE BangPatterns #-}
 module PGF.Optimize
              ( optimizePGF
              , updateProductionIndices
@@ -11,11 +11,7 @@ import PGF.Macros
 import Data.List (mapAccumL)
 import Data.Array.IArray
 import Data.Array.MArray
-#if MIN_VERSION_base(4,6,0)
 import Data.Array.Unsafe as U(unsafeFreeze)
-#else
-import Data.Array.ST as U(unsafeFreeze)
-#endif
 import Data.Array.ST
 import Data.Array.Unboxed
 import qualified Data.Map as Map

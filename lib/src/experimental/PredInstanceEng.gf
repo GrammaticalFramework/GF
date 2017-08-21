@@ -115,7 +115,7 @@ oper
     AgP1 n => n ;
     AgP2 n => n ;
     AgP3Sg _ => Sg ;
-    AgP3Pl => Pl
+    AgP3Pl _ => Pl
     } ;
 
   agr2icagr : Agr -> ICAgr = \a -> UUnit ;
@@ -123,7 +123,7 @@ oper
 -- restoring full Agr
   ipagr2agr : IPAgr -> Agr = \n -> case n of {
     Sg => AgP3Sg Neutr ; ---- gender
-    Pl => AgP3Pl
+    Pl => AgP3Pl Neutr
     } ;
 
   ipagr2vagr : IPAgr -> VAgr = \n -> case n of {
@@ -140,7 +140,7 @@ oper
   vagr2agr : VAgr -> Agr = \a -> case a of {
     VASgP1 => AgP1 Sg ;
     VASgP3 => AgP3Sg Neutr ;
-    VAPl   => AgP3Pl
+    VAPl   => AgP3Pl Neutr
     } ;
 
   vPastPart : PrVerb -> AAgr -> Str = \v,_ -> v.s ! VVF VPPart ;

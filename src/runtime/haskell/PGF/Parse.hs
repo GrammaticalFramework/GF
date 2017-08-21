@@ -77,33 +77,26 @@ parseWithRecovery pgf lang typ open_typs dp toks = accept (initState pgf lang ty
         Just ps -> accept ps ts
         Nothing -> skip ps_map ts
 
+
 -- | Creates an initial parsing state for a given language and
 -- startup category.
 initState :: PGF -> Language -> Type -> ParseState
 initState pgf lang (DTyp _ start _) = 
-  let (acc,items) = case Map.lookup start (cnccats cnc) of
-                      Just (CncCat s e labels) -> 
-                              let keys = do fid <- range (s,e)
-                                            lbl <- indices labels
-                                            return (AK fid lbl)
-                              in foldl' (\(acc,items) key -> predict flit ftok cnc
-                                                                     (pproductions cnc)
-                                                                     key key 0
-                                                                     acc items)
-                                        (Map.empty,[])
-                                        keys
-                      Nothing -> (Map.empty,[])
+  let items = case Map.lookup start (cnccats cnc) of
+                Just (CncCat s e labels) -> 
+                        do fid <- range (s,e)
+                           funid <- fromMaybe [] (IntMap.lookup fid (linrefs cnc))
+                           let lbl           = 0
+                               CncFun _ lins = unsafeAt (cncfuns cnc) funid
+                           return (Active 0 0 funid (unsafeAt lins lbl) [PArg [] fid] (AK fidStart lbl))
+                Nothing -> []
   in PState abs
             cnc
             (Chart emptyAC [] emptyPC (pproductions cnc) (totalCats cnc) 0)
-            (TrieMap.compose (Just (Set.fromList items)) acc)
+            (TrieMap.compose (Just (Set.fromList items)) Map.empty)
   where
     abs = abstract pgf
     cnc = lookConcrComplete pgf lang
-
-    flit _ = Nothing
-
-    ftok = Map.unionWith (TrieMap.unionWith Set.union)
 
 
 -- | This function constructs the simplest possible parser input. 
@@ -218,7 +211,7 @@ recoveryStates open_types (EState abs cnc chart) =
 -- limited by the category specified, which is usually
 -- the same as the startup category.
 getParseOutput :: ParseState -> Type -> Maybe Int -> (ParseOutput,BracketedString)
-getParseOutput (PState abs cnc chart cnt) ty@(DTyp _ start _) dp =
+getParseOutput (PState abs cnc chart cnt) ty dp =
   let froots | null roots = getPartialSeq (sequences cnc) (reverse (active chart1 : actives chart1)) seq
              | otherwise  = [([SymCat 0 lbl],[PArg [] fid]) | AK fid lbl <- roots]
 
@@ -253,12 +246,11 @@ getParseOutput (PState abs cnc chart cnt) ty@(DTyp _ start _) dp =
                    sym        -> []
       in init ++ tail
 
-    roots = case Map.lookup start (cnccats cnc) of
-              Just (CncCat s e lbls) -> do cat <- range (s,e)
-                                           lbl <- indices lbls
-                                           fid <- maybeToList (lookupPC (PK cat lbl 0) (passive chart1))
-                                           return (AK fid lbl)
-              Nothing                -> mzero
+    roots = do let lbl = 0
+               fid <- maybeToList (lookupPC (PK fidStart lbl 0) (passive chart1))
+               PApply _ [PArg _ fid] <- maybe [] Set.toList (IntMap.lookup fid (forest chart1))
+               return (AK fid lbl)
+
 
 getPartialSeq seqs actives = expand Set.empty
   where
@@ -400,29 +392,25 @@ process flit ftok cnc (item@(Active j ppos funid seqid args key0):items) acc cha
     ftok_ (tok:toks) item cnt =
       ftok (Map.singleton tok (TrieMap.singleton toks (Set.singleton item))) cnt
 
-predict flit ftok cnc forest key0 key@(AK fid lbl) k acc items =
-  let (acc1,items1) = case IntMap.lookup fid forest of
-                        Nothing  -> (acc,items)
-                        Just set -> Set.fold foldProd (acc,items) set
+    predict flit ftok cnc forest key0 key@(AK fid lbl) k acc items =
+      let (acc1,items1) = case IntMap.lookup fid forest of
+                            Nothing  -> (acc,items)
+                            Just set -> Set.fold foldProd (acc,items) set
 
-      (acc2,items2) = case IntMap.lookup fid (lexicon cnc) >>= IntMap.lookup lbl of
-                        Just tmap -> let (mb_v,toks) = TrieMap.decompose (TrieMap.map (toItems key0 k) tmap)
-                                         acc1'   = ftok toks acc1
-                                         items1' = maybe [] Set.toList mb_v ++ items1
-                                     in (acc1',items1')
-                        Nothing   -> (acc1,items1)
-  in (acc2,items2)
-  where
-    foldProd (PCoerce fid)         (acc,items) = predict flit ftok cnc forest key0 (AK fid lbl) k acc items
-    foldProd (PApply funid args)   (acc,items) = (acc,Active k 0 funid (rhs funid lbl) args key0 : items)
-    foldProd (PConst _ const toks) (acc,items) = (acc,items)
-    
-    rhs funid lbl = unsafeAt lins lbl
+          (acc2,items2) = case IntMap.lookup fid (lexicon cnc) >>= IntMap.lookup lbl of
+                            Just tmap -> let (mb_v,toks) = TrieMap.decompose (TrieMap.map (toItems key0 k) tmap)
+                                             acc1'   = ftok toks acc1
+                                             items1' = maybe [] Set.toList mb_v ++ items1
+                                         in (acc1',items1')
+                            Nothing   -> (acc1,items1)
+      in (acc2,items2)
       where
-        CncFun _ lins = unsafeAt (cncfuns cnc) funid
+        foldProd (PCoerce fid)         (acc,items) = predict flit ftok cnc forest key0 (AK fid lbl) k acc items
+        foldProd (PApply funid args)   (acc,items) = (acc,Active k 0 funid (rhs funid lbl) args key0 : items)
+        foldProd (PConst _ const toks) (acc,items) = (acc,items)
 
-    toItems key@(AK fid lbl) k funids =
-      Set.fromList [Active k 1 funid (rhs funid lbl) [] key | funid <- IntSet.toList funids]
+        toItems key@(AK fid lbl) k funids =
+          Set.fromList [Active k 1 funid (rhs funid lbl) [] key | funid <- IntSet.toList funids]
 
 
 updateAt :: Int -> a -> [a] -> [a]

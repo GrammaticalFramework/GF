@@ -1,7 +1,6 @@
-{-# LANGUAGE CPP,ForeignFunctionInterface #-}
+{-# LANGUAGE ForeignFunctionInterface #-}
 -- | A variant of 'Control.Concurrent.setNumCapabilities' that automatically
--- detects the number of processors in the system, and is available
--- even when compiling with GHC<7.6.
+-- detects the number of processors in the system.
 module GF.System.Concurrency(
   -- * Controlling parallelism
   setNumCapabilities,getNumberOfProcessors) where
@@ -16,13 +15,8 @@ import Foreign.C.Types(CInt(..))
 -- hasn't already been set with @+RTS -N/n/ -RTS@.
 setNumCapabilities opt_n =
   do n <- maybe getNumberOfProcessors return opt_n
-#if MIN_VERSION_base(4,6,0)
      C.setNumCapabilities n
      return True
-#else
-     n_now <- C.getNumCapabilities
-     return (n==n_now)
-#endif
 
 -- | Returns the number of processors in the system.
 getNumberOfProcessors = fmap fromEnum c_getNumberOfProcessors

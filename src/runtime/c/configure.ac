@@ -1,5 +1,5 @@
-AC_INIT(Portable Grammar Format library, 0.1.pre, 
-		 https://code.google.com/p/grammatical-framework/, 
+AC_INIT(Portable Grammar Format library, 0.1-pre, 
+		 http://www.grammaticalframework.org/, 
 		 libpgf)
 AC_PREREQ(2.58)
 
