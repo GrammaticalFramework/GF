@@ -14,8 +14,9 @@ concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude
 
     DetQuant quant num = {
       s  = quant.s ++ num.s ! Sg ! Nom ;
-      n  = num.n
-      } ;
+      n  = num.n;
+      useGen = quant.useGen
+    } ;
 
     NumSg = {s = \\num,c => []; n = Sg} ;
     NumPl = {s = \\num,c => []; n = Pl} ;
@@ -28,12 +29,8 @@ concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude
     OrdNumeral num = {s = \\c => num.s ! NOrd ! c} ;
     OrdSuperl  a = {s = \\n,c => "en" ++ a.s ! n ! c} ;
 
-    DefArt = {
-      s = []
-      } ;
-    IndefArt = {
-      s = []
-      } ;
+    DefArt = {s = []; useGen = False} ;
+    IndefArt = {s = []; useGen = False} ;
 
     UseN n = n ;
 
@@ -44,26 +41,32 @@ concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude
         h : Harmony = {vow = f.harmony.vow; con = f.harmony.con}
       in
         case f.c.c of {
-          Nom => {s = \\n, c => x.s ! Gen ++ f.s ! n ! Acc };
-          Acc => {s = \\_,_ => "TODO"};
+          Nom => {
+            s = \\n, c => x.s ! Gen ++ f.s ! n ! Acc;
+            gen = \\_, _ => "TODO"
+          };
+          Acc => {s = \\_,_ => "TODO"; gen = \\_, _ => "TODO"};
           Gen => {
             s =
               \\n, c =>
                 x.s ! Gen ++ f.gen ! n ! {n = Sg; p = P3}
-                ++ BIND ++ (caseSuffixes ! c).st ! h.con ! h.vow
+                ++ BIND ++ (caseSuffixes ! c).st ! h.con ! h.vow;
+            gen = \\_, _ => "TODO"
           };
           Dat => {
             s = \\n, c =>
               x.s ! Gen ++ f.gen ! n ! {n = Sg; p = P3}
-                ++ datSuffixN.st ! h.con ! h.vow
+                ++ datSuffixN.st ! h.con ! h.vow;
+            gen = \\_, _ => "TODO"
           };
-          Loc => {s = \\_,_ => "TODO"};
-          Ablat => {s = \\_,_ => "TODO"};
-          Abess _ => {s = \\_,_ => "TODO"}
+          Loc => {s = \\_,_ => "TODO"; gen = \\_, _ => "TODO"};
+          Ablat => {s = \\_,_ => "TODO"; gen = \\_, _ => "TODO"};
+          Abess _ => {s = \\_,_ => "TODO"; gen = \\_, _ => "TODO"}
         };
 
 
     AdjCN ap cn = {
-      s = \\n,c => ap.s ! Sg ! Nom ++ cn.s ! n ! c
+      s = \\n,c => ap.s ! Sg ! Nom ++ cn.s ! n ! c;
+      gen = \\n, a => ap.s ! Sg ! Nom ++ cn.gen ! n ! a
       } ;
 }

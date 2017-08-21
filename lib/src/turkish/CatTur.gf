@@ -7,15 +7,15 @@ concrete CatTur of Cat = CommonX ** open ResTur, Prelude in {
   lincat
 
 -- Noun
-    CN = {s : Number => Case => Str} ;
+    CN = {s : Number => Case => Str; gen : Number => Agr => Str} ;
     NP = {s : Case => Str ; a : Agr} ;
 
     Pron = ResTur.Pron ;
-    Det = {s : Str; n : Number} ;
+    Det = {s : Str; n : Number; useGen : Bool} ;
     Num  = {s : Number => Case => Str; n : Number} ;
     Card = {s : Number => Case => Str} ;
     Ord  = {s : Number => Case => Str} ;
-    Quant = {s : Str} ;
+    Quant = {s : Str; useGen : Bool} ;
     Prep = {s : Str; c : Case} ;
 
     Numeral = {s : CardOrd => Number => Case => Str ; n : Number} ;
