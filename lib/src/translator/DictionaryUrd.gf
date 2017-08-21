@@ -55,18 +55,6 @@ lin
   more_CAdv = {s = "زیادہ" ; p = "سے" } ;
   most_Predet = ss "زیادہ تر" ;
   much_Det = mkDet "بہت" "بہت" "بہت" "بہت" Sg  ;
---  must_VV = {
---    s = table {
---      VVF VInf => ["ہاvع تo"] ;
---      VVF VPres => "مuست" ;
---      VVF VPPart => ["ہاد تo"] ;
---      VVF VPresPart => ["ہاviنگ تo"] ;
---      VVF VPast => ["ہاد تo"] ;      --# notpresent
---      VVPastNeg => ["ہادn'ت تo"] ;      --# notpresent
---      VVPresNeg => "مuستn'ت"
---      } ;
---    isAux = True
---    } ;
 -----b  no_Phr = ss "نo" ;
   no_Utt = ss "نہیں" ;
   on_Prep = mkPrep "پر" "پر" ;
