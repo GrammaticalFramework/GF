@@ -543,6 +543,26 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
 		_ => x
 	} ;
 
+  shortPronoun : (_,_,_,_ : Str) -> Number -> Person -> 
+    {s : NPForm => Str ; a : Agr} = 
+      \ma, mu, mind, minu, n, p ->
+    let shortMa = mkPronoun ma mu mind n p ;
+        mulle : Str = case mu of {
+           "mu" => "mulle" ; 
+           "su" => "sulle" ;
+           _     => shortMa.s ! NPCase Allat 
+        } ;
+
+     in shortMa ** { s = table {
+         NPCase Allat => mulle ;
+         NPCase Transl => minu + "ks" ;
+         NPCase Ess    => minu + "na" ;
+         NPCase Abess  => minu + "ta" ;
+         NPCase Comit  => minu + "ga" ;
+         NPCase Termin => minu + "ni" ;
+         x          => shortMa.s ! x } } ;
+   
+
   -- TODO: this does not seem to be called from anyway
   mkDemPronoun : (_,_,_,_,_ : Str) ->  Number -> 
     {s : NPForm => Str ; a : Agr} = 
