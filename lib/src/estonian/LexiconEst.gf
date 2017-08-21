@@ -248,7 +248,7 @@ lin
   bark_N = mkN "koor" "koore" "koort" "koorde" "koorte" "koori" ;
   belly_N = mkN "kõht" "kõhu" "kõhtu" ;
   blood_N = mkN "veri" "vere" "verd" "verre" "verede" "veresid" ;
-  bone_N = mkN "luu" ;
+  bone_N = mkN "kont" "kondi" "konti" ;
   breast_N = mkN "rind" "rinna" "rinda" ;
   cloud_N = mkN "pilv" "pilve" "pilve" "pilvi" ;
   day_N = mkN "päev" "päeva" "päeva" ;
