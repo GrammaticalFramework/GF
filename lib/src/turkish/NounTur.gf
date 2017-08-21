@@ -1,12 +1,12 @@
 --# -path=.:../abstract:../common:../../prelude
 
-concrete NounTur of Noun = CatTur ** open ResTur, Prelude in {
+concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude in {
 
   flags optimize=all_subs ;
 
   lin
     DetCN det cn = {
-      s = \\c => det.s ++ cn.s ! det.n ! c ; 
+      s = \\c => det.s ++ cn.s ! det.n ! c ;
       a = agrP3 det.n
       } ;
 
@@ -40,15 +40,27 @@ concrete NounTur of Noun = CatTur ** open ResTur, Prelude in {
     UseN2 n = n;
 
     ComplN2 f x =
-      case f.c.c of {
-        Nom => {s = \\n, c => x.s ! Gen ++ f.s ! n ! Acc };
-        Acc => {s = \\_,_ => "TODO"};
-        Gen => {s = \\_,_ => "TODO"};
-        Dat => {s = \\_,_ => "TODO"};
-        Loc => {s = \\_,_ => "TODO"};
-        Ablat => {s = \\_,_ => "TODO"};
-        Abess _ => {s = \\_,_ => "TODO"}
-      };
+      let
+        h : Harmony = {vow = f.harmony.vow; con = f.harmony.con}
+      in
+        case f.c.c of {
+          Nom => {s = \\n, c => x.s ! Gen ++ f.s ! n ! Acc };
+          Acc => {s = \\_,_ => "TODO"};
+          Gen => {
+            s =
+              \\n, c =>
+                x.s ! Gen ++ f.gen ! n ! {n = Sg; p = P3}
+                ++ BIND ++ (caseSuffixes ! c).st ! h.con ! h.vow
+          };
+          Dat => {
+            s = \\n, c =>
+              x.s ! Gen ++ f.gen ! n ! {n = Sg; p = P3}
+                ++ datSuffixN.st ! h.con ! h.vow
+          };
+          Loc => {s = \\_,_ => "TODO"};
+          Ablat => {s = \\_,_ => "TODO"};
+          Abess _ => {s = \\_,_ => "TODO"}
+        };
 
 
     AdjCN ap cn = {
