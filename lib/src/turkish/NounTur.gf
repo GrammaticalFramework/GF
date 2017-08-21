@@ -38,6 +38,6 @@ concrete NounTur of Noun = CatTur ** open ResTur, Prelude in {
     UseN n = n ;
 
     AdjCN ap cn = {
-      s = \\n,c => ap.s ! n ! c ++ cn.s ! n ! c
+      s = \\n,c => ap.s ! Sg ! Nom ++ cn.s ! n ! c
       } ;
 }
