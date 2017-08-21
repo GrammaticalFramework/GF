@@ -112,6 +112,8 @@ concrete CatGer of Cat =
     VP = \vp -> useInfVP False vp ;
     VPSlash = \vps -> useInfVP False vps ++ vps.c2.s ;
 
+	AP = \ap -> ap.s ! APred ++ ap.ext ;
+
     V, VS, VQ, VA = \v -> useInfVP False (predV v) ;
     V2, V2A, V2Q, V2S = \v -> useInfVP False (predV v) ++ v.c2.s ;
     V3 = \v -> useInfVP False (predV v) ++ v.c2.s ++ v.c3.s ;
