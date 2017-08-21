@@ -20,8 +20,8 @@ concrete TranslateUrd of Translate =
   QuestionUrd,
   RelativeUrd,
   IdiomUrd,
-----  ConstructionUrd,
-----  DocumentationUrd,
+  ConstructionUrd,
+  DocumentationUrd,
 
   ChunkUrd,
   ExtensionsUrd [    ListVPS,BaseVPS,ConsVPS,ConjVPS,ListVPI,BaseVPI,ConsVPI,ConjVPI,
