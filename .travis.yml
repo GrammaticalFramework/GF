@@ -1,0 +1,2 @@
+language: nix
+script: rm -rf .git && nix-build gf.nix
