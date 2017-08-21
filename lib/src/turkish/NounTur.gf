@@ -37,6 +37,20 @@ concrete NounTur of Noun = CatTur ** open ResTur, Prelude in {
 
     UseN n = n ;
 
+    UseN2 n = n;
+
+    ComplN2 f x =
+      case f.c.c of {
+        Nom => {s = \\n, c => x.s ! Gen ++ f.s ! n ! Acc };
+        Acc => {s = \\_,_ => "TODO"};
+        Gen => {s = \\_,_ => "TODO"};
+        Dat => {s = \\_,_ => "TODO"};
+        Loc => {s = \\_,_ => "TODO"};
+        Ablat => {s = \\_,_ => "TODO"};
+        Abess _ => {s = \\_,_ => "TODO"}
+      };
+
+
     AdjCN ap cn = {
       s = \\n,c => ap.s ! Sg ! Nom ++ cn.s ! n ! c
       } ;
