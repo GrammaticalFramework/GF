@@ -213,9 +213,8 @@ oper
 		   } ;
         in makeVerb inf base progBase pastBase aoristBase futureTable har;
 
-  
   makeVerb inf base progBase pastBase aoristBase futureTable har =
-    let 
+    let
 	futht = getHarVowP (futureTable ! Hard) ;
 	pastHar = {vow = har.vow ; con = SVow} ;
 	futHar = {vow = futht ; con = (SCon Soft)} ;
@@ -231,7 +230,6 @@ oper
              }
        } ;
 
-  
 -- Implementation of noun paradigms
   mkNoun sn sa sd sg sl sabl sgabPos sgabNeg sgs pln har =
       let plHar = getHarmony pln ;
@@ -264,10 +262,9 @@ oper
         } ;
       harmony = har
     } ;
-  
+
   irregN_h sn sg har = irregN har sn sg ;
 
-  
   irregN ht sn sg =
     let
         pln = add_number Pl sn ht ;
@@ -286,7 +283,6 @@ oper
            pln
            har ;
 
-  
   regN sn =
     let har = getHarmony sn ;
         pln = add_number Pl sn har.vow ;
@@ -304,10 +300,9 @@ oper
 	   pln
 	   har ;
 
-  
   regPN sn = makePN sn sn ;
 
-  makeHarPN sn sy har = 
+  makeHarPN sn sy har =
     let bn = sn + "'" ;
         by = sy + "'" ;
         pln = add_number Pl bn har.vow ;
@@ -442,7 +437,7 @@ oper
 
   regDigit card = makeDigit card (card + ".") Pl ;
 
-  makeDigit card ordi num = 
+  makeDigit card ordi num =
     let
       digitStr = case card of {
 	  "0" => "sıfır" ;
@@ -454,7 +449,7 @@ oper
 	  "6" => "altı" ;
 	  "7" => "yedi" ;
 	  "8" => "sekiz" ;
-	  "9" => "dokuz" 
+	  "9" => "dokuz"
 	} ;
       harCard = getHarmony digitStr ;
       harOrd = getHarmony (addSuffix digitStr harCard ordNumSuffix)
@@ -462,14 +457,14 @@ oper
     {
       s = table {
 	NCard => (makeHarPN card card harCard).s ;
-	NOrd  => (makeHarPN ordi ordi harOrd).s 
-      } ; 
+	NOrd  => (makeHarPN ordi ordi harOrd).s
+      } ;
       n = num
     } ;
-    
+
 -- Helper functions and parameters
   -- finds which aorist type will be used with a base, see aorist type parameter for more info
-  getAoristType : Str -> AoristType = 
+  getAoristType : Str -> AoristType =
     \base -> case base of {
 	      #consonant* +
 	      #vowel +
@@ -478,7 +473,6 @@ oper
 	      _ => PlSyl
 	    } ;
 
-  
   -- construct a table contatining soft and hard forms of a base
   getBaseTable : Str -> Softness => Str =
     \base -> table {
@@ -507,7 +501,7 @@ oper
   dat_Case   : Prep = mkPrep [] Dat;
   acc_Case   : Prep = mkPrep [] Dat;
 
-  mkQuant : Str -> Quant = \s -> lin Quant {s=s} ;
+  mkQuant : Str -> Quant = \s -> lin Quant {s=s; useGen = NoGen} ;
 
 param
   AoristType = PlSyl         -- more than one syllable, takes -ir
