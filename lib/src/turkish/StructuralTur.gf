@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../common:../../prelude
 
 concrete StructuralTur of Structural = CatTur **
-  open ResTur, ParadigmsTur in {
+  open ResTur, ParadigmsTur, Prelude in {
 
   flags
     optimize=all ; coding = utf8 ;
@@ -63,5 +63,9 @@ concrete StructuralTur of Structural = CatTur **
     -- ... ile ...nin arasında
     between_Prep =
       mkPrep "arasında" Gen ;
+
+    and_Conj = ss "ve" ;
+
+    or_Conj = ss "veya" ;
 
 }
