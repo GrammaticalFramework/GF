@@ -68,5 +68,5 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
     mkPrep : Str -> Case -> {s : Str; c : Case; lock_Prep : {}} = \s,c -> lin Prep {s=s; c=c};
 
     mkClause : Str -> Verb -> {s : Str} =
-      \np, v -> ss "TODO" ;
+      \np, v -> ss (np ++ v.s ! VInfinitive) ;
 }
