@@ -1,0 +1,28 @@
+Treebanks for the GF Resource Grammar Library
+AR
+21 August 2017
+
+Available treebanks:
+
+  rgl-exx.txt        -- an old text treebank for RGL copied from GF/test/exx-resource.gfs
+  rgl-api-trees.txt  -- the examples of the library synopsis in core RGL terms
+  ud-rgl-trees.txt   -- trees constructed from Universal Dependencies documentation by using words from the common RGL Lexicon
+
+To run a treebank on a language:
+
+  > i alltenses/LangEng.gfo
+  > i alltenses/LangSwe.gfo
+  > rf -file=ud-rgl-trees.txt -lines -tree | l -treebank
+
+For regression testing:
+
+  > i alltenses/LangEng.gfo
+  > rf -file=rgl-api-trees.txt -lines -tree | l -treebank | wf -file=rgl-api-trees-Eng-v1.txt
+
+  -- edit and recompile LangEng.gf
+
+  > i alltenses/LangEng.gfo
+  > rf -file=rgl-api-trees.txt -lines -tree | l -treebank | wf -file=rgl-api-trees-Eng-v2.txt
+
+  > ! diff rgl-api-trees-Eng-v1.txt rgl-api-trees-Eng-v2.txt
+

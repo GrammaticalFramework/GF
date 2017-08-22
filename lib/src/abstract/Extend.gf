@@ -182,9 +182,9 @@ abstract Extend = Cat ** {
   youPolFem_Pron : Pron ; -- vous (êtes vieille)
 
 -- German
-  UttAccNP : NP -> Utt ; -- mich
-  UttDatNP : NP -> Utt ; -- mir
-  UttAccIP : NP -> Utt ; -- wen
-  UttDatIP : NP -> Utt ; -- wem
+  UttAccNP : NP -> Utt ; -- him (accusative)
+  UttDatNP : NP -> Utt ; -- him (dative)
+  UttAccIP : NP -> Utt ; -- whom (accusative)
+  UttDatIP : NP -> Utt ; -- whom (dative)
 
 }
