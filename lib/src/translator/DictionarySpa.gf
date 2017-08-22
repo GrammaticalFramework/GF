@@ -16556,7 +16556,7 @@ lin kirkintilloch_PN = mkPN "Kirkintilloch" ; -- status=guess src=geonames
 lin kirkwall_PN = mkPN "Kirkwall" ; -- status=guess src=geonames
 lin kirsch_N = mkN "kirsch" masculine ; -- status=guess
 lin kiss_N = mkN "beso" ; -- status=guess
-lin kiss_V2 = mkV2 (mkV "besarse") ; -- status=guess
+lin kiss_V2 = mkV2 (mkV "besar") ; -- status=guess
 lin kiss_off_V = advV (lin V OP_kiss_V2) OP_off_Adv ; -- guess-p-verb
 lin kiss_off_V2 = prepV2 (lin V OP_kiss_V2) OP_off_Prep ; -- guess-p-verb
 lin kiss_up_to_V2 = prepV2 (advV (lin V OP_kiss_V2) OP_up_Adv ) OP_to_Prep ; -- guess-p-verb
