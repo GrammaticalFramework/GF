@@ -43,6 +43,8 @@ concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude
 
     UseN2 n = n;
 
+    MassNP cn = { s = cn.s ! Sg; a = { n = Sg; p = P1 } } ;
+
     ComplN2 f x =
       let
         h : Harmony = {vow = f.harmony.vow; con = f.harmony.con}
