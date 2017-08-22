@@ -1,0 +1,26 @@
+Library browser grammars
+AR
+22 August 2017
+
+Grammars for finding LGR API terms by parsing strings.
+
+Two versions:
+
+  LibraryBrowser*.gf        -- uses Grammar + Lexicon (the RGL test lexicon)
+  LargeLibraryBrowser*.gf   -- uses Grammar + Dictionary (the wide-coverage translation dictionary)
+
+Two "user interfaces":
+
+  GF cloud minibar: select grammar LibraryBrowser.pgf
+
+  GF shell parsing in Eng and linearizing to API; reranking to get the "best" syntactic combinations
+
+    > i LargeLibraryBrowserEng.gf
+    > i LargeLibraryBrowserAPI.gf
+    > p -lang=Eng "the agreement will be valid notwithstanding the previous agreement" | rt -probs=../../translator/translate.probs | pt -number=1 | l -lang=API
+
+    mkUtt ( mkS futureTense ( mkCl ( mkNP the_Quant agreement_N ) ( mkVP ( mkVP valid_A ) ( mkAdv notwithstanding_Prep ( mkNP the_Quant ( mkCN ( mkAP previous_A ) ( mkCN agreement_N ) ) ) ) ) ) )
+
+The resulting expression can be used in any concrete syntax that imports a Syntax and Dictionary implementation.
+By changing the content words (e.g. agreement_N --> (mkN "agreement")) one can import Paradigms instead of Dictionary.
+
