@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:prelude
 
-concrete GrammarTur of Grammar = 
+concrete GrammarTur of Grammar =
   NounTur,
   AdjectiveTur,
   NumeralTur,
