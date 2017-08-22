@@ -9,7 +9,8 @@ concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude
       s =
         case det.useGen of {
           NoGen => \\c => det.s ++ cn.s ! det.n ! c ;
-          YesGen a => \\c => det.s ++ cn.gen ! det.n ! a
+          YesGen a => \\c => det.s ++ cn.gen ! det.n ! a ;
+          UseIndef => \\c => det.s ++ cn.s ! det.n ! Nom
         } ;
       a = agrP3 det.n
       } ;
@@ -36,7 +37,7 @@ concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude
     OrdSuperl  a = {s = \\n,c => "en" ++ a.s ! n ! c} ;
 
     DefArt = {s = []; useGen = NoGen} ;
-    IndefArt = {s = []; useGen = NoGen} ;
+    IndefArt = {s = []; useGen = UseIndef} ;
 
     UseN n = n ;
 

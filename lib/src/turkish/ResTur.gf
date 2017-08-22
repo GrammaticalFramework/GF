@@ -34,7 +34,7 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
      | VInfinitive
      ;
 
-    UseGen = NoGen | YesGen Agr;
+    UseGen = NoGen | YesGen Agr | UseIndef ;
 
   oper
     Verb : Type = {
