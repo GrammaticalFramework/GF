@@ -42,7 +42,7 @@ concrete StructuralTur of Structural = CatTur **
       mkPron "siz" "sizi" "size" "sizin" "sizde" "sizden" "sizli" "sizsiz" Pl P2 ;
 
     with_Prep =
-      mkPrep "ile" Acc ;
+      mkPrep "ile" Nom ;
 
     after_Prep =
       mkPrep "sonra" Ablat ;
