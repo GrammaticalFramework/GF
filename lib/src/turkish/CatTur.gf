@@ -11,11 +11,11 @@ concrete CatTur of Cat = CommonX ** open ResTur, Prelude in {
     NP = {s : Case => Str ; a : Agr} ;
 
     Pron = ResTur.Pron ;
-    Det = {s : Str; n : Number; useGen : Bool} ;
+    Det = {s : Str; n : Number; useGen : UseGen} ;
     Num  = {s : Number => Case => Str; n : Number} ;
     Card = {s : Number => Case => Str} ;
     Ord  = {s : Number => Case => Str} ;
-    Quant = {s : Str; useGen : Bool} ;
+    Quant = {s : Str; useGen : UseGen} ;
     Prep = {s : Str; c : Case} ;
 
     Numeral = {s : CardOrd => Number => Case => Str ; n : Number} ;

@@ -34,6 +34,8 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
      | VInfinitive
      ;
 
+    UseGen = NoGen | YesGen Agr;
+
   oper
     Verb : Type = {
       s : VForm => Str

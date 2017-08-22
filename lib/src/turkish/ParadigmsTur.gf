@@ -507,7 +507,7 @@ oper
   dat_Case   : Prep = mkPrep [] Dat;
   acc_Case   : Prep = mkPrep [] Dat;
 
-  mkQuant : Str -> Quant = \s -> lin Quant {s=s; useGen = False} ;
+  mkQuant : Str -> Quant = \s -> lin Quant {s=s; useGen = NoGen} ;
 
 param
   AoristType = PlSyl         -- more than one syllable, takes -ir

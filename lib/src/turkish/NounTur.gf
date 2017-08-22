@@ -6,11 +6,17 @@ concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude
 
   lin
     DetCN det cn = {
-      s = \\c => det.s ++ cn.s ! det.n ! c ;
+      s =
+        case det.useGen of {
+          NoGen => \\c => det.s ++ cn.s ! det.n ! c ;
+          YesGen a => \\c => det.s ++ cn.gen ! det.n ! a
+        } ;
       a = agrP3 det.n
       } ;
 
     UsePron p = p ;
+
+    PossPron p = {s = []; useGen = YesGen p.a} ;
 
     DetQuant quant num = {
       s  = quant.s ++ num.s ! Sg ! Nom ;
@@ -29,8 +35,8 @@ concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude
     OrdNumeral num = {s = \\c => num.s ! NOrd ! c} ;
     OrdSuperl  a = {s = \\n,c => "en" ++ a.s ! n ! c} ;
 
-    DefArt = {s = []; useGen = False} ;
-    IndefArt = {s = []; useGen = False} ;
+    DefArt = {s = []; useGen = NoGen} ;
+    IndefArt = {s = []; useGen = NoGen} ;
 
     UseN n = n ;
 
