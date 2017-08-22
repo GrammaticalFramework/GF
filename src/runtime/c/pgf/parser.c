@@ -311,7 +311,12 @@ pgf_print_production(int fid, PgfProduction prod,
     case PGF_PRODUCTION_APPLY: {
         PgfProductionApply* papp = i.data;
         gu_printf(out,err,"F%d(",papp->fun->funid);
-        pgf_print_expr(papp->fun->ep->expr, NULL, 0, out, err);
+        if (papp->fun->ep != NULL) {
+            pgf_print_expr(papp->fun->ep->expr, NULL, 0, out, err);
+        } else {
+            PgfPArg* parg = gu_seq_index(papp->args, PgfPArg, 0);
+            gu_printf(out,err,"linref %s", parg->ccat->cnccat->abscat->name);
+        }
         gu_printf(out,err,")[");
         pgf_print_production_args(papp->args,out,err);
         gu_printf(out,err,"]\n");
@@ -381,7 +386,12 @@ pgf_print_item(PgfItem* item, PgfParseState* state, GuOut* out, GuExn* err, GuPo
 		PgfProductionApply* papp = i.data;
         PgfCncFun* fun = papp->fun;
         gu_printf(out, err, "F%d(", fun->funid);
-        pgf_print_expr(fun->ep->expr, NULL, 0, out, err);
+        if (fun->ep != NULL) {
+            pgf_print_expr(fun->ep->expr, NULL, 0, out, err);
+        } else {
+            PgfPArg* parg = gu_seq_index(item->args, PgfPArg, 0);
+            gu_printf(out,err,"linref %s", parg->ccat->cnccat->abscat->name);
+        }
         gu_printf(out, err, ")[");
         pgf_print_production_args(item->args, out, err);
         gu_printf(out, err, "]; ");
@@ -563,6 +573,7 @@ pgf_parsing_get_conts(PgfParseState* state,
 					  GuPool *pool)
 {
 	gu_require(lin_idx < ccat->cnccat->n_lins);
+
 	PgfItemContss* contss = 
 		pgf_parsing_get_contss(state, ccat, pool);
 	if (contss == NULL) {
@@ -622,7 +633,7 @@ pgf_parsing_create_completed(PgfParsing* ps, PgfParseState* state,
 	cat->fin[0].fn = gu_ccat_fini;
 	gu_pool_finally(ps->pool, cat->fin);
 
-#ifdef PGF_COUNTS_DEBUG	
+#ifdef PGF_COUNTS_DEBUG
 	state->ps->ccat_full_count++;
 #endif
 
@@ -835,13 +846,6 @@ pgf_parsing_combine(PgfParsing* ps,
                     PgfParseState* before, PgfParseState* after,
                     PgfItem* cont, PgfCCat* cat, int lin_idx)
 {
-	if (cont == NULL) {
-		if (before->end_offset == strlen(ps->sentence)) {
-			pgf_result_predict(ps, NULL, cat);
-		}
-		return;
-	}
-
 	PgfItem* item = NULL;
 	switch (gu_variant_tag(cont->curr_sym)) {
 	case PGF_SYMBOL_CAT: {
@@ -980,6 +984,14 @@ pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
     pgf_print_production(ccat->fid, prod, out, err, tmp_pool);
     gu_pool_free(tmp_pool);
 #endif
+
+	if (item->conts->ccat->fid == -4) {
+		if (ps->before->end_offset == strlen(ps->sentence)) {
+			PgfPArg* parg = gu_seq_index(item->args, PgfPArg, 0);
+			pgf_result_predict(ps, NULL, parg->ccat);
+		}
+		return;
+	}
 
 	if (tmp_ccat != NULL) {
 		PgfItemContss* contss =
@@ -1275,6 +1287,7 @@ pgf_parsing_td_predict(PgfParsing* ps,
 	PgfItemConts* conts = 
 		pgf_parsing_get_conts(ps->before, ccat, lin_idx, ps->pool);
 	gu_buf_push(conts->items, PgfItem*, item);
+
 	if (gu_buf_length(conts->items) == 1) {
 		/* First time we encounter this linearization
 		 * of this category at the current position,
@@ -1885,9 +1898,8 @@ pgf_parse_result_is_new(PgfExprState* st)
 	return true;
 }
 
-// TODO: s/CId/Cat, add the cid to Cat, make Cat the key to CncCat
 static PgfParsing*
-pgf_parsing_init(PgfConcr* concr, PgfCId cat, size_t lin_idx, 
+pgf_parsing_init(PgfConcr* concr, PgfCId cat, 
                  GuString sentence,
                  double heuristic_factor,
                  PgfCallbacksMap* callbacks, PgfOracleCallback* oracle,
@@ -1901,8 +1913,6 @@ pgf_parsing_init(PgfConcr* concr, PgfCId cat, size_t lin_idx,
 		return NULL;
 	}
 
-	gu_assert(lin_idx < cnccat->n_lins);
-
 	PgfParsing* ps =
 		pgf_new_parsing(concr, sentence, callbacks, oracle, pool, out_pool);
 
@@ -1913,31 +1923,68 @@ pgf_parsing_init(PgfConcr* concr, PgfCId cat, size_t lin_idx,
 	PgfParseState* state =
 		pgf_new_parse_state(ps, 0, BIND_SOFT, 0);
 
+	int fidString = -1;
+	PgfCCat* start_ccat = gu_new(PgfCCat, ps->pool);
+	start_ccat->cnccat = gu_map_get(concr->ccats, &fidString, PgfCCat*)->cnccat;
+	start_ccat->lindefs = NULL;
+	start_ccat->linrefs = NULL;
+	start_ccat->viterbi_prob = 0;
+	start_ccat->fid = -4;
+	start_ccat->conts = NULL;
+	start_ccat->answers = NULL;
+	start_ccat->prods = NULL;
+	start_ccat->n_synprods = 0;
+
+#ifdef PGF_COUNTS_DEBUG
+	state->ps->ccat_full_count++;
+#endif
+
+	PgfItemConts* conts =
+		pgf_parsing_get_conts(state, start_ccat, 0, ps->pool);
+    gu_buf_push(conts->items, PgfItem*, NULL);
+
+#ifdef PGF_COUNTS_DEBUG
+	ps->cont_full_count++;
+#endif
+
 	size_t n_ccats = gu_seq_length(cnccat->cats);
 	for (size_t i = 0; i < n_ccats; i++) {
 		PgfCCat* ccat = gu_seq_get(cnccat->cats, PgfCCat*, i);
 		if (ccat != NULL) {
-            if (ccat->prods == NULL) {
-                // Empty category
-                continue;
-            }
+			PgfPArgs* args = gu_new_seq(PgfPArg, 1, ps->pool);
+			gu_seq_set(args, PgfPArg, 0, ((PgfPArg) { .hypos = NULL, .ccat = ccat }));
 
-			PgfItemConts* conts =
-				pgf_parsing_get_conts(state, ccat, lin_idx, ps->pool);
-            gu_buf_push(conts->items, PgfItem*, NULL);
+			size_t n_funs = gu_seq_length(ccat->linrefs);
+			for (size_t j = 0; j < n_funs; j++) {
+				PgfProduction prod = gu_null_variant;
+				PgfProductionApply* new_papp =
+					gu_new_variant(PGF_PRODUCTION_APPLY,
+						PgfProductionApply,
+						&prod, pool);
+				new_papp->fun  = gu_seq_get(ccat->linrefs, PgfCncFun*, j);
+				new_papp->args = args;
+
+                PgfItem* item = gu_new(PgfItem, ps->pool);
+				item->args = args;
+				item->inside_prob += ccat->viterbi_prob;
+				item->conts = conts;
+				item->prod  = prod;
+				item->curr_sym = gu_null_variant;
+				item->sym_idx = 0;
+				item->alt_idx = 0;
+				item->alt = 0;
+
+				conts->ref_count++;
+
+				pgf_item_set_curr_symbol(item, ps->pool);
 
 #ifdef PGF_COUNTS_DEBUG
-			ps->cont_full_count++;
+				ps->item_full_count++;
+				ps->item_real_count++;
 #endif
 
-            size_t n_prods = gu_seq_length(ccat->prods);
-            for (size_t i = 0; i < n_prods; i++) {
-                PgfProduction prod =
-                    gu_seq_get(ccat->prods, PgfProduction, i);
-                PgfItem* item = 
-                    pgf_new_item(ps, conts, prod);
                 gu_buf_heap_push(state->agenda, pgf_item_prob_order, &item);
-            }
+			}
 		}
 	}
 
@@ -2133,7 +2180,7 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfType* typ, GuString sentence,
 
 	// Begin parsing a sentence with the specified category
 	PgfParsing* ps =
-		pgf_parsing_init(concr, typ->cid, 0, sentence, heuristics, callbacks, NULL, err, pool, out_pool);
+		pgf_parsing_init(concr, typ->cid, sentence, heuristics, callbacks, NULL, err, pool, out_pool);
 	if (ps == NULL) {
 		return NULL;
 	}
@@ -2178,7 +2225,7 @@ pgf_parse_with_oracle(PgfConcr* concr, PgfType* typ,
 	// Begin parsing a sentence with the specified category
 	PgfCallbacksMap* callbacks = pgf_new_callbacks_map(concr, out_pool); 
 	PgfParsing* ps =
-		pgf_parsing_init(concr, typ->cid, 0, sentence, -1, callbacks, oracle, err, pool, out_pool);
+		pgf_parsing_init(concr, typ->cid, sentence, -1, callbacks, oracle, err, pool, out_pool);
 	if (ps == NULL) {
 		return NULL;
 	}
@@ -2240,7 +2287,7 @@ pgf_complete(PgfConcr* concr, PgfType* type, GuString sentence,
 	PgfCallbacksMap* callbacks =
 		pgf_new_callbacks_map(concr, pool);
 	PgfParsing* ps =
-		pgf_parsing_init(concr, type->cid, 0, sentence, -1.0, callbacks, NULL, err, pool, pool);
+		pgf_parsing_init(concr, type->cid, sentence, -1.0, callbacks, NULL, err, pool, pool);
 	if (ps == NULL) {
 		return NULL;
 	}
