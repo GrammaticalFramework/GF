@@ -1,7 +1,18 @@
 --# -path=.:../common:../abstract
 
 concrete ExtendEng of Extend =
-  CatEng ** ExtendFunctor [ProDrop]
+  CatEng ** ExtendFunctor -
+  [
+    VPS, ListVPS, RNP, RNPList, 
+    AdAdV, AdjAsCN, AdjAsNP, ApposNP, BaseVPS, Base_nr_RNP, Base_rn_RNP, Base_rr_RNP, ByVP, CompBareCN,
+    CompIQuant, CompQS, CompS, CompVP, ComplBareVS, ComplGenVV, ComplSlashPartLast, ComplVPSVV, CompoundAP,
+    CompoundN, ConjRNP, ConjVPS, ConsVPS, Cons_nr_RNP, Cons_rr_RNP, DetNPFem, EmbedPresPart, EmptyRelSlash,
+    ExistsNP, FocusAP, FocusAdV, FocusAdv, FocusObj, FrontExtPredVP, GenIP, GenModIP, GenModNP, GenNP, GenRP,
+    GerundAdv, GerundCN, GerundNP, IAdvAdv, ICompAP, InOrderToVP, InvFrontExtPredVP, MkVPS, NominalizeVPSlashNP,
+    PassAgentVPSlash, PassVPSlash, PastPartAP, PastPartAgentAP, PositAdVAdj, PredVPS, PredVPSVV, PredetRNP, PrepCN,
+    PresPartAP, PurposeVP, ReflPoss, ReflPron, ReflRNP, SlashBareV2S, SlashV2V, StrandQuestSlash, StrandRelSlash,
+    UncontractedNeg, UttAccIP, UttAccNP, UttAdV, UttDatIP, UttDatNP, UttVPShort, WithoutVP
+   ]
   with
     (Grammar = GrammarEng) **
 

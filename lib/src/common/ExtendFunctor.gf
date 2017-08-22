@@ -85,9 +85,9 @@ lin
   youPlFem_Pron = youPl_Pron ;
   theyFem_Pron = they_Pron ;
   youPolFem_Pron = youPol_Pron ;
-  UttAccNP = UttNP ;
-  UttDatNP = UttNP ;
-  UttAccIP = UttIP ;
-  UttDatIP = UttIP ;
+  UttAccNP = UttNP ; -- him (accusative) ; DEFAULT he
+  UttDatNP np = UttAccNP (lin NP np) ; -- him(dative) ; DEFAULT he
+  UttAccIP = UttIP ; -- whom (accusative) ; DEFAULT who
+  UttDatIP ip = UttAccIP (lin IP ip) ; -- whom (dative) ; DEFAULT who
 
 }
