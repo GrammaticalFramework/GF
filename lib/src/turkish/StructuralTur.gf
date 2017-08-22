@@ -53,4 +53,7 @@ concrete StructuralTur of Structural = CatTur **
     above_Prep =
       mkPrep "üzerinde" Gen ;
 
+    behind_Prep =
+      mkPrep "arkasında" Gen;
+
 }
