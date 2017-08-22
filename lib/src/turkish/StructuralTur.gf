@@ -60,6 +60,11 @@ concrete StructuralTur of Structural = CatTur **
     behind_Prep =
       mkPrep "arkasında" Gen;
 
+    -- ...nin üzerinde
+    -- ...nin üstünde
+    on_Prep =
+      variants {mkPrep "üzerinde" Gen; mkPrep "üstünde" Gen} ;
+
     -- ... ile ...nin arasında
     between_Prep =
       mkPrep "arasında" Gen ;
