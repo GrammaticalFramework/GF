@@ -47,9 +47,9 @@ ppCnc name cnc =
           text "productions" $$
           nest 2 (vcat [ppProduction (fcat,prod) | (fcat,set) <- IntMap.toList (productions cnc), prod <- Set.toList set]) $$
           text "lindefs" $$
-          nest 2 (vcat (map ppFunList (IntMap.toList (lindefs cnc)))) $$
+          nest 2 (vcat (concatMap ppLinDefs (IntMap.toList (lindefs cnc)))) $$
           text "linrefs" $$
-          nest 2 (vcat (map ppFunList (IntMap.toList (linrefs cnc)))) $$
+          nest 2 (vcat (concatMap ppLinRefs (IntMap.toList (linrefs cnc)))) $$
           text "lin" $$
           nest 2 (vcat (map ppCncFun (assocs (cncfuns cnc)))) $$
           text "sequences" $$
@@ -75,8 +75,11 @@ ppProduction (fid,PConst _ _ ss) =
 ppCncFun (funid,CncFun fun arr) =
   ppFunId funid <+> text ":=" <+> parens (hcat (punctuate comma (map ppSeqId (elems arr)))) <+> brackets (ppCId fun)
 
-ppFunList (fid,funids) = 
-  ppFId fid <+> text "->" <+> hcat (punctuate comma (map ppFunId funids))
+ppLinDefs (fid,funids) = 
+  [ppFId fid <+> text "->" <+> ppFunId funid <> brackets (ppFId fidVar) | funid <- funids]
+
+ppLinRefs (fid,funids) = 
+  [ppFId fidVar <+> text "->" <+> ppFunId funid <> brackets (ppFId fid) | funid <- funids]
 
 ppSeq (seqid,seq) = 
   ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol (elems seq))
@@ -109,6 +112,7 @@ ppFId fid
   | fid == fidInt    = text "CInt"
   | fid == fidFloat  = text "CFloat"
   | fid == fidVar    = text "CVar"
+  | fid == fidStart  = text "CStart"
   | otherwise        = char 'C' <> int fid
 
 ppFunId funid = char 'F' <> int funid

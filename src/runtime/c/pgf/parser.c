@@ -238,6 +238,12 @@ pgf_extern_syms_get(PgfItem* item, GuPool* pool)
 	return syms;
 }
 
+PGF_INTERNAL void
+pgf_print_fid(int fid, GuOut* out, GuExn* err);
+
+PGF_INTERNAL_DECL void
+pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err);
+
 #ifdef PGF_PARSER_DEBUG
 static void
 pgf_item_symbols(PgfItem* item,
@@ -291,12 +297,13 @@ pgf_print_production_args(PgfPArgs* args,
 			size_t n_hypos = gu_seq_length(arg.hypos);
 			for (size_t k = 0; k < n_hypos; k++) {
 				PgfCCat *hypo = gu_seq_get(arg.hypos, PgfCCat*, k);
-				gu_printf(out,err,"C%d ",hypo->fid);
+				pgf_print_fid(hypo->fid, out, err);
+				gu_putc(' ',out,err);
 			}
-			gu_printf(out,err,"-> ");
+			gu_puts("-> ",out,err);
 		}
-		
-		gu_printf(out,err,"C%d",arg.ccat->fid);
+
+		pgf_print_fid(arg.ccat->fid, out, err);
 	}
 }
 
@@ -304,7 +311,8 @@ static void
 pgf_print_production(int fid, PgfProduction prod, 
                      GuOut *out, GuExn* err, GuPool* pool)
 {
-    gu_printf(out,err,"C%d -> ",fid);
+	pgf_print_fid(fid, out, err);
+    gu_puts(" -> ", out, err);
        
     GuVariantInfo i = gu_variant_open(prod);
     switch (i.tag) {
@@ -324,7 +332,9 @@ pgf_print_production(int fid, PgfProduction prod,
     }
     case PGF_PRODUCTION_COERCE: {
         PgfProductionCoerce* pcoerce = i.data;
-        gu_printf(out,err,"_[C%d]\n",pcoerce->coerce->fid);
+        gu_puts("_[",out,err);
+        pgf_print_fid(pcoerce->coerce->fid, out, err);
+        gu_printf("]\n",out,err);
         break;
     }
     case PGF_PRODUCTION_EXTERN: {
@@ -338,9 +348,6 @@ pgf_print_production(int fid, PgfProduction prod,
         gu_impossible();
     }
 }
-
-PGF_INTERNAL_DECL void
-pgf_print_symbol(PgfSymbol sym, GuOut *out, GuExn *err);
 
 static void
 pgf_print_item_seq(PgfItem *item,
@@ -376,9 +383,11 @@ pgf_print_range(PgfParseState* start, PgfParseState* end, GuOut* out, GuExn* err
 static void
 pgf_print_item(PgfItem* item, PgfParseState* state, GuOut* out, GuExn* err, GuPool* pool)
 {
-    gu_printf(out, err, "[");
+    gu_putc('[', out, err);
 	pgf_print_range(item->conts->state, state, out, err);
-	gu_printf(out, err, "; C%d -> ", item->conts->ccat->fid);
+	gu_puts("; ", out, err);
+	pgf_print_fid(item->conts->ccat->fid, out, err);
+	gu_puts(" -> ", out, err);
 
 	GuVariantInfo i = gu_variant_open(item->prod);
 	switch (i.tag) {
@@ -398,8 +407,9 @@ pgf_print_item(PgfItem* item, PgfParseState* state, GuOut* out, GuExn* err, GuPo
 		break;
 	}
 	case PGF_PRODUCTION_COERCE: {
-        gu_printf(out, err, "_[C%d]; ",
-            gu_seq_index(item->args, PgfPArg, 0)->ccat->fid);
+        gu_puts("_[", out, err);
+        pgf_print_fid(gu_seq_index(item->args, PgfPArg, 0)->ccat->fid, out, err);
+        gu_puts("]; ", out, err);
 		break;
 	}
 	case PGF_PRODUCTION_EXTERN: {
@@ -976,10 +986,12 @@ pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
     if (tmp_ccat == NULL) {
 	    gu_printf(out, err, "[");
 		pgf_print_range(item->conts->state, ps->before, out, err);
-		gu_printf(out, err, "; C%d; %d; C%d]\n",
-                            item->conts->ccat->fid, 
-                            item->conts->lin_idx, 
-                            ccat->fid);
+		gu_puts("; ", out, err);
+        pgf_print_fid(item->conts->ccat->fid, out, err);
+        gu_printf(out, err, "; %d; ",
+                            item->conts->lin_idx);
+        pgf_print_fid(ccat->fid, out, err);
+		gu_puts("]\n", out, err);
 	}
     pgf_print_production(ccat->fid, prod, out, err, tmp_pool);
     gu_pool_free(tmp_pool);
