@@ -985,7 +985,7 @@ pgf_parsing_complete(PgfParsing* ps, PgfItem* item, PgfExprProb *ep)
     gu_pool_free(tmp_pool);
 #endif
 
-	if (item->conts->ccat->fid == -4) {
+	if (item->conts->ccat->fid == -5) {
 		if (ps->before->end_offset == strlen(ps->sentence)) {
 			PgfPArg* parg = gu_seq_index(item->args, PgfPArg, 0);
 			pgf_result_predict(ps, NULL, parg->ccat);
@@ -1929,7 +1929,7 @@ pgf_parsing_init(PgfConcr* concr, PgfCId cat,
 	start_ccat->lindefs = NULL;
 	start_ccat->linrefs = NULL;
 	start_ccat->viterbi_prob = 0;
-	start_ccat->fid = -4;
+	start_ccat->fid = -5;
 	start_ccat->conts = NULL;
 	start_ccat->answers = NULL;
 	start_ccat->prods = NULL;
