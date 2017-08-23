@@ -65,7 +65,7 @@ lin
   in_Prep = mkPrep "en" ;
   it_Pron = 
     mkPronoun
-      "él" "lo" "le" "él"
+      "eso" "lo" "le" "eso"
       "su" "su" "sus" "sus"
       Masc Sg P3 ;
   less_CAdv = X.mkCAdv "menos" conjThan ; ----
