@@ -30,7 +30,7 @@ concrete AdjectiveTur of Adjective =
         let
           kendi : N = mkN "kendi"
         in
-          \\n, c => kendi.s ! n ! c ++ a.c.s ++ a.s ! n ! c
+          \\n, c => kendi.s ! n ! c ++ a.c.s ++ a.s ! n ! Nom
     } ;
 
 }
