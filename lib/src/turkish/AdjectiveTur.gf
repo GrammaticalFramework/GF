@@ -1,4 +1,5 @@
-concrete AdjectiveTur of Adjective = CatTur ** open ResTur, Prelude in {
+concrete AdjectiveTur of Adjective =
+  CatTur ** open ResTur, ParadigmsTur, Prelude in {
 
   lin
 
@@ -22,6 +23,14 @@ concrete AdjectiveTur of Adjective = CatTur ** open ResTur, Prelude in {
 
     ComplA2 a np = {
       s = \\n, c => np.s ! a.c.c ++ a.c.s ++ a.s ! n ! c
+    } ;
+
+    ReflA2 a = {
+      s =
+        let
+          kendi : N = mkN "kendi"
+        in
+          \\n, c => kendi.s ! n ! c ++ a.c.s ++ a.s ! n ! c
     } ;
 
 }
