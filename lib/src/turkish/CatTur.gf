@@ -6,7 +6,7 @@ concrete CatTur of Cat = CommonX ** open ResTur, Prelude in {
 
   lincat
 
--- Noun
+    -- Noun
     CN = {s : Number => Case => Str; gen : Number => Agr => Str} ;
     NP = {s : Case => Str ; a : Agr} ;
     VP = Verb ;
@@ -24,11 +24,10 @@ concrete CatTur of Cat = CommonX ** open ResTur, Prelude in {
     Numeral = {s : CardOrd => Number => Case => Str ; n : Number} ;
     Digits  = {s : CardOrd => Number => Case => Str ; n : Number; tail : DTail} ;
 
--- Adjective
-
+    -- Adjective
     AP = {s : Number => Case => Str} ;
 
--- Open lexical classes, e.g. Lexicon
+    -- Open lexical classes, e.g. Lexicon
     V, VS, VQ, VA = Verb ;
     V2, V2Q, V2V, V2A, V2S = Verb ** {c : Prep} ;
     V3 = Verb ** {c1,c2 : Prep} ;

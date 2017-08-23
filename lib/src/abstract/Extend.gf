@@ -27,27 +27,45 @@ abstract Extend = Cat ** {
 
     CompBareCN  : CN -> Comp ;        -- (est) professeur
 
-    StrandQuestSlash     : IP -> ClSlash -> QCl ;   -- whom does John live with
-    StrandRelSlash       : RP -> ClSlash -> RCl ;   -- that he lives in
-    EmptyRelSlash        : ClSlash       -> RCl ;   -- he lives in
+    StrandQuestSlash : IP -> ClSlash -> QCl ;   -- whom does John live with
+    StrandRelSlash   : RP -> ClSlash -> RCl ;   -- that he lives in
+    EmptyRelSlash    : ClSlash       -> RCl ;   -- he lives in
  
 
--- $VP$ conjunction, covering both finite and infinitive forms (formerly VPI and VPS).
+-- $VP$ conjunction, separate categories for finite and infinitive forms (VPS and VPI, respectively)
+-- covering both in the same category leads to spurious VPI parses because VPS depends on many more tenses
 
   cat
-    VPS ;
+    VPS ;           -- finite VP's with tense and polarity
     [VPS] {2} ;
+    VPI ;
+    [VPI] {2} ;     -- infinitive VP's (TODO: with anteriority and polarity)
 
   fun
-    MkVPS      : Temp -> Pol -> VP -> VPS ;  -- to sleep / hasn't slept
+    MkVPS      : Temp -> Pol -> VP -> VPS ;  -- hasn't slept
     ConjVPS    : Conj -> [VPS] -> VPS ;      -- has walked and won't sleep
     PredVPS    : NP   -> VPS -> S ;          -- she [has walked and won't sleep]
-    ComplVPSVV : VV   -> VPS -> VP ;         -- want to sleep and to walk
+    
+    MkVPI      : VP -> VPI ;                 -- to sleep (TODO: Ant and Pol)
+    ConjVPI    : Conj -> [VPI] -> VPI ;      -- to sleep and to walk
+    ComplVPIVV : VV   -> VPI -> VP ;         -- must sleep and walk
 
--- in case ComplVPSVV is not available:
+-- the same for VPSlash, taking a complement with shared V2 verbs
 
-    PredVPSVV  : NP -> VV -> VPS -> VP ;     -- she wants to sleep and to walk
+  cat
+    VPS2 ;        -- have loved (binary version of VPS)
+    [VPS2] {2} ;  -- has loved, hates"
+    VPI2 ;        -- to love (binary version of VPI)
+    [VPI2] {2} ;  -- to love, to hate
 
+  fun
+    MkVPS2    : Temp -> Pol -> VPSlash -> VPS2 ;  -- has loved       
+    ConjVPS2  : Conj -> [VPS2] -> VPS2 ;          -- has loved and now hates
+    ComplVPS2 : VPS2 -> NP -> VPS ;               -- has loved and now hates that person
+
+    MkVPI2    : VPSlash -> VPI2 ;                 -- to love       
+    ConjVPI2  : Conj -> [VPI2] -> VPI2 ;          -- to love and hate
+    ComplVPI2 : VPI2 -> NP -> VPI ;               -- to love and hate that person
 
   fun
     ProDrop : Pron -> Pron ;  -- unstressed subject pronoun becomes []: "(io) sono stanco"
@@ -141,7 +159,7 @@ abstract Extend = Cat ** {
 --- from Extensions
 
   ComplGenVV  : VV -> Ant -> Pol -> VP  -> VP ;         -- want not to have slept
-  SlashV2V    : V2V -> Ant -> Pol -> VPS -> VPSlash ;   -- force (her) not to have slept
+----  SlashV2V    : V2V -> Ant -> Pol -> VPS -> VPSlash ;   -- force (her) not to have slept
 
   CompoundN   : N -> N  -> N ;      -- control system / controls system / control-system
   CompoundAP  : N -> A  -> AP ;     -- language independent / language-independent
@@ -186,5 +204,6 @@ abstract Extend = Cat ** {
   UttDatNP : NP -> Utt ; -- him (dative)
   UttAccIP : NP -> Utt ; -- whom (accusative)
   UttDatIP : NP -> Utt ; -- whom (dative)
+
 
 }

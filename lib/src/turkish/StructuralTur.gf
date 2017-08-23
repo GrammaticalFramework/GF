@@ -42,7 +42,7 @@ concrete StructuralTur of Structural = CatTur **
       mkPron "siz" "sizi" "size" "sizin" "sizde" "sizden" "sizli" "sizsiz" Pl P2 ;
 
     with_Prep =
-      mkPrep "ile" Nom ;
+      mkPrep [] (Abess Pos) ;
 
     -- ...den sonra
     after_Prep =
@@ -58,19 +58,33 @@ concrete StructuralTur of Structural = CatTur **
 
     -- ..nin arkasında
     behind_Prep =
-      mkPrep "arkasında" Gen;
+      mkPrep "arkasında" Gen ;
 
     -- ...nin üzerinde
     -- ...nin üstünde
     on_Prep =
       variants {mkPrep "üzerinde" Gen; mkPrep "üstünde" Gen} ;
 
+    in_Prep =
+      variants {mkPrep "içinde" Gen; mkPrep "içerisinde" Gen} ;
+
+    -- ... sırasında
+    during_Prep =
+      mkPrep "sırasında" Nom ;
+
     -- ... ile ...nin arasında
     between_Prep =
-      mkPrep "arasında" Gen ;
+      mkPrep "arasındaki" Gen ;
 
-    and_Conj = ss "ve" ;
+    and_Conj = ss "ile" ;
 
     or_Conj = ss "veya" ;
+
+    yes_Utt = ss "evet" ;
+    no_Utt  = ss "hayır" ;
+
+    always_AdV = {s = "her zaman"} ;
+
+    but_PConj = ss "ama" ;
 
 }

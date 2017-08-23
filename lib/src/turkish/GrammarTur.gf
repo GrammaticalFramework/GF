@@ -6,7 +6,8 @@ concrete GrammarTur of Grammar =
   AdjectiveTur,
   NumeralTur,
   StructuralTur,
-  SentenceTur
+  SentenceTur,
+  AdverbTur
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ;
