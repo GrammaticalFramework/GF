@@ -3,5 +3,6 @@
 concrete AllSpa of AllSpaAbs = 
   LangSpa,
   IrregSpa,
-  ExtraSpa 
+  ExtendSpa
+----  ExtraSpa 
   ** {} ;

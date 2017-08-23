@@ -3,5 +3,6 @@
 concrete AllSwe of AllSweAbs = 
   LangSwe - [PassV2],
   IrregSwe,
-  ExtraSwe
+----  ExtraSwe
+  ExtendSwe
   ** {} ;

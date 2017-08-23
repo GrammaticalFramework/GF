@@ -25,7 +25,7 @@ abstract Extend = Cat ** {
     GenModNP    : Num -> NP -> CN -> NP ; -- this man's car(s)
     GenModIP    : Num -> IP -> CN -> IP ; -- whose car(s)
 
-    CompBareCN  : CN -> Comp ;        -- (est) professeur
+    CompBareCN  : CN -> Comp ;        -- (is) teacher
 
     StrandQuestSlash : IP -> ClSlash -> QCl ;   -- whom does John live with
     StrandRelSlash   : RP -> ClSlash -> RCl ;   -- that he lives in
@@ -68,7 +68,7 @@ abstract Extend = Cat ** {
     ComplVPI2 : VPI2 -> NP -> VPI ;               -- to love and hate that person
 
   fun
-    ProDrop : Pron -> Pron ;  -- unstressed subject pronoun becomes []: "(io) sono stanco"
+    ProDrop : Pron -> Pron ;  -- unstressed subject pronoun becomes empty: "am tired"
     
     ICompAP : AP -> IComp ;   -- "how old"
     IAdvAdv : Adv -> IAdv ;   -- "how often"
@@ -192,18 +192,20 @@ abstract Extend = Cat ** {
 -- Romance
   DetNPFem : Det -> NP ;
   
-  iFem_Pron      : Pron ; -- je (suis vieille)
-  youFem_Pron    : Pron ; -- tu (es vieille)
-  weFem_Pron     : Pron ; -- nous (sommes vieilles)
-  youPlFem_Pron  : Pron ; -- vous (êtes vieilles)
-  theyFem_Pron   : Pron ; -- elles (sont vieilles)
-  youPolFem_Pron : Pron ; -- vous (êtes vieille)
+  iFem_Pron      : Pron ; -- I (Fem)
+  youFem_Pron    : Pron ; -- you (Fem)
+  weFem_Pron     : Pron ; -- we (Fem)
+  youPlFem_Pron  : Pron ; -- you plural (Fem)
+  theyFem_Pron   : Pron ; -- they (Fem)
+  youPolFem_Pron : Pron ; -- you polite (Fem)
+  youPolPl_Pron  : Pron ; -- you polite plural (Masc)
+  youPolPlFem_Pron : Pron ; -- you polite plural (Fem)
 
 -- German
   UttAccNP : NP -> Utt ; -- him (accusative)
   UttDatNP : NP -> Utt ; -- him (dative)
-  UttAccIP : NP -> Utt ; -- whom (accusative)
-  UttDatIP : NP -> Utt ; -- whom (dative)
+  UttAccIP : IP -> Utt ; -- whom (accusative)
+  UttDatIP : IP -> Utt ; -- whom (dative)
 
 
 }
