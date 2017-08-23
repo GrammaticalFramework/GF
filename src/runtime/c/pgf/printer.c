@@ -77,6 +77,23 @@ pgf_print_abstract(PgfAbstr* abstr, GuOut* out, GuExn* err)
 	gu_puts("}\n", out, err);
 }
 
+PGF_INTERNAL void
+pgf_print_fid(int fid, GuOut* out, GuExn* err)
+{
+	if (fid == -1)
+		gu_puts("CString", out, err);
+	else if (fid == -2)
+		gu_puts("CInt", out, err);
+	else if (fid == -3)
+		gu_puts("CFloat", out, err);
+	else if (fid == -4)
+		gu_puts("CVar", out, err);
+	else if (fid == -5)
+		gu_puts("CStart", out, err);
+	else
+		gu_printf(out, err, "C%d", fid);
+}
+
 static void
 pgf_print_productions(GuMapItor* fn, const void* key, void* value,
 			GuExn* err)
@@ -91,7 +108,9 @@ pgf_print_productions(GuMapItor* fn, const void* key, void* value,
 		for (size_t i = 0; i < n_prods; i++) {
 			PgfProduction prod = gu_seq_get(ccat->prods, PgfProduction, i);
 		
-			gu_printf(out,err,"    C%d -> ",fid);
+			gu_puts("    ", out, err);
+			pgf_print_fid(fid, out, err);
+			gu_puts(" -> ", out, err);
 
 			GuVariantInfo i = gu_variant_open(prod);
 			switch (i.tag) {
@@ -111,18 +130,20 @@ pgf_print_productions(GuMapItor* fn, const void* key, void* value,
 							if (k > 0)
 								gu_putc(' ',out,err);
 							PgfCCat *hypo = gu_seq_get(arg.hypos, PgfCCat*, k);
-							gu_printf(out,err,"C%d",hypo->fid);
+							pgf_print_fid(hypo->fid, out, err);
 						}
 					}
-            
-					gu_printf(out,err,"C%d",arg.ccat->fid);
+
+					pgf_print_fid(arg.ccat->fid, out, err);
 				}
 				gu_printf(out,err,"]\n");
 				break;
 			}
 			case PGF_PRODUCTION_COERCE: {
 				PgfProductionCoerce* pcoerce = i.data;
-				gu_printf(out,err,"_[C%d]\n",pcoerce->coerce->fid);
+				gu_puts("_[", out, err);
+				pgf_print_fid(pcoerce->coerce->fid, out, err);
+				gu_puts("]\n", out, err);
 				break;
 			}
 			default:
@@ -142,17 +163,13 @@ pgf_print_lindefs(GuMapItor* fn, const void* key, void* value,
     GuOut *out = clo->out;
     
     if (ccat->lindefs != NULL) {
-		gu_printf(out,err,"    C%d -> ",fid);
-		
 		size_t n_lindefs = gu_seq_length(ccat->lindefs);
 		for (size_t i = 0; i < n_lindefs; i++) {
-			if (i > 0) gu_putc(' ', out, err);
-			
 			PgfCncFun* fun = gu_seq_get(ccat->lindefs, PgfCncFun*, i);
-			gu_printf(out,err,"F%d",fun->funid);
+			gu_puts("    ",out,err);
+			pgf_print_fid(fid, out, err);
+			gu_printf(out,err," -> F%d[CVar]\n",fun->funid);
 		}
-		
-		gu_putc('\n', out,err);
 	}
 }
 
@@ -166,17 +183,13 @@ pgf_print_linrefs(GuMapItor* fn, const void* key, void* value,
     GuOut *out = clo->out;
     
     if (ccat->linrefs != NULL) {
-		gu_puts("    ",out,err);
-
 		size_t n_linrefs = gu_seq_length(ccat->linrefs);
 		for (size_t i = 0; i < n_linrefs; i++) {
-			if (i > 0) gu_putc(' ', out, err);
-
 			PgfCncFun* fun = gu_seq_get(ccat->linrefs, PgfCncFun*, i);
-			gu_printf(out,err,"F%d",fun->funid);
+			gu_printf(out,err,"    CVar -> F%d[",fun->funid);
+			pgf_print_fid(fid, out, err);
+			gu_puts("]\n", out, err);
 		}
-
-		gu_printf(out,err," -> C%d\n",fid);
 	}
 }
 
@@ -321,7 +334,11 @@ pgf_print_cnccat(GuMapItor* fn, const void* key, void* value,
     PgfCCat *start = gu_seq_get(cnccat->cats, PgfCCat*, 0);
     PgfCCat *end   = gu_seq_get(cnccat->cats, PgfCCat*, gu_seq_length(cnccat->cats)-1);
     
-    gu_printf(out, err, "       range  [C%d..C%d]\n", start->fid, end->fid);
+    gu_puts("       range  [", out, err);
+    pgf_print_fid(start->fid, out, err);
+    gu_puts("..", out, err);
+    pgf_print_fid(end->fid, out, err);
+    gu_puts("]\n", out, err);
     
     gu_puts("       labels [", out, err);
     for (size_t i = 0; i < cnccat->n_lins; i++) {
