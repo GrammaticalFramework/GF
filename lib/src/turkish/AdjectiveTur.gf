@@ -25,6 +25,7 @@ concrete AdjectiveTur of Adjective =
       s = \\n, c => np.s ! a.c.c ++ a.c.s ++ a.s ! n ! c
     } ;
 
+    -- TODO: Whether this is correct or not requires further examination.
     ReflA2 a = {
       s =
         let
