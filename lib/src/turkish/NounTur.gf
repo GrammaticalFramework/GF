@@ -25,6 +25,12 @@ concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude
       useGen = quant.useGen
     } ;
 
+    DetQuantOrd quant num o = {
+      s  = quant.s ++ num.s ! Sg ! Nom ++ o.s ! num.n ! Nom ;
+      n  = num.n;
+      useGen = quant.useGen
+    } ;
+
     NumSg = {s = \\num,c => []; n = Sg} ;
     NumPl = {s = \\num,c => []; n = Pl} ;
 
