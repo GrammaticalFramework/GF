@@ -7,9 +7,13 @@ lincat
 lin
   BaseVPS = variants {} ;
   ConsVPS = variants {} ;
-  
+  BaseVPI = variants {} ;
+  ConsVPI = variants {} ;
+  BaseVPS2 = variants {} ;
+  ConsVPS2 = variants {} ;
+  BaseVPI2 = variants {} ;
+  ConsVPI2 = variants {} ;
 
-lin
   GenNP = variants {} ;     -- NP -> Quant ; -- this man's
   GenIP = variants {} ;     -- IP -> IQuant ; -- whose
   GenRP = variants {} ;     -- Num -> CN -> RP ; -- whose car
@@ -19,11 +23,18 @@ lin
   StrandQuestSlash = QuestSlash ; -- whom does John live with ; DEFAULT with whom does John live
   StrandRelSlash = RelSlash ; -- that he lives in ; DEFAULT in which he lives
   EmptyRelSlash = RelSlash IdRP ; -- he lives in ; DEFAULT in which he lives
-  MkVPS vp = variants {} ;     -- Temp -> Pol -> VP -> VPS ; -- to sleep / hasn't slept
+  MkVPS vp = variants {} ;     -- Temp -> Pol -> VP -> VPS ; -- hasn't slept
   ConjVPS = variants {} ;     -- Conj -> [VPS] -> VPS ; -- has walked and won't sleep
-  PredVPS = variants {} ;     -- NP -> VPS -> S ; -- she [has walked and won't sleep]
-  ComplVPSVV = variants {} ;     -- VV -> VPS -> VP ; -- want to sleep and to walk
-  PredVPSVV = variants {} ;     -- NP -> VV -> VPS -> VP ; -- she wants to sleep and to walk
+  PredVPS = variants {} ;     -- NP -> VPS -> S ; -- has walked and won't sleep
+  MkVPI vp = variants {} ;     -- Temp -> Pol -> VP -> VPI ; -- to sleep / hasn't slept
+  ConjVPI = variants {} ;     -- Conj -> [VPI] -> VPI ; -- has walked and won't sleep
+  ComplVPIVV = variants {} ;     -- VV -> VPI -> VP ; -- want to sleep and to walk
+  MkVPS2 = variants {} ;     --     : Temp -> Pol -> VPSlash -> VPS2 ;  -- has loved       
+  ConjVPS2 = variants {} ;     --   : Conj -> [VPS2] -> VPS2 ;          -- has loved and now hates
+  ComplVPS2 = variants {} ;     --  : VPS2 -> NP -> VPS ;               -- has loved and now hates that person
+  MkVPI2 = variants {} ;     --     : Ant  -> Pol -> VPSlash -> VPI2 ;  -- to have loved       
+  ConjVPI2 = variants {} ;     --   : Conj -> [VPI2] -> VPI2 ;          -- to love and have hated
+  ComplVPI2 = variants {} ;     --  : VPI2 -> NP -> VPI ;               -- to love and hate that person
   ProDrop pro = pro ;     -- am tired ; DEFAULT I am tired
   ICompAP = variants {} ;     -- AP -> IComp ; -- "how old"
   IAdvAdv = variants {} ;     -- Adv -> IAdv ; -- "how often"
