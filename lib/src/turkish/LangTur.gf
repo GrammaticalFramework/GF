@@ -2,8 +2,7 @@
 
 concrete LangTur of Lang =
   GrammarTur,
-  LexiconTur,
-  AdverbTur
+  LexiconTur
   ** {
 
 flags startcat = Phr ; unlexer = text ; lexer = text ; coding=utf8 ;
