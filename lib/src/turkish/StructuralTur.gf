@@ -83,4 +83,6 @@ concrete StructuralTur of Structural = CatTur **
     yes_Utt = ss "evet" ;
     no_Utt  = ss "hayır" ;
 
+    always_AdV = {s = "her zaman"} ;
+
 }
