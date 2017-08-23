@@ -10,6 +10,6 @@ concrete GrammarTur of Grammar =
   AdverbTur
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+  flags startcat = Phr ;
 
 } ;
