@@ -87,4 +87,6 @@ concrete StructuralTur of Structural = CatTur **
 
     but_PConj = ss "ama" ;
 
+    at_most_AdN = ss "en fazla" ;
+
 }
