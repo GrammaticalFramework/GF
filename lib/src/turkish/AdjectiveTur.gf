@@ -9,4 +9,6 @@ concrete AdjectiveTur of Adjective = CatTur ** open ResTur, Prelude in {
       s = \\n,c => "daha" ++ a.s ! n ! c
       } ;
 
+    AdjOrd v = v ;
+
 }
