@@ -84,4 +84,9 @@ concrete NounTur of Noun = CatTur ** open ResTur, SuffixTur, HarmonyTur, Prelude
       s = \\n, c => adv.s ++ cn.s ! n ! c;
       gen = \\n, a => adv.s ++ cn.gen ! n ! a
     } ;
+
+    AdvNP np adv = {
+      s = \\c => adv.s ++ np.s ! c;
+      a = np.a
+    } ;
 }
