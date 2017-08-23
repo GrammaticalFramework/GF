@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common:../prelude
 
-concrete LangTur of Lang = 
+concrete LangTur of Lang =
   GrammarTur,
   LexiconTur
   ** {

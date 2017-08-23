@@ -34,6 +34,8 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
      | VInfinitive
      ;
 
+    UseGen = NoGen | YesGen Agr | UseIndef ;
+
   oper
     Verb : Type = {
       s : VForm => Str
@@ -60,8 +62,12 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
      a = {n=n; p=p} ;
      } ;
 
---Prep
-
+    -- Prep
     no_Prep = mkPrep [] Acc;
-    mkPrep : Str -> Case -> {s : Str; c : Case; lock_Prep : {}} = \s,c -> lin Prep {s=s; c=c};
+
+    mkPrep : Str -> Case -> {s : Str; c : Case; lock_Prep : {}} =
+      \s, c -> lin Prep {s=s; c=c};
+
+    mkClause : Str -> Agr -> Verb -> {s : Str} =
+      \np, a, v -> ss (np ++ v.s ! VProg a) ;
 }
