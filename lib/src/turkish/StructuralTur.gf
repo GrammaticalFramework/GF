@@ -80,4 +80,7 @@ concrete StructuralTur of Structural = CatTur **
 
     or_Conj = ss "veya" ;
 
+    yes_Utt = ss "evet" ;
+    no_Utt  = ss "hayır" ;
+
 }
