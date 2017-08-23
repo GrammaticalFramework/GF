@@ -85,4 +85,6 @@ concrete StructuralTur of Structural = CatTur **
 
     always_AdV = {s = "her zaman"} ;
 
+    but_PConj = ss "ama" ;
+
 }
