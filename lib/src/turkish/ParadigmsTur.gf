@@ -16,12 +16,12 @@ oper
 -- Paradigms for verb
 
   mkV : overload {
-    --make regular verbs, one form is enough
-    mkV : (esmek : Str) -> V ; 
+    -- make regular verbs, one form is enough
+    mkV : (esmek : Str) -> V ;
     -- make verbs of which aorist form is irregular
-    mkV : (gelmek : Str) -> AoristType -> V ; 
+    mkV : (gelmek : Str) -> AoristType -> V ;
     -- make verbs which do not obey softnening rule
-    mkV : (gitmek, gidmek : Str) -> V ; 
+    mkV : (gitmek, gidmek : Str) -> V ;
     -- make verbs which progressive and future forms has "e" to "i" conversion like "yemek" -> "yiyorum" and "demek" -> "diyorum"
     -- two forms are enough but third form is needed to differentiate from the other overloads
     mkV : (yemek, yemek, yimek : Str) -> V ;
@@ -32,10 +32,9 @@ oper
     mkV : (nefret : Str) -> (etmek : V) -> V ;
   } ;
 
-  
-
   mkV2 : overload {
-    -- make V2, use default case and preposition which are accusative case and no preposition
+    -- make V2, use default case and preposition which are accusative case
+    -- and no preposition
     mkV2 : (sormak : V) -> V2 ;
     -- make V2, set case explicitly
     mkV2 : (korkmak : V) -> Prep -> V2 ;
