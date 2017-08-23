@@ -19,6 +19,10 @@ concrete AdjectiveTur of Adjective =
       s = \\n, c => adv.s ++ ap.s ! n ! c
     } ;
 
+    AdAP a ap = {
+      s = \\n, c => a.s ! n ! c ++ ap.s ! n ! c
+    } ;
+
     UseA2 a = {s = a.s} ;
 
     ComplA2 a np = {
