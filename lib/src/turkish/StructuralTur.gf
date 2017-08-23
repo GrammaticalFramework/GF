@@ -66,7 +66,7 @@ concrete StructuralTur of Structural = CatTur **
       variants {mkPrep "üzerinde" Gen; mkPrep "üstünde" Gen} ;
 
     in_Prep =
-      variants {mkPrep "içinde" Gen; mkPrep "içinde" Gen} ;
+      variants {mkPrep "içinde" Gen; mkPrep "içerisinde" Gen} ;
 
     -- ... sırasında
     during_Prep =
