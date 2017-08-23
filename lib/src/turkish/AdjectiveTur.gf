@@ -18,4 +18,6 @@ concrete AdjectiveTur of Adjective = CatTur ** open ResTur, Prelude in {
       s = \\n, c => adv.s ++ ap.s ! n ! c
     } ;
 
+    UseA2 a = {s = a.s} ;
+
 }
