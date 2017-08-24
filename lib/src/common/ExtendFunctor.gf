@@ -19,7 +19,7 @@ lin
   GenRP = variants {} ;     -- Num -> CN -> RP ; -- whose car
   GenModNP num np cn = DetCN (DetQuant DefArt num) (AdvCN cn (PrepNP possess_Prep np)) ;     -- this man's car(s) ; DEFAULT the car of this man
   GenModIP = variants {} ;     -- Num -> IP -> CN -> IP ; -- whose car(s)
-  CompBareCN cn = CompCN cn ; -- (est) professeur ; DEFAULT is a teacher
+  CompBareCN cn = CompCN cn ; -- (is) teacher ; DEFAULT is a teacher
   StrandQuestSlash = QuestSlash ; -- whom does John live with ; DEFAULT with whom does John live
   StrandRelSlash = RelSlash ; -- that he lives in ; DEFAULT in which he lives
   EmptyRelSlash = RelSlash IdRP ; -- he lives in ; DEFAULT in which he lives
@@ -35,7 +35,7 @@ lin
   MkVPI2 = variants {} ;     --     : Ant  -> Pol -> VPSlash -> VPI2 ;  -- to have loved       
   ConjVPI2 = variants {} ;     --   : Conj -> [VPI2] -> VPI2 ;          -- to love and have hated
   ComplVPI2 = variants {} ;     --  : VPI2 -> NP -> VPI ;               -- to love and hate that person
-  ProDrop pro = pro ;     -- am tired ; DEFAULT I am tired
+  ProDrop pro = pro ;     -- am tired ; DEFAULT I am tired (no pro drop)
   ICompAP = variants {} ;     -- AP -> IComp ; -- "how old"
   IAdvAdv = variants {} ;     -- Adv -> IAdv ; -- "how often"
   CompIQuant iquant = CompIP (IdetIP (IdetQuant iquant NumSg)) ;  -- which (is it) [agreement to NP] ; DEFAULT which [no agreement]
@@ -90,12 +90,14 @@ lin
 
   DetNPFem = DetNP ;
   
-  iFem_Pron = i_Pron ;
-  youFem_Pron = youSg_Pron ;
-  weFem_Pron = we_Pron ;
-  youPlFem_Pron = youPl_Pron ;
-  theyFem_Pron = they_Pron ;
-  youPolFem_Pron = youPol_Pron ;
+  iFem_Pron = i_Pron ; -- DEFAULT I (masc)
+  youFem_Pron = youSg_Pron ; -- DEFAULT you (masc)
+  weFem_Pron = we_Pron ;  -- DEFAULT we (masc)
+  youPlFem_Pron = youPl_Pron ;  -- DEFAULT you plural (masc)
+  theyFem_Pron = they_Pron ;  -- DEFAULT they (masc)
+  youPolFem_Pron = youPol_Pron ;  -- DEFAULT you polite (masc)
+  youPolPl_Pron = youPl_Pron ;  -- DEFAULT you plural (masc)
+  youPolPlFem_Pron = youPl_Pron ;  -- DEFAULT you plural (masc)
   UttAccNP = UttNP ; -- him (accusative) ; DEFAULT he
   UttDatNP np = UttAccNP (lin NP np) ; -- him(dative) ; DEFAULT he
   UttAccIP = UttIP ; -- whom (accusative) ; DEFAULT who

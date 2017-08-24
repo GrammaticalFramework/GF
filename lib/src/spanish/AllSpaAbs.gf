@@ -1,5 +1,6 @@
 abstract AllSpaAbs = 
   Lang,
   IrregSpaAbs,
-  ExtraSpaAbs
+  Extend
+----  ExtraSpaAbs
   ** {} ;

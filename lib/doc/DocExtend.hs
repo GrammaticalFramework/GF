@@ -1,3 +1,8 @@
+module Main where
+
+import Data.List
+import Data.Ord (comparing)
+
 main = docExtend
 
 docExtend = do
@@ -22,13 +27,15 @@ docExtend = do
   --- mapM print fundefs
 
   -- read the functor exclusion lists for each language
-  let langs = [("Eng","english"),("Dut","dutch"),("Spa","spanish")] --,("Swe","swedish")]
+  let langs = [("Eng","english"),("Dut","dutch"),("Spa","spanish"),("Swe","swedish")]
   funss <- mapM getExclusions langs
-  mapM_ print funss
+  ---  mapM_ print funss
   let langfuns = zip (map fst langs) funss
   let funlangs = [(fu,[lang | (lang,fs) <- langfuns, elem fu fs]) | fu:_ <- funs]
   let fundeflangs = [[fu,ty,co,de,unwords ls] | fu:ty:co:de:_ <- fundefs, (f,ls) <- funlangs, f==fu]
-  mapM print fundeflangs
+  --- mapM print fundeflangs
+  writeFile "GF-RGL-Extend.html" $ printHTML $ sortBy (comparing (\z -> (last (words (z !! 1)), z!!0)))  fundeflangs
+  putStrLn "wrote file GF-RGL-Extend.html"
 
 -- exclusion format:
 --   concrete ExtendEng of Extend =
@@ -43,3 +50,16 @@ getExclusions (lan,language) = do
         [] -> []
         _:es -> map (filter (/=',')) $ concat $ takeWhile (/= ["]"]) es
   return excls
+
+printHTML fs = unlines $
+  "<html>" :
+  "<body>" :
+  "<table>" :
+  map prRow fs ++ [
+  "</table>",
+  "</body>",
+  "</html>"
+  ]
+ where
+   prRow ss = concat $ "<tr>" : ["<td>" ++ s ++ "</td>" | s <- ss] ++ ["</tr>"]
+
