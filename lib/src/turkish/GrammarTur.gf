@@ -17,6 +17,6 @@ concrete GrammarTur of Grammar =
   TenseX
   ** {
 
-flags startcat = Phr ;
+  flags startcat = Phr ;
 
 } ;
