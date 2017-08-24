@@ -254,7 +254,7 @@ langsPresent = langsLang `except` ["Afr","Chi","Eus","Gre","Heb","Ice","Jpn","Ml
 -- languages for which to compile Try
 langsAPI  = langsLang `except` langsIncomplete -- ["Ina","Amh","Ara"]
 
-langsIncomplete = ["Amh","Ara","Eus","Grc","Heb","Ina","Lat","Tur"]
+langsIncomplete = ["Amh","Ara","Grc","Heb","Ina","Lat","Tur"]
 
 -- languages for which to compile Symbolic
 langsSymbolic  = langsAPI `except` ["Afr","Ice","Mon","Nep"]
