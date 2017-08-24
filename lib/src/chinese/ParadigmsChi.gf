@@ -143,6 +143,9 @@ oper
       = \s,t -> lin Adv {s = word (s + t) ; advType = getAdvType s} ; ----
     mkAdv : Str -> AdvType -> Adv 
       = \s,at -> lin Adv {s = word s ; advType = at} ;
+    mkAdv : Adv -> AdvType -> Adv -- To fix the AdvType in an Adv produced by SyntaxChi.mkAdv 
+      = \adv,at -> adv ** {advType = at} ;
+
     } ;
 
   AdvType : Type
