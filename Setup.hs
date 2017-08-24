@@ -200,6 +200,7 @@ langsCoding = [
   (("afrikaans","Afr"),""),
   (("amharic",  "Amh"),""),
   (("arabic",   "Ara"),""),
+  (("basque",   "Eus"),""),
   (("bulgarian","Bul"),""),
   (("catalan",  "Cat"),""),
   (("chinese",  "Chi"),""),
@@ -248,15 +249,15 @@ langsLang = langs -- `except` ["Amh","Ara","Lat","Tur"]
 --langsLang = langs `only` ["Fin"] --test
 
 -- languagues that have notpresent marked
-langsPresent = langsLang `except` ["Afr","Chi","Gre","Heb","Ice","Jpn","Mlt","Mon","Nep","Pes","Snd","Tha","Thb","Est"]
+langsPresent = langsLang `except` ["Afr","Chi","Eus","Gre","Heb","Ice","Jpn","Mlt","Mon","Nep","Pes","Snd","Tha","Thb","Est"]
 
 -- languages for which to compile Try
 langsAPI  = langsLang `except` langsIncomplete -- ["Ina","Amh","Ara"]
 
-langsIncomplete = ["Amh","Ara","Grc","Heb","Ina","Lat","Tur"]
+langsIncomplete = ["Amh","Ara","Eus","Grc","Heb","Ina","Lat","Tur"]
 
 -- languages for which to compile Symbolic
-langsSymbolic  = langsAPI `except` ["Afr","Ice","Jpn","Mon","Nep"]
+langsSymbolic  = langsAPI `except` ["Afr","Ice","Mon","Nep"]
 
 -- languages for which to run demo test
 langsDemo = langsLang `except` ["Ara","Hin","Ina","Lav","Tha"]
