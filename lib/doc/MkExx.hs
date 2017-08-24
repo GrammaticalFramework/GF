@@ -36,6 +36,7 @@ mkIdent = concatMap unspec where
 langsCoding = [
   (("amharic",  "Amh"),""),
   (("arabic",   "Ara"),""),
+  (("basque",   "Eus"),""),
   (("bulgarian","Bul"),""),
   (("catalan",  "Cat"),"Romance"),
   (("danish",   "Dan"),"Scand"),
