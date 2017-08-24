@@ -1,20 +1,25 @@
 <html>
 	<head>
-<style>
-pre.python   {background-color:lightgray; display: none}
-pre.haskell  {background-color:lightgray; display: block}
-pre.java     {background-color:lightgray; display: none}
-pre.csharp   {background-color:lightgray; display: none}
-span.python  {display: none}
-span.haskell {display: inline}
-span.java    {display: none}
-span.csharp  {display: none}
-a {text-decoration: underline;} 
-a:hover {text-decoration: none;}
-</style>
+		<link rel="stylesheet" type="text/css" href="cloud.css" title="Cloud">
+		<style>
+			body { background: #eee; }
+
+			pre.python   {background-color:#ffc; display: none}
+			pre.haskell  {background-color:#ffc; display: block}
+			pre.java     {background-color:#ffc; display: none}
+			pre.csharp   {background-color:#ffc; display: none}
+			span.python  {display: none}
+			span.haskell {display: inline}
+			span.java    {display: none}
+			span.csharp  {display: none}
+		</style>
+
 
 <script lang="javascript">
-	function change_language(name) {
+	function change_language(href) {
+		var name = href.split("#")[1];
+		if (name == null)
+			name = "haskell";
 		for (var s = 0; s < document.styleSheets.length; s++) {
 			var sheet = document.styleSheets[s];
 			if (sheet.href == null) {
@@ -35,11 +40,11 @@ a:hover {text-decoration: none;}
 	}
 </script>
 	</head>
-	<body>
+	<body onload="change_language(window.location.href); window.addEventListener('hashchange', function(e){change_language(window.location.href);});">
 		<h1>Using the <span class="python">Python</span> <span class="haskell">Haskell</span> <span class="java">Java</span> <span class="csharp">C#</span> binding to the C runtime</h1>
 		<h4>Krasimir Angelov, July 2015</h4>
 		
-		Choose a language: <a onclick="change_language('haskell')">Haskell</a> <a onclick="change_language('python')">Python</a> <a onclick="change_language('java')">Java</a> <a onclick="change_language('csharp')">C#</a>
+		Choose a language: <a href="#haskell">Haskell</a> <a href="#python">Python</a> <a href="#java">Java</a> <a href="#csharp">C#</a>
 		
 <h2>Loading the Grammar</h2>
 
@@ -445,11 +450,23 @@ word form with its possible analyses:
 for entry in eng.fullFormLexicon():
 	print(entry)
 </pre>
+<pre class="java">
+for (entry in eng.fullFormLexicon()) {
+    System.out.println(entry);
+}
+</pre>
 The second one implements a simple lookup. The argument is a word
 form and the result is a list of analyses:
 <pre class="python">
 print(eng.lookupMorpho("letter"))
 [('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
+</pre>
+<pre class="java">
+for (MorphoAnalysis an : eng.lookupMorpho("letter")) {
+    System.out.println(an.getLemma()+", "+an.getField()+", "+an.getProb());
+}
+letter_1_N, s Sg Nom, inf
+letter_2_N, s Sg Nom, inf
 </pre>
 
 <h2>Access the Abstract Syntax</h2>
@@ -460,9 +477,24 @@ you can get a list of abstract functions:
 >>> gr.functions
 ....
 </pre>
+<pre class="haskell">
+Prelude PGF2> functions gr
+....
+</pre>
+gr.getFunctions()
+....
+</pre>
 or a list of categories:
 <pre class="python">
 >>> gr.categories
+....
+</pre>
+<pre class="haskell">
+Prelude PGF2> categories gr
+....
+</pre>
+<pre class="java">
+List&lt;String&gt; cats = gr.getCategories()
 ....
 </pre>
 You can also access all functions with the same result category:
@@ -470,9 +502,25 @@ You can also access all functions with the same result category:
 >>> gr.functionsByCat("Weekday")
 ['friday_Weekday', 'monday_Weekday', 'saturday_Weekday', 'sunday_Weekday', 'thursday_Weekday', 'tuesday_Weekday', 'wednesday_Weekday']
 </pre>
+<pre class="haskell">
+Prelude PGF2> functionsByCat gr "Weekday"
+['friday_Weekday', 'monday_Weekday', 'saturday_Weekday', 'sunday_Weekday', 'thursday_Weekday', 'tuesday_Weekday', 'wednesday_Weekday']
+</pre>
+<pre class="java">
+List&lt;String&gt; cats = gr.getFunctionsByCat("Weekday")
+....
+</pre>
 The full type of a function can be retrieved as:
 <pre class="python">
 >>> print(gr.functionType("DetCN"))
+Det -> CN -> NP
+</pre>
+<pre class="haskell">
+Prelude PGF2> print (gr.functionType "DetCN")
+Det -> CN -> NP
+</pre>
+<pre class="java">
+System.out.println(gr.getFunctionType("DetCN"))
 Det -> CN -> NP
 </pre>
 
@@ -488,6 +536,20 @@ AdjCN (PositA red_A) (UseN theatre_N)
 >>> print(ty)
 CN
 </pre>
+<pre class="haskell">
+Prelude PGF2> let Right (e,ty) = inferExpr gr e
+Prelude PGF2> print e
+AdjCN (PositA red_A) (UseN theatre_N)
+Prelude PGF2> print ty
+CN
+</pre>
+<pre class="java">
+TypedExpr te = gr.inferExpr(e)
+System.out.println(te.getExpr())
+AdjCN (PositA red_A) (UseN theatre_N)
+System.out.println(te.getType())
+CN
+</pre>
 The result is a potentially updated expression and its type. In this
 case we always deal with simple types, which means that the new
 expression will be always equal to the original expression. However, this
@@ -500,16 +562,35 @@ wouldn't be true when dependent types are added.
 >>> print(e)
 AdjCN (PositA red_A) (UseN theatre_N)
 </pre>
-In case of type error you will get an exception:
+<pre class="haskell">
+Prelude PGF2> let Just ty = readType "CN"
+Prelude PGF2> let Just e = checkExpr gr e ty
+Prelude PGF2> print e
+AdjCN (PositA red_A) (UseN theatre_N)
+</pre>
+<pre class="java">
+Expr e = gr.checkExpr(e,Type.readType("CN"))
+>>> System.out.println(e)
+AdjCN (PositA red_A) (UseN theatre_N)
+</pre>
+<p>In case of type error you will get an exception:
 <pre class="python">
 >>> e = gr.checkExpr(e,pgf.readType("A"))
 pgf.TypeError: The expected type of the expression AdjCN (PositA red_A) (UseN theatre_N) is A but CN is infered
 </pre>
-</p>
+<pre class="haskell">
+Prelude PGF2> let Just ty = readType "A"
+Prelude PGF2> let Just e = checkExpr gr e ty
+pgf.TypeError: The expected type of the expression AdjCN (PositA red_A) (UseN theatre_N) is A but CN is infered
+</pre>
+<pre class="java">
+Expr e = gr.checkExpr(e,Type.readType("A"))
+pgf.TypeError: The expected type of the expression AdjCN (PositA red_A) (UseN theatre_N) is A but CN is infered
+</pre></p>
 
 <h2>Partial Grammar Loading</h2>
 
-By default the whole grammar is compiled into a single file
+<p>By default the whole grammar is compiled into a single file
 which consists of an abstract syntax together will all concrete
 languages. For large grammars with many languages this might be
 inconvinient because loading becomes slower and the grammar takes
@@ -519,6 +600,13 @@ This is done by using the option <tt>-split-pgf</tt> in the compiler:
 <pre class="python">
 $ gf -make -split-pgf App12.pgf
 </pre>
+<pre class="haskell">
+$ gf -make -split-pgf App12.pgf
+</pre>
+<pre class="java">
+$ gf -make -split-pgf App12.pgf
+</pre>
+</p>
 
 Now you can load the grammar as usual but this time only the
 abstract syntax will be loaded. You can still use the <tt>languages</tt>
@@ -528,10 +616,20 @@ concrete syntax objects:
 >>> gr = pgf.readPGF("App.pgf")
 >>> eng = gr.languages["AppEng"]
 </pre>
+<pre class="java">
+PGF gr = PGF.readPGF("App.pgf")
+Concr eng = gr.getLanguages().get("AppEng")
+</pre>
 However, if you now try to use the concrete syntax then you will
 get an exception:
 <pre class="python">
->>> gr.languages["AppEng"].lookupMorpho("letter")
+>>> eng.lookupMorpho("letter")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+pgf.PGFError: The concrete syntax is not loaded
+</pre>
+<pre class="java">
+eng.lookupMorpho("letter")
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 pgf.PGFError: The concrete syntax is not loaded
@@ -543,18 +641,29 @@ Before using the concrete syntax, you need to explicitly load it:
 >>> print(eng.lookupMorpho("letter"))
 [('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
 </pre>
+<pre class="java">
+eng.load("AppEng.pgf_c")
+for (MorphoAnalysis an : eng.lookupMorpho("letter")) {
+    System.out.println(an.getLemma()+", "+an.getField()+", "+an.getProb());
+}
+letter_1_N, s Sg Nom, inf
+letter_2_N, s Sg Nom, inf
+</pre>
 
 When you don't need the language anymore then you can simply
 unload it:
 <pre class="python">
 >>> eng.unload()
 </pre>
+<pre class="java">
+eng.unload()
+</pre>
 
 <h2>GraphViz</h2>
 
-GraphViz is used for visualizing abstract syntax trees and parse trees.
+<p>GraphViz is used for visualizing abstract syntax trees and parse trees.
 In both cases the result is a GraphViz code that can be used for
-rendering the trees. See the examples bellow.
+rendering the trees. See the examples bellow:</p>
 
 <pre class="python">
 >>> print(gr.graphvizAbstractTree(e))
@@ -570,9 +679,60 @@ n3 -- n4 [style = "solid"]
 n0 -- n3 [style = "solid"]
 }
 </pre>
+<pre class="haskell">
+Prelude PGF2> putStrLn (graphvizAbstractTree gr e)
+graph {
+n0[label = "AdjCN", style = "solid", shape = "plaintext"]
+n1[label = "PositA", style = "solid", shape = "plaintext"]
+n2[label = "red_A", style = "solid", shape = "plaintext"]
+n1 -- n2 [style = "solid"]
+n0 -- n1 [style = "solid"]
+n3[label = "UseN", style = "solid", shape = "plaintext"]
+n4[label = "theatre_N", style = "solid", shape = "plaintext"]
+n3 -- n4 [style = "solid"]
+n0 -- n3 [style = "solid"]
+}
+</pre>
 
 <pre class="python">
 >>> print(eng.graphvizParseTree(e))
+graph {
+  node[shape=plaintext]
+
+  subgraph {rank=same;
+    n4[label="CN"]
+  }
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n1[label="AP"]
+    n3[label="CN"]
+    n1 -- n3
+  }
+  n4 -- n1
+  n4 -- n3
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n0[label="A"]
+    n2[label="N"]
+    n0 -- n2
+  }
+  n1 -- n0
+  n3 -- n2
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n100000[label="red"]
+    n100001[label="theatre"]
+    n100000 -- n100001
+  }
+  n0 -- n100000
+  n2 -- n100001
+}
+</pre>
+<pre class="haskell">
+Prelude PGF2> putStrLn (graphvizParseTree eng e)
 graph {
   node[shape=plaintext]
 
