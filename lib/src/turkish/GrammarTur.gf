@@ -4,12 +4,19 @@ concrete GrammarTur of Grammar =
   NounTur,
   VerbTur,
   AdjectiveTur,
+  AdverbTur,
   NumeralTur,
-  StructuralTur,
   SentenceTur,
-  AdverbTur
+  QuestionTur,
+  RelativeTur,
+  ConjunctionTur,
+  PhraseTur,
+  TextX,
+  StructuralTur,
+  IdiomTur,
+  TenseX
   ** {
 
-flags startcat = Phr ; unlexer = text ; lexer = text ;
+flags startcat = Phr ;
 
 } ;
