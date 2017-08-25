@@ -199,8 +199,12 @@ oper
 ---      { Abs => "hargle"; Erg => "bargle" }
 -- the field .agr. is of type Agr.   
 
-  buru_NP : NounPhrase = { s = \\_ => "buru" ;
-                           stem = "buru" ;
+  buru_NP : NounPhrase = 
+    empty_NP ** { s = \\_ => "buru" ;
+                  stem = "buru" } ;
+
+  empty_NP : NounPhrase = { s = \\_ => [] ;
+                           stem = [] ;
                            agr = Hau ; 
                            anim = Anim ; 
                            isDef = True } ;
@@ -472,7 +476,7 @@ oper
   clFromSlash : NounPhrase -> ClSlash -> Clause = \o,cls -> 
     let obj = o ** { s = mkDObj o } ;
         vp = cls ** { dobj = obj } ; --Insert the object's agr into the cls's dobj!
-        subj = buru_NP ** cls.subj ; -- Just a dummy NP, we won't use more than is in cls.subj
+        subj = empty_NP ** cls.subj ; -- Just a dummy NP, we won't use more than is in cls.subj
      in mkClause True subj vp ;
 
   mkClause : (isIP : Bool) -> NounPhrase -> VerbPhrase -> Clause = \isIP,subj,vp ->

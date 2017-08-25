@@ -5,17 +5,25 @@ concrete SymbolEus of Symbol = CatEus ** open Prelude, ParadigmsEus, ResEus, (NE
 lin
 
   --  : Symb -> PN ;                -- x
-  SymbPN i = mkPNoun i.s ; 
+  SymbPN i = symbPN i.s ; 
 
-  -- : Int -> PN ;                 -- 27
-  IntPN i  = mkPNoun i.s ;
+  ---- : Int -> PN ;                 -- 27
+  IntPN i  = symbPN i.s ;
 
-  -- : Float -> PN ;               -- 3.14159
-  FloatPN i = mkPNoun i.s ;
+  ---- : Float -> PN ;               -- 3.14159
+  FloatPN i = symbPN i.s ;
 
-  -- : Card -> PN ;                -- twelve [as proper name]
-  NumPN i = mkPNoun i.s ;
+  ---- : Card -> PN ;                -- twelve [as proper name]
+  NumPN i = symbPN i.s ;
 
+oper
+  symbPN : Str -> PN = \symb -> lin PN 
+    { s = symb ;
+      ph = FinalCons ;
+      anim = Inan ;
+      nbr = Pl } ;
+
+lin
 --  CNIntNP cn i = {} ;
 
   -- : Det -> CN -> [Symb] -> NP ; -- (the) (2) numbers x and y
