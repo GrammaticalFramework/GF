@@ -98,7 +98,7 @@ oper
 
 oper
 
--- The regulr noun heuristic takes just one form (singular
+-- The regular noun heuristic takes just one form (singular
 -- nominative) and analyses it to pick the correct paradigm.
 -- If the 1-argument paradigm does not give the correct result,
 -- one can try and give 2, 3, 4, or 6 forms.
@@ -413,7 +413,7 @@ oper
         -- This applies only to adjectives.
         -- If genitive just adds 'da' to the nominative, then construct
         -- the paradigm using IVa_aasta, giving it the genitive as the argument.
-        -- We assume here that the the nominative is overriten by the calling rule.
+        -- We assume here that the nominative is overridden by the calling rule.
         -- Example: vahe, vaheda, vahedaT, vahedaSSE, vahedaTE, vahedaID
         <_ + "e", _ + "eda"> => hjk_type_IVa_aasta lingi ;
 
