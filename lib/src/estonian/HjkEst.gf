@@ -4,7 +4,7 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 -- Heiki-Jaan Kaalep. "Eesti käänamissüsteemi seaduspärasused" (2012)
 --
 -- @author Kaarel Kaljurand
--- @version 2013-09-09
+-- @version 2014-09-01
 
   flags
 	coding = utf8 ;
@@ -497,10 +497,6 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			<_, _ + #c, i>
 				=> hjk_type_IVb_audit x i ;
 
-			-- TODO: not in HJKEKS
-			<_, _ + ("ia"|"ja"), _> --kündja, not gerilja
-				=> hjk_type_IVa_aasta x ;
-
 			--added by Inari 07.10.
 			<S23, _ + #c + ("la"), _> --haigla, not gorilla
 				=> hjk_type_IVa_aasta x ;
@@ -540,18 +536,18 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			#c + #v + #v + #v => S22 ; -- muie, neiu, riie
 			? + ? + ? + ? => S1 ;
 			-- at least 5-letters
-			_ + #c + "ia" => S2 ; -- aaria, minia, orgia, kirurgia, nostalgia
-			#v + #c + #c + #v + #v => S1 ; -- armee
-			#c + #v + #c + #v + #v => S1 ; -- depoo
 			#c + #c + #v + #c + #c => S1 ; -- tramm
-			#c + #v + #c + #c + #c => S1 ;
+			_ + #c + #v + #c + #c + #c => S1 ; -- inerts, transs
 			#c + #v + #vv     + #c => S1 ; -- poeem
 			#c + #v + #v + #v + #c => S2 ; -- hoius, laius, maius
 			#c + #v + #c + #v + #c => S2 ; -- redel
 			#c + #v + #c + #gbd + "e" => S23 ; -- valge, k6rge; p6rge, hange
 			#c + #v + #v + #gbd + "e" => S22 ; -- haige, kauge; t6uge
-			#c + #v + #v + #c + #v => S22 ; -- lause; TODO: leitu, rootu (S23)
+			#c + ? + ? + "ja" => S23 ; -- looja, sööja (TODO: derived from verb)
+			_ + #c + #v + #v + #c + #v => S22 ; -- lause, beebi, juuni, kraana; TODO: leitu, voodi (S23)
 			#c + #v + #c + #c + #v => S22 ; -- ratsu; not: surnu
+			#c + #c + #v + #vv => S1 ; -- TODO
+			#c + #c + #v + #v + #v => S22 ; -- proua
 			#v + #c + #c + #c + #v => S23 ;
 			#v + #c + #c + #v + #c => S2 ; -- amper
 			#v + #c + #v + #c + #c => S2 ; -- avang
@@ -561,64 +557,74 @@ resource HjkEst = open ResEst, Prelude, Predef in {
 			#v + #c + #v + #v + #c => S1 ; -- ukaas, TODO: not 'avaus'
 			#v + #v + #c + #v + #c => S2 ; -- aatom
 			#v + #v + #c + #c + #v => S23 ; -- aasta
-			#v + #v + #c + #v + #v => S1 ; -- aaloe (?)
+
+			_ + #c + "io" => S23 ; -- aažio, raadio
+			_ + #c + "ia" => S23 ; -- aaria, minia, orgia, kirurgia, nostalgia
+			_ + #v + #v => S1 ; -- nivoo, büroo, buržuaa
+
 			#c + #c + #v + #c + #v => S21 ; -- blogi
 			_ + ? + #v + #vv + #c => S1 ; -- -ioos, kruiis
 			#c + #c + #v + #v + #v + #c => S2 ; -- flaier
 			_ + ? + #c + #v + #c + #v => S3 ; -- oluline
 			-- at least 6-letters
+			_ + #v + #v + #c + #c + #c + #v => S23 ; -- aardla, maardla
 			#v + #c + #c + #v + #v + #c => S1 ; -- aplaus
+			#c + #c + #c + #v + ? + #c => S1 ; -- sprint, streik
+			#c + #c + #v + #v + #c + #c => S1 ; -- klient
+			#c + #v + #v + #c + #c + #c => S1 ; -- paavst, nüanss
 			#v + #c + #c + #v + #c + #c => S2 ; -- astang, ellips
-			#c + #vv + #c + #v + #v => S23 ; -- muumia, raadio, TODO: exclude 'vaarao'
-			#c + #v + #v + #c + #v + #v => S1 ; -- peoleo
+
 			#c + #v + #v + #c + #c + #v => S23 ; -- haigla --added by Inari, not sure if always correct
 			#c + #v + #c + #c + #c + #v => S23 ; -- vangla --added by Inari, not sure if always correct
 			#c + #v + #c + #vv + #c => S1 ; -- deviis (double vowel in the last syllable)
-			#v + #c + #v + #c + #v + #v => S1 ; -- agoraa
 			#c + #v + #c + #v + #c + #c => S2 ;
 			#c + #v + #c + #v + #c + #v => S3 ;
-			_ + #c + #v + #vv + #c + #v => S2 ; -- koaala
+			_ + #c + #v + #vv + #c + #v => S22 ; -- koaala
 			_ + #c + #v + #v + #v + #c + #v => S3 ; -- saiake
-			#v + #c + #v + #c + #c + #v => S3 ; -- üheksa
+			#c + #c + #v + #c + #c + #v => S22 ; -- knopka
+			_ + #c + #v + #c + #c + #v => S3 ; -- üheksa, uimasti, not allegro
 			#c + #v + #c + #c + #v + #c => S2 ; -- rektor
+			#c + #c + #v + #c + #v + #c => S2 ; -- k[lr][aiõ]bin, klirin, kvasar, pladin, pragin
 			#c + #v + #c + #v + #v + #c => S2 ; -- paleus
 			#c + #v + #v + #c + #v + #c => S2 ; -- meeter, reegel
 			#v + #v + #c + #c + #v + #c => S2 ; -- aastak
 			#v + #c + #c + #c + #v + #c => S2 ; -- andmik
 			#v + #c + #c + #v + #c + #v => S3 ;
-			_ + #v + #v + #v + #c + #v + #v => S1 ; -- meierei
 			_ + #v + #c + #v + #c + #v + #c => S3 ; -- alevik, elanik
 			-- at least 7-letters
 			_ + ? + ? + #c + #vv + #c => S1 ; -- double vowel in the last syllable: bensiin, benseen, bensool
 			#c + #v + #v + #c + #c + #v + #c => S2 ; -- jooksik
+			#c + #c + #v + #v + #c + #v + #c => S2 ; -- brauser, broiler, draiver, snaiper
+			_ + ? + #c + #c + "io" + #c + #v + #c => S3 ; -- aktsionär, pensionär
+			_ + ? + #c + #c + #v + #v + #c + #v + #c => S2 ; -- kombainer
 			#c + #v + #c + #c + #c + #v + #c => S2 ; -- hurtsik
 			#c + #v + #c + #c + #v + #c + #c => S2 ; -- kitsend
 			#c + #v + #c + #c + #v + #v + #c => S2 ; -- pension
-			#c + #v + #c + #v + #c + #v + #c => S3 ; -- seminar
-			#c + #c + #v + #c + #c + #v + #c => S2 ; -- kringel, plastik
+
+			_ + #lmnr + #gbd + #v + #c + #c + #v + #c => S3 ; -- (pa)lderjan, (ko)rgitser
+			_ + #c + #c + #v + #c + #c + #v + #c => S2 ; -- kringel, plastik; agressor
+			_ + #c + #c + #c + #c + #v + #c => S2 ; -- kantsler
+			_ + #c + #vv + #c + #c + #v + #c => S2 ; -- klooster
+			_ + #c + #vv + #c + #v + #c => S2 ; -- araabik
+			_ + #v + #vv + #c + #v + #c => S2 ; -- -iaat[oe]r, -iootik
+
 			_ + #v + #c + #v + #kpt + #kpt + #v + #c => S2 ; -- elekter, adapter
 			_ + #c + #v + #lmnr + #gbd + #v + #c => S2 ; -- (k)alender, (dets)ember
 			_ + #c + #v + #lmnr + #kpt + #v + #c => S2 ; -- (re)porter
 			_ + #c + #v + "stik" => S3 ; -- kuristik (TODO: not logistik)
 			_ + #c + #v + "s" + #kpt + #v + #c => S2 ; -- (k)anister
-			#v + #c + #v + #c + #c + #v + #c => S3 ; -- apelsin
-			#v + #c + #c + #v + #c + #v + #c => S3 ; -- admiral
-			#c + #v + #c + #v + #c + #c + #v => S3 ; -- kaheksa
+
+			_ + #c + #v + #c + #c + #v + #c => S3 ; -- apelsin, talisman, emissar
+			_ + #v + #v + #v + #c + #c + #v + #c => S3 ; -- raiesmik
+			_ + #v + #c + #v + #c => S3 ; -- seminar
+
 			#c + #c + #v + #c + #v + #c + #c => S2 ; -- klopits
 			#c + #v + #v + #c + #v + #c + #c => S2 ; -- haarang
 			#c + #v + #v + #c + #v + #v + #c => S2 ; -- raadius, kauneim
-			_ + #c + #v + #v + #c + #v + #c => S2 ; -- araabik
-			_ + #lmnr + #gbd + #v + #c + #c + #v + #c => S3 ; -- (pa)lderjan, (ko)rgitser
 			-- other
-			_ + #c + #v + #c + #c + #v + #c + #v + #c => S3 ; -- karneval
-			#c + #v + #c + #v + #c + #c + #v + #c => S3 ; -- ragastik (kalender is handled above)
-			_ + #v + #v + #c + #v + #c + #c + #v + #c => S3 ; -- ainestik
 			_ + #c + #c + #v + #c + #c + #v + #c + #c => S3 ; -- ampersand
-			_ + #c + #v + #c + #v + #c + #c => S1 ; -- dividend
-			_ + #v + #vv => S1 ; -- buržuaa
-			_ + #v + #c + #c + #c + #v + #v => S1 ; -- displei
-			_ + #c + #v + #c + #c + #v + #v => S1 ; -- politsei
-			     _ + #c + #v + #c + #v + #v => S1 ; -- defilee, kompanii
+			_ + #c + #v + #c + #v + #c + #c => S3 ; -- dividend
+			_ + #v => S22 ;
 			_ => S2 -- the default is S2, but the above rules should catch most of the words
 		} ;
 
