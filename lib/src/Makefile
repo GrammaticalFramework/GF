@@ -128,7 +128,7 @@ clean:
 # the previous translation grammar "Parse" now replaced by Translate:
 
 # Dummy targets, just for convenience
-Translate: TranslateEng TranslateBul TranslateChi TranslateGer TranslateSwe TranslateHin TranslateFin TranslateFre Translate8
+Translate: TranslateEng TranslateBul TranslateEus TranslateChi TranslateGer TranslateSwe TranslateHin TranslateFin TranslateFre Translate8
 TranslateEng: TranslateEng.pgf
 TranslateBul: TranslateBul.pgf
 TranslateChi: TranslateChi.pgf
@@ -140,6 +140,7 @@ TranslateFin: TranslateFin.pgf
 TranslateFre: TranslateFre.pgf
 TranslateIta: TranslateIta.pgf
 TranslateSpa: TranslateSpa.pgf
+TranslateEus: TranslateEus.pgf
 
 S=-s
 GFMKT=mkdir -p ../translator && gf $S -make -literal=PN,Symb -probs=$(TPROBSFILE) -gfo-dir ../translator
@@ -182,6 +183,7 @@ Translate15.pgf: $(TRANSLATE15)
 TranslateEng.pgf:: ; $(GFMKT) -name=TranslateEng translator/TranslateEng.gf
 TranslateBul.pgf:: ; $(GFMKT) -name=TranslateBul translator/TranslateBul.gf
 TranslateChi.pgf:: ; $(GFMKT) -name=TranslateChi translator/TranslateChi.gf +RTS -K200M
+TranslateEus.pgf:: ; $(GFMKT) -name=TranslateEus translator/TranslateEus.gf
 TranslateFin.pgf:: ; $(GFMKT) -name=TranslateFin translator/TranslateFin.gf +RTS -K64M
 TranslateGer.pgf:: ; $(GFMKT) -name=TranslateGer translator/TranslateGer.gf
 TranslateDut.pgf:: ; $(GFMKT) -name=TranslateDut translator/TranslateDut.gf
