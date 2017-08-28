@@ -31,6 +31,7 @@ langsCoding = [
   (("afrikaans","Afr"),""),
   (("amharic",  "Amh"),""),
   (("arabic",   "Ara"),""),
+  (("basque",   "Eus"),""),
   (("bulgarian","Bul"),""),
   (("catalan",  "Cat"),"Romance"),
   (("chinese",  "Chi"),""),
@@ -86,13 +87,13 @@ langsIncomplete = ["Amh","Ara","Heb","Lat","Tur","Thb"]
 langsAPI = langsLang `except` langsIncomplete
 
 -- languages for which to compile Symbolic
-langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Jpn","Nep","Pnb","Snd", "Thb"])
+langsSymbolic = langsLang `except` (langsIncomplete ++ ["Afr","Ina","Nep","Pnb","Snd", "Thb"])
 
 -- languages for which to compile minimal Syntax
 langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
 
 -- languages for which to run treebank test
-langsTest = langsLang `except` ["Ara","Bul","Cat","Hin","Lav","Rus","Spa","Tha","Thb"]
+langsTest = langsLang `except` ["Ara","Bul","Cat","Eus","Hin","Lav","Rus","Spa","Tha","Thb"]
 
 -- languages for which to run demo test
 langsDemo = langsLang `except` ["Ara","Hin","Ina","Lat","Lav","Tha","Thb"]

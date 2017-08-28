@@ -86,20 +86,36 @@ lin
 ---- se --> sen
 ---- lost agreement, lost genitive, lost possessive
 ---- minun saamiseni mukaan
-  
+
+
+  -- : VP -> Adv ;   
   GerundAP vp = {s = \\f => vp.s2 ! True ! Pos ! agrP3 Sg ++ (snoun2nounSep (sverb2nounPresPartAct vp.s)).s ! f ++ vp.adv ! Pos ++ vp.ext} ;
+-}
+  GerundAdv vp = 
+    { s = vp2adv vp True (VIInf InfDes) } ; 
 
-  GerundAdv vp = {s = (sverb2verbSep vp.s).s ! Inf Inf2Instr ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext} ; -- nukkuen
+  WithoutVP vp = -- ilma raamatut nägemata
+    { s = "ilma" ++ vp2adv vp False (VIInf InfMata) } ;
 
-  WithoutVP vp = {s = (sverb2verbSep vp.s).s ! Inf Inf3Abess ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext} ; -- nukkumatta
-  InOrderToVP vp = {
-    s = (sverb2verbSep vp.s).s ! Inf Inf1Long ++ Predef.BIND ++ "en" ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext
-    } ; -- nukkuakseen --- agr
-  ByVP vp = {s = (sverb2verbSep vp.s).s ! Inf Inf3Adess ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext} ; -- nukkumalla
+  InOrderToVP vp = -- et raamatut paremini näha
+    { s = "et" ++ vp2adv vp True (VIInf InfDa) } ;
+ 
+  ByVP vp = 
+    { s = vp2adv vp True (VIInf InfDes) } ; 
 
--- tänään löydetty
-  PastPartAP vp = {s = \\_,f => vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ (sverb2verbSep vp.s).s ! PastPartPass (AN f) ++ vp.ext} ;
+-- täna leitud
+  PastPartAP vp = 
+    { s = \\_,_ => vp2adv vp True (VIPass Past) ;
+      infl = Invariable } ;
 
+oper 
+  vp2adv : VP -> Bool -> VIForm -> Str = \vp,b,vif ->
+    vp.s2 ! b! Pos ! agrP3 Sg     -- raamatut
+    ++ vp.adv                     -- paremini
+    ++ vp.p                       -- ära 
+    ++ (vp.s ! vif ! Simul ! Pos ! agrP3 Sg).fin -- tunda/tundes/tundmata/...
+    ++ vp.ext ;
+{-
 -- miehen tänään löytämä
   PastPartAgentAP vp np = 
     {s = \\_,f => np.s ! NPCase Gen ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ (sverb2verbSep vp.s).s ! AgentPart (AN f) ++ vp.ext} ;

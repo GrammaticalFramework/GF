@@ -141,7 +141,7 @@ concrete StructuralEst of Structural = CatEst **
     s = \\c => mikaInt ! Sg ! npform2case Sg c ;
     n = Sg
     } ;
-  when_IAdv = ss "kui" ;
+  when_IAdv = ss "millal" ;
   when_Subj = ss "kui" ;
   where_IAdv = ss "kus" ;
   which_IQuant = { s = mikaInt } ;
