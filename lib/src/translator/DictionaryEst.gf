@@ -10,22 +10,12 @@ flags coding=utf8 ;
 
 oper
 -- Short forms of pronouns. No gender difference in any of them.
-sgP1Pron = S.i_Pron | lin Pron (M.shortPronoun "ma" "mu" "mind" "minu" R.Sg R.P1) ;
-sgP2Pron = S.youSg_Pron | lin Pron (M.shortPronoun "sa" "su" "sind" "sinu" R.Sg R.P2) ;
-sgP3Pron = S.he_Pron | lin Pron (M.shortPronoun "ta" "ta" "teda" "tema" R.Sg R.P3) ;
-plP1Pron = S.we_Pron | lin Pron (M.shortPronoun "me" "meie" "meid" "meie" R.Pl R.P1) ;
-plP2Pron = S.youPl_Pron | lin Pron (M.shortPronoun "te" "teie" "teid" "teie" R.Pl R.P2) ;
-plP3Pron = S.they_Pron | lin Pron nad_Pron 
- where {  
-  shortNad =M.shortPronoun "nad" 
-                           "neie" -- only to use the "nei" stem in the cases based on genitive! 
-                           "neid" "nende" 
-                           R.Pl R.P3 ;
-  nad_Pron = shortNad **
-   { s = table {
-         R.NPCase R.Gen => "nende" ; -- use "nende" in the actual genitive!
-         x          => shortNad.s ! x } }
-   } ;
+sgP1Pron = S.i_Pron | E.ma_Pron ;
+sgP2Pron = S.youSg_Pron | E.sa_Pron ;
+sgP3Pron = S.he_Pron | E.ta_Pron ;
+plP1Pron = S.we_Pron | E.me_Pron ;
+plP2Pron = S.youPl_Pron | E.te_Pron ;
+plP3Pron = S.they_Pron | E.nad_Pron ;
 
 -- TODO: check
 
@@ -3072,7 +3062,7 @@ lin betroth_V2 = mkV2 "kihlama" ;
 lin betrothal_N = D.kihlus_N ;
 lin betrothed_N = D.kihlatu_N ;
 lin better_A = mkA "kihlavedaja" ;
-lin better_Adv = ParadigmsEst.mkAdv "kihlavedaja" ;
+lin better_Adv = ParadigmsEst.mkAdv "paremini" ;
 lin better_N = mkN "kihlavedaja" ;
 lin better_V2 = mkV2 "paranema" ;
 lin bettering_A = mkA "paranemine" ;
@@ -21704,10 +21694,10 @@ lin parsimonious_A = D.kitsi_A ;
 lin parsimony_N = D.kitsidus_N ;
 lin parsley_N = D.petersell_N ;
 lin parsnip_N = D.pastinaak_N ;
-lin part_Adv = ParadigmsEst.mkAdv "eralduma" ;
-lin part_N = mkN "eralduma" ;
+lin part_Adv = ParadigmsEst.mkAdv "osaliselt" ;
+lin part_N = mkN "osa" ;
 lin part_V = D.eralduma_V ;
-lin part_V2 = mkV2 "eralduma" ;
+lin part_V2 = mkV2 "eraldama" ;
 lin parterre_N = D.parter_N ;
 lin parthenogenesis_N = D.partenogenees_N ;
 lin partial_A = D.erapoolik_A ;
@@ -21715,7 +21705,7 @@ lin partial_N = mkN "erapoolik" ;
 lin partiality_N = D.eelistus_N ;
 lin participant_N = D.osaleja_N ;
 lin participate_V = D.osalema_V ;
-lin participate_V2 = mkV2 "osalema" ;
+lin participate_V2 = mkV2 D.osalema_V adessive ;
 lin participation_N = D.osalemine_N ;
 lin participle_N = D.'kesksõna_N' ;
 lin particle_N = D.osake_N ;
@@ -32223,7 +32213,7 @@ lin wordless_A = mkA "sõnatu" ;
 lin words_N = mkN "repliik" ;
 lin wordsmith_N = mkN "sõnasepp" ;
 lin wordy_A = D.'paljusõnaline_A' ;
-lin work_1_V = mkV "orjama" ; -- TODO: improve
+lin work_1_V = mkV "töötama" ;
 lin work_2_V = mkV "töötama" ;
 lin work_N = D.'töö_N' ;
 lin work_V2 = mkV2 "korraldama" ;

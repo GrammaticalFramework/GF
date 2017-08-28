@@ -1,6 +1,5 @@
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="cloud.css" title="Cloud">
 		<style>
 			body { background: #eee; }
 
@@ -268,7 +267,7 @@ red theatre
 </pre>
 This method produces only a single linearization. If you use variants
 in the grammar then you might want to see all possible linearizations.
-For that purpouse you should use linearizeAll:
+For that purpouse you should use <tt>linearizeAll</tt>:
 <pre class="python">
 >>> for s in eng.linearizeAll(e):
        print(s)
@@ -294,8 +293,8 @@ then the right method to use is <tt>tabularLinearize</tt>:
 {'s Sg Nom': 'red theatre', 's Pl Nom': 'red theatres', 's Pl Gen': "red theatres'", 's Sg Gen': "red theatre's"}
 </pre>
 <pre class="haskell">
-Prelude PGF2> tabularLinearize eng e
-{'s Sg Nom': 'red theatre', 's Pl Nom': 'red theatres', 's Pl Gen': "red theatres'", 's Sg Gen': "red theatre's"}
+Prelude PGF2> tabularLinearize eng e   ---- TODO
+fromList [("s Sg Nom", "red theatre"), ("s Pl Nom", "red theatres"), ("s Pl Gen", "red theatres'"), ("s Sg Gen", "red theatre's")]
 </pre>
 <pre class="java">
 for (Map.Entry&lt;String,String&gt; entry : eng.tabularLinearize(e)) {
@@ -316,20 +315,53 @@ a list of phrases:
 (CN:4 (AP:1 (A:0 red)) (CN:3 (N:2 theatre)))
 </pre>
 <pre class="haskell">
-Prelude PGF2> let [b] = bracketedLinearize eng e
+Prelude PGF2> let [b] = bracketedLinearize eng e   ---- TODO
 Prelude PGF2> print b
 (CN:4 (AP:1 (A:0 red)) (CN:3 (N:2 theatre)))
 </pre>
 <pre class="java">
 Object[] bs = eng.bracketedLinearize(e)
 </pre>
-Each bracket is actually an object of type pgf.Bracket. The property
-<tt>cat</tt> of the object gives you the name of the category and 
-the property children gives you a list of nested brackets.
-If a phrase is discontinuous then it is represented as more than
-one brackets with the same category name. In that case, the index
-that you see in the example above will have the same value for all
-brackets of the same phrase.
+<span class="python">
+Each element in the sequence above is either a string or an object
+of type <tt>pgf.Bracket</tt>. When it is actually a bracket then
+the object has the following properties:
+<ul>
+	<li><tt>cat</tt> - the syntactic category for this bracket</li>
+	<li><tt>fid</tt> - an id which identifies this bracket in the bracketed string. If there are discontinuous phrases this id will be shared for all brackets belonging to the same phrase.</li>
+	<li><tt>lindex</tt> - the constituent index</li>
+	<li><tt>fun</tt> - the abstract function for this bracket</li>
+	<li><tt>children</tt> - a list with the children of this bracket</li>
+</ul>
+</span>
+<span class="haskell">
+The list above contains elements of type <tt>BracketedString</tt>.
+This type has two constructors:
+<ul>
+	<li><tt>Leaf</tt> with only one argument of type <tt>String</tt> that contains the current word</li>
+	<li><tt>Bracket</tt> with the following arguments:
+		<ul>
+			<li><tt>cat :: String</tt> - the syntactic category for this bracket</li>
+			<li><tt>fid :: Int</tt> - an id which identifies this bracket in the bracketed string. If there are discontinuous phrases this id will be shared for all brackets belonging to the same phrase.</li>
+			<li><tt>lindex :: Int</tt> - the constituent index</li>
+			<li><tt>fun :: String</tt> - the abstract function for this bracket</li>
+			<li><tt>children :: [BracketedString]</tt> - a list with the children of this bracket</li>
+		</ul>
+	</li>
+</ul>
+</span>
+<span class="java">
+Each element in the sequence above is either a string or an object
+of type <tt>Bracket</tt>. When it is actually a bracket then
+the object has the following public final variables:
+<ul>
+	<li><tt>String cat</tt> - the syntactic category for this bracket</li>
+	<li><tt>int fid</tt> - an id which identifies this bracket in the bracketed string. If there are discontinuous phrases this id will be shared for all brackets belonging to the same phrase.</li>
+	<li><tt>int lindex</tt> - the constituent index</li>
+	<li><tt>String fun</tt> - the abstract function for this bracket</li>
+	<li><tt>Object[] children</tt> - a list with the children of this bracket</li>
+</ul>
+</span>
 </p>
 
 The linearization works even if there are functions in the tree 
@@ -357,20 +389,45 @@ a tree into a function name and a list of arguments:
 >>> e.unpack()
 ('AdjCN', [&lt;pgf.Expr object at 0x7f7df6db78c8&gt;, &lt;pgf.Expr object at 0x7f7df6db7878&gt;])
 </pre>
-
+<pre class="haskell">
+Prelude PGF2> unApp e
+Just ("AdjCN", [..., ...])
+</pre>
+</p>
+<p>
+<span class="python">
 The result from unpack can be different depending on the form of the
 tree. If the tree is a function application then you always get
-a tuple of function name and a list of arguments. If instead the
+a tuple of a function name and a list of arguments. If instead the
 tree is just a literal string then the return value is the actual
 literal. For example the result from:
+</span>
 <pre class="python">
 >>> pgf.readExpr('"literal"').unpack()
 'literal'
 </pre>
-is just the string 'literal'. Situations like this can be detected
+<span class="haskell">
+The result from <tt>unApp</tt> is <tt>Just</tt> if the expression
+is an application and <tt>Nothing</tt> in all other cases.
+Similarly, if the tree is a literal string then the return value 
+from <tt>unStr</tt> will be <tt>Just</tt> with the actual literal. 
+For example the result from:
+</span>
+<pre class="haskell">
+Prelude PGF2> unStr (readExpr "\"literal\"")
+"literal"
+</pre>
+is just the string "literal". 
+<span class="python">Situations like this can be detected
 in Python by checking the type of the result from <tt>unpack</tt>.
+It is also possible to get an integer or a floating point number
+for the other possible literal types in GF.</span>
+<span class="haskell">
+There are also the functions <tt>unAbs</tt>, <tt>unInt</tt>, <tt>unFloat</tt> and <tt>unMeta</tt> for all other possible cases.
+</span>
 </p>
 
+<span class="python">
 <p>
 For more complex analyses you can use the visitor pattern.
 In object oriented languages this is just a clumpsy way to do
@@ -406,10 +463,12 @@ the current tree is <tt>DetCN</tt> or <tt>AdjCN</tt>
 correspondingly. In this example we just print a message and
 we call <tt>visit</tt> recursively to go deeper into the tree.
 </p>
+</span>
 
 Constructing new trees is also easy. You can either use 
 <tt>readExpr</tt> to read trees from strings, or you can
 construct new trees from existing pieces. This is possible by
+<span class="python">
 using the constructor for <tt>pgf.Expr</tt>:
 <pre class="python">
 >>> quant = pgf.readExpr("DetQuant IndefArt NumSg")
@@ -417,7 +476,18 @@ using the constructor for <tt>pgf.Expr</tt>:
 >>> print(e2)
 DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN theatre_N))
 </pre>
+</span>
+<span class="haskell">
+using the functions <tt>mkApp</tt>, <tt>mkStr</tt>, <tt>mkInt</tt>, <tt>mkFloat</tt> and <tt>mkMeta</tt>:
+<pre class="haskell">
+Prelude PGF2> let Just quant = readExpr "DetQuant IndefArt NumSg"
+Prelude PGF2> let e2 = mkApp "DetCN" [quant, e]
+Prelude PGF2> print e2
+DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN theatre_N))
+</pre>
+</span>
 
+<span class="python">
 <h2>Embedded GF Grammars</h2>
 
 The GF compiler allows for easy integration of grammars in Haskell
@@ -439,6 +509,7 @@ functions:
 >>> print(App.DetCN(quant,e))
 DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN house_N))
 </pre>
+</span>
 
 <h2>Access the Morphological Lexicon</h2>
 
@@ -447,18 +518,27 @@ lexicon. The first makes it possible to dump the full form lexicon.
 The following code just iterates over the lexicon and prints each
 word form with its possible analyses:
 <pre class="python">
-for entry in eng.fullFormLexicon():
-	print(entry)
+>>> for entry in eng.fullFormLexicon():
+>>>    print(entry)
+</pre>
+<pre class="haskell">
+Prelude PGF2> mapM_ print [(form,lemma,analysis,prob) | (form,analyses) &lt;- fullFormLexicon eng, (lemma,analysis,prob) &lt- analyses]
 </pre>
 <pre class="java">
-for (entry in eng.fullFormLexicon()) {
-    System.out.println(entry);
+for (FullFormEntry entry in eng.fullFormLexicon()) {
+	for (MorphoAnalysis analysis : entry.getAnalyses()) {
+		System.out.println(entry.getForm()+" "+analysis.getProb()+" "+analysis.getLemma()+" "+analysis.getField());
+	}
 }
 </pre>
 The second one implements a simple lookup. The argument is a word
 form and the result is a list of analyses:
 <pre class="python">
-print(eng.lookupMorpho("letter"))
+>>> print(eng.lookupMorpho("letter"))
+[('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
+</pre>
+<pre class="python">
+Prelude PGF2> print (lookupMorpho eng "letter")
 [('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
 </pre>
 <pre class="java">
@@ -588,6 +668,7 @@ Expr e = gr.checkExpr(e,Type.readType("A"))
 pgf.TypeError: The expected type of the expression AdjCN (PositA red_A) (UseN theatre_N) is A but CN is infered
 </pre></p>
 
+<span class="python">
 <h2>Partial Grammar Loading</h2>
 
 <p>By default the whole grammar is compiled into a single file
@@ -600,12 +681,6 @@ This is done by using the option <tt>-split-pgf</tt> in the compiler:
 <pre class="python">
 $ gf -make -split-pgf App12.pgf
 </pre>
-<pre class="haskell">
-$ gf -make -split-pgf App12.pgf
-</pre>
-<pre class="java">
-$ gf -make -split-pgf App12.pgf
-</pre>
 </p>
 
 Now you can load the grammar as usual but this time only the
@@ -616,20 +691,10 @@ concrete syntax objects:
 >>> gr = pgf.readPGF("App.pgf")
 >>> eng = gr.languages["AppEng"]
 </pre>
-<pre class="java">
-PGF gr = PGF.readPGF("App.pgf")
-Concr eng = gr.getLanguages().get("AppEng")
-</pre>
 However, if you now try to use the concrete syntax then you will
 get an exception:
 <pre class="python">
 >>> eng.lookupMorpho("letter")
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-pgf.PGFError: The concrete syntax is not loaded
-</pre>
-<pre class="java">
-eng.lookupMorpho("letter")
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 pgf.PGFError: The concrete syntax is not loaded
@@ -641,6 +706,47 @@ Before using the concrete syntax, you need to explicitly load it:
 >>> print(eng.lookupMorpho("letter"))
 [('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
 </pre>
+
+When you don't need the language anymore then you can simply
+unload it:
+<pre class="python">
+>>> eng.unload()
+</pre>
+</span>
+
+<span class="java">
+<h2>Partial Grammar Loading</h2>
+
+<p>By default the whole grammar is compiled into a single file
+which consists of an abstract syntax together will all concrete
+languages. For large grammars with many languages this might be
+inconvinient because loading becomes slower and the grammar takes
+more memory. For that purpose you could split the grammar into
+one file for the abstract syntax and one file for every concrete syntax.
+This is done by using the option <tt>-split-pgf</tt> in the compiler:
+<pre class="java">
+$ gf -make -split-pgf App12.pgf
+</pre>
+</p>
+
+Now you can load the grammar as usual but this time only the
+abstract syntax will be loaded. You can still use the <tt>languages</tt>
+property to get the list of languages and the corresponding
+concrete syntax objects:
+<pre class="java">
+PGF gr = PGF.readPGF("App.pgf")
+Concr eng = gr.getLanguages().get("AppEng")
+</pre>
+However, if you now try to use the concrete syntax then you will
+get an exception:
+<pre class="java">
+eng.lookupMorpho("letter")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+pgf.PGFError: The concrete syntax is not loaded
+</pre>
+
+Before using the concrete syntax, you need to explicitly load it: 
 <pre class="java">
 eng.load("AppEng.pgf_c")
 for (MorphoAnalysis an : eng.lookupMorpho("letter")) {
@@ -652,12 +758,10 @@ letter_2_N, s Sg Nom, inf
 
 When you don't need the language anymore then you can simply
 unload it:
-<pre class="python">
->>> eng.unload()
-</pre>
 <pre class="java">
 eng.unload()
 </pre>
+</span>
 
 <h2>GraphViz</h2>
 

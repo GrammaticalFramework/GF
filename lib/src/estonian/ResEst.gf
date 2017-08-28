@@ -209,7 +209,8 @@ oper
           <VIPass Fut,    _>  => <"ei", verbs ! PassPresn False,  "ole"> ; --# notpresent
           <VIPass Cond,   _>  => <"ei", verbs ! ConditPass,  "oleks"> ; --# notpresent
           <VIPass Past,   _>  => <"ei", verbs ! PassImpf False,  "olnud"> ; --# notpresent
-          <VIInf i,      _>  => <"ei", verbs ! Inf i, "olla">
+          <VIInf i,      _>  => <"ei", verbs ! Inf i, verbOlema.s ! Inf i> 
+
         } ;
         
         ei  : Str = einegole.p1 ;
@@ -249,41 +250,17 @@ oper
     sc = verb.sc 
     } ;
 
-  insertObj : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
-    s = vp.s ;
-    s2 = \\fin,b,a => vp.s2 ! fin ! b ! a  ++ obj ! fin ! b ! a ;
-    adv = vp.adv ;
-    p = vp.p ;
-    ext = vp.ext ;
-    sc = vp.sc ; 
-    } ;
+  insertObj : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> 
+    vp ** { s2 = \\fin,b,a => vp.s2 ! fin ! b ! a ++ obj ! fin ! b ! a } ;
 
-  insertObjPre : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> {
-    s = vp.s ;
-    s2 = \\fin,b,a => obj ! fin ! b ! a ++ vp.s2 ! fin ! b ! a ;
-    adv = vp.adv ;
-    p = vp.p ;
-    ext = vp.ext ;
-    sc = vp.sc ; 
-    } ;
+  insertObjPre : (Bool => Polarity => Agr => Str) -> VP -> VP = \obj,vp -> 
+    vp ** { s2 = \\fin,b,a => obj ! fin ! b ! a ++ vp.s2 ! fin ! b ! a  } ;
 
-  insertAdv : Str -> VP -> VP = \adv,vp -> {
-    s = vp.s ;
-    s2 = vp.s2 ;
-    p = vp.p ;
-    ext = vp.ext ;
-    adv = vp.adv ++ adv ;
-    sc = vp.sc ; 
-    } ;
+  insertAdv : Str -> VP -> VP = \adv,vp -> 
+    vp ** { adv = vp.adv ++ adv } ;
 
-  insertExtrapos : Str -> VP -> VP = \obj,vp -> {
-    s = vp.s ;
-    s2 = vp.s2 ;
-    p = vp.p ;
-    ext = vp.ext ++ obj ;
-    adv = vp.adv ;
-    sc = vp.sc ; 
-    } ;
+  insertExtrapos : Str -> VP -> VP = \obj,vp -> 
+    vp ** { ext = vp.ext ++ obj } ;
 
 -- For $Sentence$.
 
@@ -388,9 +365,6 @@ oper
   --allomorph "ki", depends only on phonetic rules "üks+ki", "ühe+gi" 
   --waiting for post construction in GF :P
   gi : Str = "gi" ;
-
-  glueTok : Str -> Str = \s -> "&+" ++ s ;
-
 
 -- This is used for subjects of passives: therefore isFin in False.
 

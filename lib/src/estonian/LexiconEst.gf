@@ -330,7 +330,7 @@ lin
   push_V2 = mkV2 (mkV "suruma") ;
   rub_V2 = mkV2 (mkV "hõõruma") cpartitive ;
   scratch_V2 = mkV2 (mkV "kraapima" "kraapida" "kraabib") cpartitive ;
-  sew_V = mkV "külvama" "külvata" ;
+  sew_V = mkV "õmblema" ;
   sing_V = mkV "laulma" "laulda" "laulab" "lauldakse" ;
   sit_V = mkV "istuma" ;
   smell_V = mk2V "haistma" "haista";
