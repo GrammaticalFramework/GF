@@ -9,7 +9,9 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
       isNeg = False 
      } ;
 
-    GenCN n1 n2 = {s = \\nf => n1.s ! NPCase Gen ++ n2.s ! nf} ;
+    GenCN = caseCN Gen ;     -- auton merkki
+    ComitCN = caseCN Comit ; -- puudega mets
+    ElatCN  = caseCN Elat ;  -- puust laud
 
     GenIP ip = {s = \\_,_ => ip.s ! NPCase Gen} ;
 
@@ -18,6 +20,9 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
       a = RNoAg 
 ---      a = RAg (agrP3 num.n)
       } ;
+  oper 
+    caseCN : Case -> NP -> CN -> CN = \c,np,cn ->
+      lin CN { s = \\nf => np.s ! NPCase c ++ cn.s ! nf } ;
 
   lincat
     VPI   = {s : InfForm => Str} ;
@@ -137,15 +142,13 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
         isPron = False ; isNeg = False
         } ;
 
-    vai_Conj = {s1 = [] ; s2 = "vai" ; n = Sg} ;
-
     --The reflexive possessive "oma"
     --for "ta näeb oma koera" instead of *"tema koera"
     OmaPoss = {s,sp = \\_,_ => "oma" ; isDef,isNeg,isNum = False} ;
     
-    ma_Pron = mkPronoun "ma" "mu" "mind" Sg P1 ;
-    sa_Pron = mkPronoun "sa" "su" "sind" Sg P2;
-    ta_Pron = mkPronoun "ta" "ta" "teda" Sg P3 ;
+    ma_Pron = shortPronoun "ma" "mu" "mind" "minu" Sg P1 ;
+    sa_Pron = shortPronoun "sa" "su" "sind" "sinu" Sg P2;
+    ta_Pron = shortPronoun "ta" "ta" "teda" "tema" Sg P3 ;
     me_Pron = 
     {s = table {
         NPCase Nom => "me" ;
