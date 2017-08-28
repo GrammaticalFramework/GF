@@ -18,7 +18,7 @@ What's new? See the [Release notes release-3.9.html].
 | macOS | [gf-3.9.pkg gf-3.9.pkg] | //GF+S+C+J+P// | Double-click on the package icon
 | macOS | [gf-3.9-bin-intel-mac.tar.gz gf-3.9-bin-intel-mac.tar.gz] | //GF+S+C+J+P// | ``sudo tar -C /usr/local -zxf gf-3.9-bin-intel-mac.tar.gz``
 %| Fedora (32-bit) | [Fedora RPMs /~hallgren/tmp/Fedora/] | //GF+S+C+J+P// | ``sudo rpm -i ...``
-%| Raspian 8.0 | [gf_3.9-1_armhf.deb gf_3.9-1_armhf.deb] | //GF+S+C+J+P// | ``sudo dpkg -i gf_3.9-1_armhf.deb``
+| Raspian 9.1 | [gf_3.9-1_armhf.deb gf_3.9-1_armhf.deb] | //GF+S+C+J+P// | ``sudo dpkg -i gf_3.9-1_armhf.deb``
 | Ubuntu (32-bit) | [gf_3.9-1_i386.deb gf_3.9-1_i386.deb] | //GF+S+C+J+P// | ``sudo dpkg -i gf_3.9-1_i386.deb``
 | Ubuntu (64-bit) | [gf_3.9-1_amd64.deb gf_3.9-1_amd64.deb] | //GF+S+C+J+P// | ``sudo dpkg -i gf_3.9-1_amd64.deb``
 | Windows | [gf-3.9-bin-windows.zip gf-3.9-bin-windows.zip] | //GF+S// | ``unzip gf-3.9-bin-windows.zip``
@@ -45,7 +45,11 @@ variables, see Inari's notes on
 %(which is started with ``C:\MinGW\msys\1.0\msys.bat``).
 %It should work out of the box without any additional settings.
 
-The ``.deb`` packages should work on Ubuntu 16.04 and 17.04 and similar
+The Ubuntu ``.deb`` packages should work on Ubuntu 16.04 and 17.04 and similar
+Linux distributions.
+
+The Raspian ``.deb`` package was created on a Raspberry Pi 3 and will probably
+work on other ARM-based systems running Debian 9 (stretch) or similar
 Linux distributions.
 
 The packages for macOS (Mac OS X) should work on at
