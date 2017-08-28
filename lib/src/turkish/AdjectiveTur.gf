@@ -38,4 +38,12 @@ concrete AdjectiveTur of Adjective =
           \\n, c => kendi.s ! n ! c ++ a.c.s ++ a.s ! n ! Nom
     } ;
 
+    -- Some examples of using CAdvAP:
+    --     Lang> gt -number=2 -depth=1 (CAdvAP ? ? ?) | l -lang=LangTur
+    --     > Paris kadar kötü
+    --     > o kadar kötü
+    CAdvAP cadv ap np = {
+      s = \\n, c => np.s ! Nom ++ cadv.s ++ ap.s ! n ! c
+    } ;
+
 }
