@@ -1432,6 +1432,59 @@ Java_org_grammaticalframework_pgf_Expr_unStr(JNIEnv* env, jobject self)
 	return NULL;
 }
 
+JNIEXPORT void JNICALL
+Java_org_grammaticalframework_pgf_Expr_visit(JNIEnv* env, jobject self, jobject visitor)
+{
+	PgfExpr e = gu_variant_from_ptr(l2p(get_ref(env, self)));
+
+	GuPool* tmp_pool = gu_local_pool();
+
+	PgfApplication* app = pgf_expr_unapply(e, tmp_pool);
+	if (app != NULL) {
+		char* method_name = gu_malloc(tmp_pool, strlen(app->fun)+4);
+		strcpy(method_name, "on_");
+		strcat(method_name, app->fun);
+		
+		GuExn* err = gu_exn(tmp_pool);
+		GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
+		GuOut* out = gu_string_buf_out(sbuf);
+
+		gu_putc('(', out, err);
+		for (size_t i = 0; i < app->n_args; i++) {
+			gu_puts("Lorg/grammaticalframework/pgf/Expr;", out, err);
+		}
+		gu_puts(")V", out, err);
+		gu_putc('\0', out, err);
+
+		char* sig = gu_string_buf_data(sbuf);
+
+		jclass visitor_class = (*env)->GetObjectClass(env, visitor);
+		jmethodID methodID = (*env)->GetMethodID(env, visitor_class, method_name, sig);
+		
+		if (methodID != NULL) {
+			jclass expr_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Expr");
+			jmethodID expr_constrId = (*env)->GetMethodID(env, expr_class, "<init>", "(Lorg/grammaticalframework/pgf/Pool;Ljava/lang/Object;J)V");
+
+			jvalue* args = gu_malloc(tmp_pool, sizeof(jvalue)*app->n_args);
+			for (size_t i = 0; i < app->n_args; i++) {
+				args[i].l = (*env)->NewObject(env, expr_class, expr_constrId, NULL, self, p2l(app->args[i]));
+			}
+			(*env)->CallVoidMethodA(env, visitor, methodID, args);
+		} else {
+			(*env)->ExceptionClear(env);
+
+			methodID = (*env)->GetMethodID(env, visitor_class, "defaultCase", "(Lorg/grammaticalframework/pgf/Expr;)V");
+			if (methodID != NULL) {
+				(*env)->CallVoidMethod(env, visitor, methodID, self);
+			} else {
+				(*env)->ExceptionClear(env);
+			}
+		}
+	}
+
+	gu_pool_free(tmp_pool);
+}
+
 JNIEXPORT jboolean JNICALL
 Java_org_grammaticalframework_pgf_Expr_equals(JNIEnv* env, jobject self, jobject other)
 {
