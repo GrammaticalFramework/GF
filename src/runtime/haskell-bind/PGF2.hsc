@@ -14,6 +14,7 @@
 -------------------------------------------------
 
 #include <pgf/pgf.h>
+#include <pgf/linearizer.h>
 #include <gu/enum.h>
 #include <gu/exn.h>
 
@@ -51,7 +52,7 @@ module PGF2 (-- * PGF
              -- * Concrete syntax
              ConcName,Concr,languages,
              -- ** Linearization
-             linearize,linearizeAll,
+             linearize,linearizeAll,tabularLinearize,bracketedLinearize,
              FId, LIndex, BracketedString(..), showBracketedString, flattenBracketedString,
 
              alignWords,
@@ -640,6 +641,54 @@ linearizeAll lang e = unsafePerformIO $
         else do gu_pool_free pl
                 throwIO (PGFError "The abstract tree cannot be linearized")
 
+-- | Generates a table of linearizations for an expression
+tabularLinearize :: Concr -> Expr -> Map.Map String String
+tabularLinearize lang e = unsafePerformIO $
+  withGuPool $ \tmpPl -> do
+    exn <- gu_new_exn tmpPl
+    cts <- pgf_lzr_concretize (concr lang) (expr e) exn tmpPl
+    failed <- gu_exn_is_raised exn
+    if failed
+      then throwExn exn
+      else do ctree <- alloca $ \ptr -> do gu_enum_next cts ptr tmpPl
+                                           peek ptr
+              if ctree == nullPtr
+                then do touchExpr e
+                        return Map.empty
+                else do labels <- alloca $ \p_n_lins ->
+                                  alloca $ \p_labels -> do
+                                    pgf_lzr_get_table (concr lang) ctree p_n_lins p_labels
+                                    n_lins <- peek p_n_lins
+                                    labels <- peek p_labels
+                                    labels <- peekArray (fromIntegral n_lins) labels
+                                    labels <- mapM peekCString labels
+                                    return labels
+                        lins <- collect lang ctree 0 labels exn tmpPl
+                        return (Map.fromList lins)
+  where
+    collect lang ctree lin_idx []             exn tmpPl = return []
+    collect lang ctree lin_idx (label:labels) exn tmpPl = do
+      (sb,out) <- newOut tmpPl
+      pgf_lzr_linearize_simple (concr lang) ctree lin_idx out exn tmpPl
+      failed <- gu_exn_is_raised exn
+      if failed
+        then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
+                if is_nonexist
+                  then collect lang ctree (lin_idx+1) labels exn tmpPl
+                  else throwExn exn
+        else do lin <- gu_string_buf_freeze sb tmpPl
+                s  <- peekUtf8CString lin
+                ss <- collect lang ctree (lin_idx+1) labels exn tmpPl
+                return ((label,s):ss)
+
+    throwExn exn = do
+      is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+      if is_exn
+        then do c_msg <- (#peek GuExn, data.data) exn
+                msg <- peekUtf8CString c_msg
+                throwIO (PGFError msg)
+        else do throwIO (PGFError "The abstract tree cannot be linearized")
+
 type FId    = Int
 type LIndex = Int
 
@@ -676,6 +725,84 @@ ppBracketedString (Bracket cat fid index _ bss) = parens (text cat <> colon <> i
 flattenBracketedString :: BracketedString -> [String]
 flattenBracketedString (Leaf w)              = [w]
 flattenBracketedString (Bracket _ _ _ _ bss) = concatMap flattenBracketedString bss
+
+bracketedLinearize :: Concr -> Expr -> [BracketedString]
+bracketedLinearize lang e = unsafePerformIO $
+  withGuPool $ \pl -> 
+    do exn <- gu_new_exn pl
+       cts <- pgf_lzr_concretize (concr lang) (expr e) exn pl
+       failed <- gu_exn_is_raised exn
+       if failed
+         then throwExn exn
+         else do ctree <- alloca $ \ptr -> do gu_enum_next cts ptr pl
+                                              peek ptr
+                 if ctree == nullPtr
+                   then do touchExpr e
+                           return []
+                   else do ctree <- pgf_lzr_wrap_linref ctree pl
+                           ref <- newIORef ([],[])
+                           allocaBytes (#size PgfLinFuncs) $ \pLinFuncs  ->
+                            alloca $ \ppLinFuncs -> do
+                              fptr_symbol_token <- wrapSymbolTokenCallback (symbol_token ref)
+                              fptr_begin_phrase <- wrapPhraseCallback (begin_phrase ref)
+                              fptr_end_phrase   <- wrapPhraseCallback (end_phrase ref)
+                              fptr_symbol_ne    <- wrapSymbolNonExistCallback (symbol_ne exn)
+                              fptr_symbol_meta  <- wrapSymbolMetaCallback (symbol_meta ref)
+                              (#poke PgfLinFuncs, symbol_token) pLinFuncs fptr_symbol_token
+                              (#poke PgfLinFuncs, begin_phrase) pLinFuncs fptr_begin_phrase
+                              (#poke PgfLinFuncs, end_phrase)   pLinFuncs fptr_end_phrase
+                              (#poke PgfLinFuncs, symbol_ne)    pLinFuncs fptr_symbol_ne
+                              (#poke PgfLinFuncs, symbol_bind)  pLinFuncs nullPtr
+                              (#poke PgfLinFuncs, symbol_capit) pLinFuncs nullPtr
+                              (#poke PgfLinFuncs, symbol_meta)  pLinFuncs fptr_symbol_meta
+                              poke ppLinFuncs pLinFuncs
+                              pgf_lzr_linearize (concr lang) ctree 0 ppLinFuncs pl
+                              freeHaskellFunPtr fptr_symbol_token
+                              freeHaskellFunPtr fptr_begin_phrase
+                              freeHaskellFunPtr fptr_end_phrase
+                              freeHaskellFunPtr fptr_symbol_ne
+                              freeHaskellFunPtr fptr_symbol_meta
+                           failed <- gu_exn_is_raised exn
+                           if failed
+                             then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
+                                     if is_nonexist
+                                       then return []
+                                       else throwExn exn
+                             else do (_,bs) <- readIORef ref
+                                     return (reverse bs)
+  where
+    symbol_token ref _ c_token = do
+      (stack,bs) <- readIORef ref
+      token <- peekUtf8CString c_token
+      writeIORef ref (stack,Leaf token : bs)
+
+    begin_phrase ref _ c_cat c_fid c_lindex c_fun = do
+      (stack,bs) <- readIORef ref
+      writeIORef ref (bs:stack,[])
+
+    end_phrase ref _ c_cat c_fid c_lindex c_fun = do
+      (bs':stack,bs) <- readIORef ref
+      cat <- peekUtf8CString c_cat
+      let fid    = fromIntegral c_fid
+      let lindex = fromIntegral c_lindex
+      fun <- peekUtf8CString c_fun
+      writeIORef ref (stack, Bracket cat fid lindex fun (reverse bs) : bs')
+
+    symbol_ne exn _ = do
+      gu_exn_raise exn gu_exn_type_PgfLinNonExist
+      return ()
+
+    symbol_meta ref _ meta_id = do
+      (stack,bs) <- readIORef ref
+      writeIORef ref (stack,Leaf "?" : bs)
+
+    throwExn exn = do
+      is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+      if is_exn
+        then do c_msg <- (#peek GuExn, data.data) exn
+                msg <- peekUtf8CString c_msg
+                throwIO (PGFError msg)
+        else do throwIO (PGFError "The abstract tree cannot be linearized")
 
 alignWords :: Concr -> Expr -> [(String, [Int])]
 alignWords lang e = unsafePerformIO $
