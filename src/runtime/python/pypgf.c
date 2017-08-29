@@ -1990,7 +1990,7 @@ static PyMemberDef Bracket_members[] = {
     {"fun", T_OBJECT_EX, offsetof(BracketObject, fun), 0,
      "the abstract function for this bracket"},
     {"fid", T_INT, offsetof(BracketObject, fid), 0,
-     "an unique id which identifies this bracket in the whole bracketed string"},
+     "an id which identifies this bracket in the bracketed string. If there are discontinuous phrases this id will be shared for all brackets belonging to the same phrase."},
     {"lindex", T_INT, offsetof(BracketObject, lindex), 0,
      "the constituent index"},
     {"children", T_OBJECT_EX, offsetof(BracketObject, children), 0,

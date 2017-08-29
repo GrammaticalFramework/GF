@@ -51,7 +51,7 @@ module PGF2 (-- * PGF
              -- * Concrete syntax
              ConcName,Concr,languages,
              -- ** Linearization
-             linearize,linearizeAll,
+             linearize,linearizeAll,tabularLinearize,
              FId, LIndex, BracketedString(..), showBracketedString, flattenBracketedString,
 
              alignWords,
@@ -639,6 +639,54 @@ linearizeAll lang e = unsafePerformIO $
                 throwIO (PGFError msg)
         else do gu_pool_free pl
                 throwIO (PGFError "The abstract tree cannot be linearized")
+
+-- | Generates a table of linearizations for an expression
+tabularLinearize :: Concr -> Expr -> Map.Map String String
+tabularLinearize lang e = unsafePerformIO $
+  withGuPool $ \tmpPl -> do
+    exn <- gu_new_exn tmpPl
+    cts <- pgf_lzr_concretize (concr lang) (expr e) exn tmpPl
+    failed <- gu_exn_is_raised exn
+    if failed
+      then throwExn exn
+      else do ctree <- alloca $ \ptr -> do gu_enum_next cts ptr tmpPl
+                                           peek ptr
+              if ctree == nullPtr
+                then do touchExpr e
+                        return Map.empty
+                else do labels <- alloca $ \p_n_lins ->
+                                  alloca $ \p_labels -> do
+                                    pgf_lzr_get_table (concr lang) ctree p_n_lins p_labels
+                                    n_lins <- peek p_n_lins
+                                    labels <- peek p_labels
+                                    labels <- peekArray (fromIntegral n_lins) labels
+                                    labels <- mapM peekCString labels
+                                    return labels
+                        lins <- collect lang ctree 0 labels exn tmpPl
+                        return (Map.fromList lins)
+  where
+    collect lang ctree lin_idx []             exn tmpPl = return []
+    collect lang ctree lin_idx (label:labels) exn tmpPl = do
+      (sb,out) <- newOut tmpPl
+      pgf_lzr_linearize_simple (concr lang) ctree lin_idx out exn tmpPl
+      failed <- gu_exn_is_raised exn
+      if failed
+        then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
+                if is_nonexist
+                  then collect lang ctree (lin_idx+1) labels exn tmpPl
+                  else throwExn exn
+        else do lin <- gu_string_buf_freeze sb tmpPl
+                s  <- peekUtf8CString lin
+                ss <- collect lang ctree (lin_idx+1) labels exn tmpPl
+                return ((label,s):ss)
+
+    throwExn exn = do
+      is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+      if is_exn
+        then do c_msg <- (#peek GuExn, data.data) exn
+                msg <- peekUtf8CString c_msg
+                throwIO (PGFError msg)
+        else do throwIO (PGFError "The abstract tree cannot be linearized")
 
 type FId    = Int
 type LIndex = Int
