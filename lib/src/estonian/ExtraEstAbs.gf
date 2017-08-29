@@ -8,6 +8,8 @@ abstract ExtraEstAbs = Extra [
   flags coding=utf8 ;
   fun
     GenCN : NP -> CN -> CN ;              -- auton merkki
+    ComitCN : NP -> CN -> CN ;            -- põlenud puudega mets
+    ElatCN : NP -> CN -> CN ;             -- puust laud
 
     AdvExistNP : Adv -> NP -> Cl ;        -- kuvassa olemme me
     AdvPredNP  : Adv -> V  -> NP -> Cl ;  -- kuvassa hymyilee Veikko
@@ -21,8 +23,6 @@ abstract ExtraEstAbs = Extra [
     whatPart_IP : IP ;
 
     PartCN : CN -> NP ;                   -- olutta
-
-    vai_Conj : Conj ;                     -- minä vai sinä? ("or" in question)
 
     --Short forms of the pronouns
     ma_Pron : Pron ;
