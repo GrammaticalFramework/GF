@@ -550,83 +550,6 @@ There are also the methods <tt>UnAbs</tt>, <tt>UnInt</tt>, <tt>UnFloat</tt> and 
 </span>
 </p>
 
-<span class="python">
-<p>
-For more complex analyses you can use the visitor pattern.
-In object oriented languages this is just a clumpsy way to do
-what is called pattern matching in most functional languages.
-You need to define a class which has one method for each function
-in the abstract syntax of the grammar. If the functions is called
-<tt>f</tt> then you need a method called <tt>on_f</tt>. The method
-will be called each time when the corresponding function is encountered,
-and its arguments will be the arguments from the original tree.
-If there is no matching method name then the runtime will
-call the method <tt>default</tt>. The following is an example:
-<pre class="python">
->>> class ExampleVisitor:
-		def on_DetCN(self,quant,cn):
-			print("Found DetCN")
-			cn.visit(self)
-			
-		def on_AdjCN(self,adj,cn):
-			print("Found AdjCN")
-			cn.visit(self)
-			
-		def default(self,e):
-			pass
->>> e2.visit(ExampleVisitor())
-Found DetCN
-Found AdjCN
-</pre>
-Here we call the method <tt>visit</tt> from the tree e2 and we give
-it, as parameter, an instance of class <tt>ExampleVisitor</tt>.
-<tt>ExampleVisitor</tt> has two methods <tt>on_DetCN</tt>
-and <tt>on_AdjCN</tt> which are called when the top function of
-the current tree is <tt>DetCN</tt> or <tt>AdjCN</tt>
-correspondingly. In this example we just print a message and
-we call <tt>visit</tt> recursively to go deeper into the tree.
-</p>
-</span>
-<span class="java">
-<p>
-For more complex analyses you can use the visitor pattern.
-In object oriented languages this is just a clumpsy way to do
-what is called pattern matching in most functional languages.
-You need to define a class which has one method for each function
-in the abstract syntax of the grammar. If the functions is called
-<tt>f</tt> then you need a method called <tt>on_f</tt>. The method
-will be called each time when the corresponding function is encountered,
-and its arguments will be the arguments from the original tree.
-If there is no matching method name then the runtime will
-call the method <tt>defaultCase</tt>. The following is an example:
-<pre class="java">
-e2.visit(new Object() {
-            public void on_DetCN(Expr quant, Expr cn) {
-                System.out.println("found DetCN");
-                cn.visit(this);
-            }
-
-            public void on_AdjCN(Expr adj, Expr cn) {
-                System.out.println("found AdjCN");
-                cn.visit(this);
-            }
-
-            public void defaultCase(Expr e) {
-                System.out.println("found "+e);
-            }
-        });
-Found DetCN
-Found AdjCN
-</pre>
-Here we call the method <tt>visit</tt> from the tree e2 and we give
-it, as parameter, an instance of a class with two methods <tt>on_DetCN</tt>
-and <tt>on_AdjCN</tt> which are called when the top function of
-the current tree is <tt>DetCN</tt> or <tt>AdjCN</tt>
-correspondingly. In this example we just print a message and
-we call <tt>visit</tt> recursively to go deeper into the tree.
-</p>
-</span>
-
 Constructing new trees is also easy. You can either use 
 <tt>readExpr</tt> to read trees from strings, or you can
 construct new trees from existing pieces. This is possible by
@@ -665,28 +588,144 @@ Console.WriteLine(e2);
 </pre>
 </span>
 
-<span class="python">
 <h2>Embedded GF Grammars</h2>
 
-The GF compiler allows for easy integration of grammars in Haskell
-applications. For that purpose the compiler generates Haskell code
-that makes the integration of grammars easier. Since Python is a
-dynamic language the same can be done at runtime. Once you load
-the grammar you can call the method <tt>embed</tt>, which will
-dynamically create a Python module with one Python function 
-for every function in the abstract syntax of the grammar.
-After that you can simply import the module:
+<p>If the host application needs to do a lot of expression manipulations,
+then it is helpful to use a higher-level API to the grammar,
+also known as "embedded grammars" in GF. The advantage is that
+you can construct and analyze expressions in a more compact way.</p> 
+
+<span class="python">
+<p>In Python you first have to <tt>embed</tt> the grammar by calling:
 <pre class="python">
 >>> gr.embed("App")
 &lt;module 'App' (built-in)&gt;
+</pre>
+After that whenever you need the API you should import the module:
+<pre class="python">
 >>> import App
 </pre>
-Now creating new trees is just a matter of calling ordinary Python
+</p>
+<p>Now creating new trees is just a matter of calling ordinary Python
 functions:
 <pre class="python">
 >>> print(App.DetCN(quant,e))
 DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN house_N))
 </pre>
+</p>
+</span>
+<span class="haskell">
+<p>In order to access the API you first need to generate
+one boilerplate Haskell module with the compiler:
+<pre class="haskell">
+$ gf -make -output-format=haskell App.pgf
+</pre>
+This module will expose all functions in the abstract syntax
+as data type constructors together with methods for conversion from
+a generic expression to Haskell data and vice versa. When you need the API you can just import the module:
+<pre class="haskell">
+Prelude PGF2> import App
+</pre>
+</p>
+<p>Now creating new trees is just a matter of writing ordinary Haskell
+code:
+<pre class="haskell">
+Prelude PGF2 App> print (gf (GDetCN (GDetQuant GIndefArt GNumSg) (GAdjCN (GPositA Gred_A) (GUseN Ghouse_N))))
+</pre>
+The only difference is that to the name of every abstract syntax function
+the compiler adds a capital 'G' in order to guarantee that there are no conflicts
+and that all names are valid names for Haskell data constructors. Here <tt>gf</tt> is a function
+which converts from the data type representation to generic GF expressions.</p>
+
+<p>The converse function <tt>fg</tt> converts an expression to a data type expression.
+This is useful for instance if you want to do pattern matching
+on the structure of the expression:
+<pre class="haskell">
+visit = case fg e2 of
+          GDetCN quant cn -> do putStrLn "Found DetCN"
+                                visit cn
+          GAdjCN adj   cn -> do putStrLn "Found AdjCN"
+                                visit cn
+          e               -> return ()
+</pre>
+</p>
+</span>
+
+<span class="python">
+<p>
+Analysing expressions is also made easier by using the visitor pattern.
+In object oriented languages this is a clumpsy way to do
+what is called pattern matching in most functional languages.
+You need to define a class which has one method for each function
+in the abstract syntax that you want to handle. If the functions is called
+<tt>f</tt> then you need a method called <tt>on_f</tt>. The method
+will be called each time when the corresponding function is encountered,
+and its arguments will be the arguments from the original tree.
+If there is no matching method name then the runtime will
+call the method <tt>default</tt>. The following is an example:
+<pre class="python">
+>>> class ExampleVisitor:
+		def on_DetCN(self,quant,cn):
+			print("Found DetCN")
+			cn.visit(self)
+			
+		def on_AdjCN(self,adj,cn):
+			print("Found AdjCN")
+			cn.visit(self)
+			
+		def default(self,e):
+			pass
+>>> e2.visit(ExampleVisitor())
+Found DetCN
+Found AdjCN
+</pre>
+Here we call the method <tt>visit</tt> from the tree e2 and we give
+it, as parameter, an instance of class <tt>ExampleVisitor</tt>.
+<tt>ExampleVisitor</tt> has two methods <tt>on_DetCN</tt>
+and <tt>on_AdjCN</tt> which are called when the top function of
+the current tree is <tt>DetCN</tt> or <tt>AdjCN</tt>
+correspondingly. In this example we just print a message and
+we call <tt>visit</tt> recursively to go deeper into the tree.
+</p>
+</span>
+<span class="java">
+<p>
+Analysing expressions is also made easier by using the visitor pattern.
+In object oriented languages this is a clumpsy way to do
+what is called pattern matching in most functional languages.
+You need to define a class which has one method for each function
+in the abstract syntax that you want to handle. If the functions is called
+<tt>f</tt> then you need a method called <tt>on_f</tt>. The method
+will be called each time when the corresponding function is encountered,
+and its arguments will be the arguments from the original tree.
+If there is no matching method name then the runtime will
+call the method <tt>defaultCase</tt>. The following is an example:
+<pre class="java">
+e2.visit(new Object() {
+            public void on_DetCN(Expr quant, Expr cn) {
+                System.out.println("found DetCN");
+                cn.visit(this);
+            }
+
+            public void on_AdjCN(Expr adj, Expr cn) {
+                System.out.println("found AdjCN");
+                cn.visit(this);
+            }
+
+            public void defaultCase(Expr e) {
+                System.out.println("found "+e);
+            }
+        });
+Found DetCN
+Found AdjCN
+</pre>
+Here we call the method <tt>visit</tt> from the tree e2 and we give
+it, as parameter, an instance of a class with two methods <tt>on_DetCN</tt>
+and <tt>on_AdjCN</tt> which are called when the top function of
+the current tree is <tt>DetCN</tt> or <tt>AdjCN</tt>
+correspondingly. In this example we just print a message and
+we call <tt>visit</tt> recursively to go deeper into the tree.
+</p>
 </span>
 
 <h2>Access the Morphological Lexicon</h2>
