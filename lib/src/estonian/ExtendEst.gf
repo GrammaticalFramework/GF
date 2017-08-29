@@ -196,7 +196,7 @@ lin
 -}
   -- : N -> N  -> N ;      -- control system / controls system / control-system
   CompoundN noun cn = lin N {
-    s = \\nf => noun.s ! NCase Sg Gen ++ BIND ++ cn.s ! nf ---- AR genitive best?
+    s = \\nf => noun.s ! NCase Sg Gen ++ BIND ++ cn.s ! nf 
     } ;
 {-  
   CompoundAP noun adj = {} ;
@@ -226,7 +226,10 @@ lin
 
   lin 
     ReflRNP vps rnp = insertObjPre (\\a => vps.c2 ++ rnp.s ! a) vps ;
+
+    -- : RNP 
     ReflPron = {s = reflPron} ;
+
     ReflPoss num cn = {s = \\a => possPron ! a ++ num.s ! Nom ++ cn.s ! num.n ! Nom} ;
     PredetRNP predet rnp = {s = \\a => predet.s ++ rnp.s ! a} ;
 

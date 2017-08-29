@@ -192,8 +192,9 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
       a = p.a
       } ;
 
+    -- : Pron -> Quant ;  
     ProDropPoss p = {
-      s = \\_,_ => "oma" ; --???
+      s = \\_,_ => "oma" ;
       sp = \\_,_ => p.s ! NPCase Gen ;
       isNum = False ;
       isDef = True ; 
