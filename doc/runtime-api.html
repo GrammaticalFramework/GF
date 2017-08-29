@@ -134,7 +134,7 @@ If the result is <tt>Left</tt> then the parser has failed and you will
 get the token where the parser got stuck. If the parsing was successful
 then you get a potentially infinite list of parse results:
 <pre class="haskell">
-Prelude PGF2> let Right ((p,e):rest) = res
+Prelude PGF2> let Right ((e,p):rest) = res
 </pre>
 </span>
 <span class="java">
@@ -294,7 +294,7 @@ then the right method to use is <tt>tabularLinearize</tt>:
 </pre>
 <pre class="haskell">
 Prelude PGF2> tabularLinearize eng e
-fromList [("s Sg Nom", "red theatre"), ("s Pl Nom", "red theatres"), ("s Pl Gen", "red theatres'"), ("s Sg Gen", "red theatre's")]
+fromList [("s Pl Gen","red theatres'"),("s Pl Nom","red theatres"),("s Sg Gen","red theatre's"),("s Sg Nom","red theatre")]
 </pre>
 <pre class="java">
 for (Map.Entry&lt;String,String&gt; entry : eng.tabularLinearize(e)) {
@@ -316,7 +316,7 @@ a list of phrases:
 </pre>
 <pre class="haskell">
 Prelude PGF2> let [b] = bracketedLinearize eng e
-Prelude PGF2> print b
+Prelude PGF2> putStrLn (showBracketedString b)
 (CN:4 (AP:1 (A:0 red)) (CN:3 (N:2 theatre)))
 </pre>
 <pre class="java">
@@ -371,12 +371,15 @@ It is sometimes helpful to be able to see whether a function
 is linearizable or not. This can be done in this way:
 <pre class="python">
 >>> print(eng.hasLinearization("apple_N"))
+True
 </pre>
 <pre class="haskell">
 Prelude PGF2> print (hasLinearization eng "apple_N")
+True
 </pre>
 <pre class="java">
 System.out.println(eng.hasLinearization("apple_N"))
+true
 </pre>
 
 <h2>Analysing and Constructing Expressions</h2>
@@ -414,7 +417,7 @@ from <tt>unStr</tt> will be <tt>Just</tt> with the actual literal.
 For example the result from:
 </span>
 <pre class="haskell">
-Prelude PGF2> unStr (readExpr "\"literal\"")
+Prelude PGF2> readExpr "\"literal\"" >>= unStr
 "literal"
 </pre>
 is just the string "literal". 
@@ -537,7 +540,7 @@ form and the result is a list of analyses:
 >>> print(eng.lookupMorpho("letter"))
 [('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
 </pre>
-<pre class="python">
+<pre class="haskell">
 Prelude PGF2> print (lookupMorpho eng "letter")
 [('letter_1_N', 's Sg Nom', inf), ('letter_2_N', 's Sg Nom', inf)]
 </pre>
@@ -596,7 +599,7 @@ The full type of a function can be retrieved as:
 Det -> CN -> NP
 </pre>
 <pre class="haskell">
-Prelude PGF2> print (gr.functionType "DetCN")
+Prelude PGF2> print (functionType gr "DetCN")
 Det -> CN -> NP
 </pre>
 <pre class="java">
@@ -617,8 +620,8 @@ AdjCN (PositA red_A) (UseN theatre_N)
 CN
 </pre>
 <pre class="haskell">
-Prelude PGF2> let Right (e,ty) = inferExpr gr e
-Prelude PGF2> print e
+Prelude PGF2> let Right (e',ty) = inferExpr gr e
+Prelude PGF2> print e'
 AdjCN (PositA red_A) (UseN theatre_N)
 Prelude PGF2> print ty
 CN
@@ -644,8 +647,8 @@ AdjCN (PositA red_A) (UseN theatre_N)
 </pre>
 <pre class="haskell">
 Prelude PGF2> let Just ty = readType "CN"
-Prelude PGF2> let Just e = checkExpr gr e ty
-Prelude PGF2> print e
+Prelude PGF2> let Right e' = checkExpr gr e ty
+Prelude PGF2> print e'
 AdjCN (PositA red_A) (UseN theatre_N)
 </pre>
 <pre class="java">
@@ -653,15 +656,15 @@ Expr e = gr.checkExpr(e,Type.readType("CN"))
 >>> System.out.println(e)
 AdjCN (PositA red_A) (UseN theatre_N)
 </pre>
-<p>In case of type error you will get an exception:
+<p>In case of type error you will get an error:
 <pre class="python">
 >>> e = gr.checkExpr(e,pgf.readType("A"))
 pgf.TypeError: The expected type of the expression AdjCN (PositA red_A) (UseN theatre_N) is A but CN is infered
 </pre>
 <pre class="haskell">
 Prelude PGF2> let Just ty = readType "A"
-Prelude PGF2> let Just e = checkExpr gr e ty
-pgf.TypeError: The expected type of the expression AdjCN (PositA red_A) (UseN theatre_N) is A but CN is infered
+Prelude PGF2> let Left msg = checkExpr gr e ty
+Prelude PGF2> putStrLn msg
 </pre>
 <pre class="java">
 Expr e = gr.checkExpr(e,Type.readType("A"))
