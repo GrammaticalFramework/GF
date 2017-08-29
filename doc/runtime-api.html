@@ -561,7 +561,7 @@ in the abstract syntax of the grammar. If the functions is called
 will be called each time when the corresponding function is encountered,
 and its arguments will be the arguments from the original tree.
 If there is no matching method name then the runtime will
-to call the method <tt>default</tt>. The following is an example:
+call the method <tt>default</tt>. The following is an example:
 <pre class="python">
 >>> class ExampleVisitor:
 		def on_DetCN(self,quant,cn):
@@ -581,6 +581,45 @@ Found AdjCN
 Here we call the method <tt>visit</tt> from the tree e2 and we give
 it, as parameter, an instance of class <tt>ExampleVisitor</tt>.
 <tt>ExampleVisitor</tt> has two methods <tt>on_DetCN</tt>
+and <tt>on_AdjCN</tt> which are called when the top function of
+the current tree is <tt>DetCN</tt> or <tt>AdjCN</tt>
+correspondingly. In this example we just print a message and
+we call <tt>visit</tt> recursively to go deeper into the tree.
+</p>
+</span>
+<span class="java">
+<p>
+For more complex analyses you can use the visitor pattern.
+In object oriented languages this is just a clumpsy way to do
+what is called pattern matching in most functional languages.
+You need to define a class which has one method for each function
+in the abstract syntax of the grammar. If the functions is called
+<tt>f</tt> then you need a method called <tt>on_f</tt>. The method
+will be called each time when the corresponding function is encountered,
+and its arguments will be the arguments from the original tree.
+If there is no matching method name then the runtime will
+call the method <tt>defaultCase</tt>. The following is an example:
+<pre class="java">
+e2.visit(new Object() {
+            public void on_DetCN(Expr quant, Expr cn) {
+                System.out.println("found DetCN");
+                cn.visit(this);
+            }
+
+            public void on_AdjCN(Expr adj, Expr cn) {
+                System.out.println("found AdjCN");
+                cn.visit(this);
+            }
+
+            public void defaultCase(Expr e) {
+                System.out.println("found "+e);
+            }
+        });
+Found DetCN
+Found AdjCN
+</pre>
+Here we call the method <tt>visit</tt> from the tree e2 and we give
+it, as parameter, an instance of a class with two methods <tt>on_DetCN</tt>
 and <tt>on_AdjCN</tt> which are called when the top function of
 the current tree is <tt>DetCN</tt> or <tt>AdjCN</tt>
 correspondingly. In this example we just print a message and
