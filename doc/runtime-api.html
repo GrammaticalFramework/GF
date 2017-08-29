@@ -396,6 +396,13 @@ a tree into a function name and a list of arguments:
 Prelude PGF2> unApp e
 Just ("AdjCN", [..., ...])
 </pre>
+<pre class="java">
+ExprApplication app = e.unApp();
+System.out.println(app.getFunction());
+for (Expr arg : app.getArguments()) {
+   System.out.println(arg);
+}
+</pre>
 </p>
 <p>
 <span class="python">
@@ -419,6 +426,17 @@ For example the result from:
 <pre class="haskell">
 Prelude PGF2> readExpr "\"literal\"" >>= unStr
 "literal"
+</pre>
+<span class="java">
+The result from <tt>unApp</tt> is not <tt>null</tt> if the expression
+is an application, and <tt>null</tt> in all other cases.
+Similarly, if the tree is a literal string then the return value 
+from <tt>unStr</tt> will not be <tt>null</tt> with the actual literal. 
+For example the output from:
+</span>
+<pre class="java">
+Expr e = Expr.readExpr("\"literal\"")
+System.out.println(e.unStr())
 </pre>
 is just the string "literal". 
 <span class="python">Situations like this can be detected
@@ -487,6 +505,14 @@ Prelude PGF2> let Just quant = readExpr "DetQuant IndefArt NumSg"
 Prelude PGF2> let e2 = mkApp "DetCN" [quant, e]
 Prelude PGF2> print e2
 DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN theatre_N))
+</pre>
+</span>
+<span class="java">
+using the constructor for <tt>Expr</tt>:
+<pre class="java">
+Expr quant = Expr.readExpr("DetQuant IndefArt NumSg");
+Expr e2 = new Expr("DetCN", new Expr[] {quant, e});
+System.out.println(e2);
 </pre>
 </span>
 
@@ -653,8 +679,7 @@ AdjCN (PositA red_A) (UseN theatre_N)
 </pre>
 <pre class="java">
 Expr e = gr.checkExpr(e,Type.readType("CN"))
->>> System.out.println(e)
-AdjCN (PositA red_A) (UseN theatre_N)
+System.out.println(e)
 </pre>
 <p>In case of type error you will get an error:
 <pre class="python">
@@ -668,7 +693,7 @@ Prelude PGF2> putStrLn msg
 </pre>
 <pre class="java">
 Expr e = gr.checkExpr(e,Type.readType("A"))
-pgf.TypeError: The expected type of the expression AdjCN (PositA red_A) (UseN theatre_N) is A but CN is infered
+TypeError: The expected type of the expression AdjCN (PositA red_A) (UseN theatre_N) is A but CN is infered
 </pre></p>
 
 <span class="python">
@@ -800,6 +825,20 @@ n3 -- n4 [style = "solid"]
 n0 -- n3 [style = "solid"]
 }
 </pre>
+<pre class="java">
+System.out.println(gr.graphvizAbstractTree(e))
+graph {
+n0[label = "AdjCN", style = "solid", shape = "plaintext"]
+n1[label = "PositA", style = "solid", shape = "plaintext"]
+n2[label = "red_A", style = "solid", shape = "plaintext"]
+n1 -- n2 [style = "solid"]
+n0 -- n1 [style = "solid"]
+n3[label = "UseN", style = "solid", shape = "plaintext"]
+n4[label = "theatre_N", style = "solid", shape = "plaintext"]
+n3 -- n4 [style = "solid"]
+n0 -- n3 [style = "solid"]
+}
+</pre>
 
 <pre class="python">
 >>> print(eng.graphvizParseTree(e))
@@ -840,6 +879,43 @@ graph {
 </pre>
 <pre class="haskell">
 Prelude PGF2> putStrLn (graphvizParseTree eng e)
+graph {
+  node[shape=plaintext]
+
+  subgraph {rank=same;
+    n4[label="CN"]
+  }
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n1[label="AP"]
+    n3[label="CN"]
+    n1 -- n3
+  }
+  n4 -- n1
+  n4 -- n3
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n0[label="A"]
+    n2[label="N"]
+    n0 -- n2
+  }
+  n1 -- n0
+  n3 -- n2
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n100000[label="red"]
+    n100001[label="theatre"]
+    n100000 -- n100001
+  }
+  n0 -- n100000
+  n2 -- n100001
+}
+</pre>
+<pre class="java">
+System.out.println(eng.graphvizParseTree(e))
 graph {
   node[shape=plaintext]
 
