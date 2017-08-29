@@ -650,6 +650,26 @@ visit = case fg e2 of
 </pre>
 </p>
 </span>
+<span class="java">
+<p>In order to access the API you first need to generate
+one boilerplate Java class with the compiler:
+<pre class="java">
+$ gf -make -output-format=java App.pgf
+</pre>
+This class will expose all functions in the abstract syntax
+as methods. Now creating new trees is just a matter of writing ordinary Java
+code:
+<pre class="java">
+System.out.println(App.DetCN(quant, cn));
+</pre>
+If the grammar name is too long to write it in front of every function
+name then you can create an instance with a shorter name:
+<pre class="java">
+App a = new App();
+System.out.println(a.DetCN(quant, cn));
+</pre>
+</p>
+</span>
 
 <span class="python">
 <p>
@@ -665,16 +685,16 @@ If there is no matching method name then the runtime will
 call the method <tt>default</tt>. The following is an example:
 <pre class="python">
 >>> class ExampleVisitor:
-		def on_DetCN(self,quant,cn):
-			print("Found DetCN")
-			cn.visit(self)
+      def on_DetCN(self,quant,cn):
+        print("Found DetCN")
+        cn.visit(self)
 			
-		def on_AdjCN(self,adj,cn):
-			print("Found AdjCN")
-			cn.visit(self)
-			
-		def default(self,e):
-			pass
+      def on_AdjCN(self,adj,cn):
+        print("Found AdjCN")
+        cn.visit(self)
+
+      def default(self,e):
+        pass
 >>> e2.visit(ExampleVisitor())
 Found DetCN
 Found AdjCN
