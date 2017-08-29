@@ -81,7 +81,7 @@ A grammar is loaded by calling <span class="python">the method pgf.readPGF</span
 Prelude PGF2> gr &lt;- readPGF "App12.pgf"
 </pre>
 <pre class="java">
-PGF gr = PGF.readPGF("App12.pgf")
+PGF gr = PGF.readPGF("App12.pgf");
 </pre>
 
 From the grammar you can query the set of available languages.
@@ -100,7 +100,7 @@ Prelude PGF2> :t eng
 eng :: Concr
 </pre>
 <pre class="java">
-Concr eng = gr.getLanguages().get("AppEng")
+Concr eng = gr.getLanguages().get("AppEng");
 </pre>
 
 <h2>Parsing</h2>
@@ -115,7 +115,7 @@ For example to invoke the parser, you can call:
 Prelude PGF2> let res = parse eng (startCat gr) "this is a small theatre"
 </pre>
 <pre class="java">
-Iterable&lt;ExprProb&gt; iterable = eng.parse(gr.startCat(), "this is a small theatre")
+Iterable&lt;ExprProb&gt; iterable = eng.parse(gr.getStartCat(), "this is a small theatre");
 </pre>
 <span class="python">
 This gives you an iterator which can enumerate all possible
@@ -141,8 +141,8 @@ Prelude PGF2> let Right ((e,p):rest) = res
 This gives you an iterable which can enumerate all possible
 abstract trees. You can get the next tree by calling <tt>next</tt>:
 <pre class="java">
-Iterator&lt;ExprProb&gt; iter = iterable.iterator()
-ExprProb ep = iter.next()
+Iterator&lt;ExprProb&gt; iter = iterable.iterator();
+ExprProb ep = iter.next();
 </pre>
 </span>
 
@@ -161,7 +161,7 @@ Prelude PGF2> print p
 35.9166526794
 </pre>
 <pre class="java">
-System.out.println(ep.getProb())
+System.out.println(ep.getProb());
 35.9166526794
 </pre>
 and this is the corresponding abstract tree:
@@ -174,7 +174,7 @@ Prelude PGF2> print e
 PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant this_Quant NumSg)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA small_A) (UseN theatre_N)))))))) NoVoc
 </pre>
 <pre class="java">
-System.out.println(ep.getExpr())
+System.out.println(ep.getExpr());
 PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant this_Quant NumSg)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA small_A) (UseN theatre_N)))))))) NoVoc
 </pre>
 
@@ -216,7 +216,7 @@ There is also the method <tt>parseWithHeuristics</tt> which
 takes two more paramaters which let you to have a better control 
 over the parser's behaviour:
 <pre class="java">
-Iterable&lt;ExprProb&gt; iterable = eng.parseWithHeuristics(gr.startCat(), heuristic_factor, callbacks)
+Iterable&lt;ExprProb&gt; iterable = eng.parseWithHeuristics(gr.startCat(), heuristic_factor, callbacks);
 </pre>
 </span>
 
@@ -250,7 +250,7 @@ a new expression like this:
 Prelude PGF2> let Just e = readExpr "AdjCN (PositA red_A) (UseN theatre_N)"
 </pre>
 <pre class="java">
-Expr e = Expr.readExpr("AdjCN (PositA red_A) (UseN theatre_N)")
+Expr e = Expr.readExpr("AdjCN (PositA red_A) (UseN theatre_N)");
 </pre>
 and then we can linearize it:
 <pre class="python">
@@ -262,7 +262,7 @@ Prelude PGF2> putStrLn (linearize eng e)
 red theatre
 </pre>
 <pre class="java">
-System.out.println(eng.linearize(e))
+System.out.println(eng.linearize(e));
 red theatre
 </pre>
 This method produces only a single linearization. If you use variants
@@ -281,7 +281,7 @@ red theater
 </pre>
 <pre class="java">
 for (String s : eng.linearizeAll(e)) {
-    System.out.println(s)
+    System.out.println(s);
 }
 red theatre
 red theater
@@ -297,7 +297,7 @@ Prelude PGF2> tabularLinearize eng e
 fromList [("s Pl Gen","red theatres'"),("s Pl Nom","red theatres"),("s Sg Gen","red theatre's"),("s Sg Nom","red theatre")]
 </pre>
 <pre class="java">
-for (Map.Entry&lt;String,String&gt; entry : eng.tabularLinearize(e)) {
+for (Map.Entry&lt;String,String&gt; entry : eng.tabularLinearize(e).entrySet()) {
     System.out.println(entry.getKey() + ": " + entry.getValue());
 }
 s Sg Nom: red theatre
@@ -320,7 +320,7 @@ Prelude PGF2> putStrLn (showBracketedString b)
 (CN:4 (AP:1 (A:0 red)) (CN:3 (N:2 theatre)))
 </pre>
 <pre class="java">
-Object[] bs = eng.bracketedLinearize(e)
+Object[] bs = eng.bracketedLinearize(e);
 </pre>
 <span class="python">
 Each element in the sequence above is either a string or an object
@@ -378,7 +378,7 @@ Prelude PGF2> print (hasLinearization eng "apple_N")
 True
 </pre>
 <pre class="java">
-System.out.println(eng.hasLinearization("apple_N"))
+System.out.println(eng.hasLinearization("apple_N"));
 true
 </pre>
 
@@ -435,8 +435,8 @@ from <tt>unStr</tt> will not be <tt>null</tt> with the actual literal.
 For example the output from:
 </span>
 <pre class="java">
-Expr e = Expr.readExpr("\"literal\"")
-System.out.println(e.unStr())
+Expr elit = Expr.readExpr("\"literal\"");
+System.out.println(elit.unStr());
 </pre>
 is just the string "literal". 
 <span class="python">Situations like this can be detected
@@ -445,6 +445,9 @@ It is also possible to get an integer or a floating point number
 for the other possible literal types in GF.</span>
 <span class="haskell">
 There are also the functions <tt>unAbs</tt>, <tt>unInt</tt>, <tt>unFloat</tt> and <tt>unMeta</tt> for all other possible cases.
+</span>
+<span class="java">
+There are also the methods <tt>unAbs</tt>, <tt>unInt</tt>, <tt>unFloat</tt> and <tt>unMeta</tt> for all other possible cases.
 </span>
 </p>
 
@@ -554,7 +557,7 @@ word form with its possible analyses:
 Prelude PGF2> mapM_ print [(form,lemma,analysis,prob) | (form,analyses) &lt;- fullFormLexicon eng, (lemma,analysis,prob) &lt- analyses]
 </pre>
 <pre class="java">
-for (FullFormEntry entry in eng.fullFormLexicon()) {
+for (FullFormEntry entry in eng.fullFormLexicon()) { ///// TODO
 	for (MorphoAnalysis analysis : entry.getAnalyses()) {
 		System.out.println(entry.getForm()+" "+analysis.getProb()+" "+analysis.getLemma()+" "+analysis.getField());
 	}
@@ -603,7 +606,7 @@ Prelude PGF2> categories gr
 ....
 </pre>
 <pre class="java">
-List&lt;String&gt; cats = gr.getCategories()
+List&lt;String&gt; cats = gr.getCategories();
 ....
 </pre>
 You can also access all functions with the same result category:
@@ -616,7 +619,7 @@ Prelude PGF2> functionsByCat gr "Weekday"
 ['friday_Weekday', 'monday_Weekday', 'saturday_Weekday', 'sunday_Weekday', 'thursday_Weekday', 'tuesday_Weekday', 'wednesday_Weekday']
 </pre>
 <pre class="java">
-List&lt;String&gt; cats = gr.getFunctionsByCat("Weekday")
+List&lt;String&gt; funsByCat = gr.getFunctionsByCat("Weekday");
 ....
 </pre>
 The full type of a function can be retrieved as:
@@ -629,7 +632,7 @@ Prelude PGF2> print (functionType gr "DetCN")
 Det -> CN -> NP
 </pre>
 <pre class="java">
-System.out.println(gr.getFunctionType("DetCN"))
+System.out.println(gr.getFunctionType("DetCN"));
 Det -> CN -> NP
 </pre>
 
@@ -653,11 +656,9 @@ Prelude PGF2> print ty
 CN
 </pre>
 <pre class="java">
-TypedExpr te = gr.inferExpr(e)
-System.out.println(te.getExpr())
-AdjCN (PositA red_A) (UseN theatre_N)
-System.out.println(te.getType())
-CN
+TypedExpr te = gr.inferExpr(e);
+System.out.println(te.getExpr()+" : "+te.getType());
+AdjCN (PositA red_A) (UseN theatre_N) : CN
 </pre>
 The result is a potentially updated expression and its type. In this
 case we always deal with simple types, which means that the new
@@ -678,7 +679,7 @@ Prelude PGF2> print e'
 AdjCN (PositA red_A) (UseN theatre_N)
 </pre>
 <pre class="java">
-Expr e = gr.checkExpr(e,Type.readType("CN"))
+Expr new_e = gr.checkExpr(e,Type.readType("CN")); //// TODO
 System.out.println(e)
 </pre>
 <p>In case of type error you will get an error:
@@ -826,7 +827,7 @@ n0 -- n3 [style = "solid"]
 }
 </pre>
 <pre class="java">
-System.out.println(gr.graphvizAbstractTree(e))
+System.out.println(gr.graphvizAbstractTree(e));   //// TODO
 graph {
 n0[label = "AdjCN", style = "solid", shape = "plaintext"]
 n1[label = "PositA", style = "solid", shape = "plaintext"]
@@ -915,7 +916,7 @@ graph {
 }
 </pre>
 <pre class="java">
-System.out.println(eng.graphvizParseTree(e))
+System.out.println(eng.graphvizParseTree(e));   //// TODO
 graph {
   node[shape=plaintext]
 
