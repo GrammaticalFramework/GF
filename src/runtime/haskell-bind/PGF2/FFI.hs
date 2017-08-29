@@ -202,6 +202,9 @@ foreign import ccall "pgf/pgf.h pgf_lzr_wrap_linref"
 foreign import ccall "pgf/pgf.h pgf_lzr_linearize_simple"
   pgf_lzr_linearize_simple :: Ptr PgfConcr -> Ptr PgfCncTree -> CInt -> Ptr GuOut -> Ptr GuExn -> Ptr GuPool -> IO ()
 
+foreign import ccall "pgf/pgf.h pgf_lzr_get_table"
+  pgf_lzr_get_table :: Ptr PgfConcr -> Ptr PgfCncTree -> Ptr CInt -> Ptr (Ptr CString) -> IO ()
+
 foreign import ccall "pgf/pgf.h pgf_align_words"
   pgf_align_words :: Ptr PgfConcr -> PgfExpr -> Ptr GuExn -> Ptr GuPool -> IO (Ptr GuSeq)
 
