@@ -118,10 +118,17 @@ abstract Extend = Cat ** {
     ComplBareVS  : VS  -> S  -> VP ;       -- say she runs
     SlashBareV2S : V2S -> S  -> VPSlash ;  -- answer (to him) it is good
 
+    ComplDirectVS : VS -> Utt -> VP ;      -- say: "today"
+    ComplDirectVQ : VQ -> Utt -> VP ;      -- ask: "when"
+
 -- front the extraposed part
 
-    FrontExtPredVP : NP -> VP -> Cl ;      -- I am here, she said
-    InvFrontExtPredVP : NP -> VP -> Cl ;   -- I am here, said she
+    FrontComplDirectVS : NP -> VS -> Utt -> Cl ;      -- "I am here", she said
+    FrontComplDirectVQ : NP -> VQ -> Utt -> Cl ;      -- "where", she asked
+
+-- proper structure of "it is AP to VP"
+
+    PredAPVP : AP -> VP -> Cl ;   -- it is good to walk
 
 -- to use an AP as CN or NP without CN
 
