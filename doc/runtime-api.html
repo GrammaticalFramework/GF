@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<style>
-			body { background: #eee; }
+			body { background: #eee; padding-top: 200px; }
 
 			pre.python   {background-color:#ffc; display: none}
 			pre.haskell  {background-color:#ffc; display: block}
@@ -11,6 +11,16 @@
 			span.haskell {display: inline}
 			span.java    {display: none}
 			span.csharp  {display: none}
+			
+			.header {
+               position: fixed;
+               top: 0;
+               left: 0;
+               background: #ddd;
+               width: 100%;
+               padding: 5pt;
+               border-bottom: solid #bbb 2pt;
+            }
 		</style>
 
 
@@ -40,10 +50,13 @@
 </script>
 	</head>
 	<body onload="change_language(window.location.href); window.addEventListener('hashchange', function(e){change_language(window.location.href);});">
+		<span class="header">
 		<h1>Using the <span class="python">Python</span> <span class="haskell">Haskell</span> <span class="java">Java</span> <span class="csharp">C#</span> binding to the C runtime</h1>
-		<h4>Krasimir Angelov, July 2015</h4>
 		
 		Choose a language: <a href="#haskell">Haskell</a> <a href="#python">Python</a> <a href="#java">Java</a> <a href="#csharp">C#</a>
+		</span>
+
+		<h4>Krasimir Angelov, July 2015</h4>
 		
 <h2>Loading the Grammar</h2>
 
