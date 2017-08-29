@@ -584,37 +584,55 @@ oper
          } ;
        } ;
 
-  CommonNoun = {s : NForm => Str} ;
+  Noun = {s : NForm => Str} ;
+
 
 -- To form an adjective, it is usually enough to give a noun declension: the
 -- adverbial form is regular.
 
   Adj : Type = {s : AForm => Str} ;
 
+-- Helper functions to form Comps.
+  compAP = icompAP [] ;
+
+  icompAP : Str -> {s : Bool => NForm => Str} -> {s : Agr => Str} = \kui,ap ->
+    { s = \\agr => 
+       let n = complNumAgr agr ; 
+        in kui ++ ap.s ! False ! NCase n Nom } ;
+      
+  compCN : Noun -> {s : Agr => Str} = \cn -> 
+    { s = \\agr => 
+       let n = complNumAgr agr ; 
+        in cn.s ! NCase n Nom } ;
+
 
 -- Reflexive pronoun. 
 --- Possessive could be shared with the more general $NounFin.DetCN$.
 
---oper
-  --Estonian version started
   reflPron : Agr -> NP = \agr -> 
     let 
-      ise = nForms2N (nForms6 "ise" "enda" "ennast" "endasse" "IGNORE" "IGNORE")
-    in {
+      ise = nForms2N (nForms6 "ise" "enda" "ennast" "endasse" "endi" "endid") ;
+      n = case agr of {
+        AgPol => Sg ;
+        Ag n _ => n } ;
+     in {
       s = table {
         NPAcc => "ennast" ;
-        NPCase c => ise.s ! NCase Sg c
+        NPCase c => fixPlNom "endid" ise.s ! NCase n c
         } ;
       a = agr ;
       isPron = False -- no special acc form
       } ;
 
+  -- Using nForms6 as a shortcut works pretty nicely, but plural nominative is often wrong.
+  -- This is used at least 3 times :-D
+  fixPlNom : Str -> (NForm => Str) -> (NForm => Str) = \mis,n ->
+    table { NCase Pl Nom => mis ;
+            x            => n ! x } ;
 
+  NForms : Type = Predef.Ints 5 => Str ;
 
-    Noun = CommonNoun ** {lock_N : {}} ;
-    NForms : Type = Predef.Ints 5 => Str ;
-
-    nForms6 : (x1,_,_,_,_,x6 : Str) -> NForms = 
+  nForms6 : (x1,_,_,_,_,x6 : Str) -> NForms = 
       \jogi,joe,joge,joesse, -- sg nom, gen, part, ill
        jogede,jogesid -> table { -- pl gen, part,
       0 => jogi ;

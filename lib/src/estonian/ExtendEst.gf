@@ -115,14 +115,16 @@ concrete ExtendEst of Extend =
     mkVPI : VP -> VPI = \vp -> lin VPI {} ;
 
 -----
-
-  lin
-    ICompAP ap = {} ; ---- IComp should have agr!
-
-    IAdvAdv adv = {} ;
 -}
 
-    -- : VP -> AP ;   -- (the man) looking at Mary / filme vaatav (mees)
+lin
+  -- : AP -> IComp ;   -- "how old"
+  ICompAP ap = icompAP "kui" ap ; 
+
+  -- : Adv -> IAdv ;   -- "how often"
+  IAdvAdv adv = { s = "kui" ++ adv.s } ;  
+
+  -- : VP -> AP ;   -- (the man) looking at Mary / filme vaatav (mees)
   PresPartAP vp = {
     s = \\_,_ => vp2adv vp True VIPresPart ;
     infl = Invariable 
