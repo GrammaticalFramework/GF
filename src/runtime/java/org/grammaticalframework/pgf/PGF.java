@@ -68,6 +68,9 @@ public class PGF {
 	 * of the expression together with its type */
 	public native TypedExpr inferExpr(Expr expr) throws TypeError;
 
+
+	public native String graphvizAbstractTree(Expr expr);
+
 	//////////////////////////////////////////////////////////////////
 	// private stuff
 	private Pool pool;
