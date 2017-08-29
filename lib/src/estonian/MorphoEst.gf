@@ -563,30 +563,24 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
          x          => shortMa.s ! x } } ;
    
 
-  -- TODO: this does not seem to be called from anyway
-  mkDemPronoun : (_,_,_,_,_ : Str) ->  Number -> 
-    {s : NPForm => Str ; a : Agr} = 
-    \tuo, tuon, tuota, tuona, tuohon, n ->
-    let pro = mkPronoun tuo tuon tuota n P3
-    in {
-      s = table {
-        NPAcc => tuo ;
-        c => pro.s ! c
-        } ;
-      a = pro.a
-      } ;
-
 -- The relative pronoun, "joka", is inflected in case and number, 
 -- like common nouns, but it does not take possessive suffixes.
 -- The inflextion shows a surprising similarity with "suo".
 
 oper
-  -- TODO: fix: Nom => kelled
-  -- TODO: mis
-  relPron : Number => Case => Str =
-    let kes = nForms2N (nForms6 "kes" "kelle" "keda" "kellesse" "kelle" "keda") in
-    \\n,c => kes.s ! NCase n c ;
 
+  relPron : Number => Case => Str = 
+    let mis = nForms2N (nForms6 "mis" "mille" "mida" "millesse" "mille" "mida") in 
+    \\n,c => case <n,c> of {
+      <Pl,Nom> => "mis" ;
+      <> => mis.s ! NCase n c } ;
+
+  kesPron : Number => Case => Str =
+    let kes = nForms2N (nForms6 "kes" "kelle" "keda" "kellesse" "kelle" "keda") in
+    \\n,c => case <n,c> of {
+      <Pl,Nom> => "kes" ;
+      <> => kes.s ! NCase n c } ;
+  
   ProperName = {s : Case => Str} ;
 
   -- TODO: generate using mkPronoun
