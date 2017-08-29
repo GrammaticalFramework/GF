@@ -53,10 +53,13 @@ lin
   NominalizeVPSlashNP = variants {} ;     -- VPSlash -> NP -> NP ;
   ExistsNP = variants {} ;     -- NP -> Cl ; -- there exists a number / there exist numbers
   PurposeVP = variants {} ;     -- VP -> Adv ; -- to become happy
-  ComplBareVS = variants {} ;     -- VS -> S -> VP ; -- say she runs
-  SlashBareV2S = variants {} ;     -- V2S -> S -> VPSlash ; -- answer (to him) it is good
-  FrontExtPredVP = variants {} ;     -- NP -> VP -> Cl ; -- I am here, she said
-  InvFrontExtPredVP = variants {} ;     -- NP -> VP -> Cl ; -- I am here, said she
+  ComplBareVS = ComplVS ;     -- VS -> S -> VP ; -- say she runs ; DEFAULT say that she runs
+  SlashBareV2S = SlashV2S ;     -- V2S -> S -> VPSlash ; -- answer (to him) it is good ; DEFAULT answer that it is good
+  ComplDirectVS vs utt = AdvVP (UseV <lin V vs : V>) (lin Adv {s = ":" ++ quoted utt.s}) ; -- DEFAULT complement added as Adv in quotes
+  ComplDirectVQ vq utt = AdvVP (UseV <lin V vq : V>) (lin Adv {s = ":" ++ quoted utt.s}) ; -- DEFAULT complement added as Adv in quotes
+  FrontComplDirectVS = variants {} ; -- NP -> VS -> Utt -> Cl ;      -- "I am here", she said
+  FrontComplDirectVQ  = variants {} ; -- NP -> VQ -> Utt -> Cl ;      -- "where", she asked
+  PredAPVP ap vp = ImpersCl (UseComp (CompAP (SentAP ap (EmbedVP vp)))) ; -- DEFAULT it is (good to walk)
   AdjAsCN = variants {} ;     -- AP -> CN ; -- a green one ; en grön (Swe)
   AdjAsNP = variants {} ;     -- AP -> NP ; -- green (is good)
   ReflRNP = variants {} ;     -- VPSlash -> RNP -> VP ; -- love my family and myself
@@ -102,5 +105,8 @@ lin
   UttDatNP np = UttAccNP (lin NP np) ; -- him(dative) ; DEFAULT he
   UttAccIP = UttIP ; -- whom (accusative) ; DEFAULT who
   UttDatIP ip = UttAccIP (lin IP ip) ; -- whom (dative) ; DEFAULT who
+
+oper
+  quoted : Str -> Str = \s -> "\"" ++ s ++ "\"" ; ---- TODO bind ; move to Prelude?
 
 }

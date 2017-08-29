@@ -55,6 +55,9 @@ foreign import ccall "gu/exn.h gu_exn_is_raised"
 foreign import ccall "gu/exn.h gu_exn_caught_"
   gu_exn_caught :: Ptr GuExn -> CString -> IO Bool
 
+foreign import ccall "gu/exn.h gu_exn_raise_"
+  gu_exn_raise :: Ptr GuExn -> CString -> IO (Ptr ())
+
 gu_exn_type_GuErrno = Ptr "GuErrno"# :: CString
 
 gu_exn_type_PgfLinNonExist = Ptr "PgfLinNonExist"# :: CString
@@ -144,6 +147,7 @@ type PgfType = Ptr ()
 data PgfCallbacksMap
 data PgfOracleCallback
 data PgfCncTree
+data PgfLinFuncs
 
 foreign import ccall "pgf/pgf.h pgf_read"
   pgf_read :: CString -> Ptr GuPool -> Ptr GuExn -> IO (Ptr PgfPGF)
@@ -202,8 +206,28 @@ foreign import ccall "pgf/pgf.h pgf_lzr_wrap_linref"
 foreign import ccall "pgf/pgf.h pgf_lzr_linearize_simple"
   pgf_lzr_linearize_simple :: Ptr PgfConcr -> Ptr PgfCncTree -> CInt -> Ptr GuOut -> Ptr GuExn -> Ptr GuPool -> IO ()
 
+foreign import ccall "pgf/pgf.h pgf_lzr_linearize"
+  pgf_lzr_linearize :: Ptr PgfConcr -> Ptr PgfCncTree -> CInt -> Ptr (Ptr PgfLinFuncs) -> Ptr GuPool -> IO ()
+
 foreign import ccall "pgf/pgf.h pgf_lzr_get_table"
   pgf_lzr_get_table :: Ptr PgfConcr -> Ptr PgfCncTree -> Ptr CInt -> Ptr (Ptr CString) -> IO ()
+
+type SymbolTokenCallback = Ptr (Ptr PgfLinFuncs) -> CString -> IO ()
+type PhraseCallback = Ptr (Ptr PgfLinFuncs) -> CString -> CInt -> CInt -> CString -> IO ()
+type NonExistCallback = Ptr (Ptr PgfLinFuncs) -> IO ()
+type MetaCallback = Ptr (Ptr PgfLinFuncs) -> CInt -> IO ()
+
+foreign import ccall "wrapper"
+  wrapSymbolTokenCallback :: SymbolTokenCallback -> IO (FunPtr SymbolTokenCallback)
+
+foreign import ccall "wrapper"
+  wrapPhraseCallback :: PhraseCallback -> IO (FunPtr PhraseCallback)
+
+foreign import ccall "wrapper"
+  wrapSymbolNonExistCallback :: NonExistCallback -> IO (FunPtr NonExistCallback)
+
+foreign import ccall "wrapper"
+  wrapSymbolMetaCallback :: MetaCallback -> IO (FunPtr MetaCallback)
 
 foreign import ccall "pgf/pgf.h pgf_align_words"
   pgf_align_words :: Ptr PgfConcr -> PgfExpr -> Ptr GuExn -> Ptr GuPool -> IO (Ptr GuSeq)

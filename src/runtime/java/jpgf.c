@@ -1371,7 +1371,7 @@ Java_org_grammaticalframework_pgf_Expr_initApp__Ljava_lang_String_2_3Lorg_gramma
 }
 
 JNIEXPORT jobject JNICALL
-Java_org_grammaticalframework_pgf_Expr_unApply(JNIEnv* env, jobject self)
+Java_org_grammaticalframework_pgf_Expr_unApp(JNIEnv* env, jobject self)
 {
 	jclass expr_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Expr");
 	if (!expr_class)

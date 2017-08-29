@@ -87,7 +87,7 @@ public class Expr implements Serializable {
 		 * a function application, then it is decomposed into 
 		 * a function name and a list of arguments. If this is not 
 		 * an application then the result is null. */
-		public native ExprApplication unApply();
+		public native ExprApplication unApp();
 
 		/** If the method is called on an expression which is 
 		 * a meta variable, then it will return the variable's id.

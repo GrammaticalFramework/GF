@@ -11,8 +11,8 @@ concrete ExtendEng of Extend =
     Base_nr_RNP, Base_rn_RNP, Base_rr_RNP, ByVP, CompBareCN,
     CompIQuant, CompQS, CompS, CompVP, ComplBareVS, ComplGenVV, ComplSlashPartLast, ComplVPSVV, CompoundAP,
     CompoundN, ConjRNP, ConjVPS, ConsVPS, Cons_nr_RNP, Cons_rr_RNP, DetNPFem, EmbedPresPart, EmptyRelSlash,
-    ExistsNP, FocusAP, FocusAdV, FocusAdv, FocusObj, FrontExtPredVP, GenIP, GenModIP, GenModNP, GenNP, GenRP,
-    GerundAdv, GerundCN, GerundNP, IAdvAdv, ICompAP, InOrderToVP, InvFrontExtPredVP, MkVPS, NominalizeVPSlashNP,
+    ExistsNP, FocusAP, FocusAdV, FocusAdv, FocusObj, GenIP, GenModIP, GenModNP, GenNP, GenRP,
+    GerundAdv, GerundCN, GerundNP, IAdvAdv, ICompAP, InOrderToVP, MkVPS, NominalizeVPSlashNP,
     PassAgentVPSlash, PassVPSlash, PastPartAP, PastPartAgentAP, PositAdVAdj, PredVPS, PredVPSVV, PredetRNP, PrepCN,
     PresPartAP, PurposeVP, ReflPoss, ReflPron, ReflRNP, SlashBareV2S, SlashV2V, StrandQuestSlash, StrandRelSlash,
     UncontractedNeg, UttAccIP, UttAccNP, UttAdV, UttDatIP, UttDatNP, UttVPShort, WithoutVP, BaseVPS2, ConsVPS2, ConjVPS2, ComplVPS2, MkVPS2
