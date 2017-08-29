@@ -46,4 +46,9 @@ concrete AdjectiveTur of Adjective =
       s = \\n, c => np.s ! Nom ++ cadv.s ++ ap.s ! n ! c
     } ;
 
+    -- TODO: Implement.
+    SentAP ap sc = {
+      s = \\_, _ => "SentAP_TODO"
+    } ;
+
 }
