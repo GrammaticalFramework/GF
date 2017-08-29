@@ -194,7 +194,7 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
       s = \\_,_ => "oma" ; --???
       sp = \\_,_ => p.s ! NPCase Gen ;
       isNum = False ;
-      isDef = True ;  --- "minun kolme autoani ovat" ; thus "...on" is missing
+      isDef = True ; 
       isNeg = False
       } ;
 
