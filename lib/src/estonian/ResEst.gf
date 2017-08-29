@@ -175,6 +175,7 @@ param
      VIFin  Tense  
    | VIInf  InfForm
    | VIPass Tense
+   | VIPresPart 
    | VIImper 
    ;  
 
@@ -199,17 +200,18 @@ oper
         } ; 
         
         einegole : Str * Str * Str = case <vi,agr.n> of {
-          <VIFin Pres,   _>  => <"ei", verbs ! Imper Sg,     "ole"> ;
-          <VIFin Fut,    _>  => <"ei", verbs ! Imper Sg,     "ole"> ;
-          <VIFin Cond,   _>  => <"ei", verbs ! Condit Sg P3, "oleks"> ;
-          <VIFin Past,   _>  => <"ei", part,                 "olnud"> ;
-          <VIImper,      Sg> => <"ära", verbs ! Imper Sg,   "ole"> ;
-          <VIImper,      Pl> => <"ärge", verbs ! Imper Pl,  "olge"> ;
-          <VIPass Pres,   _>  => <"ei", verbs ! PassPresn False,  "ole"> ;
-          <VIPass Fut,    _>  => <"ei", verbs ! PassPresn False,  "ole"> ; --# notpresent
-          <VIPass Cond,   _>  => <"ei", verbs ! ConditPass,  "oleks"> ; --# notpresent
-          <VIPass Past,   _>  => <"ei", verbs ! PassImpf False,  "olnud"> ; --# notpresent
-          <VIInf i,      _>  => <"ei", verbs ! Inf i, verbOlema.s ! Inf i> 
+          <VIFin Pres>  => <"ei", verbs ! Imper Sg,     "ole"> ;
+          <VIFin Fut>   => <"ei", verbs ! Imper Sg,     "ole"> ;
+          <VIFin Cond>  => <"ei", verbs ! Condit Sg P3, "oleks"> ;
+          <VIFin Past>  => <"ei", part,                 "olnud"> ;
+          <VIImper, Sg> => <"ära", verbs ! Imper Sg,   "ole"> ;
+          <VIImper, Pl> => <"ärge", verbs ! Imper Pl,  "olge"> ;
+          <VIPass Pres> => <"ei", verbs ! PassPresn False,  "ole"> ;
+          <VIPass Fut>  => <"ei", verbs ! PassPresn False,  "ole"> ; --# notpresent
+          <VIPass Cond> => <"ei", verbs ! ConditPass,  "oleks"> ; --# notpresent
+          <VIPass Past> => <"ei", verbs ! PassImpf False,  "olnud"> ; --# notpresent
+          <VIPresPart>  => <"ei", verbs ! PresPart Act, "olev"> ; --# notpresent
+          <VIInf i>     => <"ei", verbs ! Inf i, verbOlema.s ! Inf i> 
 
         } ;
         
@@ -240,6 +242,7 @@ oper
         VIPass Past => mkvf (PassImpf passPol) ;  --# notpresent
         VIPass Cond => mkvf (ConditPass) ; --# notpresent
         VIPass Fut  => mkvf (PassPresn passPol) ;  --# notpresent
+        VIPresPart  => mkvf (PresPart Act) ;  --# notpresent
         VIInf i    => mkvf (Inf i)
         } ;
 
@@ -370,14 +373,17 @@ oper
 
   subjForm : NP -> NPForm -> Polarity -> Str = \np,sc,b -> 
     appCompl False b {s = [] ; c = sc ; isPre = True} np ;
-  infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
-    \sc,pol,agr,vp,vi ->
+
+  infVP : NPForm -> Polarity -> Agr -> VP -> InfForm -> Str = infVPAnt Simul ;
+
+  infVPAnt : Anteriority -> NPForm -> Polarity -> Agr -> VP -> InfForm -> Str =
+    \ant,sc,pol,agr,vp,vi ->
         let 
           fin = case sc of {     -- subject case
             NPCase Nom => True ; -- mina tahan joosta
             _ => False           -- minul peab auto olema
             } ;
-          verb  = vp.s ! VIInf vi ! Simul ! Pos ! agr ; -- no "ei"
+          verb  = vp.s ! VIInf vi ! ant ! Pos ! agr ; -- no "ei"
           compl = vp.s2 ! fin ! pol ! agr ; -- but compl. case propagated
           adv = vp.adv
         in
