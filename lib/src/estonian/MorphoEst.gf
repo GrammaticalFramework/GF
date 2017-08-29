@@ -487,10 +487,10 @@ These used to be here:
 -- for Structural
 -----------------------
 
-caseTable : Number -> CommonNoun -> Case => Str = \n,cn -> 
+caseTable : Number -> Noun -> Case => Str = \n,cn -> 
   \\c => cn.s ! NCase n c ;
 
-  mkDet : Number -> CommonNoun -> {
+  mkDet : Number -> Noun -> {
       s,sp : Case => Str ;       -- minun kolme
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)

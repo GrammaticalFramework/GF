@@ -566,17 +566,14 @@ oper
     vforms2V (regVForms kinkima kinkida kingib kingitakse) ;
 
 
-  noun2adj : CommonNoun -> Adj = noun2adjComp True ;
---  noun2adj : Noun -> Adj = noun2adjComp True ;
+  noun2adj : Noun -> Adj = noun2adjComp True ;
 
-  -- TODO: remove the unused arguments and clean up the code
   -- TODO: AAdv is current just Sg Ablat, which seems OK in most cases, although
   -- ilus -> ilusti | ilusalt?
   -- hea -> hästi
   -- parem -> paremini
   -- parim -> kõige paremini | parimalt?
-  noun2adjComp : Bool -> CommonNoun -> Adj = \isPos,tuore ->
---  noun2adjComp : Bool -> Noun -> Adj = \isPos,tuore ->
+  noun2adjComp : Bool -> Noun -> Adj = \isPos,tuore ->
     let 
       tuoreesti  = Predef.tk 1 (tuore.s ! NCase Sg Gen) + "sti" ; 
       tuoreemmin = Predef.tk 2 (tuore.s ! NCase Sg Gen) + "in"
@@ -628,7 +625,7 @@ oper
       5 => jogesid 
       } ;
 
-  n2nforms : CommonNoun -> NForms = \ukko -> table {
+  n2nforms : Noun -> NForms = \ukko -> table {
     0 => ukko.s ! NCase Sg Nom ;
     1 => ukko.s ! NCase Sg Gen ;
     2 => ukko.s ! NCase Sg Part ;
@@ -639,7 +636,7 @@ oper
 
     -- Converts 6 given strings (Nom, Gen, Part, Illat, Gen, Part) into Noun
     -- http://www.eki.ee/books/ekk09/index.php?p=3&p1=5&id=226
-    nForms2N : NForms -> CommonNoun = \f -> 
+    nForms2N : NForms -> Noun = \f -> 
       let
         jogi = f ! 0 ;
         joe = f ! 1 ;
