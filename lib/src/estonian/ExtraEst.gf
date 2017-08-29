@@ -18,7 +18,7 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
     GenIP ip = {s = \\_,_ => ip.s ! NPCase Gen} ;
 
     GenRP num cn = {
-      s = \\n,c => let k = npform2case num.n c in relPron ! n ! Gen ++ cn.s ! NCase num.n k ; 
+      s = \\n,c => let k = npform2case num.n c in relPron ! NCase n Gen ++ cn.s ! NCase num.n k ; 
       a = RNoAg 
 ---      a = RAg (agrP3 num.n)
       } ;
