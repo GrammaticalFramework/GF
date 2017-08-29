@@ -293,7 +293,7 @@ then the right method to use is <tt>tabularLinearize</tt>:
 {'s Sg Nom': 'red theatre', 's Pl Nom': 'red theatres', 's Pl Gen': "red theatres'", 's Sg Gen': "red theatre's"}
 </pre>
 <pre class="haskell">
-Prelude PGF2> tabularLinearize eng e   ---- TODO
+Prelude PGF2> tabularLinearize eng e
 fromList [("s Sg Nom", "red theatre"), ("s Pl Nom", "red theatres"), ("s Pl Gen", "red theatres'"), ("s Sg Gen", "red theatre's")]
 </pre>
 <pre class="java">
@@ -315,7 +315,7 @@ a list of phrases:
 (CN:4 (AP:1 (A:0 red)) (CN:3 (N:2 theatre)))
 </pre>
 <pre class="haskell">
-Prelude PGF2> let [b] = bracketedLinearize eng e   ---- TODO
+Prelude PGF2> let [b] = bracketedLinearize eng e
 Prelude PGF2> print b
 (CN:4 (AP:1 (A:0 red)) (CN:3 (N:2 theatre)))
 </pre>
