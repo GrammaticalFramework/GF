@@ -47,7 +47,7 @@
 		
 <h2>Loading the Grammar</h2>
 
-Before you use the <span class="python">Python</span> binding you need to import the <span class="haskell">PGF2 module</span><span class="python">pgf module</span><span class="java">pgf package</span>.
+Before you use the <span class="python">Python</span> binding you need to import the <span class="haskell">PGF2 module</span><span class="python">pgf module</span><span class="java">pgf package</span><span class="csharp">PGFSharp package</span>:
 <pre class="python">
 >>> import pgf
 </pre>
@@ -56,6 +56,9 @@ Prelude> import PGF2
 </pre>
 <pre class="java">
 import org.grammaticalframework.pgf.*;
+</pre>
+<pre class="csharp">
+using PGFSharp;
 </pre>
 
 <span class="python">Once you have the module imported, you can use the <tt>dir</tt> and
@@ -83,10 +86,13 @@ Prelude PGF2> gr &lt;- readPGF "App12.pgf"
 <pre class="java">
 PGF gr = PGF.readPGF("App12.pgf");
 </pre>
+<pre class="csharp">
+PGF gr = PGF.ReadPGF("App12.pgf");
+</pre>
 
 From the grammar you can query the set of available languages.
 It is accessible through the property <tt>languages</tt> which
-is a map from language name to an object of <span class="python">class <tt>pgf.Concr</tt></span><span class="haskell">type <tt>Concr</tt></span><span class="java">class <tt>Concr</tt></span>
+is a map from language name to an object of <span class="python">class <tt>pgf.Concr</tt></span><span class="haskell">type <tt>Concr</tt></span><span class="java">class <tt>Concr</tt></span><span class="csharp">class <tt>Concr</tt></span>
 which respresents the language.
 For example the following will extract the English language:
 <pre class="python">
@@ -102,11 +108,14 @@ eng :: Concr
 <pre class="java">
 Concr eng = gr.getLanguages().get("AppEng");
 </pre>
+<pre class="csharp">
+Concr eng = gr.Languages["AppEng"];
+</pre>
 
 <h2>Parsing</h2>
 
 All language specific services are available as 
-<span class="python">methods of the class <tt>pgf.Concr</tt></span><span class="haskell">functions that take as an argument an object of type <tt>Concr</tt></span><span class="java">methods of the class <tt>Concr</tt></span>.
+<span class="python">methods of the class <tt>pgf.Concr</tt></span><span class="haskell">functions that take as an argument an object of type <tt>Concr</tt></span><span class="java">methods of the class <tt>Concr</tt></span><span class="csharp">methods of the class <tt>Concr</tt></span>.
 For example to invoke the parser, you can call:
 <pre class="python">
 >>> i = eng.parse("this is a small theatre")
@@ -116,6 +125,9 @@ Prelude PGF2> let res = parse eng (startCat gr) "this is a small theatre"
 </pre>
 <pre class="java">
 Iterable&lt;ExprProb&gt; iterable = eng.parse(gr.getStartCat(), "this is a small theatre");
+</pre>
+<pre class="csharp">
+IEnumerable&lt;Tuple&lt;Expr, float&gt;&gt; enumerable = eng.Parse(gr.StartCat, "this is a small theatre");
 </pre>
 <span class="python">
 This gives you an iterator which can enumerate all possible
@@ -145,6 +157,14 @@ Iterator&lt;ExprProb&gt; iter = iterable.iterator();
 ExprProb ep = iter.next();
 </pre>
 </span>
+<span class="csharp">
+This gives you an enumerable which can enumerate all possible
+abstract trees. You can get the next tree by calling <tt>MoveNext</tt>:
+<pre class="csharp">
+enumerable.MoveNext();
+Tuple&lt;Expr, float&gt; ep = enumerable.Current;
+</pre>
+</span>
 
 <p>The results are pairs of probability and tree. The probabilities
 are negated logarithmic probabilities and this means that the lowest
@@ -164,6 +184,10 @@ Prelude PGF2> print p
 System.out.println(ep.getProb());
 35.9166526794
 </pre>
+<pre class="csharp">
+Console.WriteLine(ep.Item2);
+35.9166526794
+</pre>
 and this is the corresponding abstract tree:
 <pre class="python">
 >>> print(e)
@@ -175,6 +199,10 @@ PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant t
 </pre>
 <pre class="java">
 System.out.println(ep.getExpr());
+PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant this_Quant NumSg)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA small_A) (UseN theatre_N)))))))) NoVoc
+</pre>
+<pre class="csharp">
+Console.WriteLine(ep.Item1);
 PhrUtt NoPConj (UttS (UseCl (TTAnt TPres ASimul) PPos (PredVP (DetNP (DetQuant this_Quant NumSg)) (UseComp (CompNP (DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA small_A) (UseN theatre_N)))))))) NoVoc
 </pre>
 
@@ -219,6 +247,14 @@ over the parser's behaviour:
 Iterable&lt;ExprProb&gt; iterable = eng.parseWithHeuristics(gr.startCat(), heuristic_factor, callbacks);
 </pre>
 </span>
+<span class="csharp">
+There is also the method <tt>ParseWithHeuristics</tt> which 
+takes two more paramaters which let you to have a better control 
+over the parser's behaviour:
+<pre class="csharp">
+IEnumerable&lt;Tuple&lt;Expr, float&gt;&gt; enumerable = eng.ParseWithHeuristics(gr.StartCat, heuristic_factor, callbacks);
+</pre>
+</span>
 
 <p>The heuristics factor can be used to trade parsing speed for quality.
 By default the list of trees is sorted by probability and this corresponds
@@ -252,6 +288,9 @@ Prelude PGF2> let Just e = readExpr "AdjCN (PositA red_A) (UseN theatre_N)"
 <pre class="java">
 Expr e = Expr.readExpr("AdjCN (PositA red_A) (UseN theatre_N)");
 </pre>
+<pre class="csharp">
+Expr e = Expr.ReadExpr("AdjCN (PositA red_A) (UseN theatre_N)");
+</pre>
 and then we can linearize it:
 <pre class="python">
 >>> print(eng.linearize(e))
@@ -263,6 +302,10 @@ red theatre
 </pre>
 <pre class="java">
 System.out.println(eng.linearize(e));
+red theatre
+</pre>
+<pre class="csharp">
+Console.WriteLine(eng.Linearize(e));
 red theatre
 </pre>
 This method produces only a single linearization. If you use variants
@@ -286,6 +329,13 @@ for (String s : eng.linearizeAll(e)) {
 red theatre
 red theater
 </pre>
+<pre class="csharp">
+for (String s : eng.LinearizeAll(e)) {
+    Console.WriteLine(s);
+}
+red theatre
+red theater
+</pre>
 If, instead, you need an inflection table with all possible forms
 then the right method to use is <tt>tabularLinearize</tt>:
 <pre class="python">
@@ -299,6 +349,15 @@ fromList [("s Pl Gen","red theatres'"),("s Pl Nom","red theatres"),("s Sg Gen","
 <pre class="java">
 for (Map.Entry&lt;String,String&gt; entry : eng.tabularLinearize(e).entrySet()) {
     System.out.println(entry.getKey() + ": " + entry.getValue());
+}
+s Sg Nom: red theatre
+s Pl Nom: red theatres
+s Pl Gen: red theatres'
+s Sg Gen: red theatre's
+</pre>
+<pre class="csharp">
+for (Map.Entry&lt;String,String&gt; entry : eng.TabularLinearize(e).EntrySet()) {
+    Console.WriteLine(entry.Key + ": " + entry.Value);
 }
 s Sg Nom: red theatre
 s Pl Nom: red theatres
@@ -321,6 +380,9 @@ Prelude PGF2> putStrLn (showBracketedString b)
 </pre>
 <pre class="java">
 Object[] bs = eng.bracketedLinearize(e);
+</pre>
+<pre class="csharp">
+Object[] bs = eng.BracketedLinearize(e);
 </pre>
 <span class="python">
 Each element in the sequence above is either a string or an object
@@ -362,6 +424,18 @@ the object has the following public final variables:
 	<li><tt>Object[] children</tt> - a list with the children of this bracket</li>
 </ul>
 </span>
+<span class="csharp">
+Each element in the sequence above is either a string or an object
+of type <tt>Bracket</tt>. When it is actually a bracket then
+the object has the following public final variables:
+<ul>
+	<li><tt>String cat</tt> - the syntactic category for this bracket</li>
+	<li><tt>int fid</tt> - an id which identifies this bracket in the bracketed string. If there are discontinuous phrases this id will be shared for all brackets belonging to the same phrase.</li>
+	<li><tt>int lindex</tt> - the constituent index</li>
+	<li><tt>String fun</tt> - the abstract function for this bracket</li>
+	<li><tt>Object[] children</tt> - a list with the children of this bracket</li>
+</ul>
+</span>
 </p>
 
 The linearization works even if there are functions in the tree 
@@ -379,6 +453,10 @@ True
 </pre>
 <pre class="java">
 System.out.println(eng.hasLinearization("apple_N"));
+true
+</pre>
+<pre class="csharp">
+Console.WriteLine(eng.HasLinearization("apple_N"));
 true
 </pre>
 
@@ -401,6 +479,13 @@ ExprApplication app = e.unApp();
 System.out.println(app.getFunction());
 for (Expr arg : app.getArguments()) {
    System.out.println(arg);
+}
+</pre>
+<pre class="csharp">
+ExprApplication app = e.UnApp();
+System.out.println(app.Function);
+for (Expr arg : app.Arguments) {
+   Console.WriteLine(arg);
 }
 </pre>
 </p>
@@ -438,6 +523,17 @@ For example the output from:
 Expr elit = Expr.readExpr("\"literal\"");
 System.out.println(elit.unStr());
 </pre>
+<span class="csharp">
+The result from <tt>UnApp</tt> is not <tt>null</tt> if the expression
+is an application, and <tt>null</tt> in all other cases.
+Similarly, if the tree is a literal string then the return value 
+from <tt>UnStr</tt> will not be <tt>null</tt> with the actual literal. 
+For example the output from:
+</span>
+<pre class="csharp">
+Expr elit = Expr.ReadExpr("\"literal\"");
+Console.WriteLine(elit.UnStr());
+</pre>
 is just the string "literal". 
 <span class="python">Situations like this can be detected
 in Python by checking the type of the result from <tt>unpack</tt>.
@@ -448,6 +544,9 @@ There are also the functions <tt>unAbs</tt>, <tt>unInt</tt>, <tt>unFloat</tt> an
 </span>
 <span class="java">
 There are also the methods <tt>unAbs</tt>, <tt>unInt</tt>, <tt>unFloat</tt> and <tt>unMeta</tt> for all other possible cases.
+</span>
+<span class="csharp">
+There are also the methods <tt>UnAbs</tt>, <tt>UnInt</tt>, <tt>UnFloat</tt> and <tt>UnMeta</tt> for all other possible cases.
 </span>
 </p>
 
@@ -518,6 +617,14 @@ Expr e2 = new Expr("DetCN", new Expr[] {quant, e});
 System.out.println(e2);
 </pre>
 </span>
+<span class="csharp">
+using the constructor for <tt>Expr</tt>:
+<pre class="csharp">
+Expr quant = Expr.ReadExpr("DetQuant IndefArt NumSg");
+Expr e2 = new Expr("DetCN", new Expr[] {quant, e});
+Console.WriteLine(e2);
+</pre>
+</span>
 
 <span class="python">
 <h2>Embedded GF Grammars</h2>
@@ -563,6 +670,13 @@ for (FullFormEntry entry in eng.fullFormLexicon()) { ///// TODO
 	}
 }
 </pre>
+<pre class="csharp">
+for (FullFormEntry entry in eng.FullFormLexicon) {
+	for (MorphoAnalysis analysis : entry.Analyses) {
+		Console.WriteLine(entry.Form+" "+analysis.Prob+" "+analysis.Lemma+" "+analysis.Field);
+	}
+}
+</pre>
 The second one implements a simple lookup. The argument is a word
 form and the result is a list of analyses:
 <pre class="python">
@@ -580,6 +694,13 @@ for (MorphoAnalysis an : eng.lookupMorpho("letter")) {
 letter_1_N, s Sg Nom, inf
 letter_2_N, s Sg Nom, inf
 </pre>
+<pre class="csharp">
+for (MorphoAnalysis an : eng.LookupMorpho("letter")) {
+    Console.WriteLine(an.Lemma+", "+an.Field+", "+an.Prob);
+}
+letter_1_N, s Sg Nom, inf
+letter_2_N, s Sg Nom, inf
+</pre>
 
 <h2>Access the Abstract Syntax</h2>
 
@@ -593,7 +714,12 @@ you can get a list of abstract functions:
 Prelude PGF2> functions gr
 ....
 </pre>
-gr.getFunctions()
+<pre class="java">
+List&lt;String&gt; funs = gr.getFunctions()
+....
+</pre>
+<pre class="csharp">
+IList&lt;String&gt; funs = gr.Functions;
 ....
 </pre>
 or a list of categories:
@@ -609,6 +735,10 @@ Prelude PGF2> categories gr
 List&lt;String&gt; cats = gr.getCategories();
 ....
 </pre>
+<pre class="csharp">
+IList&lt;String&gt; cats = gr.Categories;
+....
+</pre>
 You can also access all functions with the same result category:
 <pre class="python">
 >>> gr.functionsByCat("Weekday")
@@ -620,6 +750,10 @@ Prelude PGF2> functionsByCat gr "Weekday"
 </pre>
 <pre class="java">
 List&lt;String&gt; funsByCat = gr.getFunctionsByCat("Weekday");
+....
+</pre>
+<pre class="csharp">
+IList&lt;String&gt; funsByCat = gr.FunctionsByCat("Weekday");
 ....
 </pre>
 The full type of a function can be retrieved as:
@@ -660,6 +794,11 @@ TypedExpr te = gr.inferExpr(e);
 System.out.println(te.getExpr()+" : "+te.getType());
 AdjCN (PositA red_A) (UseN theatre_N) : CN
 </pre>
+<pre class="csharp">
+TypedExpr te = gr.InferExpr(e);
+Console.WriteLine(te.Expr+" : "+te.Type);
+AdjCN (PositA red_A) (UseN theatre_N) : CN
+</pre>
 The result is a potentially updated expression and its type. In this
 case we always deal with simple types, which means that the new
 expression will be always equal to the original expression. However, this
@@ -681,6 +820,10 @@ AdjCN (PositA red_A) (UseN theatre_N)
 <pre class="java">
 Expr new_e = gr.checkExpr(e,Type.readType("CN")); //// TODO
 System.out.println(e)
+</pre>
+<pre class="csharp">
+Expr new_e = gr.CheckExpr(e,Type.ReadType("CN"));
+Console.WriteLine(e)
 </pre>
 <p>In case of type error you will get an error:
 <pre class="python">
@@ -840,6 +983,20 @@ n3 -- n4 [style = "solid"]
 n0 -- n3 [style = "solid"]
 }
 </pre>
+<pre class="csharp">
+Console.WriteLine(gr.GraphvizAbstractTree(e));
+graph {
+n0[label = "AdjCN", style = "solid", shape = "plaintext"]
+n1[label = "PositA", style = "solid", shape = "plaintext"]
+n2[label = "red_A", style = "solid", shape = "plaintext"]
+n1 -- n2 [style = "solid"]
+n0 -- n1 [style = "solid"]
+n3[label = "UseN", style = "solid", shape = "plaintext"]
+n4[label = "theatre_N", style = "solid", shape = "plaintext"]
+n3 -- n4 [style = "solid"]
+n0 -- n3 [style = "solid"]
+}
+</pre>
 
 <pre class="python">
 >>> print(eng.graphvizParseTree(e))
@@ -917,6 +1074,43 @@ graph {
 </pre>
 <pre class="java">
 System.out.println(eng.graphvizParseTree(e));   //// TODO
+graph {
+  node[shape=plaintext]
+
+  subgraph {rank=same;
+    n4[label="CN"]
+  }
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n1[label="AP"]
+    n3[label="CN"]
+    n1 -- n3
+  }
+  n4 -- n1
+  n4 -- n3
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n0[label="A"]
+    n2[label="N"]
+    n0 -- n2
+  }
+  n1 -- n0
+  n3 -- n2
+
+  subgraph {rank=same;
+    edge[style=invis]
+    n100000[label="red"]
+    n100001[label="theatre"]
+    n100000 -- n100001
+  }
+  n0 -- n100000
+  n2 -- n100001
+}
+</pre>
+<pre class="csharp">
+Console.WriteLine(eng.GraphvizParseTree(e));
 graph {
   node[shape=plaintext]
 
