@@ -176,6 +176,9 @@ unMeta (Expr expr touch) =
                 touch
                 return (Just (fromIntegral (id :: CInt)))
 
+-- | this functions is only for backward compatibility with the old Haskell runtime
+mkCId x = x
+
 -- | parses a 'String' as an expression
 readExpr :: String -> Maybe Expr
 readExpr str =
