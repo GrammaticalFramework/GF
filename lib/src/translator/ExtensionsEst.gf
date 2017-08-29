@@ -52,7 +52,7 @@ lin
 -}
 
   CompoundN noun cn = lin N {
-    s = \\nf => noun.s ! NCase Sg Gen ++ BIND ++ cn.s ! nf ---- AR genitive best?
+    s = \\nf => noun.s ! NCase Sg Gen ++ BIND ++ cn.s ! nf 
     } ;
 
 {-
@@ -60,11 +60,6 @@ lin
     s = \\_ => (snoun2nounSep {s = \\f => noun.s ! 10 ++ BIND ++ adj.s ! Posit ! sAN f ; h = adj.h}).s
     } ;
 
-  PresPartAP vp = { ---- many things can go wrong here...
-    s = \\bool,nform => 
-         vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ vp.ext ++ 
-         (sverb2verbSep vp.s).s ! PresPartAct (AN nform)
-    } ;
 
   PredVPosv np vp = mkCl np vp ; ----
 
@@ -87,10 +82,9 @@ lin
 ---- lost agreement, lost genitive, lost possessive
 ---- minun saamiseni mukaan
 
-
-  -- : VP -> Adv ;   
-  GerundAP vp = {s = \\f => vp.s2 ! True ! Pos ! agrP3 Sg ++ (snoun2nounSep (sverb2nounPresPartAct vp.s)).s ! f ++ vp.adv ! Pos ++ vp.ext} ;
 -}
+
+  -- : VP -> Adv ; 
   GerundAdv vp = 
     { s = vp2adv vp True (VIInf InfDes) } ; 
 
@@ -103,23 +97,35 @@ lin
   ByVP vp = 
     { s = vp2adv vp True (VIInf InfDes) } ; 
 
--- täna leitud
+  -- : VP -> AP 
+  PresPartAP vp = { -- raamatut nägev (mees)
+    s = \\_,_ => vp2adv vp True VIPresPart ;
+    infl = Invariable 
+  } ;
+
+  -- täna leitud
   PastPartAP vp = 
     { s = \\_,_ => vp2adv vp True (VIPass Past) ;
       infl = Invariable } ;
 
+  -- hobisukeldujate poolt leitud (süvaveepomm)
+  PastPartAgentAP vp np = { 
+    s = \\_,_ => np.s ! NPCase Gen ++ "poolt" 
+          ++ vp2adv vp True (VIPass Past) ; 
+    infl = Invariable } ;
+
+--GerundAP vp = {s = \\f => vp.s2 ! True ! Pos ! agrP3 Sg ++ (snoun2nounSep (sverb2nounPresPartAct vp.s)).s ! f ++ vp.adv ! Pos ++ vp.ext} ;  
+
 oper 
-  vp2adv : VP -> Bool -> VIForm -> Str = \vp,b,vif ->
-    vp.s2 ! b! Pos ! agrP3 Sg     -- raamatut
+  vp2adv : VP -> Bool -> VIForm -> Str = \vp,objIsPos,vif ->
+    vp.s2 ! objIsPos ! Pos ! agrP3 Sg     -- raamatut
     ++ vp.adv                     -- paremini
     ++ vp.p                       -- ära 
     ++ (vp.s ! vif ! Simul ! Pos ! agrP3 Sg).fin -- tunda/tundes/tundmata/...
     ++ vp.ext ;
-{-
--- miehen tänään löytämä
-  PastPartAgentAP vp np = 
-    {s = \\_,f => np.s ! NPCase Gen ++ vp.s2 ! True ! Pos ! agrP3 Sg ++ vp.adv ! Pos ++ (sverb2verbSep vp.s).s ! AgentPart (AN f) ++ vp.ext} ;
 
+lin 
+{-
 
   OrdCompar a = snoun2nounSep {s = \\nc => a.s ! Compar ! SAN nc ; h = a.h} ; 
 
@@ -136,17 +142,31 @@ oper
   SlashV2V v ant p vp = 
       insertObj (\\_,b,a => infVP v.sc b a vp (vvtype2infform v.vi)) (predSV v) ** {c2 = v.c2} ; ----
       ---- insertObj (\\_,b,a => infVPGen p.p v.sc b a vp v.vi) (predSV v) ** {c2 = v.c2} ;
+-}
 
-  CompS s = {s = \\_ => "että" ++ s.s} ;  -- S -> Comp            ---- what are these expected to do ? 29/3/2013
-  CompVP ant pol vp = {s = \\a => infVPGen pol.p vp.s.sc Pos a vp Inf1} ; -- VP -> Comp
+  -- : QS -> Comp ;                  -- (the question is) who sleeps
+  CompQS qs = lin Comp {s = \\_ => qs.s } ;
 
+  -- : Ant -> Pol -> VP -> Comp ;    -- (she is) to go 
+  CompVP ant pol vp = lin Comp     -- no idea which inf to choose /IL
+    {s = \\agr => infVPAnt ant.a (NPCase Nom) pol.p agr vp InfDa } ;
+
+  -- TODO: revisit pronouns? Looks a bit overly complicated. /IL
+  who_RP = { s = \\n,c => MorphoEst.kesPron ! n ! npform2case n c ; 
+             a = RNoAg } ;
 
   that_RP = which_RP ;
-  no_RP = which_RP ;
 
   UttAdV a = a ;
 
   UncNeg = negativePol ;
+
+
+  -- : AdA -> AdV -> AdV ;           -- almost always
+  AdAdV ada adv = {s = ada.s ++ adv.s} ;
+
+{-
+
 
   PresPartRS ant pol vp = mkRS ant pol (mkRCl which_RP vp) ;  ---- present participle attr "teräviä ottava"
 
@@ -155,10 +175,8 @@ oper
 
    EmptyRelSlash cls = mkRCl which_RP cls ;
 
-  CompQS qs = {s = \\_ => qs.s} ;
 
 
-  AdAdV ada adv = {s = ada.s ++ adv.s} ;
 
    SlashVPIV2V v pol vpi = -- : V2V -> Pol -> VPI -> VPSlash ;
       insertObj (\\_,b,a => vpi.s ! v.vi) (predSV v) ** {c2 = v.c2} ;
