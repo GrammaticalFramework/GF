@@ -9,9 +9,11 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
       isNeg = False 
      } ;
 
-    GenCN = caseCN Gen ;     -- auton merkki
+    GenCN = caseCN Gen ;     -- soome mees
     ComitCN = caseCN Comit ; -- puudega mets
     ElatCN  = caseCN Elat ;  -- puust laud
+    AbessCN = caseCN Abess ; -- autota pere
+    TerminCN = caseCN Termin ; -- maani kleit
 
     GenIP ip = {s = \\_,_ => ip.s ! NPCase Gen} ;
 
