@@ -524,8 +524,7 @@ oper
       Inf InfMaks => tulema + "ks" 
       } ;
     sc = NPCase Nom ;
-    p = [] ;
-    lock_V = <>
+    p = [] 
     } ;
 
   -- For regular verbs, paradigm from 4 base forms
