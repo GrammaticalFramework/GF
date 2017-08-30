@@ -73,7 +73,7 @@ namespace PGFSharp
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct PgfType
+        internal struct PgfType
         {
             public IntPtr hypos; // GuSeq of PgfHypo
             public IntPtr cid;

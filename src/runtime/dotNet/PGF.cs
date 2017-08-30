@@ -1,4 +1,5 @@
 using System;
+using System.Dynamic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -154,5 +155,57 @@ namespace PGFSharp
             Native.MapIter(f, _ptr, (k, v) => c.Add(k));
             return c;
         }
+        
+        public dynamic Embed() {
+			return new GrammarEmbedding(this);
+		}
+
+		private class GrammarEmbedding : DynamicObject {
+			private PGF gr;
+
+			public GrammarEmbedding(PGF gr) {
+				this.gr = gr;
+			}
+		
+			public override bool TryGetMember(GetMemberBinder binder, out object result)
+			{
+				result = null;
+
+				using (var str = new Native.NativeString(binder.Name))
+				{
+					var typePtr = Native.pgf_function_type(gr._ptr, str.Ptr);
+					if (typePtr == IntPtr.Zero)
+						return false;
+				}
+
+				result = new ApplicationExpr(binder.Name, new Expr[0]);
+				return true;
+			}
+
+			public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result) {
+				result = null;
+
+				uint n_hypos = 0;
+				using (var str = new Native.NativeString(binder.Name))
+				{
+					var typePtr = Native.pgf_function_type(gr._ptr, str.Ptr);
+					if (typePtr == IntPtr.Zero)
+						return false;
+					n_hypos = NativeGU.SeqLength(Marshal.PtrToStructure<Type.PgfType>(typePtr).hypos);
+				}
+
+				if (args.Length != n_hypos)
+					return false;
+					
+				Expr[] exprs = new Expr[args.Length];
+				for (var i = 0; i < args.Length; i++) {
+					exprs[i] = args[i] as Expr;
+					if (exprs[i] == null)
+						return false;
+				}
+				result = new ApplicationExpr(binder.Name, exprs);
+				return true;
+			}
+		}
     }
 }
