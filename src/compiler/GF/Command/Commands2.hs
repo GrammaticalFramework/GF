@@ -317,27 +317,6 @@ pgfCommands = Map.fromList [
        ("lang","the languages of linearization (comma-separated, no spaces)")
        ]
      }),
-{-
-  ("lc", emptyCommandInfo {
-     longname = "linearize_chunks",
-     synopsis = "linearize a tree that has metavariables in maximal chunks without them",
-     explanation = unlines [
-       "A hopefully temporary command, intended to work around the type checker that fails",
-       "trees where a function node is a metavariable."
-       ],
-     examples = [
-       mkEx "l -lang=LangSwe,LangNor -chunks ? a b (? c d)"
-       ],
-     exec = \env@(pgf, mos) opts -> return . fromStrings . optLins pgf (opts ++ [OOpt "chunks"]),
-     options = [
-       ("treebank","show the tree and tag linearizations with language names")
-       ] ++ stringOpOptions,
-     flags = [
-       ("lang","the languages of linearization (comma-separated, no spaces)")
-       ],
-     needsTypeCheck = False
-     }),
--} 
   ("ma", emptyCommandInfo {
      longname = "morpho_analyse",
      synopsis = "print the morphological analyses of the (multiword) expression in the string",
