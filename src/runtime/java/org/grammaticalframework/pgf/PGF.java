@@ -67,7 +67,10 @@ public class PGF {
 	/** Takes an expression and returns a refined version
 	 * of the expression together with its type */
 	public native TypedExpr inferExpr(Expr expr) throws TypeError;
-
+	
+	/** Takes an expression and checks it agains a type. The returned expression
+	 * is a possibly refined version of the original. */
+	public native Expr checkExpr(Expr expr, Type ty) throws TypeError;
 
 	public native String graphvizAbstractTree(Expr expr);
 
