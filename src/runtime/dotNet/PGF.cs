@@ -79,7 +79,7 @@ namespace PGFSharp
         /// Returns a list with all functions with a given return category.
         /// </summary>
         /// <param name="catName">The name of the return category.</param>
-        public IEnumerable<string> FunctionByCategory(string catName)
+        public IEnumerable<string> FunctionsByCat(string catName)
         {
             using (var str = new Native.NativeString(catName))
             {
