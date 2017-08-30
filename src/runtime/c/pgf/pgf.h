@@ -94,7 +94,7 @@ pgf_function_prob(PgfPGF* pgf, PgfCId funname);
 PGF_API_DECL GuString
 pgf_print_name(PgfConcr*, PgfCId id);
 
-PGF_API_DECL bool
+PGF_API_DECL int
 pgf_has_linearization(PgfConcr* concr, PgfCId id);
 
 PGF_API_DECL void

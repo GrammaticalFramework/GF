@@ -192,7 +192,7 @@ foreign import ccall "pgf/pgf.h pgf_print_name"
   pgf_print_name :: Ptr PgfConcr -> CString -> IO CString
 
 foreign import ccall "pgf/pgf.h pgf_has_linearization"
-  pgf_has_linearization :: Ptr PgfConcr -> CString -> IO Bool
+  pgf_has_linearization :: Ptr PgfConcr -> CString -> IO CInt
 
 foreign import ccall "pgf/pgf.h pgf_linearize"
   pgf_linearize :: Ptr PgfConcr -> PgfExpr -> Ptr GuOut -> Ptr GuExn -> IO ()

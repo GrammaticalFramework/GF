@@ -580,8 +580,9 @@ parseWithOracle lang cat sent (predict,complete,literal) =
 -- | Returns True if there is a linearization defined for that function in that language
 hasLinearization :: Concr -> Fun -> Bool
 hasLinearization lang id = unsafePerformIO $
-  withGuPool $ \pl ->
-    newUtf8CString id pl >>= pgf_has_linearization (concr lang)
+  withGuPool $ \pl -> do
+    res <- newUtf8CString id pl >>= pgf_has_linearization (concr lang)
+    return (res /= 0)
 
 -- | Linearizes an expression as a string in the language
 linearize :: Concr -> Expr -> String
