@@ -321,7 +321,7 @@ oper
         let 
           agrfin = case vp.sc of {
                     NPCase Nom => <agr,True> ;
-                    _ => <agrP3 Sg,False>      -- minun täytyy, minulla on
+                    _ => <agrP3 Sg,False>      -- minule meeldib, minul on
                     } ;
           verb  = vp.s ! VIFin t ! a ! b ! agrfin.p1 ;
         in {subj = sub b ; 

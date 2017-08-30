@@ -28,6 +28,7 @@ concrete ExtendEst of Extend =
     Coordination,
     Prelude,
     MorphoEst,
+    LexiconEst,
     ParadigmsEst in {
 
   lin
@@ -130,13 +131,19 @@ lin
     infl = Invariable 
   } ;
 
-{- TODO: need to change VP to get this to work properly:
+{- TODO: need to change VP to get the following 3 functions to work properly:
    1) Add "mine" form into VP (or switch to a BIND solution and just add a stem)
    2) Change s2 in VP so that we can manipulate the complement to be in genitive!
   -- : VP -> SC ;   -- looking at Mary (is fun) / filmide vaatamine (on tore)
   EmbedPresPart vp = 
     let vpGen = vp ; --** { s2 = \\_,_,_ => vp.s2 ! True ! Pos ! }
       {s = vp2adv vp True VI } ; 
+
+   -- : VP -> CN    -- publishing of the document (can get a determiner)
+   GerundCN vp = {} ;
+
+   -- : VP -> NP    -- publishing the document (by nature definite)
+   GerundNP vp = {} ;
 -}
 
   -- : VPSlash -> AP ;    -- täna leitud 
@@ -149,13 +156,7 @@ lin
     s = \\_,_ => np.s ! NPCase Gen ++ "poolt" 
               ++ vp2adv vp True (VIPass Past) ; 
     infl = Invariable } ;
-{-
-   -- : VP -> CN    -- publishing of the document (can get a determiner)
-   GerundCN vp = {} ;
 
-   -- : VP -> NP    -- publishing the document (by nature definite)
-   GerundNP vp = {} ;
--}
   -- : VP -> Adv
   GerundAdv vp = 
     { s = vp2adv vp True (VIInf InfDes) } ; 
@@ -194,22 +195,38 @@ lin
    ComplBareVS  v s = insertExtra s.s (predV v) ;
    SlashBareV2S v s = insertExtrac s.s (predVc v) ;
 -}
+
   -- : N -> N  -> N ;      -- control system / controls system / control-system
   CompoundN noun cn = lin N {
     s = \\nf => noun.s ! NCase Sg Gen ++ BIND ++ cn.s ! nf 
     } ;
 {-  
+  -- : N -> A  -> AP ;     -- language independent / language-independent
   CompoundAP noun adj = {} ;
 
-  FrontExtPredVP np vp = {} ;
+  -- : VS -> Utt -> VP ;      -- say: "today"
+  ComplDirectVS vs utt = {} ;
+  -- : VQ -> Utt -> VP ;      -- ask: "when"
+  ComplDirectVQ vq utt = {} ;
 
-  InvFrontExtPredVP np vp = {} ;
+  -- : NP -> VS -> Utt -> Cl ;      -- "I am here", she said
+  FrontComplDirectVS np vs utt = {} ;
+  -- : NP -> VQ -> Utt -> Cl ;      -- "where", she asked
+  FrontComplDirectVQ np vq utt = {} ;
+-}
 
+  -- : AP -> VP -> Cl ;   -- it is good to walk / on hea kõndida
+  PredAPVP ap vp = 
+    let heaOllaVP : VP = insertObj (\\_,_ => ap.s) vp ; -- puts AP into the s2 field
+        heaOllaComp : Comp = CompVP ASimul PPos heaOlla ; -- chooses InfDa, fixes word order
+        heaOlla : VP = UseComp heaOllaComp -- looks silly, but I want to reuse the abstract syntax funs :-P
+    in existClause noSubj (agrP3 Sg) heaOlla ; 
 
-
+oper
+testCl = PredAPVP (PositA good_A) (UseV walk_V) ;
 
   lin
--}
+
   -- : AP -> CN ;   -- a green one ; en grön (Swe)
   AdjAsCN ap = { s = ap.s ! True } ; -- True = it's a modifier, not a predicate
 
