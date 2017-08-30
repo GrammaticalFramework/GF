@@ -689,6 +689,20 @@ System.out.println(a.DetCN(quant, cn));
 </pre>
 </p>
 </span>
+<span class="csharp">
+<p>In C# you first have to <tt>embed</tt> the grammar by calling:
+<pre class="csharp">
+dynamic g = gr.Embed()
+</pre>
+</p>
+<p>Now creating new trees is just a matter of calling ordinary C#
+methods:
+<pre class="csharp">
+Console.WriteLine(g.DetCN(quant,e))
+DetCN (DetQuant IndefArt NumSg) (AdjCN (PositA red_A) (UseN house_N))
+</pre>
+</p>
+</span>
 
 <span class="python">
 <p>
