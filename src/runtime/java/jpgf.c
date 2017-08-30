@@ -1107,8 +1107,11 @@ Java_org_grammaticalframework_pgf_Lexicon_lookupWordPrefix
 	GuPool* pool = gu_new_pool();	
 	GuExn* err = gu_new_exn(pool);
 
-	GuEnum* en = pgf_lookup_word_prefix(get_ref(env, jconcr), j2gu_string(env, prefix, pool),
-	                                    pool, err);
+	GuEnum* en = 
+		(prefix == NULL) ? pgf_fullform_lexicon(get_ref(env, jconcr), 
+	                                            pool)
+	                     : pgf_lookup_word_prefix(get_ref(env, jconcr), j2gu_string(env, prefix, pool),
+	                                              pool, err);
 	if (!gu_ok(err)) {
 		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);

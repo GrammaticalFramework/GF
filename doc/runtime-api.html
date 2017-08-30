@@ -775,7 +775,7 @@ word form with its possible analyses:
 Prelude PGF2> mapM_ print [(form,lemma,analysis,prob) | (form,analyses) &lt;- fullFormLexicon eng, (lemma,analysis,prob) &lt- analyses]
 </pre>
 <pre class="java">
-for (FullFormEntry entry in eng.fullFormLexicon()) { ///// TODO
+for (FullFormEntry entry : eng.fullFormLexicon()) {
 	for (MorphoAnalysis analysis : entry.getAnalyses()) {
 		System.out.println(entry.getForm()+" "+analysis.getProb()+" "+analysis.getLemma()+" "+analysis.getField());
 	}

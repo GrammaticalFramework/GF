@@ -70,7 +70,9 @@ public class Concr {
 	public native List<MorphoAnalysis> lookupMorpho(String sentence);
 	
 	/** Creates an iterable over the full form lexicon in the grammar */
-	public native Iterable<FullFormEntry> fullFormLexicon();
+	public Iterable<FullFormEntry> fullFormLexicon() {
+		return new Lexicon(this, null);
+	}
 
 	/** Returns an iterable enumerating all words in the lexicon
 	 * starting with a given prefix.
