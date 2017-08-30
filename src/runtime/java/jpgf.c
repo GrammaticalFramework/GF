@@ -371,6 +371,25 @@ Java_org_grammaticalframework_pgf_PGF_getFunctionsByCat(JNIEnv* env, jobject sel
 	return functions;
 }
 
+JNIEXPORT jstring JNICALL
+Java_org_grammaticalframework_pgf_PGF_graphvizAbstractTree(JNIEnv* env, jobject self, jobject jexpr)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	GuExn* err = gu_exn(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
+	GuOut* out = gu_string_buf_out(sbuf);
+
+	pgf_graphviz_abstract_tree(get_ref(env,self),
+	                           gu_variant_from_ptr(l2p(get_ref(env,jexpr))),
+	                           out, err);
+
+	jstring jstr = gu2j_string_buf(env, sbuf);
+
+	gu_pool_free(tmp_pool);
+	return jstr;
+}
+
 JNIEXPORT jstring JNICALL 
 Java_org_grammaticalframework_pgf_Concr_getName(JNIEnv* env, jobject self)
 {
@@ -1196,6 +1215,25 @@ Java_org_grammaticalframework_pgf_Concr_getPrintName(JNIEnv* env, jobject self, 
 	gu_pool_free(tmp_pool);
 
 	return jname;
+}
+
+JNIEXPORT jstring JNICALL
+Java_org_grammaticalframework_pgf_Concr_graphvizParseTree(JNIEnv* env, jobject self, jobject jexpr)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	GuExn* err = gu_exn(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
+	GuOut* out = gu_string_buf_out(sbuf);
+
+	pgf_graphviz_parse_tree(get_ref(env,self),
+	                        gu_variant_from_ptr(l2p(get_ref(env,jexpr))),
+	                        out, err);
+
+	jstring jstr = gu2j_string_buf(env, sbuf);
+
+	gu_pool_free(tmp_pool);
+	return jstr;
 }
 
 JNIEXPORT jlong JNICALL
