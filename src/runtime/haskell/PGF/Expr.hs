@@ -6,6 +6,7 @@ module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..
                 mkStr,    unStr,
                 mkInt,    unInt,
                 mkDouble, unDouble,
+                mkFloat,  unFloat,
                 mkMeta,   unMeta,
 
                 normalForm,
@@ -153,6 +154,9 @@ unDouble (ELit (LFlt f)) = Just f
 unDouble (ETyped e ty)   = unDouble e
 unDouble (EImplArg e)    = unDouble e
 unDouble _               = Nothing
+
+mkFloat = mkDouble
+unFloat = unDouble
 
 -- | Constructs an expression which is meta variable
 mkMeta :: Int -> Expr

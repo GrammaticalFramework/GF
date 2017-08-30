@@ -51,6 +51,7 @@ module PGF(
            mkStr,    unStr,
            mkInt,    unInt,
            mkDouble, unDouble,
+           mkFloat,  unFloat,
            mkMeta,   unMeta,
            -- extra
            pExpr,

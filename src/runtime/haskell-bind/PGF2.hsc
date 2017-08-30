@@ -38,6 +38,7 @@ module PGF2 (-- * PGF
              mkInt,unInt,
              mkFloat,unFloat,
              mkMeta,unMeta,
+             mkCId,
              -- ** Types
              Type, Hypo, BindType(..), startCat,
              readType, showType,
