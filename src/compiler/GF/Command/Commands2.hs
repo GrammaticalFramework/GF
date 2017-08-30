@@ -40,7 +40,7 @@ import Data.Maybe
 import qualified Data.Map as Map
 --import System.Cmd(system) -- use GF.Infra.UseIO.restricedSystem instead!
 --import GF.System.Process
---import GF.Text.Pretty
+import GF.Text.Pretty
 --import Data.List (sort)
 import Control.Monad(mplus)
 --import Debug.Trace
@@ -377,7 +377,6 @@ pgfCommands = Map.fromList [
      flags = [("number","take at most this many trees")] ++ treeOpFlags undefined{-pgf-}
      }),
 -}
-{-
   ("rf",  emptyCommandInfo {
      longname = "read_file",
      synopsis = "read string or tree input from a file",
@@ -392,21 +391,21 @@ pgfCommands = Map.fromList [
        ("lines","return the list of lines, instead of the singleton of all contents"),
        ("tree","convert strings into trees")
        ],
-     exec = \env@(pgf, mos) opts _ -> do
+     exec = needPGF $ \opts _ env@(pgf, mos) -> do
        let file = valStrOpts "file" "_gftmp" opts
        let exprs []         = ([],empty)
            exprs ((n,s):ls) | null s
                             = exprs ls
-           exprs ((n,s):ls) = case H.readExpr s of
+           exprs ((n,s):ls) = case readExpr s of
                                 Just e  -> let (es,err) = exprs ls
-                                           in case H.inferExpr pgf e of
+                                           in case inferExpr pgf e of
                                                 Right (e,t) -> (e:es,err)
-                                                Left tcerr  -> (es,"on line" <+> n <> ':' $$ nest 2 (H.ppTcError tcerr) $$ err)
+                                                Left msg    -> (es,"on line" <+> n <> ':' $$ msg $$ err)
                                 Nothing -> let (es,err) = exprs ls
                                            in (es,"on line" <+> n <> ':' <+> "parse error" $$ err)
            returnFromLines ls = case exprs ls of
                                   (es, err) | null es   -> return $ pipeMessage $ render (err $$ "no trees found")
-                                            | otherwise -> return $ pipeWithMessage es (render err)
+                                            | otherwise -> return $ pipeWithMessage (map hsExpr es) (render err)
 
        s <- restricted $ readFile file
        case opts of
@@ -418,7 +417,7 @@ pgfCommands = Map.fromList [
          _ -> return (fromString s),
      flags = [("file","the input file name")]
      }),
-
+{-
   ("rt", emptyCommandInfo {
      longname = "rank_trees",
      synopsis = "show trees in an order of decreasing probability",
