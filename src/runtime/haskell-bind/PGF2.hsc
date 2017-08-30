@@ -648,7 +648,7 @@ linearizeAll lang e = unsafePerformIO $
                 throwIO (PGFError "The abstract tree cannot be linearized")
 
 -- | Generates a table of linearizations for an expression
-tabularLinearize :: Concr -> Expr -> Map.Map String String
+tabularLinearize :: Concr -> Expr -> [(String, String)]
 tabularLinearize lang e = unsafePerformIO $
   withGuPool $ \tmpPl -> do
     exn <- gu_new_exn tmpPl
@@ -660,7 +660,7 @@ tabularLinearize lang e = unsafePerformIO $
                                            peek ptr
               if ctree == nullPtr
                 then do touchExpr e
-                        return Map.empty
+                        return []
                 else do labels <- alloca $ \p_n_lins ->
                                   alloca $ \p_labels -> do
                                     pgf_lzr_get_table (concr lang) ctree p_n_lins p_labels
@@ -670,7 +670,7 @@ tabularLinearize lang e = unsafePerformIO $
                                     labels <- mapM peekCString labels
                                     return labels
                         lins <- collect lang ctree 0 labels exn tmpPl
-                        return (Map.fromList lins)
+                        return lins
   where
     collect lang ctree lin_idx []             exn tmpPl = return []
     collect lang ctree lin_idx (label:labels) exn tmpPl = do

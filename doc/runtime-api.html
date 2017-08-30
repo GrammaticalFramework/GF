@@ -363,7 +363,7 @@ then the right method to use is <tt>tabularLinearize</tt>:
 </pre>
 <pre class="haskell">
 Prelude PGF2> tabularLinearize eng e
-fromList [("s Pl Gen","red theatres'"),("s Pl Nom","red theatres"),("s Sg Gen","red theatre's"),("s Sg Nom","red theatre")]
+[("s Sg Nom","red theatre"),("s Sg Gen","red theatre's"),("s Pl Nom","red theatres"),("s Pl Gen","red theatres'")]
 </pre>
 <pre class="java">
 for (Map.Entry&lt;String,String&gt; entry : eng.tabularLinearize(e).entrySet()) {
