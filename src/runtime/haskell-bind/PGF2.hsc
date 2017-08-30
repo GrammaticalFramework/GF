@@ -53,7 +53,7 @@ module PGF2 (-- * PGF
              -- * Concrete syntax
              ConcName,Concr,languages,concreteName,
              -- ** Linearization
-             linearize,linearizeAll,tabularLinearize,bracketedLinearize,
+             linearize,linearizeAll,tabularLinearize,tabularLinearizeAll,bracketedLinearize,
              FId, LIndex, BracketedString(..), showBracketedString, flattenBracketedString,
 
              alignWords,
@@ -649,42 +649,53 @@ linearizeAll lang e = unsafePerformIO $
 
 -- | Generates a table of linearizations for an expression
 tabularLinearize :: Concr -> Expr -> [(String, String)]
-tabularLinearize lang e = unsafePerformIO $
+tabularLinearize lang e = 
+  case tabularLinearizeAll lang e of
+    (lins:_) -> lins
+    _        -> []
+
+-- | Generates a table of linearizations for an expression
+tabularLinearizeAll :: Concr -> Expr -> [[(String, String)]]
+tabularLinearizeAll lang e = unsafePerformIO $
   withGuPool $ \tmpPl -> do
     exn <- gu_new_exn tmpPl
     cts <- pgf_lzr_concretize (concr lang) (expr e) exn tmpPl
     failed <- gu_exn_is_raised exn
     if failed
       then throwExn exn
-      else do ctree <- alloca $ \ptr -> do gu_enum_next cts ptr tmpPl
-                                           peek ptr
-              if ctree == nullPtr
-                then do touchExpr e
-                        return []
-                else do labels <- alloca $ \p_n_lins ->
-                                  alloca $ \p_labels -> do
-                                    pgf_lzr_get_table (concr lang) ctree p_n_lins p_labels
-                                    n_lins <- peek p_n_lins
-                                    labels <- peek p_labels
-                                    labels <- peekArray (fromIntegral n_lins) labels
-                                    labels <- mapM peekCString labels
-                                    return labels
-                        lins <- collect lang ctree 0 labels exn tmpPl
-                        return lins
+      else collect cts exn tmpPl
   where
-    collect lang ctree lin_idx []             exn tmpPl = return []
-    collect lang ctree lin_idx (label:labels) exn tmpPl = do
+    collect cts exn tmpPl = do
+      ctree <- alloca $ \ptr -> do gu_enum_next cts ptr tmpPl
+                                   peek ptr
+      if ctree == nullPtr
+        then do touchExpr e
+                return []
+        else do labels <- alloca $ \p_n_lins ->
+                          alloca $ \p_labels -> do
+                            pgf_lzr_get_table (concr lang) ctree p_n_lins p_labels
+                            n_lins <- peek p_n_lins
+                            labels <- peek p_labels
+                            labels <- peekArray (fromIntegral n_lins) labels
+                            labels <- mapM peekCString labels
+                            return labels
+                lins <- collectTable lang ctree 0 labels exn tmpPl
+                linss <- collect cts exn tmpPl
+                return (lins : linss)
+
+    collectTable lang ctree lin_idx []             exn tmpPl = return []
+    collectTable lang ctree lin_idx (label:labels) exn tmpPl = do
       (sb,out) <- newOut tmpPl
       pgf_lzr_linearize_simple (concr lang) ctree lin_idx out exn tmpPl
       failed <- gu_exn_is_raised exn
       if failed
         then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
                 if is_nonexist
-                  then collect lang ctree (lin_idx+1) labels exn tmpPl
+                  then collectTable lang ctree (lin_idx+1) labels exn tmpPl
                   else throwExn exn
         else do lin <- gu_string_buf_freeze sb tmpPl
                 s  <- peekUtf8CString lin
-                ss <- collect lang ctree (lin_idx+1) labels exn tmpPl
+                ss <- collectTable lang ctree (lin_idx+1) labels exn tmpPl
                 return ((label,s):ss)
 
     throwExn exn = do
