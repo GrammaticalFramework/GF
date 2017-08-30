@@ -210,51 +210,20 @@ pgfCommands = Map.fromList [
        returnFromExprs $ take (optNum opts) ts
      }),
 -}
-  ("ga", emptyCommandInfo {
-     longname = "generate_all",
-     synopsis = "generate a list of all trees",
+  ("gt", emptyCommandInfo {
+     longname = "generate_trees",
+     synopsis = "generates a list of trees, by default exhaustive",
      flags = [("cat","the generation category"),
               ("number","the number of trees generated")],
      examples = [
-       mkEx "ga                     -- all trees in the startcat",
-       mkEx "ga -cat=NP -number=16  -- 16 trees in the category NP"],
+       mkEx "gt                     -- all trees in the startcat",
+       mkEx "gt -cat=NP -number=16  -- 16 trees in the category NP"],
      exec = needPGF $ \ opts _ env@(pgf,_) ->
             let ts = map fst (generateAll pgf cat)
                 cat = optCat pgf opts
             in returnFromCExprs (takeOptNum opts ts),
      needsTypeCheck = False
      }),
-{-
-  ("gt", emptyCommandInfo {
-     longname = "generate_trees",
-     synopsis = "generates a list of trees, by default exhaustive",
-     explanation = unlines [
-       "Generates all trees of a given category. By default, ",
-       "the depth is limited to 4, but this can be changed by a flag.",
-       "If a Tree argument is given, the command completes the Tree with values",
-       "to all metavariables in the tree."
-       ],
-     flags = [
-       ("cat","the generation category"),
-       ("depth","the maximum generation depth"),
-       ("lang","excludes functions that have no linearization in this language"),
-       ("number","the number of trees generated")
-       ],
-     examples = [
-       mkEx "gt                     -- all trees in the startcat, to depth 4",
-       mkEx "gt -cat=NP -number=16  -- 16 trees in the category NP",
-       mkEx "gt -cat=NP -depth=2    -- trees in the category NP to depth 2",
-       mkEx "gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))"
-       ],
-     exec = \env@(pgf, mos) opts xs -> do
-       let pgfr = optRestricted opts pgf
-       let dp = valIntOpts "depth" 4 opts
-       let ts = case mexp xs of
-                  Just ex -> H.generateFromDepth pgfr ex (Just dp)
-                  Nothing -> H.generateAllDepth pgfr (optType pgf opts) (Just dp)
-       returnFromExprs $ take (optNumInf opts) ts
-     }),
--}
   ("i", emptyCommandInfo {
      longname = "import",
      synopsis = "import a grammar from a compiled .pgf file",
