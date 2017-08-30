@@ -641,44 +641,37 @@ pgfCommands = Map.fromList [
 
   ("ai", emptyCommandInfo {
      longname = "abstract_info",
---   syntax = "ai IDENTIFIER  or  ai EXPR",
-     syntax = "ai IDENTIFIER",
---   synopsis = "Provides an information about a function, an expression or a category from the abstract syntax",
-     synopsis = "Provides information about a function, or a category from the abstract syntax",
+     syntax = "ai IDENTIFIER  or  ai EXPR",
+     synopsis = "Provides an information about a function, an expression or a category from the abstract syntax",
      explanation = unlines [
---     "The command has one argument which is either function, expression or",
-       "The command has one argument which is either function or",
+       "The command has one argument which is either function, expression or",
        "a category defined in the abstract syntax of the current grammar. ",
        "If the argument is a function then its type is printed out.",
-       "If it is a category then the category definition is printed."{-,
+       "If it is a category then the category definition is printed.",
        "If a whole expression is given it prints the expression with refined",
-       "metavariables and the type of the expression."-}
+       "metavariables and the type of the expression."
        ],
-     exec = needPGF $ \ opts arg env@(pgf,cncs) -> do
-       case toExprs arg of
-         [H.EFun cid]
-             | id `elem` funs -> return (fromString (showFun pgf id))
-             | id `elem` cats -> return (fromString (showCat id))
-           where
-             id = H.showCId cid
-             funs = functions pgf
-             cats = categories pgf
+     exec = needPGF $ \opts args env@(pgf,cncs) ->
+       case map cExpr (toExprs args) of
+         [e] -> case unApp e of
+                  Just (id,[]) | id `elem` funs -> return (fromString (showFun pgf id))
+                               | id `elem` cats -> return (fromString (showCat id))
+                               where
+                                 funs = functions  pgf
+                                 cats = categories pgf
 
-             showCat c = "cat "++c -- TODO: show categoryContext
-                         ++"\n\n"++
-                         unlines [showFun' f ty|f<-funs,
-                                                let ty=functionType pgf f,
-                                                target ty == c]
-           --target (C.DTyp _ c _) = c
-             target t = case unType t of (_,c,_) -> c
-{-
-         [e]         -> case H.inferExpr pgf e of
-                          Left tcErr   -> error $ render (H.ppTcError tcErr)
-                          Right (e,ty) -> do putStrLn ("Expression:  "++H.showExpr [] e)
-                                             putStrLn ("Type:        "++H.showType [] ty)
-                                             putStrLn ("Probability: "++show (H.probTree pgf e))
+                                 showCat c = "cat "++c -- TODO: show categoryContext
+                                             ++"\n\n"++
+                                             unlines [showFun' f ty|f<-funs,
+                                                                    let ty=functionType pgf f,
+                                                                    target ty == c]
+                                 target t = case unType t of (_,c,_) -> c
+                  _  -> case inferExpr pgf e of
+                          Left msg     -> error msg
+                          Right (e,ty) -> do putStrLn ("Expression:  "++PGF2.showExpr [] e)
+                                             putStrLn ("Type:        "++PGF2.showType [] ty)
+                                             -- putStrLn ("Probability: "++show (H.probTree pgf e))
                                              return void
--}
          _           -> do putStrLn "a single function name or category name is expected"
                            return void,
      needsTypeCheck = False
