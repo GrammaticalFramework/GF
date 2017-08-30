@@ -38,7 +38,7 @@ namespace PGFSharp
         /// </summary>
         /// <param name="exprStr"></param>
         /// <returns></returns>
-        public Expr ReadExpr(string exprStr)
+        public static Expr ReadExpr(string exprStr)
         {
             var tmp_pool = new NativeGU.NativeMemoryPool();
             var exn = new NativeGU.NativeExceptionContext(tmp_pool);

@@ -56,7 +56,7 @@
 		Choose a language: <a href="#haskell">Haskell</a> <a href="#python">Python</a> <a href="#java">Java</a> <a href="#csharp">C#</a>
 		</span>
 
-		<h4>Krasimir Angelov, July 2015</h4>
+		<h4>Krasimir Angelov, July 2015 - August 2017</h4>
 		
 <h2>Loading the Grammar</h2>
 
@@ -140,7 +140,7 @@ Prelude PGF2> let res = parse eng (startCat gr) "this is a small theatre"
 Iterable&lt;ExprProb&gt; iterable = eng.parse(gr.getStartCat(), "this is a small theatre");
 </pre>
 <pre class="csharp">
-IEnumerable&lt;Tuple&lt;Expr, float&gt;&gt; enumerable = eng.Parse(gr.StartCat, "this is a small theatre");
+IEnumerable&lt;Tuple&lt;Expr, float&gt;&gt; enumerable = eng.Parse("this is a small theatre");
 </pre>
 <span class="python">
 This gives you an iterator which can enumerate all possible
@@ -174,8 +174,9 @@ ExprProb ep = iter.next();
 This gives you an enumerable which can enumerate all possible
 abstract trees. You can get the next tree by calling <tt>MoveNext</tt>:
 <pre class="csharp">
-enumerable.MoveNext();
-Tuple&lt;Expr, float&gt; ep = enumerable.Current;
+IEnumerator&lt;Tuple&lt;Expr, float&gt;&gt; enumerator = enumerable.GetEnumerator();
+enumerator.MoveNext();
+Tuple&lt;Expr, float&gt; ep = enumerator.Current;
 </pre>
 </span>
 
@@ -261,11 +262,16 @@ Iterable&lt;ExprProb&gt; iterable = eng.parseWithHeuristics(gr.startCat(), heuri
 </pre>
 </span>
 <span class="csharp">
-There is also the method <tt>ParseWithHeuristics</tt> which 
-takes two more paramaters which let you to have a better control 
-over the parser's behaviour:
+The <tt>Parse</tt> method has also the following optional parameters:
+<table border=1>
+	<tr><td>cat</td><td>start category</td></tr>
+	<tr><td>heuristics</td><td>a real number from 0 to 1</td></tr>
+</table>
+
+<p>By using these parameters it is possible for instance to change the start category for
+the parser. For example parsing with a different start category can be done as follows:</p>
 <pre class="csharp">
-IEnumerable&lt;Tuple&lt;Expr, float&gt;&gt; enumerable = eng.ParseWithHeuristics(gr.StartCat, heuristic_factor, callbacks);
+IEnumerable&lt;Tuple&lt;Expr, float&gt;&gt; enumerable = eng.Parse("this is a small theatre", cat: Type.ReadType("NP"));
 </pre>
 </span>
 
@@ -343,7 +349,7 @@ red theatre
 red theater
 </pre>
 <pre class="csharp">
-for (String s : eng.LinearizeAll(e)) {
+foreach (String s in eng.LinearizeAll(e)) {
     Console.WriteLine(s);
 }
 red theatre
@@ -369,7 +375,7 @@ s Pl Gen: red theatres'
 s Sg Gen: red theatre's
 </pre>
 <pre class="csharp">
-for (Map.Entry&lt;String,String&gt; entry : eng.TabularLinearize(e).EntrySet()) {
+foreach (Map.Entry&lt;String,String&gt; entry in eng.TabularLinearize(e).EntrySet()) {  //// TODO
     Console.WriteLine(entry.Key + ": " + entry.Value);
 }
 s Sg Nom: red theatre
@@ -395,7 +401,7 @@ Prelude PGF2> putStrLn (showBracketedString b)
 Object[] bs = eng.bracketedLinearize(e);
 </pre>
 <pre class="csharp">
-Object[] bs = eng.BracketedLinearize(e);
+Bracket b = eng.BracketedLinearize(e);
 </pre>
 <span class="python">
 Each element in the sequence above is either a string or an object
@@ -469,7 +475,7 @@ System.out.println(eng.hasLinearization("apple_N"));
 true
 </pre>
 <pre class="csharp">
-Console.WriteLine(eng.HasLinearization("apple_N"));
+Console.WriteLine(eng.HasLinearization("apple_N"));  //// TODO
 true
 </pre>
 
@@ -497,7 +503,7 @@ for (Expr arg : app.getArguments()) {
 <pre class="csharp">
 ExprApplication app = e.UnApp();
 System.out.println(app.Function);
-for (Expr arg : app.Arguments) {
+foreach (Expr arg in app.Arguments) {
    Console.WriteLine(arg);
 }
 </pre>
@@ -782,8 +788,8 @@ for (FullFormEntry entry : eng.fullFormLexicon()) {
 }
 </pre>
 <pre class="csharp">
-for (FullFormEntry entry in eng.FullFormLexicon) {
-	for (MorphoAnalysis analysis : entry.Analyses) {
+foreach (FullFormEntry entry in eng.FullFormLexicon) {     //// TODO
+	foreach (MorphoAnalysis analysis in entry.Analyses) {
 		Console.WriteLine(entry.Form+" "+analysis.Prob+" "+analysis.Lemma+" "+analysis.Field);
 	}
 }
@@ -806,7 +812,7 @@ letter_1_N, s Sg Nom, inf
 letter_2_N, s Sg Nom, inf
 </pre>
 <pre class="csharp">
-for (MorphoAnalysis an : eng.LookupMorpho("letter")) {
+foreach (MorphoAnalysis an in eng.LookupMorpho("letter")) {   //// TODO
     Console.WriteLine(an.Lemma+", "+an.Field+", "+an.Prob);
 }
 letter_1_N, s Sg Nom, inf
@@ -830,7 +836,7 @@ List&lt;String&gt; funs = gr.getFunctions()
 ....
 </pre>
 <pre class="csharp">
-IList&lt;String&gt; funs = gr.Functions;
+IEnumerable&lt;String&gt; funs = gr.Functions;
 ....
 </pre>
 or a list of categories:
@@ -847,7 +853,7 @@ List&lt;String&gt; cats = gr.getCategories();
 ....
 </pre>
 <pre class="csharp">
-IList&lt;String&gt; cats = gr.Categories;
+IEnumerable&lt;String&gt; cats = gr.Categories;
 ....
 </pre>
 You can also access all functions with the same result category:
@@ -864,7 +870,7 @@ List&lt;String&gt; funsByCat = gr.getFunctionsByCat("Weekday");
 ....
 </pre>
 <pre class="csharp">
-IList&lt;String&gt; funsByCat = gr.FunctionsByCat("Weekday");
+IList&lt;String&gt; funsByCat = gr.FunctionsByCat("Weekday");    //// TODO
 ....
 </pre>
 The full type of a function can be retrieved as:
@@ -906,7 +912,7 @@ System.out.println(te.getExpr()+" : "+te.getType());
 AdjCN (PositA red_A) (UseN theatre_N) : CN
 </pre>
 <pre class="csharp">
-TypedExpr te = gr.InferExpr(e);
+TypedExpr te = gr.InferExpr(e);                 //// TODO
 Console.WriteLine(te.Expr+" : "+te.Type);
 AdjCN (PositA red_A) (UseN theatre_N) : CN
 </pre>
@@ -933,7 +939,7 @@ Expr new_e = gr.checkExpr(e,Type.readType("CN"));
 System.out.println(e)
 </pre>
 <pre class="csharp">
-Expr new_e = gr.CheckExpr(e,Type.ReadType("CN"));
+Expr new_e = gr.CheckExpr(e,Type.ReadType("CN"));            //// TODO
 Console.WriteLine(e)
 </pre>
 <p>In case of type error you will get an error:
@@ -1095,7 +1101,7 @@ n0 -- n3 [style = "solid"]
 }
 </pre>
 <pre class="csharp">
-Console.WriteLine(gr.GraphvizAbstractTree(e));
+Console.WriteLine(gr.GraphvizAbstractTree(e));       //// TODO
 graph {
 n0[label = "AdjCN", style = "solid", shape = "plaintext"]
 n1[label = "PositA", style = "solid", shape = "plaintext"]
@@ -1221,7 +1227,7 @@ graph {
 }
 </pre>
 <pre class="csharp">
-Console.WriteLine(eng.GraphvizParseTree(e));
+Console.WriteLine(eng.GraphvizParseTree(e));          //// TODO
 graph {
   node[shape=plaintext]
 
