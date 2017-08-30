@@ -338,34 +338,21 @@ pgfCommands = Map.fromList [
      needsTypeCheck = False
      }),
 -} 
-{-
   ("ma", emptyCommandInfo {
      longname = "morpho_analyse",
-     synopsis = "print the morphological analyses of all words in the string",
+     synopsis = "print the morphological analyses of the (multiword) expression in the string",
      explanation = unlines [
-       "Prints all the analyses of space-separated words in the input string,",
+       "Prints all the analyses of the (multiword) expression in the input string,",
        "using the morphological analyser of the actual grammar (see command pg)"
        ],
-     exec  = \env opts -> case opts of
-               _ | isOpt "missing" opts ->
-                    return . fromString . unwords .
-                    H.morphoMissing (optMorpho env opts) .
-                    concatMap words . toStrings
-               _ | isOpt "known" opts ->
-                    return . fromString . unwords .
-                    H.morphoKnown (optMorpho env opts) .
-                    concatMap words . toStrings
-               _ -> return . fromString . unlines .
-                    map prMorphoAnalysis . concatMap (morphos env opts) .
-                    concatMap words . toStrings ,
+     exec  = needPGF $ \opts args env -> 
+               return ((fromString . unlines .
+                        map prMorphoAnalysis . concatMap (morphos env opts) . toStrings) args),
      flags = [
        ("lang","the languages of analysis (comma-separated, no spaces)")
-       ],
-     options = [
-       ("known",  "return only the known words, in order of appearance"),
-       ("missing","show the list of unknown words, in order of appearance")
        ]
      }),
+{-
   ("mq", emptyCommandInfo {
      longname = "morpho_quiz",
      synopsis = "start a morphology quiz",
@@ -1044,14 +1031,10 @@ pgfCommands = Map.fromList [
 
    funsigs pgf = [(f,ty) | (f,(ty,_,_,_)) <- Map.assocs (H.funs (H.abstract pgf))]
    showFun (f,ty) = H.showCId f ++ " : " ++ H.showType [] ty ++ " ;"
-
-   morphos (pgf,mos) opts s =
-     [(s,morpho mos [] (\mo -> H.lookupMorpho mo s) la) | la <- optLangs pgf opts]
-
-   morpho mos z f la = maybe z f $ Map.lookup la mos
-
-   optMorpho (pgf,mos) opts = morpho mos (error "no morpho") id (head (optLangs pgf opts))
-
+-}
+   morphos env opts s =
+     [(s,lookupMorpho concr s) | (lang,concr) <- optConcs env opts]
+{-
    optClitics opts = case valStrOpts "clitics" "" opts of
      "" -> []
      cs -> map reverse $ chunks ',' cs
@@ -1104,11 +1087,10 @@ prFullFormLexicon mo =
 prAllWords :: H.Morpho -> String
 prAllWords mo =
   unwords [w | (w,_) <- H.fullFormLexicon mo]
-
-prMorphoAnalysis :: (String,[(H.Lemma,H.Analysis)]) -> String
-prMorphoAnalysis (w,lps) =
-  unlines (w:[H.showCId l ++ " : " ++ p | (l,p) <- lps])
 -}
+prMorphoAnalysis :: (String,[MorphoAnalysis]) -> String
+prMorphoAnalysis (w,lps) =
+  unlines (w:[fun ++ " : " ++ cat | (fun,cat,p) <- lps])
 
 hsExpr c =
   case unApp c of

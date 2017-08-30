@@ -344,7 +344,7 @@ graphvizParseTree c e =
 -- Functions using Concr
 -- Morpho analyses, parsing & linearization
 
-type MorphoAnalysis = (Fun,String,Float)
+type MorphoAnalysis = (Fun,Cat,Float)
 
 lookupMorpho :: Concr -> String -> [MorphoAnalysis]
 lookupMorpho (Concr concr master) sent =
