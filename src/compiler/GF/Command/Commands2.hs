@@ -188,7 +188,7 @@ pgfCommands = Map.fromList [
        mkEx "gt -cat=NP -number=16  -- 16 trees in the category NP"],
      exec = needPGF $ \ opts _ env@(pgf,_) ->
             let ts = map fst (generateAll pgf cat)
-                cat = optCat pgf opts
+                cat = optType pgf opts
             in returnFromCExprs (takeOptNum opts ts),
      needsTypeCheck = False
      }),
@@ -392,7 +392,7 @@ pgfCommands = Map.fromList [
        ("tree","convert strings into trees")
        ],
      exec = needPGF $ \opts _ env@(pgf, mos) -> do
-       let file = valStrOpts "file" "_gftmp" opts
+       let file = optFile opts
        let exprs []         = ([],empty)
            exprs ((n,s):ls) | null s
                             = exprs ls
@@ -688,7 +688,7 @@ pgfCommands = Map.fromList [
    cParse env@(pgf,_) opts ss = 
         parsed [ parse cnc cat s | s<-ss,(lang,cnc)<-cncs]
      where
-       cat = optCat pgf opts
+       cat = optType pgf opts
        cncs = optConcs env opts
        parsed rs = Piped (Exprs ts,unlines msgs)
           where
@@ -738,35 +738,6 @@ pgfCommands = Map.fromList [
            pick l = (,) l `fmap` Map.lookup l cncs
 
 {-
-   optLins pgf opts ts = case opts of
-     _ | isOpt "groups" opts ->
-       map (unlines . snd) $ H.groupResults
-         [[(lang, linear pgf opts lang t) | lang <- optLangs pgf opts] | t <- ts]
-     _ -> map (optLin pgf opts) ts
-   optLin pgf opts t = unlines $
-     case opts of
-       _ | isOpt "treebank" opts && isOpt "chunks" opts ->
-         (H.showCId (H.abstractName pgf) ++ ": " ++ H.showExpr [] t) :
-         [H.showCId lang ++ ": " ++ li | (lang,li) <- linChunks pgf opts t] --linear pgf opts lang t | lang <- optLangs pgf opts]
-       _ | isOpt "treebank" opts ->
-         (H.showCId (H.abstractName pgf) ++ ": " ++ H.showExpr [] t) :
-         [H.showCId lang ++ ": " ++ linear pgf opts lang t | lang <- optLangs pgf opts]
-       _ | isOpt "chunks" opts -> map snd $ linChunks pgf opts t   
-       _ -> [linear pgf opts lang t | lang <- optLangs pgf opts]
-   linChunks pgf opts t = 
-     [(lang, unwords (intersperse "<+>" (map (linear pgf opts lang) (treeChunks t)))) | lang <- optLangs pgf opts]
-
-   linear :: H.PGF -> [Option] -> H.CId -> H.Expr -> String
-   linear pgf opts lang = let unl = unlex opts lang in case opts of
-       _ | isOpt "all"     opts -> unlines . concat . intersperse [[]] .
-                                   map (map (unl . snd)) . H.tabularLinearizes pgf lang
-       _ | isOpt "list"    opts -> commaList . concat . intersperse [[]] .
-                                   map (map (unl . snd)) . H.tabularLinearizes pgf lang
-       _ | isOpt "table"   opts -> unlines . concat . intersperse [[]] .
-                    map (map (\(p,v) -> p+++":"+++unl v)) . H.tabularLinearizes pgf lang
-       _ | isOpt "bracket" opts -> unwords . map H.showBracketedString . H.bracketedLinearize pgf lang
-       _                        -> unl . H.linearize pgf lang
-
    -- replace each non-atomic constructor with mkC, where C is the val cat
    tree2mk pgf = H.showExpr [] . t2m where
      t2m t = case H.unApp t of
@@ -802,19 +773,10 @@ pgfCommands = Map.fromList [
    optRestricted opts pgf =
      H.restrictPGF (\f -> and [H.hasLin pgf la f | la <- optLangs pgf opts]) pgf
 
-   optLang  = optLangFlag "lang"
-   optLangs = optLangsFlag "lang"
-
-   optLangsFlag f pgf opts = case valStrOpts f "" opts of
-     "" -> H.languages pgf
-     lang -> map (completeLang pgf) (chunks ',' lang)
-
    completeLang pgf la = let cla = (H.mkCId la) in
      if elem cla (H.languages pgf)
        then cla
        else (H.mkCId (H.showCId (H.abstractName pgf) ++ la))
-
-   optLangFlag f pgf opts = head $ optLangsFlag f pgf opts ++ [H.wildCId]
 
    optOpenTypes opts = case valStrOpts "openclass" "" opts of
      ""   -> []
@@ -834,25 +796,19 @@ pgfCommands = Map.fromList [
      (_,file) -> do
        src <- restricted $ readFile file
        return $ transliterateWithFile file src True
-
-   optFile opts = valStrOpts "file" "_gftmp" opts
 -}
-   optCat pgf opts = 
+   optFile opts = valStrOpts "file" "_gftmp" opts
+
+   optType pgf opts =
      case listFlags "cat" opts of
-       v:_ -> mkType [] (valueString v) []
+       v:_ -> let str = valueString v
+              in case readType str of
+                   Just ty -> case checkType pgf ty of
+                                Left msg -> error msg
+                                Right ty -> ty
+                   Nothing -> error ("Can't parse '"++str++"' as a type")
        _   -> startCat pgf
 
-{-
-   optType pgf opts =
-     let str = valStrOpts "cat" (H.showCId $ H.lookStartCat pgf) opts
-     in case H.readType str of
-          Just ty -> case H.checkType pgf ty of
-                       Left tcErr -> error $ render (H.ppTcError tcErr)
-                       Right ty   -> ty
-          Nothing -> error ("Can't parse '"++str++"' as a type")
-
-   optComm opts = valStrOpts "command" "" opts
--}
    optViewFormat opts = valStrOpts "format" "png" opts
    optViewGraph opts = valStrOpts "view" "open" opts
 {-
