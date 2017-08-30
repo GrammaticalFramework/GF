@@ -35,7 +35,7 @@ import GF.Command.CommandInfo
 import GF.Data.Operations
 
 --import PGF.Internal (encodeFile)
---import Data.List(intersperse,nub)
+import Data.List(intersperse,nub)
 import Data.Maybe
 import qualified Data.Map as Map
 --import System.Cmd(system) -- use GF.Infra.UseIO.restricedSystem instead!
@@ -336,47 +336,23 @@ pgfCommands = Map.fromList [
 -}
   ("pg", emptyCommandInfo { -----
      longname = "print_grammar",
---   synopsis = "print the actual grammar with the given printer",
-     synopsis = "print some information about the grammar",
-{-
-     explanation = unlines [
-       "Prints the actual grammar, with all involved languages.",
-       "In some printers, this can be restricted to a subset of languages",
-       "with the -lang=X,Y flag (comma-separated, no spaces).",
-       "The -printer=P flag sets the format in which the grammar is printed.",
-       "N.B.1 Since grammars are compiled when imported, this command",
-       "generally shows a grammar that looks rather different from the source.",
-       "N.B.2 Another way to produce different formats is to use 'gf -make',",
-       "the batch compiler. The following values are available both for",
-       "the batch compiler (flag -output-format) and the print_grammar",
-       "command (flag -printer):",
-       ""
-       ] ++ unlines (sort [
-        " " ++ opt ++ "\t\t" ++ expl |
-           ((opt,_),expl) <- outputFormatsExpl, take 1 expl /= "*"
-       ]),
--}
+     synopsis = "prints different information about the grammar",
      exec  = needPGF $ \opts _ env -> prGrammar env opts,
-     flags = [
-       --"cat",
---     ("file",   "set the file name when printing with -pgf option"),
---     ("lang",   "select languages for the some options (default all languages)"),
---     ("printer","select the printing format (see flag values above)")
-       ],
      options = [
        ("cats",   "show just the names of abstract syntax categories"),
---     ("fullform", "print the fullform lexicon"),
+       ("fullform", "print the fullform lexicon"),
        ("funs",   "show just the names and types of abstract syntax functions"),
-       ("langs",  "show just the names of top concrete syntax modules")
---     ("lexc", "print the lexicon in Xerox LEXC format"),
---     ("missing","show just the names of functions that have no linearization"),
---     ("opt",    "optimize the generated pgf"),
---     ("pgf",    "write current pgf image in file"),
---     ("words", "print the list of words")
+       ("langs",  "show just the names of top concrete syntax modules"),
+       ("lexc", "print the lexicon in Xerox LEXC format"),
+       ("missing","show just the names of functions that have no linearization"),
+       ("words", "print the list of words")
+       ],
+     flags = [
+       ("lang","the languages that need to be printed")
        ],
      examples = [
-       mkEx "pg -langs -- show the names of top concrete syntax modules"
---     mkEx ("pg -funs | ? grep \" S ;\"  -- show functions with value cat S")
+       mkEx "pg -langs -- show the names of top concrete syntax modules",
+       mkEx "pg -funs | ? grep \" S ;\"  -- show functions with value cat S"
        ]
      }),
 
@@ -916,11 +892,16 @@ pgfCommands = Map.fromList [
                  _  -> fromExprs es
 
    prGrammar env@(pgf,cncs) opts
-     | isOpt "langs" opts = return . fromString . unwords $ Map.keys cncs
+     | isOpt "langs" opts = return . fromString . unwords $ (map fst (optConcs env opts))
      | isOpt "cats" opts = return . fromString . unwords $ categories pgf
      | isOpt "funs" opts = return . fromString . unlines . map (showFun pgf) $
                              functions pgf
-     | otherwise = return void -- TODO implement more options
+     | isOpt "missing" opts = return . fromString . unwords $
+                                 [f | f <- functions pgf, not (and [hasLinearization concr f | (_,concr) <- optConcs env opts])]
+     | isOpt "fullform" opts = return $ fromString $ concatMap (prFullFormLexicon . snd) $ optConcs env opts
+     | isOpt "words"    opts = return $ fromString $ concatMap (prAllWords . snd) $ optConcs env opts
+     | isOpt "lexc"     opts = return $ fromString $ concatMap (prLexcLexicon . snd) $ optConcs env opts
+     | otherwise = return void
 
    showFun pgf f = showFun' f (functionType pgf f)
    showFun' f ty = "fun "++f++" : "++showType [] ty
@@ -955,28 +936,28 @@ morphologyQuiz mex pgf ig typ = do
 -- | the maximal number of precompiled quiz problems
 infinity :: Int
 infinity = 256
-
-prLexcLexicon :: H.Morpho -> String
-prLexcLexicon mo =
-  unlines $ "Multichar_Symbols":multichars:"":"LEXICON Root" : [prLexc l p ++ ":" ++ w  ++ " # ;" | (w,lps) <- morpho, (l,p) <- lps] ++ ["END"]
+-}
+prLexcLexicon :: Concr -> String
+prLexcLexicon concr =
+  unlines $ "Multichar_Symbols":multichars:"":"LEXICON Root" : [prLexc l p ++ ":" ++ w  ++ " # ;" | (w,lps) <- morpho, (l,p,_) <- lps] ++ ["END"]
  where
-  morpho = H.fullFormLexicon mo
-  prLexc l p = H.showCId l ++ concat (mkTags (words p))
+  morpho = fullFormLexicon concr
+  prLexc l p = l ++ concat (mkTags (words p))
   mkTags p = case p of
     "s":ws -> mkTags ws   --- remove record field
     ws -> map ('+':) ws
 
-  multichars = unwords $ nub $ concat [mkTags (words p) | (w,lps) <- morpho, (l,p) <- lps]
+  multichars = unwords $ nub $ concat [mkTags (words p) | (w,lps) <- morpho, (l,p,_) <- lps]
   -- thick_A+(AAdj+Posit+Gen):thick's # ;
 
-prFullFormLexicon :: H.Morpho -> String
-prFullFormLexicon mo =
-  unlines (map prMorphoAnalysis (H.fullFormLexicon mo))
+prFullFormLexicon :: Concr -> String
+prFullFormLexicon concr =
+  unlines (map prMorphoAnalysis (fullFormLexicon concr))
 
-prAllWords :: H.Morpho -> String
-prAllWords mo =
-  unwords [w | (w,_) <- H.fullFormLexicon mo]
--}
+prAllWords :: Concr -> String
+prAllWords concr =
+  unwords [w | (w,_) <- fullFormLexicon concr]
+
 prMorphoAnalysis :: (String,[MorphoAnalysis]) -> String
 prMorphoAnalysis (w,lps) =
   unlines (w:[fun ++ " : " ++ cat | (fun,cat,p) <- lps])
