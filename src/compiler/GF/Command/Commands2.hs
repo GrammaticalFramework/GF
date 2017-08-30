@@ -108,38 +108,6 @@ pgfCommands = Map.fromList [
        ("view",  "program to open the resulting file")
        ]
     }),
-
-  ("ca", emptyCommandInfo {
-     longname = "clitic_analyse",
-     synopsis = "print the analyses of all words into stems and clitics",
-     explanation = unlines [
-       "Analyses all words into all possible combinations of stem + clitics.",
-       "The analysis is returned in the format stem &+ clitic1 &+ clitic2 ...",
-       "which is hence the inverse of 'pt -bind'. The list of clitics is give",
-       "by the flag '-clitics'. The list of stems is given as the list of words",
-       "of the language given by the '-lang' flag."
-       ],
-     exec  = \env opts -> case opts of
-               _ | isOpt "raw" opts ->
-                    return . fromString .
-                    unlines . map (unwords . map (concat . intersperse "+")) .
-                    map (getClitics (H.isInMorpho (optMorpho env opts)) (optClitics opts)) .
-                    concatMap words . toStrings
-               _ ->
-                    return . fromStrings .
-                    getCliticsText (H.isInMorpho (optMorpho env opts)) (optClitics opts) .
-                    concatMap words . toStrings,
-     flags = [
-       ("clitics","the list of possible clitics (comma-separated, no spaces)"),
-       ("lang",   "the language of analysis")
-       ],
-     options = [
-       ("raw", "analyse each word separately (not suitable input for parser)")
-       ],
-     examples = [
-       mkEx "ca -lang=Fin -clitics=ko,ni \"nukkuuko minun vaimoni\" | p  -- to parse Finnish"
-       ]
-     }),
 -}
 {-
   ("eb", emptyCommandInfo {
@@ -957,36 +925,9 @@ pgfCommands = Map.fromList [
    showFun pgf f = showFun' f (functionType pgf f)
    showFun' f ty = "fun "++f++" : "++showType [] ty
 
-{-
-   prGrammar env@(pgf,mos) opts
-     | isOpt "pgf"      opts = do
-          let pgf1 = if isOpt "opt" opts then H.optimizePGF pgf else pgf
-          let outfile = valStrOpts "file" (H.showCId (H.abstractName pgf) ++ ".pgf") opts
-          restricted $ encodeFile outfile pgf1
-          putStrLn $ "wrote file " ++ outfile
-          return void
-     | isOpt "cats"     opts = return $ fromString $ unwords $ map H.showCId $ H.categories pgf
-     | isOpt "funs"     opts = return $ fromString $ unlines $ map showFun $ funsigs pgf
-     | isOpt "fullform" opts = return $ fromString $ concatMap (morpho mos "" prFullFormLexicon) $ optLangs pgf opts
-     | isOpt "langs"    opts = return $ fromString $ unwords $ map H.showCId $ H.languages pgf
-
-     | isOpt "lexc"     opts = return $ fromString $ concatMap (morpho mos "" prLexcLexicon) $ optLangs pgf opts
-     | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (H.showCId la:":": map H.showCId cs) |
-                                                                  la <- optLangs pgf opts, let cs = H.missingLins pgf la]
-     | isOpt "words" opts = return $ fromString $ concatMap (morpho mos "" prAllWords) $ optLangs pgf opts
-     | otherwise             = do fmt <- readOutputFormat (valStrOpts "printer" "pgf_pretty" opts)
-                                  return $ fromString $ concatMap snd $ exportPGF noOptions fmt pgf
-
-   funsigs pgf = [(f,ty) | (f,(ty,_,_,_)) <- Map.assocs (H.funs (H.abstract pgf))]
-   showFun (f,ty) = H.showCId f ++ " : " ++ H.showType [] ty ++ " ;"
--}
    morphos env opts s =
      [(s,lookupMorpho concr s) | (lang,concr) <- optConcs env opts]
 {-
-   optClitics opts = case valStrOpts "clitics" "" opts of
-     "" -> []
-     cs -> map reverse $ chunks ',' cs
-
    mexp xs = case xs of
      t:_ -> Just t
      _   -> Nothing
