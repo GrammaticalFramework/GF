@@ -382,6 +382,7 @@ Java_org_grammaticalframework_pgf_PGF_graphvizAbstractTree(JNIEnv* env, jobject 
 
 	pgf_graphviz_abstract_tree(get_ref(env,self),
 	                           gu_variant_from_ptr(l2p(get_ref(env,jexpr))),
+	                           pgf_default_graphviz_options,
 	                           out, err);
 
 	jstring jstr = gu2j_string_buf(env, sbuf);
@@ -1228,6 +1229,7 @@ Java_org_grammaticalframework_pgf_Concr_graphvizParseTree(JNIEnv* env, jobject s
 
 	pgf_graphviz_parse_tree(get_ref(env,self),
 	                        gu_variant_from_ptr(l2p(get_ref(env,jexpr))),
+	                        pgf_default_graphviz_options,
 	                        out, err);
 
 	jstring jstr = gu2j_string_buf(env, sbuf);

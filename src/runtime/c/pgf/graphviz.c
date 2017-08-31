@@ -2,8 +2,12 @@
 #include "graphviz.h"
 #include "linearizer.h"
 
+PgfGraphvizOptions pgf_default_graphviz_options[1] =
+  { {0, 0, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL} } ;
+
 static int
-pgf_graphviz_abstract_tree_(PgfExpr expr, int *pid,
+pgf_graphviz_abstract_tree_(PgfPGF* pgf, PgfExpr expr, int *pid,
+                            PgfGraphvizOptions* opts,
                             GuOut* out, GuExn* err)
 {
 	int id = -1;
@@ -15,9 +19,16 @@ pgf_graphviz_abstract_tree_(PgfExpr expr, int *pid,
 		break;
 	case PGF_EXPR_APP: {
 		PgfExprApp* app = ei.data;
-		id = pgf_graphviz_abstract_tree_(app->fun, pid, out, err);
-		int arg_id = pgf_graphviz_abstract_tree_(app->arg, pid, out, err);
-		gu_printf(out, err, "n%d -- n%d [style = \"solid\"]\n", id, arg_id);
+		id = pgf_graphviz_abstract_tree_(pgf, app->fun, pid, opts, out, err);
+		int arg_id = pgf_graphviz_abstract_tree_(pgf, app->arg, pid, opts, out, err);
+		gu_printf(out, err, "n%d -- n%d", id, arg_id);
+		if (opts->nodeEdgeStyle != NULL && *opts->nodeEdgeStyle && opts->nodeColor != NULL && *opts->nodeColor)
+			gu_printf(out, err, " [style = \"%s\", color = \"%s\"]", opts->nodeEdgeStyle, opts->nodeColor);
+		else if (opts->nodeEdgeStyle != NULL && *opts->nodeEdgeStyle)
+				gu_printf(out, err, " [style = \"%s\"]", opts->nodeEdgeStyle);
+		else if (opts->nodeColor != NULL && *opts->nodeColor)
+				gu_printf(out, err, " [color = \"%s\"]", opts->nodeColor);
+		gu_printf(out, err, "\n", id, arg_id);
 		break;
 	}
 	case PGF_EXPR_LIT: {
@@ -58,9 +69,24 @@ pgf_graphviz_abstract_tree_(PgfExpr expr, int *pid,
 	case PGF_EXPR_FUN: {
 		PgfExprFun* fun = ei.data;
 		id = (*pid)++;
-		gu_printf(out, err, "n%d[label = \"", id);
-		gu_string_write(fun->fun, out, err);
-		gu_puts("\", style = \"solid\", shape = \"plaintext\"]\n", out, err);
+		if (opts->noFun && opts->noCat) {
+			gu_printf(out, err, "n%d[shape = \"point\"]\n", id);
+		} else {
+			gu_printf(out, err, "n%d[label = \"", id);
+			PgfType* ty = (opts->noCat) ? NULL : pgf_function_type(pgf, fun->fun);
+			if (!opts->noFun)
+				gu_string_write(fun->fun, out, err);
+			if (!opts->noFun && ty != NULL)
+				gu_puts(" : ", out,err);
+			if (ty != NULL)
+				gu_string_write(ty->cid, out, err);
+			gu_puts("\", shape = \"plaintext\", style = \"solid\"", out, err);
+			if (opts->nodeColor != NULL && *opts->nodeColor)
+				gu_printf(out, err, ", fontcolor = \"%s\"", opts->nodeColor);
+			if (opts->nodeFont != NULL && *opts->nodeFont)
+				gu_printf(out, err, ", fontname = \"%s\"", opts->nodeFont);
+			gu_puts("]\n", out, err);
+		}
 		break;
 	}
 	case PGF_EXPR_VAR:
@@ -68,12 +94,12 @@ pgf_graphviz_abstract_tree_(PgfExpr expr, int *pid,
 		break;
 	case PGF_EXPR_TYPED: {
 		PgfExprTyped* typed = ei.data;
-		id = pgf_graphviz_abstract_tree_(typed->expr, pid, out, err);
+		id = pgf_graphviz_abstract_tree_(pgf, typed->expr, pid, opts, out, err);
 		break;
 	}
 	case PGF_EXPR_IMPL_ARG: {
 		PgfExprImplArg* implarg = ei.data;
-		id = pgf_graphviz_abstract_tree_(implarg->expr, pid, out, err);
+		id = pgf_graphviz_abstract_tree_(pgf, implarg->expr, pid, opts, out, err);
 		break;
 	}
 	default:
@@ -84,12 +110,12 @@ pgf_graphviz_abstract_tree_(PgfExpr expr, int *pid,
 }
 
 PGF_API void
-pgf_graphviz_abstract_tree(PgfPGF* pgf, PgfExpr expr, GuOut* out, GuExn* err)
+pgf_graphviz_abstract_tree(PgfPGF* pgf, PgfExpr expr, PgfGraphvizOptions* opts, GuOut* out, GuExn* err)
 {
 	int id = 0;
 
 	gu_puts("graph {\n", out, err);
-	pgf_graphviz_abstract_tree_(expr, &id, out, err);
+	pgf_graphviz_abstract_tree_(pgf, expr, &id, opts, out, err);
 	gu_puts("}", out, err);
 }
 
@@ -98,6 +124,7 @@ typedef struct PgfParseNode PgfParseNode;
 struct PgfParseNode {
 	int id;
 	PgfParseNode* parent;
+	GuString fun;
 	GuString label;
 };
 
@@ -107,7 +134,7 @@ typedef struct {
 	GuPool* pool;
 	GuOut* out;
 	GuExn* err;
-	
+
 	PgfParseNode* parent;
 	size_t level;
 	GuBuf* internals;
@@ -122,6 +149,7 @@ pgf_bracket_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 	PgfParseNode* node = gu_new(PgfParseNode, state->pool);
 	node->id     = 100000 + gu_buf_length(state->leaves);
 	node->parent = state->parent;
+	node->fun    = NULL;
 	node->label  = tok;
 	gu_buf_push(state->leaves, PgfParseNode*, node);
 }
@@ -156,6 +184,7 @@ pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int linde
 	PgfParseNode* node = gu_new(PgfParseNode, state->pool);
 	node->id     = fid;
 	node->parent = state->parent;
+	node->fun    = fun;
 	node->label  = cat;
 	gu_buf_push(level, PgfParseNode*, node);
 
@@ -182,6 +211,7 @@ pgf_bracket_lzn_symbol_meta(PgfLinFuncs** funcs, PgfMetaId meta_id)
 	PgfParseNode* node = gu_new(PgfParseNode, state->pool);
 	node->id     = 100000 + gu_buf_length(state->leaves);
 	node->parent = state->parent;
+	node->fun    = NULL;
 	node->label  = "?";
 	gu_buf_push(state->leaves, PgfParseNode*, node);
 }
@@ -197,7 +227,7 @@ static PgfLinFuncs pgf_bracket_lin_funcs = {
 };
 
 static void
-pgf_graphviz_parse_level(GuBuf* level, GuOut* out, GuExn* err)
+pgf_graphviz_parse_level(GuBuf* level, PgfGraphvizOptions* opts, GuOut* out, GuExn* err)
 {
 	gu_puts("\n  subgraph {rank=same;\n", out, err);
 
@@ -208,9 +238,32 @@ pgf_graphviz_parse_level(GuBuf* level, GuOut* out, GuExn* err)
 
 	for (size_t i = 0; i < len; i++) {
 		PgfParseNode* node = gu_buf_get(level, PgfParseNode*, i);
-		gu_printf(out, err, "    n%d[label=\"", node->id);
-		gu_string_write(node->label, out, err);
-		gu_puts("\"]\n", out, err);		
+		if (node->fun != NULL) {
+			gu_printf(out, err, "    n%d[label=\"", node->id);
+			if (!opts->noFun)
+				gu_string_write(node->fun, out, err);
+			if (!opts->noFun && !opts->noCat)
+				gu_puts(" : ", out, err);
+			if (!opts->noCat)
+				gu_string_write(node->label, out, err);
+			gu_puts("\"", out, err);
+			if (opts->nodeColor != NULL && *opts->nodeColor)
+				gu_printf(out, err, ", fontcolor = \"%s\"", opts->nodeColor);
+			if (opts->nodeFont != NULL && *opts->nodeFont)
+				gu_printf(out, err, ", fontname = \"%s\"", opts->nodeFont);
+			gu_puts("]\n", out, err);
+		} else {
+			if (opts->noLeaves)
+				gu_printf(out, err, "    n%d[label=\"\"]\n", node->id);
+			else {
+				gu_printf(out, err, "    n%d[label=\"%s\"", node->id, node->label);
+				if (opts->leafColor != NULL && *opts->leafColor)
+					gu_printf(out, err, ", fontcolor = \"%s\"", opts->leafColor);
+				if (opts->leafFont != NULL && *opts->leafFont)
+					gu_printf(out, err, ", fontname = \"%s\"", opts->leafFont);
+				gu_puts("]\n", out, err);
+			}
+		}
 	}
 	
 	if (len > 1) {
@@ -227,13 +280,32 @@ pgf_graphviz_parse_level(GuBuf* level, GuOut* out, GuExn* err)
 
 	for (size_t i = 0; i < len; i++) {
 		PgfParseNode* node = gu_buf_get(level, PgfParseNode*, i);		
-		if (node->parent != NULL)
-			gu_printf(out, err, "  n%d -- n%d\n", node->parent->id, node->id);
+		if (node->parent != NULL) {
+			gu_printf(out, err, "  n%d -- n%d", node->parent->id, node->id);
+
+			GuString edgeStyle, color;
+			if (node->fun == NULL) {
+				edgeStyle = opts->leafEdgeStyle;
+				color     = opts->leafColor;
+			} else {
+				edgeStyle = opts->nodeEdgeStyle;
+				color     = opts->nodeColor;
+			}
+
+			if (edgeStyle != NULL && *edgeStyle && color != NULL && *color)
+				gu_printf(out, err, " [style = \"%s\", color = \"%s\"]", edgeStyle, color);
+			else if (edgeStyle != NULL && *edgeStyle)
+				gu_printf(out, err, " [style = \"%s\"]", edgeStyle);
+			else if (color != NULL && *color)
+				gu_printf(out, err, " [color = \"%s\"]", color);
+
+			gu_putc('\n', out, err);			
+		}
 	}
 }
 
 PGF_API void
-pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
+pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, PgfGraphvizOptions* opts, GuOut* out, GuExn* err)
 {
 	GuPool* tmp_pool = gu_local_pool();
 	
@@ -266,9 +338,9 @@ pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, GuOut* out, GuExn* err)
 	size_t len = gu_buf_length(state.internals);
 	for (size_t i = 0; i < len; i++) {
 		GuBuf* level = gu_buf_get(state.internals, GuBuf*, i);
-		pgf_graphviz_parse_level(level, out, err);
+		pgf_graphviz_parse_level(level, opts, out, err);
 	}
-	pgf_graphviz_parse_level(state.leaves, out, err);
+	pgf_graphviz_parse_level(state.leaves, opts, out, err);
 
 	gu_puts("}", out, err);
 

@@ -509,21 +509,21 @@ pgfCommands = Map.fromList [
      exec = needPGF $ \opts arg env@(pgf, concs) ->
       do let es = toExprs arg
          let concs = optConcs env opts
-{-
-         let gvOptions=H.GraphvizOptions {H.noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
-                                          H.noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
-                                          H.noCat = isOpt "nocat" opts && not (isOpt "showcat" opts),
-                                          H.nodeFont = valStrOpts "nodefont" "" opts,
-                                          H.leafFont = valStrOpts "leaffont" "" opts,
-                                          H.nodeColor = valStrOpts "nodecolor" "" opts,
-                                          H.leafColor = valStrOpts "leafcolor" "" opts,
-                                          H.nodeEdgeStyle = valStrOpts "nodeedgestyle" "solid" opts,
-                                          H.leafEdgeStyle = valStrOpts "leafedgestyle" "dashed" opts
-                                         }
--}
+
+         let gvOptions=graphvizDefaults{noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
+                                        noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
+                                        noCat = isOpt "nocat" opts && not (isOpt "showcat" opts),
+                                        nodeFont = valStrOpts "nodefont" "" opts,
+                                        leafFont = valStrOpts "leaffont" "" opts,
+                                        nodeColor = valStrOpts "nodecolor" "" opts,
+                                        leafColor = valStrOpts "leafcolor" "" opts,
+                                        nodeEdgeStyle = valStrOpts "nodeedgestyle" "solid" opts,
+                                        leafEdgeStyle = valStrOpts "leafedgestyle" "dashed" opts
+                                       }
+
          let grph= if null es || null concs
                    then []
-                   else graphvizParseTree (snd (head concs)) (cExpr (head es))
+                   else graphvizParseTree (snd (head concs)) gvOptions (cExpr (head es))
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
@@ -534,31 +534,27 @@ pgfCommands = Map.fromList [
            return void
           else return $ fromString grph,
      examples = [
-       mkEx "p -lang=Eng \"John walks\" | vp  -- generate a tree and show parse tree as .dot script"--,
---     mkEx "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
+       mkEx "p -lang=Eng \"John walks\" | vp  -- generate a tree and show parse tree as .dot script",
+       mkEx "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
        ],
      options = [
-{-
        ("showcat","show categories in the tree nodes (default)"),
        ("nocat","don't show categories"),
        ("showfun","show function names in the tree nodes"),
        ("nofun","don't show function names (default)"),
        ("showleaves","show the leaves of the tree (default)"),
        ("noleaves","don't show the leaves of the tree (i.e., only the abstract tree)")
--}
        ],
      flags = [
        ("lang","the language to visualize"),
        ("format","format of the visualization file (default \"png\")"),
-       ("view","program to open the resulting file (default \"open\")")--,
-{-
+       ("view","program to open the resulting file (default \"open\")"),
        ("nodefont","font for tree nodes (default: Times -- graphviz standard font)"),
        ("leaffont","font for tree leaves (default: nodefont)"),
        ("nodecolor","color for tree nodes (default: black -- graphviz standard color)"),
        ("leafcolor","color for tree leaves (default: nodecolor)"),
        ("nodeedgestyle","edge style between tree nodes (solid/dashed/dotted/bold, default: solid)"),
        ("leafedgestyle","edge style for links to leaves (solid/dashed/dotted/bold, default: dashed)")
--}
        ]
     }),
 
@@ -584,9 +580,13 @@ pgfCommands = Map.fromList [
          mapM_ putStrLn ss
          return void
        else do
---       let funs = not (isOpt "nofun" opts)
---       let cats = not (isOpt "nocat" opts)
-         let grph = unlines (map (graphvizAbstractTree pgf . cExpr) es)
+         let gvOptions=graphvizDefaults{noFun = isOpt "nofun" opts,
+                                        noCat = isOpt "nocat" opts,
+                                        nodeFont = valStrOpts "nodefont" "" opts,
+                                        nodeColor = valStrOpts "nodecolor" "" opts,
+                                        nodeEdgeStyle = valStrOpts "nodeedgestyle" "solid" opts
+                                       }
+         let grph = unlines (map (graphvizAbstractTree pgf gvOptions . cExpr) es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
@@ -601,14 +601,17 @@ pgfCommands = Map.fromList [
        mkEx "p \"hello\" | vt -view=\"open\" -- parse a string and display trees on a Mac"
        ],
      options = [
-       ("api", "show the tree with function names converted to 'mkC' with value cats C")--,
+       ("api", "show the tree with function names converted to 'mkC' with value cats C"),
 --     ("mk",  "similar to -api, deprecated"),
---     ("nofun","don't show functions but only categories"),
---     ("nocat","don't show categories but only functions")
+       ("nofun","don't show functions but only categories"),
+       ("nocat","don't show categories but only functions")
        ],
      flags = [
        ("format","format of the visualization file (default \"png\")"),
-       ("view","program to open the resulting file (default \"open\")")
+       ("view","program to open the resulting file (default \"open\")"),
+       ("nodefont","font for tree nodes (default: Times -- graphviz standard font)"),
+       ("nodecolor","color for tree nodes (default: black -- graphviz standard color)"),
+       ("nodeedgestyle","edge style between tree nodes (solid/dashed/dotted/bold, default: solid)")
        ]
      }),
 

@@ -66,7 +66,8 @@ module PGF2 (-- * PGF
              -- ** Morphological Analysis
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
              -- ** Visualizations
-             graphvizAbstractTree,graphvizParseTree,
+             GraphvizOptions(..), graphvizDefaults,
+             graphvizAbstractTree, graphvizParseTree,
 
              -- * Exceptions
              PGFError(..),
@@ -316,29 +317,60 @@ compute (PGF p _) (Expr c_expr touch1) =
 -----------------------------------------------------------------------------
 -- Graphviz
 
+data GraphvizOptions = GraphvizOptions {noLeaves :: Bool,
+                                        noFun :: Bool,
+                                        noCat :: Bool,
+                                        noDep :: Bool,
+                                        nodeFont :: String,
+                                        leafFont :: String,
+                                        nodeColor :: String,
+                                        leafColor :: String,
+                                        nodeEdgeStyle :: String,
+                                        leafEdgeStyle :: String
+                                       }
+
+graphvizDefaults = GraphvizOptions False False False True "" "" "" "" "" ""
+
 -- | Renders an abstract syntax tree in a Graphviz format.
-graphvizAbstractTree :: PGF -> Expr -> String
-graphvizAbstractTree p e =
+graphvizAbstractTree :: PGF -> GraphvizOptions -> Expr -> String
+graphvizAbstractTree p opts e =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
       do (sb,out) <- newOut tmpPl
          exn <- gu_new_exn tmpPl
-         pgf_graphviz_abstract_tree (pgf p) (expr e) out exn
+         c_opts <- newGraphvizOptions tmpPl opts
+         pgf_graphviz_abstract_tree (pgf p) (expr e) c_opts out exn
          touchExpr e
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s
 
 
-graphvizParseTree :: Concr -> Expr -> String
-graphvizParseTree c e =
+graphvizParseTree :: Concr -> GraphvizOptions -> Expr -> String
+graphvizParseTree c opts e =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
       do (sb,out) <- newOut tmpPl
          exn <- gu_new_exn tmpPl
-         pgf_graphviz_parse_tree (concr c) (expr e) out exn
+         c_opts <- newGraphvizOptions tmpPl opts
+         pgf_graphviz_parse_tree (concr c) (expr e) c_opts out exn
          touchExpr e
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s
+
+newGraphvizOptions :: Ptr GuPool -> GraphvizOptions -> IO (Ptr PgfGraphvizOptions)
+newGraphvizOptions pool opts = do
+  c_opts <- gu_malloc pool (#size PgfGraphvizOptions)
+  (#poke PgfGraphvizOptions, noLeaves) c_opts (if noLeaves opts then 1 else 0 :: CInt)
+  (#poke PgfGraphvizOptions, noFun)    c_opts (if noFun    opts then 1 else 0 :: CInt)
+  (#poke PgfGraphvizOptions, noCat)    c_opts (if noCat    opts then 1 else 0 :: CInt)
+  (#poke PgfGraphvizOptions, noDep)    c_opts (if noDep    opts then 1 else 0 :: CInt)
+  newUtf8CString (nodeFont opts) pool >>= (#poke PgfGraphvizOptions, nodeFont) c_opts
+  newUtf8CString (leafFont opts) pool >>= (#poke PgfGraphvizOptions, leafFont) c_opts
+  newUtf8CString (nodeColor opts) pool >>= (#poke PgfGraphvizOptions, nodeColor) c_opts
+  newUtf8CString (leafColor opts) pool >>= (#poke PgfGraphvizOptions, leafColor) c_opts
+  newUtf8CString (nodeEdgeStyle opts) pool >>= (#poke PgfGraphvizOptions, nodeEdgeStyle) c_opts
+  newUtf8CString (leafEdgeStyle opts) pool >>= (#poke PgfGraphvizOptions, leafEdgeStyle) c_opts
+  return c_opts
 
 -----------------------------------------------------------------------------
 -- Functions using Concr

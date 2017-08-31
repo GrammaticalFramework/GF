@@ -148,6 +148,7 @@ data PgfCallbacksMap
 data PgfOracleCallback
 data PgfCncTree
 data PgfLinFuncs
+data PgfGraphvizOptions
 
 foreign import ccall "pgf/pgf.h pgf_read"
   pgf_read :: CString -> Ptr GuPool -> Ptr GuExn -> IO (Ptr PgfPGF)
@@ -364,7 +365,7 @@ foreign import ccall "pgf/expr.h pgf_read_type"
   pgf_read_type :: Ptr GuIn -> Ptr GuPool -> Ptr GuExn -> IO PgfType
 
 foreign import ccall "pgf/graphviz.h pgf_graphviz_abstract_tree"
-  pgf_graphviz_abstract_tree :: Ptr PgfPGF -> PgfExpr -> Ptr GuOut -> Ptr GuExn -> IO ()
+  pgf_graphviz_abstract_tree :: Ptr PgfPGF -> PgfExpr -> Ptr PgfGraphvizOptions -> Ptr GuOut -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/graphviz.h pgf_graphviz_parse_tree"
-  pgf_graphviz_parse_tree :: Ptr PgfConcr -> PgfExpr -> Ptr GuOut -> Ptr GuExn -> IO ()
+  pgf_graphviz_parse_tree :: Ptr PgfConcr -> PgfExpr -> Ptr PgfGraphvizOptions -> Ptr GuOut -> Ptr GuExn -> IO ()
