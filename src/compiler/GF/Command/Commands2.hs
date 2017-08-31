@@ -307,34 +307,7 @@ pgfCommands = Map.fromList [
        ],
      exec = needPGF $ \ opts ts env -> return . cParse env opts $ toStrings ts
      }),
-{-
-  ("p", emptyCommandInfo {
-     longname = "parse",
-     synopsis = "parse a string to abstract syntax expression",
-     explanation = unlines [
-       "Shows all trees returned by parsing a string in the grammars in scope.",
-       "The -lang flag can be used to restrict this to fewer languages.",
-       "The default start category can be overridden by the -cat flag.",
-       "See also the ps command for lexing and character encoding.",
-       "",
-       "The -openclass flag is experimental and allows some robustness in ",
-       "the parser. For example if -openclass=\"A,N,V\" is given, the parser",
-       "will accept unknown adjectives, nouns and verbs with the resource grammar."
-       ],
-     exec = \env@(pgf, mos) opts ts ->
-              return . Piped $ fromParse opts (concat [map ((,) s) (par pgf opts s) | s <- toStrings ts]),
-     flags = [
-       ("cat","target category of parsing"),
-       ("lang","the languages of parsing (comma-separated, no spaces)"),
-       ("openclass","list of open-class categories for robust parsing"),
-       ("depth","maximal depth for proof search if the abstract syntax tree has meta variables")
-       ],
-     options = [
-       ("bracket","prints the bracketed string from the parser")
-       ]
-     }),
--}
-  ("pg", emptyCommandInfo { -----
+  ("pg", emptyCommandInfo {
      longname = "print_grammar",
      synopsis = "prints different information about the grammar",
      exec  = needPGF $ \opts _ env -> prGrammar env opts,
@@ -678,13 +651,6 @@ pgfCommands = Map.fromList [
      })
   ]
  where
-{-
-   par pgf opts s = case optOpenTypes opts of
-                  []        -> [H.parse_ pgf lang (optType pgf opts) (Just dp) s | lang <- optLangs pgf opts]
-                  open_typs -> [H.parseWithRecovery pgf lang (optType pgf opts) open_typs (Just dp) s | lang <- optLangs pgf opts]
-     where
-       dp = valIntOpts "depth" 4 opts
--}
    cParse env@(pgf,_) opts ss = 
         parsed [ parse cnc cat s | s<-ss,(lang,cnc)<-cncs]
      where
@@ -756,47 +722,6 @@ pgfCommands = Map.fromList [
    commaList [] = []
    commaList ws = concat $ head ws : map (", " ++) (tail ws)
 
--- Proposed logic of coding in unlexing:
---   - If lang has no coding flag, or -to_utf8 is not in opts, just opts are used.
---   - If lang has flag coding=utf8, -to_utf8 is ignored.
---   - If lang has coding=other, and -to_utf8 is in opts, from_other is applied first.
--- THIS DOES NOT WORK UNFORTUNATELY - can't use the grammar flag properly
-{-
-   unlexx pgf opts lang = {- trace (unwords optsC) $ -} stringOps Nothing optsC where ----
-     optsC = case lookConcrFlag pgf (H.mkCId lang) (H.mkCId "coding") of
-       Just (LStr "utf8") -> filter (/="to_utf8") $ map prOpt opts
-       Just (LStr other) | isOpt "to_utf8" opts ->
-                      let cod = ("from_" ++ other)
-                      in cod : filter (/=cod) (map prOpt opts)
-       _ -> map prOpt opts
-
-   optRestricted opts pgf =
-     H.restrictPGF (\f -> and [H.hasLin pgf la f | la <- optLangs pgf opts]) pgf
-
-   completeLang pgf la = let cla = (H.mkCId la) in
-     if elem cla (H.languages pgf)
-       then cla
-       else (H.mkCId (H.showCId (H.abstractName pgf) ++ la))
-
-   optOpenTypes opts = case valStrOpts "openclass" "" opts of
-     ""   -> []
-     cats -> mapMaybe H.readType (chunks ',' cats)
-
-   optProbs opts pgf = case valStrOpts "probs" "" opts of
-     ""   -> return pgf
-     file -> do
-       probs <- restricted $ H.readProbabilitiesFromFile file pgf
-       return (H.setProbabilities probs pgf)
-
-   optTranslit opts = case (valStrOpts "to" "" opts, valStrOpts "from" "" opts) of
-     ("","")  -> return id
-     (file,"") -> do
-       src <- restricted $ readFile file
-       return $ transliterateWithFile file src False
-     (_,file) -> do
-       src <- restricted $ readFile file
-       return $ transliterateWithFile file src True
--}
    optFile opts = valStrOpts "file" "_gftmp" opts
 
    optType pgf opts =
@@ -816,23 +741,7 @@ pgfCommands = Map.fromList [
 -}
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
    takeOptNum opts = take (optNumInf opts)
-{-
-   fromParse opts []     = ([],[])
-   fromParse opts ((s,(po,bs)):ps)
-     | isOpt "bracket" opts = (es, H.showBracketedString bs
-                                   ++ "\n" ++ msg)
-     | otherwise            = case po of
-                                H.ParseOk ts     -> let Piped (es',msg') = fromExprs ts
-                                                  in (es'++es,msg'++msg)
-                                H.TypeError errs -> ([], render ("The parsing is successful but the type checking failed with error(s):" $$
-                                                               nest 2 (vcat (map (H.ppTcError . snd) errs)))
-                                                       ++ "\n" ++ msg)
-                                H.ParseFailed i  -> ([], "The parser failed at token " ++ show (words s !! max 0 (i-1))
-                                                       ++ "\n" ++ msg)
-                                H.ParseIncomplete-> ([], "The sentence is not complete")
-     where
-       (es,msg) = fromParse opts ps
--}
+
    returnFromCExprs = returnFromExprs . map hsExpr
    returnFromExprs es =
       return $ case es of
