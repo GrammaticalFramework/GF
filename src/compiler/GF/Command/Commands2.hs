@@ -59,7 +59,6 @@ instance Monad m => TypeCheckArg m where
 
 pgfCommands :: HasPGFEnv m => Map.Map String (CommandInfo m)
 pgfCommands = Map.fromList [
-{-
   ("aw", emptyCommandInfo {
      longname = "align_words",
      synopsis = "show word alignments between languages graphically",
@@ -71,9 +70,9 @@ pgfCommands = Map.fromList [
        "by the flag. The target format is postscript, unless overridden by the",
        "flag -format."
        ],
-     exec = \env@(pgf, mos) opts es -> do
-         let langs = optLangs pgf opts
-         if isOpt "giza" opts
+     exec = needPGF $ \opts es env -> do
+         let cncs = optConcs env opts
+         {-if isOpt "giza" opts
            then do
              let giz = map (H.gizaAlignment pgf (head $ langs, head $ tail $ langs)) es
              let lsrc = unlines $ map (\(x,_,_) -> x) giz
@@ -81,8 +80,12 @@ pgfCommands = Map.fromList [
              let align = unlines $ map (\(_,_,x) -> x) giz
              let grph = if null es then [] else lsrc ++ "\n--end_source--\n\n"++ltrg++"\n-end_target--\n\n"++align
              return $ fromString grph
-           else do
-             let grph = if null es then [] else H.graphvizAlignment pgf langs (head es)
+           else do-}
+         do  let gvOptions=graphvizDefaults{leafFont = valStrOpts "font" "" opts,
+                                            leafColor = valStrOpts "color" "" opts,
+                                            leafEdgeStyle = valStrOpts "edgestyle" "" opts
+                                           }
+                 grph = if null (toExprs es) then [] else graphvizWordAlignment (map snd cncs) gvOptions (cExpr (head (toExprs es)))
              if isFlag "view" opts || isFlag "format" opts
                then do
                  let file s = "_grph." ++ s
@@ -105,10 +108,12 @@ pgfCommands = Map.fromList [
      flags = [
        ("format","format of the visualization file (default \"png\")"),
        ("lang",  "alignments for this list of languages (default: all)"),
-       ("view",  "program to open the resulting file")
+       ("view",  "program to open the resulting file"),
+       ("font",  "font for the words"),
+       ("color", "color for the words"),
+       ("edgestyle", "the style for links between words")
        ]
     }),
--}
 {-
   ("eb", emptyCommandInfo {
      longname = "example_based",

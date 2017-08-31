@@ -22,4 +22,7 @@ pgf_graphviz_abstract_tree(PgfPGF* pgf, PgfExpr expr, PgfGraphvizOptions* opts, 
 PGF_API_DECL void
 pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, PgfGraphvizOptions* opts, GuOut* out, GuExn* err);
 
+PGF_API_DECL void
+pgf_graphviz_word_alignment(PgfConcr** concrs, size_t n_concrs, PgfExpr expr, PgfGraphvizOptions* opts, GuOut* out, GuExn* err);
+
 #endif

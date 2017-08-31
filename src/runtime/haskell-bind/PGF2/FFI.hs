@@ -369,3 +369,6 @@ foreign import ccall "pgf/graphviz.h pgf_graphviz_abstract_tree"
 
 foreign import ccall "pgf/graphviz.h pgf_graphviz_parse_tree"
   pgf_graphviz_parse_tree :: Ptr PgfConcr -> PgfExpr -> Ptr PgfGraphvizOptions -> Ptr GuOut -> Ptr GuExn -> IO ()
+
+foreign import ccall "pgf/graphviz.h pgf_graphviz_word_alignment"
+  pgf_graphviz_word_alignment :: Ptr (Ptr PgfConcr) -> CInt -> PgfExpr -> Ptr PgfGraphvizOptions -> Ptr GuOut -> Ptr GuExn -> IO ()

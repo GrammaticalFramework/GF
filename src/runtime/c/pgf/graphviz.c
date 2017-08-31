@@ -311,8 +311,10 @@ pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, PgfGraphvizOptions* opts,
 	
 	GuEnum* cts = 
 		pgf_lzr_concretize(concr, expr, err, tmp_pool);
-	if (!gu_ok(err))
+	if (!gu_ok(err)) {
+		gu_pool_free(tmp_pool);
 		return;
+	}
 
 	PgfCncTree ctree = gu_next(cts, PgfCncTree, tmp_pool);
 	if (gu_variant_is_null(ctree)) {
@@ -341,6 +343,71 @@ pgf_graphviz_parse_tree(PgfConcr* concr, PgfExpr expr, PgfGraphvizOptions* opts,
 		pgf_graphviz_parse_level(level, opts, out, err);
 	}
 	pgf_graphviz_parse_level(state.leaves, opts, out, err);
+
+	gu_puts("}", out, err);
+
+	gu_pool_free(tmp_pool);
+}
+
+
+PGF_API_DECL void
+pgf_graphviz_word_alignment(PgfConcr** concrs, size_t n_concrs, PgfExpr expr, PgfGraphvizOptions* opts, GuOut* out, GuExn* err)
+{
+	GuPool* tmp_pool = gu_local_pool();
+	
+	gu_puts("digraph {\n", out, err);
+	gu_puts("rankdir=LR ;\n", out, err);
+	gu_puts("node [shape = record", out, err);
+	if (opts->leafFont != NULL && *opts->leafFont)
+		gu_printf(out, err, ", fontname = \"%s\"", opts->leafFont);
+	if (opts->leafColor != NULL && *opts->leafColor)
+		gu_printf(out, err, ", fontcolor = \"%s\"", opts->leafColor);
+	gu_puts("] ;\n\n", out, err);
+	if (opts->leafEdgeStyle != NULL && *opts->leafEdgeStyle)
+		gu_printf(out, err, "edge [style = %s];\n", opts->leafEdgeStyle);
+	gu_puts("\n", out, err);
+
+	GuSeq* alignment = NULL;
+	GuSeq* last_alignment = NULL;
+	for (size_t i = 0; i < n_concrs; i++) {
+		alignment = pgf_align_words(concrs[i], expr, err, tmp_pool);
+		gu_printf(out, err, "  struct%d[label=\"", i);
+
+		size_t n_tokens = gu_seq_length(alignment);
+		for (size_t j = 0; j < n_tokens; j++) {
+			PgfAlignmentPhrase* phrase = gu_seq_get(alignment, PgfAlignmentPhrase*, j);
+			if (j > 0)
+				gu_puts(" | ", out, err);
+			gu_printf(out, err, "<n%d> %s", j, phrase->phrase);
+		}
+
+		gu_puts("\"] ;\n", out, err);
+
+		if (last_alignment != NULL) {
+			size_t n_last_tokens = gu_seq_length(last_alignment);
+
+			for (size_t j = 0; j < n_tokens; j++) {
+				PgfAlignmentPhrase* phrase = gu_seq_get(alignment, PgfAlignmentPhrase*, j);
+
+				for (size_t k = 0; k < phrase->n_fids; k++) {
+					int fid = phrase->fids[k];
+
+					for (size_t l = 0; l < n_last_tokens; l++) {
+						PgfAlignmentPhrase* last_phrase = gu_seq_get(last_alignment, PgfAlignmentPhrase*, l);
+						
+						for (size_t r = 0; r < last_phrase->n_fids; r++) {
+							int last_fid = last_phrase->fids[r];
+							if (fid == last_fid) {
+								gu_printf(out, err, "struct%d:n%d:e -> struct%d:n%d:w ;\n",i,j,i-1,l);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		last_alignment = alignment;
+	}
 
 	gu_puts("}", out, err);
 

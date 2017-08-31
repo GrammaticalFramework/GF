@@ -67,7 +67,7 @@ module PGF2 (-- * PGF
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
              -- ** Visualizations
              GraphvizOptions(..), graphvizDefaults,
-             graphvizAbstractTree, graphvizParseTree,
+             graphvizAbstractTree, graphvizParseTree, graphvizWordAlignment,
 
              -- * Exceptions
              PGFError(..),
@@ -353,6 +353,19 @@ graphvizParseTree c opts e =
          exn <- gu_new_exn tmpPl
          c_opts <- newGraphvizOptions tmpPl opts
          pgf_graphviz_parse_tree (concr c) (expr e) c_opts out exn
+         touchExpr e
+         s <- gu_string_buf_freeze sb tmpPl
+         peekUtf8CString s
+
+graphvizWordAlignment :: [Concr] -> GraphvizOptions -> Expr -> String
+graphvizWordAlignment cs opts e =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+    withArrayLen (map concr cs) $ \n_concrs ptr ->
+      do (sb,out) <- newOut tmpPl
+         exn <- gu_new_exn tmpPl
+         c_opts <- newGraphvizOptions tmpPl opts
+         pgf_graphviz_word_alignment ptr (fromIntegral n_concrs) (expr e) c_opts out exn
          touchExpr e
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s
