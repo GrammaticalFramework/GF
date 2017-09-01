@@ -5,7 +5,7 @@ include $(CLEAR_VARS)
 jni_c_files := jpgf.c jsg.c jni_utils.c
 sg_c_files := sg.c sqlite3Btree.c
 pgf_c_files := data.c expr.c graphviz.c linearizer.c literals.c parser.c parseval.c pgf.c printer.c reader.c \
-reasoner.c evaluator.c jit.c typechecker.c lookup.c
+reasoner.c evaluator.c jit.c typechecker.c lookup.c aligner.c
 gu_c_files := assert.c  choice.c  exn.c   fun.c   in.c      map.c  out.c     utf8.c \
 bits.c    defs.c    enum.c  file.c  hash.c  mem.c  prime.c  seq.c   string.c  ucs.c   variant.c
 
