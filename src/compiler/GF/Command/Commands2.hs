@@ -650,7 +650,7 @@ pgfCommands = Map.fromList [
                           Left msg     -> error msg
                           Right (e,ty) -> do putStrLn ("Expression:  "++PGF2.showExpr [] e)
                                              putStrLn ("Type:        "++PGF2.showType [] ty)
-                                             -- putStrLn ("Probability: "++show (H.probTree pgf e))
+                                             putStrLn ("Probability: "++show (treeProbability pgf e))
                                              return void
          _           -> do putStrLn "a single function name or category name is expected"
                            return void,

@@ -39,6 +39,8 @@ module PGF2 (-- * PGF
              mkFloat,unFloat,
              mkMeta,unMeta,
              mkCId,
+             treeProbability,
+
              -- ** Types
              Type, Hypo, BindType(..), startCat,
              readType, showType,
@@ -313,6 +315,13 @@ compute (PGF p _) (Expr c_expr touch1) =
               msg <- peekUtf8CString c_msg
               gu_pool_free exprPl
               throwIO (PGFError msg)
+
+treeProbability :: PGF -> Expr -> Float
+treeProbability (PGF p _) (Expr c_expr touch1) =
+  unsafePerformIO $ do
+    res <- pgf_compute_tree_probability p c_expr
+    touch1
+    return (realToFrac res)
 
 -----------------------------------------------------------------------------
 -- Graphviz

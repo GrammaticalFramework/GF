@@ -1,11 +1,12 @@
 #include "pgf.h"
+#include "data.h"
 #include <gu/assert.h>
 #include <gu/utf8.h>
 #include <gu/seq.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <math.h>
 
 static PgfExpr
 pgf_expr_unwrap(PgfExpr expr)
@@ -1499,4 +1500,28 @@ pgf_type_eq(PgfType* t1, PgfType* t2)
 	}
 
 	return true;
+}
+
+PGF_API prob_t
+pgf_compute_tree_probability(PgfPGF *gr, PgfExpr expr)
+{
+	GuVariantInfo ei = gu_variant_open(expr);
+	switch (ei.tag) {
+	case PGF_EXPR_APP: {
+		PgfExprApp* app = ei.data;
+		return pgf_compute_tree_probability(gr, app->fun) +
+		       pgf_compute_tree_probability(gr, app->arg);
+	}
+	case PGF_EXPR_FUN: {
+		PgfExprFun* fun = ei.data;
+		PgfAbsFun* absfun =
+			gu_seq_binsearch(gr->abstract.funs, pgf_absfun_order, PgfAbsFun, fun->fun);
+		if (absfun == NULL)
+			return INFINITY;
+		else
+			return absfun->ep.prob;
+	}
+	default:
+		return 0;
+	}
 }
