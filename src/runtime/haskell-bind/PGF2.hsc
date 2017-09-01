@@ -27,7 +27,7 @@ module PGF2 (-- * PGF
              -- * Abstract syntax
              AbsName,abstractName,
              -- ** Categories
-             Cat,categories,
+             Cat,categories,showCategory,
              -- ** Functions
              Fun,functions, functionsByCat, functionType, hasLinearization,
              -- ** Expressions
@@ -38,6 +38,9 @@ module PGF2 (-- * PGF
              mkInt,unInt,
              mkFloat,unFloat,
              mkMeta,unMeta,
+             mkCId,
+             treeProbability,
+
              -- ** Types
              Type, Hypo, BindType(..), startCat,
              readType, showType,
@@ -50,9 +53,9 @@ module PGF2 (-- * PGF
              compute,
 
              -- * Concrete syntax
-             ConcName,Concr,languages,
+             ConcName,Concr,languages,concreteName,
              -- ** Linearization
-             linearize,linearizeAll,tabularLinearize,bracketedLinearize,
+             linearize,linearizeAll,tabularLinearize,tabularLinearizeAll,bracketedLinearize,
              FId, LIndex, BracketedString(..), showBracketedString, flattenBracketedString,
 
              alignWords,
@@ -65,7 +68,8 @@ module PGF2 (-- * PGF
              -- ** Morphological Analysis
              MorphoAnalysis, lookupMorpho, fullFormLexicon,
              -- ** Visualizations
-             graphvizAbstractTree,graphvizParseTree,
+             GraphvizOptions(..), graphvizDefaults,
+             graphvizAbstractTree, graphvizParseTree, graphvizWordAlignment,
 
              -- * Exceptions
              PGFError(..),
@@ -149,6 +153,11 @@ languages p =
       concr <- fmap (\ptr -> Concr ptr (touchPGF p)) $ peek (castPtr value)
       writeIORef ref $! Map.insert name concr langs
 
+-- | The abstract language name is the name of the top-level
+-- abstract module
+concreteName :: Concr -> ConcName
+concreteName c = unsafePerformIO (peekUtf8CString =<< pgf_concrete_name (concr c))
+
 -- | Generates an exhaustive possibly infinite list of
 -- all abstract syntax expressions of the given type. 
 -- The expressions are ordered by their probability.
@@ -203,15 +212,15 @@ unloadConcr :: Concr -> IO ()
 unloadConcr c = pgf_concrete_unload (concr c)
 
 -- | The type of a function
-functionType :: PGF -> Fun -> Type
+functionType :: PGF -> Fun -> Maybe Type
 functionType p fn =
   unsafePerformIO $
   withGuPool $ \tmpPl -> do
     c_fn <- newUtf8CString fn tmpPl
     c_type <- pgf_function_type (pgf p) c_fn
-    if c_type == nullPtr
-      then throwIO (PGFError ("Function '"++fn++"' is not defined"))
-      else return (Type c_type (touchPGF p))
+    return (if c_type == nullPtr
+              then Nothing
+              else Just (Type c_type (touchPGF p)))
 
 -- | Checks an expression against a specified type.
 checkExpr :: PGF -> Expr -> Type -> Either String Expr
@@ -307,38 +316,89 @@ compute (PGF p _) (Expr c_expr touch1) =
               gu_pool_free exprPl
               throwIO (PGFError msg)
 
+treeProbability :: PGF -> Expr -> Float
+treeProbability (PGF p _) (Expr c_expr touch1) =
+  unsafePerformIO $ do
+    res <- pgf_compute_tree_probability p c_expr
+    touch1
+    return (realToFrac res)
+
 -----------------------------------------------------------------------------
 -- Graphviz
 
+data GraphvizOptions = GraphvizOptions {noLeaves :: Bool,
+                                        noFun :: Bool,
+                                        noCat :: Bool,
+                                        noDep :: Bool,
+                                        nodeFont :: String,
+                                        leafFont :: String,
+                                        nodeColor :: String,
+                                        leafColor :: String,
+                                        nodeEdgeStyle :: String,
+                                        leafEdgeStyle :: String
+                                       }
+
+graphvizDefaults = GraphvizOptions False False False True "" "" "" "" "" ""
+
 -- | Renders an abstract syntax tree in a Graphviz format.
-graphvizAbstractTree :: PGF -> Expr -> String
-graphvizAbstractTree p e =
+graphvizAbstractTree :: PGF -> GraphvizOptions -> Expr -> String
+graphvizAbstractTree p opts e =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
       do (sb,out) <- newOut tmpPl
          exn <- gu_new_exn tmpPl
-         pgf_graphviz_abstract_tree (pgf p) (expr e) out exn
+         c_opts <- newGraphvizOptions tmpPl opts
+         pgf_graphviz_abstract_tree (pgf p) (expr e) c_opts out exn
          touchExpr e
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s
 
 
-graphvizParseTree :: Concr -> Expr -> String
-graphvizParseTree c e =
+graphvizParseTree :: Concr -> GraphvizOptions -> Expr -> String
+graphvizParseTree c opts e =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
       do (sb,out) <- newOut tmpPl
          exn <- gu_new_exn tmpPl
-         pgf_graphviz_parse_tree (concr c) (expr e) out exn
+         c_opts <- newGraphvizOptions tmpPl opts
+         pgf_graphviz_parse_tree (concr c) (expr e) c_opts out exn
          touchExpr e
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s
+
+graphvizWordAlignment :: [Concr] -> GraphvizOptions -> Expr -> String
+graphvizWordAlignment cs opts e =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+    withArrayLen (map concr cs) $ \n_concrs ptr ->
+      do (sb,out) <- newOut tmpPl
+         exn <- gu_new_exn tmpPl
+         c_opts <- newGraphvizOptions tmpPl opts
+         pgf_graphviz_word_alignment ptr (fromIntegral n_concrs) (expr e) c_opts out exn
+         touchExpr e
+         s <- gu_string_buf_freeze sb tmpPl
+         peekUtf8CString s
+
+newGraphvizOptions :: Ptr GuPool -> GraphvizOptions -> IO (Ptr PgfGraphvizOptions)
+newGraphvizOptions pool opts = do
+  c_opts <- gu_malloc pool (#size PgfGraphvizOptions)
+  (#poke PgfGraphvizOptions, noLeaves) c_opts (if noLeaves opts then 1 else 0 :: CInt)
+  (#poke PgfGraphvizOptions, noFun)    c_opts (if noFun    opts then 1 else 0 :: CInt)
+  (#poke PgfGraphvizOptions, noCat)    c_opts (if noCat    opts then 1 else 0 :: CInt)
+  (#poke PgfGraphvizOptions, noDep)    c_opts (if noDep    opts then 1 else 0 :: CInt)
+  newUtf8CString (nodeFont opts) pool >>= (#poke PgfGraphvizOptions, nodeFont) c_opts
+  newUtf8CString (leafFont opts) pool >>= (#poke PgfGraphvizOptions, leafFont) c_opts
+  newUtf8CString (nodeColor opts) pool >>= (#poke PgfGraphvizOptions, nodeColor) c_opts
+  newUtf8CString (leafColor opts) pool >>= (#poke PgfGraphvizOptions, leafColor) c_opts
+  newUtf8CString (nodeEdgeStyle opts) pool >>= (#poke PgfGraphvizOptions, nodeEdgeStyle) c_opts
+  newUtf8CString (leafEdgeStyle opts) pool >>= (#poke PgfGraphvizOptions, leafEdgeStyle) c_opts
+  return c_opts
 
 -----------------------------------------------------------------------------
 -- Functions using Concr
 -- Morpho analyses, parsing & linearization
 
-type MorphoAnalysis = (Fun,String,Float)
+type MorphoAnalysis = (Fun,Cat,Float)
 
 lookupMorpho :: Concr -> String -> [MorphoAnalysis]
 lookupMorpho (Concr concr master) sent =
@@ -574,8 +634,9 @@ parseWithOracle lang cat sent (predict,complete,literal) =
 -- | Returns True if there is a linearization defined for that function in that language
 hasLinearization :: Concr -> Fun -> Bool
 hasLinearization lang id = unsafePerformIO $
-  withGuPool $ \pl ->
-    newUtf8CString id pl >>= pgf_has_linearization (concr lang)
+  withGuPool $ \pl -> do
+    res <- newUtf8CString id pl >>= pgf_has_linearization (concr lang)
+    return (res /= 0)
 
 -- | Linearizes an expression as a string in the language
 linearize :: Concr -> Expr -> String
@@ -642,43 +703,54 @@ linearizeAll lang e = unsafePerformIO $
                 throwIO (PGFError "The abstract tree cannot be linearized")
 
 -- | Generates a table of linearizations for an expression
-tabularLinearize :: Concr -> Expr -> Map.Map String String
-tabularLinearize lang e = unsafePerformIO $
+tabularLinearize :: Concr -> Expr -> [(String, String)]
+tabularLinearize lang e = 
+  case tabularLinearizeAll lang e of
+    (lins:_) -> lins
+    _        -> []
+
+-- | Generates a table of linearizations for an expression
+tabularLinearizeAll :: Concr -> Expr -> [[(String, String)]]
+tabularLinearizeAll lang e = unsafePerformIO $
   withGuPool $ \tmpPl -> do
     exn <- gu_new_exn tmpPl
     cts <- pgf_lzr_concretize (concr lang) (expr e) exn tmpPl
     failed <- gu_exn_is_raised exn
     if failed
       then throwExn exn
-      else do ctree <- alloca $ \ptr -> do gu_enum_next cts ptr tmpPl
-                                           peek ptr
-              if ctree == nullPtr
-                then do touchExpr e
-                        return Map.empty
-                else do labels <- alloca $ \p_n_lins ->
-                                  alloca $ \p_labels -> do
-                                    pgf_lzr_get_table (concr lang) ctree p_n_lins p_labels
-                                    n_lins <- peek p_n_lins
-                                    labels <- peek p_labels
-                                    labels <- peekArray (fromIntegral n_lins) labels
-                                    labels <- mapM peekCString labels
-                                    return labels
-                        lins <- collect lang ctree 0 labels exn tmpPl
-                        return (Map.fromList lins)
+      else collect cts exn tmpPl
   where
-    collect lang ctree lin_idx []             exn tmpPl = return []
-    collect lang ctree lin_idx (label:labels) exn tmpPl = do
+    collect cts exn tmpPl = do
+      ctree <- alloca $ \ptr -> do gu_enum_next cts ptr tmpPl
+                                   peek ptr
+      if ctree == nullPtr
+        then do touchExpr e
+                return []
+        else do labels <- alloca $ \p_n_lins ->
+                          alloca $ \p_labels -> do
+                            pgf_lzr_get_table (concr lang) ctree p_n_lins p_labels
+                            n_lins <- peek p_n_lins
+                            labels <- peek p_labels
+                            labels <- peekArray (fromIntegral n_lins) labels
+                            labels <- mapM peekCString labels
+                            return labels
+                lins <- collectTable lang ctree 0 labels exn tmpPl
+                linss <- collect cts exn tmpPl
+                return (lins : linss)
+
+    collectTable lang ctree lin_idx []             exn tmpPl = return []
+    collectTable lang ctree lin_idx (label:labels) exn tmpPl = do
       (sb,out) <- newOut tmpPl
       pgf_lzr_linearize_simple (concr lang) ctree lin_idx out exn tmpPl
       failed <- gu_exn_is_raised exn
       if failed
         then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
                 if is_nonexist
-                  then collect lang ctree (lin_idx+1) labels exn tmpPl
+                  then collectTable lang ctree (lin_idx+1) labels exn tmpPl
                   else throwExn exn
         else do lin <- gu_string_buf_freeze sb tmpPl
                 s  <- peekUtf8CString lin
-                ss <- collect lang ctree (lin_idx+1) labels exn tmpPl
+                ss <- collectTable lang ctree (lin_idx+1) labels exn tmpPl
                 return ((label,s):ss)
 
     throwExn exn = do
@@ -902,8 +974,25 @@ categories p =
       name  <- peekUtf8CString (castPtr key)
       writeIORef ref $! (name : names)
 
-categoryContext :: PGF -> Cat -> Maybe [Hypo]
-categoryContext pgf cat = Nothing -- !!! not implemented yet TODO
+showCategory :: PGF -> Cat -> String
+showCategory p cat =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+      do (sb,out) <- newOut tmpPl
+         exn <- gu_new_exn tmpPl
+         c_cat <- newUtf8CString cat tmpPl
+         pgf_print_category (pgf p) c_cat out exn
+         touchPGF p
+         failed <- gu_exn_is_raised exn
+         if failed
+           then do is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+                   if is_exn
+                     then do c_msg <- (#peek GuExn, data.data) exn
+                             msg <- peekUtf8CString c_msg
+                             throwIO (PGFError msg)
+                     else throwIO (PGFError "The abstract tree cannot be linearized")
+           else do s <- gu_string_buf_freeze sb tmpPl
+                   peekUtf8CString s
 
 -----------------------------------------------------------------------------
 -- Helper functions
@@ -960,7 +1049,7 @@ nerc pgf (lang,concr) sentence lin_idx offset =
         ((lemma,cat),_) = maximumBy (compare `on` snd) (reverse ls)
         ls = [((fun,cat),p)
               |(fun,_,p)<-lookupMorpho concr name,
-                let cat=functionCat fun,
+                Just cat <- [functionCat fun],
                 cat/="Nationality"]
         name = trimRight (concat capwords)
     _ -> Nothing
@@ -972,7 +1061,7 @@ nerc pgf (lang,concr) sentence lin_idx offset =
         Just (y,xs') -> (y:ys,xs'')
           where (ys,xs'') = consume munch xs'
 
-    functionCat f = case unType (functionType pgf f) of (_,cat,_) -> cat
+    functionCat f = fmap ((\(_,c,_) -> c) . unType) (functionType pgf f)
 
 -- | Callback to parse arbitrary words as chunks (from
 -- ../java/org/grammaticalframework/pgf/UnknownLiteralCallback.java)

@@ -159,8 +159,8 @@ cpgfMain qsem command (t,(pgf,pc)) =
     "c-lookupmorpho"-> out t=<< morpho # from1 % textInput
     "c-flush"       -> out t=<< flush
     "c-grammar"     -> out t grammar
-    "c-abstrtree"   -> outputGraphviz=<< C.graphvizAbstractTree pgf # tree
-    "c-parsetree"   -> outputGraphviz=<< C.graphvizParseTree . snd # from1 %tree
+    "c-abstrtree"   -> outputGraphviz=<< C.graphvizAbstractTree pgf C.graphvizDefaults # tree
+    "c-parsetree"   -> outputGraphviz=<< (\cnc -> C.graphvizParseTree cnc C.graphvizDefaults) . snd # from1 %tree
     "c-wordforword" -> out t =<< wordforword # input % to
     _               -> badRequest "Unknown command" command
   where

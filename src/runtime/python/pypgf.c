@@ -2281,7 +2281,7 @@ Concr_graphvizParseTree(ConcrObject* self, PyObject *args) {
 	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
-	pgf_graphviz_parse_tree(self->concr, pyexpr->expr, out, err);
+	pgf_graphviz_parse_tree(self->concr, pyexpr->expr, pgf_default_graphviz_options, out, err);
 	if (!gu_ok(err)) {
 		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
@@ -3075,7 +3075,7 @@ PGF_graphvizAbstractTree(PGFObject* self, PyObject *args) {
 	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 	
-	pgf_graphviz_abstract_tree(self->pgf, pyexpr->expr, out, err);
+	pgf_graphviz_abstract_tree(self->pgf, pyexpr->expr, pgf_default_graphviz_options, out, err);
 	if (!gu_ok(err)) {
 		PyErr_SetString(PGFError, "The abstract tree cannot be visualized");
 		return NULL;

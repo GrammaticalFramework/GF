@@ -371,6 +371,26 @@ Java_org_grammaticalframework_pgf_PGF_getFunctionsByCat(JNIEnv* env, jobject sel
 	return functions;
 }
 
+JNIEXPORT jstring JNICALL
+Java_org_grammaticalframework_pgf_PGF_graphvizAbstractTree(JNIEnv* env, jobject self, jobject jexpr)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	GuExn* err = gu_exn(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
+	GuOut* out = gu_string_buf_out(sbuf);
+
+	pgf_graphviz_abstract_tree(get_ref(env,self),
+	                           gu_variant_from_ptr(l2p(get_ref(env,jexpr))),
+	                           pgf_default_graphviz_options,
+	                           out, err);
+
+	jstring jstr = gu2j_string_buf(env, sbuf);
+
+	gu_pool_free(tmp_pool);
+	return jstr;
+}
+
 JNIEXPORT jstring JNICALL 
 Java_org_grammaticalframework_pgf_Concr_getName(JNIEnv* env, jobject self)
 {
@@ -1107,8 +1127,11 @@ Java_org_grammaticalframework_pgf_Lexicon_lookupWordPrefix
 	GuPool* pool = gu_new_pool();	
 	GuExn* err = gu_new_exn(pool);
 
-	GuEnum* en = pgf_lookup_word_prefix(get_ref(env, jconcr), j2gu_string(env, prefix, pool),
-	                                    pool, err);
+	GuEnum* en = 
+		(prefix == NULL) ? pgf_fullform_lexicon(get_ref(env, jconcr), 
+	                                            pool)
+	                     : pgf_lookup_word_prefix(get_ref(env, jconcr), j2gu_string(env, prefix, pool),
+	                                              pool, err);
 	if (!gu_ok(err)) {
 		if (gu_exn_caught(err, PgfExn)) {
 			GuString msg = (GuString) gu_exn_caught_data(err);
@@ -1193,6 +1216,26 @@ Java_org_grammaticalframework_pgf_Concr_getPrintName(JNIEnv* env, jobject self, 
 	gu_pool_free(tmp_pool);
 
 	return jname;
+}
+
+JNIEXPORT jstring JNICALL
+Java_org_grammaticalframework_pgf_Concr_graphvizParseTree(JNIEnv* env, jobject self, jobject jexpr)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	GuExn* err = gu_exn(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
+	GuOut* out = gu_string_buf_out(sbuf);
+
+	pgf_graphviz_parse_tree(get_ref(env,self),
+	                        gu_variant_from_ptr(l2p(get_ref(env,jexpr))),
+	                        pgf_default_graphviz_options,
+	                        out, err);
+
+	jstring jstr = gu2j_string_buf(env, sbuf);
+
+	gu_pool_free(tmp_pool);
+	return jstr;
 }
 
 JNIEXPORT jlong JNICALL
@@ -1432,6 +1475,59 @@ Java_org_grammaticalframework_pgf_Expr_unStr(JNIEnv* env, jobject self)
 	return NULL;
 }
 
+JNIEXPORT void JNICALL
+Java_org_grammaticalframework_pgf_Expr_visit(JNIEnv* env, jobject self, jobject visitor)
+{
+	PgfExpr e = gu_variant_from_ptr(l2p(get_ref(env, self)));
+
+	GuPool* tmp_pool = gu_local_pool();
+
+	PgfApplication* app = pgf_expr_unapply(e, tmp_pool);
+	if (app != NULL) {
+		char* method_name = gu_malloc(tmp_pool, strlen(app->fun)+4);
+		strcpy(method_name, "on_");
+		strcat(method_name, app->fun);
+		
+		GuExn* err = gu_exn(tmp_pool);
+		GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
+		GuOut* out = gu_string_buf_out(sbuf);
+
+		gu_putc('(', out, err);
+		for (size_t i = 0; i < app->n_args; i++) {
+			gu_puts("Lorg/grammaticalframework/pgf/Expr;", out, err);
+		}
+		gu_puts(")V", out, err);
+		gu_putc('\0', out, err);
+
+		char* sig = gu_string_buf_data(sbuf);
+
+		jclass visitor_class = (*env)->GetObjectClass(env, visitor);
+		jmethodID methodID = (*env)->GetMethodID(env, visitor_class, method_name, sig);
+		
+		if (methodID != NULL) {
+			jclass expr_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Expr");
+			jmethodID expr_constrId = (*env)->GetMethodID(env, expr_class, "<init>", "(Lorg/grammaticalframework/pgf/Pool;Ljava/lang/Object;J)V");
+
+			jvalue* args = gu_malloc(tmp_pool, sizeof(jvalue)*app->n_args);
+			for (size_t i = 0; i < app->n_args; i++) {
+				args[i].l = (*env)->NewObject(env, expr_class, expr_constrId, NULL, self, p2l(app->args[i]));
+			}
+			(*env)->CallVoidMethodA(env, visitor, methodID, args);
+		} else {
+			(*env)->ExceptionClear(env);
+
+			methodID = (*env)->GetMethodID(env, visitor_class, "defaultCase", "(Lorg/grammaticalframework/pgf/Expr;)V");
+			if (methodID != NULL) {
+				(*env)->CallVoidMethod(env, visitor, methodID, self);
+			} else {
+				(*env)->ExceptionClear(env);
+			}
+		}
+	}
+
+	gu_pool_free(tmp_pool);
+}
+
 JNIEXPORT jboolean JNICALL
 Java_org_grammaticalframework_pgf_Expr_equals(JNIEnv* env, jobject self, jobject other)
 {
@@ -1481,6 +1577,34 @@ Java_org_grammaticalframework_pgf_Type_getHypos(JNIEnv* env, jobject self)
 		(*env)->DeleteLocalRef(env, jhypo);
 	}
 	return jhypos;
+}
+
+JNIEXPORT jobject JNICALL 
+Java_org_grammaticalframework_pgf_Type_readType(JNIEnv* env, jclass clazz, jstring s)
+{
+	GuPool* pool = gu_new_pool();
+
+	GuPool* tmp_pool = gu_local_pool();
+	GuString buf = j2gu_string(env, s, tmp_pool);
+	GuIn* in = gu_data_in((uint8_t*) buf, strlen(buf), tmp_pool);
+	GuExn* err = gu_exn(tmp_pool);
+
+	PgfType* ty = pgf_read_type(in, pool, err);
+	if (!gu_ok(err)) {
+		throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The type cannot be parsed");
+		gu_pool_free(tmp_pool);
+		gu_pool_free(pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	jclass pool_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Pool");
+	jmethodID pool_constrId = (*env)->GetMethodID(env, pool_class, "<init>", "(J)V");
+	jobject jpool = (*env)->NewObject(env, pool_class, pool_constrId, p2l(pool));
+
+	jmethodID constrId = (*env)->GetMethodID(env, clazz, "<init>", "(Ljava/lang/Object;J)V");
+	return (*env)->NewObject(env, clazz, constrId, jpool, p2l(ty));
 }
 
 JNIEXPORT jstring JNICALL
@@ -1619,4 +1743,44 @@ Java_org_grammaticalframework_pgf_PGF_inferExpr(JNIEnv* env, jobject self, jobje
 	jobject jtyped_expr = (*env)->NewObject(env, typed_expr_class, typed_expr_constrId, jexpr, jtype);
 
 	return jtyped_expr;
+}
+
+JNIEXPORT jobject JNICALL
+Java_org_grammaticalframework_pgf_PGF_checkExpr(JNIEnv* env, jobject self, jobject jexpr, jobject jtp)
+{
+	GuPool* pool = gu_new_pool();
+	GuPool* tmp_pool = gu_local_pool();
+	GuExn* err = gu_exn(tmp_pool);
+
+	PgfExpr expr =
+		gu_variant_from_ptr((void*) get_ref(env, jexpr));
+	PgfType* tp  =
+		get_ref(env, jtp);
+	pgf_check_expr(get_ref(env, self), &expr, tp, err, pool);
+	if (!gu_ok(err)) {
+		if (gu_exn_caught(err, PgfExn)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
+		} else if (gu_exn_caught(err, PgfTypeError)) {
+			GuString msg = (GuString) gu_exn_caught_data(err);
+			throw_string_exception(env, "org/grammaticalframework/pgf/TypeError", msg);
+ 		} else {
+			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The type cannot be inferred");
+		}
+		gu_pool_free(tmp_pool);
+		gu_pool_free(pool);
+		return NULL;
+	}
+
+	gu_pool_free(tmp_pool);
+
+	jclass pool_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/Pool");
+	jmethodID pool_constrId = (*env)->GetMethodID(env, pool_class, "<init>", "(J)V");
+	jobject jpool = (*env)->NewObject(env, pool_class, pool_constrId, p2l(pool));
+
+	jclass expr_class  = (*env)->GetObjectClass(env, jexpr);
+	jmethodID expr_constrId = (*env)->GetMethodID(env, expr_class, "<init>", "(Lorg/grammaticalframework/pgf/Pool;Ljava/lang/Object;J)V");
+	jexpr = (*env)->NewObject(env, expr_class, expr_constrId, jpool, NULL, p2l(gu_variant_to_ptr(expr)));
+
+	return jexpr;
 }

@@ -50,7 +50,7 @@ showType scope (Type ty touch) =
       do (sb,out) <- newOut tmpPl
          printCtxt <- newPrintCtxt scope tmpPl
          exn <- gu_new_exn tmpPl
-         pgf_print_type ty printCtxt 1 out exn
+         pgf_print_type ty printCtxt 0 out exn
          touch
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s
