@@ -71,10 +71,13 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
     mkClause : Str -> Agr -> Verb -> {s : Str} =
       \np, a, v -> ss (np ++ v.s ! VProg a) ;
 
-    attachMe : Str -> Str =
-      \s ->
-        case s of {
-          (_ + vowel + _ )* + (_ + frontVowel + _) => s ++ "me" ;
-          (_ + vowel + _)*  + (_ + backVowel  + _) => s ++ "ma"
-        } ;
+    attachMe : Verb -> {s : Str} =
+      \v ->
+        let
+          s : Str = v.s ! VImperative
+        in
+          case s of {
+            (_ + #vowel + _ )* + (_ + #frontVowel + _) => ss (s ++ "me") ;
+            (_ + #vowel + _)*  + (_ + #backVowel  + _) => ss (s ++ "ma")
+          } ;
 }

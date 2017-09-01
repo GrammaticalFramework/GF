@@ -48,7 +48,7 @@ concrete AdjectiveTur of Adjective =
 
     -- TODO: Implement.
     SentAP ap sc = {
-      s = \\_, _ => "SentAP_TODO"
+      s = \\_, _ => sc.s
     } ;
 
 }
