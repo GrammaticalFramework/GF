@@ -14,6 +14,8 @@ public class Type {
 	public native Hypo[] getHypos();
 
 	public native String toString();
+	
+	public native static Type readType(String s);
 
 	//////////////////////////////////////////////////////////////////
 	// private stuff

@@ -195,7 +195,7 @@ pgf_print_name(PgfConcr* concr, PgfCId id)
 	return name;
 }
 
-PGF_API bool
+PGF_API int
 pgf_has_linearization(PgfConcr* concr, PgfCId id)
 {
 	PgfCncOverloadMap* overl_table =

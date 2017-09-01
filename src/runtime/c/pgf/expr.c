@@ -1,11 +1,12 @@
 #include "pgf.h"
+#include "data.h"
 #include <gu/assert.h>
 #include <gu/utf8.h>
 #include <gu/seq.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <math.h>
 
 static PgfExpr
 pgf_expr_unwrap(PgfExpr expr)
@@ -1466,6 +1467,30 @@ pgf_print_expr_tuple(size_t n_exprs, PgfExpr exprs[], PgfPrintContext* ctxt,
 	gu_putc('>', out, err);
 }
 
+PGF_API_DECL void
+pgf_print_category(PgfPGF *gr, PgfCId catname,
+                   GuOut* out, GuExn *err)
+{
+	PgfAbsCat* abscat =
+		gu_seq_binsearch(gr->abstract.cats, pgf_abscat_order, PgfAbsCat, catname);
+	if (abscat == NULL) {
+		GuExnData* exn = gu_raise(err, PgfExn);
+		exn->data = "Unknown category";
+		return;
+	}
+
+	gu_puts(abscat->name, out, err);
+
+	PgfPrintContext* ctxt = NULL;
+	size_t n_hypos = gu_seq_length(abscat->context);
+	for (size_t i = 0; i < n_hypos; i++) {
+		PgfHypo *hypo = gu_seq_index(abscat->context, PgfHypo, i);
+
+		gu_putc(' ', out, err);
+		ctxt = pgf_print_hypo(hypo, ctxt, 4, out, err);
+	}
+}
+
 PGF_API bool
 pgf_type_eq(PgfType* t1, PgfType* t2)
 {
@@ -1499,4 +1524,28 @@ pgf_type_eq(PgfType* t1, PgfType* t2)
 	}
 
 	return true;
+}
+
+PGF_API prob_t
+pgf_compute_tree_probability(PgfPGF *gr, PgfExpr expr)
+{
+	GuVariantInfo ei = gu_variant_open(expr);
+	switch (ei.tag) {
+	case PGF_EXPR_APP: {
+		PgfExprApp* app = ei.data;
+		return pgf_compute_tree_probability(gr, app->fun) +
+		       pgf_compute_tree_probability(gr, app->arg);
+	}
+	case PGF_EXPR_FUN: {
+		PgfExprFun* fun = ei.data;
+		PgfAbsFun* absfun =
+			gu_seq_binsearch(gr->abstract.funs, pgf_absfun_order, PgfAbsFun, fun->fun);
+		if (absfun == NULL)
+			return INFINITY;
+		else
+			return absfun->ep.prob;
+	}
+	default:
+		return 0;
+	}
 }

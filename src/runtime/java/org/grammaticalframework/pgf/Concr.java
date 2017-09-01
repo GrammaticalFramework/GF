@@ -68,6 +68,11 @@ public class Concr {
 	 * @param sentence the word form or the multilingual expression.
 	 */
 	public native List<MorphoAnalysis> lookupMorpho(String sentence);
+	
+	/** Creates an iterable over the full form lexicon in the grammar */
+	public Iterable<FullFormEntry> fullFormLexicon() {
+		return new Lexicon(this, null);
+	}
 
 	/** Returns an iterable enumerating all words in the lexicon
 	 * starting with a given prefix.
@@ -82,6 +87,8 @@ public class Concr {
 	 * @param fun the name of the function
 	 */
 	public native boolean hasLinearization(String fun);
+
+	public native String graphvizParseTree(Expr expr);
 
 	/** returns the print name for that function or category.
 	 */

@@ -99,6 +99,10 @@ public class Expr implements Serializable {
 		 * If this is not a string literal then the result is null. */
 		public native String unStr();
 
+		/** An implementation for the visitor pattern. The method uses
+		 * reflection to find the relevant methods from the visitor object */
+		public native void visit(Object visitor);
+
 		/** Returns the expression as a string in the GF syntax */
 		public String toString() {
 			return showExpr(ref);

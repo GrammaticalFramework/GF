@@ -5,61 +5,38 @@ module GF.Command.Commands2 (
   ) where
 import Prelude hiding (putStrLn)
 
-import qualified PGF2 as C
+import PGF2
 import qualified PGF as H
-
---import qualified PGF.Internal as H(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
-import qualified PGF.Internal as H(Expr(EFun)) ----abstract,funs,cats,
---import qualified PGF.Internal as H(Literal(LStr),Expr(ELit)) ----
---import qualified PGF.Internal as H(ppFun,ppCat)
-
---import qualified PGF.Internal as H(optimizePGF)
-
---import GF.Compile.Export
 import GF.Compile.ToAPI(exprToAPI)
---import GF.Compile.ExampleBased
---import GF.Infra.Option (noOptions, readOutputFormat, outputFormatsExpl)
 import GF.Infra.UseIO(writeUTF8File)
 import GF.Infra.SIO(MonadSIO,liftSIO,putStrLn,restricted,restrictedSystem)
---import GF.Data.ErrM ----
 import GF.Command.Abstract
---import GF.Command.Messages
 import GF.Command.CommandInfo
---import GF.Text.Lexing
---import GF.Text.Clitics
---import GF.Text.Transliterations
---import GF.Quiz
-
---import GF.Command.TreeOperations ---- temporary place for typecheck and compute
-
 import GF.Data.Operations
-
---import PGF.Internal (encodeFile)
---import Data.List(intersperse,nub)
+import Data.List(intersperse,intersect,nub,sortBy)
 import Data.Maybe
 import qualified Data.Map as Map
---import System.Cmd(system) -- use GF.Infra.UseIO.restricedSystem instead!
---import GF.System.Process
---import GF.Text.Pretty
---import Data.List (sort)
+import GF.Text.Pretty
 import Control.Monad(mplus)
---import Debug.Trace
---import System.Random (newStdGen) ----
 
 
-data PGFEnv = Env {pgf::Maybe C.PGF,concs::Map.Map C.ConcName C.Concr}
+data PGFEnv = Env {pgf::Maybe PGF,concs::Map.Map ConcName Concr}
 
-pgfEnv pgf = Env (Just pgf) (C.languages pgf)
+pgfEnv pgf = Env (Just pgf) (languages pgf)
 emptyPGFEnv = Env Nothing Map.empty
 
 class (Monad m,MonadSIO m) => HasPGFEnv m where getPGFEnv :: m PGFEnv
 
-instance Monad m => TypeCheckArg m where
-  typeCheckArg = return -- no type checker available !!
+instance (Monad m,HasPGFEnv m) => TypeCheckArg m where
+  typeCheckArg e = do env <- getPGFEnv
+                      case pgf env of
+                        Just gr -> either fail
+                                          (return . hsExpr . fst)
+                                          (inferExpr gr (cExpr e))
+                        Nothing  -> fail "Import a grammar before using this command"
 
 pgfCommands :: HasPGFEnv m => Map.Map String (CommandInfo m)
 pgfCommands = Map.fromList [
-{-
   ("aw", emptyCommandInfo {
      longname = "align_words",
      synopsis = "show word alignments between languages graphically",
@@ -71,28 +48,31 @@ pgfCommands = Map.fromList [
        "by the flag. The target format is postscript, unless overridden by the",
        "flag -format."
        ],
-     exec = \env@(pgf, mos) opts es -> do
-         let langs = optLangs pgf opts
+     exec = needPGF $ \opts es env -> do
+         let cncs = optConcs env opts
          if isOpt "giza" opts
-           then do
-             let giz = map (H.gizaAlignment pgf (head $ langs, head $ tail $ langs)) es
-             let lsrc = unlines $ map (\(x,_,_) -> x) giz
-             let ltrg = unlines $ map (\(_,x,_) -> x) giz
-             let align = unlines $ map (\(_,_,x) -> x) giz
-             let grph = if null es then [] else lsrc ++ "\n--end_source--\n\n"++ltrg++"\n-end_target--\n\n"++align
-             return $ fromString grph
-           else do
-             let grph = if null es then [] else H.graphvizAlignment pgf langs (head es)
-             if isFlag "view" opts || isFlag "format" opts
-               then do
-                 let file s = "_grph." ++ s
-                 let view = optViewGraph opts
-                 let format = optViewFormat opts
-                 restricted $ writeUTF8File (file "dot") grph
-                 restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-                 restrictedSystem $ view ++ " " ++ file format
-                 return void
-               else return $ fromString grph,
+           then if length cncs == 2
+                  then let giz = map (gizaAlignment pgf (snd (cncs !! 0)) (snd (cncs !! 1)) . cExpr) (toExprs es)
+                           lsrc = unlines $ map (\(x,_,_) -> x) giz
+                           ltrg = unlines $ map (\(_,x,_) -> x) giz
+                           align = unlines $ map (\(_,_,x) -> x) giz
+                           grph = if null (toExprs es) then [] else lsrc ++ "\n--end_source--\n\n"++ltrg++"\n-end_target--\n\n"++align
+                       in return (fromString grph)
+                  else error "For giza alignment you need exactly two languages"
+           else let gvOptions=graphvizDefaults{leafFont = valStrOpts "font" "" opts,
+                                               leafColor = valStrOpts "color" "" opts,
+                                               leafEdgeStyle = valStrOpts "edgestyle" "" opts
+                                              }
+                    grph = if null (toExprs es) then [] else graphvizWordAlignment (map snd cncs) gvOptions (cExpr (head (toExprs es)))
+                in if isFlag "view" opts || isFlag "format" opts
+                     then do let file s = "_grph." ++ s
+                             let view = optViewGraph opts
+                             let format = optViewFormat opts
+                             restricted $ writeUTF8File (file "dot") grph
+                             restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+                             restrictedSystem $ view ++ " " ++ file format
+                             return void
+                     else return (fromString grph),
      examples = [
        ("gr | aw"                         , "generate a tree and show word alignment as graph script"),
        ("gr | aw -view=\"open\""          , "generate a tree and display alignment on Mac"),
@@ -105,42 +85,12 @@ pgfCommands = Map.fromList [
      flags = [
        ("format","format of the visualization file (default \"png\")"),
        ("lang",  "alignments for this list of languages (default: all)"),
-       ("view",  "program to open the resulting file")
+       ("view",  "program to open the resulting file"),
+       ("font",  "font for the words"),
+       ("color", "color for the words"),
+       ("edgestyle", "the style for links between words")
        ]
     }),
-
-  ("ca", emptyCommandInfo {
-     longname = "clitic_analyse",
-     synopsis = "print the analyses of all words into stems and clitics",
-     explanation = unlines [
-       "Analyses all words into all possible combinations of stem + clitics.",
-       "The analysis is returned in the format stem &+ clitic1 &+ clitic2 ...",
-       "which is hence the inverse of 'pt -bind'. The list of clitics is give",
-       "by the flag '-clitics'. The list of stems is given as the list of words",
-       "of the language given by the '-lang' flag."
-       ],
-     exec  = \env opts -> case opts of
-               _ | isOpt "raw" opts ->
-                    return . fromString .
-                    unlines . map (unwords . map (concat . intersperse "+")) .
-                    map (getClitics (H.isInMorpho (optMorpho env opts)) (optClitics opts)) .
-                    concatMap words . toStrings
-               _ ->
-                    return . fromStrings .
-                    getCliticsText (H.isInMorpho (optMorpho env opts)) (optClitics opts) .
-                    concatMap words . toStrings,
-     flags = [
-       ("clitics","the list of possible clitics (comma-separated, no spaces)"),
-       ("lang",   "the language of analysis")
-       ],
-     options = [
-       ("raw", "analyse each word separately (not suitable input for parser)")
-       ],
-     examples = [
-       mkEx "ca -lang=Fin -clitics=ko,ni \"nukkuuko minun vaimoni\" | p  -- to parse Finnish"
-       ]
-     }),
--}
 {-
   ("eb", emptyCommandInfo {
      longname = "example_based",
@@ -210,51 +160,20 @@ pgfCommands = Map.fromList [
        returnFromExprs $ take (optNum opts) ts
      }),
 -}
-  ("ga", emptyCommandInfo {
-     longname = "generate_all",
-     synopsis = "generate a list of all trees",
-     flags = [("cat","the generation category"),
-              ("number","the number of trees generated")],
-     examples = [
-       mkEx "ga                     -- all trees in the startcat",
-       mkEx "ga -cat=NP -number=16  -- 16 trees in the category NP"],
-     exec = needPGF $ \ opts _ env@(pgf,_) ->
-            let ts = map fst (C.generateAll pgf cat)
-                cat = optCat pgf opts
-            in returnFromCExprs (takeOptNum opts ts),
-     needsTypeCheck = False
-     }),
-{-
   ("gt", emptyCommandInfo {
      longname = "generate_trees",
      synopsis = "generates a list of trees, by default exhaustive",
-     explanation = unlines [
-       "Generates all trees of a given category. By default, ",
-       "the depth is limited to 4, but this can be changed by a flag.",
-       "If a Tree argument is given, the command completes the Tree with values",
-       "to all metavariables in the tree."
-       ],
-     flags = [
-       ("cat","the generation category"),
-       ("depth","the maximum generation depth"),
-       ("lang","excludes functions that have no linearization in this language"),
-       ("number","the number of trees generated")
-       ],
+     flags = [("cat","the generation category"),
+              ("number","the number of trees generated")],
      examples = [
-       mkEx "gt                     -- all trees in the startcat, to depth 4",
-       mkEx "gt -cat=NP -number=16  -- 16 trees in the category NP",
-       mkEx "gt -cat=NP -depth=2    -- trees in the category NP to depth 2",
-       mkEx "gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))"
-       ],
-     exec = \env@(pgf, mos) opts xs -> do
-       let pgfr = optRestricted opts pgf
-       let dp = valIntOpts "depth" 4 opts
-       let ts = case mexp xs of
-                  Just ex -> H.generateFromDepth pgfr ex (Just dp)
-                  Nothing -> H.generateAllDepth pgfr (optType pgf opts) (Just dp)
-       returnFromExprs $ take (optNumInf opts) ts
+       mkEx "gt                     -- all trees in the startcat",
+       mkEx "gt -cat=NP -number=16  -- 16 trees in the category NP"],
+     exec = needPGF $ \ opts _ env@(pgf,_) ->
+            let ts = map fst (generateAll pgf cat)
+                cat = optType pgf opts
+            in returnFromCExprs (takeOptNum opts ts),
+     needsTypeCheck = False
      }),
--}
   ("i", emptyCommandInfo {
      longname = "import",
      synopsis = "import a grammar from a compiled .pgf file",
@@ -288,26 +207,6 @@ pgfCommands = Map.fromList [
      synopsis = "convert an abstract syntax expression to string",
      explanation = unlines [
        "Shows the linearization of a Tree by the grammars in scope.",
-       "The -lang flag can be used to restrict this to fewer languages."],
-     flags = [
-       ("lang","the languages of linearization (comma-separated, no spaces)")
-       ],
-     options = [
-       ("all",    "show all variants (but not all forms), one by line (cf. l -list)"),
-       ("list","show all variants (but not all forms), comma-separated on one line (cf. l -all)"),
-       ("treebank","show the tree and tag linearizations with language names")
-       ],
-     examples = [
-       mkEx "l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor"],
-     exec = needPGF $ \ opts arg env ->
-                      return . fromStrings . cLins env opts . map cExpr $ toExprs arg
-     }),
-{-
-  ("l", emptyCommandInfo {
-     longname = "linearize",
-     synopsis = "convert an abstract syntax expression to string",
-     explanation = unlines [
-       "Shows the linearization of a Tree by the grammars in scope.",
        "The -lang flag can be used to restrict this to fewer languages.",
        "A sequence of string operations (see command ps) can be given",
        "as options, and works then like a pipe to the ps command, except",
@@ -318,11 +217,12 @@ pgfCommands = Map.fromList [
        "sequences; see example."
        ],
      examples = [
-       mkEx "l -lang=LangSwe,LangNor no_Utt   -- linearize tree to LangSwe and LangNor",
+       mkEx "l -lang=LangSwe,LangNor no_Utt   -- linearize a tree to LangSwe and LangNor",
        mkEx "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -- hindi table",
        mkEx "l -unlexer=\"LangAra=to_arabic LangHin=to_devanagari\" -- different unlexers"
        ],
-     exec = \env@(pgf, mos) opts -> return . fromStrings . optLins pgf opts,
+     exec = needPGF $ \ opts arg env ->
+                      return . fromStrings . optLins env opts . map cExpr $ toExprs arg,
      options = [
        ("all",    "show all forms and variants, one by line (cf. l -list)"),
        ("bracket","show tree structure with brackets and paths to nodes"),
@@ -331,62 +231,26 @@ pgfCommands = Map.fromList [
        ("multi","linearize to all languages (default)"),
        ("table","show all forms labelled by parameters"),
        ("treebank","show the tree and tag linearizations with language names")
-       ] ++ stringOpOptions,
-     flags = [
-       ("lang","the languages of linearization (comma-separated, no spaces)"),
-       ("unlexer","set unlexers separately to each language (space-separated)")
-       ]
-     }),
--}
-{-
-  ("lc", emptyCommandInfo {
-     longname = "linearize_chunks",
-     synopsis = "linearize a tree that has metavariables in maximal chunks without them",
-     explanation = unlines [
-       "A hopefully temporary command, intended to work around the type checker that fails",
-       "trees where a function node is a metavariable."
        ],
-     examples = [
-       mkEx "l -lang=LangSwe,LangNor -chunks ? a b (? c d)"
-       ],
-     exec = \env@(pgf, mos) opts -> return . fromStrings . optLins pgf (opts ++ [OOpt "chunks"]),
-     options = [
-       ("treebank","show the tree and tag linearizations with language names")
-       ] ++ stringOpOptions,
      flags = [
        ("lang","the languages of linearization (comma-separated, no spaces)")
-       ],
-     needsTypeCheck = False
-     }),
--} 
-{-
-  ("ma", emptyCommandInfo {
-     longname = "morpho_analyse",
-     synopsis = "print the morphological analyses of all words in the string",
-     explanation = unlines [
-       "Prints all the analyses of space-separated words in the input string,",
-       "using the morphological analyser of the actual grammar (see command pg)"
-       ],
-     exec  = \env opts -> case opts of
-               _ | isOpt "missing" opts ->
-                    return . fromString . unwords .
-                    H.morphoMissing (optMorpho env opts) .
-                    concatMap words . toStrings
-               _ | isOpt "known" opts ->
-                    return . fromString . unwords .
-                    H.morphoKnown (optMorpho env opts) .
-                    concatMap words . toStrings
-               _ -> return . fromString . unlines .
-                    map prMorphoAnalysis . concatMap (morphos env opts) .
-                    concatMap words . toStrings ,
-     flags = [
-       ("lang","the languages of analysis (comma-separated, no spaces)")
-       ],
-     options = [
-       ("known",  "return only the known words, in order of appearance"),
-       ("missing","show the list of unknown words, in order of appearance")
        ]
      }),
+  ("ma", emptyCommandInfo {
+     longname = "morpho_analyse",
+     synopsis = "print the morphological analyses of the (multiword) expression in the string",
+     explanation = unlines [
+       "Prints all the analyses of the (multiword) expression in the input string,",
+       "using the morphological analyser of the actual grammar (see command pg)"
+       ],
+     exec  = needPGF $ \opts args env -> 
+               return ((fromString . unlines .
+                        map prMorphoAnalysis . concatMap (morphos env opts) . toStrings) args),
+     flags = [
+       ("lang","the languages of analysis (comma-separated, no spaces)")
+       ]
+     }),
+{-
   ("mq", emptyCommandInfo {
      longname = "morpho_quiz",
      synopsis = "start a morphology quiz",
@@ -425,76 +289,25 @@ pgfCommands = Map.fromList [
        ],
      exec = needPGF $ \ opts ts env -> return . cParse env opts $ toStrings ts
      }),
-{-
-  ("p", emptyCommandInfo {
-     longname = "parse",
-     synopsis = "parse a string to abstract syntax expression",
-     explanation = unlines [
-       "Shows all trees returned by parsing a string in the grammars in scope.",
-       "The -lang flag can be used to restrict this to fewer languages.",
-       "The default start category can be overridden by the -cat flag.",
-       "See also the ps command for lexing and character encoding.",
-       "",
-       "The -openclass flag is experimental and allows some robustness in ",
-       "the parser. For example if -openclass=\"A,N,V\" is given, the parser",
-       "will accept unknown adjectives, nouns and verbs with the resource grammar."
-       ],
-     exec = \env@(pgf, mos) opts ts ->
-              return . Piped $ fromParse opts (concat [map ((,) s) (par pgf opts s) | s <- toStrings ts]),
-     flags = [
-       ("cat","target category of parsing"),
-       ("lang","the languages of parsing (comma-separated, no spaces)"),
-       ("openclass","list of open-class categories for robust parsing"),
-       ("depth","maximal depth for proof search if the abstract syntax tree has meta variables")
-       ],
-     options = [
-       ("bracket","prints the bracketed string from the parser")
-       ]
-     }),
--}
-  ("pg", emptyCommandInfo { -----
+  ("pg", emptyCommandInfo {
      longname = "print_grammar",
---   synopsis = "print the actual grammar with the given printer",
-     synopsis = "print some information about the grammar",
-{-
-     explanation = unlines [
-       "Prints the actual grammar, with all involved languages.",
-       "In some printers, this can be restricted to a subset of languages",
-       "with the -lang=X,Y flag (comma-separated, no spaces).",
-       "The -printer=P flag sets the format in which the grammar is printed.",
-       "N.B.1 Since grammars are compiled when imported, this command",
-       "generally shows a grammar that looks rather different from the source.",
-       "N.B.2 Another way to produce different formats is to use 'gf -make',",
-       "the batch compiler. The following values are available both for",
-       "the batch compiler (flag -output-format) and the print_grammar",
-       "command (flag -printer):",
-       ""
-       ] ++ unlines (sort [
-        " " ++ opt ++ "\t\t" ++ expl |
-           ((opt,_),expl) <- outputFormatsExpl, take 1 expl /= "*"
-       ]),
--}
+     synopsis = "prints different information about the grammar",
      exec  = needPGF $ \opts _ env -> prGrammar env opts,
-     flags = [
-       --"cat",
---     ("file",   "set the file name when printing with -pgf option"),
---     ("lang",   "select languages for the some options (default all languages)"),
---     ("printer","select the printing format (see flag values above)")
-       ],
      options = [
        ("cats",   "show just the names of abstract syntax categories"),
---     ("fullform", "print the fullform lexicon"),
+       ("fullform", "print the fullform lexicon"),
        ("funs",   "show just the names and types of abstract syntax functions"),
-       ("langs",  "show just the names of top concrete syntax modules")
---     ("lexc", "print the lexicon in Xerox LEXC format"),
---     ("missing","show just the names of functions that have no linearization"),
---     ("opt",    "optimize the generated pgf"),
---     ("pgf",    "write current pgf image in file"),
---     ("words", "print the list of words")
+       ("langs",  "show just the names of top concrete syntax modules"),
+       ("lexc", "print the lexicon in Xerox LEXC format"),
+       ("missing","show just the names of functions that have no linearization"),
+       ("words", "print the list of words")
+       ],
+     flags = [
+       ("lang","the languages that need to be printed")
        ],
      examples = [
-       mkEx "pg -langs -- show the names of top concrete syntax modules"
---     mkEx ("pg -funs | ? grep \" S ;\"  -- show functions with value cat S")
+       mkEx "pg -langs -- show the names of top concrete syntax modules",
+       mkEx "pg -funs | ? grep \" S ;\"  -- show functions with value cat S"
        ]
      }),
 
@@ -519,7 +332,6 @@ pgfCommands = Map.fromList [
      flags = [("number","take at most this many trees")] ++ treeOpFlags undefined{-pgf-}
      }),
 -}
-{-
   ("rf",  emptyCommandInfo {
      longname = "read_file",
      synopsis = "read string or tree input from a file",
@@ -534,21 +346,21 @@ pgfCommands = Map.fromList [
        ("lines","return the list of lines, instead of the singleton of all contents"),
        ("tree","convert strings into trees")
        ],
-     exec = \env@(pgf, mos) opts _ -> do
-       let file = valStrOpts "file" "_gftmp" opts
+     exec = needPGF $ \opts _ env@(pgf, mos) -> do
+       let file = optFile opts
        let exprs []         = ([],empty)
            exprs ((n,s):ls) | null s
                             = exprs ls
-           exprs ((n,s):ls) = case H.readExpr s of
+           exprs ((n,s):ls) = case readExpr s of
                                 Just e  -> let (es,err) = exprs ls
-                                           in case H.inferExpr pgf e of
+                                           in case inferExpr pgf e of
                                                 Right (e,t) -> (e:es,err)
-                                                Left tcerr  -> (es,"on line" <+> n <> ':' $$ nest 2 (H.ppTcError tcerr) $$ err)
+                                                Left msg    -> (es,"on line" <+> n <> ':' $$ msg $$ err)
                                 Nothing -> let (es,err) = exprs ls
                                            in (es,"on line" <+> n <> ':' <+> "parse error" $$ err)
            returnFromLines ls = case exprs ls of
                                   (es, err) | null es   -> return $ pipeMessage $ render (err $$ "no trees found")
-                                            | otherwise -> return $ pipeWithMessage es (render err)
+                                            | otherwise -> return $ pipeWithMessage (map hsExpr es) (render err)
 
        s <- restricted $ readFile file
        case opts of
@@ -560,7 +372,6 @@ pgfCommands = Map.fromList [
          _ -> return (fromString s),
      flags = [("file","the input file name")]
      }),
-
   ("rt", emptyCommandInfo {
      longname = "rank_trees",
      synopsis = "show trees in an order of decreasing probability",
@@ -570,14 +381,14 @@ pgfCommands = Map.fromList [
        "by the file given by flag -probs=FILE, where each line has the form",
        "'function probability', e.g. 'youPol_Pron  0.01'."
        ],
-     exec = \env@(pgf, mos) opts ts -> do
-         pgf <- optProbs opts pgf
-         let tds = H.rankTreesByProbs pgf ts
+     exec = needPGF $ \opts es env@(pgf, _) -> do
+         let tds = sortBy (\(_,p) (_,q) -> compare p q)
+                          [(t, treeProbability pgf t) | t <- map cExpr (toExprs es)]
          if isOpt "v" opts
            then putStrLn $
-                  unlines [H.showExpr []  t ++ "\t--" ++ show d | (t,d) <- tds]
+                  unlines [PGF2.showExpr []  t ++ "\t--" ++ show d | (t,d) <- tds]
            else return ()
-         returnFromExprs $ map fst tds,
+         returnFromExprs $ map (hsExpr . fst) tds,
      flags = [
        ("probs","probabilities from this file (format 'f 0.6' per line)")
        ],
@@ -588,7 +399,7 @@ pgfCommands = Map.fromList [
       mkEx "p \"you are here\" | rt -probs=probs | pt -number=1 -- most probable result"
       ]
      }),
-
+{-
   ("tq", emptyCommandInfo {
      longname = "translation_quiz",
      syntax   = "tq -from=LANG -to=LANG (-cat=CAT)? (-probs=FILE)? TREE?",
@@ -679,21 +490,21 @@ pgfCommands = Map.fromList [
      exec = needPGF $ \opts arg env@(pgf, concs) ->
       do let es = toExprs arg
          let concs = optConcs env opts
-{-
-         let gvOptions=H.GraphvizOptions {H.noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
-                                          H.noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
-                                          H.noCat = isOpt "nocat" opts && not (isOpt "showcat" opts),
-                                          H.nodeFont = valStrOpts "nodefont" "" opts,
-                                          H.leafFont = valStrOpts "leaffont" "" opts,
-                                          H.nodeColor = valStrOpts "nodecolor" "" opts,
-                                          H.leafColor = valStrOpts "leafcolor" "" opts,
-                                          H.nodeEdgeStyle = valStrOpts "nodeedgestyle" "solid" opts,
-                                          H.leafEdgeStyle = valStrOpts "leafedgestyle" "dashed" opts
-                                         }
--}
+
+         let gvOptions=graphvizDefaults{noLeaves = isOpt "noleaves" opts && not (isOpt "showleaves" opts),
+                                        noFun = isOpt "nofun" opts || not (isOpt "showfun" opts),
+                                        noCat = isOpt "nocat" opts && not (isOpt "showcat" opts),
+                                        nodeFont = valStrOpts "nodefont" "" opts,
+                                        leafFont = valStrOpts "leaffont" "" opts,
+                                        nodeColor = valStrOpts "nodecolor" "" opts,
+                                        leafColor = valStrOpts "leafcolor" "" opts,
+                                        nodeEdgeStyle = valStrOpts "nodeedgestyle" "solid" opts,
+                                        leafEdgeStyle = valStrOpts "leafedgestyle" "dashed" opts
+                                       }
+
          let grph= if null es || null concs
                    then []
-                   else C.graphvizParseTree (snd (head concs)) (cExpr (head es))
+                   else graphvizParseTree (snd (head concs)) gvOptions (cExpr (head es))
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
@@ -704,31 +515,27 @@ pgfCommands = Map.fromList [
            return void
           else return $ fromString grph,
      examples = [
-       mkEx "p -lang=Eng \"John walks\" | vp  -- generate a tree and show parse tree as .dot script"--,
---     mkEx "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
+       mkEx "p -lang=Eng \"John walks\" | vp  -- generate a tree and show parse tree as .dot script",
+       mkEx "gr | vp -view=\"open\" -- generate a tree and display parse tree on a Mac"
        ],
      options = [
-{-
        ("showcat","show categories in the tree nodes (default)"),
        ("nocat","don't show categories"),
        ("showfun","show function names in the tree nodes"),
        ("nofun","don't show function names (default)"),
        ("showleaves","show the leaves of the tree (default)"),
        ("noleaves","don't show the leaves of the tree (i.e., only the abstract tree)")
--}
        ],
      flags = [
        ("lang","the language to visualize"),
        ("format","format of the visualization file (default \"png\")"),
-       ("view","program to open the resulting file (default \"open\")")--,
-{-
+       ("view","program to open the resulting file (default \"open\")"),
        ("nodefont","font for tree nodes (default: Times -- graphviz standard font)"),
        ("leaffont","font for tree leaves (default: nodefont)"),
        ("nodecolor","color for tree nodes (default: black -- graphviz standard color)"),
        ("leafcolor","color for tree leaves (default: nodecolor)"),
        ("nodeedgestyle","edge style between tree nodes (solid/dashed/dotted/bold, default: solid)"),
        ("leafedgestyle","edge style for links to leaves (solid/dashed/dotted/bold, default: dashed)")
--}
        ]
     }),
 
@@ -741,22 +548,22 @@ pgfCommands = Map.fromList [
        "If the -view flag is defined, the graph is saved in a temporary file",
        "which is processed by graphviz and displayed by the program indicated",
        "by the flag. The target format is postscript, unless overridden by the",
-       "flag -format."--,
---     "With option -mk, use for showing library style function names of form 'mkC'."
+       "flag -format."
        ],
      exec = needPGF $ \opts arg env@(pgf, _) ->
        let es = toExprs arg in
-       {-if isOpt "mk" opts
-       then return $ fromString $ unlines $ map (tree2mk pgf) es
-       else -}if isOpt "api" opts
+       if isOpt "api" opts
        then do
-         let ss = map exprToAPI es
-         mapM_ putStrLn ss
+         mapM_ (putStrLn . exprToAPI) es
          return void
        else do
---       let funs = not (isOpt "nofun" opts)
---       let cats = not (isOpt "nocat" opts)
-         let grph = unlines (map (C.graphvizAbstractTree pgf . cExpr) es)
+         let gvOptions=graphvizDefaults{noFun = isOpt "nofun" opts,
+                                        noCat = isOpt "nocat" opts,
+                                        nodeFont = valStrOpts "nodefont" "" opts,
+                                        nodeColor = valStrOpts "nodecolor" "" opts,
+                                        nodeEdgeStyle = valStrOpts "nodeedgestyle" "solid" opts
+                                       }
+         let grph = unlines (map (graphvizAbstractTree pgf gvOptions . cExpr) es)
          if isFlag "view" opts || isFlag "format" opts then do
            let file s = "_grph." ++ s
            let view = optViewGraph opts
@@ -771,98 +578,96 @@ pgfCommands = Map.fromList [
        mkEx "p \"hello\" | vt -view=\"open\" -- parse a string and display trees on a Mac"
        ],
      options = [
-       ("api", "show the tree with function names converted to 'mkC' with value cats C")--,
---     ("mk",  "similar to -api, deprecated"),
---     ("nofun","don't show functions but only categories"),
---     ("nocat","don't show categories but only functions")
+       ("api", "show the tree with function names converted to 'mkC' with value cats C"),
+       ("nofun","don't show functions but only categories"),
+       ("nocat","don't show categories but only functions")
        ],
      flags = [
        ("format","format of the visualization file (default \"png\")"),
-       ("view","program to open the resulting file (default \"open\")")
+       ("view","program to open the resulting file (default \"open\")"),
+       ("nodefont","font for tree nodes (default: Times -- graphviz standard font)"),
+       ("nodecolor","color for tree nodes (default: black -- graphviz standard color)"),
+       ("nodeedgestyle","edge style between tree nodes (solid/dashed/dotted/bold, default: solid)")
        ]
      }),
 
   ("ai", emptyCommandInfo {
      longname = "abstract_info",
---   syntax = "ai IDENTIFIER  or  ai EXPR",
-     syntax = "ai IDENTIFIER",
---   synopsis = "Provides an information about a function, an expression or a category from the abstract syntax",
-     synopsis = "Provides information about a function, or a category from the abstract syntax",
+     syntax = "ai IDENTIFIER  or  ai EXPR",
+     synopsis = "Provides an information about a function, an expression or a category from the abstract syntax",
      explanation = unlines [
---     "The command has one argument which is either function, expression or",
-       "The command has one argument which is either function or",
+       "The command has one argument which is either function, expression or",
        "a category defined in the abstract syntax of the current grammar. ",
        "If the argument is a function then its type is printed out.",
-       "If it is a category then the category definition is printed."{-,
+       "If it is a category then the category definition is printed.",
        "If a whole expression is given it prints the expression with refined",
-       "metavariables and the type of the expression."-}
+       "metavariables and the type of the expression."
        ],
-     exec = needPGF $ \ opts arg env@(pgf,cncs) -> do
-       case toExprs arg of
-         [H.EFun cid]
-             | id `elem` funs -> return (fromString (showFun pgf id))
-             | id `elem` cats -> return (fromString (showCat id))
-           where
-             id = H.showCId cid
-             funs = C.functions pgf
-             cats = C.categories pgf
-
-             showCat c = "cat "++c -- TODO: show categoryContext
-                         ++"\n\n"++
-                         unlines [showFun' f ty|f<-funs,
-                                                let ty=C.functionType pgf f,
-                                                target ty == c]
-           --target (C.DTyp _ c _) = c
-             target t = case C.unType t of (_,c,_) -> c
-{-
-         [e]         -> case H.inferExpr pgf e of
-                          Left tcErr   -> error $ render (H.ppTcError tcErr)
-                          Right (e,ty) -> do putStrLn ("Expression:  "++H.showExpr [] e)
-                                             putStrLn ("Type:        "++H.showType [] ty)
-                                             putStrLn ("Probability: "++show (H.probTree pgf e))
+     exec = needPGF $ \opts args env@(pgf,cncs) ->
+       case map cExpr (toExprs args) of
+         [e] -> case unApp e of
+                  Just (id,[]) -> return (fromString 
+                                            (case functionType pgf id of
+                                               Just ty -> showFun id ty
+                                               Nothing -> let funs = functionsByCat pgf id
+                                                          in showCat id funs))
+                                  where
+                                    showCat c funs = "cat "++showCategory pgf c++
+                                                     " ;\n\n"++
+                                                     unlines [showFun f ty| f<-funs,
+                                                                            Just ty <- [functionType pgf f]]
+                                    showFun f ty = "fun "++f++" : "++showType [] ty++" ;"
+                  _  -> case inferExpr pgf e of
+                          Left msg     -> error msg
+                          Right (e,ty) -> do putStrLn ("Expression:  "++PGF2.showExpr [] e)
+                                             putStrLn ("Type:        "++PGF2.showType [] ty)
+                                             putStrLn ("Probability: "++show (treeProbability pgf e))
                                              return void
--}
          _           -> do putStrLn "a single function name or category name is expected"
                            return void,
      needsTypeCheck = False
      })
   ]
  where
-{-
-   par pgf opts s = case optOpenTypes opts of
-                  []        -> [H.parse_ pgf lang (optType pgf opts) (Just dp) s | lang <- optLangs pgf opts]
-                  open_typs -> [H.parseWithRecovery pgf lang (optType pgf opts) open_typs (Just dp) s | lang <- optLangs pgf opts]
-     where
-       dp = valIntOpts "depth" 4 opts
--}
    cParse env@(pgf,_) opts ss = 
-        parsed [ C.parse cnc cat s | s<-ss,(lang,cnc)<-cncs]
+        parsed [ parse cnc cat s | s<-ss,(lang,cnc)<-cncs]
      where
-       cat = optCat pgf opts
+       cat = optType pgf opts
        cncs = optConcs env opts
        parsed rs = Piped (Exprs ts,unlines msgs)
           where
             ts = [hsExpr t|Right ts<-rs,(t,p)<-takeOptNum opts ts]
             msgs = concatMap (either err ok) rs
             err msg = ["Parse failed: "++msg]
-            ok = map (C.showExpr [] . fst).takeOptNum opts
+            ok = map (PGF2.showExpr [] . fst).takeOptNum opts
 
-   cLins env@(pgf,cncs) opts ts =
-       [l|t<-ts,l<-[abs++": "++show t|treebank]++[l|cnc<-cncs,l<-lin cnc t]]
+   optLins env opts ts = case opts of
+     _ | isOpt "groups" opts ->
+       concatMap snd $ groupResults
+         [[(lang, s) | (lang,concr) <- optConcs env opts,s <- linear opts lang concr t] | t <- ts]
+     _ -> concatMap (optLin env opts) ts
+   optLin env@(pgf,_) opts t =
+     case opts of
+       _ | isOpt "treebank" opts ->
+         (abstractName pgf ++ ": " ++ PGF2.showExpr [] t) :
+         [lang ++ ": " ++ s | (lang,concr) <- optConcs env opts, s<-linear opts lang concr t]
+       _ -> [s | (lang,concr) <- optConcs env opts, s<-linear opts lang concr t]
+
+   linear :: [Option] -> ConcName -> Concr -> PGF2.Expr -> [String]
+   linear opts lang concr = case opts of
+       _ | isOpt "all"     opts -> concat . map (map snd) . tabularLinearizeAll concr
+       _ | isOpt "list"    opts -> (:[]) . commaList .
+                                   concatMap (map snd) . tabularLinearizeAll concr
+       _ | isOpt "table"   opts -> concatMap (map (\(p,v) -> p+++":"+++v)) . tabularLinearizeAll concr
+       _ | isOpt "bracket" opts -> (:[]) . unwords . map showBracketedString . bracketedLinearize concr
+       _                        -> (:[]) . linearize concr
+
+   groupResults :: [[(ConcName,String)]] -> [(ConcName,[String])]
+   groupResults = Map.toList . foldr more Map.empty . start . concat
      where
-       lin (lang,cnc) t =
-           tag $ if all || list
-                 then optCommaList (C.linearizeAll cnc t)
-                 else [C.linearize cnc t]
-         where
-           tag = if treebank then map ((lang++": ")++) else id
-           optCommaList = if list then (:[]) . commaList else id
-
-       abs = C.abstractName pgf
-       cncs = optConcs env opts
-       treebank = isOpt "treebank" opts
-       all = isOpt "all" opts
-       list = isOpt "list" opts
+       start ls = [(l,[s]) | (l,s) <- ls]
+       more (l,s) = 
+          Map.insertWith (\ [x] xs -> if elem x xs then xs else (x : xs)) l s
 
    optConcs = optConcsFlag "lang"
 
@@ -873,39 +678,10 @@ pgfCommands = Map.fromList [
      where
        pickLang l = pick l `mplus` pick fl
          where
-           fl = C.abstractName pgf++l
+           fl = abstractName pgf++l
            pick l = (,) l `fmap` Map.lookup l cncs
 
 {-
-   optLins pgf opts ts = case opts of
-     _ | isOpt "groups" opts ->
-       map (unlines . snd) $ H.groupResults
-         [[(lang, linear pgf opts lang t) | lang <- optLangs pgf opts] | t <- ts]
-     _ -> map (optLin pgf opts) ts
-   optLin pgf opts t = unlines $
-     case opts of
-       _ | isOpt "treebank" opts && isOpt "chunks" opts ->
-         (H.showCId (H.abstractName pgf) ++ ": " ++ H.showExpr [] t) :
-         [H.showCId lang ++ ": " ++ li | (lang,li) <- linChunks pgf opts t] --linear pgf opts lang t | lang <- optLangs pgf opts]
-       _ | isOpt "treebank" opts ->
-         (H.showCId (H.abstractName pgf) ++ ": " ++ H.showExpr [] t) :
-         [H.showCId lang ++ ": " ++ linear pgf opts lang t | lang <- optLangs pgf opts]
-       _ | isOpt "chunks" opts -> map snd $ linChunks pgf opts t   
-       _ -> [linear pgf opts lang t | lang <- optLangs pgf opts]
-   linChunks pgf opts t = 
-     [(lang, unwords (intersperse "<+>" (map (linear pgf opts lang) (treeChunks t)))) | lang <- optLangs pgf opts]
-
-   linear :: H.PGF -> [Option] -> H.CId -> H.Expr -> String
-   linear pgf opts lang = let unl = unlex opts lang in case opts of
-       _ | isOpt "all"     opts -> unlines . concat . intersperse [[]] .
-                                   map (map (unl . snd)) . H.tabularLinearizes pgf lang
-       _ | isOpt "list"    opts -> commaList . concat . intersperse [[]] .
-                                   map (map (unl . snd)) . H.tabularLinearizes pgf lang
-       _ | isOpt "table"   opts -> unlines . concat . intersperse [[]] .
-                    map (map (\(p,v) -> p+++":"+++unl v)) . H.tabularLinearizes pgf lang
-       _ | isOpt "bracket" opts -> unwords . map H.showBracketedString . H.bracketedLinearize pgf lang
-       _                        -> unl . H.linearize pgf lang
-
    -- replace each non-atomic constructor with mkC, where C is the val cat
    tree2mk pgf = H.showExpr [] . t2m where
      t2m t = case H.unApp t of
@@ -924,75 +700,18 @@ pgfCommands = Map.fromList [
    commaList [] = []
    commaList ws = concat $ head ws : map (", " ++) (tail ws)
 
--- Proposed logic of coding in unlexing:
---   - If lang has no coding flag, or -to_utf8 is not in opts, just opts are used.
---   - If lang has flag coding=utf8, -to_utf8 is ignored.
---   - If lang has coding=other, and -to_utf8 is in opts, from_other is applied first.
--- THIS DOES NOT WORK UNFORTUNATELY - can't use the grammar flag properly
-{-
-   unlexx pgf opts lang = {- trace (unwords optsC) $ -} stringOps Nothing optsC where ----
-     optsC = case lookConcrFlag pgf (H.mkCId lang) (H.mkCId "coding") of
-       Just (LStr "utf8") -> filter (/="to_utf8") $ map prOpt opts
-       Just (LStr other) | isOpt "to_utf8" opts ->
-                      let cod = ("from_" ++ other)
-                      in cod : filter (/=cod) (map prOpt opts)
-       _ -> map prOpt opts
-
-   optRestricted opts pgf =
-     H.restrictPGF (\f -> and [H.hasLin pgf la f | la <- optLangs pgf opts]) pgf
-
-   optLang  = optLangFlag "lang"
-   optLangs = optLangsFlag "lang"
-
-   optLangsFlag f pgf opts = case valStrOpts f "" opts of
-     "" -> H.languages pgf
-     lang -> map (completeLang pgf) (chunks ',' lang)
-
-   completeLang pgf la = let cla = (H.mkCId la) in
-     if elem cla (H.languages pgf)
-       then cla
-       else (H.mkCId (H.showCId (H.abstractName pgf) ++ la))
-
-   optLangFlag f pgf opts = head $ optLangsFlag f pgf opts ++ [H.wildCId]
-
-   optOpenTypes opts = case valStrOpts "openclass" "" opts of
-     ""   -> []
-     cats -> mapMaybe H.readType (chunks ',' cats)
-
-   optProbs opts pgf = case valStrOpts "probs" "" opts of
-     ""   -> return pgf
-     file -> do
-       probs <- restricted $ H.readProbabilitiesFromFile file pgf
-       return (H.setProbabilities probs pgf)
-
-   optTranslit opts = case (valStrOpts "to" "" opts, valStrOpts "from" "" opts) of
-     ("","")  -> return id
-     (file,"") -> do
-       src <- restricted $ readFile file
-       return $ transliterateWithFile file src False
-     (_,file) -> do
-       src <- restricted $ readFile file
-       return $ transliterateWithFile file src True
-
    optFile opts = valStrOpts "file" "_gftmp" opts
--}
-   optCat pgf opts = 
-     case listFlags "cat" opts of
-     --v:_ -> C.DTyp [] (valueString v) []
-       v:_ -> C.mkType [] (valueString v) []
-       _   -> C.startCat pgf
 
-{-
    optType pgf opts =
-     let str = valStrOpts "cat" (H.showCId $ H.lookStartCat pgf) opts
-     in case H.readType str of
-          Just ty -> case H.checkType pgf ty of
-                       Left tcErr -> error $ render (H.ppTcError tcErr)
-                       Right ty   -> ty
-          Nothing -> error ("Can't parse '"++str++"' as a type")
+     case listFlags "cat" opts of
+       v:_ -> let str = valueString v
+              in case readType str of
+                   Just ty -> case checkType pgf ty of
+                                Left msg -> error msg
+                                Right ty -> ty
+                   Nothing -> error ("Can't parse '"++str++"' as a type")
+       _   -> startCat pgf
 
-   optComm opts = valStrOpts "command" "" opts
--}
    optViewFormat opts = valStrOpts "format" "png" opts
    optViewGraph opts = valStrOpts "view" "open" opts
 {-
@@ -1000,23 +719,7 @@ pgfCommands = Map.fromList [
 -}
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
    takeOptNum opts = take (optNumInf opts)
-{-
-   fromParse opts []     = ([],[])
-   fromParse opts ((s,(po,bs)):ps)
-     | isOpt "bracket" opts = (es, H.showBracketedString bs
-                                   ++ "\n" ++ msg)
-     | otherwise            = case po of
-                                H.ParseOk ts     -> let Piped (es',msg') = fromExprs ts
-                                                  in (es'++es,msg'++msg)
-                                H.TypeError errs -> ([], render ("The parsing is successful but the type checking failed with error(s):" $$
-                                                               nest 2 (vcat (map (H.ppTcError . snd) errs)))
-                                                       ++ "\n" ++ msg)
-                                H.ParseFailed i  -> ([], "The parser failed at token " ++ show (words s !! max 0 (i-1))
-                                                       ++ "\n" ++ msg)
-                                H.ParseIncomplete-> ([], "The sentence is not complete")
-     where
-       (es,msg) = fromParse opts ps
--}
+
    returnFromCExprs = returnFromExprs . map hsExpr
    returnFromExprs es =
       return $ case es of
@@ -1024,49 +727,25 @@ pgfCommands = Map.fromList [
                  _  -> fromExprs es
 
    prGrammar env@(pgf,cncs) opts
-     | isOpt "langs" opts = return . fromString . unwords $ Map.keys cncs
-     | isOpt "cats" opts = return . fromString . unwords $ C.categories pgf
-     | isOpt "funs" opts = return . fromString . unlines . map (showFun pgf) $
-                             C.functions pgf
-     | otherwise = return void -- TODO implement more options
+     | isOpt "langs" opts = return . fromString . unwords $ (map fst (optConcs env opts))
+     | isOpt "cats" opts = return . fromString . unwords $ categories pgf
+     | isOpt "funs" opts = return . fromString . unwords $ functions pgf
+     | isOpt "missing" opts = return . fromString . unwords $
+                                 [f | f <- functions pgf, not (and [hasLinearization concr f | (_,concr) <- optConcs env opts])]
+     | isOpt "fullform" opts = return $ fromString $ concatMap (prFullFormLexicon . snd) $ optConcs env opts
+     | isOpt "words"    opts = return $ fromString $ concatMap (prAllWords . snd) $ optConcs env opts
+     | isOpt "lexc"     opts = return $ fromString $ concatMap (prLexcLexicon . snd) $ optConcs env opts
+     | otherwise = return void
 
-   showFun pgf f = showFun' f (C.functionType pgf f)
-   showFun' f ty = "fun "++f++" : "++C.showType [] ty
+   gizaAlignment pgf src_cnc tgt_cnc e =
+     let src_res   = alignWords src_cnc e
+         tgt_res   = alignWords tgt_cnc e
+         alignment = [show i++"-"++show j | (i,(_,src_fids)) <- zip [0..] src_res, (j,(_,tgt_fids)) <- zip [0..] tgt_res, not (null (intersect src_fids tgt_fids))]
+     in (unwords (map fst src_res), unwords (map fst tgt_res), unwords alignment)
 
+   morphos env opts s =
+     [(s,res) | (lang,concr) <- optConcs env opts, let res = lookupMorpho concr s, not (null res)]
 {-
-   prGrammar env@(pgf,mos) opts
-     | isOpt "pgf"      opts = do
-          let pgf1 = if isOpt "opt" opts then H.optimizePGF pgf else pgf
-          let outfile = valStrOpts "file" (H.showCId (H.abstractName pgf) ++ ".pgf") opts
-          restricted $ encodeFile outfile pgf1
-          putStrLn $ "wrote file " ++ outfile
-          return void
-     | isOpt "cats"     opts = return $ fromString $ unwords $ map H.showCId $ H.categories pgf
-     | isOpt "funs"     opts = return $ fromString $ unlines $ map showFun $ funsigs pgf
-     | isOpt "fullform" opts = return $ fromString $ concatMap (morpho mos "" prFullFormLexicon) $ optLangs pgf opts
-     | isOpt "langs"    opts = return $ fromString $ unwords $ map H.showCId $ H.languages pgf
-
-     | isOpt "lexc"     opts = return $ fromString $ concatMap (morpho mos "" prLexcLexicon) $ optLangs pgf opts
-     | isOpt "missing"  opts = return $ fromString $ unlines $ [unwords (H.showCId la:":": map H.showCId cs) |
-                                                                  la <- optLangs pgf opts, let cs = H.missingLins pgf la]
-     | isOpt "words" opts = return $ fromString $ concatMap (morpho mos "" prAllWords) $ optLangs pgf opts
-     | otherwise             = do fmt <- readOutputFormat (valStrOpts "printer" "pgf_pretty" opts)
-                                  return $ fromString $ concatMap snd $ exportPGF noOptions fmt pgf
-
-   funsigs pgf = [(f,ty) | (f,(ty,_,_,_)) <- Map.assocs (H.funs (H.abstract pgf))]
-   showFun (f,ty) = H.showCId f ++ " : " ++ H.showType [] ty ++ " ;"
-
-   morphos (pgf,mos) opts s =
-     [(s,morpho mos [] (\mo -> H.lookupMorpho mo s) la) | la <- optLangs pgf opts]
-
-   morpho mos z f la = maybe z f $ Map.lookup la mos
-
-   optMorpho (pgf,mos) opts = morpho mos (error "no morpho") id (head (optLangs pgf opts))
-
-   optClitics opts = case valStrOpts "clitics" "" opts of
-     "" -> []
-     cs -> map reverse $ chunks ',' cs
-
    mexp xs = case xs of
      t:_ -> Just t
      _   -> Nothing
@@ -1094,41 +773,40 @@ morphologyQuiz mex pgf ig typ = do
 -- | the maximal number of precompiled quiz problems
 infinity :: Int
 infinity = 256
-
-prLexcLexicon :: H.Morpho -> String
-prLexcLexicon mo =
-  unlines $ "Multichar_Symbols":multichars:"":"LEXICON Root" : [prLexc l p ++ ":" ++ w  ++ " # ;" | (w,lps) <- morpho, (l,p) <- lps] ++ ["END"]
+-}
+prLexcLexicon :: Concr -> String
+prLexcLexicon concr =
+  unlines $ "Multichar_Symbols":multichars:"":"LEXICON Root" : [prLexc l p ++ ":" ++ w  ++ " # ;" | (w,lps) <- morpho, (l,p,_) <- lps] ++ ["END"]
  where
-  morpho = H.fullFormLexicon mo
-  prLexc l p = H.showCId l ++ concat (mkTags (words p))
+  morpho = fullFormLexicon concr
+  prLexc l p = l ++ concat (mkTags (words p))
   mkTags p = case p of
     "s":ws -> mkTags ws   --- remove record field
     ws -> map ('+':) ws
 
-  multichars = unwords $ nub $ concat [mkTags (words p) | (w,lps) <- morpho, (l,p) <- lps]
+  multichars = unwords $ nub $ concat [mkTags (words p) | (w,lps) <- morpho, (l,p,_) <- lps]
   -- thick_A+(AAdj+Posit+Gen):thick's # ;
 
-prFullFormLexicon :: H.Morpho -> String
-prFullFormLexicon mo =
-  unlines (map prMorphoAnalysis (H.fullFormLexicon mo))
+prFullFormLexicon :: Concr -> String
+prFullFormLexicon concr =
+  unlines (map prMorphoAnalysis (fullFormLexicon concr))
 
-prAllWords :: H.Morpho -> String
-prAllWords mo =
-  unwords [w | (w,_) <- H.fullFormLexicon mo]
+prAllWords :: Concr -> String
+prAllWords concr =
+  unwords [w | (w,_) <- fullFormLexicon concr]
 
-prMorphoAnalysis :: (String,[(H.Lemma,H.Analysis)]) -> String
+prMorphoAnalysis :: (String,[MorphoAnalysis]) -> String
 prMorphoAnalysis (w,lps) =
-  unlines (w:[H.showCId l ++ " : " ++ p | (l,p) <- lps])
--}
+  unlines (w:[fun ++ " : " ++ cat | (fun,cat,p) <- lps])
 
 hsExpr c =
-  case C.unApp c of
+  case unApp c of
     Just (f,cs) -> H.mkApp (H.mkCId f) (map hsExpr cs)
     _ -> error "GF.Command.Commands2.hsExpr"
 
 cExpr e =
   case H.unApp e of
-    Just (f,es) -> C.mkApp (H.showCId f) (map cExpr es)
+    Just (f,es) -> mkApp (H.showCId f) (map cExpr es)
     _ -> error "GF.Command.Commands2.cExpr"
 
 needPGF exec opts ts =

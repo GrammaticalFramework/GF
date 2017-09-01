@@ -35,7 +35,7 @@ namespace PGFSharp
         /// </summary>
         /// <param name="typeStr"></param>
         /// <returns></returns>
-        public Type ReadType(string typeStr)
+        public static Type ReadType(string typeStr)
         {
             var tmp_pool = new NativeGU.NativeMemoryPool();
             var exn = new NativeGU.NativeExceptionContext(tmp_pool);
@@ -73,7 +73,7 @@ namespace PGFSharp
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct PgfType
+        internal struct PgfType
         {
             public IntPtr hypos; // GuSeq of PgfHypo
             public IntPtr cid;
