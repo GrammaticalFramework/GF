@@ -29,6 +29,8 @@ resource HarmonyTur = ParamX ** open Prelude, Predef in {
   oper
     -- Some pattern macros used by some opers (especially those related to
     -- harmonies) in ResTur.gf and ParadigmsTur.gf
+    frontVowel : pattern Str = #("e"|"i"|"ö"|"ü") ;
+    backVowel  : pattern Str = #("a"|"ı"|"o"|"u") ;
 
     -- Capital forms of vowels are also added, otherwise harmony of proper
     -- nouns like "Of" can not be determined
