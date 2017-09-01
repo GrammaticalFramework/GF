@@ -109,11 +109,11 @@ mkProbDefs :: PGF -> ([[CId]],[(CId,Type,[Equation])])
 mkProbDefs pgf =
   let cs = [(c,hyps,fns) | (c,(hyps0,fs,_)) <- Map.toList (cats (abstract pgf)),
                            not (elem c [cidString,cidInt,cidFloat]),
-	                       let hyps = zipWith (\(bt,_,ty) n -> (bt,mkCId ('v':show n),ty))
-	                                          hyps0
-	                                          [1..]
-	                           fns  = [(f,ty) | (_,f) <- fs, 
-	                                            let Just (ty,_,_,_) = Map.lookup f (funs (abstract pgf))]
+                           let hyps = zipWith (\(bt,_,ty) n -> (bt,mkCId ('v':show n),ty))
+                                              hyps0
+                                              [1..]
+                               fns  = [(f,ty) | (_,f) <- fs, 
+                                               let Just (ty,_,_,_) = Map.lookup f (funs (abstract pgf))]
            ]
       ((_,css),eqss) = mapAccumL (\(ngen,css) (c,hyps,fns) -> 
               let st0      = (1,Map.empty)
