@@ -1091,7 +1091,7 @@ n0 -- n3 [style = "solid"]
 }
 </pre>
 <pre class="haskell">
-Prelude PGF2> putStrLn (graphvizAbstractTree gr e)
+Prelude PGF2> putStrLn (graphvizAbstractTree gr graphvizDefaults e)
 graph {
 n0[label = "AdjCN", style = "solid", shape = "plaintext"]
 n1[label = "PositA", style = "solid", shape = "plaintext"]
@@ -1171,7 +1171,7 @@ graph {
 }
 </pre>
 <pre class="haskell">
-Prelude PGF2> putStrLn (graphvizParseTree eng e)
+Prelude PGF2> putStrLn (graphvizParseTree eng graphvizDefaults e)
 graph {
   node[shape=plaintext]
 
