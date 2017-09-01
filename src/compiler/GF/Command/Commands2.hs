@@ -634,18 +634,17 @@ pgfCommands = Map.fromList [
      exec = needPGF $ \opts args env@(pgf,cncs) ->
        case map cExpr (toExprs args) of
          [e] -> case unApp e of
-                  Just (id,[]) | id `elem` funs -> return (fromString (showFun pgf id))
-                               | id `elem` cats -> return (fromString (showCat id))
-                               where
-                                 funs = functions  pgf
-                                 cats = categories pgf
-
-                                 showCat c = "cat "++c -- TODO: show categoryContext
-                                             ++"\n\n"++
-                                             unlines [showFun' f ty|f<-funs,
-                                                                    let ty=functionType pgf f,
-                                                                    target ty == c]
-                                 target t = case unType t of (_,c,_) -> c
+                  Just (id,[]) -> return (fromString 
+                                            (case functionType pgf id of
+                                               Just ty -> showFun id ty
+                                               Nothing -> let funs = functionsByCat pgf id
+                                                          in showCat id funs))
+                                  where
+                                    showCat c funs = "cat "++showCategory pgf c++
+                                                     " ;\n\n"++
+                                                     unlines [showFun f ty| f<-funs,
+                                                                            Just ty <- [functionType pgf f]]
+                                    showFun f ty = "fun "++f++" : "++showType [] ty++" ;"
                   _  -> case inferExpr pgf e of
                           Left msg     -> error msg
                           Right (e,ty) -> do putStrLn ("Expression:  "++PGF2.showExpr [] e)
@@ -758,17 +757,13 @@ pgfCommands = Map.fromList [
    prGrammar env@(pgf,cncs) opts
      | isOpt "langs" opts = return . fromString . unwords $ (map fst (optConcs env opts))
      | isOpt "cats" opts = return . fromString . unwords $ categories pgf
-     | isOpt "funs" opts = return . fromString . unlines . map (showFun pgf) $
-                             functions pgf
+     | isOpt "funs" opts = return . fromString . unwords $ functions pgf
      | isOpt "missing" opts = return . fromString . unwords $
                                  [f | f <- functions pgf, not (and [hasLinearization concr f | (_,concr) <- optConcs env opts])]
      | isOpt "fullform" opts = return $ fromString $ concatMap (prFullFormLexicon . snd) $ optConcs env opts
      | isOpt "words"    opts = return $ fromString $ concatMap (prAllWords . snd) $ optConcs env opts
      | isOpt "lexc"     opts = return $ fromString $ concatMap (prLexcLexicon . snd) $ optConcs env opts
      | otherwise = return void
-
-   showFun pgf f = showFun' f (functionType pgf f)
-   showFun' f ty = "fun "++f++" : "++showType [] ty
 
    gizaAlignment pgf src_cnc tgt_cnc e =
      let src_res   = alignWords src_cnc e
