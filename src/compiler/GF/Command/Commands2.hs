@@ -7,44 +7,17 @@ import Prelude hiding (putStrLn)
 
 import PGF2
 import qualified PGF as H
-
---import qualified PGF.Internal as H(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
-import qualified PGF.Internal as H(Expr(EFun)) ----abstract,funs,cats,
---import qualified PGF.Internal as H(Literal(LStr),Expr(ELit)) ----
---import qualified PGF.Internal as H(ppFun,ppCat)
-
---import qualified PGF.Internal as H(optimizePGF)
-
---import GF.Compile.Export
 import GF.Compile.ToAPI(exprToAPI)
---import GF.Compile.ExampleBased
---import GF.Infra.Option (noOptions, readOutputFormat, outputFormatsExpl)
 import GF.Infra.UseIO(writeUTF8File)
 import GF.Infra.SIO(MonadSIO,liftSIO,putStrLn,restricted,restrictedSystem)
---import GF.Data.ErrM ----
 import GF.Command.Abstract
---import GF.Command.Messages
 import GF.Command.CommandInfo
---import GF.Text.Lexing
---import GF.Text.Clitics
---import GF.Text.Transliterations
---import GF.Quiz
-
---import GF.Command.TreeOperations ---- temporary place for typecheck and compute
-
 import GF.Data.Operations
-
---import PGF.Internal (encodeFile)
 import Data.List(intersperse,intersect,nub)
 import Data.Maybe
 import qualified Data.Map as Map
---import System.Cmd(system) -- use GF.Infra.UseIO.restricedSystem instead!
---import GF.System.Process
 import GF.Text.Pretty
---import Data.List (sort)
 import Control.Monad(mplus)
---import Debug.Trace
---import System.Random (newStdGen) ----
 
 
 data PGFEnv = Env {pgf::Maybe PGF,concs::Map.Map ConcName Concr}
@@ -54,8 +27,13 @@ emptyPGFEnv = Env Nothing Map.empty
 
 class (Monad m,MonadSIO m) => HasPGFEnv m where getPGFEnv :: m PGFEnv
 
-instance Monad m => TypeCheckArg m where
-  typeCheckArg = return -- no type checker available !!
+instance (Monad m,HasPGFEnv m) => TypeCheckArg m where
+  typeCheckArg e = do env <- getPGFEnv
+                      case pgf env of
+                        Just gr -> either fail
+                                          (return . hsExpr . fst)
+                                          (inferExpr gr (cExpr e))
+                        Nothing  -> fail "Import a grammar before using this command"
 
 pgfCommands :: HasPGFEnv m => Map.Map String (CommandInfo m)
 pgfCommands = Map.fromList [
@@ -571,17 +549,13 @@ pgfCommands = Map.fromList [
        "If the -view flag is defined, the graph is saved in a temporary file",
        "which is processed by graphviz and displayed by the program indicated",
        "by the flag. The target format is postscript, unless overridden by the",
-       "flag -format."--,
---     "With option -mk, use for showing library style function names of form 'mkC'."
+       "flag -format."
        ],
      exec = needPGF $ \opts arg env@(pgf, _) ->
        let es = toExprs arg in
-       {-if isOpt "mk" opts
-       then return $ fromString $ unlines $ map (tree2mk pgf) es
-       else -}if isOpt "api" opts
+       if isOpt "api" opts
        then do
-         let ss = map exprToAPI es
-         mapM_ putStrLn ss
+         mapM_ (putStrLn . exprToAPI) es
          return void
        else do
          let gvOptions=graphvizDefaults{noFun = isOpt "nofun" opts,
@@ -606,7 +580,6 @@ pgfCommands = Map.fromList [
        ],
      options = [
        ("api", "show the tree with function names converted to 'mkC' with value cats C"),
---     ("mk",  "similar to -api, deprecated"),
        ("nofun","don't show functions but only categories"),
        ("nocat","don't show categories but only functions")
        ],
