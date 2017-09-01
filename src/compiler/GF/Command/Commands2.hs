@@ -13,7 +13,7 @@ import GF.Infra.SIO(MonadSIO,liftSIO,putStrLn,restricted,restrictedSystem)
 import GF.Command.Abstract
 import GF.Command.CommandInfo
 import GF.Data.Operations
-import Data.List(intersperse,intersect,nub)
+import Data.List(intersperse,intersect,nub,sortBy)
 import Data.Maybe
 import qualified Data.Map as Map
 import GF.Text.Pretty
@@ -372,7 +372,6 @@ pgfCommands = Map.fromList [
          _ -> return (fromString s),
      flags = [("file","the input file name")]
      }),
-{-
   ("rt", emptyCommandInfo {
      longname = "rank_trees",
      synopsis = "show trees in an order of decreasing probability",
@@ -382,14 +381,14 @@ pgfCommands = Map.fromList [
        "by the file given by flag -probs=FILE, where each line has the form",
        "'function probability', e.g. 'youPol_Pron  0.01'."
        ],
-     exec = \env@(pgf, mos) opts ts -> do
-         pgf <- optProbs opts pgf
-         let tds = H.rankTreesByProbs pgf ts
+     exec = needPGF $ \opts es env@(pgf, _) -> do
+         let tds = sortBy (\(_,p) (_,q) -> compare p q)
+                          [(t, treeProbability pgf t) | t <- map cExpr (toExprs es)]
          if isOpt "v" opts
            then putStrLn $
-                  unlines [H.showExpr []  t ++ "\t--" ++ show d | (t,d) <- tds]
+                  unlines [PGF2.showExpr []  t ++ "\t--" ++ show d | (t,d) <- tds]
            else return ()
-         returnFromExprs $ map fst tds,
+         returnFromExprs $ map (hsExpr . fst) tds,
      flags = [
        ("probs","probabilities from this file (format 'f 0.6' per line)")
        ],
@@ -400,7 +399,7 @@ pgfCommands = Map.fromList [
       mkEx "p \"you are here\" | rt -probs=probs | pt -number=1 -- most probable result"
       ]
      }),
-
+{-
   ("tq", emptyCommandInfo {
      longname = "translation_quiz",
      syntax   = "tq -from=LANG -to=LANG (-cat=CAT)? (-probs=FILE)? TREE?",
