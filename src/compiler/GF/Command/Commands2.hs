@@ -35,7 +35,7 @@ import GF.Command.CommandInfo
 import GF.Data.Operations
 
 --import PGF.Internal (encodeFile)
-import Data.List(intersperse,nub)
+import Data.List(intersperse,intersect,nub)
 import Data.Maybe
 import qualified Data.Map as Map
 --import System.Cmd(system) -- use GF.Infra.UseIO.restricedSystem instead!
@@ -72,30 +72,29 @@ pgfCommands = Map.fromList [
        ],
      exec = needPGF $ \opts es env -> do
          let cncs = optConcs env opts
-         {-if isOpt "giza" opts
-           then do
-             let giz = map (H.gizaAlignment pgf (head $ langs, head $ tail $ langs)) es
-             let lsrc = unlines $ map (\(x,_,_) -> x) giz
-             let ltrg = unlines $ map (\(_,x,_) -> x) giz
-             let align = unlines $ map (\(_,_,x) -> x) giz
-             let grph = if null es then [] else lsrc ++ "\n--end_source--\n\n"++ltrg++"\n-end_target--\n\n"++align
-             return $ fromString grph
-           else do-}
-         do  let gvOptions=graphvizDefaults{leafFont = valStrOpts "font" "" opts,
-                                            leafColor = valStrOpts "color" "" opts,
-                                            leafEdgeStyle = valStrOpts "edgestyle" "" opts
-                                           }
-                 grph = if null (toExprs es) then [] else graphvizWordAlignment (map snd cncs) gvOptions (cExpr (head (toExprs es)))
-             if isFlag "view" opts || isFlag "format" opts
-               then do
-                 let file s = "_grph." ++ s
-                 let view = optViewGraph opts
-                 let format = optViewFormat opts
-                 restricted $ writeUTF8File (file "dot") grph
-                 restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
-                 restrictedSystem $ view ++ " " ++ file format
-                 return void
-               else return $ fromString grph,
+         if isOpt "giza" opts
+           then if length cncs == 2
+                  then let giz = map (gizaAlignment pgf (snd (cncs !! 0)) (snd (cncs !! 1)) . cExpr) (toExprs es)
+                           lsrc = unlines $ map (\(x,_,_) -> x) giz
+                           ltrg = unlines $ map (\(_,x,_) -> x) giz
+                           align = unlines $ map (\(_,_,x) -> x) giz
+                           grph = if null (toExprs es) then [] else lsrc ++ "\n--end_source--\n\n"++ltrg++"\n-end_target--\n\n"++align
+                       in return (fromString grph)
+                  else error "For giza alignment you need exactly two languages"
+           else let gvOptions=graphvizDefaults{leafFont = valStrOpts "font" "" opts,
+                                               leafColor = valStrOpts "color" "" opts,
+                                               leafEdgeStyle = valStrOpts "edgestyle" "" opts
+                                              }
+                    grph = if null (toExprs es) then [] else graphvizWordAlignment (map snd cncs) gvOptions (cExpr (head (toExprs es)))
+                in if isFlag "view" opts || isFlag "format" opts
+                     then do let file s = "_grph." ++ s
+                             let view = optViewGraph opts
+                             let format = optViewFormat opts
+                             restricted $ writeUTF8File (file "dot") grph
+                             restrictedSystem $ "dot -T" ++ format ++ " " ++ file "dot" ++ " > " ++ file format
+                             restrictedSystem $ view ++ " " ++ file format
+                             return void
+                     else return (fromString grph),
      examples = [
        ("gr | aw"                         , "generate a tree and show word alignment as graph script"),
        ("gr | aw -view=\"open\""          , "generate a tree and display alignment on Mac"),
@@ -771,8 +770,14 @@ pgfCommands = Map.fromList [
    showFun pgf f = showFun' f (functionType pgf f)
    showFun' f ty = "fun "++f++" : "++showType [] ty
 
+   gizaAlignment pgf src_cnc tgt_cnc e =
+     let src_res   = alignWords src_cnc e
+         tgt_res   = alignWords tgt_cnc e
+         alignment = [show i++"-"++show j | (i,(_,src_fids)) <- zip [0..] src_res, (j,(_,tgt_fids)) <- zip [0..] tgt_res, not (null (intersect src_fids tgt_fids))]
+     in (unwords (map fst src_res), unwords (map fst tgt_res), unwords alignment)
+
    morphos env opts s =
-     [(s,lookupMorpho concr s) | (lang,concr) <- optConcs env opts]
+     [(s,res) | (lang,concr) <- optConcs env opts, let res = lookupMorpho concr s, not (null res)]
 {-
    mexp xs = case xs of
      t:_ -> Just t
