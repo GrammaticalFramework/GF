@@ -109,9 +109,6 @@ Library
   exposed-modules: 
     PGF
     PGF.Internal
-    PGF.Lexing
-    PGF.LexingAGreek
-    PGF.Utilities
     PGF.Haskell
 
   other-modules:
@@ -137,6 +134,7 @@ Library
     PGF.VisualizeTree
     PGF.ByteCode
     PGF.OldBinary
+    PGF.Utilities
 
   if flag(c-runtime)
     exposed-modules: PGF2

@@ -4,8 +4,8 @@ module PGFService(cgiMain,cgiMain',getPath,
                   Caches,pgfCache,newPGFCache,flushPGFCache,listPGFCache) where
 
 import PGF (PGF,Labels,CncLabels)
+import GF.Text.Lexing
 import qualified PGF
-import PGF.Lexing
 import Cache
 import CGIUtils(outputJSONP,outputPlain,outputHTML,outputText,
                 outputBinary,outputBinary',
@@ -272,8 +272,11 @@ cpgfMain qsem command (t,(pgf,pc)) =
             maybe (Left ("["++w++"]")) Right $
             msum [parse1 w,parse1 ow,morph w,morph ow]
           where
-            ow = if w==lw then capitInit w else lw
-            lw = uncapitInit w
+            ow = case w of
+                   c:cs | isLower c -> toUpper c : cs
+                        | isUpper c -> toLower c : cs
+                   s                -> s
+
             parse1 = either (const Nothing) (fmap fst . listToMaybe) .
                      C.parse concr cat
             morph w = listToMaybe
@@ -293,7 +296,7 @@ cpgfMain qsem command (t,(pgf,pc)) =
     from1 = maybe (missing "from") return =<< from'
     from' = getLang "from"
 
-    to = (,) # getLangs "to" % unlexerC
+    to = (,) # getLangs "to" % unlexer (const False)
 
     getLangs = getLangs' readLang
     getLang = getLang' readLang
@@ -308,8 +311,7 @@ cpgfMain qsem command (t,(pgf,pc)) =
               let t = C.readExpr s
               maybe (badRequest "bad tree" s) return t
 
-    --c_lexer concr = lexer
-    c_lexer concr = ilexer (not . null . C.lookupMorpho concr)
+    c_lexer concr = lexer (not . null . C.lookupMorpho concr)
 
 --------------------------------------------------------------------------------
 
@@ -338,62 +340,29 @@ instance ToATree C.Expr where
 --------------------------------------------------------------------------------
 -- * Lexing
 
--- | Lexers with a text lexer that tries to be a more clever with the first word
-ilexer good = lexer' uncap
-  where
-    uncap s = case span isUpper s of
-                ([c],r) | not (good s) -> toLower c:r
-                _ -> s
-
 -- | Standard lexers
-lexer = lexer' uncapitInit
-
-lexer' uncap = maybe (return id) lexerfun =<< getInput "lexer" 
+lexer good = maybe (return id) lexerfun =<< getInput "lexer" 
   where
     lexerfun name =
-       case name of
-         "text"  -> return (unwords . lexText' uncap)
-         "code"  -> return (unwords . lexCode)
-         "mixed" -> return (unwords . lexMixed)
-         _ -> badRequest "Unknown lexer" name
+      case stringOp good ("lex"++name) of
+        Just fn -> return fn
+        Nothing -> badRequest "Unknown lexer" name
 
 
 type Unlexer = String->String
 
 -- | Unlexing for the C runtime system, &+ is already applied
-unlexerC :: CGI Unlexer
-unlexerC = maybe (return id) unlexerfun =<< getInput "unlexer"
+unlexer :: (String -> Bool) -> CGI Unlexer
+unlexer good = maybe (return id) unlexerfun =<< getInput "unlexer"
   where
     unlexerfun name =
-       case name of
-         "text"  -> return (unlexText' . words)
-         "code"  -> return (unlexCode . words)
-         "mixed" -> return (unlexMixed . words)
-         "none"  -> return id
-         "id"    -> return id
-         _ -> badRequest "Unknown lexer" name
-
--- | Unlex text, skipping the quality marker used by the App grammar
-unlexText' ("+":ws) = "+ "++unlexText ws
-unlexText' ("*":ws) = "* "++unlexText ws
-unlexText' ws       = unlexText ws
-
--- | Unlexing for the Haskell run-time, applying the &+ operator first
-unlexerH :: CGI Unlexer
-unlexerH = maybe (return doBind) unlexerfun =<< getInput "unlexer"
-  where
-    unlexerfun name =
-       case name of
-         "text"  -> return (unlexText' . bind)
-         "code"  -> return (unlexCode . bind)
-         "mixed" -> return (unlexMixed . bind)
-         "none"  -> return id
-         "id"    -> return id
-         "bind"  -> return doBind
-         _ -> badRequest "Unknown lexer" name
-
-    doBind = unwords . bind
-    bind = bindTok . words
+       case stringOp good ("unlex"++name) of
+         Just fn -> return (fn . cleanMarker)
+         Nothing -> badRequest "Unknown unlexer" name
+    
+    cleanMarker ('+':cs) = cs
+    cleanMarker ('*':cs) = cs
+    cleanMarker cs       = cs
 
 --------------------------------------------------------------------------------
 -- * Haskell run-time functionality
@@ -431,8 +400,8 @@ pgfMain lcs@(alc,clc) path command tpgf@(t,pgf) =
                inp <- textInput
                return (fr,lex inp)
 
-    mlexer Nothing = lexer
-    mlexer (Just lang) = ilexer (PGF.isInMorpho morpho)
+    mlexer Nothing     = lexer (const False)
+    mlexer (Just lang) = lexer (PGF.isInMorpho morpho)
       where morpho = PGF.buildMorpho pgf lang
 
     tree :: CGI PGF.Tree
@@ -489,7 +458,7 @@ pgfMain lcs@(alc,clc) path command tpgf@(t,pgf) =
     from = getLang "from"
 
     to1 = maybe (missing "to") return =<< getLang "to"
-    to = (,) # getLangs "to" % unlexerH
+    to = (,) # getLangs "to" % unlexer (const False)
 
     getLangs = getLangs' readLang
     getLang = getLang' readLang
