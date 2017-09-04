@@ -325,6 +325,9 @@ foreign import ccall "pgf/pgf.h pgf_expr_unlit"
 foreign import ccall "pgf/expr.h pgf_expr_arity"
   pgf_expr_arity :: PgfExpr -> IO CInt
 
+foreign import ccall "pgf/expr.h pgf_expr_eq"
+  pgf_expr_eq :: PgfExpr -> PgfExpr -> IO CInt
+
 foreign import ccall "pgf/expr.h pgf_compute_tree_probability"
   pgf_compute_tree_probability :: Ptr PgfPGF -> PgfExpr -> IO CFloat
 
