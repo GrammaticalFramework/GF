@@ -4,7 +4,7 @@ module GF.Command.TreeOperations (
   treeChunks
   ) where
 
-import PGF(PGF,CId,compute,unApp,paraphrase)
+import PGF(PGF,CId,compute,unApp)
 import PGF.Internal(Expr(..),unAppForm)
 import Data.List
 
@@ -19,8 +19,6 @@ allTreeOps pgf = [
       Left  $ map (compute pgf))),
    ("transfer",("syntactic transfer by applying function, recursively in subtrees",
       Right $ \f -> map (transfer pgf f))),
-   ("paraphrase",("paraphrase by using semantic definitions (def)",
-      Left  $ nub . concatMap (paraphrase pgf))),
    ("largest",("sort trees from largest to smallest, in number of nodes",
       Left  $ largest)),
    ("nub",("remove duplicate trees",
@@ -31,8 +29,6 @@ allTreeOps pgf = [
       Left  $ concatMap subtrees)),
    ("funs",("return all fun functions appearing in the tree, with duplications",
       Left  $ concatMap funNodes))
----   ("chunks",("return all chunks, i.e. maximal subtrees where the top node is not a metavariable",
----      Left  $ concatMap treeChunks)) --- a tree with ? head does not type check anyway AR 5/11/2013
   ]
 
 largest :: [Expr] -> [Expr]
