@@ -185,7 +185,7 @@ pgf_read_type(GuIn* in, GuPool* pool, GuExn* err);
 PGF_API_DECL bool
 pgf_literal_eq(PgfLiteral lit1, PgfLiteral lit2);
 
-PGF_API_DECL bool
+PGF_API_DECL int
 pgf_expr_eq(PgfExpr e1, PgfExpr e2);
 
 PGF_API_DECL bool

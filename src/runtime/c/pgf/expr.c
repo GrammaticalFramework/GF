@@ -1037,7 +1037,7 @@ pgf_literal_eq(PgfLiteral lit1, PgfLiteral lit2)
     return false;
 }
 
-PGF_API bool
+PGF_API int
 pgf_expr_eq(PgfExpr e1, PgfExpr e2)
 {
 	GuVariantInfo ei1 = gu_variant_open(e1);
