@@ -1,0 +1,80 @@
+name: pgf
+version: 3.9-git
+
+cabal-version: >= 1.20
+build-type: Simple
+license: OtherLicense
+category: Natural Language Processing
+synopsis: Grammatical Framework
+description: A library for interpreting the Portable Grammar Format (PGF)
+homepage: http://www.grammaticalframework.org/
+bug-reports: https://github.com/GrammaticalFramework/GF/issues
+maintainer: Thomas Hallgren
+tested-with: GHC==7.6.3, GHC==7.8.3, GHC==7.10.3, GHC==8.0.2
+
+flag custom-binary
+  Description: Use a customised version of the binary package
+  Default:     True
+  Manual:      True
+
+Library
+  default-language:    Haskell2010
+  build-depends: base >= 4.6 && <5,
+                 array,
+                 containers,
+                 bytestring,
+                 utf8-string,
+                 random,
+                 pretty,
+                 mtl,
+                 exceptions
+
+  if flag(custom-binary)
+    other-modules:
+      -- not really part of GF but I have changed the original binary library
+      -- and we have to keep the copy for now.
+      Data.Binary
+      Data.Binary.Put
+      Data.Binary.Get
+      Data.Binary.Builder
+      Data.Binary.IEEE754
+  else
+    build-depends: binary, data-binary-ieee754
+
+--ghc-options: -fwarn-unused-imports
+--if impl(ghc>=7.8)
+--  ghc-options: +RTS -A20M -RTS
+  ghc-prof-options: -fprof-auto
+  extensions: 
+
+  exposed-modules: 
+    PGF
+    PGF.Internal
+    PGF.Lexing
+    PGF.LexingAGreek
+    PGF.Utilities
+    PGF.Haskell
+
+  other-modules:
+    PGF.Data
+    PGF.Macros
+    PGF.Binary
+    PGF.Optimize
+    PGF.Printer
+    PGF.CId
+    PGF.Expr
+    PGF.Generate
+    PGF.Linearize
+    PGF.Morphology
+    PGF.Paraphrase
+    PGF.Parse
+    PGF.Probabilistic
+    PGF.SortTop
+    PGF.Tree
+    PGF.Type
+    PGF.TypeCheck
+    PGF.Forest
+    PGF.TrieMap
+    PGF.VisualizeTree
+    PGF.ByteCode
+    PGF.OldBinary
