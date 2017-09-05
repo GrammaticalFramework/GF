@@ -38,7 +38,6 @@ module PGF2 (-- * PGF
              mkInt,unInt,
              mkFloat,unFloat,
              mkMeta,unMeta,
-             mkCId,
              treeProbability,
 
              -- ** Types
