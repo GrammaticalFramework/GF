@@ -22,6 +22,7 @@ module PGF (PGF2.PGF, PGF2.readPGF,
             Language, languages, PGF2.startCat, PGF2.languageCode,
             linearize, bracketedLinearize, tabularLinearizes, parse,
             PGF2.BracketedString(..), PGF2.flattenBracketedString,
+            showPrintName,
             
             Morpho, buildMorpho, lookupMorpho, isInMorpho,
 
@@ -54,6 +55,11 @@ linearize gr cnc e = PGF2.linearize cnc e
 bracketedLinearize gr cnc e = PGF2.bracketedLinearize cnc e
 tabularLinearizes gr cnc e = PGF2.tabularLinearize cnc e
 parse gr cnc s = PGF2.parse cnc s
+
+showPrintName cnc f = 
+  case PGF2.printName cnc f of
+    Just n  -> n
+    Nothing -> f
 
 getDepLabels = error "getDepLabels is not implemented"
 getCncDepLabels = error "getCncDepLabels is not implemented"
