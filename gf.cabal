@@ -66,98 +66,38 @@ flag network-uri
 --  Description: Make -new-comp the default
 --  Default:     True
 
-flag custom-binary
-  Description: Use a customised version of the binary package
-  Default:     True
-  Manual:      True
-
 flag c-runtime
   Description: Include functionality from the C run-time library (which must be installed already)
   Default:     False
 
-Library
+
+
+executable gf
+  hs-source-dirs: src/programs
+  main-is: gf-main.hs
   default-language:    Haskell2010
-  build-depends: base >= 4.6 && <5,
-                 array,
-                 containers,
-                 bytestring,
-                 utf8-string,
-                 random,
-                 pretty,
-                 mtl,
-                 exceptions
-  hs-source-dirs: src/runtime/haskell
-
-  if flag(custom-binary)
-    other-modules:
-      -- not really part of GF but I have changed the original binary library
-      -- and we have to keep the copy for now.
-      Data.Binary
-      Data.Binary.Put
-      Data.Binary.Get
-      Data.Binary.Builder
-      Data.Binary.IEEE754
-  else
-    build-depends: binary, data-binary-ieee754
-
---ghc-options: -fwarn-unused-imports
---if impl(ghc>=7.8)
---  ghc-options: +RTS -A20M -RTS
-  ghc-prof-options: -fprof-auto
-  extensions: 
-
-  exposed-modules: 
-    PGF
-    PGF.Internal
-    PGF.Haskell
-
-  other-modules:
-    PGF.Data
-    PGF.Macros
-    PGF.Binary
-    PGF.Optimize
-    PGF.Printer
-    PGF.CId
-    PGF.Expr
-    PGF.Generate
-    PGF.Linearize
-    PGF.Morphology
-    PGF.Paraphrase
-    PGF.Parse
-    PGF.Probabilistic
-    PGF.SortTop
-    PGF.Tree
-    PGF.Type
-    PGF.TypeCheck
-    PGF.Forest
-    PGF.TrieMap
-    PGF.VisualizeTree
-    PGF.ByteCode
-    PGF.OldBinary
-    PGF.Utilities
+  build-depends: base, filepath, directory, time, time-compat, old-locale, pretty, mtl, array, random,
+                 process, haskeline, parallel>=3, exceptions, bytestring, utf8-string, containers
+  ghc-options: -threaded
 
   if flag(c-runtime)
-    exposed-modules: PGF2
-    other-modules:   PGF2.FFI PGF2.Expr PGF2.Type
-                     GF.Interactive2 GF.Command.Commands2
-    hs-source-dirs:  src/runtime/haskell-bind
-    build-tools:     hsc2hs
-    extra-libraries: pgf gu
-    c-sources:       src/runtime/haskell-bind/utils.c
-    cc-options:      -std=c99
+    build-depends: pgf2
+  else
+    build-depends: pgf
 
----- GF compiler as a library:
+  if impl(ghc>=7.0)
+    ghc-options: -rtsopts -with-rtsopts=-I5
+    if impl(ghc<7.8)
+      ghc-options: -with-rtsopts=-K64M
 
-  build-depends: filepath, directory, time, time-compat, old-locale,
-                 process, haskeline, parallel>=3
+  ghc-prof-options: -auto-all
 
   hs-source-dirs: src/compiler
-  exposed-modules:
+
+  other-modules:
     GF
     GF.Support
     GF.Text.Pretty
-
-  other-modules:
     GF.Main GF.Compiler GF.Interactive
 
     GF.Compile GF.CompileInParallel GF.CompileOne  GF.Compile.GetGrammar
@@ -181,7 +121,6 @@ Library
     GF.Compile.CheckGrammar
     GF.Compile.Compute.AppPredefined
     GF.Compile.Compute.ConcreteNew
---  GF.Compile.Compute.ConcreteNew1
     GF.Compile.Compute.Predef
     GF.Compile.Compute.Value
     GF.Compile.ExampleBased
@@ -308,7 +247,6 @@ Library
 
   if impl(ghc>=7.8)
     build-tools: happy>=1.19, alex>=3.1
---  ghc-options: +RTS -A20M -RTS
   else
     build-tools: happy, alex>=3
 
@@ -319,32 +257,6 @@ Library
   else
     build-depends: unix, terminfo>=0.4
 
-
-Executable gf
-  hs-source-dirs: src/programs
-  main-is: gf-main.hs
-  default-language:    Haskell2010
-  build-depends: gf, base
-  ghc-options: -threaded
---ghc-options: -fwarn-unused-imports
-
-  if impl(ghc>=7.0)
-    ghc-options: -rtsopts -with-rtsopts=-I5
-    if impl(ghc<7.8)
-      ghc-options: -with-rtsopts=-K64M
-
-  ghc-prof-options: -auto-all
-
-
-executable pgf-shell
---if !flag(c-runtime)
-  buildable: False
-  main-is:             pgf-shell.hs
-  hs-source-dirs:      src/runtime/haskell-bind/examples
-  build-depends:       gf, base, containers, mtl, lifted-base
-  default-language:    Haskell2010
-  if impl(ghc>=7.0)
-    ghc-options: -rtsopts
 
 test-suite rgl-tests
   type:           exitcode-stdio-1.0
