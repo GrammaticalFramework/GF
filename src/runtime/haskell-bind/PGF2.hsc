@@ -39,6 +39,7 @@ module PGF2 (-- * PGF
              mkFloat,unFloat,
              mkMeta,unMeta,
              mkCId,
+             exprHash,
              treeProbability,
 
              -- ** Types
@@ -322,6 +323,15 @@ treeProbability (PGF p _) (Expr c_expr touch1) =
     res <- pgf_compute_tree_probability p c_expr
     touch1
     return (realToFrac res)
+
+exprHash :: Int32 -> Expr -> Int32
+exprHash h (Expr c_expr touch1) =
+  unsafePerformIO $ do
+    h <- pgf_expr_hash (fromIntegral h) c_expr
+    touch1
+    return (fromIntegral h)
+
+    
 
 -----------------------------------------------------------------------------
 -- Graphviz
