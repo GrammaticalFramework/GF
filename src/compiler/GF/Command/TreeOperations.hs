@@ -4,7 +4,7 @@ module GF.Command.TreeOperations (
   treeChunks
   ) where
 
-import PGF(PGF,CId,compute,unApp)
+import PGF(PGF,CId,compute,unApp,mkApp,exprSize,exprFunctions)
 import PGF.Internal(Expr(..),unAppForm)
 import Data.List
 
@@ -28,18 +28,14 @@ allTreeOps pgf = [
    ("subtrees",("return all fully applied subtrees (stopping at abstractions), by default sorted from the largest",
       Left  $ concatMap subtrees)),
    ("funs",("return all fun functions appearing in the tree, with duplications",
-      Left  $ concatMap funNodes))
+      Left  $ \es -> [mkApp f [] | e <- es, f <- exprFunctions e]))
   ]
 
 largest :: [Expr] -> [Expr]
 largest = reverse . smallest
 
 smallest :: [Expr] -> [Expr]
-smallest = sortBy (\t u -> compare (size t) (size u)) where
-  size t = case t of
-    EAbs _ _ e -> size e + 1
-    EApp e1 e2 -> size e1 + size e2 + 1
-    _ -> 1
+smallest = sortBy (\t u -> compare (exprSize t) (exprSize u))
 
 treeChunks :: Expr -> [Expr]
 treeChunks = snd . cks where
@@ -54,13 +50,6 @@ subtrees :: Expr -> [Expr]
 subtrees t = t : case unApp t of
   Just (f,ts) -> concatMap subtrees ts
   _ -> []  -- don't go under abstractions
-
-funNodes :: Expr -> [Expr]
-funNodes t = case t of
-   EAbs _ _ e -> funNodes e
-   EApp e1 e2 -> funNodes e1 ++ funNodes e2
-   EFun _ -> [t]
-   _ -> []  -- not literals, metas, etc
 
 --- simple-minded transfer; should use PGF.Expr.match
 
