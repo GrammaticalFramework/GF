@@ -331,7 +331,7 @@ exprHash h (Expr c_expr touch1) =
     touch1
     return (fromIntegral h)
 
-exprSize :: Expr -> Int32
+exprSize :: Expr -> Int
 exprSize (Expr c_expr touch1) =
   unsafePerformIO $ do
     size <- pgf_expr_size c_expr
