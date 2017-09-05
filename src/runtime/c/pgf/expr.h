@@ -197,6 +197,9 @@ pgf_literal_hash(GuHash h, PgfLiteral lit);
 PGF_API_DECL GuHash
 pgf_expr_hash(GuHash h, PgfExpr e);
 
+PGF_API size_t
+pgf_expr_size(PgfExpr expr);
+
 typedef struct PgfPrintContext PgfPrintContext;
 
 struct PgfPrintContext {

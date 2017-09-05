@@ -1177,6 +1177,39 @@ pgf_expr_hash(GuHash h, PgfExpr e)
 	return h;
 }
 
+PGF_API size_t
+pgf_expr_size(PgfExpr expr)
+{
+	GuVariantInfo ei = gu_variant_open(expr);
+	switch (ei.tag) {
+	case PGF_EXPR_ABS: {
+		PgfExprAbs* abs = ei.data;
+		return pgf_expr_size(abs->body);
+	}
+	case PGF_EXPR_APP: {
+		PgfExprApp* app = ei.data;
+		return pgf_expr_size(app->fun) + pgf_expr_size(app->arg);
+	}
+	case PGF_EXPR_LIT:
+	case PGF_EXPR_META:
+	case PGF_EXPR_FUN:
+	case PGF_EXPR_VAR: {
+		return 1;
+	}
+	case PGF_EXPR_TYPED: {
+		PgfExprTyped* typed = ei.data;
+		return pgf_expr_size(typed->expr);
+	}
+	case PGF_EXPR_IMPL_ARG: {
+		PgfExprImplArg* impl = ei.data;
+		return pgf_expr_size(impl->expr);
+	}
+	default:
+		gu_impossible();
+		return 0;
+	}
+}
+
 PGF_API void
 pgf_print_cid(PgfCId id,
 			  GuOut* out, GuExn* err)

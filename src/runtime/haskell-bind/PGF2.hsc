@@ -39,7 +39,7 @@ module PGF2 (-- * PGF
              mkFloat,unFloat,
              mkMeta,unMeta,
              mkCId,
-             exprHash,
+             exprHash, exprSize,
              treeProbability,
 
              -- ** Types
@@ -331,7 +331,13 @@ exprHash h (Expr c_expr touch1) =
     touch1
     return (fromIntegral h)
 
-    
+exprSize :: Expr -> Int32
+exprSize (Expr c_expr touch1) =
+  unsafePerformIO $ do
+    size <- pgf_expr_size c_expr
+    touch1
+    return (fromIntegral size)
+
 
 -----------------------------------------------------------------------------
 -- Graphviz
