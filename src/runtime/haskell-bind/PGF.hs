@@ -3,7 +3,7 @@ module PGF (PGF2.PGF, PGF2.readPGF,
 
             PGF2.CId, mkCId, showCId, readCId,
             
-            PGF2.categories, PGF2.functions,
+            PGF2.categories, PGF2.functions, PGF2.functionType,
 
             PGF2.Expr,Tree,PGF2.showExpr,PGF2.readExpr,
             PGF2.mkAbs,PGF2.unAbs,
@@ -15,22 +15,23 @@ module PGF (PGF2.PGF, PGF2.readPGF,
             compute,
 
             PGF2.Type, PGF2.showType, PGF2.readType,
-            PGF2.mkType,
-            
+            PGF2.mkType, PGF2.unType,
+
             Token,
 
-            Language, languages, PGF2.startCat,
-            linearize, parse,
-            PGF2.BracketedString, PGF2.flattenBracketedString,
+            Language, languages, PGF2.startCat, PGF2.languageCode,
+            linearize, bracketedLinearize, tabularLinearizes, parse,
+            PGF2.BracketedString(..), PGF2.flattenBracketedString,
             
-            PGF2.GraphvizOptions(..),
-
             Morpho, buildMorpho, lookupMorpho, isInMorpho,
 
             Labels, getDepLabels, CncLabels, getCncDepLabels,
 
             generateRandomFromDepth,
-            
+
+            PGF2.GraphvizOptions(..),
+            graphvizAbstractTree, graphvizParseTree, graphvizAlignment,
+
             -- * Tries
             ATree(..),Trie(..),toATree,toTrie
            ) where
@@ -50,6 +51,8 @@ showCId x = x
 readCId s = s
 
 linearize gr cnc e = PGF2.linearize cnc e
+bracketedLinearize gr cnc e = PGF2.bracketedLinearize cnc e
+tabularLinearizes gr cnc e = PGF2.tabularLinearize cnc e
 parse gr cnc s = PGF2.parse cnc s
 
 getDepLabels = error "getDepLabels is not implemented"
@@ -66,6 +69,10 @@ type Morpho = PGF2.Concr
 buildMorpho gr cnc = cnc
 lookupMorpho cnc w = [(lemma,an) | (lemma,an,_) <- PGF2.lookupMorpho cnc w]
 isInMorpho cnc w = not (null (PGF2.lookupMorpho cnc w))
+
+graphvizAbstractTree pgf (funs,cats) = PGF2.graphvizAbstractTree pgf PGF2.graphvizDefaults{PGF2.noFun=not funs,PGF2.noCat=not cats}
+graphvizParseTree _   = PGF2.graphvizParseTree
+graphvizAlignment cs  = PGF2.graphvizWordAlignment cs PGF2.graphvizDefaults
 
 -- | A type for plain applicative trees
 data ATree t = Other t    | App PGF2.CId  [ATree t]  deriving Show
