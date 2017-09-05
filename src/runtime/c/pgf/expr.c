@@ -1210,6 +1210,55 @@ pgf_expr_size(PgfExpr expr)
 	}
 }
 
+static void
+pgf_expr_functions_helper(PgfExpr expr, GuBuf* functions)
+{
+	GuVariantInfo ei = gu_variant_open(expr);
+	switch (ei.tag) {
+	case PGF_EXPR_ABS: {
+		PgfExprAbs* abs = ei.data;
+		pgf_expr_functions_helper(abs->body, functions);
+		break;
+	}
+	case PGF_EXPR_APP: {
+		PgfExprApp* app = ei.data;
+		pgf_expr_functions_helper(app->fun, functions);
+		pgf_expr_functions_helper(app->arg, functions);
+		break;
+	}
+	case PGF_EXPR_LIT:
+	case PGF_EXPR_META:
+	case PGF_EXPR_VAR: {
+		break;
+	}
+	case PGF_EXPR_FUN:{
+		PgfExprFun* fun = ei.data;
+		gu_buf_push(functions, GuString, fun->fun);
+		break;
+	}
+	case PGF_EXPR_TYPED: {
+		PgfExprTyped* typed = ei.data;
+		pgf_expr_functions_helper(typed->expr, functions);
+		break;
+	}
+	case PGF_EXPR_IMPL_ARG: {
+		PgfExprImplArg* impl = ei.data;
+		pgf_expr_functions_helper(impl->expr, functions);
+		break;
+	}
+	default:
+		gu_impossible();
+	}
+}
+
+PGF_API GuSeq*
+pgf_expr_functions(PgfExpr expr, GuPool* pool)
+{
+	GuBuf* functions = gu_new_buf(GuString, pool);
+	pgf_expr_functions_helper(expr, functions);
+	return gu_buf_data_seq(functions);
+}
+
 PGF_API void
 pgf_print_cid(PgfCId id,
 			  GuOut* out, GuExn* err)

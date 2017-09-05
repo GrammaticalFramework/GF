@@ -39,7 +39,7 @@ module PGF2 (-- * PGF
              mkFloat,unFloat,
              mkMeta,unMeta,
              mkCId,
-             exprHash, exprSize,
+             exprHash, exprSize, exprFunctions,
              treeProbability,
 
              -- ** Types
@@ -338,6 +338,16 @@ exprSize (Expr c_expr touch1) =
     touch1
     return (fromIntegral size)
 
+exprFunctions :: Expr -> [Fun]
+exprFunctions (Expr c_expr touch) =
+  unsafePerformIO $
+  withGuPool $ \tmpPl -> do
+    seq <- pgf_expr_functions c_expr tmpPl
+    len <- (#peek GuSeq, len) seq
+    arr <- peekArray (fromIntegral (len :: CInt)) (seq `plusPtr` (#offset GuSeq, data))
+    funs <- mapM peekUtf8CString arr
+    touch
+    return funs
 
 -----------------------------------------------------------------------------
 -- Graphviz

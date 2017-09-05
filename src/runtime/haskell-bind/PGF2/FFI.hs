@@ -334,6 +334,9 @@ foreign import ccall "pgf/expr.h pgf_expr_hash"
 foreign import ccall "pgf/expr.h pgf_expr_size"
   pgf_expr_size :: PgfExpr -> IO CInt
 
+foreign import ccall "pgf/expr.h pgf_expr_functions"
+  pgf_expr_functions :: PgfExpr -> Ptr GuPool -> IO (Ptr GuSeq)
+
 foreign import ccall "pgf/expr.h pgf_compute_tree_probability"
   pgf_compute_tree_probability :: Ptr PgfPGF -> PgfExpr -> IO CFloat
 
