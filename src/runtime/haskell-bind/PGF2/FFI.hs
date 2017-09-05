@@ -328,6 +328,15 @@ foreign import ccall "pgf/expr.h pgf_expr_arity"
 foreign import ccall "pgf/expr.h pgf_expr_eq"
   pgf_expr_eq :: PgfExpr -> PgfExpr -> IO CInt
 
+foreign import ccall "pgf/expr.h pgf_expr_hash"
+  pgf_expr_hash :: Word -> PgfExpr -> IO Word
+
+foreign import ccall "pgf/expr.h pgf_expr_size"
+  pgf_expr_size :: PgfExpr -> IO CInt
+
+foreign import ccall "pgf/expr.h pgf_expr_functions"
+  pgf_expr_functions :: PgfExpr -> Ptr GuPool -> IO (Ptr GuSeq)
+
 foreign import ccall "pgf/expr.h pgf_compute_tree_probability"
   pgf_compute_tree_probability :: Ptr PgfPGF -> PgfExpr -> IO CFloat
 

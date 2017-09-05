@@ -38,6 +38,7 @@ module PGF2 (-- * PGF
              mkInt,unInt,
              mkFloat,unFloat,
              mkMeta,unMeta,
+             exprHash, exprSize, exprFunctions,
              treeProbability,
 
              -- ** Types
@@ -321,6 +322,31 @@ treeProbability (PGF p _) (Expr c_expr touch1) =
     res <- pgf_compute_tree_probability p c_expr
     touch1
     return (realToFrac res)
+
+exprHash :: Int32 -> Expr -> Int32
+exprHash h (Expr c_expr touch1) =
+  unsafePerformIO $ do
+    h <- pgf_expr_hash (fromIntegral h) c_expr
+    touch1
+    return (fromIntegral h)
+
+exprSize :: Expr -> Int
+exprSize (Expr c_expr touch1) =
+  unsafePerformIO $ do
+    size <- pgf_expr_size c_expr
+    touch1
+    return (fromIntegral size)
+
+exprFunctions :: Expr -> [Fun]
+exprFunctions (Expr c_expr touch) =
+  unsafePerformIO $
+  withGuPool $ \tmpPl -> do
+    seq <- pgf_expr_functions c_expr tmpPl
+    len <- (#peek GuSeq, len) seq
+    arr <- peekArray (fromIntegral (len :: CInt)) (seq `plusPtr` (#offset GuSeq, data))
+    funs <- mapM peekUtf8CString arr
+    touch
+    return funs
 
 -----------------------------------------------------------------------------
 -- Graphviz

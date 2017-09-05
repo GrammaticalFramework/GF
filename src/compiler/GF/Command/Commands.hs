@@ -425,8 +425,7 @@ pgfCommands = Map.fromList [
        "are type checking and semantic computation."
        ],
      examples = [
-       mkEx "pt -compute (plus one two)                               -- compute value",
-       mkEx "p \"4 dogs love 5 cats\" | pt -transfer=digits2numeral | l -- four...five..."
+       mkEx "pt -compute (plus one two)                               -- compute value"
        ],
      exec = getEnv $ \ opts arg (Env pgf mos) ->
             returnFromExprs . takeOptNum opts . treeOps pgf opts $ toExprs arg,
