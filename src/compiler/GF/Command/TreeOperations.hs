@@ -4,8 +4,7 @@ module GF.Command.TreeOperations (
   treeChunks
   ) where
 
-import PGF(PGF,CId,compute,unApp,mkApp,exprSize,exprFunctions)
-import PGF.Internal(Expr(..),unAppForm)
+import PGF(Expr,PGF,CId,compute,mkApp,unApp,unapply,unMeta,exprSize,exprFunctions)
 import Data.List
 
 type TreeOp = [Expr] -> [Expr]
@@ -17,8 +16,6 @@ allTreeOps :: PGF -> [(String,(String,Either TreeOp (CId -> TreeOp)))]
 allTreeOps pgf = [
    ("compute",("compute by using semantic definitions (def)",
       Left  $ map (compute pgf))),
-   ("transfer",("syntactic transfer by applying function, recursively in subtrees",
-      Right $ \f -> map (transfer pgf f))),
    ("largest",("sort trees from largest to smallest, in number of nodes",
       Left  $ largest)),
    ("nub",("remove duplicate trees",
@@ -39,27 +36,15 @@ smallest = sortBy (\t u -> compare (exprSize t) (exprSize u))
 
 treeChunks :: Expr -> [Expr]
 treeChunks = snd . cks where
-  cks t = case unAppForm t of
-    (EFun f, ts) -> case unzip (map cks ts) of 
-       (bs,_) | and bs      -> (True, [t])
-       (_,cts)              -> (False,concat cts)
-    (EMeta _, ts)           -> (False,concatMap (snd . cks) ts)
-    _                       -> (True, [t])
+  cks t = 
+    case unapply t of
+      (t, ts) -> case unMeta t of
+                   Just _  -> (False,concatMap (snd . cks) ts)
+                   Nothing -> case unzip (map cks ts) of
+                                (bs,_) | and bs      -> (True, [t])
+                                (_,cts)              -> (False,concat cts)
 
 subtrees :: Expr -> [Expr]
 subtrees t = t : case unApp t of
   Just (f,ts) -> concatMap subtrees ts
   _ -> []  -- don't go under abstractions
-
---- simple-minded transfer; should use PGF.Expr.match
-
-transfer :: PGF -> CId -> Expr -> Expr
-transfer pgf f e = case transf e of
-  v | v /= appf e -> v
-  _ -> case e of
-    EApp g a -> EApp (transfer pgf f g) (transfer pgf f a)
-    _ -> e
- where
-  appf = EApp (EFun f)
-  transf = compute pgf . appf
-

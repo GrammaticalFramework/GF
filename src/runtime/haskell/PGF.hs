@@ -47,7 +47,7 @@ module PGF(
            Expr,
            showExpr, readExpr,
            mkAbs,    unAbs,
-           mkApp,    unApp,
+           mkApp,    unApp, unapply,
            mkStr,    unStr,
            mkInt,    unInt,
            mkDouble, unDouble,
