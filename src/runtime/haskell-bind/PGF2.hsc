@@ -55,9 +55,11 @@ module PGF2 (-- * PGF
 
              -- * Concrete syntax
              ConcName,Concr,languages,concreteName,languageCode,
+
              -- ** Linearization
              linearize,linearizeAll,tabularLinearize,tabularLinearizeAll,bracketedLinearize,
              FId, LIndex, BracketedString(..), showBracketedString, flattenBracketedString,
+             printName,
 
              alignWords,
              -- ** Parsing
@@ -911,6 +913,7 @@ alignWords lang e = unsafePerformIO $
   withGuPool $ \pl ->
     do exn <- gu_new_exn pl
        seq <- pgf_align_words (concr lang) (expr e) exn pl
+       touchConcr lang
        touchExpr e
        failed <- gu_exn_is_raised exn
        if failed
@@ -934,6 +937,18 @@ alignWords lang e = unsafePerformIO $
       n_fids <- (#peek PgfAlignmentPhrase, n_fids) ptr
       (fids :: [CInt]) <- peekArray (fromIntegral (n_fids :: CInt)) (ptr `plusPtr` (#offset PgfAlignmentPhrase, fids))
       return (phrase, map fromIntegral fids)
+
+printName :: Concr -> Fun -> Maybe String
+printName lang fun =
+  unsafePerformIO $
+  withGuPool $ \tmpPl -> do
+    c_fun  <- newUtf8CString fun tmpPl
+    c_name <- pgf_print_name (concr lang) c_fun
+    name   <- if c_name == nullPtr
+                then return Nothing
+                else fmap Just (peekUtf8CString c_name)
+    touchConcr lang
+    return name
 
 -- | List of all functions defined in the abstract syntax
 functions :: PGF -> [Fun]
