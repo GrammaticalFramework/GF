@@ -54,7 +54,7 @@ module PGF2 (-- * PGF
              compute,
 
              -- * Concrete syntax
-             ConcName,Concr,languages,concreteName,
+             ConcName,Concr,languages,concreteName,languageCode,
              -- ** Linearization
              linearize,linearizeAll,tabularLinearize,tabularLinearizeAll,bracketedLinearize,
              FId, LIndex, BracketedString(..), showBracketedString, flattenBracketedString,
@@ -158,6 +158,10 @@ languages p =
 -- abstract module
 concreteName :: Concr -> ConcName
 concreteName c = unsafePerformIO (peekUtf8CString =<< pgf_concrete_name (concr c))
+
+languageCode :: Concr -> String
+languageCode c = unsafePerformIO (peekUtf8CString =<< pgf_language_code (concr c))
+
 
 -- | Generates an exhaustive possibly infinite list of
 -- all abstract syntax expressions of the given type. 
