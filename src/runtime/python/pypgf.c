@@ -1545,13 +1545,28 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 			GuString msg = (GuString) gu_exn_caught_data(parse_err);
 			PyErr_SetString(PGFError, msg);
 		} else if (gu_exn_caught(parse_err, PgfParseError)) {
-			GuString tok = (GuString) gu_exn_caught_data(parse_err);
-			PyObject* py_tok = PyString_FromString(tok);
-			PyObject_SetAttrString(ParseError, "token", py_tok);
-			PyErr_Format(ParseError, "Unexpected token: \"%s\"", tok);
-			Py_DECREF(py_tok);
+			PgfParseError* err = (PgfParseError*) gu_exn_caught_data(parse_err);
+			PyObject* py_offset = PyInt_FromLong(err->offset);
+			if (err->incomplete) {
+	            PyObject_SetAttrString(ParseError, "incomplete",  Py_True);
+	            PyObject_SetAttrString(ParseError, "offset",      py_offset);
+				PyErr_Format(ParseError, "The sentence is incomplete");
+			} else {
+				PyObject* py_tok    = PyString_FromStringAndSize(err->token_ptr,
+	                                                             err->token_len);
+	            PyObject_SetAttrString(ParseError, "incomplete",  Py_False);
+				PyObject_SetAttrString(ParseError, "offset",      py_offset);
+				PyObject_SetAttrString(ParseError, "token",       py_tok);
+#if PY_MAJOR_VERSION >= 3
+				PyErr_Format(ParseError, "Unexpected token: \"%U\"", py_tok);
+#else
+				PyErr_Format(ParseError, "Unexpected token: \"%s\"", PyString_AsString(py_tok));
+#endif
+				Py_DECREF(py_tok);
+			}
+			Py_DECREF(py_offset);
 		}
-		
+
 		Py_DECREF(pyres);
 		pyres = NULL;
 	}

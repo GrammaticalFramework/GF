@@ -63,7 +63,7 @@ module PGF2 (-- * PGF
 
              alignWords,
              -- ** Parsing
-             parse, parseWithHeuristics,
+             ParseOutput(..), parse, parseWithHeuristics,
              -- ** Sentence Lookup
              lookupSentence,
              -- ** Generation
@@ -480,7 +480,15 @@ getAnalysis ref self c_lemma c_anal prob exn = do
   anal  <- peekUtf8CString c_anal
   writeIORef ref ((lemma, anal, prob):ans)
 
-parse :: Concr -> Type -> String -> Either String [(Expr,Float)]
+-- | This data type encodes the different outcomes which you could get from the parser.
+data ParseOutput
+  = ParseFailed Int String         -- ^ The integer is the position in number of unicode characters where the parser failed.
+                                   -- The string is the token where the parser have failed.
+  | ParseOk [(Expr,Float)]         -- ^ If the parsing and the type checking are successful we get a list of abstract syntax trees.
+                                   -- The list should be non-empty.
+  | ParseIncomplete                -- ^ The sentence is not complete.
+
+parse :: Concr -> Type -> String -> ParseOutput
 parse lang ty sent = parseWithHeuristics lang ty sent (-1.0) []
 
 parseWithHeuristics :: Concr      -- ^ the language with which we parse
@@ -497,7 +505,7 @@ parseWithHeuristics :: Concr      -- ^ the language with which we parse
                                   -- the input sentence; the current offset in the sentence.
                                   -- If a literal has been recognized then the output should
                                   -- be Just (expr,probability,end_offset)
-                    -> Either String [(Expr,Float)]
+                    -> ParseOutput
 parseWithHeuristics lang (Type ctype _) sent heuristic callbacks =
   unsafePerformIO $
     do exprPl  <- gu_new_pool
@@ -510,11 +518,19 @@ parseWithHeuristics lang (Type ctype _) sent heuristic callbacks =
        if failed
          then do is_parse_error <- gu_exn_caught exn gu_exn_type_PgfParseError
                  if is_parse_error
-                   then do c_tok <- (#peek GuExn, data.data) exn
-                           tok <- peekUtf8CString c_tok
-                           gu_pool_free parsePl
-                           gu_pool_free exprPl
-                           return (Left tok)
+                   then do c_err <- (#peek GuExn, data.data) exn
+                           c_incomplete <- (#peek PgfParseError, incomplete) c_err
+                           if (c_incomplete :: CInt) == 0
+                             then do c_offset <- (#peek PgfParseError, offset) c_err
+                                     token_ptr <- (#peek PgfParseError, token_ptr) c_err
+                                     token_len <- (#peek PgfParseError, token_len) c_err
+                                     tok <- peekUtf8CStringLen token_ptr token_len
+                                     gu_pool_free parsePl
+                                     gu_pool_free exprPl
+                                     return (ParseFailed (fromIntegral (c_offset :: CInt)) tok)
+                             else do gu_pool_free parsePl
+                                     gu_pool_free exprPl
+                                     return ParseIncomplete
                    else do is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
                            if is_exn
                              then do c_msg <- (#peek GuExn, data.data) exn
@@ -528,7 +544,7 @@ parseWithHeuristics lang (Type ctype _) sent heuristic callbacks =
          else do parseFPl <- newForeignPtr gu_pool_finalizer parsePl
                  exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
                  exprs    <- fromPgfExprEnum enum parseFPl (touchConcr lang >> touchForeignPtr exprFPl)
-                 return (Right exprs)
+                 return (ParseOk exprs)
 
 mkCallbacksMap :: Ptr PgfConcr -> [(String, Int -> Int -> Maybe (Expr,Float,Int))] -> Ptr GuPool -> IO (Ptr PgfCallbacksMap)
 mkCallbacksMap concr callbacks pool = do
@@ -595,7 +611,7 @@ parseWithOracle :: Concr      -- ^ the language with which we parse
                 -> Cat        -- ^ the start category
                 -> String     -- ^ the input sentence
                 -> Oracle
-                -> Either String [(Expr,Float)]
+                -> ParseOutput
 parseWithOracle lang cat sent (predict,complete,literal) =
   unsafePerformIO $
     do parsePl <- gu_new_pool
@@ -612,11 +628,19 @@ parseWithOracle lang cat sent (predict,complete,literal) =
        if failed
          then do is_parse_error <- gu_exn_caught exn gu_exn_type_PgfParseError
                  if is_parse_error
-                   then do c_tok <- (#peek GuExn, data.data) exn
-                           tok <- peekUtf8CString c_tok
-                           gu_pool_free parsePl
-                           gu_pool_free exprPl
-                           return (Left tok)
+                   then do c_err <- (#peek GuExn, data.data) exn
+                           c_incomplete <- (#peek PgfParseError, incomplete) c_err
+                           if (c_incomplete :: CInt) == 0
+                             then do c_offset <- (#peek PgfParseError, offset) c_err
+                                     token_ptr <- (#peek PgfParseError, token_ptr) c_err
+                                     token_len <- (#peek PgfParseError, token_len) c_err
+                                     tok <- peekUtf8CStringLen token_ptr token_len
+                                     gu_pool_free parsePl
+                                     gu_pool_free exprPl
+                                     return (ParseFailed (fromIntegral (c_offset :: CInt)) tok)
+                             else do gu_pool_free parsePl
+                                     gu_pool_free exprPl
+                                     return ParseIncomplete
                    else do is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
                            if is_exn
                              then do c_msg <- (#peek GuExn, data.data) exn
@@ -630,7 +654,7 @@ parseWithOracle lang cat sent (predict,complete,literal) =
          else do parseFPl <- newForeignPtr gu_pool_finalizer parsePl
                  exprFPl  <- newForeignPtr gu_pool_finalizer exprPl
                  exprs    <- fromPgfExprEnum enum parseFPl (touchConcr lang >> touchForeignPtr exprFPl)
-                 return (Right exprs)
+                 return (ParseOk exprs)
   where
     oracleWrapper oracle catPtr lblPtr offset = do
       cat <- peekUtf8CString catPtr

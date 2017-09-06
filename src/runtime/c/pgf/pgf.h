@@ -122,6 +122,13 @@ PGF_API_DECL PgfExprEnum*
 pgf_generate_all(PgfPGF* pgf, PgfType* ty,
                  GuExn* err, GuPool* pool, GuPool* out_pool);
 
+typedef struct {
+	int incomplete;   // equal to !=0 if the sentence is incomplete, 0 otherwise
+	size_t offset;
+	const char*  token_ptr;
+	size_t       token_len;
+} PgfParseError;
+
 PGF_API_DECL PgfExprEnum*
 pgf_parse(PgfConcr* concr, PgfType* typ, GuString sentence,
           GuExn* err, GuPool* pool, GuPool* out_pool);

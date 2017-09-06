@@ -2139,30 +2139,37 @@ pgf_parse_result_enum_next(GuEnum* self, void* to, GuPool* pool)
 	*(PgfExprProb**)to = pgf_parse_result_next(ps);
 }
 
-static GuString
-pgf_parsing_last_token(PgfParsing* ps, GuPool* pool)
+static PgfParseError*
+pgf_parsing_new_exception(PgfParsing* ps, GuPool* pool)
 {
-	if (ps->before == NULL)
-		return "";
+	const uint8_t* p   = (uint8_t*) ps->sentence;
+	const uint8_t* end = p + (ps->before ? ps->before->end_offset : 0);
 
-	const uint8_t* start = (uint8_t*) ps->sentence;
-	const uint8_t* end   = (uint8_t*) ps->sentence + ps->before->end_offset;
+	PgfParseError* err = gu_new(PgfParseError, pool);
+	err->incomplete= (*end == 0);
+	err->offset    = 0;
+	err->token_ptr = (char*) p;
 
-	const uint8_t* p = start;
 	while (p < end) {
 		if (gu_ucs_is_space(gu_utf8_decode(&p))) {
-			start = p;
+			err->token_ptr = (char*) p;
 		}
+		err->offset++;
+	}
+
+	if (err->incomplete) {
+		err->token_ptr = NULL;
+		err->token_len = 0;
+		return err;
 	}
 
 	while (*p && !gu_ucs_is_space(gu_utf8_decode(&p))) {
 		end = p;
 	}
 
-	char* tok = gu_malloc(pool, end-start+1);
-	memcpy(tok, start, (end-start));
-	tok[end-start] = 0;
-	return tok;
+	err->token_len = ((char*)end)-err->token_ptr;
+
+	return err;
 }
 
 PGF_API GuEnum*
@@ -2204,7 +2211,7 @@ pgf_parse_with_heuristics(PgfConcr* concr, PgfType* typ, GuString sentence,
 	while (gu_buf_length(ps->expr_queue) == 0) {
 		if (!pgf_parsing_proceed(ps)) {
 			GuExnData* exn = gu_raise(err, PgfParseError);
-			exn->data = (void*) pgf_parsing_last_token(ps, exn->pool);
+			exn->data = (void*) pgf_parsing_new_exception(ps, exn->pool);
 			return NULL;
 		}
 
@@ -2249,7 +2256,7 @@ pgf_parse_with_oracle(PgfConcr* concr, PgfType* typ,
 	while (gu_buf_length(ps->expr_queue) == 0) {
 		if (!pgf_parsing_proceed(ps)) {
 			GuExnData* exn = gu_raise(err, PgfParseError);
-			exn->data = (void*) pgf_parsing_last_token(ps, exn->pool);
+			exn->data = (void*) pgf_parsing_new_exception(ps, exn->pool);
 			return NULL;
 		}
 
@@ -2312,7 +2319,7 @@ pgf_complete(PgfConcr* concr, PgfType* type, GuString sentence,
 	while (ps->before->end_offset < len) {
 		if (!pgf_parsing_proceed(ps)) {
 			GuExnData* exn = gu_raise(err, PgfParseError);
-			exn->data = (void*) pgf_parsing_last_token(ps, exn->pool);
+			exn->data = (void*) pgf_parsing_new_exception(ps, exn->pool);
 			return NULL;
 		}
 

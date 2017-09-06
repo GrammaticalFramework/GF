@@ -2,7 +2,7 @@
 
 module PGF2.FFI where
 
-import Foreign ( alloca, poke )
+import Foreign ( alloca, peek, poke )
 import Foreign.C
 import Foreign.Ptr
 import Foreign.ForeignPtr
@@ -114,6 +114,19 @@ peekUtf8CString ptr =
       if x == 0
         then return []
         else do cs <- decode pptr
+                return (((toEnum . fromEnum) x) : cs)
+
+peekUtf8CStringLen :: CString -> CInt -> IO String
+peekUtf8CStringLen ptr len =
+  alloca $ \pptr ->
+    poke pptr ptr >> decode pptr (ptr `plusPtr` fromIntegral len)
+  where
+    decode pptr end = do
+      ptr <- peek pptr
+      if ptr >= end
+        then return []
+        else do x <- gu_utf8_decode pptr
+                cs <- decode pptr end
                 return (((toEnum . fromEnum) x) : cs)
 
 newUtf8CString :: String -> Ptr GuPool -> IO CString

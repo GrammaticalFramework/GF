@@ -37,18 +37,18 @@ execute cmd =
     P lang s    -> do pgf <- gets fst
                       c <- getConcr' pgf lang
                       case parse c (startCat pgf) s of
-                        Left tok -> do put (pgf,[])
-                                       putln ("Parse error: "++tok)
-                        Right ts -> do put (pgf,map show ts)
-                                       pop
+                        ParseFailed _ tok -> do put (pgf,[])
+                                                putln ("Parse error: "++tok)
+                        ParseOk ts        -> do put (pgf,map show ts)
+                                                pop
     T from to s -> do pgf <- gets fst
                       cfrom <- getConcr' pgf from
                       cto   <- getConcr' pgf to
                       case parse cfrom (startCat pgf) s of
-                        Left tok -> do put (pgf,[])
-                                       putln ("Parse error: "++tok)
-                        Right ts -> do put (pgf,map (linearize cto.fst) ts)
-                                       pop
+                        ParseFailed _ tok -> do put (pgf,[])
+                                                putln ("Parse error: "++tok)
+                        ParseOk ts        -> do put (pgf,map (linearize cto.fst) ts)
+                                                pop
     I path -> do pgf <- liftIO (readPGF path)
                  putln . unwords . M.keys $ languages pgf
                  put (pgf,[])
