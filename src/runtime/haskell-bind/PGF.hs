@@ -1,9 +1,9 @@
-module PGF (PGF2.PGF, PGF2.readPGF,
-            PGF2.abstractName,
+module PGF (PGF, readPGF,
+            abstractName,
 
             PGF2.CId, mkCId, showCId, readCId,
             
-            PGF2.categories, PGF2.functions, PGF2.functionType,
+            categories, functions, functionType, browse,
 
             PGF2.Expr,Tree,PGF2.showExpr,PGF2.readExpr,
             PGF2.mkAbs,PGF2.unAbs,
@@ -14,13 +14,16 @@ module PGF (PGF2.PGF, PGF2.readPGF,
             PGF2.mkMeta,PGF2.unMeta,
             compute,
 
+            TcError, ppTcError, inferExpr,
+
             PGF2.Type, PGF2.showType, PGF2.readType,
             PGF2.mkType, PGF2.unType,
 
             Token,
 
-            Language, languages, PGF2.startCat, PGF2.languageCode,
-            linearize, bracketedLinearize, tabularLinearizes, parse,
+            Language, readLanguage, showLanguage,
+            languages, PGF2.startCat, PGF2.languageCode,
+            linearize, bracketedLinearize, tabularLinearizes, ParseOutput(..), parse,
             PGF2.BracketedString(..), PGF2.flattenBracketedString,
             showPrintName,
             
@@ -28,10 +31,10 @@ module PGF (PGF2.PGF, PGF2.readPGF,
 
             Labels, getDepLabels, CncLabels, getCncDepLabels,
 
-            generateRandomFromDepth,
+            generateAllDepth, generateRandomDepth, generateRandomFromDepth,
 
             PGF2.GraphvizOptions(..),
-            graphvizAbstractTree, graphvizParseTree, graphvizAlignment,
+            graphvizAbstractTree, graphvizParseTree, graphvizAlignment, graphvizDependencyTree,
 
             -- * Tries
             ATree(..),Trie(..),toATree,toTrie
@@ -40,7 +43,22 @@ module PGF (PGF2.PGF, PGF2.readPGF,
 import qualified PGF2
 import qualified Data.Map as Map
 
-type Language = PGF2.Concr
+type Language = String
+data PGF = PGF PGF2.PGF (Map.Map Language PGF2.Concr)
+
+readPGF fpath = do
+  gr <- PGF2.readPGF fpath
+  return (PGF gr (PGF2.languages gr))
+
+readLanguage s = Just s
+showLanguage s = s
+
+abstractName (PGF gr _) = PGF2.abstractName gr
+
+categories (PGF gr _) = PGF2.categories gr
+functions (PGF gr _)  = PGF2.functions gr
+functionType (PGF gr _) = PGF2.functionType gr
+
 type Tree = PGF2.Expr
 type Labels = ()
 type CncLabels = ()
@@ -51,24 +69,49 @@ mkCId x =  x
 showCId x = x
 readCId s = s
 
-linearize gr cnc e = PGF2.linearize cnc e
-bracketedLinearize gr cnc e = PGF2.bracketedLinearize cnc e
-tabularLinearizes gr cnc e = PGF2.tabularLinearize cnc e
-parse gr cnc s = PGF2.parse cnc s
+linearize (PGF gr langs) lang e = PGF2.linearize (getConcr langs lang) e
+bracketedLinearize (PGF gr langs) lang e = PGF2.bracketedLinearize (getConcr langs lang) e
+tabularLinearizes (PGF gr langs) lang e = PGF2.tabularLinearize (getConcr langs lang) e
 
-showPrintName cnc f = 
-  case PGF2.printName cnc f of
+type FId = Int
+type TcError = String
+
+-- | This data type encodes the different outcomes which you could get from the parser.
+data ParseOutput
+  = ParseFailed Int                -- ^ The integer is the position in number of tokens where the parser failed.
+  | TypeError   [(FId,TcError)]    -- ^ The parsing was successful but none of the trees is type correct. 
+                                   -- The forest id ('FId') points to the bracketed string from the parser
+                                   -- where the type checking failed. More than one error is returned
+                                   -- if there are many analizes for some phrase but they all are not type correct.
+  | ParseOk [Tree]                 -- ^ If the parsing and the type checking are successful we get a list of abstract syntax trees.
+                                   -- The list should be non-empty.
+  | ParseIncomplete                -- ^ The sentence is not complete. Only partial output is produced
+
+parse (PGF gr langs) lang cat s = 
+  case PGF2.parse (getConcr langs lang) cat s of
+    PGF2.ParseFailed o _ -> ParseFailed o
+    PGF2.ParseOk ts      -> ParseOk (map fst ts)
+    PGF2.ParseIncomplete -> ParseIncomplete
+
+ppTcError s = s
+
+inferExpr (PGF gr _) = PGF2.inferExpr gr
+
+showPrintName (PGF gr langs) lang f = 
+  case PGF2.printName (getConcr langs lang) f of
     Just n  -> n
     Nothing -> f
 
 getDepLabels = error "getDepLabels is not implemented"
 getCncDepLabels = error "getCncDepLabels is not implemented"
 
+generateAllDepth = error "generateAllDepth is not implemented"
+generateRandomDepth = error "generateRandomDepth is not implemented"
 generateRandomFromDepth = error "generateRandomFromDepth is not implemented"
 
 compute = error "compute is not implemented"
 
-languages gr = Map.elems (PGF2.languages gr)
+languages (PGF gr _) = Map.elems (PGF2.languages gr)
 
 type Morpho = PGF2.Concr
 
@@ -76,9 +119,11 @@ buildMorpho gr cnc = cnc
 lookupMorpho cnc w = [(lemma,an) | (lemma,an,_) <- PGF2.lookupMorpho cnc w]
 isInMorpho cnc w = not (null (PGF2.lookupMorpho cnc w))
 
-graphvizAbstractTree pgf (funs,cats) = PGF2.graphvizAbstractTree pgf PGF2.graphvizDefaults{PGF2.noFun=not funs,PGF2.noCat=not cats}
-graphvizParseTree _   = PGF2.graphvizParseTree
+graphvizAbstractTree (PGF gr _) (funs,cats) = PGF2.graphvizAbstractTree gr PGF2.graphvizDefaults{PGF2.noFun=not funs,PGF2.noCat=not cats}
+graphvizParseTree (PGF gr langs) lang  = PGF2.graphvizParseTree (getConcr langs lang)
 graphvizAlignment cs  = PGF2.graphvizWordAlignment cs PGF2.graphvizDefaults
+graphvizDependencyTree = error "graphvizDependencyTree is not implemented"
+browse = error "browse is not implemented"
 
 -- | A type for plain applicative trees
 data ATree t = Other t    | App PGF2.CId  [ATree t]  deriving Show
@@ -110,3 +155,8 @@ toTrie = combines . map ((:[]) . singleton)
           where
             combine2 (Ap f ts,Ap g us) | f==g = Just (Ap f (combines (ts++us)))
             combine2 _ = Nothing
+
+getConcr langs lang =
+  case Map.lookup lang langs of
+    Just cnc -> cnc
+    Nothing  -> error "Unknown language"
