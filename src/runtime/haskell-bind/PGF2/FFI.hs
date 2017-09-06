@@ -9,6 +9,7 @@ import Foreign.ForeignPtr
 import Control.Exception
 import GHC.Ptr
 import Data.Int(Int32)
+import Data.Word(Word)
 
 type Touch = IO ()
 
