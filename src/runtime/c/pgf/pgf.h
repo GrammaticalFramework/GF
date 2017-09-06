@@ -200,6 +200,7 @@ pgf_parse_with_oracle(PgfConcr* concr, PgfType* typ,
 typedef struct {
 	PgfToken tok;
 	PgfCId cat;
+	PgfCId fun;
 	prob_t prob;
 } PgfTokenProb;
 

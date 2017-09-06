@@ -1254,9 +1254,12 @@ pgf_parsing_add_transition(PgfParsing* ps, PgfToken tok, PgfItem* item)
 
 	if (ps->prefix != NULL && *current == 0) {
 		if (gu_string_is_prefix(ps->prefix, tok)) {
+			PgfProductionApply* papp = gu_variant_data(item->prod);
+
 			ps->tp = gu_new(PgfTokenProb, ps->out_pool);
 			ps->tp->tok  = tok;
 			ps->tp->cat  = item->conts->ccat->cnccat->abscat->name;
+			ps->tp->fun  = papp->fun->absfun->name;
 			ps->tp->prob = item->inside_prob + item->conts->outside_prob;
 		}
 	} else {

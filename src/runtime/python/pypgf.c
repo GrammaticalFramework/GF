@@ -1163,7 +1163,10 @@ Iter_fetch_token(IterObject* self)
 
 	PyObject* py_tok = PyString_FromString(tp->tok);
 	PyObject* py_cat = PyString_FromString(tp->cat);
-	PyObject* res = Py_BuildValue("(f,O,O)", tp->prob, py_tok, py_cat);
+	PyObject* py_fun = PyString_FromString(tp->fun);
+	PyObject* res = Py_BuildValue("(f,O,O,O)", tp->prob, py_tok, py_cat, py_fun);
+	Py_DECREF(py_fun);
+	Py_DECREF(py_cat);
 	Py_DECREF(py_tok);
 
 	return res;
