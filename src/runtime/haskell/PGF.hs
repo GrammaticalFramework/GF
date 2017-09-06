@@ -66,7 +66,7 @@ module PGF(
            Forest.showBracketedString,flattenBracketedString,
 
            -- ** Parsing
-           parse, parseAllLang, parseAll, parse_, parseWithRecovery,
+           parse, parseAllLang, parseAll, parse_, parseWithRecovery, complete,
 
            -- ** Evaluation
            PGF.compute, paraphrase,
@@ -272,6 +272,25 @@ parse_ pgf lang typ dp s =
     Nothing  -> error ("Unknown language: " ++ showCId lang)
 
 parseWithRecovery pgf lang typ open_typs dp s = Parse.parseWithRecovery pgf lang typ open_typs dp (words s)
+
+complete :: PGF -> Language -> Type -> String -> String -> (BracketedString,String,Map.Map Token [CId])
+complete pgf from typ input prefix =
+  let ws  = words input
+      ps0 = Parse.initState pgf from typ
+      (ps,ws') = loop ps0 ws
+      bs       = snd (Parse.getParseOutput ps typ Nothing)
+  in if not (null ws')
+       then (bs, unwords (if null prefix then ws' else ws'++[prefix]), Map.empty)
+       else (bs, prefix, fmap getFuns (Parse.getCompletions ps prefix))
+  where
+    loop ps []     = (ps,[])
+    loop ps (w:ws) = case Parse.nextState ps (Parse.simpleParseInput w) of
+                       Left  es -> (ps,w:ws)
+                       Right ps -> loop ps ws
+
+    getFuns ps = [cid | (funid,cid,seq) <- snd . head $ Map.toList contInfo]
+      where
+        contInfo = Parse.getContinuationInfo ps
 
 groupResults :: [[(Language,String)]] -> [(Language,[String])]
 groupResults = Map.toList . foldr more Map.empty . start . concat

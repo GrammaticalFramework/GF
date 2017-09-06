@@ -663,19 +663,16 @@ doComplete pgf (mfrom,input) mcat mlimit full = showJSON
     froms = maybe (PGF.languages pgf) (:[]) mfrom
     cat = fromMaybe (PGF.startCat pgf) mcat
 
-completionInfo :: PGF -> PGF.Token -> PGF.ParseState -> JSValue
-completionInfo pgf token pstate =
+completionInfo :: PGF -> PGF.Token -> [PGF.CId] -> JSValue
+completionInfo pgf token funs =
   makeObj
   ["token".= token
-  ,"funs" .= (map mkFun (nubBy ignoreFunIds funs))
+  ,"funs" .= map mkFun (nub funs)
   ]
   where
-    contInfo = PGF.getContinuationInfo pstate
-    funs = snd . head $ Map.toList contInfo -- always get [([],_)] ; funs :: [(fid,cid,seq)]
-    ignoreFunIds (_,cid1,seq1) (_,cid2,seq2) = (cid1,seq1) == (cid2,seq2)
-    mkFun (funid,cid,seq) = case PGF.functionType pgf cid of
+    mkFun cid = case PGF.functionType pgf cid of
       Just typ ->
-        makeObj [ {-"fid".=funid,-} "fun".=cid, "hyps".=hyps', "cat".=cat, "seq".=seq ]
+        makeObj [ {-"fid".=funid,-} "fun".=cid, "hyps".=hyps', "cat".=cat ]
         where
           (hyps,cat,_es) = PGF.unType typ
           hyps' = [ PGF.showType [] typ | (_,_,typ) <- hyps ]
@@ -993,28 +990,17 @@ parse' pgf input mcat mfrom =
         cat = fromMaybe (PGF.startCat pgf) mcat
 
 complete' :: PGF -> PGF.Language -> PGF.Type -> Maybe Int -> String
-         -> (PGF.BracketedString, String, Map.Map PGF.Token PGF.ParseState)
+         -> (PGF.BracketedString, String, Map.Map PGF.Token [PGF.CId])
 complete' pgf from typ mlimit input =
   let (ws,prefix) = tokensAndPrefix input
-      ps0 = PGF.initState pgf from typ
-      (ps,ws') = loop ps0 ws
-      bs       = snd (PGF.getParseOutput ps typ Nothing)
-  in if not (null ws')
-       then (bs, unwords (if null prefix then ws' else ws'++[prefix]), Map.empty)
-       else (bs, prefix, PGF.getCompletions ps prefix)
+  in PGF.complete pgf from typ (unwords ws) prefix
   where
-  --order = sortBy (compare `on` map toLower)
-
     tokensAndPrefix :: String -> ([String],String)
     tokensAndPrefix s | not (null s) && isSpace (last s) = (ws, "")
                       | null ws = ([],"")
                       | otherwise = (init ws, last ws)
         where ws = words s
 
-    loop ps []     = (ps,[])
-    loop ps (w:ws) = case PGF.nextState ps (PGF.simpleParseInput w) of
-                       Left  es -> (ps,w:ws)
-                       Right ps -> loop ps ws
 
 transfer lang = if "LaTeX" `isSuffixOf` show lang
                 then fold -- OpenMath LaTeX transfer
