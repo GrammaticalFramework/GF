@@ -191,10 +191,11 @@ cpgfMain qsem command (t,(pgf,pc)) =
 
     -- Without caching parse results:
     parse' start mlimit ((from,concr),input) =
-        return $ maybe id take mlimit . drop start # cparse
+        case C.parseWithHeuristics concr cat input (-1) callbacks of
+          C.ParseOk ts        -> return (Right (maybe id take mlimit (drop start ts)))
+          C.ParseFailed _ tok -> return (Left tok)
+          C.ParseIncomplete   -> return (Left "")
       where
-      --cparse = C.parse concr cat input
-        cparse = C.parseWithHeuristics concr cat input (-1) callbacks
         callbacks = maybe [] cb $ lookup (C.abstractName pgf) C.literalCallbacks
         cb fs = [(cat,f pgf (from,concr) input)|(cat,f)<-fs]
 {-
@@ -277,8 +278,9 @@ cpgfMain qsem command (t,(pgf,pc)) =
                         | isUpper c -> toLower c : cs
                    s                -> s
 
-            parse1 = either (const Nothing) (fmap fst . listToMaybe) .
-                     C.parse concr cat
+            parse1 s = case C.parse concr cat s of
+                         C.ParseOk ((t,_):ts) -> Just t
+                         _                    -> Nothing
             morph w = listToMaybe
                         [t | (f,a,p)<-C.lookupMorpho concr w,
                              t<-maybeToList (C.readExpr f)]

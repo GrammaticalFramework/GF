@@ -154,12 +154,12 @@ or by calling __next__ if you are using Python 3:
 </pre>
 </span>
 <span class="haskell">
-This gives you a result of type <tt>Either String [(Expr, Float)]</tt>.
-If the result is <tt>Left</tt> then the parser has failed and you will
-get the token where the parser got stuck. If the parsing was successful
-then you get a potentially infinite list of parse results:
+This gives you a result of type <tt>ParseOutput</tt>.
+If the result is <tt>ParseFailed</tt> then the parser has failed and you will
+get the offset and the token where the parser got stuck. If the parsing was successful
+then you get <tt>ParseOk</tt> with a potentially infinite list of parse results:
 <pre class="haskell">
-Prelude PGF2> let Right ((e,p):rest) = res
+Prelude PGF2> let ParseOk ((e,p):rest) = res
 </pre>
 </span>
 <span class="java">

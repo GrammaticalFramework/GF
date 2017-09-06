@@ -56,7 +56,7 @@ haskPreamble gadt name =
   "import Data.Monoid"
   ] else []) ++
  [
-  "import PGF",
+  "import PGF hiding (Tree)",
   "----------------------------------------------------",
   "-- automatic translation from GF to Haskell",
   "----------------------------------------------------",

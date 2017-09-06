@@ -34,10 +34,8 @@ gu2j_string(JNIEnv *env, GuString s) {
 }
 
 JPGF_INTERNAL jstring
-gu2j_string_buf(JNIEnv *env, GuStringBuf* sbuf) {
-	const char* s    = gu_string_buf_data(sbuf);
+gu2j_string_len(JNIEnv *env, const char* s, size_t len) {
 	const char* utf8 = s;
-	size_t len = gu_string_buf_length(sbuf);
 
 	jchar* utf16 = alloca(len*sizeof(jchar));
 	jchar* dst   = utf16;
@@ -54,6 +52,11 @@ gu2j_string_buf(JNIEnv *env, GuStringBuf* sbuf) {
 	}
 
 	return (*env)->NewString(env, utf16, dst-utf16);
+}
+
+JPGF_INTERNAL jstring
+gu2j_string_buf(JNIEnv *env, GuStringBuf* sbuf) {
+	return gu2j_string_len(env, gu_string_buf_data(sbuf), gu_string_buf_length(sbuf));
 }
 
 JPGF_INTERNAL GuString
