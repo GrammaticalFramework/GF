@@ -28,10 +28,12 @@ data GuKind
 data GuType
 data GuString
 data GuStringBuf
+data GuMap
 data GuMapItor
 data GuOut
 data GuSeq
 data GuPool
+type GuVariant = Ptr ()
 
 foreign import ccall fopen :: CString -> CString -> IO (Ptr ())
 
@@ -95,6 +97,19 @@ foreign import ccall unsafe "gu/utf8.h gu_utf8_encode"
 
 foreign import ccall unsafe "gu/seq.h gu_make_seq"
   gu_make_seq :: CInt -> CInt -> Ptr GuPool -> IO (Ptr GuSeq)
+
+foreign import ccall unsafe "gu/map.h gu_map_find_default"
+  gu_map_find_default :: Ptr GuMap -> Ptr a -> IO (Ptr b)
+
+foreign import ccall "gu/map.h gu_map_iter"
+  gu_map_iter :: Ptr GuMap -> Ptr GuMapItor -> Ptr GuExn -> IO ()
+
+foreign import ccall unsafe "gu/variant.h gu_variant_tag"
+  gu_variant_tag :: GuVariant -> IO CInt
+
+foreign import ccall unsafe "gu/variant.h gu_variant_data"
+  gu_variant_data :: GuVariant -> IO (Ptr a)
+
 
 withGuPool :: (Ptr GuPool -> IO a) -> IO a
 withGuPool f = bracket gu_new_pool gu_pool_free f
