@@ -12,7 +12,6 @@ module GF.Speech.VoiceXML (grammar2vxml) where
 import GF.Data.XML
 --import GF.Infra.Ident
 import PGF
-import PGF.Internal
 
 --import Control.Monad (liftM)
 import Data.List (intersperse) -- isPrefixOf, find
@@ -28,7 +27,7 @@ grammar2vxml pgf cnc = showsXMLDoc (skel2vxml name language start skel qs) ""
           name = showCId cnc
           qs = catQuestions pgf cnc (map fst skel)
           language = languageCode pgf cnc
-          start = lookStartCat pgf
+          (_,start,_) = unType (startCat pgf)
 
 --
 -- * VSkeleton: a simple description of the abstract syntax.
@@ -37,8 +36,8 @@ grammar2vxml pgf cnc = showsXMLDoc (skel2vxml name language start skel qs) ""
 type Skeleton = [(CId, [(CId, [CId])])]
 
 pgfSkeleton :: PGF -> Skeleton
-pgfSkeleton pgf = [(c,[(f,fst (catSkeleton (lookType (abstract pgf) f))) | (_,f) <- fs]) 
-                   | (c,(_,fs,_)) <- Map.toList (cats (abstract pgf))]
+pgfSkeleton pgf = [(c,[(f,[cat | (_,_,ty) <- hypos, let (_,cat,_) = unType ty]) | f <- functionsByCat pgf c, Just (hypos,_,_) <- [fmap unType (functionType pgf f)]])
+                     | c <- categories pgf]
 
 --
 -- * Questions to ask 

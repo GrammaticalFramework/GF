@@ -3,7 +3,7 @@ module PGF (PGF, readPGF,
 
             CId, mkCId, showCId, readCId,
             
-            categories, functions, functionType, browse,
+            categories, functions, functionsByCat, functionType, browse,
 
             PGF2.Expr,Tree,showExpr,PGF2.readExpr,
             mkAbs,unAbs,
@@ -43,13 +43,11 @@ module PGF (PGF, readPGF,
             ATree(..),Trie(..),toATree,toTrie
            ) where
 
+import PGF.Internal
 import qualified PGF2
 import qualified Data.Map as Map
 import Data.List(sortBy)
 import Text.PrettyPrint(text)
-
-type Language = CId
-data PGF = PGF PGF2.PGF (Map.Map String PGF2.Concr)
 
 readPGF fpath = do
   gr <- PGF2.readPGF fpath
@@ -59,20 +57,19 @@ readLanguage = readCId
 showLanguage (CId s) = s
 
 startCat (PGF pgf _) = PGF2.startCat pgf
-languageCode (PGF _ langs) lang = Just (PGF2.languageCode (getConcr langs lang))
+languageCode pgf lang = Just (PGF2.languageCode (lookConcr pgf lang))
 
 abstractName (PGF gr _) = CId (PGF2.abstractName gr)
 
 categories (PGF gr _) = map CId (PGF2.categories gr)
 functions (PGF gr _)  = map CId (PGF2.functions gr)
+functionsByCat (PGF gr _) (CId c) = map CId (PGF2.functionsByCat gr c)
 functionType (PGF gr _) (CId f) = PGF2.functionType gr f
 
 type Tree = PGF2.Expr
 type Labels = Map.Map CId [String]
 type CncLabels = [(String, String -> Maybe (String -> String,String,String))]
-type Token = String
 
-newtype CId = CId String deriving (Show,Read,Eq,Ord)
 
 mkCId x = CId x
 showCId (CId x) = x
@@ -103,11 +100,10 @@ mkType hypos (CId var) es = PGF2.mkType [(bt,var,ty) | (bt,CId var,ty) <- hypos]
 unType ty = case PGF2.unType ty of
               (hypos,var,es) -> ([(bt,CId var,ty) | (bt,var,ty) <- hypos],CId var,es)
 
-linearize (PGF gr langs) lang e = PGF2.linearize (getConcr langs lang) e
-bracketedLinearize (PGF gr langs) lang e = PGF2.bracketedLinearize (getConcr langs lang) e
-tabularLinearizes (PGF gr langs) lang e = [PGF2.tabularLinearize (getConcr langs lang) e]
+linearize pgf lang e = PGF2.linearize (lookConcr pgf lang) e
+bracketedLinearize pgf lang e = PGF2.bracketedLinearize (lookConcr pgf lang) e
+tabularLinearizes pgf lang e = [PGF2.tabularLinearize (lookConcr pgf lang) e]
 
-type FId = Int
 type TcError = String
 
 -- | This data type encodes the different outcomes which you could get from the parser.
@@ -121,8 +117,8 @@ data ParseOutput
                                    -- The list should be non-empty.
   | ParseIncomplete                -- ^ The sentence is not complete. Only partial output is produced
 
-parse (PGF gr langs) lang cat s = 
-  case PGF2.parse (getConcr langs lang) cat s of
+parse pgf lang cat s = 
+  case PGF2.parse (lookConcr pgf lang) cat s of
     PGF2.ParseOk ts -> map fst ts
     _               -> []
 
@@ -136,8 +132,8 @@ inferExpr (PGF gr _) e =
     Right res -> Right res
     Left  msg -> Left (text msg)
 
-showPrintName (PGF gr langs) lang (CId f) = 
-  case PGF2.printName (getConcr langs lang) f of
+showPrintName pgf lang (CId f) = 
+  case PGF2.printName (lookConcr pgf lang) f of
     Just n  -> n
     Nothing -> f
 
@@ -161,14 +157,14 @@ languages (PGF gr _) = fmap CId (Map.keys (PGF2.languages gr))
 
 type Morpho = PGF2.Concr
 
-buildMorpho (PGF _ langs) lang = getConcr langs lang
+buildMorpho pgf lang = lookConcr pgf lang
 lookupMorpho cnc w = [(CId lemma,CId an) | (lemma,an,_) <- PGF2.lookupMorpho cnc w]
 isInMorpho cnc w = not (null (PGF2.lookupMorpho cnc w))
 morphoMissing = error "morphoMissing is not implemented"
 
 graphvizAbstractTree (PGF gr _) (funs,cats) = PGF2.graphvizAbstractTree gr PGF2.graphvizDefaults{PGF2.noFun=not funs,PGF2.noCat=not cats}
-graphvizParseTree (PGF gr langs) lang  = PGF2.graphvizParseTree (getConcr langs lang)
-graphvizAlignment (PGF gr all_langs) langs  = PGF2.graphvizWordAlignment (map (getConcr all_langs) langs) PGF2.graphvizDefaults
+graphvizParseTree pgf lang  = PGF2.graphvizParseTree (lookConcr pgf lang)
+graphvizAlignment pgf langs  = PGF2.graphvizWordAlignment (map (lookConcr pgf) langs) PGF2.graphvizDefaults
 graphvizDependencyTree = error "graphvizDependencyTree is not implemented"
 
 browse :: PGF -> CId -> Maybe (String,[CId],[CId])
@@ -205,7 +201,3 @@ toTrie = combines . map ((:[]) . singleton)
             combine2 (Ap f ts,Ap g us) | f==g = Just (Ap f (combines (ts++us)))
             combine2 _ = Nothing
 
-getConcr langs (CId lang) =
-  case Map.lookup lang langs of
-    Just cnc -> cnc
-    Nothing  -> error "Unknown language"

@@ -2,8 +2,7 @@ module GF.Compile.ToAPI
  (stringToAPI,exprToAPI)
   where
 
-import PGF.Internal
-import PGF(showCId)
+import PGF
 import Data.Maybe
 --import System.IO
 --import Control.Monad
