@@ -3,7 +3,9 @@ module PGF.Internal(CId(..),Language,PGF(..),
                     FId,isPredefFId,
                     FunId,LIndex,Token,Production(..),PArg(..),
                     CncCat(..),CncFun(..),Symbol(..),DotPos,
-                    concrTotalCats, concrProductions, concrCategories, concrFunction, concrSequence) where
+                    concrTotalCats, concrCategories, concrProductions,
+                    concrTotalFuns, concrFunction,
+                    concrTotalSeqs, concrSequence) where
 
 import qualified PGF2
 import qualified Data.Map as Map
@@ -50,14 +52,20 @@ type SeqId = Int
 concrTotalCats :: PGF2.Concr -> FId
 concrTotalCats = error "concrTotalCats is not implemented"
 
-concrProductions :: PGF2.Concr -> FId -> [Production]
-concrProductions = error "concrProductions is not implemented"
-
 concrCategories :: PGF2.Concr -> [(CId,CncCat)]
 concrCategories = error "concrCats is not implemented"
 
+concrProductions :: PGF2.Concr -> FId -> [Production]
+concrProductions = error "concrProductions is not implemented"
+
+concrTotalFuns :: PGF2.Concr -> FunId
+concrTotalFuns = error "concrTotalFuns is not implemented"
+
 concrFunction :: PGF2.Concr -> FunId -> CncFun
 concrFunction = error "concrFunction is not implemented"
+
+concrTotalSeqs :: PGF2.Concr -> SeqId
+concrTotalSeqs = error "concrTotalSeqs is not implemented"
 
 concrSequence :: PGF2.Concr -> SeqId -> [Symbol]
 concrSequence = error "concrSequence is not implemented"

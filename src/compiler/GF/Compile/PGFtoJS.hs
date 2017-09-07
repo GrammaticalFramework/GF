@@ -1,6 +1,7 @@
 module GF.Compile.PGFtoJS (pgf2js) where
 
 import PGF
+import PGF.Internal
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
 import qualified Data.Array.IArray as Array
@@ -17,7 +18,7 @@ pgf2js pgf =
    start = showType [] $ startCat pgf
    grammar = new "GFGrammar" [js_abstract, js_concrete]
    js_abstract = abstract2js start pgf
-   js_concrete = JS.EObj $ map concrete2js (languages pgf)
+   js_concrete = JS.EObj $ map (concrete2js pgf) (languages pgf)
 
 abstract2js :: String -> PGF -> JS.Expr
 abstract2js start pgf = new "GFAbstract" [JS.EStr start, JS.EObj [absdef2js f ty | f <- functions pgf, Just ty <- [functionType pgf f]]]
@@ -27,32 +28,29 @@ absdef2js f typ =
   let (hypos,cat,_) = unType typ
       args          = [cat | (_,_,typ) <- hypos, let (hypos,cat,_) = unType typ]
   in JS.Prop (JS.IdentPropName (JS.Ident (showCId f))) (new "Type" [JS.EArray [JS.EStr (showCId x) | x <- args], JS.EStr (showCId cat)])
-{-
-lit2js (LStr s) = JS.EStr s
-lit2js (LInt n) = JS.EInt n
-lit2js (LFlt d) = JS.EDbl d
--}
-concrete2js :: Language -> JS.Property
-concrete2js lang =
-  JS.Prop l (new "GFConcrete" [{-mapToJSObj (lit2js) $ cflags cnc,
-                               JS.EObj $ [JS.Prop (JS.IntPropName cat) (JS.EArray (map frule2js (Set.toList set))) | (cat,set) <- IntMap.toList (productions cnc)],
-                               JS.EArray $ (map ffun2js (Array.elems (cncfuns cnc))),
-                               JS.EArray $ (map seq2js (Array.elems (sequences cnc))),
-                               JS.EObj $ map cats (Map.assocs (cnccats cnc)),
-                               JS.EInt (totalCats cnc)-}])
-  where 
+
+concrete2js :: PGF -> Language -> JS.Property
+concrete2js pgf lang =
+  JS.Prop l (new "GFConcrete" [JS.EObj [],
+                               JS.EObj [JS.Prop (JS.IntPropName cat) (JS.EArray (map frule2js (concrProductions cnc cat))) | cat <- [0..concrTotalCats cnc]],
+                               JS.EArray [ffun2js (concrFunction cnc funid) | funid <- [0..concrTotalFuns cnc]],
+                               JS.EArray [seq2js (concrSequence cnc seqid) | seqid <- [0..concrTotalSeqs cnc]],
+                               JS.EObj $ map cats (concrCategories cnc),
+                               JS.EInt (concrTotalCats cnc)])
+  where
+   cnc = lookConcr pgf lang
    l  = JS.IdentPropName (JS.Ident (showCId lang))
 
    litslins = [JS.Prop (JS.StringPropName    "Int") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]), 
                JS.Prop (JS.StringPropName  "Float") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]),
                JS.Prop (JS.StringPropName "String") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]])]
 
---   cats (c,CncCat start end _) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
---                                                                                            ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
+   cats (c,CncCat start end _) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
+                                                                                            ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
 
 children :: JS.Ident
 children = JS.Ident "cs"
-{-
+
 frule2js :: Production -> JS.Expr
 frule2js (PApply funid args) = new "Apply"  [JS.EInt funid, JS.EArray (map farg2js args)]
 frule2js (PCoerce arg)       = new "Coerce" [JS.EInt arg]
@@ -61,8 +59,8 @@ farg2js (PArg hypos fid) = new "PArg" (map (JS.EInt . snd) hypos ++ [JS.EInt fid
 
 ffun2js (CncFun f lins) = new "CncFun" [JS.EStr (showCId f), JS.EArray (map JS.EInt (Array.elems lins))]
 
-seq2js :: Array.Array DotPos Symbol -> JS.Expr
-seq2js seq = JS.EArray [sym2js s | s <- Array.elems seq]
+seq2js :: [Symbol] -> JS.Expr
+seq2js seq = JS.EArray [sym2js s | s <- seq]
 
 sym2js :: Symbol -> JS.Expr
 sym2js (SymCat n l)    = new "SymCat" [JS.EInt n, JS.EInt l]
@@ -78,10 +76,7 @@ sym2js SymALL_CAPIT    = new "SymKS"  [JS.EStr "&|"]
 sym2js SymNE           = new "SymNE"  []
 
 alt2js (ps,ts) = new "Alt" [JS.EArray (map sym2js ps), JS.EArray (map JS.EStr ts)]
--}
+
 new :: String -> [JS.Expr] -> JS.Expr
 new f xs = JS.ENew (JS.Ident f) xs
-
-mapToJSObj :: (a -> JS.Expr) -> Map CId a -> JS.Expr
-mapToJSObj f m = JS.EObj [ JS.Prop (JS.IdentPropName (JS.Ident (showCId k))) (f v) | (k,v) <- Map.toList m ]
 
