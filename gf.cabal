@@ -196,7 +196,6 @@ Library
     GF.Haskell
     GF.Compile.ConcreteToHaskell
     GF.Compile.PGFtoJS
-    GF.Compile.PGFtoLProlog
     GF.Compile.PGFtoProlog
     GF.Compile.PGFtoPython
     GF.Compile.ReadFiles

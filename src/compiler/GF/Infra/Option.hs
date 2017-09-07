@@ -92,8 +92,6 @@ data OutputFormat = FmtPGFPretty
                   | FmtHaskell 
                   | FmtJava
                   | FmtProlog
-                  | FmtLambdaProlog
-                  | FmtByteCode
                   | FmtBNF
                   | FmtEBNF
                   | FmtRegular
@@ -478,8 +476,6 @@ outputFormatsExpl =
      (("haskell",      FmtHaskell),"Haskell (abstract syntax)"),
      (("java",         FmtJava),"Java (abstract syntax)"),
      (("prolog",       FmtProlog),"Prolog (whole grammar)"),
-     (("lambda_prolog",FmtLambdaProlog),"LambdaProlog (abstract syntax)"),
-     (("lp_byte_code", FmtByteCode),"Bytecode for Teyjus (abstract syntax, experimental)"),
      (("bnf",          FmtBNF),"BNF (context-free grammar)"),
      (("ebnf",         FmtEBNF),"Extended BNF"),
      (("regular",      FmtRegular),"* regular grammar"),

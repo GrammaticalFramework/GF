@@ -56,7 +56,7 @@ compileSourceFiles opts fs =
                                return (t,[cnc_gr])
 
     cncs2haskell output =
-      when (FmtHaskell `elem` outputFormats opts &&
+      when (FmtHaskell `elem` flag optOutputFormats opts &&
             haskellOption opts HaskellConcrete) $
         mapM_ cnc2haskell (snd output)
 
@@ -130,7 +130,7 @@ unionPGFFiles opts fs =
 writeOutputs :: Options -> PGF -> IOE ()
 writeOutputs opts pgf = do
   sequence_ [writeOutput opts name str 
-                 | fmt <- outputFormats opts,
+                 | fmt <- flag optOutputFormats opts,
                    (name,str) <- exportPGF opts fmt pgf]
 
 -- | Write the result of compiling a grammar (e.g. with 'compileToPGF' or
@@ -163,7 +163,6 @@ grammarName :: Options -> PGF -> String
 grammarName opts pgf = grammarName' opts (showCId (abstractName pgf))
 grammarName' opts abs = fromMaybe abs (flag optName opts)
 
-outputFormats opts = [fmt | fmt <- flag optOutputFormats opts, fmt/=FmtByteCode]
 outputJustPGF opts = null (flag optOutputFormats opts) && not (flag optSplitPGF opts)
 
 outputPath opts file = maybe id (</>) (flag optOutputDir opts) file
