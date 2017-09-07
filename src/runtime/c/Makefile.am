@@ -34,7 +34,8 @@ pgfinclude_HEADERS = \
 	pgf/linearizer.h \
 	pgf/literals.h \
 	pgf/graphviz.h \
-	pgf/pgf.h
+	pgf/pgf.h \
+	pgf/data.h
 
 sgincludedir=$(includedir)/sg
 sginclude_HEADERS = \
