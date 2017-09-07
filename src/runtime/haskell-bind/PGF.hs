@@ -1,7 +1,7 @@
 module PGF (PGF, readPGF,
             abstractName,
 
-            CId, mkCId, showCId, readCId,
+            CId, mkCId, wildCId, showCId, readCId,
             
             categories, functions, functionsByCat, functionType, browse,
 
@@ -72,6 +72,7 @@ type CncLabels = [(String, String -> Maybe (String -> String,String,String))]
 
 
 mkCId x = CId x
+wildCId = CId "_"
 showCId (CId x) = x
 readCId s = Just (CId s)
 
