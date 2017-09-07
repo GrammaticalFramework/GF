@@ -21,9 +21,6 @@
 module PGF2 (-- * PGF
              PGF,readPGF,
 
-             -- * Identifiers
-             CId,
-
              -- * Abstract syntax
              AbsName,abstractName,
              -- ** Categories
@@ -108,8 +105,8 @@ import Data.Function(on)
 -- to Concr but has lost its reference to PGF.
 
 
-type AbsName  = CId -- ^ Name of abstract syntax
-type ConcName = CId -- ^ Name of concrete syntax
+type AbsName  = String -- ^ Name of abstract syntax
+type ConcName = String -- ^ Name of concrete syntax
 
 -- | Reads file in Portable Grammar Format and produces
 -- 'PGF' structure. The file is usually produced with:
@@ -824,8 +821,8 @@ type LIndex = Int
 -- mark the beginning and the end of each constituent.
 data BracketedString
   = Leaf String                                                                -- ^ this is the leaf i.e. a single token
-  | Bracket CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex CId [BracketedString]
-                                                                               -- ^ this is a bracket. The 'CId' is the category of
+  | Bracket Cat {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex Fun [BracketedString]
+                                                                               -- ^ this is a bracket. The 'Cat' is the category of
                                                                                -- the phrase. The 'FId' is an unique identifier for
                                                                                -- every phrase in the sentence. For context-free grammars
                                                                                -- i.e. without discontinuous constituents this identifier
@@ -836,7 +833,7 @@ data BracketedString
                                                                                -- the constituent index i.e. 'LIndex'. If the grammar is reduplicating
                                                                                -- then the constituent indices will be the same for all brackets
                                                                                -- that represents the same constituent.
-                                                                               -- The second 'CId' is the name of the abstract function that generated
+                                                                               -- The 'Fun' is the name of the abstract function that generated
                                                                                -- this phrase.
 
 -- | Renders the bracketed string as a string where 

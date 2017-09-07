@@ -7,14 +7,8 @@ import Foreign hiding (unsafePerformIO)
 import Foreign.C
 import PGF2.FFI
 
--- | An data type that represents
--- identifiers for functions and categories in PGF.
-type CId = String
-
-wildCId = "_" :: CId
-
-type Cat = CId -- ^ Name of syntactic category
-type Fun = CId -- ^ Name of function
+type Cat = String -- ^ Name of syntactic category
+type Fun = String -- ^ Name of function
 
 data BindType = 
     Explicit
@@ -42,7 +36,7 @@ instance Eq Expr where
       return (res /= 0)
 
 -- | Constructs an expression by lambda abstraction
-mkAbs :: BindType -> CId -> Expr -> Expr
+mkAbs :: BindType -> String -> Expr -> Expr
 mkAbs bind_type var (Expr body bodyTouch) =
   unsafePerformIO $ do
       exprPl <- gu_new_pool
@@ -57,7 +51,7 @@ mkAbs bind_type var (Expr body bodyTouch) =
         Implicit -> (#const PGF_BIND_TYPE_IMPLICIT)
 
 -- | Decomposes an expression into an abstraction and a body
-unAbs :: Expr -> Maybe (BindType, CId, Expr)
+unAbs :: Expr -> Maybe (BindType, String, Expr)
 unAbs (Expr expr touch) =
   unsafePerformIO $ do
       c_abs <- pgf_expr_unabs expr
@@ -183,9 +177,6 @@ unMeta (Expr expr touch) =
                 touch
                 return (Just (fromIntegral (id :: CInt)))
 
--- | this functions is only for backward compatibility with the old Haskell runtime
-mkCId x = x
-
 -- | parses a 'String' as an expression
 readExpr :: String -> Maybe Expr
 readExpr str =
@@ -207,7 +198,7 @@ readExpr str =
 -- of identifiers is the list of all free variables
 -- in the expression in order reverse to the order
 -- of binding.
-showExpr :: [CId] -> Expr -> String
+showExpr :: [String] -> Expr -> String
 showExpr scope e = 
   unsafePerformIO $
     withGuPool $ \tmpPl ->

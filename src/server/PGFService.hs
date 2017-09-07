@@ -317,25 +317,12 @@ cpgfMain qsem command (t,(pgf,pc)) =
 
 --------------------------------------------------------------------------------
 
-{-
-instance JSON C.CId where
-    readJSON x = readJSON x >>= maybe (fail "Bad language.") return . C.readCId
-    showJSON = showJSON . C.showCId
--}
-instance JSON C.Expr where
-    readJSON x = readJSON x >>= maybe (fail "Bad expression.") return . C.readExpr
-    showJSON = showJSON . C.showExpr []
-
 
 -- | Convert a 'Tree' to an 'ATree'
 cToATree :: C.Expr -> PGF.ATree C.Expr
 cToATree e = maybe (PGF.Other e) app (C.unApp e)
   where
     app (f,es) = PGF.App (read f) (map cToATree es)
-
-instance ToATree C.Expr where
-  showTree = show
-  toATree = cToATree
 
 #endif
 
@@ -974,7 +961,11 @@ instance JSON PGF.Expr where
 
 instance JSON PGF.BracketedString where
     readJSON x = return (PGF.Leaf "")
+#ifdef C_RUNTIME
+    showJSON (PGF.Bracket cat fid index fun bs) =
+#else
     showJSON (PGF.Bracket cat fid index fun _ bs) =
+#endif
         makeObj ["cat".=cat, "fid".=fid, "index".=index, "fun".=fun, "children".=bs]
     showJSON (PGF.Leaf s) = makeObj ["token".=s]
 
