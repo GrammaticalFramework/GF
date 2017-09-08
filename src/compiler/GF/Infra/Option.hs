@@ -12,8 +12,8 @@ module GF.Infra.Option
      -- *** Option parsing
      parseOptions, parseModuleOptions, fixRelativeLibPaths,
      -- *** Option pretty-printing
-     optionsGFO,
-     optionsPGF,
+--     optionsGFO,
+--     optionsPGF,
      -- *** Option manipulation
      addOptions, concatOptions, noOptions,
      modifyFlags,
@@ -42,8 +42,6 @@ import GF.Data.Operations(Err,ErrorMonad(..),liftErr)
 
 import Data.Set (Set)
 import qualified Data.Set as Set
-
-import PGF.Internal(Literal(..))
 
 usageHeader :: String
 usageHeader = unlines 
@@ -215,17 +213,17 @@ fixRelativeLibPaths curr_dir lib_dir (Options o) = Options (fixPathFlags . o)
 -- Showing options
 
 -- | Pretty-print the options that are preserved in .gfo files.
-optionsGFO :: Options -> [(String,Literal)]
-optionsGFO opts = optionsPGF opts
-      ++ [("coding", LStr (getEncoding opts))]
+--optionsGFO :: Options -> [(String,Literal)]
+--optionsGFO opts = optionsPGF opts
+--      ++ [("coding", LStr (getEncoding opts))]
 
 -- | Pretty-print the options that are preserved in .pgf files.
-optionsPGF :: Options -> [(String,Literal)]
-optionsPGF opts =
-         maybe [] (\x -> [("language",LStr x)]) (flag optSpeechLanguage opts)
-      ++ maybe [] (\x -> [("startcat",LStr x)]) (flag optStartCat opts)
-      ++ maybe [] (\x -> [("heuristic_search_factor",LFlt x)]) (flag optHeuristicFactor opts)
-      ++ (if flag optCaseSensitive opts then [] else [("case_sensitive",LStr "off")])
+--optionsPGF :: Options -> [(String,Literal)]
+--optionsPGF opts =
+--         maybe [] (\x -> [("language",LStr x)]) (flag optSpeechLanguage opts)
+--      ++ maybe [] (\x -> [("startcat",LStr x)]) (flag optStartCat opts)
+--      ++ maybe [] (\x -> [("heuristic_search_factor",LFlt x)]) (flag optHeuristicFactor opts)
+--      ++ (if flag optCaseSensitive opts then [] else [("case_sensitive",LStr "off")])
 
 -- Option manipulation
 
