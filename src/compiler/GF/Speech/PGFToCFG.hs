@@ -10,7 +10,6 @@ import PGF
 import PGF.Internal
 import GF.Grammar.CFG hiding (Symbol)
 
-import Data.Array.IArray as Array
 import Data.Map (Map)
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
@@ -40,7 +39,7 @@ pgfToCFG pgf lang = mkCFG (showCId start_cat) extCats (startRules ++ concatMap r
     fcatCats :: Map FId Cat
     fcatCats = Map.fromList [(fc, showCId c ++ "_" ++ show i) 
                                  | (c,s,e,lbls) <- concrCategories cnc,
-                                   (fc,i) <- zip (range (s,e)) [1..]]
+                                   (fc,i) <- zip [s..e] [1..]]
 
     fcatCat :: FId -> Cat
     fcatCat c = Map.findWithDefault ("Unknown_" ++ show c) c fcatCats
@@ -67,7 +66,7 @@ pgfToCFG pgf lang = mkCFG (showCId start_cat) extCats (startRules ++ concatMap r
     startRules :: [CFRule]
     startRules = [Rule (showCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
                       | (c,s,e,lbls) <- concrCategories cnc,
-                        fc <- range (s,e), not (isPredefFId fc),
+                        fc <- [s..e], not (isPredefFId fc),
                         r <- [0..catLinArity fc-1]]
 
     ruleToCFRule :: (FId,Production) -> [CFRule]
