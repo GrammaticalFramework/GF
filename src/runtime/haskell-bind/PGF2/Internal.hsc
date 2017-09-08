@@ -8,7 +8,7 @@ module PGF2.Internal(-- * Access the internal structures
                      concrTotalSeqs, concrSequence,
                      
                      -- * Building new PGFs in memory
-                     withBuilder, eAbs, eApp, eMeta, eFun, eVar, eTyped, eImplArg, dTyp
+                     withBuilder, eAbs, eApp, eMeta, eFun, eVar, eTyped, eImplArg, dTyp, hypo
                     ) where
 
 #include <pgf/data.h>
@@ -84,9 +84,9 @@ concrCategories c =
       c_cats <- (#peek PgfCncCat, cats) c_cnccat
       c_len <- (#peek GuSeq, len) c_cats
       first <- peek (c_cats `plusPtr` (#offset GuSeq, data)) >>= peekFId
-      last  <- peek (c_cats `plusPtr` ((#offset GuSeq, data) + (fromIntegral (c_len-1::CInt))*(#size PgfCCat*))) >>= peekFId
+      last  <- peek (c_cats `plusPtr` ((#offset GuSeq, data) + (fromIntegral (c_len-1::CSizeT))*(#size PgfCCat*))) >>= peekFId
       c_n_lins <- (#peek PgfCncCat, n_lins) c_cnccat
-      arr <- peekArray (fromIntegral (c_n_lins :: CInt)) (c_cnccat `plusPtr` (#offset PgfCncCat, labels))
+      arr <- peekArray (fromIntegral (c_n_lins :: CSizeT)) (c_cnccat `plusPtr` (#offset PgfCncCat, labels))
       labels <- mapM peekUtf8CString arr
       writeIORef ref ((name,first,last,labels) : names)
 
@@ -137,7 +137,7 @@ concrTotalFuns c = unsafePerformIO $ do
   c_cncfuns <- (#peek PgfConcr, cncfuns) (concr c)
   c_len <- (#peek GuSeq, len) c_cncfuns
   touchConcr c
-  return (fromIntegral (c_len :: CInt))
+  return (fromIntegral (c_len :: CSizeT))
 
 concrFunction :: Concr -> FunId -> (Fun,[SeqId])
 concrFunction c funid = unsafePerformIO $ do
@@ -147,7 +147,7 @@ concrFunction c funid = unsafePerformIO $ do
   c_name <- (#peek PgfAbsFun, name) c_absfun
   name <- peekUtf8CString c_name
   c_n_lins <- (#peek PgfCncFun, n_lins) c_cncfun
-  arr <- peekArray (fromIntegral (c_n_lins :: CInt)) (c_cncfun `plusPtr` (#offset PgfCncFun, lins))
+  arr <- peekArray (fromIntegral (c_n_lins :: CSizeT)) (c_cncfun `plusPtr` (#offset PgfCncFun, lins))
   seqs_seq <- (#peek PgfConcr, sequences) (concr c)
   touchConcr c
   let seqs = seqs_seq `plusPtr` (#offset GuSeq, data)
@@ -160,7 +160,7 @@ concrTotalSeqs c = unsafePerformIO $ do
   seq <- (#peek PgfConcr, sequences) (concr c)
   c_len <- (#peek GuSeq, len) seq
   touchConcr c
-  return (fromIntegral (c_len :: CInt))
+  return (fromIntegral (c_len :: CSizeT))
 
 concrSequence :: Concr -> SeqId -> [Symbol]
 concrSequence c seqid = unsafePerformIO $ do
@@ -201,7 +201,7 @@ concrSequence c seqid = unsafePerformIO $ do
       c_default_form <- (#peek PgfSymbolKP, default_form) dt
       default_form <- peekSequence (deRef peekSymbol) (#size GuVariant) c_default_form
       c_n_forms <- (#peek PgfSymbolKP, n_forms) dt
-      forms <- peekForms (c_n_forms :: CInt) (dt `plusPtr` (#offset PgfSymbolKP, forms))
+      forms <- peekForms (c_n_forms :: CSizeT) (dt `plusPtr` (#offset PgfSymbolKP, forms))
       return (SymKP default_form forms)
 
     peekForms 0   ptr = return []
@@ -215,7 +215,7 @@ concrSequence c seqid = unsafePerformIO $ do
 
 peekSequence peekElem size ptr = do
   c_len <- (#peek GuSeq, len) ptr
-  peekElems (c_len :: CInt) (ptr `plusPtr` (#offset GuSeq, data))
+  peekElems (c_len :: CSizeT) (ptr `plusPtr` (#offset GuSeq, data))
   where
      peekElems 0   ptr = return []
      peekElems len ptr = do
@@ -261,7 +261,7 @@ eAbs bind_type var (B (Expr body _)) =
                             (#const gu_alignof(PgfExprAbs))
                             pptr pool
     cvar <- newUtf8CString var pool
-    (#poke PgfExprAbs, bind_type) ptr (cbind_type :: CInt)
+    (#poke PgfExprAbs, bind_type) ptr (cbind_type :: PgfBindType)
     (#poke PgfExprAbs, id) ptr cvar
     (#poke PgfExprAbs, body) ptr body
     e <- peek pptr
@@ -360,7 +360,10 @@ eImplArg (B (Expr e _)) =
   where
     (Builder pool touch) = ?builder
 
-dTyp :: (?builder :: Builder s) => [(BindType,CId,B s Type)] -> Cat -> [B s Expr] -> B s Type
+hypo :: BindType -> CId -> B s Type -> (B s Hypo)
+hypo bind_type var (B ty) = B (bind_type,var,ty)
+
+dTyp :: (?builder :: Builder s) => [B s Hypo] -> Cat -> [B s Expr] -> B s Type
 dTyp hypos cat es =
   unsafePerformIO $ do
     ptr <- gu_malloc_aligned pool 
@@ -378,10 +381,10 @@ dTyp hypos cat es =
     (Builder pool touch) = ?builder
     n_exprs = fromIntegral (length es) :: CSizeT
 
-    pokeHypos ptr []                                    = return ()
-    pokeHypos ptr ((bind_type,var,B (Type ty _)):hypos) = do
+    pokeHypos ptr []                                  = return ()
+    pokeHypos ptr (B (bind_type,var,Type ty _):hypos) = do
       c_var <- newUtf8CString var pool
-      (#poke PgfHypo, bind_type) ptr (cbind_type :: CInt)
+      (#poke PgfHypo, bind_type) ptr (cbind_type :: PgfBindType)
       (#poke PgfHypo, cid)       ptr c_var
       (#poke PgfHypo, type)      ptr ty
       pokeHypos (ptr `plusPtr` (#size PgfHypo)) hypos
@@ -408,8 +411,8 @@ newPGF gflags absname aflags cats funs concrs =
     c_aflags <- newFlags aflags pool
     c_concrs <- gu_make_seq (#size PgfConcr) (fromIntegral (Map.size concrs)) pool
     pokeConcrs (c_concrs `plusPtr` (#offset GuSeq, data)) (Map.toList concrs)
-    (#poke PgfPGF, major_version)   ptr (2 :: Word16)
-    (#poke PgfPGF, minor_version)   ptr (0 :: Word16)
+    (#poke PgfPGF, major_version)   ptr (2 :: (#type uint16_t))
+    (#poke PgfPGF, minor_version)   ptr (0 :: (#type uint16_t))
     (#poke PgfPGF, gflags)          ptr c_gflags
     (#poke PgfPGF, abstract.name)   ptr c_absname
     (#poke PgfPGF, abstract.aflags) ptr c_aflags
