@@ -1,17 +1,27 @@
-module PGF2.Internal(FId,isPredefFId,
-                     FunId,Token,Production(..),PArg(..),Symbol(..),
+{-# LANGUAGE ImplicitParams, RankNTypes #-}
+
+module PGF2.Internal(-- * Access the internal structures
+                     FId,isPredefFId,
+                     FunId,Token,Production(..),PArg(..),Symbol(..),Literal(..),
                      concrTotalCats, concrCategories, concrProductions,
                      concrTotalFuns, concrFunction,
-                     concrTotalSeqs, concrSequence) where
+                     concrTotalSeqs, concrSequence,
+                     
+                     -- * Building new PGFs in memory
+                     withBuilder, eAbs, eApp, eMeta, eFun, eVar, eTyped, eImplArg, dTyp
+                    ) where
 
 #include <pgf/data.h>
 
 import PGF2
 import PGF2.FFI
+import PGF2.Expr
+import PGF2.Type
 import System.IO.Unsafe(unsafePerformIO)
 import Foreign
 import Foreign.C
 import Data.IORef
+import qualified Data.Map as Map
 
 type Token = String
 data Symbol
@@ -34,7 +44,16 @@ data Production
 data PArg = PArg [FId] {-# UNPACK #-} !FId deriving (Eq,Ord,Show)
 type FunId = Int
 type SeqId = Int
+data Literal =
+   LStr String                      -- ^ a string constant
+ | LInt Int                         -- ^ an integer constant
+ | LFlt Double                      -- ^ a floating point constant
+ deriving (Eq,Ord,Show)
 
+
+-----------------------------------------------------------------------
+-- Access the internal structures
+-----------------------------------------------------------------------
 
 concrTotalCats :: Concr -> FId
 concrTotalCats c = unsafePerformIO $ do
@@ -215,3 +234,239 @@ fidStart  = (-5)
 
 isPredefFId :: FId -> Bool
 isPredefFId = (`elem` [fidString, fidInt, fidFloat, fidVar])
+
+
+-----------------------------------------------------------------------
+-- Building new PGFs in memory
+-----------------------------------------------------------------------
+
+data Builder s = Builder (Ptr GuPool) Touch
+newtype B s a = B a
+
+withBuilder :: (forall s . (?builder :: Builder s) => B s a) -> a
+withBuilder f =
+  unsafePerformIO $ do
+    pool <- gu_new_pool
+    poolFPtr <- newForeignPtr gu_pool_finalizer pool
+    let ?builder = Builder pool (touchForeignPtr poolFPtr)
+    let B res = f
+    return res
+
+eAbs :: (?builder :: Builder s) => BindType -> String -> B s Expr -> B s Expr
+eAbs bind_type var (B (Expr body _)) =
+  unsafePerformIO $
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_EXPR_ABS)
+                            (#size PgfExprAbs)
+                            (#const gu_alignof(PgfExprAbs))
+                            pptr pool
+    cvar <- newUtf8CString var pool
+    (#poke PgfExprAbs, bind_type) ptr (cbind_type :: CInt)
+    (#poke PgfExprAbs, id) ptr cvar
+    (#poke PgfExprAbs, body) ptr body
+    e <- peek pptr
+    return (B (Expr e touch))
+  where
+    (Builder pool touch) = ?builder
+
+    cbind_type =
+      case bind_type of
+        Explicit -> (#const PGF_BIND_TYPE_EXPLICIT)
+        Implicit -> (#const PGF_BIND_TYPE_IMPLICIT)
+
+eApp :: (?builder :: Builder s) => B s Expr -> B s Expr -> B s Expr
+eApp (B (Expr fun _)) (B (Expr arg _)) =
+  unsafePerformIO $
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_EXPR_APP)
+                            (#size PgfExprApp)
+                            (#const gu_alignof(PgfExprApp))
+                            pptr pool
+    (#poke PgfExprApp, fun) ptr fun
+    (#poke PgfExprApp, arg) ptr arg
+    e <- peek pptr
+    return (B (Expr e touch))
+  where
+    (Builder pool touch) = ?builder
+
+eMeta :: (?builder :: Builder s) => Int -> B s Expr
+eMeta id =
+  unsafePerformIO $
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_EXPR_META)
+                            (fromIntegral (#size PgfExprMeta))
+                            (#const gu_flex_alignof(PgfExprMeta))
+                            pptr pool
+    (#poke PgfExprMeta, id) ptr (fromIntegral id :: CInt)
+    e <- peek pptr
+    return (B (Expr e touch))
+  where
+    (Builder pool touch) = ?builder
+
+eFun :: (?builder :: Builder s) => Fun -> B s Expr
+eFun fun =
+  unsafePerformIO $
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_EXPR_FUN)
+                            (fromIntegral ((#size PgfExprFun)+utf8Length fun))
+                            (#const gu_flex_alignof(PgfExprFun))
+                            pptr pool
+    pokeUtf8CString fun (ptr `plusPtr` (#offset PgfExprFun, fun))
+    e <- peek pptr
+    return (B (Expr e touch))
+  where
+    (Builder pool touch) = ?builder
+
+eVar :: (?builder :: Builder s) => Int -> B s Expr
+eVar var =
+  unsafePerformIO $
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_EXPR_VAR)
+                            (#size PgfExprVar)
+                            (#const gu_alignof(PgfExprVar))
+                            pptr pool
+    (#poke PgfExprVar, var) ptr (fromIntegral var :: CInt)
+    e <- peek pptr
+    return (B (Expr e touch))
+  where
+    (Builder pool touch) = ?builder
+
+eTyped :: (?builder :: Builder s) => B s Expr -> B s Type -> B s Expr
+eTyped (B (Expr e _)) (B (Type ty _)) =
+  unsafePerformIO $
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_EXPR_TYPED)
+                            (#size PgfExprTyped)
+                            (#const gu_alignof(PgfExprTyped))
+                            pptr pool
+    (#poke PgfExprTyped, expr) ptr e
+    (#poke PgfExprTyped, type) ptr ty
+    e <- peek pptr
+    return (B (Expr e touch))
+  where
+    (Builder pool touch) = ?builder
+
+eImplArg :: (?builder :: Builder s) => B s Expr -> B s Expr
+eImplArg (B (Expr e _)) =
+  unsafePerformIO $
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_EXPR_IMPL_ARG)
+                            (#size PgfExprImplArg)
+                            (#const gu_alignof(PgfExprImplArg))
+                            pptr pool
+    (#poke PgfExprImplArg, expr) ptr e
+    e <- peek pptr
+    return (B (Expr e touch))
+  where
+    (Builder pool touch) = ?builder
+
+dTyp :: (?builder :: Builder s) => [(BindType,CId,B s Type)] -> Cat -> [B s Expr] -> B s Type
+dTyp hypos cat es =
+  unsafePerformIO $ do
+    ptr <- gu_malloc_aligned pool 
+                             ((#size PgfType)+n_exprs*(#size GuVariant))
+                             (#const gu_flex_alignof(PgfType))
+    c_hypos <- gu_make_seq (#size PgfHypo) (fromIntegral (length hypos)) pool
+    pokeHypos (c_hypos `plusPtr` (#offset GuSeq, data)) hypos
+    c_cat <- newUtf8CString cat pool
+    (#poke PgfType, hypos)   ptr c_hypos
+    (#poke PgfType, cid)     ptr c_cat
+    (#poke PgfType, n_exprs) ptr n_exprs
+    pokeArray (ptr `plusPtr` (#offset PgfType, exprs)) [e | B (Expr e _) <- es]
+    return (B (Type ptr touch))
+  where
+    (Builder pool touch) = ?builder
+    n_exprs = fromIntegral (length es) :: CInt
+
+    pokeHypos ptr []                                    = return ()
+    pokeHypos ptr ((bind_type,var,B (Type ty _)):hypos) = do
+      c_var <- newUtf8CString var pool
+      (#poke PgfHypo, bind_type) ptr (cbind_type :: CInt)
+      (#poke PgfHypo, cid)       ptr c_var
+      (#poke PgfHypo, type)      ptr ty
+      pokeHypos (ptr `plusPtr` (#size PgfHypo)) hypos
+      where
+        cbind_type =
+          case bind_type of
+            Explicit -> (#const PGF_BIND_TYPE_EXPLICIT)
+            Implicit -> (#const PGF_BIND_TYPE_IMPLICIT)
+
+newPGF :: (?builder :: Builder s) => Map.Map String Literal ->
+                                     AbsName ->
+                                     Map.Map String Literal ->
+                                     Map.Map Cat ([Hypo],Float) ->
+                                     Map.Map Fun (Type,Float) ->
+                                     Map.Map ConcName () -> 
+                                     B s PGF
+newPGF gflags absname aflags cats funs concrs =
+  unsafePerformIO $ do
+    ptr <- gu_malloc_aligned pool
+                             (#size PgfPGF)
+                             (#const gu_alignof(PgfPGF))
+    c_gflags <- newFlags gflags pool
+    c_absname <- newUtf8CString absname pool
+    c_aflags <- newFlags aflags pool
+    c_concrs <- gu_make_seq (#size PgfConcr) (fromIntegral (Map.size concrs)) pool
+    pokeConcrs (c_concrs `plusPtr` (#offset GuSeq, data)) (Map.toList concrs)
+    (#poke PgfPGF, major_version)   ptr (2 :: Word16)
+    (#poke PgfPGF, minor_version)   ptr (0 :: Word16)
+    (#poke PgfPGF, gflags)          ptr c_gflags
+    (#poke PgfPGF, abstract.name)   ptr c_absname
+    (#poke PgfPGF, abstract.aflags) ptr c_aflags
+    (#poke PgfPGF, concretes)       ptr c_concrs
+    (#poke PgfPGF, pool)            ptr pool
+    return (B (PGF ptr touch))
+  where
+    (Builder pool touch) = ?builder
+
+    pokeConcrs ptr []                    = return ()
+    pokeConcrs ptr ((name,concr):concrs) = do
+      initConcr ptr name concr pool
+      pokeConcrs (ptr `plusPtr` (#size PgfConcr)) concrs
+
+newFlags :: Map.Map String Literal -> Ptr GuPool -> IO (Ptr GuSeq)
+newFlags flags pool = do
+  c_flags <- gu_make_seq (#size PgfFlag) (fromIntegral (Map.size flags)) pool
+  pokeFlags (c_flags `plusPtr` (#offset GuSeq, data)) (Map.toList flags)
+  return c_flags
+  where
+    pokeFlags c_flag []                   = return ()
+    pokeFlags c_flag ((name,value):flags) = do
+      c_name  <- newUtf8CString name pool
+      c_value <- newLiteral value pool
+      (#poke PgfFlag, name)  c_flag c_name
+      (#poke PgfFlag, value) c_flag c_value
+      pokeFlags (c_flag `plusPtr` (#size PgfFlag)) flags
+
+newLiteral :: Literal -> Ptr GuPool -> IO GuVariant
+newLiteral (LStr val) pool =
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_LITERAL_STR)
+                            (fromIntegral ((#size PgfLiteralStr)+utf8Length val))
+                            (#const gu_flex_alignof(PgfLiteralStr))
+                            pptr pool
+    pokeUtf8CString val (ptr `plusPtr` (#offset PgfLiteralStr, val))
+    peek pptr
+newLiteral (LInt val) pool =
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_LITERAL_INT)
+                            (fromIntegral (#size PgfLiteralInt))
+                            (#const gu_flex_alignof(PgfLiteralInt))
+                            pptr pool
+    (#poke PgfLiteralInt, val) ptr (fromIntegral val :: CInt)
+    peek pptr
+newLiteral (LFlt val) pool =
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_LITERAL_FLT)
+                            (fromIntegral (#size PgfLiteralFlt))
+                            (#const gu_flex_alignof(PgfLiteralFlt))
+                            pptr pool
+    (#poke PgfLiteralFlt, val) ptr (realToFrac val :: CDouble)
+    peek pptr
+
+initConcr :: Ptr PgfConcr -> ConcName -> () -> Ptr GuPool -> IO ()
+initConcr ptr name c pool = do
+  return ()
+
+newSymbol :: Symbol -> Ptr GuPool -> IO GuVariant
+newSymbol pool = undefined
