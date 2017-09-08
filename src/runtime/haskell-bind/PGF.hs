@@ -34,7 +34,7 @@ module PGF (PGF, readPGF,
 
             Labels, getDepLabels, CncLabels, getCncDepLabels,
 
-            generateAllDepth, generateRandomDepth, generateRandomFromDepth,
+            generateAllDepth, generateRandom, generateRandomFrom, generateRandomDepth, generateRandomFromDepth,
 
             PGF2.GraphvizOptions(..),
             graphvizAbstractTree, graphvizParseTree, graphvizAlignment, graphvizDependencyTree,
@@ -142,6 +142,8 @@ getDepLabels = error "getDepLabels is not implemented"
 getCncDepLabels = error "getCncDepLabels is not implemented"
 
 generateAllDepth = error "generateAllDepth is not implemented"
+generateRandom = error "generateRandom is not implemented"
+generateRandomFrom = error "generateRandomFrom is not implemented"
 generateRandomDepth = error "generateRandomDepth is not implemented"
 generateRandomFromDepth = error "generateRandomFromDepth is not implemented"
 

@@ -4,7 +4,6 @@ import PGF
 import PGF.Internal
 import qualified GF.JavaScript.AbsJS as JS
 import qualified GF.JavaScript.PrintJS as JS
-import qualified Data.Array.IArray as Array
 import Data.Map (Map)
 import qualified Data.Set as Set
 import qualified Data.Map as Map
@@ -45,8 +44,8 @@ concrete2js pgf lang =
                JS.Prop (JS.StringPropName  "Float") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]]),
                JS.Prop (JS.StringPropName "String") (JS.EFun [children] [JS.SReturn $ new "Arr" [JS.EIndex (JS.EVar children) (JS.EInt 0)]])]
 
-   cats (c,CncCat start end _) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
-                                                                                            ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
+   cats (c,start,end,_) = JS.Prop (JS.IdentPropName (JS.Ident (showCId c))) (JS.EObj [JS.Prop (JS.IdentPropName (JS.Ident "s")) (JS.EInt start)
+                                                                                     ,JS.Prop (JS.IdentPropName (JS.Ident "e")) (JS.EInt end)])
 
 children :: JS.Ident
 children = JS.Ident "cs"
@@ -55,9 +54,9 @@ frule2js :: Production -> JS.Expr
 frule2js (PApply funid args) = new "Apply"  [JS.EInt funid, JS.EArray (map farg2js args)]
 frule2js (PCoerce arg)       = new "Coerce" [JS.EInt arg]
 
-farg2js (PArg hypos fid) = new "PArg" (map (JS.EInt . snd) hypos ++ [JS.EInt fid])
+farg2js (PArg hypos fid) = new "PArg" (map JS.EInt hypos ++ [JS.EInt fid])
 
-ffun2js (CncFun f lins) = new "CncFun" [JS.EStr (showCId f), JS.EArray (map JS.EInt (Array.elems lins))]
+ffun2js (f,lins) = new "CncFun" [JS.EStr (showCId f), JS.EArray (map JS.EInt lins)]
 
 seq2js :: [Symbol] -> JS.Expr
 seq2js seq = JS.EArray [sym2js s | s <- seq]

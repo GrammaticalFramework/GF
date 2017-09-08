@@ -1,5 +1,5 @@
 module PGF2.Internal(FId,isPredefFId,
-                     FunId,Token,Production(..),PArg(..),Symbol(..),
+                     FunId,SeqId,Token,Production(..),PArg(..),Symbol(..),
                      concrTotalCats, concrCategories, concrProductions,
                      concrTotalFuns, concrFunction,
                      concrTotalSeqs, concrSequence) where

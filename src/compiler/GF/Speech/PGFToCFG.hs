@@ -39,19 +39,19 @@ pgfToCFG pgf lang = mkCFG (showCId start_cat) extCats (startRules ++ concatMap r
 
     fcatCats :: Map FId Cat
     fcatCats = Map.fromList [(fc, showCId c ++ "_" ++ show i) 
-                                 | (c,CncCat s e lbls) <- concrCategories cnc,
+                                 | (c,s,e,lbls) <- concrCategories cnc,
                                    (fc,i) <- zip (range (s,e)) [1..]]
 
     fcatCat :: FId -> Cat
     fcatCat c = Map.findWithDefault ("Unknown_" ++ show c) c fcatCats
 
-    fcatToCat :: FId -> LIndex -> Cat
+    fcatToCat :: FId -> Int -> Cat
     fcatToCat c l = fcatCat c ++ row
       where row = if catLinArity c == 1 then "" else "_" ++ show l
 
     -- gets the number of fields in the lincat for the given category
     catLinArity :: FId -> Int
-    catLinArity c = maximum (1:[rangeSize (bounds rhs) | (CncFun _ rhs, _) <- topdownRules c])
+    catLinArity c = maximum (1:[length rhs | ((_,rhs), _) <- topdownRules c])
 
     topdownRules cat = f cat []
       where
@@ -66,18 +66,18 @@ pgfToCFG pgf lang = mkCFG (showCId start_cat) extCats (startRules ++ concatMap r
 
     startRules :: [CFRule]
     startRules = [Rule (showCId c) [NonTerminal (fcatToCat fc r)] (CFRes 0) 
-                      | (c,CncCat s e lbls) <- concrCategories cnc,
+                      | (c,s,e,lbls) <- concrCategories cnc,
                         fc <- range (s,e), not (isPredefFId fc),
                         r <- [0..catLinArity fc-1]]
 
     ruleToCFRule :: (FId,Production) -> [CFRule]
     ruleToCFRule (c,PApply funid args) = 
         [Rule (fcatToCat c l) (mkRhs row) (profilesToTerm [fixProfile row n | n <- [0..length args-1]])
-           | (l,seqid) <- Array.assocs rhs
+           | (l,seqid) <- zip [0..] rhs
            , let row = concrSequence cnc seqid
            , not (containsLiterals row)]
       where
-        CncFun f rhs = concrFunction cnc funid
+        (f, rhs) = concrFunction cnc funid
 
         mkRhs :: [Symbol] -> [CFSymbol]
         mkRhs = concatMap symbolToCFSymbol
