@@ -2,7 +2,7 @@ module PGF.Internal(CId(..),Language,PGF(..),
                     PGF2.Concr,lookConcr,
                     PGF2.FId,isPredefFId,
                     PGF2.FunId,PGF2.SeqId,PGF2.Token,
-                    PGF2.Production(..),PGF2.PArg(..),PGF2.Symbol(..),
+                    PGF2.Production(..),PGF2.PArg(..),PGF2.Symbol(..),PGF2.Literal(..),
                     concrTotalCats, concrCategories, concrProductions,
                     concrTotalFuns, concrFunction,
                     concrTotalSeqs, concrSequence) where
