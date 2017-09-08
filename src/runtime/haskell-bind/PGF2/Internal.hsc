@@ -376,7 +376,7 @@ dTyp hypos cat es =
     return (B (Type ptr touch))
   where
     (Builder pool touch) = ?builder
-    n_exprs = fromIntegral (length es) :: CInt
+    n_exprs = fromIntegral (length es) :: CSizeT
 
     pokeHypos ptr []                                    = return ()
     pokeHypos ptr ((bind_type,var,B (Type ty _)):hypos) = do

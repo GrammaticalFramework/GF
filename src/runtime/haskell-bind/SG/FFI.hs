@@ -65,10 +65,10 @@ foreign import ccall "sg/sg.h sg_triple_result_close"
   sg_triple_result_close :: Ptr SgTripleResult -> Ptr GuExn -> IO ()
 
 foreign import ccall "sg/sg.h sg_query"
-  sg_query :: Ptr SgSG -> CInt -> Ptr PgfExpr -> Ptr GuExn -> IO (Ptr SgQueryResult)
+  sg_query :: Ptr SgSG -> CSizeT -> Ptr PgfExpr -> Ptr GuExn -> IO (Ptr SgQueryResult)
 
 foreign import ccall "sg/sg.h sg_query_result_columns"
-  sg_query_result_columns :: Ptr SgQueryResult -> IO CInt
+  sg_query_result_columns :: Ptr SgQueryResult -> IO CSizeT
 
 foreign import ccall "sg/sg.h sg_query_result_fetch"
   sg_query_result_fetch :: Ptr SgQueryResult -> Ptr PgfExpr -> Ptr GuPool -> Ptr GuExn -> IO CInt

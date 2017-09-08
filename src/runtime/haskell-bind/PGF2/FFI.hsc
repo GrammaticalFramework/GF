@@ -2,14 +2,19 @@
 
 module PGF2.FFI where
 
+#include <gu/defs.h>
+#include <gu/hash.h>
+#include <gu/utf8.h>
+#include <pgf/pgf.h>
+
 import Foreign ( alloca, peek, poke )
 import Foreign.C
 import Foreign.Ptr
 import Foreign.ForeignPtr
 import Control.Exception
 import GHC.Ptr
-import Data.Int(Int32)
-import Data.Word(Word,Word8)
+import Data.Int
+import Data.Word
 
 type Touch = IO ()
 
@@ -34,6 +39,11 @@ data GuOut
 data GuSeq
 data GuPool
 type GuVariant = Ptr ()
+type GuHash = (#type GuHash)
+type GuUCS = (#type GuUCS)
+
+type CSizeT = (#type size_t)
+type CUInt8 = (#type uint8_t)
 
 foreign import ccall unsafe fopen :: CString -> CString -> IO (Ptr ())
 
@@ -41,10 +51,10 @@ foreign import ccall unsafe "gu/mem.h gu_new_pool"
   gu_new_pool :: IO (Ptr GuPool)
 
 foreign import ccall unsafe "gu/mem.h gu_malloc"
-  gu_malloc :: Ptr GuPool -> CInt -> IO (Ptr a)
+  gu_malloc :: Ptr GuPool -> CSizeT -> IO (Ptr a)
 
 foreign import ccall unsafe "gu/mem.h gu_malloc_aligned"
-  gu_malloc_aligned :: Ptr GuPool -> CInt -> CInt -> IO (Ptr a)
+  gu_malloc_aligned :: Ptr GuPool -> CSizeT -> CSizeT -> IO (Ptr a)
 
 foreign import ccall unsafe "gu/mem.h gu_pool_free"
   gu_pool_free :: Ptr GuPool -> IO ()
@@ -64,15 +74,15 @@ foreign import ccall unsafe "gu/exn.h gu_exn_caught_"
 foreign import ccall unsafe "gu/exn.h gu_exn_raise_"
   gu_exn_raise :: Ptr GuExn -> CString -> IO (Ptr ())
 
-gu_exn_type_GuErrno = Ptr "GuErrno"# :: CString
+gu_exn_type_GuErrno = Ptr "GuErrno"## :: CString
 
-gu_exn_type_PgfLinNonExist = Ptr "PgfLinNonExist"# :: CString
+gu_exn_type_PgfLinNonExist = Ptr "PgfLinNonExist"## :: CString
 
-gu_exn_type_PgfExn = Ptr "PgfExn"# :: CString
+gu_exn_type_PgfExn = Ptr "PgfExn"## :: CString
 
-gu_exn_type_PgfParseError = Ptr "PgfParseError"# :: CString
+gu_exn_type_PgfParseError = Ptr "PgfParseError"## :: CString
 
-gu_exn_type_PgfTypeError = Ptr "PgfTypeError"# :: CString
+gu_exn_type_PgfTypeError = Ptr "PgfTypeError"## :: CString
 
 foreign import ccall unsafe "gu/string.h gu_string_in"
   gu_string_in :: CString -> Ptr GuPool -> IO (Ptr GuIn)
@@ -93,13 +103,13 @@ foreign import ccall unsafe "gu/string.h gu_string_buf_freeze"
   gu_string_buf_freeze :: Ptr GuStringBuf -> Ptr GuPool -> IO CString
 
 foreign import ccall unsafe "gu/utf8.h gu_utf8_decode"
-  gu_utf8_decode :: Ptr CString -> IO Int32
+  gu_utf8_decode :: Ptr CString -> IO GuUCS
 
 foreign import ccall unsafe "gu/utf8.h gu_utf8_encode"
-  gu_utf8_encode :: Int32 -> Ptr CString -> IO ()
+  gu_utf8_encode :: GuUCS -> Ptr CString -> IO ()
 
 foreign import ccall unsafe "gu/seq.h gu_make_seq"
-  gu_make_seq :: CInt -> CInt -> Ptr GuPool -> IO (Ptr GuSeq)
+  gu_make_seq :: CSizeT -> CSizeT -> Ptr GuPool -> IO (Ptr GuSeq)
 
 foreign import ccall unsafe "gu/map.h gu_map_find_default"
   gu_map_find_default :: Ptr GuMap -> Ptr a -> IO (Ptr b)
@@ -114,7 +124,7 @@ foreign import ccall unsafe "gu/variant.h gu_variant_data"
   gu_variant_data :: GuVariant -> IO (Ptr a)
 
 foreign import ccall unsafe "gu/variant.h gu_alloc_variant"
-  gu_alloc_variant :: Word8 -> CInt -> CInt -> Ptr GuVariant -> Ptr GuPool -> IO (Ptr a)
+  gu_alloc_variant :: CUInt8 -> CSizeT -> CSizeT -> Ptr GuVariant -> Ptr GuPool -> IO (Ptr a)
 
 
 withGuPool :: (Ptr GuPool -> IO a) -> IO a
@@ -198,6 +208,7 @@ data PgfOracleCallback
 data PgfCncTree
 data PgfLinFuncs
 data PgfGraphvizOptions
+type PgfBindType = (#type PgfBindType)
 
 foreign import ccall "pgf/pgf.h pgf_read"
   pgf_read :: CString -> Ptr GuPool -> Ptr GuExn -> IO (Ptr PgfPGF)
@@ -254,16 +265,16 @@ foreign import ccall "pgf/pgf.h pgf_lzr_wrap_linref"
   pgf_lzr_wrap_linref :: Ptr PgfCncTree -> Ptr GuPool -> IO (Ptr PgfCncTree)
 
 foreign import ccall "pgf/pgf.h pgf_lzr_linearize_simple"
-  pgf_lzr_linearize_simple :: Ptr PgfConcr -> Ptr PgfCncTree -> CInt -> Ptr GuOut -> Ptr GuExn -> Ptr GuPool -> IO ()
+  pgf_lzr_linearize_simple :: Ptr PgfConcr -> Ptr PgfCncTree -> CSizeT -> Ptr GuOut -> Ptr GuExn -> Ptr GuPool -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_lzr_linearize"
-  pgf_lzr_linearize :: Ptr PgfConcr -> Ptr PgfCncTree -> CInt -> Ptr (Ptr PgfLinFuncs) -> Ptr GuPool -> IO ()
+  pgf_lzr_linearize :: Ptr PgfConcr -> Ptr PgfCncTree -> CSizeT -> Ptr (Ptr PgfLinFuncs) -> Ptr GuPool -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_lzr_get_table"
-  pgf_lzr_get_table :: Ptr PgfConcr -> Ptr PgfCncTree -> Ptr CInt -> Ptr (Ptr CString) -> IO ()
+  pgf_lzr_get_table :: Ptr PgfConcr -> Ptr PgfCncTree -> Ptr CSizeT -> Ptr (Ptr CString) -> IO ()
 
 type SymbolTokenCallback = Ptr (Ptr PgfLinFuncs) -> CString -> IO ()
-type PhraseCallback = Ptr (Ptr PgfLinFuncs) -> CString -> CInt -> CInt -> CString -> IO ()
+type PhraseCallback = Ptr (Ptr PgfLinFuncs) -> CString -> CInt -> CSizeT -> CString -> IO ()
 type NonExistCallback = Ptr (Ptr PgfLinFuncs) -> IO ()
 type MetaCallback = Ptr (Ptr PgfLinFuncs) -> CInt -> IO ()
 
@@ -288,12 +299,12 @@ foreign import ccall "pgf/pgf.h pgf_parse_with_heuristics"
 foreign import ccall "pgf/pgf.h pgf_lookup_sentence"
   pgf_lookup_sentence :: Ptr PgfConcr -> PgfType -> CString -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
 
-type LiteralMatchCallback = CInt -> Ptr CInt -> Ptr GuPool -> IO (Ptr PgfExprProb)
+type LiteralMatchCallback = CSizeT -> Ptr CSizeT -> Ptr GuPool -> IO (Ptr PgfExprProb)
 
 foreign import ccall "wrapper"
   wrapLiteralMatchCallback :: LiteralMatchCallback -> IO (FunPtr LiteralMatchCallback)
 
-type LiteralPredictCallback = CInt -> CString -> Ptr GuPool -> IO (Ptr PgfExprProb)
+type LiteralPredictCallback = CSizeT -> CString -> Ptr GuPool -> IO (Ptr PgfExprProb)
 
 foreign import ccall "wrapper"
   wrapLiteralPredictCallback :: LiteralPredictCallback -> IO (FunPtr LiteralPredictCallback)
@@ -304,8 +315,8 @@ foreign import ccall "pgf/pgf.h pgf_new_callbacks_map"
 foreign import ccall
   hspgf_callbacks_map_add_literal :: Ptr PgfConcr -> Ptr PgfCallbacksMap -> CString -> FunPtr LiteralMatchCallback -> FunPtr LiteralPredictCallback -> Ptr GuPool -> IO ()
 
-type OracleCallback = CString -> CString -> CInt -> IO Bool
-type OracleLiteralCallback = CString -> CString -> Ptr CInt -> Ptr GuPool -> IO (Ptr PgfExprProb)
+type OracleCallback = CString -> CString -> CSizeT -> IO Bool
+type OracleLiteralCallback = CString -> CString -> Ptr CSizeT -> Ptr GuPool -> IO (Ptr PgfExprProb)
 
 foreign import ccall "wrapper"
   wrapOracleCallback :: OracleCallback -> IO (FunPtr OracleCallback)
@@ -348,7 +359,7 @@ foreign import ccall "pgf/pgf.h pgf_expr_unapply"
   pgf_expr_unapply :: PgfExpr -> Ptr GuPool -> IO (Ptr PgfApplication)
 
 foreign import ccall "pgf/pgf.h pgf_expr_abs"
-  pgf_expr_abs :: CInt -> CString -> PgfExpr -> Ptr GuPool -> IO PgfExpr
+  pgf_expr_abs :: PgfBindType -> CString -> PgfExpr -> Ptr GuPool -> IO PgfExpr
 
 foreign import ccall "pgf/pgf.h pgf_expr_unabs"
   pgf_expr_unabs :: PgfExpr -> IO (Ptr a)
@@ -378,7 +389,7 @@ foreign import ccall "pgf/expr.h pgf_expr_eq"
   pgf_expr_eq :: PgfExpr -> PgfExpr -> IO CInt
 
 foreign import ccall "pgf/expr.h pgf_expr_hash"
-  pgf_expr_hash :: Word -> PgfExpr -> IO Word
+  pgf_expr_hash :: GuHash -> PgfExpr -> IO GuHash
 
 foreign import ccall "pgf/expr.h pgf_expr_size"
   pgf_expr_size :: PgfExpr -> IO CInt
@@ -405,7 +416,7 @@ foreign import ccall "pgf/expr.h pgf_print_expr"
   pgf_print_expr :: PgfExpr -> Ptr PgfPrintContext -> CInt -> Ptr GuOut -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/expr.h pgf_print_expr_tuple"
-  pgf_print_expr_tuple :: CInt -> Ptr PgfExpr -> Ptr PgfPrintContext -> Ptr GuOut -> Ptr GuExn -> IO ()
+  pgf_print_expr_tuple :: CSizeT -> Ptr PgfExpr -> Ptr PgfPrintContext -> Ptr GuOut -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/expr.h pgf_print_category"
   pgf_print_category :: Ptr PgfPGF -> CString -> Ptr GuOut -> Ptr GuExn -> IO ()
@@ -423,10 +434,10 @@ foreign import ccall "pgf/expr.h pgf_read_expr"
   pgf_read_expr :: Ptr GuIn -> Ptr GuPool -> Ptr GuExn -> IO PgfExpr
 
 foreign import ccall "pgf/expr.h pgf_read_expr_tuple"
-  pgf_read_expr_tuple :: Ptr GuIn -> CInt -> Ptr PgfExpr -> Ptr GuPool -> Ptr GuExn -> IO CInt
+  pgf_read_expr_tuple :: Ptr GuIn -> CSizeT -> Ptr PgfExpr -> Ptr GuPool -> Ptr GuExn -> IO CInt
 
 foreign import ccall "pgf/expr.h pgf_read_expr_matrix"
-  pgf_read_expr_matrix :: Ptr GuIn -> CInt -> Ptr GuPool -> Ptr GuExn -> IO (Ptr GuSeq)
+  pgf_read_expr_matrix :: Ptr GuIn -> CSizeT -> Ptr GuPool -> Ptr GuExn -> IO (Ptr GuSeq)
 
 foreign import ccall "pgf/expr.h pgf_read_type"
   pgf_read_type :: Ptr GuIn -> Ptr GuPool -> Ptr GuExn -> IO PgfType
@@ -438,4 +449,4 @@ foreign import ccall "pgf/graphviz.h pgf_graphviz_parse_tree"
   pgf_graphviz_parse_tree :: Ptr PgfConcr -> PgfExpr -> Ptr PgfGraphvizOptions -> Ptr GuOut -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/graphviz.h pgf_graphviz_word_alignment"
-  pgf_graphviz_word_alignment :: Ptr (Ptr PgfConcr) -> CInt -> PgfExpr -> Ptr PgfGraphvizOptions -> Ptr GuOut -> Ptr GuExn -> IO ()
+  pgf_graphviz_word_alignment :: Ptr (Ptr PgfConcr) -> CSizeT -> PgfExpr -> Ptr PgfGraphvizOptions -> Ptr GuOut -> Ptr GuExn -> IO ()
