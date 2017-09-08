@@ -73,7 +73,7 @@ flag c-runtime
 
 
 executable gf
-  hs-source-dirs: src/programs
+  hs-source-dirs: src/programs, src/runtime/haskell/binary
   main-is: gf-main.hs
   default-language:    Haskell2010
   build-depends: base, filepath, directory, time, time-compat, old-locale, pretty, mtl, array, random,
@@ -209,6 +209,14 @@ executable gf
     GF.Text.Lexing
     GF.Text.Transliterations
     Paths_gf
+    
+    -- not really part of GF but I have changed the original binary library
+    -- and we have to keep the copy for now.
+    Data.Binary
+    Data.Binary.Put
+    Data.Binary.Get
+    Data.Binary.Builder
+    Data.Binary.IEEE754
 
   if flag(c-runtime)
     cpp-options: -DC_RUNTIME

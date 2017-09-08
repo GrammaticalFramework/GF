@@ -30,6 +30,7 @@ Library
                  exceptions
 
   if flag(custom-binary)
+    hs-source-dirs: ., binary
     other-modules:
       -- not really part of GF but I have changed the original binary library
       -- and we have to keep the copy for now.
