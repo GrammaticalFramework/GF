@@ -83,10 +83,10 @@ struct PgfLinFuncs
 	void (*symbol_token)(PgfLinFuncs** self, PgfToken tok);
 
 	/// Begin phrase
-	void (*begin_phrase)(PgfLinFuncs** self, PgfCId cat, int fid, int lindex, PgfCId fun);
+	void (*begin_phrase)(PgfLinFuncs** self, PgfCId cat, int fid, size_t lindex, PgfCId fun);
 
 	/// End phrase
-	void (*end_phrase)(PgfLinFuncs** self, PgfCId cat, int fid, int lindex, PgfCId fun);
+	void (*end_phrase)(PgfLinFuncs** self, PgfCId cat, int fid, size_t lindex, PgfCId fun);
 
 	/// handling nonExist
 	void (*symbol_ne)(PgfLinFuncs** self);

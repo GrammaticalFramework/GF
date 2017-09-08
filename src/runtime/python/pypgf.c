@@ -2075,7 +2075,7 @@ pgf_bracket_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 }
 
 static void
-pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lindex, PgfCId fun)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 	
@@ -2084,7 +2084,7 @@ pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int linde
 }
 
 static void
-pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lindex, PgfCId fun)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 

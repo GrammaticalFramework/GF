@@ -142,14 +142,14 @@ pgf_aligner_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 }
 
 static void
-pgf_aligner_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+pgf_aligner_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lindex, PgfCId fun)
 {
 	PgfAlignerLin* alin = gu_container(funcs, PgfAlignerLin, funcs);
 	gu_buf_push(alin->parent_stack, int, fid);
 }
 
 static void
-pgf_aligner_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+pgf_aligner_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lindex, PgfCId fun)
 {
 	PgfAlignerLin* alin = gu_container(funcs, PgfAlignerLin, funcs);
 	gu_buf_pop(alin->parent_stack, int);
