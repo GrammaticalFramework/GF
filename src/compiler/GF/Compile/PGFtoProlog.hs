@@ -8,9 +8,8 @@
 
 module GF.Compile.PGFtoProlog (grammar2prolog) where
 
-import PGF(mkCId,wildCId,showCId)
+import PGF
 import PGF.Internal
---import PGF.Macros
 
 import GF.Data.Operations
 
@@ -29,70 +28,47 @@ grammar2prolog pgf
                    [[plp name]] ++++
        plFacts wildCId "concrete" 2 "(?AbstractName, ?ConcreteName)" 
                    [[plp name, plp cncname] | 
-                    cncname <- Map.keys (concretes pgf)] ++++
-       plFacts wildCId "flag" 2 "(?Flag, ?Value): global flags" 
-                   [[plp f, plp v] | 
-                    (f, v) <- Map.assocs (gflags pgf)] ++++
-       plAbstract name (abstract pgf) ++++
-       unlines (map plConcrete (Map.assocs (concretes pgf)))
+                    cncname <- languages pgf] ++++
+       plAbstract name pgf ++++
+       unlines [plConcrete name (lookConcr pgf name) | name <- languages pgf]
       )
-    where name = absname pgf
+    where name = abstractName pgf
 
 ----------------------------------------------------------------------
 -- abstract syntax
 
-plAbstract :: CId -> Abstr -> String
-plAbstract name abs 
+plAbstract :: CId -> PGF -> String
+plAbstract name pgf
     = (plHeader "Abstract syntax" ++++
-       plFacts name "flag" 2 "(?Flag, ?Value): flags for abstract syntax"
-                   [[plp f, plp v] | 
-                    (f, v) <- Map.assocs (aflags abs)] ++++
        plFacts name "cat" 2 "(?Type, ?[X:Type,...])"
-                   [[plType cat args, plHypos hypos'] |
-                    (cat, (hypos,_,_)) <- Map.assocs (cats abs),
-                    let ((_, subst), hypos') = mapAccumL alphaConvertHypo emptyEnv hypos,
-                        let args = reverse [EFun x | (_,x) <- subst]] ++++
+                   [[plType cat, []] | cat <- categories pgf] ++++
        plFacts name "fun" 3 "(?Fun, ?Type, ?[X:Type,...])"
-                   [[plp fun, plType cat args, plHypos hypos] |
-                    (fun, (typ, _, _, _)) <- Map.assocs (funs abs),
-                    let (_, DTyp hypos cat args) = alphaConvert emptyEnv typ] ++++
-       plFacts name "def" 2 "(?Fun, ?Expr)" 
-                   [[plp fun, plp expr] |
-                    (fun, (_, _, Just (eqs,_), _)) <- Map.assocs (funs abs),
-                    let (_, expr) = alphaConvert emptyEnv eqs]
+                   [[plp fun, plType cat, plHypos hypos] |
+                    fun <- functions pgf, Just typ <- [functionType pgf fun],
+                    let (hypos,cat,_) = unType typ]
       )
-    where plType cat args = plTerm (plp cat) (map plp args)
+    where plType cat = plTerm (plp cat) []
           plHypos hypos = plList [plOper ":" (plp x) (plp ty) | (_, x, ty) <- hypos]
 
 ----------------------------------------------------------------------
 -- concrete syntax
 
-plConcrete :: (CId, Concr) -> String
-plConcrete (name, cnc) 
+plConcrete :: CId -> Concr -> String
+plConcrete name cnc
     = (plHeader ("Concrete syntax: " ++ plp name) ++++
-       plFacts name "flag" 2 "(?Flag, ?Value): flags for concrete syntax"
-                   [[plp f, plp v] | 
-                    (f, v) <- Map.assocs (cflags cnc)] ++++
-       plFacts name "printname" 2 "(?AbsFun/AbsCat, ?Atom)"
-                   [[plp f, plp n] | 
-                    (f, n) <- Map.assocs (printnames cnc)] ++++
-       plFacts name "lindef" 2 "(?CncCat, ?CncFun)"
-                   [[plCat cat, plFun fun] | 
-                    (cat, funs) <- IntMap.assocs (lindefs cnc),
-                    fun <- funs] ++++
        plFacts name "prod" 3 "(?CncCat, ?CncFun, ?[CncCat])"
                    [[plCat cat, fun, plTerm "c" (map plCat args)] |
-                    (cat, set) <- IntMap.toList (productions cnc),
-                    (fun, args) <- map plProduction (Set.toList set)] ++++
+                    cat <- [0..concrTotalCats cnc-1],
+                    (fun, args) <- map plProduction (concrProductions cnc cat)] ++++
        plFacts name "cncfun" 3 "(?CncFun, ?[Seq,...], ?AbsFun)"
-                   [[plFun fun, plTerm "s" (map plSeq (Array.elems lins)), plp absfun] |
-                    (fun, CncFun absfun lins) <- Array.assocs (cncfuns cnc)] ++++
+                   [[plFun funid, plTerm "s" (map plSeq lins), plp absfun] |
+                    funid <- [0..concrTotalFuns cnc-1], let (absfun,lins) = concrFunction cnc funid] ++++
        plFacts name "seq" 2 "(?Seq, ?[Term])"
-                   [[plSeq seq, plp (Array.elems symbols)] |
-                    (seq, symbols) <- Array.assocs (sequences cnc)] ++++
+                   [[plSeq seqid, plp (concrSequence cnc seqid)] |
+                    seqid <- [0..concrTotalSeqs cnc-1]] ++++
        plFacts name "cnccat" 2 "(?AbsCat, ?[CnCCat])" 
                    [[plp cat, plList (map plCat [start..end])] |
-                    (cat, CncCat start end _) <- Map.assocs (cnccats cnc)]
+                    (cat,start,end,_) <- concrCategories cnc]
       )
     where plProduction (PCoerce arg)       = ("-", [arg])
           plProduction (PApply funid args) = (plFun funid, [fid | PArg hypos fid <- args])
@@ -101,36 +77,17 @@ plConcrete (name, cnc)
 -- prolog-printing pgf datatypes
 
 instance PLPrint Type where
-    plp (DTyp hypos cat args) 
-        | null hypos = result
-        | otherwise  = plOper " -> " plHypos result
-        where result = plTerm (plp cat) (map plp args)
-              plHypos = plList [plOper ":" (plp x) (plp ty) | (_,x,ty) <- hypos]
-
-instance PLPrint Expr where
-    plp (EFun x)    = plp x
-    plp (EAbs _ x e)= plOper "^" (plp x) (plp e)
-    plp (EApp e e') = plOper " * " (plp e) (plp e')
-    plp (ELit lit)  = plp lit
-    plp (EMeta n)   = "Meta_" ++ show n
-
-instance PLPrint Patt where
-    plp (PVar x)    = plp x
-    plp (PApp f ps) = plOper " * " (plp f) (plp ps)
-    plp (PLit lit)  = plp lit
-
-instance PLPrint Equation where
-    plp (Equ patterns result) = plOper ":" (plp patterns) (plp result)
+    plp ty
+      | null hypos = result
+      | otherwise  = plOper " -> " plHypos result
+      where (hypos,cat,_) = unType ty
+            result = plTerm (plp cat) []
+            plHypos = plList [plOper ":" (plp x) (plp ty) | (_,x,ty) <- hypos]
 
 instance PLPrint CId where
     plp cid | isLogicalVariable str || cid == wildCId = plVar str
             | otherwise = plAtom str
         where str = showCId cid
-
-instance PLPrint Literal where
-    plp (LStr s) = plp s
-    plp (LInt n) = plp (show n)
-    plp (LFlt f) = plp (show f)
 
 instance PLPrint Symbol where
     plp (SymCat n l)    = plOper ":" (show n) (show l)
@@ -213,50 +170,3 @@ isLogicalVariable = isPrefixOf logicalVariablePrefix
 
 logicalVariablePrefix :: String 
 logicalVariablePrefix = "X"
-
-----------------------------------------------------------------------
--- alpha convert variables to (unique) logical variables
--- * this is needed if we want to translate variables to Prolog variables
--- * used for abstract syntax, not concrete
--- * not (yet?) used for variables bound in pattern equations
-
-type ConvertEnv = (Int, [(CId,CId)])
-
-emptyEnv :: ConvertEnv
-emptyEnv = (0, [])
-
-class AlphaConvert a where
-    alphaConvert :: ConvertEnv -> a -> (ConvertEnv, a)
-
-instance AlphaConvert a => AlphaConvert [a] where
-    alphaConvert env [] = (env, [])
-    alphaConvert env (a:as) = (env'', a':as')
-        where (env',  a')  = alphaConvert env  a
-              (env'', as') = alphaConvert env' as
-
-instance AlphaConvert Type where
-    alphaConvert env@(_,subst) (DTyp hypos cat args) 
-        = ((ctr,subst), DTyp hypos' cat args')
-        where (env',   hypos') = mapAccumL alphaConvertHypo env hypos
-              ((ctr,_), args') = alphaConvert env' args
-
-alphaConvertHypo env (b,x,typ) = ((ctr+1,(x,x'):subst), (b,x',typ'))
-    where ((ctr,subst), typ') = alphaConvert env typ
-          x' = createLogicalVariable ctr
-
-instance AlphaConvert Expr where
-    alphaConvert (ctr,subst) (EAbs b x e) = ((ctr',subst), EAbs b x' e')
-        where ((ctr',_), e') = alphaConvert (ctr+1,(x,x'):subst) e
-              x' = createLogicalVariable ctr
-    alphaConvert env (EApp e1 e2) = (env'', EApp e1' e2')
-        where (env',  e1') = alphaConvert env  e1
-              (env'', e2') = alphaConvert env' e2
-    alphaConvert env expr@(EFun i) = (env, maybe expr EFun (lookup i (snd env)))
-    alphaConvert env expr = (env, expr)
-
--- pattern variables are not alpha converted
--- (but they probably should be...)
-instance AlphaConvert Equation where
-    alphaConvert env@(_,subst) (Equ patterns result)
-        = ((ctr,subst), Equ patterns result')
-        where ((ctr,_), result') = alphaConvert env result

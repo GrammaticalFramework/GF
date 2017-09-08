@@ -18,7 +18,7 @@ module PGF (PGF, readPGF,
 
             TcError, ppTcError, inferExpr,
 
-            PGF2.Type, showType, PGF2.readType,
+            PGF2.Type, PGF2.Hypo, showType, PGF2.readType,
             mkType, unType,
 
             Token,
