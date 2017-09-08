@@ -1,4 +1,4 @@
-{-# LANGUAGE ForeignFunctionInterface, MagicHash #-}
+{-# LANGUAGE ForeignFunctionInterface, MagicHash, BangPatterns #-}
 
 module PGF2.FFI where
 
@@ -9,7 +9,7 @@ import Foreign.ForeignPtr
 import Control.Exception
 import GHC.Ptr
 import Data.Int(Int32)
-import Data.Word(Word)
+import Data.Word(Word,Word8)
 
 type Touch = IO ()
 
@@ -35,30 +35,33 @@ data GuSeq
 data GuPool
 type GuVariant = Ptr ()
 
-foreign import ccall fopen :: CString -> CString -> IO (Ptr ())
+foreign import ccall unsafe fopen :: CString -> CString -> IO (Ptr ())
 
-foreign import ccall "gu/mem.h gu_new_pool"
+foreign import ccall unsafe "gu/mem.h gu_new_pool"
   gu_new_pool :: IO (Ptr GuPool)
 
-foreign import ccall "gu/mem.h gu_malloc"
+foreign import ccall unsafe "gu/mem.h gu_malloc"
   gu_malloc :: Ptr GuPool -> CInt -> IO (Ptr a)
 
-foreign import ccall "gu/mem.h gu_pool_free"
+foreign import ccall unsafe "gu/mem.h gu_malloc_aligned"
+  gu_malloc_aligned :: Ptr GuPool -> CInt -> CInt -> IO (Ptr a)
+
+foreign import ccall unsafe "gu/mem.h gu_pool_free"
   gu_pool_free :: Ptr GuPool -> IO ()
 
-foreign import ccall "gu/mem.h &gu_pool_free"
+foreign import ccall unsafe "gu/mem.h &gu_pool_free"
   gu_pool_finalizer :: FinalizerPtr GuPool
 
-foreign import ccall "gu/exn.h gu_new_exn"
+foreign import ccall unsafe "gu/exn.h gu_new_exn"
   gu_new_exn :: Ptr GuPool -> IO (Ptr GuExn)
 
-foreign import ccall "gu/exn.h gu_exn_is_raised"
+foreign import ccall unsafe "gu/exn.h gu_exn_is_raised"
   gu_exn_is_raised :: Ptr GuExn -> IO Bool
 
-foreign import ccall "gu/exn.h gu_exn_caught_"
+foreign import ccall unsafe "gu/exn.h gu_exn_caught_"
   gu_exn_caught :: Ptr GuExn -> CString -> IO Bool
 
-foreign import ccall "gu/exn.h gu_exn_raise_"
+foreign import ccall unsafe "gu/exn.h gu_exn_raise_"
   gu_exn_raise :: Ptr GuExn -> CString -> IO (Ptr ())
 
 gu_exn_type_GuErrno = Ptr "GuErrno"# :: CString
@@ -71,22 +74,22 @@ gu_exn_type_PgfParseError = Ptr "PgfParseError"# :: CString
 
 gu_exn_type_PgfTypeError = Ptr "PgfTypeError"# :: CString
 
-foreign import ccall "gu/string.h gu_string_in"
+foreign import ccall unsafe "gu/string.h gu_string_in"
   gu_string_in :: CString -> Ptr GuPool -> IO (Ptr GuIn)
 
-foreign import ccall "gu/string.h gu_new_string_buf"
+foreign import ccall unsafe "gu/string.h gu_new_string_buf"
   gu_new_string_buf :: Ptr GuPool -> IO (Ptr GuStringBuf)
 
-foreign import ccall "gu/string.h gu_string_buf_out"
+foreign import ccall unsafe "gu/string.h gu_string_buf_out"
   gu_string_buf_out :: Ptr GuStringBuf -> IO (Ptr GuOut)
 
-foreign import ccall "gu/file.h gu_file_in"
+foreign import ccall unsafe "gu/file.h gu_file_in"
   gu_file_in :: Ptr () -> Ptr GuPool -> IO (Ptr GuIn)
 
-foreign import ccall "gu/enum.h gu_enum_next"
+foreign import ccall unsafe "gu/enum.h gu_enum_next"
   gu_enum_next :: Ptr a -> Ptr (Ptr b) -> Ptr GuPool -> IO ()
  
-foreign import ccall "gu/string.h gu_string_buf_freeze"
+foreign import ccall unsafe "gu/string.h gu_string_buf_freeze"
   gu_string_buf_freeze :: Ptr GuStringBuf -> Ptr GuPool -> IO CString
 
 foreign import ccall unsafe "gu/utf8.h gu_utf8_decode"
@@ -109,6 +112,9 @@ foreign import ccall unsafe "gu/variant.h gu_variant_tag"
 
 foreign import ccall unsafe "gu/variant.h gu_variant_data"
   gu_variant_data :: GuVariant -> IO (Ptr a)
+
+foreign import ccall unsafe "gu/variant.h gu_alloc_variant"
+  gu_alloc_variant :: Word8 -> CInt -> CInt -> Ptr GuVariant -> Ptr GuPool -> IO (Ptr a)
 
 
 withGuPool :: (Ptr GuPool -> IO a) -> IO a
@@ -145,21 +151,35 @@ peekUtf8CStringLen ptr len =
                 cs <- decode pptr end
                 return (((toEnum . fromEnum) x) : cs)
 
-newUtf8CString :: String -> Ptr GuPool -> IO CString
-newUtf8CString s pool = do
-  -- An UTF8 character takes up to 6 bytes. We allocate enough
-  -- memory for the worst case. This is wasteful but those
-  -- strings are usually allocated only temporary.
-  ptr <- gu_malloc pool (fromIntegral (length s * 6+1))
+pokeUtf8CString :: String -> CString -> IO ()
+pokeUtf8CString s ptr =
   alloca $ \pptr ->
     poke pptr ptr >> encode s pptr
-  return ptr
   where
     encode []     pptr = do
       gu_utf8_encode 0 pptr
     encode (c:cs) pptr = do
       gu_utf8_encode ((toEnum . fromEnum) c) pptr
       encode cs pptr
+
+newUtf8CString :: String -> Ptr GuPool -> IO CString
+newUtf8CString s pool = do
+  ptr <- gu_malloc pool (fromIntegral (utf8Length s))
+  pokeUtf8CString s ptr
+  return ptr
+
+utf8Length s = count 0 s
+  where
+    count !c []         = c+1
+    count !c (x:xs)
+      | ucs < 0x80      = count (c+1) xs
+      | ucs < 0x800     = count (c+2) xs
+      | ucs < 0x10000   = count (c+3) xs
+      | ucs < 0x200000  = count (c+4) xs
+      | ucs < 0x4000000 = count (c+5) xs
+      | otherwise       = count (c+6) xs
+      where
+        ucs = fromEnum x
 
 ------------------------------------------------------------------
 -- libpgf API
