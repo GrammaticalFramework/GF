@@ -3,6 +3,7 @@
 module PGF2.Internal(-- * Access the internal structures
                      FId,isPredefFId,
                      FunId,Token,Production(..),PArg(..),Symbol(..),Literal(..),
+                     globalFlags, abstrFlags, concrFlags,
                      concrTotalCats, concrCategories, concrProductions,
                      concrTotalFuns, concrFunction,
                      concrTotalSeqs, concrSequence,
@@ -54,6 +55,53 @@ data Literal =
 -----------------------------------------------------------------------
 -- Access the internal structures
 -----------------------------------------------------------------------
+
+globalFlags :: PGF -> Map.Map String Literal
+globalFlags p = unsafePerformIO $ do
+  c_flags <- (#peek PgfPGF, gflags) (pgf p)
+  flags   <- peekFlags c_flags
+  touchPGF p
+  return flags
+
+abstrFlags :: PGF -> Map.Map String Literal
+abstrFlags p = unsafePerformIO $ do
+  c_flags <- (#peek PgfPGF, abstract.aflags) (pgf p)
+  flags   <- peekFlags c_flags
+  touchPGF p
+  return flags
+
+concrFlags :: Concr -> Map.Map String Literal
+concrFlags c = unsafePerformIO $ do
+  c_flags <- (#peek PgfConcr, cflags) (concr c)
+  flags   <- peekFlags c_flags
+  touchConcr c
+  return flags
+
+peekFlags :: Ptr GuSeq -> IO (Map.Map String Literal)
+peekFlags c_flags = do
+  c_len <- (#peek GuSeq, len) c_flags
+  list  <- peekFlags (c_len :: CInt) (c_flags `plusPtr` (#offset GuSeq, data))
+  return (Map.fromAscList list)
+  where
+    peekFlags 0     ptr = return []
+    peekFlags c_len ptr = do
+      name  <- (#peek PgfFlag, name)  ptr >>= peekUtf8CString
+      value <- (#peek PgfFlag, value) ptr >>= peekLiteral
+      flags <- peekFlags (c_len-1) (ptr `plusPtr` (#size PgfFlag))
+      return ((name,value):flags)
+
+peekLiteral :: GuVariant -> IO Literal
+peekLiteral p = do
+  tag <- gu_variant_tag  p
+  ptr <- gu_variant_data p
+  case tag of
+    (#const PGF_LITERAL_STR) -> do { val <- peekUtf8CString (ptr `plusPtr` (#offset PgfLiteralStr, val));
+                                     return (LStr val) }
+    (#const PGF_LITERAL_INT) -> do { val <- peek (ptr `plusPtr` (#offset PgfLiteralInt, val));
+                                     return (LInt (fromIntegral (val :: CInt))) }
+    (#const PGF_LITERAL_FLT) -> do { val <- peek (ptr `plusPtr` (#offset PgfLiteralFlt, val));
+                                     return (LFlt (realToFrac (val :: CDouble))) }
+    _                        -> error "Unknown literal type in the grammar"
 
 concrTotalCats :: Concr -> FId
 concrTotalCats c = unsafePerformIO $ do
