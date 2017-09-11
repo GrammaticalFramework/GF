@@ -1,8 +1,8 @@
 module PGF.Internal(CId(..),Language,PGF(..),
                     PGF2.Concr,lookConcr,
                     PGF2.FId,isPredefFId,
-                    PGF2.FunId,PGF2.SeqId,PGF2.Token,
-                    PGF2.Production(..),PGF2.PArg(..),PGF2.Symbol(..),PGF2.Literal(..),
+                    PGF2.FunId,PGF2.SeqId,PGF2.LIndex,PGF2.Token,
+                    PGF2.Production(..),PGF2.PArg(..),PGF2.Symbol(..),PGF2.Literal(..),PGF2.BindType(..),Sequence(..),
                     globalFlags, abstrFlags, concrFlags,
                     concrTotalCats, concrCategories, concrProductions,
                     concrTotalFuns, concrFunction,
@@ -49,3 +49,5 @@ concrTotalSeqs = PGF2.concrTotalSeqs
 concrSequence = PGF2.concrSequence
 
 isPredefFId = PGF2.isPredefFId
+
+type Sequence = Array Int PGF2.Symbol

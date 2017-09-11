@@ -13,7 +13,7 @@ type Fun = String -- ^ Name of function
 data BindType = 
     Explicit
   | Implicit
-  deriving Show
+  deriving (Show, Eq, Ord)
 
 -----------------------------------------------------------------------------
 -- Expressions

@@ -11,7 +11,7 @@ type Pipe = [Command]
 
 data Command
    = Command Ident [Option] Argument
-   deriving (Eq,Ord,Show)
+   deriving Show
 
 data Option
   = OOpt Ident
@@ -29,7 +29,7 @@ data Argument
   | ATerm Term
   | ANoArg
   | AMacro Ident
-  deriving (Eq,Ord,Show)
+  deriving Show
 
 valCIdOpts :: String -> CId -> [Option] -> CId
 valCIdOpts flag def opts =

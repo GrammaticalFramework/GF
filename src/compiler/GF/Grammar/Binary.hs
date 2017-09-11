@@ -11,8 +11,7 @@ module GF.Grammar.Binary(VersionTagged(..),decodeModuleHeader,decodeModule,encod
 
 import Prelude hiding (catch)
 import Control.Exception(catch,ErrorCall(..),throwIO)
-
-import PGF.Internal(Binary(..),Word8,putWord8,getWord8,encodeFile,decodeFile)
+import Data.Binary
 import qualified Data.Map as Map(empty)
 import qualified Data.ByteString.Char8 as BS
 
