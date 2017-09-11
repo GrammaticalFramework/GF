@@ -64,17 +64,17 @@ namespace PGFSharp
 				stack.Peek ().AddChild (new StringChildBracket (str));
 			}
 
-			private void BeginPhrase(IntPtr self, IntPtr cat, int fid, int lindex, IntPtr fun) {
+			private void BeginPhrase(IntPtr self, IntPtr cat, int fid, UIntPtr lindex, IntPtr fun) {
 				stack.Push (new Bracket ());
 			}
 
-			private void EndPhrase(IntPtr self, IntPtr cat, int fid, int lindex, IntPtr fun) {
+			private void EndPhrase(IntPtr self, IntPtr cat, int fid, UIntPtr lindex, IntPtr fun) {
 				var b = stack.Pop ();
 
 				b.CatName = Native.NativeString.StringFromNativeUtf8 (cat);
 				b.FunName = Native.NativeString.StringFromNativeUtf8 (fun);
 				b.FId = fid;
-				b.LIndex = lindex;
+				b.LIndex = (int) lindex;
 
 				if (stack.Count == 0)
 					final = b;
