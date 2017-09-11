@@ -28,9 +28,13 @@ absdef2js f typ =
       args          = [cat | (_,_,typ) <- hypos, let (hypos,cat,_) = unType typ]
   in JS.Prop (JS.IdentPropName (JS.Ident (showCId f))) (new "Type" [JS.EArray [JS.EStr (showCId x) | x <- args], JS.EStr (showCId cat)])
 
+lit2js (LStr s) = JS.EStr s
+lit2js (LInt n) = JS.EInt n
+lit2js (LFlt d) = JS.EDbl d
+
 concrete2js :: PGF -> Language -> JS.Property
 concrete2js pgf lang =
-  JS.Prop l (new "GFConcrete" [JS.EObj [],
+  JS.Prop l (new "GFConcrete" [mapToJSObj (lit2js) $ concrFlags cnc,
                                JS.EObj [JS.Prop (JS.IntPropName cat) (JS.EArray (map frule2js (concrProductions cnc cat))) | cat <- [0..concrTotalCats cnc]],
                                JS.EArray [ffun2js (concrFunction cnc funid) | funid <- [0..concrTotalFuns cnc]],
                                JS.EArray [seq2js (concrSequence cnc seqid) | seqid <- [0..concrTotalSeqs cnc]],
@@ -78,4 +82,7 @@ alt2js (ps,ts) = new "Alt" [JS.EArray (map sym2js ps), JS.EArray (map JS.EStr ts
 
 new :: String -> [JS.Expr] -> JS.Expr
 new f xs = JS.ENew (JS.Ident f) xs
+
+mapToJSObj :: (a -> JS.Expr) -> Map CId a -> JS.Expr
+mapToJSObj f m = JS.EObj [ JS.Prop (JS.IdentPropName (JS.Ident (showCId k))) (f v) | (k,v) <- Map.toList m ]
 

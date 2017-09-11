@@ -3,6 +3,7 @@ module PGF.Internal(CId(..),Language,PGF(..),
                     PGF2.FId,isPredefFId,
                     PGF2.FunId,PGF2.SeqId,PGF2.Token,
                     PGF2.Production(..),PGF2.PArg(..),PGF2.Symbol(..),PGF2.Literal(..),
+                    globalFlags, abstrFlags, concrFlags,
                     concrTotalCats, concrCategories, concrProductions,
                     concrTotalFuns, concrFunction,
                     concrTotalSeqs, concrSequence) where
@@ -22,6 +23,10 @@ lookConcr (PGF _ langs) (CId lang) =
   case Map.lookup lang langs of
     Just cnc -> cnc
     Nothing  -> error "Unknown language"
+
+globalFlags (PGF pgf _) = Map.fromAscList [(CId name,value) | (name,value) <- Map.toAscList (PGF2.globalFlags pgf)]
+abstrFlags  (PGF pgf _) = Map.fromAscList [(CId name,value) | (name,value) <- Map.toAscList (PGF2.abstrFlags pgf)]
+concrFlags concr = Map.fromAscList [(CId name,value) | (name,value) <- Map.toAscList (PGF2.concrFlags concr)]
 
 concrTotalCats = PGF2.concrTotalCats
 

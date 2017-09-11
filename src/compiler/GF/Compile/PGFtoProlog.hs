@@ -29,6 +29,9 @@ grammar2prolog pgf
        plFacts wildCId "concrete" 2 "(?AbstractName, ?ConcreteName)" 
                    [[plp name, plp cncname] | 
                     cncname <- languages pgf] ++++
+       plFacts wildCId "flag" 2 "(?Flag, ?Value): global flags" 
+                   [[plp f, plp v] | 
+                    (f, v) <- Map.assocs (globalFlags pgf)] ++++
        plAbstract name pgf ++++
        unlines [plConcrete name (lookConcr pgf name) | name <- languages pgf]
       )
@@ -40,6 +43,9 @@ grammar2prolog pgf
 plAbstract :: CId -> PGF -> String
 plAbstract name pgf
     = (plHeader "Abstract syntax" ++++
+       plFacts name "flag" 2 "(?Flag, ?Value): flags for abstract syntax"
+                   [[plp f, plp v] | 
+                    (f, v) <- Map.assocs (abstrFlags pgf)] ++++
        plFacts name "cat" 2 "(?Type, ?[X:Type,...])"
                    [[plType cat, []] | cat <- categories pgf] ++++
        plFacts name "fun" 3 "(?Fun, ?Type, ?[X:Type,...])"
@@ -56,6 +62,9 @@ plAbstract name pgf
 plConcrete :: CId -> Concr -> String
 plConcrete name cnc
     = (plHeader ("Concrete syntax: " ++ plp name) ++++
+       plFacts name "flag" 2 "(?Flag, ?Value): flags for concrete syntax"
+                   [[plp f, plp v] | 
+                    (f, v) <- Map.assocs (concrFlags cnc)] ++++
        plFacts name "prod" 3 "(?CncCat, ?CncFun, ?[CncCat])"
                    [[plCat cat, fun, plTerm "c" (map plCat args)] |
                     cat <- [0..concrTotalCats cnc-1],
@@ -88,6 +97,11 @@ instance PLPrint CId where
     plp cid | isLogicalVariable str || cid == wildCId = plVar str
             | otherwise = plAtom str
         where str = showCId cid
+
+instance PLPrint Literal where
+    plp (LStr s) = plp s
+    plp (LInt n) = plp (show n)
+    plp (LFlt f) = plp (show f)
 
 instance PLPrint Symbol where
     plp (SymCat n l)    = plOper ":" (show n) (show l)
