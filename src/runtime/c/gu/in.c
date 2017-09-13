@@ -152,7 +152,7 @@ gu_in_le(GuIn* in, GuExn* err, int n)
 	uint8_t buf[8];
 	gu_in_bytes(in, buf, n, err);
 	uint64_t u = 0;
-	for (int i = 0; i < n; i++) {
+	for (int i = n-1; i >= 0; i--) {
 		u = u << 8 | buf[i];
 	}
 	return u;
@@ -246,7 +246,7 @@ gu_in_f64le(GuIn* in, GuExn* err)
 GU_API double
 gu_in_f64be(GuIn* in, GuExn* err)
 {
-	return gu_decode_double(gu_in_u64le(in, err));
+	return gu_decode_double(gu_in_u64be(in, err));
 }
 
 static void

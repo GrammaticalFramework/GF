@@ -86,7 +86,9 @@ oper
 
 -- The worst case has two forms (singular + plural) and the gender.
 
-    mkN : (baston,bastones : Str) -> Gender -> N -- worst case 
+    mkN : (baston,bastones : Str) -> Gender -> N ; -- worst case
+
+    mkN : N -> Str -> N ; -- compound, e.g. "número" + "de teléfono"
     } ;
 
 
@@ -476,7 +478,8 @@ oper
   mkN = overload {
     mkN : (luz : Str) -> N = regN ;
     mkN : Str -> Gender -> N = \s,g -> {s = (regN s).s ; g = g ; lock_N = <>};
-    mkN : (baston,bastones : Str) -> Gender -> N = mk2N
+    mkN : (baston,bastones : Str) -> Gender -> N = mk2N ;
+    mkN : N -> Str -> N = compN ;
     } ;
   regN : Str -> N ;
   mk2N : (baston,bastones : Str) -> Gender -> N ;

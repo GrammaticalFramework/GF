@@ -47,14 +47,14 @@ module PGF(
            Expr,
            showExpr, readExpr,
            mkAbs,    unAbs,
-           mkApp,    unApp,
+           mkApp,    unApp, unapply,
            mkStr,    unStr,
            mkInt,    unInt,
            mkDouble, unDouble,
            mkFloat,  unFloat,
            mkMeta,   unMeta,
            -- extra
-           pExpr,
+           pExpr, exprSize, exprFunctions,
 
            -- * Operations
            -- ** Linearization
@@ -66,7 +66,7 @@ module PGF(
            Forest.showBracketedString,flattenBracketedString,
 
            -- ** Parsing
-           parse, parseAllLang, parseAll, parse_, parseWithRecovery,
+           parse, parseAllLang, parseAll, parse_, parseWithRecovery, complete,
 
            -- ** Evaluation
            PGF.compute, paraphrase,
@@ -273,6 +273,25 @@ parse_ pgf lang typ dp s =
 
 parseWithRecovery pgf lang typ open_typs dp s = Parse.parseWithRecovery pgf lang typ open_typs dp (words s)
 
+complete :: PGF -> Language -> Type -> String -> String -> (BracketedString,String,Map.Map Token [CId])
+complete pgf from typ input prefix =
+  let ws  = words input
+      ps0 = Parse.initState pgf from typ
+      (ps,ws') = loop ps0 ws
+      bs       = snd (Parse.getParseOutput ps typ Nothing)
+  in if not (null ws')
+       then (bs, unwords (if null prefix then ws' else ws'++[prefix]), Map.empty)
+       else (bs, prefix, fmap getFuns (Parse.getCompletions ps prefix))
+  where
+    loop ps []     = (ps,[])
+    loop ps (w:ws) = case Parse.nextState ps (Parse.simpleParseInput w) of
+                       Left  es -> (ps,w:ws)
+                       Right ps -> loop ps ws
+
+    getFuns ps = [cid | (funid,cid,seq) <- snd . head $ Map.toList contInfo]
+      where
+        contInfo = Parse.getContinuationInfo ps
+
 groupResults :: [[(Language,String)]] -> [(Language,[String])]
 groupResults = Map.toList . foldr more Map.empty . start . concat
  where
@@ -313,6 +332,23 @@ functionType pgf fun =
 -- | Converts an expression to normal form
 compute :: PGF -> Expr -> Expr
 compute pgf = PGF.Data.normalForm (funs (abstract pgf),const Nothing) 0 []
+
+exprSize :: Expr -> Int
+exprSize (EAbs _ _ e) = exprSize e
+exprSize (EApp e1 e2) = exprSize e1 + exprSize e2
+exprSize (ETyped e ty)= exprSize e
+exprSize (EImplArg e) = exprSize e
+exprSize _            = 1
+
+exprFunctions :: Expr -> [CId]
+exprFunctions (EAbs _ _ e) = exprFunctions e
+exprFunctions (EApp e1 e2) = exprFunctions e1 ++ exprFunctions e2
+exprFunctions (ETyped e ty)= exprFunctions e
+exprFunctions (EImplArg e) = exprFunctions e
+exprFunctions (EFun f)     = [f]
+exprFunctions _            = []
+
+--exprFunctions :: Expr -> [Fun]
 
 browse :: PGF -> CId -> Maybe (String,[CId],[CId])
 browse pgf id = fmap (\def -> (def,producers,consumers)) definition

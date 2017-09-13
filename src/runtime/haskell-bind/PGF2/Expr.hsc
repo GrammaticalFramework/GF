@@ -34,6 +34,13 @@ data Expr = Expr {expr :: PgfExpr, touchExpr :: Touch}
 instance Show Expr where
   show = showExpr []
 
+instance Eq Expr where
+  (Expr e1 e1_touch) == (Expr e2 e2_touch) = 
+    unsafePerformIO $ do
+      res <- pgf_expr_eq e1 e2
+      e1_touch >> e2_touch
+      return (res /= 0)
+
 -- | Constructs an expression by lambda abstraction
 mkAbs :: BindType -> CId -> Expr -> Expr
 mkAbs bind_type var (Expr body bodyTouch) =
@@ -44,7 +51,7 @@ mkAbs bind_type var (Expr body bodyTouch) =
       exprFPl <- newForeignPtr gu_pool_finalizer exprPl
       return (Expr c_expr (bodyTouch >> touchForeignPtr exprFPl))
   where
-    cbind_type = 
+    cbind_type =
       case bind_type of
         Explicit -> (#const PGF_BIND_TYPE_EXPLICIT)
         Implicit -> (#const PGF_BIND_TYPE_IMPLICIT)

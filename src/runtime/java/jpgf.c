@@ -591,6 +591,30 @@ JNIEXPORT void JNICALL Java_org_grammaticalframework_pgf_Parser_addLiteralCallba
                                   j2gu_string(env, jcat, pool), &callback->callback);
 }
 
+static void
+throw_parse_error(JNIEnv *env, PgfParseError* err)
+{
+	jstring jtoken;
+	if (err->incomplete)
+		jtoken = NULL;
+	else {
+		jtoken = gu2j_string_len(env, err->token_ptr, err->token_len);
+		if (!jtoken)
+			return;
+	}
+
+	jclass exception_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/ParseError");
+	if (!exception_class)
+		return;
+	jmethodID constrId = (*env)->GetMethodID(env, exception_class, "<init>", "(Ljava/lang/String;IZ)V");
+	if (!constrId)
+		return;
+	jobject exception = (*env)->NewObject(env, exception_class, constrId, jtoken, err->offset, err->incomplete);
+	if (!exception)
+		return;
+	(*env)->Throw(env, exception);
+}
+
 JNIEXPORT jobject JNICALL 
 Java_org_grammaticalframework_pgf_Parser_parseWithHeuristics
   (JNIEnv* env, jclass clazz, jobject jconcr, jstring jstartCat, jstring js, jdouble heuristics, jlong callbacksRef, jobject jpool)
@@ -615,8 +639,7 @@ Java_org_grammaticalframework_pgf_Parser_parseWithHeuristics
 			GuString msg = (GuString) gu_exn_caught_data(parse_err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else if (gu_exn_caught(parse_err, PgfParseError)) {
-			GuString tok = (GuString) gu_exn_caught_data(parse_err);
-			throw_string_exception(env, "org/grammaticalframework/pgf/ParseError", tok);
+			throw_parse_error(env, (PgfParseError*) gu_exn_caught_data(parse_err));
 		}
 
 		gu_pool_free(out_pool);
@@ -656,8 +679,7 @@ Java_org_grammaticalframework_pgf_Completer_complete(JNIEnv* env, jclass clazz, 
 			GuString msg = (GuString) gu_exn_caught_data(parse_err);
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", msg);
 		} else if (gu_exn_caught(parse_err, PgfParseError)) {
-			GuString tok = (GuString) gu_exn_caught_data(parse_err);
-			throw_string_exception(env, "org/grammaticalframework/pgf/ParseError", tok);
+			throw_parse_error(env, (PgfParseError*) gu_exn_caught_data(parse_err));
 		}
 
 		gu_pool_free(pool);
@@ -709,8 +731,8 @@ Java_org_grammaticalframework_pgf_TokenIterator_fetchTokenProb(JNIEnv* env, jcla
 		return NULL;
 
 	jclass tp_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/TokenProb");
-	jmethodID tp_constrId = (*env)->GetMethodID(env, tp_class, "<init>", "(DLjava/lang/String;Ljava/lang/String;)V");
-	jobject jtp = (*env)->NewObject(env, tp_class, tp_constrId, tp->prob, gu2j_string(env,tp->tok), gu2j_string(env,tp->cat));
+	jmethodID tp_constrId = (*env)->GetMethodID(env, tp_class, "<init>", "(DLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+	jobject jtp = (*env)->NewObject(env, tp_class, tp_constrId, (double) tp->prob, gu2j_string(env,tp->tok), gu2j_string(env,tp->cat), gu2j_string(env,tp->fun));
 
 	return jtp;
 }
@@ -924,7 +946,7 @@ pgf_bracket_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 }
 
 static void
-pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lindex, PgfCId fun)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 	
@@ -933,7 +955,7 @@ pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int linde
 }
 
 static void
-pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lindex, PgfCId fun)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 	JNIEnv* env = state->env;

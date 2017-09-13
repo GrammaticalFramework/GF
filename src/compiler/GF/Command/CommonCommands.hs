@@ -219,7 +219,7 @@ commonCommands = fmap (mapCommandExec liftSIO) $ Map.fromList [
 
 stringOps menv opts s = foldr (menvop . app) s (reverse opts)
   where
-    app f = maybe id id (stringOp f)
+    app f = maybe id id (stringOp (const False) f)
     menvop op = maybe op (\ (b,e) -> opInEnv b e op) menv
 
 envFlag fs =

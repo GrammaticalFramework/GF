@@ -4,8 +4,8 @@ module PGFService(cgiMain,cgiMain',getPath,
                   Caches,pgfCache,newPGFCache,flushPGFCache,listPGFCache) where
 
 import PGF (PGF,Labels,CncLabels)
+import GF.Text.Lexing
 import qualified PGF
-import PGF.Lexing
 import Cache
 import CGIUtils(outputJSONP,outputPlain,outputHTML,outputText,
                 outputBinary,outputBinary',
@@ -191,10 +191,11 @@ cpgfMain qsem command (t,(pgf,pc)) =
 
     -- Without caching parse results:
     parse' start mlimit ((from,concr),input) =
-        return $ maybe id take mlimit . drop start # cparse
+        case C.parseWithHeuristics concr cat input (-1) callbacks of
+          C.ParseOk ts        -> return (Right (maybe id take mlimit (drop start ts)))
+          C.ParseFailed _ tok -> return (Left tok)
+          C.ParseIncomplete   -> return (Left "")
       where
-      --cparse = C.parse concr cat input
-        cparse = C.parseWithHeuristics concr cat input (-1) callbacks
         callbacks = maybe [] cb $ lookup (C.abstractName pgf) C.literalCallbacks
         cb fs = [(cat,f pgf (from,concr) input)|(cat,f)<-fs]
 {-
@@ -272,10 +273,14 @@ cpgfMain qsem command (t,(pgf,pc)) =
             maybe (Left ("["++w++"]")) Right $
             msum [parse1 w,parse1 ow,morph w,morph ow]
           where
-            ow = if w==lw then capitInit w else lw
-            lw = uncapitInit w
-            parse1 = either (const Nothing) (fmap fst . listToMaybe) .
-                     C.parse concr cat
+            ow = case w of
+                   c:cs | isLower c -> toUpper c : cs
+                        | isUpper c -> toLower c : cs
+                   s                -> s
+
+            parse1 s = case C.parse concr cat s of
+                         C.ParseOk ((t,_):ts) -> Just t
+                         _                    -> Nothing
             morph w = listToMaybe
                         [t | (f,a,p)<-C.lookupMorpho concr w,
                              t<-maybeToList (C.readExpr f)]
@@ -293,7 +298,7 @@ cpgfMain qsem command (t,(pgf,pc)) =
     from1 = maybe (missing "from") return =<< from'
     from' = getLang "from"
 
-    to = (,) # getLangs "to" % unlexerC
+    to = (,) # getLangs "to" % unlexer (const False)
 
     getLangs = getLangs' readLang
     getLang = getLang' readLang
@@ -308,8 +313,7 @@ cpgfMain qsem command (t,(pgf,pc)) =
               let t = C.readExpr s
               maybe (badRequest "bad tree" s) return t
 
-    --c_lexer concr = lexer
-    c_lexer concr = ilexer (not . null . C.lookupMorpho concr)
+    c_lexer concr = lexer (not . null . C.lookupMorpho concr)
 
 --------------------------------------------------------------------------------
 
@@ -338,62 +342,29 @@ instance ToATree C.Expr where
 --------------------------------------------------------------------------------
 -- * Lexing
 
--- | Lexers with a text lexer that tries to be a more clever with the first word
-ilexer good = lexer' uncap
-  where
-    uncap s = case span isUpper s of
-                ([c],r) | not (good s) -> toLower c:r
-                _ -> s
-
 -- | Standard lexers
-lexer = lexer' uncapitInit
-
-lexer' uncap = maybe (return id) lexerfun =<< getInput "lexer" 
+lexer good = maybe (return id) lexerfun =<< getInput "lexer" 
   where
     lexerfun name =
-       case name of
-         "text"  -> return (unwords . lexText' uncap)
-         "code"  -> return (unwords . lexCode)
-         "mixed" -> return (unwords . lexMixed)
-         _ -> badRequest "Unknown lexer" name
+      case stringOp good ("lex"++name) of
+        Just fn -> return fn
+        Nothing -> badRequest "Unknown lexer" name
 
 
 type Unlexer = String->String
 
 -- | Unlexing for the C runtime system, &+ is already applied
-unlexerC :: CGI Unlexer
-unlexerC = maybe (return id) unlexerfun =<< getInput "unlexer"
+unlexer :: (String -> Bool) -> CGI Unlexer
+unlexer good = maybe (return id) unlexerfun =<< getInput "unlexer"
   where
     unlexerfun name =
-       case name of
-         "text"  -> return (unlexText' . words)
-         "code"  -> return (unlexCode . words)
-         "mixed" -> return (unlexMixed . words)
-         "none"  -> return id
-         "id"    -> return id
-         _ -> badRequest "Unknown lexer" name
-
--- | Unlex text, skipping the quality marker used by the App grammar
-unlexText' ("+":ws) = "+ "++unlexText ws
-unlexText' ("*":ws) = "* "++unlexText ws
-unlexText' ws       = unlexText ws
-
--- | Unlexing for the Haskell run-time, applying the &+ operator first
-unlexerH :: CGI Unlexer
-unlexerH = maybe (return doBind) unlexerfun =<< getInput "unlexer"
-  where
-    unlexerfun name =
-       case name of
-         "text"  -> return (unlexText' . bind)
-         "code"  -> return (unlexCode . bind)
-         "mixed" -> return (unlexMixed . bind)
-         "none"  -> return id
-         "id"    -> return id
-         "bind"  -> return doBind
-         _ -> badRequest "Unknown lexer" name
-
-    doBind = unwords . bind
-    bind = bindTok . words
+       case stringOp good ("unlex"++name) of
+         Just fn -> return (fn . cleanMarker)
+         Nothing -> badRequest "Unknown unlexer" name
+    
+    cleanMarker ('+':cs) = cs
+    cleanMarker ('*':cs) = cs
+    cleanMarker cs       = cs
 
 --------------------------------------------------------------------------------
 -- * Haskell run-time functionality
@@ -431,8 +402,8 @@ pgfMain lcs@(alc,clc) path command tpgf@(t,pgf) =
                inp <- textInput
                return (fr,lex inp)
 
-    mlexer Nothing = lexer
-    mlexer (Just lang) = ilexer (PGF.isInMorpho morpho)
+    mlexer Nothing     = lexer (const False)
+    mlexer (Just lang) = lexer (PGF.isInMorpho morpho)
       where morpho = PGF.buildMorpho pgf lang
 
     tree :: CGI PGF.Tree
@@ -489,7 +460,7 @@ pgfMain lcs@(alc,clc) path command tpgf@(t,pgf) =
     from = getLang "from"
 
     to1 = maybe (missing "to") return =<< getLang "to"
-    to = (,) # getLangs "to" % unlexerH
+    to = (,) # getLangs "to" % unlexer (const False)
 
     getLangs = getLangs' readLang
     getLang = getLang' readLang
@@ -692,19 +663,16 @@ doComplete pgf (mfrom,input) mcat mlimit full = showJSON
     froms = maybe (PGF.languages pgf) (:[]) mfrom
     cat = fromMaybe (PGF.startCat pgf) mcat
 
-completionInfo :: PGF -> PGF.Token -> PGF.ParseState -> JSValue
-completionInfo pgf token pstate =
+completionInfo :: PGF -> PGF.Token -> [PGF.CId] -> JSValue
+completionInfo pgf token funs =
   makeObj
   ["token".= token
-  ,"funs" .= (map mkFun (nubBy ignoreFunIds funs))
+  ,"funs" .= map mkFun (nub funs)
   ]
   where
-    contInfo = PGF.getContinuationInfo pstate
-    funs = snd . head $ Map.toList contInfo -- always get [([],_)] ; funs :: [(fid,cid,seq)]
-    ignoreFunIds (_,cid1,seq1) (_,cid2,seq2) = (cid1,seq1) == (cid2,seq2)
-    mkFun (funid,cid,seq) = case PGF.functionType pgf cid of
+    mkFun cid = case PGF.functionType pgf cid of
       Just typ ->
-        makeObj [ {-"fid".=funid,-} "fun".=cid, "hyps".=hyps', "cat".=cat, "seq".=seq ]
+        makeObj [ {-"fid".=funid,-} "fun".=cid, "hyps".=hyps', "cat".=cat ]
         where
           (hyps,cat,_es) = PGF.unType typ
           hyps' = [ PGF.showType [] typ | (_,_,typ) <- hyps ]
@@ -1022,28 +990,17 @@ parse' pgf input mcat mfrom =
         cat = fromMaybe (PGF.startCat pgf) mcat
 
 complete' :: PGF -> PGF.Language -> PGF.Type -> Maybe Int -> String
-         -> (PGF.BracketedString, String, Map.Map PGF.Token PGF.ParseState)
+         -> (PGF.BracketedString, String, Map.Map PGF.Token [PGF.CId])
 complete' pgf from typ mlimit input =
   let (ws,prefix) = tokensAndPrefix input
-      ps0 = PGF.initState pgf from typ
-      (ps,ws') = loop ps0 ws
-      bs       = snd (PGF.getParseOutput ps typ Nothing)
-  in if not (null ws')
-       then (bs, unwords (if null prefix then ws' else ws'++[prefix]), Map.empty)
-       else (bs, prefix, PGF.getCompletions ps prefix)
+  in PGF.complete pgf from typ (unwords ws) prefix
   where
-  --order = sortBy (compare `on` map toLower)
-
     tokensAndPrefix :: String -> ([String],String)
     tokensAndPrefix s | not (null s) && isSpace (last s) = (ws, "")
                       | null ws = ([],"")
                       | otherwise = (init ws, last ws)
         where ws = words s
 
-    loop ps []     = (ps,[])
-    loop ps (w:ws) = case PGF.nextState ps (PGF.simpleParseInput w) of
-                       Left  es -> (ps,w:ws)
-                       Right ps -> loop ps ws
 
 transfer lang = if "LaTeX" `isSuffixOf` show lang
                 then fold -- OpenMath LaTeX transfer
