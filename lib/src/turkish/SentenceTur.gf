@@ -5,6 +5,6 @@ concrete SentenceTur of Sentence = CatTur ** open Prelude, ResTur in {
     PredVP np vp = mkClause (np.s ! Nom) np.a vp ;
 
     -- TODO: Check how correct this is.
-    EmbedVP vp = attachMe vp ;
+    EmbedVP vp = {s = (vp.s ! Gerund)} ;
 
 }

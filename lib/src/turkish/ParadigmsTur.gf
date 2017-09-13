@@ -54,7 +54,7 @@ resource ParadigmsTur = open
 
     -- worst-case function
     -- bases of all forms are required.
-    makeVerb : (inf,base,presBase,pastBase,aoristBase : Str)
+    makeVerb : (mek,inf,base,presBase,pastBase,aoristBase : Str)
             -> (futureBase : Softness => Str )
             -> Harmony
             -> V ;
@@ -237,9 +237,9 @@ resource ParadigmsTur = open
               SVow => addSuffix (tk 1 base) (getHarmony (tk 1 base)) presentSuffix ;
               _    => addSuffix softBase har presentSuffix
         } ;
-    in makeVerb inf base progBase pastBase aoristBase futureTable har;
+    in makeVerb (init inf) inf base progBase pastBase aoristBase futureTable har;
 
-    makeVerb inf base progBase pastBase aoristBase futureTable har =
+    makeVerb mek inf base progBase pastBase aoristBase futureTable har =
       let
         futht = getHarVowP (futureTable ! Hard) ;
         pastHar = {vow = har.vow ; con = SVow} ;
@@ -254,7 +254,8 @@ resource ParadigmsTur = open
               VFuture agr => addSuffix futureTable futHar (verbSuffixes ! agr) ;
               VAorist agr => addSuffix aoristBase aorHar (verbSuffixes ! agr) ;
               VImperative => base ;
-              VInfinitive => inf
+              VInfinitive => inf ;
+              Gerund      => mek
             }
         } ;
 
