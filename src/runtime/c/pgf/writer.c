@@ -356,7 +356,7 @@ pgf_write_absfuns(PgfAbsFuns* absfuns, PgfWriter* wtr)
 }
 
 static void
-pgf_write_abscat(PgfAbsCat* abscat, PgfWriter* wtr)
+pgf_write_abscat(PgfAbsCat* abscat, PgfAbstr* abstr, PgfWriter* wtr)
 {
 	pgf_write_cid(abscat->name, wtr);
 	gu_return_on_exn(wtr->err, );
@@ -371,11 +371,33 @@ pgf_write_abscat(PgfAbsCat* abscat, PgfWriter* wtr)
 		gu_return_on_exn(wtr->err, );
 	}
 
+	size_t n_count = 0;
+	size_t n_funs  = gu_seq_length(abstr->funs);
+	for (size_t i = 0; i < n_funs; i++) {
+		PgfAbsFun* fun = gu_seq_index(abstr->funs, PgfAbsFun, i);
+
+		if (strcmp(fun->type->cid, abscat->name) == 0) {
+			n_count++;
+		}
+	}
+	pgf_write_len(n_count, wtr);
+	for (size_t i = 0; i < n_funs; i++) {
+		PgfAbsFun* fun = gu_seq_index(abstr->funs, PgfAbsFun, i);
+
+		if (strcmp(fun->type->cid, abscat->name) == 0) {
+			gu_out_f64be(wtr->out, exp(-fun->ep.prob), wtr->err);  // ignore
+			gu_return_on_exn(wtr->err, );
+
+			pgf_write_cid(fun->name, wtr);
+			gu_return_on_exn(wtr->err, );
+		}
+	}
+	
 	pgf_write_double(exp(-abscat->prob), wtr);
 }
 
 static void
-pgf_write_abscats(PgfAbsCats* abscats, PgfWriter* wtr)
+pgf_write_abscats(PgfAbsCats* abscats, PgfAbstr* abstr, PgfWriter* wtr)
 {
 	size_t n_cats = gu_seq_length(abscats);
 	pgf_write_len(n_cats, wtr);
@@ -383,24 +405,24 @@ pgf_write_abscats(PgfAbsCats* abscats, PgfWriter* wtr)
 
 	for (size_t i = 0; i < n_cats; i++) {
 		PgfAbsCat* abscat = gu_seq_index(abscats, PgfAbsCat, i);
-		pgf_write_abscat(abscat, wtr);
+		pgf_write_abscat(abscat, abstr, wtr);
 		gu_return_on_exn(wtr->err, );
 	}
 }
 
 static void
-pgf_write_abstract(PgfAbstr* abstract, PgfWriter* wtr)
+pgf_write_abstract(PgfAbstr* abstr, PgfWriter* wtr)
 {
-	pgf_write_cid(abstract->name, wtr);
+	pgf_write_cid(abstr->name, wtr);
 	gu_return_on_exn(wtr->err, );
 
-	pgf_write_flags(abstract->aflags, wtr);
+	pgf_write_flags(abstr->aflags, wtr);
 	gu_return_on_exn(wtr->err, );
 
-	pgf_write_absfuns(abstract->funs, wtr);
+	pgf_write_absfuns(abstr->funs, wtr);
 	gu_return_on_exn(wtr->err, );
 
-	pgf_write_abscats(abstract->cats, wtr);
+	pgf_write_abscats(abstr->cats, abstr, wtr);
 	gu_return_on_exn(wtr->err, );
 }
 
@@ -613,7 +635,7 @@ static void
 pgf_write_ccat_lindefrefs(GuMapItor* self, const void* key, void* value, GuExn *err)
 {
 	PgfLinDefRefIter* itor = gu_container(self, PgfLinDefRefIter, itor);
-	PgfCCat* ccat          = value;
+	PgfCCat* ccat          = *((PgfCCat**) value);
 
 	PgfCncFuns* funs = (itor->do_defs) ? ccat->lindefs : ccat->linrefs;
 	if (funs != NULL) {
@@ -735,12 +757,12 @@ static void
 pgf_write_ccat(GuMapItor* self, const void* key, void* value, GuExn *err)
 {
 	PgfWriterIter* itor = gu_container(self, PgfWriterIter, itor);
-	PgfCCat* ccat       = value;
+	PgfCCat* ccat       = *((PgfCCat**) value);
 
 	pgf_write_fid(ccat, itor->wtr);
 	gu_return_on_exn(err, );
 
-	size_t n_prods = gu_seq_length(ccat->prods);
+	size_t n_prods = ccat->prods ? gu_seq_length(ccat->prods) : 0;
 	pgf_write_len(n_prods, itor->wtr);
 	gu_return_on_exn(err, );
 
@@ -782,7 +804,7 @@ static void
 pgf_write_cnccat_iter(GuMapItor* self, const void* key, void* value, GuExn *err)
 {
 	PgfWriterIter* itor = gu_container(self, PgfWriterIter, itor);
-	PgfCncCat* cnccat   = value;
+	PgfCncCat* cnccat   = *((PgfCncCat**) value);
 
 	pgf_write_cid(cnccat->abscat->name, itor->wtr);
 	gu_return_on_exn(err, );

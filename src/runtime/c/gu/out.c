@@ -172,21 +172,21 @@ gu_out_try_u8_(GuOut* restrict out, uint8_t u);
 GU_API void
 gu_out_u16be(GuOut* out, uint16_t u, GuExn* err)
 {
-	gu_out_u8(out, (u>>8) && 0xFF, err);
-	gu_out_u8(out, u      && 0xFF, err);
+	gu_out_u8(out, (u>>8) & 0xFF, err);
+	gu_out_u8(out, u      & 0xFF, err);
 }
 
 GU_API void
 gu_out_u64be(GuOut* out, uint64_t u, GuExn* err)
 {
-	gu_out_u8(out, (u>>56) && 0xFF, err);
-	gu_out_u8(out, (u>>48) && 0xFF, err);
-	gu_out_u8(out, (u>>40) && 0xFF, err);
-	gu_out_u8(out, (u>>32) && 0xFF, err);
-	gu_out_u8(out, (u>>24) && 0xFF, err);
-	gu_out_u8(out, (u>>16) && 0xFF, err);
-	gu_out_u8(out, (u>>8)  && 0xFF, err);
-	gu_out_u8(out, u       && 0xFF, err);
+	gu_out_u8(out, (u>>56) & 0xFF, err);
+	gu_out_u8(out, (u>>48) & 0xFF, err);
+	gu_out_u8(out, (u>>40) & 0xFF, err);
+	gu_out_u8(out, (u>>32) & 0xFF, err);
+	gu_out_u8(out, (u>>24) & 0xFF, err);
+	gu_out_u8(out, (u>>16) & 0xFF, err);
+	gu_out_u8(out, (u>>8)  & 0xFF, err);
+	gu_out_u8(out, u       & 0xFF, err);
 }
 
 GU_API void
