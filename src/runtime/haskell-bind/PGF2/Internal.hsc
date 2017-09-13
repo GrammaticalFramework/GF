@@ -10,7 +10,10 @@ module PGF2.Internal(-- * Access the internal structures
                      
                      -- * Building new PGFs in memory
                      build, eAbs, eApp, eMeta, eFun, eVar, eTyped, eImplArg, dTyp, hypo,
-                     newAbstr, newPGF
+                     newAbstr, newPGF,
+                     
+                     -- * Write an in-memory PGF to a file
+                     writePGF
                     ) where
 
 #include <pgf/data.h>
@@ -24,6 +27,7 @@ import Foreign
 import Foreign.C
 import Data.IORef
 import qualified Data.Map as Map
+import Control.Exception(Exception,throwIO)
 
 type Token = String
 data Symbol
@@ -561,3 +565,23 @@ newMap elem_size pokeElem m pool = do
     pokeElems ptr ((key,value):xs) = do
       pokeElem  ptr key value
       pokeElems (ptr `plusPtr` (fromIntegral elem_size)) xs
+
+writePGF :: FilePath -> PGF -> IO ()
+writePGF fpath p = do
+  pool <- gu_new_pool
+  exn <- gu_new_exn pool
+  withCString fpath $ \c_fpath ->
+    pgf_write (pgf p) c_fpath exn
+  touchPGF p
+  failed <- gu_exn_is_raised exn
+  if failed
+    then do is_errno <- gu_exn_caught exn gu_exn_type_GuErrno
+            if is_errno
+              then do perrno <- (#peek GuExn, data.data) exn
+                      errno  <- peek perrno
+                      gu_pool_free pool
+                      ioError (errnoToIOError "writePGF" (Errno errno) Nothing (Just fpath))
+              else do gu_pool_free pool
+                      throwIO (PGFError "The grammar cannot be stored")
+    else do gu_pool_free pool
+            return ()
