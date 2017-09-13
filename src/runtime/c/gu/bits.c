@@ -41,3 +41,31 @@ gu_decode_double(uint64_t u)
 	}
 	return sign ? copysign(ret, -1.0) : ret;
 }
+
+GU_INTERNAL uint64_t
+gu_encode_double(double d)
+{
+	int sign = (d < 0) ? 1 : 0;
+	int rawexp;
+	double mantissa;
+
+	switch (fpclassify(d)) {
+	case FP_NAN:
+		rawexp   = 0x7ff;
+		mantissa = 1;
+		break;
+	case FP_INFINITE:
+		rawexp   = 0x7ff;
+		mantissa = 0;
+		break;
+	default:
+		mantissa = frexp(d, &rawexp);
+		rawexp += 1075;
+	}
+
+    uint64_t u = (((uint64_t) sign) << 63) |
+                 ((((uint64_t) rawexp) << 52) & 0x7ff) |
+                 ((uint64_t) mantissa);
+
+	return u;
+}

@@ -144,6 +144,7 @@ gu_decode_2c64(uint64_t u, GuExn* err)
 GU_INTERNAL_DECL double
 gu_decode_double(uint64_t u);
 
-
+GU_INTERNAL_DECL uint64_t
+gu_encode_double(double d);
 
 #endif // GU_BITS_H_
