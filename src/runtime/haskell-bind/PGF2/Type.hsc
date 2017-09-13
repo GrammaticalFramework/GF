@@ -62,7 +62,7 @@ showType scope (Type ty touch) =
 mkType :: [Hypo] -> CId -> [Expr] -> Type
 mkType hypos cat exprs = unsafePerformIO $ do
   typPl  <- gu_new_pool
-  let n_exprs = fromIntegral (length exprs) :: CInt
+  let n_exprs = fromIntegral (length exprs) :: CSizeT
   c_type <- gu_malloc typPl ((#size PgfType) + n_exprs * (#size PgfExpr))
   c_hypos <- gu_make_seq (#size PgfHypo) (fromIntegral (length hypos)) typPl
   hs <- pokeHypos (c_hypos `plusPtr` (#offset GuSeq, data)) hypos typPl

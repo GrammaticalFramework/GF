@@ -2,6 +2,7 @@
 #include <pgf/data.h>
 #include <pgf/expr.h>
 #include <pgf/reader.h>
+#include <pgf/writer.h>
 #include <pgf/linearizer.h>
 #include <gu/file.h>
 #include <gu/string.h>
@@ -42,6 +43,28 @@ pgf_read_in(GuIn* in,
 	PgfPGF* pgf = pgf_read_pgf(rdr);
 	pgf_reader_done(rdr, pgf);
 	return pgf;
+}
+
+PGF_API_DECL void
+pgf_write(PgfPGF* pgf, const char* fpath, GuExn* err)
+{
+	FILE* outfile = fopen(fpath, "wb");
+	if (outfile == NULL) {
+		gu_raise_errno(err);
+		return;
+	}
+
+	GuPool* tmp_pool = gu_local_pool();
+
+	// Create an input stream from the input file
+	GuOut* out = gu_file_out(outfile, tmp_pool);
+
+	PgfWriter* wtr = pgf_new_writer(out, tmp_pool, err);
+	pgf_write_pgf(pgf, wtr);
+
+	gu_pool_free(tmp_pool);
+	
+	fclose(outfile);
 }
 
 PGF_API GuString

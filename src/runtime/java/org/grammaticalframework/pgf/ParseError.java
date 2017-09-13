@@ -4,11 +4,26 @@ package org.grammaticalframework.pgf;
 public class ParseError extends Exception {
 	private static final long serialVersionUID = -6086991674218306569L;
 
-	public ParseError(String token) {
-		super(token);
+	private String  token;
+	private int     offset;
+	private boolean incomplete;
+
+	public ParseError(String token, int offset, boolean incomplete) {
+		super(incomplete ? "The sentence is incomplete" : "Unexpected token: \""+token+"\"");
+		this.token      = token;
+		this.offset     = offset;
+		this.incomplete = incomplete;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public int getOffset() {
+		return offset;
 	}
 	
-	public String getToken() {
-		return getMessage();
+	public boolean isIncomplete() {
+		return incomplete;
 	}
 }

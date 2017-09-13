@@ -207,10 +207,10 @@ namespace PGFSharp
         public delegate void LinFuncSymbolToken(IntPtr self, IntPtr token);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void LinFuncBeginPhrase(IntPtr self, IntPtr cat, int fid, int lindex, IntPtr fun);
+        public delegate void LinFuncBeginPhrase(IntPtr self, IntPtr cat, int fid, UIntPtr lindex, IntPtr fun);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void LinFuncEndPhrase(IntPtr self, IntPtr cat, int fid, int lindex, IntPtr fun);
+        public delegate void LinFuncEndPhrase(IntPtr self, IntPtr cat, int fid, UIntPtr lindex, IntPtr fun);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void LinFuncSymbolNonexistant(IntPtr self);

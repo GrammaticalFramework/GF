@@ -6,7 +6,7 @@
 typedef struct {
 	int start, end;
 	PgfCId cat;
-	int lin_idx;
+	size_t lin_idx;
 } PgfPhrase;
 
 typedef struct {
@@ -46,14 +46,14 @@ pgf_metrics_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 }
 
 static void
-pgf_metrics_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_index, PgfCId fun)
+pgf_metrics_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lin_index, PgfCId fun)
 {
 	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
 	gu_buf_push(state->marks, int, state->pos);
 }
 
 static void
-pgf_metrics_lzn_end_phrase1(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_idx, PgfCId fun)
+pgf_metrics_lzn_end_phrase1(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lin_idx, PgfCId fun)
 {
 	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
 
@@ -85,7 +85,7 @@ pgf_metrics_symbol_bind(PgfLinFuncs** funcs)
 }
 
 static void
-pgf_metrics_lzn_end_phrase2(PgfLinFuncs** funcs, PgfCId cat, int fid, int lin_idx, PgfCId fun)
+pgf_metrics_lzn_end_phrase2(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lin_idx, PgfCId fun)
 {
 	PgfMetricsLznState* state = gu_container(funcs, PgfMetricsLznState, funcs);
 

@@ -636,10 +636,12 @@ pgfCommands = Map.fromList [
        cncs = optConcs env opts
        parsed rs = Piped (Exprs ts,unlines msgs)
           where
-            ts = [hsExpr t|Right ts<-rs,(t,p)<-takeOptNum opts ts]
-            msgs = concatMap (either err ok) rs
-            err msg = ["Parse failed: "++msg]
-            ok = map (PGF2.showExpr [] . fst).takeOptNum opts
+            ts = [hsExpr t|ParseOk ts<-rs,(t,p)<-takeOptNum opts ts]
+            msgs = concatMap mkMsg rs
+
+            mkMsg (ParseOk ts) = (map (PGF2.showExpr [] . fst).takeOptNum opts) ts
+            mkMsg (ParseFailed _ tok) = ["Parse failed: "++tok]
+            mkMsg (ParseIncomplete)   = ["The sentence is incomplete"]
 
    optLins env opts ts = case opts of
      _ | isOpt "groups" opts ->

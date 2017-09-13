@@ -1163,7 +1163,10 @@ Iter_fetch_token(IterObject* self)
 
 	PyObject* py_tok = PyString_FromString(tp->tok);
 	PyObject* py_cat = PyString_FromString(tp->cat);
-	PyObject* res = Py_BuildValue("(f,O,O)", tp->prob, py_tok, py_cat);
+	PyObject* py_fun = PyString_FromString(tp->fun);
+	PyObject* res = Py_BuildValue("(f,O,O,O)", tp->prob, py_tok, py_cat, py_fun);
+	Py_DECREF(py_fun);
+	Py_DECREF(py_cat);
 	Py_DECREF(py_tok);
 
 	return res;
@@ -1545,13 +1548,28 @@ Concr_parse(ConcrObject* self, PyObject *args, PyObject *keywds)
 			GuString msg = (GuString) gu_exn_caught_data(parse_err);
 			PyErr_SetString(PGFError, msg);
 		} else if (gu_exn_caught(parse_err, PgfParseError)) {
-			GuString tok = (GuString) gu_exn_caught_data(parse_err);
-			PyObject* py_tok = PyString_FromString(tok);
-			PyObject_SetAttrString(ParseError, "token", py_tok);
-			PyErr_Format(ParseError, "Unexpected token: \"%s\"", tok);
-			Py_DECREF(py_tok);
+			PgfParseError* err = (PgfParseError*) gu_exn_caught_data(parse_err);
+			PyObject* py_offset = PyInt_FromLong(err->offset);
+			if (err->incomplete) {
+	            PyObject_SetAttrString(ParseError, "incomplete",  Py_True);
+	            PyObject_SetAttrString(ParseError, "offset",      py_offset);
+				PyErr_Format(ParseError, "The sentence is incomplete");
+			} else {
+				PyObject* py_tok    = PyString_FromStringAndSize(err->token_ptr,
+	                                                             err->token_len);
+	            PyObject_SetAttrString(ParseError, "incomplete",  Py_False);
+				PyObject_SetAttrString(ParseError, "offset",      py_offset);
+				PyObject_SetAttrString(ParseError, "token",       py_tok);
+#if PY_MAJOR_VERSION >= 3
+				PyErr_Format(ParseError, "Unexpected token: \"%U\"", py_tok);
+#else
+				PyErr_Format(ParseError, "Unexpected token: \"%s\"", PyString_AsString(py_tok));
+#endif
+				Py_DECREF(py_tok);
+			}
+			Py_DECREF(py_offset);
 		}
-		
+
 		Py_DECREF(pyres);
 		pyres = NULL;
 	}
@@ -2057,7 +2075,7 @@ pgf_bracket_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 }
 
 static void
-pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lindex, PgfCId fun)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 	
@@ -2066,7 +2084,7 @@ pgf_bracket_lzn_begin_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int linde
 }
 
 static void
-pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, int lindex, PgfCId fun)
+pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lindex, PgfCId fun)
 {
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 
