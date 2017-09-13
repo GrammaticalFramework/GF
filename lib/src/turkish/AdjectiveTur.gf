@@ -46,7 +46,8 @@ concrete AdjectiveTur of Adjective =
       s = \\n, c => np.s ! Nom ++ cadv.s ++ ap.s ! n ! c
     } ;
 
-    -- TODO: Implement.
+    -- TODO: Instead of `++ BIND ++ "si"`, sc.s should be treated as a noun
+    -- and it should be inflected to `gen Sg {n = Sg; p = P3}`.
     SentAP ap sc = {
       s =
         \\n, c => (sc.s ++ BIND ++ "si") ++ (ap.s ! n ! c)
