@@ -45,9 +45,9 @@ gu_decode_double(uint64_t u)
 GU_INTERNAL uint64_t
 gu_encode_double(double d)
 {
-	int sign = (d < 0) ? 1 : 0;
-	int rawexp;
-	double mantissa;
+	int sign = signbit(d) > 0;
+	unsigned rawexp;
+	uint64_t mantissa;
 
 	switch (fpclassify(d)) {
 	case FP_NAN:
@@ -58,14 +58,19 @@ gu_encode_double(double d)
 		rawexp   = 0x7ff;
 		mantissa = 0;
 		break;
-	default:
-		mantissa = frexp(d, &rawexp);
-		rawexp += 1075;
+	default: {
+		int exp;
+		mantissa = (uint64_t) scalbn(frexp(d, &exp), 53);
+		mantissa &= ~ (1ULL << 52);
+		exp -= 53;
+
+		rawexp = exp + 1075;
+	}
 	}
 
     uint64_t u = (((uint64_t) sign) << 63) |
-                 ((((uint64_t) rawexp) << 52) & 0x7ff) |
-                 ((uint64_t) mantissa);
+                 (((uint64_t) rawexp & 0x7ff) << 52) |
+                 mantissa;
 
 	return u;
 }
