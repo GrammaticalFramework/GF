@@ -21,6 +21,7 @@ concrete StructuralPes of Structural = CatPes **
   by8agent_Prep = ss "توسط" ;
   by8means_Prep = ss "با" ;
 --  can8know_VV,can_VV = mkV "سکن" ** { isAux = True} ;
+  can_VV = mkV_1 " توانستن " ** { isAux = True} ; ---- AR
   during_Prep = ss ["در طول"] ;
   either7or_DConj = sd2 "یا" "یا" ** {n = Sg} ;
 --  everybody_NP =  MassNP (UseN (MorphoPnb.mkN11 ["هر کwی"])); -- not a good way coz need to include NounPnb
@@ -48,6 +49,7 @@ concrete StructuralPes of Structural = CatPes **
   more_CAdv = {s = "بیشتر" ; p = "" } ; 
   most_Predet = ss "اکثر";
   much_Det = mkDet ["مقدار زیادی"]  Pl ;
+  must_VV = mkV_1 " بایستن " ** {isAux = True} ;  ---- AR
 --  must_VV = {
 --    s = table {
 --      VVF VInf => ["هوe تْ"] ;

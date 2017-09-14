@@ -111,6 +111,8 @@ oper
 	  |VPFutr Anteriority
 	  |VPCond Anteriority ;
 oper
+--s (Vvform (AgPes Sg PPers1)) : بخوانم
+
 
   predV : Verb -> VPH = \verb -> {
       s = \\vh => 
@@ -228,10 +230,18 @@ oper
 {-
 	infVP : Bool -> VPH -> Agr -> Str = \isAux,vp,a ->
      vp.obj.s ++ vp.inf ++ vp.comp ! a ;
- -}    
-    infVV : Bool -> VPH -> {s : AgrPes => Str} = \isAux,vp -> 
-	                       {s = \\agr => case agr of {
-		                  AgPes n p => (vp.ad ++ vp.comp ! (toAgr n p)) ++ (vp.s ! VVForm (AgPes n p)).inf }};
+ -}
+
+---- AR 14/9/2017 trying to fix isAux = True case by inserting conjThat
+---- but don't know yet how False should be affect 
+    infVV : Bool -> VPH -> {s : AgrPes => Str} = \isAux,vp ->
+      {s = \\agr => case agr of {
+         AgPes n p => case isAux of {
+	   True  => conjThat ++ (vp.ad ++ vp.comp ! (toAgr n p)) ++ (vp.s ! VVForm (AgPes n p)).inf ;
+	   False => (vp.ad ++ vp.comp ! (toAgr n p)) ++ (vp.s ! VVForm (AgPes n p)).inf
+	   }
+	 }
+       } ;
    
     insertObjPre : (AgrPes => Str) -> VPHSlash -> VPH = \obj,vp -> {
      s = vp.s ;
