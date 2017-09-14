@@ -49,7 +49,7 @@ concrete StructuralPes of Structural = CatPes **
   more_CAdv = {s = "بیشتر" ; p = "" } ; 
   most_Predet = ss "اکثر";
   much_Det = mkDet ["مقدار زیادی"]  Pl ;
-  must_VV = mkV_1 " بایستن " ** {isAux = True} ;  ---- AR
+  must_VV = invarV " بایستن " ** {isAux = True} ;  ---- AR
 --  must_VV = {
 --    s = table {
 --      VVF VInf => ["هوe تْ"] ;
