@@ -122,7 +122,9 @@ oper
    compoundV : Str -> V -> V = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;     
    compoundV : Str -> V2 -> V = \s,v -> {s = \\vf => s ++ v.s ! vf ; lock_V = <>} ;
    };
- 
+
+   invarV : Str -> V -- for verbs like  " بایستن " ("must"), which don't inflect
+     = \s -> lin V {s = \\_ => s} ; 
 
 ----2 Adverbs
   mkAdv : Str -> Adv = \str -> {s =  str ; lock_Adv = <>};
