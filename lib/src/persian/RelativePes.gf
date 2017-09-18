@@ -34,7 +34,7 @@ concrete RelativePes of Relative = CatPes ** open ResPes in {
 ---- "we رe لْْکنگ ت").
 --
     RelSlash rp slash = {
-      s = \\t,p,o,agr => rp.s ++ slash.c2.s ++  slash.s ! t ! p ! o  ;--case t of {
+      s = \\t,p,o,agr => rp.s ++ slash.c2.s ++ slash.subj ++ slash.vp ! t ! p ! o  ;--case t of { ---- AR 18/8/2017 is this the right place of subj? 
 --	       VPImpPast => rp.s !  (giveNumber agr) Obl ++ slash.c2.s ++  slash.s ! t ! p ! o ;
 --		   _         => rp.s !  (giveNumber agr) Dir ++ slash.c2.s ++  slash.s ! t ! p ! o 
 --		   };
