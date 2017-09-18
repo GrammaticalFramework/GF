@@ -142,7 +142,7 @@ have_V2 = {
   (VF Pos (PPresent2 PrPerf) PPers3 Pl) => "داشته اند" ;
   (VF Pos (PPresent2 PrImperf) PPers1 Sg) => "دارم" ;
   (VF Pos (PPresent2 PrImperf) PPers1 Pl) => "داریم" ;
-  (VF Pos (PPresent2 PrImperf) PPers2 Sg) => "داریم" ;
+  (VF Pos (PPresent2 PrImperf) PPers2 Sg) => " داری" ;
   (VF Pos (PPresent2 PrImperf) PPers2 Pl) => "دارید" ;
   (VF Pos (PPresent2 PrImperf) PPers3 Sg) => "دارد" ;
   (VF Pos (PPresent2 PrImperf) PPers3 Pl) => "دارند" ;
@@ -246,7 +246,7 @@ have_V2 = {
   } ;
   c2 = {
     s  = [] ;
-    ra = "را" ;
+    ra = [] ; --- "را" ;  ---- AR 18/9/2017: usually no ra acc. to Nasrin, but this is tricky 
     c = R.VTrans
     }
   } ;
