@@ -936,18 +936,6 @@ pgf_read_pargs(PgfReader* rdr, PgfConcr* concr)
 	return pargs;
 }
 
-extern void
-pgf_parser_index(PgfConcr* concr, 
-                 PgfCCat* ccat, PgfProduction prod,
-                 bool is_lexical,
-                 GuPool *pool);
-
-extern void
-pgf_lzr_index(PgfConcr* concr, 
-              PgfCCat* ccat, PgfProduction prod,
-              bool is_lexical,
-              GuPool *pool);
-
 static bool
 pgf_production_is_lexical(PgfReader* rdr, PgfProductionApply *papp)
 {
@@ -1075,7 +1063,7 @@ pgf_read_cnccat(PgfReader* rdr, PgfAbstr* abstr, PgfConcr* concr, PgfCId name)
 
 	int len = last + 1 - first;
 	cnccat->cats = gu_new_seq(PgfCCat*, len, rdr->opool);
-	
+
 	for (int i = 0; i < len; i++) {
 		int fid = first + i;
 		PgfCCat* ccat = gu_map_get(concr->ccats, &fid, PgfCCat*);

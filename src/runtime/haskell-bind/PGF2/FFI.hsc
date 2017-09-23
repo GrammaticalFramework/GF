@@ -29,13 +29,14 @@ data Concr = Concr {concr :: Ptr PgfConcr, touchConcr :: Touch}
 data GuEnum
 data GuExn
 data GuIn
+data GuOut
 data GuKind
 data GuType
 data GuString
 data GuStringBuf
 data GuMap
 data GuMapItor
-data GuOut
+data GuHasher
 data GuSeq
 data GuPool
 type GuVariant = Ptr ()
@@ -111,11 +112,26 @@ foreign import ccall unsafe "gu/utf8.h gu_utf8_encode"
 foreign import ccall unsafe "gu/seq.h gu_make_seq"
   gu_make_seq :: CSizeT -> CSizeT -> Ptr GuPool -> IO (Ptr GuSeq)
 
+foreign import ccall unsafe "gu/map.h gu_make_map"
+  gu_make_map :: CSizeT -> Ptr GuHasher -> CSizeT -> Ptr a -> CSizeT -> Ptr GuPool -> IO (Ptr GuMap)
+
+foreign import ccall unsafe "gu/map.h gu_map_insert"
+  gu_map_insert :: Ptr GuMap -> Ptr a -> IO (Ptr b)
+
 foreign import ccall unsafe "gu/map.h gu_map_find_default"
   gu_map_find_default :: Ptr GuMap -> Ptr a -> IO (Ptr b)
 
 foreign import ccall "gu/map.h gu_map_iter"
   gu_map_iter :: Ptr GuMap -> Ptr GuMapItor -> Ptr GuExn -> IO ()
+
+foreign import ccall unsafe "gu/hash.h &gu_int_hasher"
+  gu_int_hasher :: Ptr GuHasher
+
+foreign import ccall unsafe "gu/hash.h &gu_string_hasher"
+  gu_string_hasher :: Ptr GuHasher
+
+foreign import ccall unsafe "gu/hash.h &gu_null_struct"
+  gu_null_struct :: Ptr a
 
 foreign import ccall unsafe "gu/variant.h gu_variant_tag"
   gu_variant_tag :: GuVariant -> IO CInt
@@ -209,6 +225,8 @@ data PgfCncTree
 data PgfLinFuncs
 data PgfGraphvizOptions
 type PgfBindType = (#type PgfBindType)
+data PgfAbsFun
+data PgfAbsCat
 
 foreign import ccall "pgf/pgf.h pgf_read"
   pgf_read :: CString -> Ptr GuPool -> Ptr GuExn -> IO (Ptr PgfPGF)

@@ -14,7 +14,8 @@ concrete CatPes of Cat = CommonX - [Adv] ** open ResPes, Prelude in {
 
     Cl = ResPes.Clause ;
     ClSlash = {
-      s : ResPes.VPHTense => Polarity => Order => Str ;
+      subj : Str ;
+      vp : ResPes.VPHTense => Polarity => Order => Str ;
       c2 : ResPes.Compl
       } ;
     Imp = {s : CPolarity => ImpForm => Str} ;

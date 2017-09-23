@@ -351,4 +351,16 @@ struct PgfCCat {
 	GuFinalizer fin[0];
 };
 
+PGF_API_DECL void
+pgf_parser_index(PgfConcr* concr, 
+                 PgfCCat* ccat, PgfProduction prod,
+                 bool is_lexical,
+                 GuPool *pool);
+
+PGF_API_DECL void
+pgf_lzr_index(PgfConcr* concr, 
+              PgfCCat* ccat, PgfProduction prod,
+              bool is_lexical,
+              GuPool *pool);
+
 #endif

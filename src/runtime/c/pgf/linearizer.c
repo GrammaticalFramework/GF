@@ -30,7 +30,7 @@ pgf_lzr_add_overl_entry(PgfCncOverloadMap* overl_table,
 	gu_buf_push(entries, void*, entry);
 }
 
-PGF_INTERNAL void
+PGF_API void
 pgf_lzr_index(PgfConcr* concr, 
               PgfCCat* ccat, PgfProduction prod,
               bool is_lexical,
