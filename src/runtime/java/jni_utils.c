@@ -1,6 +1,8 @@
 #include <jni.h>
 #include <gu/utf8.h>
 #include <gu/string.h>
+#include <pgf/pgf.h>
+#include <pgf/linearizer.h>
 #include "jni_utils.h"
 #ifndef __MINGW32__
 #include <alloca.h>
@@ -57,6 +59,35 @@ gu2j_string_len(JNIEnv *env, const char* s, size_t len) {
 JPGF_INTERNAL jstring
 gu2j_string_buf(JNIEnv *env, GuStringBuf* sbuf) {
 	return gu2j_string_len(env, gu_string_buf_data(sbuf), gu_string_buf_length(sbuf));
+}
+
+JPGF_INTERNAL jstring
+gu2j_string_capit(JNIEnv *env, GuString s, PgfCapitState capit) {
+	const char* utf8 = s;
+	size_t len = strlen(s);
+
+	jchar* utf16 = alloca(len*sizeof(jchar));
+	jchar* dst   = utf16;
+	while (s-utf8 < len) {
+		GuUCS ucs = gu_utf8_decode((const uint8_t**) &s);
+
+		if (capit == PGF_CAPIT_FIRST) {
+			ucs = gu_ucs_to_upper(ucs);
+			capit == PGF_CAPIT_NONE;
+		} else if (capit == PGF_CAPIT_NEXT) {
+			ucs = gu_ucs_to_upper(ucs);
+		}
+
+		if (ucs <= 0xFFFF) {
+			*dst++ = ucs;
+		} else {
+			ucs -= 0x10000;
+			*dst++ = 0xD800+((ucs >> 10) & 0x3FF);
+			*dst++ = 0xDC00+(ucs & 0x3FF);
+		}
+	}
+
+	return (*env)->NewString(env, utf16, dst-utf16);
 }
 
 JPGF_INTERNAL GuString
