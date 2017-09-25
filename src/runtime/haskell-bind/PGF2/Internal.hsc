@@ -9,7 +9,8 @@ module PGF2.Internal(-- * Access the internal structures
                      concrTotalSeqs, concrSequence,
                      
                      -- * Building new PGFs in memory
-                     build, eAbs, eApp, eMeta, eFun, eVar, eTyped, eImplArg, dTyp, hypo,
+                     build, Builder, B,
+                     eAbs, eApp, eMeta, eFun, eVar, eTyped, eImplArg, dTyp, hypo,
                      AbstrInfo, newAbstr, ConcrInfo, newConcr, newPGF,
                      
                      -- * Write an in-memory PGF to a file
@@ -297,6 +298,9 @@ isPredefFId = (`elem` [fidString, fidInt, fidFloat, fidVar])
 
 data Builder s = Builder (Ptr GuPool) Touch
 newtype B s a = B a
+
+instance Functor (B s) where
+  fmap f (B x) = B (f x)
 
 build :: (forall s . (?builder :: Builder s) => B s a) -> a
 build f =
