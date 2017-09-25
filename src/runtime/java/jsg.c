@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <sg/sg.h>
 #include <pgf/expr.h>
+#include <pgf/linearizer.h>
 #include "jni_utils.h"
 
 JNIEXPORT jobject JNICALL
