@@ -16,13 +16,14 @@
 
 module GF.Compile.PGFtoHaskell (grammar2haskell) where
 
-import PGF(showCId)
+import PGF
 import PGF.Internal
 
 import GF.Data.Operations
 import GF.Infra.Option
 
-import Data.List --(isPrefixOf, find, intersperse)
+import Data.List
+import Data.Maybe(mapMaybe)
 import qualified Data.Map as Map
 
 type Prefix = String -> String
@@ -262,18 +263,21 @@ fInstance gId lexical m (cat,rules) =
 --type HSkeleton = [(OIdent, [(OIdent, [OIdent])])]
 hSkeleton :: PGF -> (String,HSkeleton)
 hSkeleton gr = 
-  (showCId (absname gr), 
+  (showCId (abstractName gr),
    let fs = 
-         [(showCId c, [(showCId f, map showCId cs) | (f, (cs,_)) <- fs]) | 
-                                        fs@((_, (_,c)):_) <- fns]
+         [(showCId c, [(showCId f, map showCId cs) | (f, cs,_) <- fs]) | 
+                                        fs@((_, _,c):_) <- fns]
    in fs ++ [(sc, []) | c <- cts, let sc = showCId c, notElem sc (["Int", "Float", "String"] ++ map fst fs)]
   )
  where
-   cts = Map.keys (cats (abstract gr)) 
-   fns = groupBy valtypg (sortBy valtyps (map jty (Map.assocs (funs (abstract gr)))))
-   valtyps (_, (_,x)) (_, (_,y)) = compare x y
-   valtypg (_, (_,x)) (_, (_,y)) = x == y
-   jty (f,(ty,_,_,_)) = (f,catSkeleton ty)
+   cts = categories gr
+   fns = groupBy valtypg (sortBy valtyps (mapMaybe jty (functions gr)))
+   valtyps (_,_,x) (_,_,y) = compare x y
+   valtypg (_,_,x) (_,_,y) = x == y
+   jty f = case functionType gr f of
+             Just ty -> let (hypos,valcat,_) = unType ty
+                        in Just (f,[argcat | (_,_,ty) <- hypos, let (_,argcat,_) = unType ty],valcat)
+             Nothing -> Nothing
 {-
 updateSkeleton :: OIdent -> HSkeleton -> (OIdent, [OIdent]) -> HSkeleton
 updateSkeleton cat skel rule =
