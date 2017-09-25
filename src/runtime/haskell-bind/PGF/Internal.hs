@@ -24,9 +24,9 @@ lookConcr (PGF _ langs) (CId lang) =
     Just cnc -> cnc
     Nothing  -> error "Unknown language"
 
-globalFlags (PGF pgf _) = Map.fromAscList [(CId name,value) | (name,value) <- Map.toAscList (PGF2.globalFlags pgf)]
-abstrFlags  (PGF pgf _) = Map.fromAscList [(CId name,value) | (name,value) <- Map.toAscList (PGF2.abstrFlags pgf)]
-concrFlags concr = Map.fromAscList [(CId name,value) | (name,value) <- Map.toAscList (PGF2.concrFlags concr)]
+globalFlags (PGF pgf _) = Map.fromAscList [(CId name,value) | (name,value) <- PGF2.globalFlags pgf]
+abstrFlags  (PGF pgf _) = Map.fromAscList [(CId name,value) | (name,value) <- PGF2.abstrFlags pgf]
+concrFlags concr = Map.fromAscList [(CId name,value) | (name,value) <- PGF2.concrFlags concr]
 
 concrTotalCats = PGF2.concrTotalCats
 
