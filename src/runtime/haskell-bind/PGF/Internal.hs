@@ -16,7 +16,9 @@ module PGF.Internal(CId(..),Language,PGF(..),
                     -- * Write an in-memory PGF to a file
                     writePGF,
                      
-                    PGF2.fidString, PGF2.fidInt, PGF2.fidFloat, PGF2.fidVar, PGF2.fidStart
+                    PGF2.fidString, PGF2.fidInt, PGF2.fidFloat, PGF2.fidVar, PGF2.fidStart,
+                    
+                    ppFunId, ppSeqId, ppFId, ppMeta, ppLit, ppSeq
 ) where
 
 import qualified PGF2
@@ -24,6 +26,7 @@ import qualified PGF2.Internal as PGF2
 import qualified Data.Map as Map
 import Data.Array.IArray
 import Data.Array.Unboxed
+import Text.PrettyPrint
 
 newtype CId = CId String deriving (Show,Read,Eq,Ord)
 
@@ -110,3 +113,41 @@ newPGF flags (CId name) abstr concrs =
                     [(name,concr) | (CId name,concr) <- concrs])
 
 writePGF = PGF2.writePGF
+
+
+ppFunId funid = char 'F' <> int funid
+ppSeqId seqid = char 'S' <> int seqid
+
+ppFId fid
+  | fid == PGF2.fidString = text "CString"
+  | fid == PGF2.fidInt    = text "CInt"
+  | fid == PGF2.fidFloat  = text "CFloat"
+  | fid == PGF2.fidVar    = text "CVar"
+  | fid == PGF2.fidStart  = text "CStart"
+  | otherwise             = char 'C' <> int fid
+
+ppMeta :: Int -> Doc
+ppMeta n
+  | n == 0    = char '?'
+  | otherwise = char '?' <> int n
+
+ppLit (PGF2.LStr s) = text (show s)
+ppLit (PGF2.LInt n) = int n
+ppLit (PGF2.LFlt d) = double d
+
+ppSeq (seqid,seq) = 
+  ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol (elems seq))
+
+ppSymbol (PGF2.SymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
+ppSymbol (PGF2.SymLit d r) = char '{' <> int d <> comma <> int r <> char '}'
+ppSymbol (PGF2.SymVar d r) = char '<' <> int d <> comma <> char '$' <> int r <> char '>'
+ppSymbol (PGF2.SymKS t)    = doubleQuotes (text t)
+ppSymbol PGF2.SymNE        = text "nonExist"
+ppSymbol PGF2.SymBIND      = text "BIND"
+ppSymbol PGF2.SymSOFT_BIND = text "SOFT_BIND"
+ppSymbol PGF2.SymSOFT_SPACE= text "SOFT_SPACE"
+ppSymbol PGF2.SymCAPIT     = text "CAPIT"
+ppSymbol PGF2.SymALL_CAPIT = text "ALL_CAPIT"
+ppSymbol (PGF2.SymKP syms alts) = text "pre" <+> braces (hsep (punctuate semi (hsep (map ppSymbol syms) : map ppAlt alts)))
+
+ppAlt (syms,ps) = hsep (map ppSymbol syms) <+> char '/' <+> hsep (map (doubleQuotes . text) ps)

@@ -1,4 +1,4 @@
-module PGF (PGF, readPGF,
+module PGF (PGF, readPGF, showPGF,
             abstractName,
 
             CId, mkCId, wildCId, showCId, readCId,
@@ -52,6 +52,8 @@ import Text.PrettyPrint(text)
 readPGF fpath = do
   gr <- PGF2.readPGF fpath
   return (PGF gr (PGF2.languages gr))
+
+showPGF (PGF gr _) = PGF2.showPGF gr
 
 readLanguage = readCId
 showLanguage (CId s) = s
@@ -203,4 +205,3 @@ toTrie = combines . map ((:[]) . singleton)
           where
             combine2 (Ap f ts,Ap g us) | f==g = Just (Ap f (combines (ts++us)))
             combine2 _ = Nothing
-
