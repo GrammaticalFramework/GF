@@ -29,6 +29,7 @@ import Data.IORef
 import Data.Maybe(fromMaybe)
 import Data.List(sortBy)
 import Control.Exception(Exception,throwIO)
+import Control.Monad(foldM)
 import qualified Data.Map as Map
 
 type Token = String
@@ -454,7 +455,7 @@ newHypos hypos pool = do
             Implicit -> (#const PGF_BIND_TYPE_IMPLICIT)
 
 
-data AbstrInfo = AbstrInfo (Ptr GuSeq) (Ptr GuSeq) (Map.Map String (Ptr PgfAbsCat)) (Ptr GuSeq) (Map.Map String (Ptr PgfAbsFun)) (Ptr PgfAbsFun) Touch
+data AbstrInfo = AbstrInfo (Ptr GuSeq) (Ptr GuSeq) (Map.Map String (Ptr PgfAbsCat)) (Ptr GuSeq) (Map.Map String (Ptr PgfAbsFun)) (Ptr PgfAbsFun) (Ptr GuBuf) Touch
 
 newAbstr :: (?builder :: Builder s) => [(String,Literal)] ->
                                        [(Cat,[B s Hypo],Float)] ->
@@ -465,7 +466,8 @@ newAbstr aflags cats funs = unsafePerformIO $ do
   (c_cats,abscats) <- newAbsCats (sortByFst3 cats) pool
   (c_funs,absfuns) <- newAbsFuns (sortByFst4 funs) pool
   c_abs_lin_fun <- newAbsLinFun
-  return (AbstrInfo c_aflags c_cats abscats c_funs absfuns c_abs_lin_fun touch)
+  c_non_lexical_buf <- gu_make_buf (#size PgfProductionIdxEntry) pool
+  return (AbstrInfo c_aflags c_cats abscats c_funs absfuns c_abs_lin_fun c_non_lexical_buf touch)
   where
     (Builder pool touch) = ?builder
 
@@ -531,7 +533,7 @@ newAbstr aflags cats funs = unsafePerformIO $ do
       return ptr
 
 
-data ConcrInfo = ConcrInfo (Ptr GuSeq) (Ptr GuMap) (Ptr GuMap) (Ptr GuSeq) (Ptr GuSeq) (Ptr GuMap)
+data ConcrInfo = ConcrInfo (Ptr GuSeq) (Ptr GuMap) (Ptr GuMap) (Ptr GuSeq) (Ptr GuSeq) (Ptr GuMap) (Ptr PgfConcr -> Ptr GuPool -> IO ()) CInt
 
 newConcr :: (?builder :: Builder s) => AbstrInfo ->
                                        [(String,Literal)] ->       -- ^ Concrete syntax flags
@@ -542,8 +544,9 @@ newConcr :: (?builder :: Builder s) => AbstrInfo ->
                                        [(Fun,[SeqId])] ->          -- ^ Concrete functions   (must be sorted by Fun)
                                        [[Symbol]] ->               -- ^ Sequences            (must be sorted)
                                        [(Cat,FId,FId,[String])] -> -- ^ Concrete categories
+                                       FId ->                      -- ^ The total count of the categories
                                        ConcrInfo
-newConcr (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun _) cflags printnames lindefs linrefs prods cncfuns sequences cnccats = unsafePerformIO $ do
+newConcr (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun c_non_lexical_buf _) cflags printnames lindefs linrefs prods cncfuns sequences cnccats total_cats = unsafePerformIO $ do
   c_cflags <- newFlags cflags pool
   c_printname <- newMap (#size GuString) gu_string_hasher newUtf8CString 
                         (#size GuString) (pokeString pool)
@@ -558,9 +561,9 @@ newConcr (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun _) cflags printnames li
                          pool
   mapM_ (addLindefs c_ccats funs_ptr) lindefs
   mapM_ (addLinrefs c_ccats funs_ptr) linrefs
-  mapM_ (addProductions c_ccats funs_ptr) prods
+  mk_index <- foldM (addProductions c_ccats funs_ptr c_non_lexical_buf) (\concr pool -> return ()) prods
   c_cnccats <- newMap (#size GuString) gu_string_hasher newUtf8CString (#size PgfCncCat*) (pokeCncCat c_ccats) (map (\v@(k,_,_,_) -> (k,v)) cnccats) pool
-  return (ConcrInfo c_cflags c_printname c_ccats c_cncfuns c_seqs c_cnccats)
+  return (ConcrInfo c_cflags c_printname c_ccats c_cncfuns c_seqs c_cnccats mk_index (fromIntegral total_cats))
   where
     (Builder pool touch) = ?builder
 
@@ -575,20 +578,34 @@ newConcr (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun _) cflags printnames li
 
     addLindefs c_ccats funs_ptr (fid,funids) = do
       c_ccat <- getCCat c_ccats fid pool
-      c_funs <- newSequence (#size PgfCncFun*) (pokeFunId funs_ptr) funids pool
+      c_funs <- newSequence (#size PgfCncFun*) (pokeRefDefFunId funs_ptr) funids pool
       (#poke PgfCCat, lindefs) c_ccat c_funs
 
     addLinrefs c_ccats funs_ptr (fid,funids) = do
       c_ccat <- getCCat c_ccats fid pool
-      c_funs <- newSequence (#size PgfCncFun*) (pokeFunId funs_ptr) funids pool
+      c_funs <- newSequence (#size PgfCncFun*) (pokeRefDefFunId funs_ptr) funids pool
       (#poke PgfCCat, linrefs) c_ccat c_funs
 
-    addProductions c_ccats funs_ptr (fid,prods) = do
-      c_ccat  <- getCCat c_ccats fid pool
-      c_prods <- gu_make_seq (#size PgfProduction) (fromIntegral (length prods)) pool
+    addProductions c_ccats funs_ptr c_non_lexical_buf mk_index (fid,prods) = do
+      c_ccat <- getCCat c_ccats fid pool
+      let n_prods = length prods
+      c_prods <- gu_make_seq (#size PgfProduction) (fromIntegral n_prods) pool
       (#poke PgfCCat, prods) c_ccat c_prods
+      pokeProductions c_ccat (c_prods `plusPtr` (#offset GuSeq, data)) 0 (n_prods-1) mk_index prods
+      where
+        pokeProductions c_ccat ptr top bot mk_index []           = return mk_index
+        pokeProductions c_ccat ptr top bot mk_index (prod:prods) = do
+          (is_lexical,c_prod) <- newProduction c_ccats funs_ptr c_non_lexical_buf prod pool
+          let mk_index' = \concr pool -> do pgf_parser_index concr c_ccat c_prod is_lexical pool
+                                            pgf_lzr_index    concr c_ccat c_prod is_lexical pool
+                                            mk_index concr pool
+          if is_lexical == 0
+            then do poke (ptr `plusPtr` ((#size PgfProduction)*top)) c_prod
+                    pokeProductions c_ccat ptr (top+1) bot mk_index' prods
+            else do poke (ptr `plusPtr` ((#size PgfProduction)*bot)) c_prod
+                    pokeProductions c_ccat ptr top (bot-1) mk_index' prods
 
-    pokeFunId funs_ptr ptr funid = do
+    pokeRefDefFunId funs_ptr ptr funid = do
       let c_fun = funs_ptr `plusPtr` (funid * (#size PgfCncFun))
       (#poke PgfCncFun, absfun) c_fun c_abs_lin_fun
       poke ptr c_fun
@@ -622,7 +639,7 @@ newPGF :: (?builder :: Builder s) => [(String,Literal)] ->
                                      AbstrInfo ->
                                      [(ConcName,ConcrInfo)] ->
                                      B s PGF
-newPGF gflags absname (AbstrInfo c_aflags c_cats _ c_funs _ c_abs_lin_fun _) concrs =
+newPGF gflags absname (AbstrInfo c_aflags c_cats _ c_funs _ c_abs_lin_fun _ _) concrs =
   unsafePerformIO $ do
     ptr <- gu_malloc_aligned pool
                              (#size PgfPGF)
@@ -645,17 +662,29 @@ newPGF gflags absname (AbstrInfo c_aflags c_cats _ c_funs _ c_abs_lin_fun _) con
   where
     (Builder pool touch) = ?builder
 
-    pokeConcr c_abstr ptr (name, ConcrInfo c_cflags c_printnames c_ccats c_cncfuns c_seqs c_cnccats) = do
+    pokeConcr c_abstr ptr (name, ConcrInfo c_cflags c_printnames c_ccats c_cncfuns c_seqs c_cnccats mk_index c_total_cats) = do
       c_name <- newUtf8CString name pool
-      (#poke PgfConcr, name)       ptr c_name
-      (#poke PgfConcr, abstr)      ptr c_abstr
-      (#poke PgfConcr, cflags)     ptr c_cflags
-      (#poke PgfConcr, printnames) ptr c_printnames
-      (#poke PgfConcr, ccats)      ptr c_ccats
-      (#poke PgfConcr, cncfuns)    ptr c_cncfuns
-      (#poke PgfConcr, sequences)  ptr c_seqs
-      (#poke PgfConcr, cnccats)    ptr c_cnccats
-      (#poke PgfConcr, pool)       ptr nullPtr
+      c_fun_indices <- gu_make_map (#size GuString) gu_string_hasher
+                                   (#size PgfCncOverloadMap*) gu_null_struct
+                                   (#const GU_MAP_DEFAULT_INIT_SIZE)
+                                   pool
+      c_coerce_idx  <- gu_make_map (#size PgfCCat*) gu_addr_hasher
+                                   (#size GuBuf*) gu_null_struct
+                                   (#const GU_MAP_DEFAULT_INIT_SIZE)
+                                   pool
+      (#poke PgfConcr, name)        ptr c_name
+      (#poke PgfConcr, abstr)       ptr c_abstr
+      (#poke PgfConcr, cflags)      ptr c_cflags
+      (#poke PgfConcr, printnames)  ptr c_printnames
+      (#poke PgfConcr, ccats)       ptr c_ccats
+      (#poke PgfConcr, fun_indices) ptr c_fun_indices
+      (#poke PgfConcr, coerce_idx)  ptr c_coerce_idx
+      (#poke PgfConcr, cncfuns)     ptr c_cncfuns
+      (#poke PgfConcr, sequences)   ptr c_seqs
+      (#poke PgfConcr, cnccats)     ptr c_cnccats
+      (#poke PgfConcr, total_cats)  ptr c_total_cats
+      (#poke PgfConcr, pool)        ptr nullPtr
+      mk_index ptr pool
 
 
 newFlags :: [(String,Literal)] -> Ptr GuPool -> IO (Ptr GuSeq)
@@ -666,6 +695,7 @@ newFlags flags pool = newSequence (#size PgfFlag) pokeFlag (sortByFst flags) poo
       c_value <- newLiteral value pool
       (#poke PgfFlag, name)  c_flag c_name
       (#poke PgfFlag, value) c_flag c_value
+
 
 newLiteral :: Literal -> Ptr GuPool -> IO GuVariant
 newLiteral (LStr val) pool =
@@ -692,6 +722,44 @@ newLiteral (LFlt val) pool =
                             pptr pool
     (#poke PgfLiteralFlt, val) ptr (realToFrac val :: CDouble)
     peek pptr
+
+
+newProduction :: Ptr GuMap -> Ptr PgfCncFun -> Ptr GuBuf -> Production -> Ptr GuPool -> IO ((#type bool), GuVariant)
+newProduction c_ccats funs_ptr c_non_lexical_buf (PApply fun_id args) pool =
+  alloca $ \pptr -> do
+    let c_fun = funs_ptr `plusPtr` (fun_id * (#size PgfCncFun))
+    c_args <- newSequence (#size PgfPArg) pokePArg args pool
+    ptr <- gu_alloc_variant (#const PGF_PRODUCTION_APPLY)
+                            (fromIntegral (#size PgfProductionApply))
+                            (#const gu_alignof(PgfProductionApply))
+                            pptr pool
+    (#poke PgfProductionApply, fun)  ptr c_fun
+    (#poke PgfProductionApply, args) ptr c_args
+    is_lexical <- pgf_production_is_lexical ptr c_non_lexical_buf pool
+    c_prod <- peek pptr
+    return (is_lexical,c_prod)
+  where
+    pokePArg ptr (PArg hypos ccat) = do
+      c_ccat <- getCCat c_ccats ccat pool
+      (#poke PgfPArg, ccat) ptr c_ccat
+      c_hypos <- newSequence (#size PgfCCat*) pokeCCat hypos pool
+      (#poke PgfPArg, hypos) ptr c_hypos
+
+    pokeCCat ptr ccat = do
+      c_ccat <- getCCat c_ccats ccat pool
+      poke ptr c_ccat
+
+newProduction c_ccats funs_ptr c_non_lexical_buf (PCoerce fid) pool =
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_PRODUCTION_COERCE)
+                            (fromIntegral (#size PgfProductionCoerce))
+                            (#const gu_alignof(PgfProductionCoerce))
+                            pptr pool
+    c_ccat <- getCCat c_ccats fid pool
+    (#poke PgfProductionCoerce, coerce) ptr c_ccat
+    c_prod <- peek pptr
+    return (0,c_prod)
+
 
 newCncFun absfuns seqs_ptr (funid,(fun,seqids)) pool =
   do let c_absfun = fromMaybe nullPtr (Map.lookup fun absfuns)
