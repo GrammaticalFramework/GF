@@ -3,8 +3,7 @@ import GF.Command.Abstract(Option,Expr,Term)
 import GF.Text.Pretty(render)
 import GF.Grammar.Printer() -- instance Pretty Term
 import GF.Grammar.Macros(string2term)
-import qualified PGF as H(showExpr)
-import qualified PGF.Internal as H(Literal(LStr),Expr(ELit)) ----
+import PGF(mkStr,unStr,showExpr)
 
 data CommandInfo m = CommandInfo {
   exec     :: [Option] -> CommandArguments -> m CommandOutput,
@@ -44,14 +43,12 @@ newtype CommandOutput = Piped (CommandArguments,String) ---- errors, etc
 
 -- ** Converting command output
 fromStrings ss         = Piped (Strings ss, unlines ss)
-fromExprs   es         = Piped (Exprs es,unlines (map (H.showExpr []) es))
+fromExprs   es         = Piped (Exprs es,unlines (map (showExpr []) es))
 fromString  s          = Piped (Strings [s], s)
 pipeWithMessage es msg = Piped (Exprs es,msg)
 pipeMessage msg        = Piped (Exprs [],msg)
 pipeExprs   es         = Piped (Exprs es,[]) -- only used in emptyCommandInfo
 void                   = Piped (Exprs [],"")
-
-stringAsExpr = H.ELit . H.LStr -- should be a pattern macro
 
 -- ** Converting command input
 
@@ -62,22 +59,22 @@ toStrings args =
       Term t -> [render t]
   where
     showAsString first t =
-      case t of
-        H.ELit (H.LStr s) -> s
-        _ -> ['\n'|not first] ++
-             H.showExpr [] t ---newline needed in other cases than the first
+      case unStr t of
+        Just s  -> s
+        Nothing -> ['\n'|not first] ++
+                   showExpr [] t ---newline needed in other cases than the first
 
 toExprs args =
   case args of
     Exprs es -> es
-    Strings ss -> map stringAsExpr ss
-    Term t -> [stringAsExpr (render t)]
+    Strings ss -> map mkStr ss
+    Term t -> [mkStr (render t)]
 
 toTerm args =
   case args of
     Term t -> t
     Strings ss -> string2term $ unwords ss -- hmm
-    Exprs es -> string2term $ unwords $ map (H.showExpr []) es -- hmm
+    Exprs es -> string2term $ unwords $ map (showExpr []) es -- hmm
 
 -- ** Creating documentation
 

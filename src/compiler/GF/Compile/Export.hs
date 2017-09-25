@@ -1,7 +1,6 @@
 module GF.Compile.Export where
 
 import PGF
-import PGF.Internal(ppPGF)
 import GF.Compile.PGFtoHaskell
 import GF.Compile.PGFtoJava
 import GF.Compile.PGFtoProlog
@@ -33,7 +32,7 @@ exportPGF :: Options
           -> [(FilePath,String)] -- ^ List of recommended file names and contents.
 exportPGF opts fmt pgf = 
     case fmt of
-      FmtPGFPretty    -> multi "txt" (render . ppPGF)
+      FmtPGFPretty    -> multi "txt" (showPGF)
       FmtJavaScript   -> multi "js"  pgf2js
       FmtPython       -> multi "py"  pgf2python
       FmtHaskell      -> multi "hs"  (grammar2haskell opts name)
