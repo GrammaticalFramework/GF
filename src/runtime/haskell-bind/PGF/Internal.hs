@@ -13,8 +13,10 @@ module PGF.Internal(CId(..),Language,PGF(..),
                     eAbs, eApp, eMeta, eFun, eVar, eTyped, eImplArg, dTyp, hypo,
                     PGF2.AbstrInfo, newAbstr, PGF2.ConcrInfo, newConcr, newPGF,
                      
-                     -- * Write an in-memory PGF to a file
-                     writePGF
+                    -- * Write an in-memory PGF to a file
+                    writePGF,
+                     
+                    PGF2.fidString, PGF2.fidInt, PGF2.fidFloat, PGF2.fidVar, PGF2.fidStart
 ) where
 
 import qualified PGF2
@@ -81,8 +83,8 @@ eTyped = PGF2.eTyped
 eImplArg :: (?builder :: PGF2.Builder s) => PGF2.B s PGF2.Expr -> PGF2.B s PGF2.Expr
 eImplArg = PGF2.eImplArg
 
-dTyp :: (?builder :: PGF2.Builder s) => [PGF2.B s (PGF2.BindType,CId,PGF2.Type)] -> CId -> [PGF2.B s PGF2.Expr] -> PGF2.B s PGF2.Type
-dTyp hypos (CId cat) es = PGF2.dTyp (map (fmap (\(bt,CId var,ty) -> (bt,var,ty))) hypos) cat es
+dTyp :: (?builder :: PGF2.Builder s) => [PGF2.B s (PGF2.BindType,String,PGF2.Type)] -> CId -> [PGF2.B s PGF2.Expr] -> PGF2.B s PGF2.Type
+dTyp hypos (CId cat) es = PGF2.dTyp hypos cat es
 
 hypo bind_type (CId var) ty = PGF2.hypo bind_type var ty
 
@@ -100,9 +102,11 @@ newConcr abs flags printnames lindefs linrefs prods cncfuns seqs cnccats total_c
                     [(cat,start,end,labels) | (CId cat,start,end,labels) <- cnccats]
                     total_ccats
 
-newPGF flags (CId name) abstr concrs = PGF2.newPGF [(flag,lit) | (CId flag,lit) <- flags]
-                                                   name
-                                                   abstr
-                                                   [(name,concr) | (CId name,concr) <- concrs]
+newPGF flags (CId name) abstr concrs = 
+  fmap (\pgf -> PGF pgf (PGF2.languages pgf))
+       (PGF2.newPGF [(flag,lit) | (CId flag,lit) <- flags]
+                    name
+                    abstr
+                    [(name,concr) | (CId name,concr) <- concrs])
 
 writePGF = PGF2.writePGF

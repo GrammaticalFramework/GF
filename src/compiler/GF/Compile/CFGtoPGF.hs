@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts, ImplicitParams #-}
 module GF.Compile.CFGtoPGF (cf2pgf) where
 
 import GF.Grammar.CFG
@@ -19,81 +19,71 @@ import Data.List
 
 cf2pgf :: FilePath -> ParamCFG -> PGF
 cf2pgf fpath cf = 
- let pgf = PGF Map.empty aname (cf2abstr cf) (Map.singleton cname (cf2concr cf))
- in updateProductionIndices pgf
+ build (let abstr = cf2abstr cf
+        in newPGF [] aname abstr [(cname, cf2concr abstr cf)])
  where
    name = justModuleName fpath
    aname = mkCId (name ++ "Abs")
    cname = mkCId name
 
-cf2abstr :: ParamCFG -> Abstr
-cf2abstr cfg = Abstr aflags afuns acats
+cf2abstr :: (?builder :: Builder s) => ParamCFG -> B s AbstrInfo
+cf2abstr cfg = newAbstr aflags acats afuns
   where
-    aflags = Map.singleton (mkCId "startcat") (LStr (fst (cfgStartCat cfg)))
+    aflags = [(mkCId "startcat", LStr (fst (cfgStartCat cfg)))]
 
-    acats  = Map.fromList [(cat, ([], [(0,mkRuleName rule) | rule <- rules], 0))
-                            | (cat,rules) <- (Map.toList . Map.fromListWith (++))
-                                                [(cat2id cat, catRules cfg cat) | 
-                                                     cat <- allCats' cfg]]
-    afuns  = Map.fromList [(mkRuleName rule, (cftype [cat2id c | NonTerminal c <- ruleRhs rule] (cat2id (ruleLhs rule)), 0, Nothing, 0))
+    acats  = [(cat2id cat, [], 0) | cat <- allCats' cfg]
+    afuns  = [(mkRuleName rule, dTyp [hypo Explicit wildCId (dTyp [] (cat2id c) []) | NonTerminal c <- ruleRhs rule] (cat2id (ruleLhs rule)) [], 0, 0)
                             | rule <- allRules cfg]
 
     cat2id = mkCId . fst
 
-cf2concr :: ParamCFG -> Concr
-cf2concr cfg = Concr Map.empty Map.empty
-                     cncfuns lindefsrefs lindefsrefs
-                     sequences productions
-                     IntMap.empty Map.empty
-                     cnccats
-                     IntMap.empty
-                     totalCats
+cf2concr :: (?builder :: Builder s) => B s AbstrInfo -> ParamCFG -> B s ConcrInfo
+cf2concr abstr cfg = 
+  newConcr abstr [] []
+           lindefsrefs lindefsrefs
+           (IntMap.toList productions) cncfuns
+           sequences cnccats totalCats
   where
     cats  = allCats' cfg
     rules = allRules cfg
 
-    sequences0 = Set.fromList (listArray (0,0) [SymCat 0 0] : 
-                               map mkSequence rules)
-    sequences  = listArray (0,Set.size sequences0-1) (Set.toList sequences0)
+    idSeq = [SymCat 0 0]
 
-    idFun = CncFun wildCId (listArray (0,0) [seqid])
-      where
-        seq   = listArray (0,0) [SymCat 0 0]
-        seqid = binSearch seq sequences (bounds sequences)
+    sequences0 = Set.fromList (idSeq : 
+                               map mkSequence rules)
+    sequences  = Set.toList sequences0
+
+    idFun = (wildCId,[Set.findIndex idSeq sequences0])
     ((fun_cnt,cncfuns0),productions0) = mapAccumL (convertRule cs) (1,[idFun]) rules
     productions = foldl addProd IntMap.empty (concat (productions0++coercions))
-    cncfuns = listArray (0,fun_cnt-1) (reverse cncfuns0)
+    cncfuns = reverse cncfuns0
 
-    lbls = listArray (0,0) ["s"]
-    (fid,cnccats0) = (mapAccumL mkCncCat 0 . Map.toList . Map.fromListWith max)
-                              [(c,p) | (c,ps) <- cats, p <- ps]
+    lbls = ["s"]
+    (fid,cnccats) = (mapAccumL mkCncCat 0 . Map.toList . Map.fromListWith max)
+                         [(c,p) | (c,ps) <- cats, p <- ps]
     ((totalCats,cs), coercions) = mapAccumL mkCoercions (fid,Map.empty) cats
-    cnccats = Map.fromList cnccats0
 
-    lindefsrefs =
-       IntMap.fromList (map mkLinDefRef cats)
+    lindefsrefs = map mkLinDefRef cats
 
     convertRule cs (funid,funs) rule =
       let args   = [PArg [] (cat2arg c) | NonTerminal c <- ruleRhs rule]
           prod   = PApply funid args
-          seqid  = binSearch (mkSequence rule) sequences (bounds sequences)
-          fun    = CncFun (mkRuleName rule) (listArray (0,0) [seqid])
+          seqid  = Set.findIndex (mkSequence rule) sequences0
+          fun    = (mkRuleName rule, [seqid])
           funid' = funid+1
       in funid' `seq` ((funid',fun:funs),let (c,ps) = ruleLhs rule in [(cat2fid c p, prod) | p <- ps])
 
-    mkSequence rule = listArray (0,length syms-1) syms
+    mkSequence rule = snd $ mapAccumL convertSymbol 0 (ruleRhs rule)
       where
-        syms   = snd $ mapAccumL convertSymbol 0 (ruleRhs rule)
-
         convertSymbol d (NonTerminal (c,_)) = (d+1,if c `elem` ["Int","Float","String"] then SymLit d 0 else SymCat d 0)
         convertSymbol d (Terminal t)        = (d,  SymKS t)
 
     mkCncCat fid (cat,n)
-      | cat == "Int"    = (fid, (mkCId cat, CncCat fidInt    fidInt    lbls))
-      | cat == "Float"  = (fid, (mkCId cat, CncCat fidFloat  fidFloat  lbls))
-      | cat == "String" = (fid, (mkCId cat, CncCat fidString fidString lbls))
+      | cat == "Int"    = (fid, (mkCId cat, fidInt,    fidInt,    lbls))
+      | cat == "Float"  = (fid, (mkCId cat, fidFloat,  fidFloat,  lbls))
+      | cat == "String" = (fid, (mkCId cat, fidString, fidString, lbls))
       | otherwise       = let fid' = fid+n+1
-                          in fid' `seq` (fid', (mkCId cat,CncCat fid (fid+n) lbls))
+                          in fid' `seq` (fid', (mkCId cat, fid, fid+n, lbls))
 
     mkCoercions (fid,cs) c@(cat,[p]) = ((fid,cs),[])
     mkCoercions (fid,cs) c@(cat,ps ) =
@@ -102,25 +92,16 @@ cf2concr cfg = Concr Map.empty Map.empty
 
     mkLinDefRef (cat,_) =
       (cat2fid cat 0,[0])
-      
+
     addProd prods (fid,prod) =
       case IntMap.lookup fid prods of
-        Just set -> IntMap.insert fid (Set.insert prod set) prods
-        Nothing  -> IntMap.insert fid (Set.singleton prod)  prods
-
-    binSearch v arr (i,j)
-      | i <= j    = case compare v (arr ! k) of
-                      LT -> binSearch v arr (i,k-1)
-                      EQ -> k
-                      GT -> binSearch v arr (k+1,j)
-      | otherwise = error "binSearch"
-      where
-        k = (i+j) `div` 2
+        Just set -> IntMap.insert fid (prod:set) prods
+        Nothing  -> IntMap.insert fid [prod]     prods
 
     cat2fid cat p =
-      case Map.lookup (mkCId cat) cnccats of
-        Just (CncCat fid _ _) -> fid+p
-        _                     -> error "cat2fid"
+      case [start | (cat',start,_,_) <- cnccats, mkCId cat == cat'] of
+        (start:_) -> fid+p
+        _         -> error "cat2fid"
 
     cat2arg c@(cat,[p]) = cat2fid cat p
     cat2arg c@(cat,ps ) =
@@ -132,3 +113,4 @@ mkRuleName rule =
   case ruleName rule of
 	CFObj n _ -> n
 	_         -> wildCId
+

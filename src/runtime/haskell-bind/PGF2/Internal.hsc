@@ -14,7 +14,10 @@ module PGF2.Internal(-- * Access the internal structures
                      AbstrInfo, newAbstr, ConcrInfo, newConcr, newPGF,
                      
                      -- * Write an in-memory PGF to a file
-                     writePGF
+                     writePGF,
+                     
+                     -- * Predefined concrete categories
+                     fidString, fidInt, fidFloat, fidVar, fidStart
                     ) where
 
 #include <pgf/data.h>
@@ -464,14 +467,14 @@ data AbstrInfo = AbstrInfo (Ptr GuSeq) (Ptr GuSeq) (Map.Map String (Ptr PgfAbsCa
 newAbstr :: (?builder :: Builder s) => [(String,Literal)] ->
                                        [(Cat,[B s Hypo],Float)] ->
                                        [(Fun,B s Type,Int,Float)] ->
-                                       AbstrInfo
+                                       B s AbstrInfo
 newAbstr aflags cats funs = unsafePerformIO $ do
   c_aflags <- newFlags aflags pool
   (c_cats,abscats) <- newAbsCats (sortByFst3 cats) pool
   (c_funs,absfuns) <- newAbsFuns (sortByFst4 funs) pool
   c_abs_lin_fun <- newAbsLinFun
   c_non_lexical_buf <- gu_make_buf (#size PgfProductionIdxEntry) pool
-  return (AbstrInfo c_aflags c_cats abscats c_funs absfuns c_abs_lin_fun c_non_lexical_buf touch)
+  return (B (AbstrInfo c_aflags c_cats abscats c_funs absfuns c_abs_lin_fun c_non_lexical_buf touch))
   where
     (Builder pool touch) = ?builder
 
@@ -539,7 +542,7 @@ newAbstr aflags cats funs = unsafePerformIO $ do
 
 data ConcrInfo = ConcrInfo (Ptr GuSeq) (Ptr GuMap) (Ptr GuMap) (Ptr GuSeq) (Ptr GuSeq) (Ptr GuMap) (Ptr PgfConcr -> Ptr GuPool -> IO ()) CInt
 
-newConcr :: (?builder :: Builder s) => AbstrInfo ->
+newConcr :: (?builder :: Builder s) => B s AbstrInfo ->
                                        [(String,Literal)] ->       -- ^ Concrete syntax flags
                                        [(String,String)] ->        -- ^ Printnames
                                        [(FId,[FunId])] ->          -- ^ Lindefs
@@ -549,8 +552,8 @@ newConcr :: (?builder :: Builder s) => AbstrInfo ->
                                        [[Symbol]] ->               -- ^ Sequences            (must be sorted)
                                        [(Cat,FId,FId,[String])] -> -- ^ Concrete categories
                                        FId ->                      -- ^ The total count of the categories
-                                       ConcrInfo
-newConcr (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun c_non_lexical_buf _) cflags printnames lindefs linrefs prods cncfuns sequences cnccats total_cats = unsafePerformIO $ do
+                                       B s ConcrInfo
+newConcr (B (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun c_non_lexical_buf _)) cflags printnames lindefs linrefs prods cncfuns sequences cnccats total_cats = unsafePerformIO $ do
   c_cflags <- newFlags cflags pool
   c_printname <- newMap (#size GuString) gu_string_hasher newUtf8CString 
                         (#size GuString) (pokeString pool)
@@ -567,7 +570,7 @@ newConcr (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun c_non_lexical_buf _) cf
   mapM_ (addLinrefs c_ccats funs_ptr) linrefs
   mk_index <- foldM (addProductions c_ccats funs_ptr c_non_lexical_buf) (\concr pool -> return ()) prods
   c_cnccats <- newMap (#size GuString) gu_string_hasher newUtf8CString (#size PgfCncCat*) (pokeCncCat c_ccats) (map (\v@(k,_,_,_) -> (k,v)) cnccats) pool
-  return (ConcrInfo c_cflags c_printname c_ccats c_cncfuns c_seqs c_cnccats mk_index (fromIntegral total_cats))
+  return (B (ConcrInfo c_cflags c_printname c_ccats c_cncfuns c_seqs c_cnccats mk_index (fromIntegral total_cats)))
   where
     (Builder pool touch) = ?builder
 
@@ -640,10 +643,10 @@ newConcr (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun c_non_lexical_buf _) cf
 
 newPGF :: (?builder :: Builder s) => [(String,Literal)] ->
                                      AbsName ->
-                                     AbstrInfo ->
-                                     [(ConcName,ConcrInfo)] ->
+                                     B s AbstrInfo ->
+                                     [(ConcName,B s ConcrInfo)] ->
                                      B s PGF
-newPGF gflags absname (AbstrInfo c_aflags c_cats _ c_funs _ c_abs_lin_fun _ _) concrs =
+newPGF gflags absname (B (AbstrInfo c_aflags c_cats _ c_funs _ c_abs_lin_fun _ _)) concrs =
   unsafePerformIO $ do
     ptr <- gu_malloc_aligned pool
                              (#size PgfPGF)
@@ -666,7 +669,7 @@ newPGF gflags absname (AbstrInfo c_aflags c_cats _ c_funs _ c_abs_lin_fun _ _) c
   where
     (Builder pool touch) = ?builder
 
-    pokeConcr c_abstr ptr (name, ConcrInfo c_cflags c_printnames c_ccats c_cncfuns c_seqs c_cnccats mk_index c_total_cats) = do
+    pokeConcr c_abstr ptr (name, B (ConcrInfo c_cflags c_printnames c_ccats c_cncfuns c_seqs c_cnccats mk_index c_total_cats)) = do
       c_name <- newUtf8CString name pool
       c_fun_indices <- gu_make_map (#size GuString) gu_string_hasher
                                    (#size PgfCncOverloadMap*) gu_null_struct
