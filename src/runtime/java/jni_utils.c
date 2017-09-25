@@ -73,7 +73,7 @@ gu2j_string_capit(JNIEnv *env, GuString s, PgfCapitState capit) {
 
 		if (capit == PGF_CAPIT_FIRST) {
 			ucs = gu_ucs_to_upper(ucs);
-			capit == PGF_CAPIT_NONE;
+			capit = PGF_CAPIT_NONE;
 		} else if (capit == PGF_CAPIT_NEXT) {
 			ucs = gu_ucs_to_upper(ucs);
 		}
