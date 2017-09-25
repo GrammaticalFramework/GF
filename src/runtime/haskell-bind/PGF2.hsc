@@ -19,7 +19,7 @@
 #include <gu/exn.h>
 
 module PGF2 (-- * PGF
-             PGF,readPGF,
+             PGF,readPGF,showPGF,
 
              -- * Abstract syntax
              AbsName,abstractName,
@@ -132,6 +132,17 @@ readPGF fpath =
                    else return pgf
      pgfFPtr <- newForeignPtr gu_pool_finalizer pool
      return (PGF pgf (touchForeignPtr pgfFPtr))
+
+showPGF :: PGF -> String
+showPGF p =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+      do (sb,out) <- newOut tmpPl
+         exn <- gu_new_exn tmpPl
+         pgf_print (pgf p) out exn
+         touchPGF p
+         s <- gu_string_buf_freeze sb tmpPl
+         peekUtf8CString s
 
 -- | List of all languages available in the grammar.
 languages :: PGF -> Map.Map ConcName Concr
