@@ -2504,7 +2504,7 @@ pgf_lookup_word_prefix(PgfConcr *concr, GuString prefix,
 	return &state->en;
 }
 
-PGF_INTERNAL void
+PGF_API void
 pgf_parser_index(PgfConcr* concr, 
                  PgfCCat* ccat, PgfProduction prod,
                  bool is_lexical,

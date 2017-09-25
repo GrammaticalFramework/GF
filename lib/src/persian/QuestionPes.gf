@@ -20,8 +20,11 @@ concrete QuestionPes of Question = CatPes ** open ResPes, Prelude in {
 --					 }
 					 
     QuestSlash ip slash = {
-      s = \\t,p,o =>  slash.c2.s ++ ip.s ++ slash.c2.ra ++ slash.s ! t ! p ! ODir; -- order of whome and john needs to be changed
-            
+      s = \\t,p,o =>
+        slash.subj ++ slash.c2.s ++ ip.s ++ slash.c2.ra ++
+	slash.vp ! t ! p ! ODir;
+	-- order of whome and john needs to be changed
+        -- AR 18/9/2017 now changed by making ClSlash discontinuous    
         };
 
     QuestIAdv iadv cl = { 

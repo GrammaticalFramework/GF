@@ -76,6 +76,8 @@ libpgf_la_SOURCES = \
 	pgf/literals.h \
 	pgf/reader.h \
 	pgf/reader.c \
+	pgf/writer.h \
+	pgf/writer.c \
 	pgf/linearizer.c \
 	pgf/typechecker.c \
 	pgf/reasoner.c \
