@@ -6,7 +6,7 @@ module GF.Command.Interpreter (
 import GF.Command.CommandInfo
 import GF.Command.Abstract
 import GF.Command.Parse
-import PGF.Internal(Expr(..))
+import PGF
 import GF.Infra.UseIO(putStrLnE)
 
 import Control.Monad(when)
@@ -53,17 +53,8 @@ interpretPipe env cs = do
 -- | macro definition applications: replace ?i by (exps !! i)
 appCommand :: CommandArguments -> Command -> Command
 appCommand args c@(Command i os arg) = case arg of
-  AExpr e -> Command i os (AExpr (app e))
+  AExpr e -> Command i os (AExpr (exprSubstitute e (toExprs args)))
   _       -> c
- where
-  xs = toExprs args
-
-  app e = case e of
-    EAbs b x e -> EAbs b x (app e)
-    EApp e1 e2 -> EApp (app e1) (app e2)
-    ELit l     -> ELit l
-    EMeta i    -> xs !! i
-    EFun x     -> EFun x
 
 -- | return the trees to be sent in pipe, and the output possibly printed
 --interpret :: CommandEnv -> [Expr] -> Command -> SIO CommandOutput

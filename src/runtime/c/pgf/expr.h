@@ -203,6 +203,12 @@ pgf_expr_size(PgfExpr expr);
 PGF_API GuSeq*
 pgf_expr_functions(PgfExpr expr, GuPool* pool);
 
+PGF_API PgfExpr
+pgf_expr_substitute(PgfExpr expr, GuSeq* meta_values, GuPool* pool);
+
+PGF_API PgfType*
+pgf_type_substitute(PgfType* type, GuSeq* meta_values, GuPool* pool);
+
 typedef struct PgfPrintContext PgfPrintContext;
 
 struct PgfPrintContext {

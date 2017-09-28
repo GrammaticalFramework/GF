@@ -35,7 +35,7 @@ module PGF2 (-- * PGF
              mkInt,unInt,
              mkFloat,unFloat,
              mkMeta,unMeta,
-             exprHash, exprSize, exprFunctions,
+             exprHash, exprSize, exprFunctions, exprSubstitute,
              treeProbability,
 
              -- ** Types
@@ -361,6 +361,20 @@ exprFunctions (Expr c_expr touch) =
     funs <- mapM peekUtf8CString arr
     touch
     return funs
+
+exprSubstitute :: Expr -> [Expr] -> Expr
+exprSubstitute (Expr c_expr touch) meta_values =
+  unsafePerformIO $
+  withGuPool $ \tmpPl -> do
+    c_meta_values <- newSequence (#size PgfExpr) pokeExpr meta_values tmpPl
+    exprPl <- gu_new_pool
+    c_expr <- pgf_expr_substitute c_expr c_meta_values exprPl
+    touch
+    exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+    let touch' = sequence_ (touchForeignPtr exprFPl : map touchExpr meta_values)
+    return (Expr c_expr touch')
+  where
+    pokeExpr ptr (Expr c_expr _) = poke ptr c_expr
 
 -----------------------------------------------------------------------------
 -- Graphviz

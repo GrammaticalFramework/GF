@@ -12,7 +12,7 @@ module PGF (PGF, readPGF, showPGF,
             PGF2.mkInt,PGF2.unInt,
             PGF2.mkFloat,PGF2.unFloat,
             PGF2.mkMeta,PGF2.unMeta,
-            PGF2.exprSize, exprFunctions,
+            PGF2.exprSize, exprFunctions,PGF2.exprSubstitute,
             compute,
             rankTreesByProbs,
 
