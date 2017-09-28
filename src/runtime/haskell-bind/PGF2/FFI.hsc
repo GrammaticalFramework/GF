@@ -32,7 +32,6 @@ data GuIn
 data GuOut
 data GuKind
 data GuType
-data GuString
 data GuStringBuf
 data GuMap
 data GuMapItor

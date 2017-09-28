@@ -675,6 +675,17 @@ pgf_expr_parser_binds(PgfExprParser* parser)
 	return binds;
 }
 
+PGF_API GuString
+pgf_expr_parser_ident(PgfExprParser* parser)
+{
+	GuString ident = NULL;
+	if (parser->token_tag == PGF_TOKEN_IDENT) {
+		ident =	gu_string_copy(gu_string_buf_data(parser->token_value), parser->expr_pool);
+		pgf_expr_parser_token(parser, true);
+	}
+	return ident;
+}
+
 PGF_API PgfExpr
 pgf_expr_parser_expr(PgfExprParser* parser, bool mark)
 {

@@ -28,7 +28,7 @@ module PGF2 (-- * PGF
              -- ** Functions
              Fun,functions, functionsByCat, functionType, hasLinearization,
              -- ** Expressions
-             Expr,showExpr,readExpr,pExpr,
+             Expr,showExpr,readExpr,pExpr,pIdent,
              mkAbs,unAbs,
              mkApp,unApp,
              mkStr,unStr,

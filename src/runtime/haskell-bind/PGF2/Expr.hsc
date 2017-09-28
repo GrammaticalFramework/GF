@@ -195,6 +195,22 @@ readExpr str =
               else do gu_pool_free exprPl
                       return Nothing
 
+pIdent :: ReadS String
+pIdent str =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+       do ref <- newIORef (str,str,str)
+          exn <- gu_new_exn tmpPl
+          c_fetch_char <- wrapParserGetc (fetch_char ref)
+          c_parser <- pgf_new_parser nullPtr c_fetch_char tmpPl tmpPl exn
+          c_ident <- pgf_expr_parser_ident c_parser
+          status <- gu_exn_is_raised exn
+          if (not status && c_ident /= nullPtr)
+            then do ident <- peekUtf8CString c_ident
+                    (str,_,_) <- readIORef ref
+                    return [(ident,str)]
+            else do return []
+
 pExpr :: ReadS Expr
 pExpr str =
   unsafePerformIO $
@@ -212,19 +228,19 @@ pExpr str =
                       return [(Expr c_expr (touchForeignPtr exprFPl),str)]
               else do gu_pool_free exprPl
                       return []
-  where
-    fetch_char :: IORef (String,String,String) -> Ptr () -> (#type bool) -> Ptr GuExn -> IO (#type GuUCS)
-    fetch_char ref _ mark exn = do
-      (str1,str2,str3) <- readIORef ref
-      let str1' = if mark /= 0
-                    then str2
-                    else str1
-      case str3 of
-        []     -> do writeIORef ref (str1',str3,[])
-                     gu_exn_raise exn gu_exn_type_GuEOF
-                     return (-1)
-        (c:cs) -> do writeIORef ref (str1',str3,cs)
-                     return ((fromIntegral . fromEnum) c)
+
+fetch_char :: IORef (String,String,String) -> Ptr () -> (#type bool) -> Ptr GuExn -> IO (#type GuUCS)
+fetch_char ref _ mark exn = do
+  (str1,str2,str3) <- readIORef ref
+  let str1' = if mark /= 0
+                then str2
+                else str1
+  case str3 of
+    []     -> do writeIORef ref (str1',str3,[])
+                 gu_exn_raise exn gu_exn_type_GuEOF
+                 return (-1)
+    (c:cs) -> do writeIORef ref (str1',str3,cs)
+                 return ((fromIntegral . fromEnum) c)
 
 foreign import ccall "pgf/expr.h pgf_new_parser"
   pgf_new_parser :: Ptr () -> (FunPtr ParserGetc) -> Ptr GuPool -> Ptr GuPool -> Ptr GuExn -> IO (Ptr PgfExprParser)
@@ -232,10 +248,14 @@ foreign import ccall "pgf/expr.h pgf_new_parser"
 foreign import ccall "pgf/expr.h pgf_expr_parser_expr"
   pgf_expr_parser_expr :: Ptr PgfExprParser -> (#type bool) -> IO PgfExpr
 
+foreign import ccall "pgf/expr.h pgf_expr_parser_ident"
+  pgf_expr_parser_ident :: Ptr PgfExprParser -> IO CString
+
 type ParserGetc = Ptr () -> (#type bool) -> Ptr GuExn -> IO (#type GuUCS)
 
 foreign import ccall "wrapper"
   wrapParserGetc :: ParserGetc -> IO (FunPtr ParserGetc)
+
 
 -- | renders an expression as a 'String'. The list
 -- of identifiers is the list of all free variables

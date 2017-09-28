@@ -5,7 +5,7 @@ module PGF (PGF, readPGF, showPGF,
             
             categories, functions, functionsByCat, functionType, browse,
 
-            PGF2.Expr,Tree,showExpr,PGF2.readExpr,
+            PGF2.Expr,Tree,showExpr,PGF2.readExpr,pExpr,pIdent,
             mkAbs,unAbs,
             mkApp,unApp,unapply,
             PGF2.mkStr,PGF2.unStr,
@@ -46,6 +46,7 @@ module PGF (PGF, readPGF, showPGF,
 import PGF.Internal
 import qualified PGF2
 import qualified Data.Map as Map
+import qualified Text.ParserCombinators.ReadP as RP
 import Data.List(sortBy)
 import Text.PrettyPrint(text)
 
@@ -79,6 +80,9 @@ showCId (CId x) = x
 readCId s = Just (CId s)
 
 showExpr xs e = PGF2.showExpr [x | CId x <- xs] e
+
+pExpr = RP.readS_to_P PGF2.pExpr
+pIdent = RP.readS_to_P PGF2.pIdent
 
 mkAbs bind_type (CId var) e = PGF2.mkAbs bind_type var e
 unAbs e = case PGF2.unAbs e of
