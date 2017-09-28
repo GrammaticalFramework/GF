@@ -13,6 +13,7 @@ concrete GrammarTur of Grammar =
   PhraseTur,
   TextX,
   StructuralTur,
+  PhraseTur,
   IdiomTur,
   TenseX
   ** {
