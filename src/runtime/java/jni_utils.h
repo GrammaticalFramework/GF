@@ -26,6 +26,9 @@ gu2j_string_len(JNIEnv *env, const char* s, size_t len);
 JPGF_INTERNAL_DECL jstring
 gu2j_string_buf(JNIEnv *env, GuStringBuf* sbuf);
 
+JPGF_INTERNAL jstring
+gu2j_string_capit(JNIEnv *env, GuString s, PgfCapitState capit);
+
 JPGF_INTERNAL_DECL GuString
 j2gu_string(JNIEnv *env, jstring s, GuPool* pool);
 

@@ -936,8 +936,9 @@ pgf_read_pargs(PgfReader* rdr, PgfConcr* concr)
 	return pargs;
 }
 
-static bool
-pgf_production_is_lexical(PgfReader* rdr, PgfProductionApply *papp)
+PGF_API bool
+pgf_production_is_lexical(PgfProductionApply *papp, 
+                          GuBuf* non_lexical_buf, GuPool* pool)
 {
 	if (gu_seq_length(papp->args) > 0)
 		return false;
@@ -957,13 +958,13 @@ pgf_production_is_lexical(PgfReader* rdr, PgfProductionApply *papp)
 					inf.tag == PGF_SYMBOL_SOFT_SPACE ||
 					inf.tag == PGF_SYMBOL_CAPIT ||
 					inf.tag == PGF_SYMBOL_ALL_CAPIT) {
-					seq->idx = rdr->non_lexical_buf;
+					seq->idx = non_lexical_buf;
 					return false;
 				}
 			}
 
-			seq->idx = gu_new_buf(PgfProductionIdxEntry, rdr->opool);
-		} if (seq->idx == rdr->non_lexical_buf) {
+			seq->idx = gu_new_buf(PgfProductionIdxEntry, pool);
+		} if (seq->idx == non_lexical_buf) {
 			return false;
 		}
 	}
@@ -992,7 +993,7 @@ pgf_read_production(PgfReader* rdr, PgfConcr* concr,
 		papp->args = pgf_read_pargs(rdr, concr);
 		gu_return_on_exn(rdr->err, );
 
-		is_lexical = pgf_production_is_lexical(rdr, papp);
+		is_lexical = pgf_production_is_lexical(papp, rdr->non_lexical_buf, rdr->opool);
 		if (!is_lexical)
 			gu_seq_set(ccat->prods, PgfProduction, (*top)++, prod);
 		else

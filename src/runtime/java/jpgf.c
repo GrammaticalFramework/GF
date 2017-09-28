@@ -930,6 +930,9 @@ typedef struct {
 	GuPool* tmp_pool;
 	GuBuf* stack;
 	GuBuf* list;
+	bool bind;
+	PgfCapitState capit;
+	jobject bind_instance;
 	jclass object_class;
 	jclass bracket_class;
 	jmethodID bracket_constrId;
@@ -941,8 +944,23 @@ pgf_bracket_lzn_symbol_token(PgfLinFuncs** funcs, PgfToken tok)
 	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
 	JNIEnv* env = state->env;
 
-	jstring jname = gu2j_string(env, tok);
-	gu_buf_push(state->list, jobject, jname);
+	if (state->bind) {
+		jobject bind_instance = (*env)->NewLocalRef(env, state->bind_instance);
+		gu_buf_push(state->list, jobject, bind_instance);
+		state->bind = false;
+	} else {
+		if (state->capit == PGF_CAPIT_NEXT)
+			state->capit = PGF_CAPIT_NONE;
+	}
+
+	if (state->capit == PGF_CAPIT_ALL)
+		state->capit = PGF_CAPIT_NEXT;
+
+	jstring jtok = gu2j_string_capit(env, tok, state->capit);
+	gu_buf_push(state->list, jobject, jtok);
+	
+	if (state->capit == PGF_CAPIT_FIRST)
+		state->capit = PGF_CAPIT_NONE;
 }
 
 static void
@@ -994,6 +1012,20 @@ pgf_bracket_lzn_end_phrase(PgfLinFuncs** funcs, PgfCId cat, int fid, size_t lind
 }
 
 static void
+pgf_bracket_lzn_symbol_bind(PgfLinFuncs** funcs)
+{
+	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
+	state->bind = true;
+}
+
+static void
+pgf_bracket_lzn_symbol_capit(PgfLinFuncs** funcs, PgfCapitState capit)
+{
+	PgfBracketLznState* state = gu_container(funcs, PgfBracketLznState, funcs);
+	state->capit = capit;
+}
+
+static void
 pgf_bracket_lzn_symbol_meta(PgfLinFuncs** funcs, PgfMetaId id)
 {
 	pgf_bracket_lzn_symbol_token(funcs, "?");
@@ -1004,8 +1036,8 @@ static PgfLinFuncs pgf_bracket_lin_funcs = {
 	.begin_phrase  = pgf_bracket_lzn_begin_phrase,
 	.end_phrase    = pgf_bracket_lzn_end_phrase,
 	.symbol_ne     = NULL,
-	.symbol_bind   = NULL,
-	.symbol_capit  = NULL,
+	.symbol_bind   = pgf_bracket_lzn_symbol_bind,
+	.symbol_capit  = pgf_bracket_lzn_symbol_capit,
 	.symbol_meta   = pgf_bracket_lzn_symbol_meta
 };
 
@@ -1021,6 +1053,16 @@ Java_org_grammaticalframework_pgf_Concr_bracketedLinearize(JNIEnv* env, jobject 
 		return NULL;
 	jmethodID bracket_constrId = (*env)->GetMethodID(env, bracket_class, "<init>", "(Ljava/lang/String;Ljava/lang/String;II[Ljava/lang/Object;)V");
 	if (!bracket_constrId)
+		return NULL;
+		
+	jclass bind_class = (*env)->FindClass(env, "org/grammaticalframework/pgf/BIND");
+	if (!bind_class)
+		return NULL;
+	jfieldID bind_instance_id = (*env)->GetStaticFieldID(env, bind_class, "instance", "Lorg/grammaticalframework/pgf/BIND;");
+	if (!bind_instance_id)
+		return NULL;
+	jobject bind_instance = (*env)->GetStaticObjectField(env, bind_class, bind_instance_id);
+	if (!bind_instance)
 		return NULL;
 
 	GuPool* tmp_pool = gu_local_pool();
@@ -1056,6 +1098,9 @@ Java_org_grammaticalframework_pgf_Concr_bracketedLinearize(JNIEnv* env, jobject 
 	state.tmp_pool = tmp_pool;
 	state.stack = gu_new_buf(GuBuf*, tmp_pool);
 	state.list  = gu_new_buf(jobject, tmp_pool);
+	state.bind  = true;
+	state.capit = PGF_CAPIT_NONE;
+	state.bind_instance = bind_instance;
 	state.object_class = object_class;
 	state.bracket_class = bracket_class;
 	state.bracket_constrId = bracket_constrId;
