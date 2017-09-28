@@ -10,7 +10,6 @@ concrete GrammarTur of Grammar =
   QuestionTur,
   RelativeTur,
   ConjunctionTur,
-  PhraseTur,
   TextX,
   StructuralTur,
   PhraseTur,
