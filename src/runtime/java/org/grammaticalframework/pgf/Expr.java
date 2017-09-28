@@ -108,6 +108,9 @@ public class Expr implements Serializable {
 			return showExpr(ref);
 		}
 
+		/** Computes the number of functions in the expression */
+		public native int size();
+
 		/** Reads a string in the GF syntax for abstract expressions
 		 * and returns an object representing the expression. */
 		public static native Expr readExpr(String s) throws PGFError;

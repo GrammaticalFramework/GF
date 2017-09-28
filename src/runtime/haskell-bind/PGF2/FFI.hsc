@@ -29,14 +29,16 @@ data Concr = Concr {concr :: Ptr PgfConcr, touchConcr :: Touch}
 data GuEnum
 data GuExn
 data GuIn
+data GuOut
 data GuKind
 data GuType
 data GuString
 data GuStringBuf
 data GuMap
 data GuMapItor
-data GuOut
+data GuHasher
 data GuSeq
+data GuBuf
 data GuPool
 type GuVariant = Ptr ()
 type GuHash = (#type GuHash)
@@ -111,11 +113,32 @@ foreign import ccall unsafe "gu/utf8.h gu_utf8_encode"
 foreign import ccall unsafe "gu/seq.h gu_make_seq"
   gu_make_seq :: CSizeT -> CSizeT -> Ptr GuPool -> IO (Ptr GuSeq)
 
+foreign import ccall unsafe "gu/seq.h gu_make_buf"
+  gu_make_buf :: CSizeT -> Ptr GuPool -> IO (Ptr GuBuf)
+
+foreign import ccall unsafe "gu/map.h gu_make_map"
+  gu_make_map :: CSizeT -> Ptr GuHasher -> CSizeT -> Ptr a -> CSizeT -> Ptr GuPool -> IO (Ptr GuMap)
+
+foreign import ccall unsafe "gu/map.h gu_map_insert"
+  gu_map_insert :: Ptr GuMap -> Ptr a -> IO (Ptr b)
+
 foreign import ccall unsafe "gu/map.h gu_map_find_default"
   gu_map_find_default :: Ptr GuMap -> Ptr a -> IO (Ptr b)
 
 foreign import ccall "gu/map.h gu_map_iter"
   gu_map_iter :: Ptr GuMap -> Ptr GuMapItor -> Ptr GuExn -> IO ()
+
+foreign import ccall unsafe "gu/hash.h &gu_int_hasher"
+  gu_int_hasher :: Ptr GuHasher
+
+foreign import ccall unsafe "gu/hash.h &gu_addr_hasher"
+  gu_addr_hasher :: Ptr GuHasher
+
+foreign import ccall unsafe "gu/hash.h &gu_string_hasher"
+  gu_string_hasher :: Ptr GuHasher
+
+foreign import ccall unsafe "gu/hash.h &gu_null_struct"
+  gu_null_struct :: Ptr a
 
 foreign import ccall unsafe "gu/variant.h gu_variant_tag"
   gu_variant_tag :: GuVariant -> IO CInt
@@ -209,6 +232,11 @@ data PgfCncTree
 data PgfLinFuncs
 data PgfGraphvizOptions
 type PgfBindType = (#type PgfBindType)
+data PgfAbsFun
+data PgfAbsCat
+data PgfCCat
+data PgfCncFun
+data PgfProductionApply
 
 foreign import ccall "pgf/pgf.h pgf_read"
   pgf_read :: CString -> Ptr GuPool -> Ptr GuExn -> IO (Ptr PgfPGF)
@@ -453,3 +481,12 @@ foreign import ccall "pgf/graphviz.h pgf_graphviz_parse_tree"
 
 foreign import ccall "pgf/graphviz.h pgf_graphviz_word_alignment"
   pgf_graphviz_word_alignment :: Ptr (Ptr PgfConcr) -> CSizeT -> PgfExpr -> Ptr PgfGraphvizOptions -> Ptr GuOut -> Ptr GuExn -> IO ()
+
+foreign import ccall "pgf/data.h pgf_parser_index"
+  pgf_parser_index :: Ptr PgfConcr -> Ptr PgfCCat -> GuVariant -> (#type bool) -> Ptr GuPool -> IO ()
+
+foreign import ccall "pgf/data.h pgf_lzr_index"
+  pgf_lzr_index :: Ptr PgfConcr -> Ptr PgfCCat -> GuVariant -> (#type bool) -> Ptr GuPool -> IO ()
+
+foreign import ccall "pgf/data.h pgf_production_is_lexical"
+  pgf_production_is_lexical :: Ptr PgfProductionApply -> Ptr GuBuf -> Ptr GuPool -> IO (#type bool)

@@ -21,17 +21,20 @@ concrete SentencePes of Sentence = CatPes ** open Prelude, ResPes,Predef in {
 
 
     SlashVP np vp = 
-      mkClause np vp ** {c2 = vp.c2} ;
+      mkSlClause np vp ** {c2 = vp.c2} ;
 
-    AdvSlash slash adv = {
-	  s  = \\t,p,o =>  adv.s ++ slash.s ! t ! p ! o  ;
-      c2 = slash.c2
-    } ;
+    AdvSlash slash adv = slash ** {
+	  vp = \\t,p,o => adv.s ++ slash.vp ! t ! p ! o  ;
+      } ;
 
-    SlashPrep cl prep = cl **  {c2 = { s = prep.s ; ra = [] ; c = VIntrans}} ;
+    SlashPrep cl prep = {
+      subj = [] ; ---- AR 18/9/2017 this can destroy SOV ; Cl should be made discont
+      vp = cl.s ;
+      c2 = { s = prep.s ; ra = [] ; c = VIntrans}
+      } ;
 
     SlashVS np vs slash = 
-      mkClause  np 
+      mkSlClause  np 
         (insertObj2 (conjThat ++ slash.s) (predV vs))  **
         {c2 = slash.c2} ;
 
@@ -82,15 +85,16 @@ concrete SentencePes of Sentence = CatPes ** open Prelude, ResPes,Predef in {
     } ;
     
     UseSlash temp p clslash = {
-      s = case <temp.t,temp.a> of {
-	      <Pres,Simul> => temp.s ++ p.s ++ clslash.s ! VPres ! p.p ! ODir;
-          <Pres,Anter> => temp.s ++ p.s ++ clslash.s ! VPerfPres ! p.p ! ODir;
-          <Past,Simul> => temp.s ++ p.s ++ clslash.s ! VPast ! p.p ! ODir ;
-          <Past,Anter> => temp.s ++ p.s ++ clslash.s ! VPerfPast ! p.p ! ODir;
-          <Fut,Simul>  => temp.s ++ p.s ++ clslash.s ! VFut ! p.p ! ODir;
-          <Fut,Anter>  => temp.s ++ p.s ++ clslash.s ! VPerfFut ! p.p ! ODir;
-          <Cond,Simul> => temp.s ++ p.s ++ clslash.s ! VCondSimul ! p.p ! ODir;
-          <Cond,Anter> => temp.s ++ p.s ++ clslash.s ! VCondSimul ! p.p ! ODir
+      s = temp.s ++ p.s ++ clslash.subj ++
+          case <temp.t,temp.a> of {
+	    <Pres,Simul> => clslash.vp ! VPres ! p.p ! ODir;
+            <Pres,Anter> => clslash.vp ! VPerfPres ! p.p ! ODir;
+            <Past,Simul> => clslash.vp ! VPast ! p.p ! ODir ;
+            <Past,Anter> => clslash.vp ! VPerfPast ! p.p ! ODir;
+            <Fut,Simul>  => clslash.vp ! VFut ! p.p ! ODir;
+            <Fut,Anter>  => clslash.vp ! VPerfFut ! p.p ! ODir;
+            <Cond,Simul> => clslash.vp ! VCondSimul ! p.p ! ODir;
+            <Cond,Anter> => clslash.vp ! VCondSimul ! p.p ! ODir
      };		  
       c2 = clslash.c2
     } ;

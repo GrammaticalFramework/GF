@@ -111,6 +111,8 @@ oper
 	  |VPFutr Anteriority
 	  |VPCond Anteriority ;
 oper
+--s (Vvform (AgPes Sg PPers1)) : بخوانم
+
 
   predV : Verb -> VPH = \verb -> {
       s = \\vh => 
@@ -228,10 +230,18 @@ oper
 {-
 	infVP : Bool -> VPH -> Agr -> Str = \isAux,vp,a ->
      vp.obj.s ++ vp.inf ++ vp.comp ! a ;
- -}    
-    infVV : Bool -> VPH -> {s : AgrPes => Str} = \isAux,vp -> 
-	                       {s = \\agr => case agr of {
-		                  AgPes n p => (vp.ad ++ vp.comp ! (toAgr n p)) ++ (vp.s ! VVForm (AgPes n p)).inf }};
+ -}
+
+---- AR 14/9/2017 trying to fix isAux = True case by inserting conjThat
+---- but don't know yet how False should be affect 
+    infVV : Bool -> VPH -> {s : AgrPes => Str} = \isAux,vp ->
+      {s = \\agr => case agr of {
+         AgPes n p => case isAux of {
+	   True  => conjThat ++ (vp.ad ++ vp.comp ! (toAgr n p)) ++ (vp.s ! VVForm (AgPes n p)).inf ;
+	   False => (vp.ad ++ vp.comp ! (toAgr n p)) ++ (vp.s ! VVForm (AgPes n p)).inf
+	   }
+	 }
+       } ;
    
     insertObjPre : (AgrPes => Str) -> VPHSlash -> VPH = \obj,vp -> {
      s = vp.s ;
@@ -289,10 +299,22 @@ oper
 --- Clauses
 ---------------------------
 Clause : Type = {s : VPHTense => Polarity => Order => Str} ;
-mkClause : NP -> VPH -> Clause = \np,vp -> {
-      s = \\vt,b,ord => 
+SlClause : Type = {quest : Order => Str ; subj : Str ; vp : VPHTense => Polarity => Order => Str} ;
+
+---- AR 18/9/2017 intermediate SClause to preserve SOV in e.g. QuestionPes.QuestSlash
+
+mkClause : NP -> VPH -> Clause = \np,vp ->
+  let cls = mkSlClause np vp
+  in {s = \\vt,b,ord => cls.quest ! ord ++ cls.subj ++ cls.vp ! vt ! b ! ord} ;
+  
+mkSlClause : NP -> VPH -> SlClause = \np,vp -> {
+    quest = table
+              { ODir => [];
+                OQuest => "آیا" } ; 
+
+    subj = np.s ! NPC bEzafa ;
+    vp = \\vt,b,ord =>
         let 
-          subj = np.s ! NPC bEzafa;
           agr  = np.a ;
 	  n    = (fromAgr agr).n;
 	  p    = (fromAgr agr).p;
@@ -326,16 +348,12 @@ mkClause : NP -> VPH -> Clause = \np,vp -> {
 		      };
 					
 		    
-          quest =
-            case ord of
-              { ODir => [];
-                OQuest => "آیا" }; 
 	 
            
             
         in
 		
-		quest ++ subj ++ vp.ad ++ vp.comp ! np.a ++ vp.obj.s ++ vps.inf ++ vp.vComp ! np.a ++ vp.embComp
+        vp.ad ++ vp.comp ! np.a ++ vp.obj.s ++ vps.inf ++ vp.vComp ! np.a ++ vp.embComp
 
 };
 
