@@ -268,16 +268,6 @@ concrSequence c seqid = unsafePerformIO $ do
       forms <- peekForms (len-1) (ptr `plusPtr` (#size PgfAlternative))
       return ((form,prefixes):forms)
 
-peekSequence peekElem size ptr = do
-  c_len <- (#peek GuSeq, len) ptr
-  peekElems (c_len :: CSizeT) (ptr `plusPtr` (#offset GuSeq, data))
-  where
-     peekElems 0   ptr = return []
-     peekElems len ptr = do
-       e  <- peekElem ptr
-       es <- peekElems (len-1) (ptr `plusPtr` size)
-       return (e:es)
-
 deRef peekValue ptr = peek ptr >>= peekValue
 
 fidString, fidInt, fidFloat, fidVar, fidStart :: FId
@@ -900,17 +890,6 @@ pokeAlternatives ptr ((syms,prefixes):alts) pool = do
 pokeString pool c_elem str = do
   c_str <- newUtf8CString str pool
   poke c_elem c_str
-
-newSequence :: CSizeT -> (Ptr a -> v -> IO ()) -> [v] -> Ptr GuPool -> IO (Ptr GuSeq)
-newSequence elem_size pokeElem values pool = do
-  c_seq <- gu_make_seq elem_size (fromIntegral (length values)) pool
-  pokeElems (c_seq `plusPtr` (#offset GuSeq, data)) values
-  return c_seq
-  where
-    pokeElems ptr []     = return ()
-    pokeElems ptr (x:xs) = do
-      pokeElem  ptr x
-      pokeElems (ptr `plusPtr` (fromIntegral elem_size)) xs
 
 newMap key_size hasher newKey elem_size pokeElem values pool = do
   map <- gu_make_map key_size hasher

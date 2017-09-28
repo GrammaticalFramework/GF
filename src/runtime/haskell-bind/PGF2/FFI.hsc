@@ -7,7 +7,7 @@ module PGF2.FFI where
 #include <gu/utf8.h>
 #include <pgf/pgf.h>
 
-import Foreign ( alloca, peek, poke )
+import Foreign ( alloca, peek, poke, peekByteOff )
 import Foreign.C
 import Foreign.Ptr
 import Foreign.ForeignPtr
@@ -215,6 +215,27 @@ utf8Length s = count 0 s
       | otherwise       = count (c+6) xs
       where
         ucs = fromEnum x
+
+peekSequence peekElem size ptr = do
+  c_len <- (#peek GuSeq, len) ptr
+  peekElems (c_len :: CSizeT) (ptr `plusPtr` (#offset GuSeq, data))
+  where
+     peekElems 0   ptr = return []
+     peekElems len ptr = do
+       e  <- peekElem ptr
+       es <- peekElems (len-1) (ptr `plusPtr` size)
+       return (e:es)
+
+newSequence :: CSizeT -> (Ptr a -> v -> IO ()) -> [v] -> Ptr GuPool -> IO (Ptr GuSeq)
+newSequence elem_size pokeElem values pool = do
+  c_seq <- gu_make_seq elem_size (fromIntegral (length values)) pool
+  pokeElems (c_seq `plusPtr` (#offset GuSeq, data)) values
+  return c_seq
+  where
+    pokeElems ptr []     = return ()
+    pokeElems ptr (x:xs) = do
+      pokeElem  ptr x
+      pokeElems (ptr `plusPtr` (fromIntegral elem_size)) xs
 
 ------------------------------------------------------------------
 -- libpgf API
@@ -430,6 +451,9 @@ foreign import ccall "pgf/expr.h pgf_expr_size"
 
 foreign import ccall "pgf/expr.h pgf_expr_functions"
   pgf_expr_functions :: PgfExpr -> Ptr GuPool -> IO (Ptr GuSeq)
+
+foreign import ccall "pgf/expr.h pgf_expr_substitute"
+  pgf_expr_substitute :: PgfExpr -> Ptr GuSeq -> Ptr GuPool -> IO PgfExpr
 
 foreign import ccall "pgf/expr.h pgf_compute_tree_probability"
   pgf_compute_tree_probability :: Ptr PgfPGF -> PgfExpr -> IO CFloat

@@ -1271,6 +1271,165 @@ pgf_expr_functions(PgfExpr expr, GuPool* pool)
 	return gu_buf_data_seq(functions);
 }
 
+PGF_API PgfType*
+pgf_type_substitute(PgfType* type, GuSeq* meta_values, GuPool* pool)
+{
+	size_t n_hypos = gu_seq_length(type->hypos);
+	PgfHypos* new_hypos = gu_new_seq(PgfHypo, n_hypos, pool);
+	for (size_t i = 0; i < n_hypos; i++) {
+		PgfHypo* hypo     = gu_seq_index(type->hypos, PgfHypo, i);
+		PgfHypo* new_hypo = gu_seq_index(new_hypos, PgfHypo, i);
+
+		new_hypo->bind_type = hypo->bind_type;
+		new_hypo->cid       = gu_string_copy(hypo->cid, pool);
+		new_hypo->type      = pgf_type_substitute(hypo->type, meta_values, pool);
+	}
+
+	PgfType *new_type =
+		gu_new_flex(pool, PgfType, exprs, type->n_exprs);
+	new_type->hypos   = new_hypos;
+	new_type->cid     = gu_string_copy(type->cid, pool);
+	new_type->n_exprs = type->n_exprs;
+
+	for (size_t i = 0; i < type->n_exprs; i++) {
+		new_type->exprs[i] =
+			pgf_expr_substitute(type->exprs[i], meta_values, pool);
+	}
+	
+	return new_type;
+}
+
+PGF_API PgfExpr
+pgf_expr_substitute(PgfExpr expr, GuSeq* meta_values, GuPool* pool)
+{
+	GuVariantInfo ei = gu_variant_open(expr);
+	switch (ei.tag) {
+	case PGF_EXPR_ABS: {
+		PgfExprAbs* abs = ei.data;
+
+		PgfCId id    = gu_string_copy(abs->id, pool);
+		PgfExpr body = pgf_expr_substitute(abs->body, meta_values, pool);
+		return gu_new_variant_i(pool,
+								PGF_EXPR_ABS,
+								PgfExprAbs,
+								abs->bind_type, id, body);
+	}
+	case PGF_EXPR_APP: {
+		PgfExprApp* app = ei.data;
+		
+		PgfExpr fun = pgf_expr_substitute(app->fun, meta_values, pool);
+		PgfExpr arg = pgf_expr_substitute(app->arg, meta_values, pool);
+		return gu_new_variant_i(pool,
+								PGF_EXPR_APP,
+								PgfExprApp,
+								fun, arg);
+	}
+	case PGF_EXPR_LIT: {
+		PgfExprLit* elit = ei.data;
+
+		PgfLiteral lit;
+		GuVariantInfo i = gu_variant_open(elit->lit);
+		switch (i.tag) {
+		case PGF_LITERAL_STR: {
+			PgfLiteralStr* lstr = i.data;
+
+			PgfLiteralStr* new_lstr =
+				gu_new_flex_variant(PGF_LITERAL_STR,
+				                    PgfLiteralStr,
+				                    val, strlen(lstr->val)+1,
+				                    &lit, pool);
+			strcpy(new_lstr->val, lstr->val);
+			break;
+		}
+		case PGF_LITERAL_INT: {
+			PgfLiteralInt* lint = i.data;
+
+			PgfLiteralInt* new_lint =
+				gu_new_variant(PGF_LITERAL_INT,
+				               PgfLiteralInt,
+				               &lit, pool);
+			new_lint->val = lint->val;
+			break;
+		}
+		case PGF_LITERAL_FLT: {
+			PgfLiteralFlt* lflt = i.data;
+
+			PgfLiteralFlt* new_lflt =
+				gu_new_variant(PGF_LITERAL_FLT,
+				               PgfLiteralFlt,
+				               &lit, pool);
+			new_lflt->val = lflt->val;
+			break;
+		}
+		default:
+			gu_impossible();
+		}
+		
+		return gu_new_variant_i(pool,
+		                        PGF_EXPR_LIT,
+			                    PgfExprLit,
+			                    lit);
+	}
+	case PGF_EXPR_META: {
+		PgfExprMeta* meta = ei.data;
+		PgfExpr e = gu_null_variant;
+		if ((size_t) meta->id < gu_seq_length(meta_values)) {
+			e = gu_seq_get(meta_values, PgfExpr, meta->id);
+		}
+		if (gu_variant_is_null(e)) {
+			e = gu_new_variant_i(pool,
+		                         PGF_EXPR_META,
+			                     PgfExprMeta,
+			                     meta->id);
+		}
+		return e;
+	}
+	case PGF_EXPR_FUN: {
+		PgfExprFun* fun = ei.data;
+
+		PgfExpr e;
+		PgfExprFun* new_fun =
+				gu_new_flex_variant(PGF_EXPR_FUN,
+				                    PgfExprFun,
+				                    fun, strlen(fun->fun)+1,
+				                    &e, pool);
+		strcpy(new_fun->fun, fun->fun);
+		return e;
+	}
+	case PGF_EXPR_VAR: {
+		PgfExprVar* var = ei.data;
+		return gu_new_variant_i(pool,
+		                        PGF_EXPR_VAR,
+			                    PgfExprVar,
+			                    var->var);
+	}
+	case PGF_EXPR_TYPED: {
+		PgfExprTyped* typed = ei.data;
+		
+		PgfExpr expr  = pgf_expr_substitute(typed->expr, meta_values, pool);
+		PgfType *type = pgf_type_substitute(typed->type, meta_values, pool);
+
+		return gu_new_variant_i(pool,
+								PGF_EXPR_TYPED,
+								PgfExprTyped,
+								expr,
+								type);
+	}
+	case PGF_EXPR_IMPL_ARG: {
+		PgfExprImplArg* impl = ei.data;
+
+		PgfExpr expr = pgf_expr_substitute(impl->expr, meta_values, pool);
+		return gu_new_variant_i(pool,
+								PGF_EXPR_IMPL_ARG,
+								PgfExprImplArg,
+								expr);
+	}
+	default:
+		gu_impossible();
+		return gu_null_variant;
+	}
+}
+
 PGF_API void
 pgf_print_cid(PgfCId id,
 			  GuOut* out, GuExn* err)
