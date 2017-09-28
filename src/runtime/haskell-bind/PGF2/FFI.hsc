@@ -78,6 +78,8 @@ foreign import ccall unsafe "gu/exn.h gu_exn_raise_"
 
 gu_exn_type_GuErrno = Ptr "GuErrno"## :: CString
 
+gu_exn_type_GuEOF = Ptr "GuEOF"## :: CString
+
 gu_exn_type_PgfLinNonExist = Ptr "PgfLinNonExist"## :: CString
 
 gu_exn_type_PgfExn = Ptr "PgfExn"## :: CString
@@ -222,6 +224,7 @@ data PgfApplication
 data PgfConcr
 type PgfExpr = Ptr ()
 data PgfExprProb
+data PgfExprParser
 data PgfFullFormEntry
 data PgfMorphoCallback
 data PgfPrintContext
@@ -462,7 +465,7 @@ foreign import ccall "pgf/pgf.h pgf_print"
   pgf_print :: Ptr PgfPGF -> Ptr GuOut -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/expr.h pgf_read_expr"
-  pgf_read_expr :: Ptr GuIn -> Ptr GuPool -> Ptr GuExn -> IO PgfExpr
+  pgf_read_expr :: Ptr GuIn -> Ptr GuPool -> Ptr GuPool -> Ptr GuExn -> IO PgfExpr
 
 foreign import ccall "pgf/expr.h pgf_read_expr_tuple"
   pgf_read_expr_tuple :: Ptr GuIn -> CSizeT -> Ptr PgfExpr -> Ptr GuPool -> Ptr GuExn -> IO CInt
@@ -471,7 +474,7 @@ foreign import ccall "pgf/expr.h pgf_read_expr_matrix"
   pgf_read_expr_matrix :: Ptr GuIn -> CSizeT -> Ptr GuPool -> Ptr GuExn -> IO (Ptr GuSeq)
 
 foreign import ccall "pgf/expr.h pgf_read_type"
-  pgf_read_type :: Ptr GuIn -> Ptr GuPool -> Ptr GuExn -> IO PgfType
+  pgf_read_type :: Ptr GuIn -> Ptr GuPool -> Ptr GuPool -> Ptr GuExn -> IO PgfType
 
 foreign import ccall "pgf/graphviz.h pgf_graphviz_abstract_tree"
   pgf_graphviz_abstract_tree :: Ptr PgfPGF -> PgfExpr -> Ptr PgfGraphvizOptions -> Ptr GuOut -> Ptr GuExn -> IO ()

@@ -31,7 +31,7 @@ module PGF2 (-- * PGF
              -- ** Functions
              Fun,functions, functionsByCat, functionType, hasLinearization,
              -- ** Expressions
-             Expr,showExpr,readExpr,
+             Expr,showExpr,readExpr,pExpr,
              mkAbs,unAbs,
              mkApp,unApp,
              mkStr,unStr,
@@ -583,7 +583,7 @@ mkCallbacksMap concr callbacks pool = do
                                              c_str <- gu_string_buf_freeze sb tmpPl
 
                                              guin <- gu_string_in c_str tmpPl
-                                             pgf_read_expr guin out_pool exn
+                                             pgf_read_expr guin out_pool tmpPl exn
 
                                     ep <- gu_malloc out_pool (#size PgfExprProb)
                                     (#poke PgfExprProb, expr) ep c_e
@@ -690,7 +690,7 @@ parseWithOracle lang cat sent (predict,complete,literal) =
                                   c_str <- gu_string_buf_freeze sb tmpPl
 
                                   guin <- gu_string_in c_str tmpPl
-                                  pgf_read_expr guin out_pool exn
+                                  pgf_read_expr guin out_pool tmpPl exn
 
                          ep <- gu_malloc out_pool (#size PgfExprProb)
                          (#poke PgfExprProb, expr) ep c_e

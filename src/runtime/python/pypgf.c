@@ -1394,7 +1394,7 @@ pypgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
 		                      gu_string_buf_length(sbuf),
 		                      tmp_pool);
 
-		ep->expr = pgf_read_expr(in, out_pool, err);
+		ep->expr = pgf_read_expr(in, out_pool, tmp_pool, err);
 		if (!gu_ok(err) || gu_variant_is_null(ep->expr)) {
 			PyErr_SetString(PGFError, "The expression cannot be parsed");
 			gu_pool_free(tmp_pool);
@@ -3331,7 +3331,7 @@ pgf_readExpr(PyObject *self, PyObject *args) {
 	GuExn* err = gu_new_exn(tmp_pool);
 
 	pyexpr->pool = gu_new_pool();
-	pyexpr->expr = pgf_read_expr(in, pyexpr->pool, err);
+	pyexpr->expr = pgf_read_expr(in, pyexpr->pool, tmp_pool, err);
 	pyexpr->master = NULL;
 	
 	if (!gu_ok(err) || gu_variant_is_null(pyexpr->expr)) {
@@ -3361,7 +3361,7 @@ pgf_readType(PyObject *self, PyObject *args) {
 	GuExn* err = gu_new_exn(tmp_pool);
 
 	pytype->pool = gu_new_pool();
-	pytype->type = pgf_read_type(in, pytype->pool, err);
+	pytype->type = pgf_read_type(in, pytype->pool, tmp_pool, err);
 	pytype->master = NULL;
 
 	if (!gu_ok(err) || pytype->type == NULL) {
