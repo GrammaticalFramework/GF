@@ -31,7 +31,7 @@ module PGF2 (-- * PGF
              -- ** Functions
              Fun,functions, functionsByCat, functionType, hasLinearization,
              -- ** Expressions
-             Expr,showExpr,readExpr,
+             Expr,showExpr,readExpr,pExpr,
              mkAbs,unAbs,
              mkApp,unApp,
              mkStr,unStr,
@@ -39,7 +39,7 @@ module PGF2 (-- * PGF
              mkFloat,unFloat,
              mkMeta,unMeta,
              mkCId,
-             exprHash, exprSize, exprFunctions,
+             exprHash, exprSize, exprFunctions, exprSubstitute,
              treeProbability,
 
              -- ** Types
@@ -366,6 +366,20 @@ exprFunctions (Expr c_expr touch) =
     touch
     return funs
 
+exprSubstitute :: Expr -> [Expr] -> Expr
+exprSubstitute (Expr c_expr touch) meta_values =
+  unsafePerformIO $
+  withGuPool $ \tmpPl -> do
+    c_meta_values <- newSequence (#size PgfExpr) pokeExpr meta_values tmpPl
+    exprPl <- gu_new_pool
+    c_expr <- pgf_expr_substitute c_expr c_meta_values exprPl
+    touch
+    exprFPl <- newForeignPtr gu_pool_finalizer exprPl
+    let touch' = sequence_ (touchForeignPtr exprFPl : map touchExpr meta_values)
+    return (Expr c_expr touch')
+  where
+    pokeExpr ptr (Expr c_expr _) = poke ptr c_expr
+
 -----------------------------------------------------------------------------
 -- Graphviz
 
@@ -583,7 +597,7 @@ mkCallbacksMap concr callbacks pool = do
                                              c_str <- gu_string_buf_freeze sb tmpPl
 
                                              guin <- gu_string_in c_str tmpPl
-                                             pgf_read_expr guin out_pool exn
+                                             pgf_read_expr guin out_pool tmpPl exn
 
                                     ep <- gu_malloc out_pool (#size PgfExprProb)
                                     (#poke PgfExprProb, expr) ep c_e
@@ -690,7 +704,7 @@ parseWithOracle lang cat sent (predict,complete,literal) =
                                   c_str <- gu_string_buf_freeze sb tmpPl
 
                                   guin <- gu_string_in c_str tmpPl
-                                  pgf_read_expr guin out_pool exn
+                                  pgf_read_expr guin out_pool tmpPl exn
 
                          ep <- gu_malloc out_pool (#size PgfExprProb)
                          (#poke PgfExprProb, expr) ep c_e

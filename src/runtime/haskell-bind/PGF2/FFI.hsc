@@ -7,7 +7,7 @@ module PGF2.FFI where
 #include <gu/utf8.h>
 #include <pgf/pgf.h>
 
-import Foreign ( alloca, peek, poke )
+import Foreign ( alloca, peek, poke, peekByteOff )
 import Foreign.C
 import Foreign.Ptr
 import Foreign.ForeignPtr
@@ -77,6 +77,8 @@ foreign import ccall unsafe "gu/exn.h gu_exn_raise_"
   gu_exn_raise :: Ptr GuExn -> CString -> IO (Ptr ())
 
 gu_exn_type_GuErrno = Ptr "GuErrno"## :: CString
+
+gu_exn_type_GuEOF = Ptr "GuEOF"## :: CString
 
 gu_exn_type_PgfLinNonExist = Ptr "PgfLinNonExist"## :: CString
 
@@ -214,6 +216,27 @@ utf8Length s = count 0 s
       where
         ucs = fromEnum x
 
+peekSequence peekElem size ptr = do
+  c_len <- (#peek GuSeq, len) ptr
+  peekElems (c_len :: CSizeT) (ptr `plusPtr` (#offset GuSeq, data))
+  where
+     peekElems 0   ptr = return []
+     peekElems len ptr = do
+       e  <- peekElem ptr
+       es <- peekElems (len-1) (ptr `plusPtr` size)
+       return (e:es)
+
+newSequence :: CSizeT -> (Ptr a -> v -> IO ()) -> [v] -> Ptr GuPool -> IO (Ptr GuSeq)
+newSequence elem_size pokeElem values pool = do
+  c_seq <- gu_make_seq elem_size (fromIntegral (length values)) pool
+  pokeElems (c_seq `plusPtr` (#offset GuSeq, data)) values
+  return c_seq
+  where
+    pokeElems ptr []     = return ()
+    pokeElems ptr (x:xs) = do
+      pokeElem  ptr x
+      pokeElems (ptr `plusPtr` (fromIntegral elem_size)) xs
+
 ------------------------------------------------------------------
 -- libpgf API
 
@@ -222,6 +245,7 @@ data PgfApplication
 data PgfConcr
 type PgfExpr = Ptr ()
 data PgfExprProb
+data PgfExprParser
 data PgfFullFormEntry
 data PgfMorphoCallback
 data PgfPrintContext
@@ -428,6 +452,9 @@ foreign import ccall "pgf/expr.h pgf_expr_size"
 foreign import ccall "pgf/expr.h pgf_expr_functions"
   pgf_expr_functions :: PgfExpr -> Ptr GuPool -> IO (Ptr GuSeq)
 
+foreign import ccall "pgf/expr.h pgf_expr_substitute"
+  pgf_expr_substitute :: PgfExpr -> Ptr GuSeq -> Ptr GuPool -> IO PgfExpr
+
 foreign import ccall "pgf/expr.h pgf_compute_tree_probability"
   pgf_compute_tree_probability :: Ptr PgfPGF -> PgfExpr -> IO CFloat
 
@@ -462,7 +489,7 @@ foreign import ccall "pgf/pgf.h pgf_print"
   pgf_print :: Ptr PgfPGF -> Ptr GuOut -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/expr.h pgf_read_expr"
-  pgf_read_expr :: Ptr GuIn -> Ptr GuPool -> Ptr GuExn -> IO PgfExpr
+  pgf_read_expr :: Ptr GuIn -> Ptr GuPool -> Ptr GuPool -> Ptr GuExn -> IO PgfExpr
 
 foreign import ccall "pgf/expr.h pgf_read_expr_tuple"
   pgf_read_expr_tuple :: Ptr GuIn -> CSizeT -> Ptr PgfExpr -> Ptr GuPool -> Ptr GuExn -> IO CInt
@@ -471,7 +498,7 @@ foreign import ccall "pgf/expr.h pgf_read_expr_matrix"
   pgf_read_expr_matrix :: Ptr GuIn -> CSizeT -> Ptr GuPool -> Ptr GuExn -> IO (Ptr GuSeq)
 
 foreign import ccall "pgf/expr.h pgf_read_type"
-  pgf_read_type :: Ptr GuIn -> Ptr GuPool -> Ptr GuExn -> IO PgfType
+  pgf_read_type :: Ptr GuIn -> Ptr GuPool -> Ptr GuPool -> Ptr GuExn -> IO PgfType
 
 foreign import ccall "pgf/graphviz.h pgf_graphviz_abstract_tree"
   pgf_graphviz_abstract_tree :: Ptr PgfPGF -> PgfExpr -> Ptr PgfGraphvizOptions -> Ptr GuOut -> Ptr GuExn -> IO ()
