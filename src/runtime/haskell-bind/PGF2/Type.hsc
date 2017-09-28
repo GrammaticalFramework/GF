@@ -31,7 +31,7 @@ readType str =
          do c_str <- newUtf8CString str tmpPl
             guin <- gu_string_in c_str tmpPl
             exn <- gu_new_exn tmpPl
-            c_type <- pgf_read_type guin typPl exn
+            c_type <- pgf_read_type guin typPl tmpPl exn
             status <- gu_exn_is_raised exn
             if (not status && c_type /= nullPtr)
               then do typFPl <- newForeignPtr gu_pool_finalizer typPl

@@ -128,7 +128,7 @@ namespace PGFSharp
         public static extern IntPtr pgf_function_type(IntPtr pgf, IntPtr funNameStr);
 
         [DllImport(LIBNAME, CallingConvention = CC)]
-        public static extern IntPtr pgf_read_type(IntPtr in_, IntPtr pool, IntPtr err);
+        public static extern IntPtr pgf_read_type(IntPtr in_, IntPtr pool, IntPtr tmp_pool, IntPtr err);
 
         [DllImport(LIBNAME, CallingConvention = CC)]
         public static extern void pgf_print_type(IntPtr expr, IntPtr ctxt, int prec, IntPtr output, IntPtr err);
@@ -139,7 +139,7 @@ namespace PGFSharp
         public static extern void pgf_print_expr(IntPtr expr, IntPtr ctxt, int prec, IntPtr output, IntPtr err);
 
         [DllImport(LIBNAME, CallingConvention = CC)]
-        public static extern IntPtr pgf_read_expr(IntPtr in_, IntPtr pool, IntPtr err);
+        public static extern IntPtr pgf_read_expr(IntPtr in_, IntPtr pool, IntPtr tmp_pool, IntPtr err);
 
         [DllImport(LIBNAME, CallingConvention = CC)]
         public static extern IntPtr pgf_compute(IntPtr pgf, IntPtr expr, IntPtr err, IntPtr tmp_pool, IntPtr res_pool);

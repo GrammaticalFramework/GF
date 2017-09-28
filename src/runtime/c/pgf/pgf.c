@@ -124,7 +124,7 @@ pgf_start_cat(PgfPGF* pgf, GuPool* pool)
 			GuPool* tmp_pool = gu_local_pool();
 			GuIn* in = gu_string_in(lstr->val,tmp_pool);
 			GuExn* err = gu_new_exn(tmp_pool);
-			PgfType *type = pgf_read_type(in, pool, err);
+			PgfType *type = pgf_read_type(in, pool, tmp_pool, err);
 			if (!gu_ok(err))
 				break;
 			gu_pool_free(tmp_pool);

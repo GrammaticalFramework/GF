@@ -168,7 +168,7 @@ PGF_API_DECL PgfExprMeta*
 pgf_expr_unmeta(PgfExpr expr);
 
 PGF_API_DECL PgfExpr
-pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err);
+pgf_read_expr(GuIn* in, GuPool* pool, GuPool* tmp_pool, GuExn* err);
 
 PGF_API_DECL int
 pgf_read_expr_tuple(GuIn* in,
@@ -180,7 +180,7 @@ pgf_read_expr_matrix(GuIn* in, size_t n_exprs,
                      GuPool* pool, GuExn* err);
 
 PGF_API_DECL PgfType*
-pgf_read_type(GuIn* in, GuPool* pool, GuExn* err);
+pgf_read_type(GuIn* in, GuPool* pool, GuPool* tmp_pool, GuExn* err);
 
 PGF_API_DECL bool
 pgf_literal_eq(PgfLiteral lit1, PgfLiteral lit2);
@@ -202,6 +202,12 @@ pgf_expr_size(PgfExpr expr);
 
 PGF_API GuSeq*
 pgf_expr_functions(PgfExpr expr, GuPool* pool);
+
+PGF_API PgfExpr
+pgf_expr_substitute(PgfExpr expr, GuSeq* meta_values, GuPool* pool);
+
+PGF_API PgfType*
+pgf_type_substitute(PgfType* type, GuSeq* meta_values, GuPool* pool);
 
 typedef struct PgfPrintContext PgfPrintContext;
 
