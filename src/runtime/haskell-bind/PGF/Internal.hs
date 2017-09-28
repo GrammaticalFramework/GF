@@ -9,6 +9,8 @@ module PGF.Internal(CId(..),Language,PGF(..),
                     concrTotalFuns, concrFunction,
                     concrTotalSeqs, concrSequence,
                     
+                    PGF2.CodeLabel, PGF2.Instr(..), PGF2.IVal(..), PGF2.TailInfo(..),
+
                     PGF2.Builder, PGF2.B, PGF2.build,
                     eAbs, eApp, eMeta, eFun, eVar, eTyped, eImplArg, dTyp, hypo,
                     PGF2.AbstrInfo, newAbstr, PGF2.ConcrInfo, newConcr, newPGF,

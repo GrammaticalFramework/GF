@@ -3,7 +3,6 @@ module GF.Compile.GenerateBC(generateByteCode) where
 import GF.Grammar
 import GF.Grammar.Lookup(lookupAbsDef,lookupFunType)
 import GF.Data.Operations
-import PGF(CId,utf8CId)
 import PGF.Internal(CodeLabel,Instr(..),IVal(..),TailInfo(..),Literal(..))
 import qualified Data.Map as Map
 import Data.List(nub,mapAccumL)
@@ -63,7 +62,7 @@ compileEquations gr arity st (i:is) eqs       fl bs = whilePP eqs Map.empty
 
     case_instr t =
       case t of
-        (Q (_,id)) -> CASE (i2i id)
+        (Q (_,id)) -> CASE (showIdent id)
         (EInt n)   -> CASE_LIT (LInt n)
         (K s)      -> CASE_LIT (LStr s)
         (EFloat d) -> CASE_LIT (LFlt d)
@@ -105,7 +104,7 @@ compileFun gr eval st vs (App e1 e2) h0 bs args =
 compileFun gr eval st vs (Q (m,id))  h0 bs args =
   case lookupAbsDef gr m id of
     Ok (_,Just _)
-       -> (h0,bs,eval st (GLOBAL (i2i id)) args)
+       -> (h0,bs,eval st (GLOBAL (showIdent id)) args)
     _  -> let Ok ty = lookupFunType gr m id
               (ctxt,_,_) = typeForm ty
               c_arity    = length ctxt
@@ -114,14 +113,14 @@ compileFun gr eval st vs (Q (m,id))  h0 bs args =
               diff   = c_arity-n_args
           in if diff <= 0
                then if n_args == 0
-                      then (h0,bs,eval st (GLOBAL (i2i id)) [])
+                      then (h0,bs,eval st (GLOBAL (showIdent id)) [])
                       else let h1  = h0 + 2 + n_args
-                           in (h1,bs,PUT_CONSTR (i2i id):is1++eval st (HEAP h0) [])
+                           in (h1,bs,PUT_CONSTR (showIdent id):is1++eval st (HEAP h0) [])
                else let h1  = h0 + 1 + n_args
                         is2 = [SET (FREE_VAR i) | i <- [0..n_args-1]] ++ [SET (ARG_VAR (i+1)) | i <- [0..diff-1]]
                         b   = CHECK_ARGS diff :
                               ALLOC (c_arity+2) : 
-                              PUT_CONSTR (i2i id) : 
+                              PUT_CONSTR (showIdent id) : 
                               is2 ++
                               TUCK (ARG_VAR 0) diff :
                               EVAL (HEAP h0) (TailCall diff) :
@@ -167,16 +166,16 @@ compileFun gr eval st vs e _ _ _ = error (show e)
 
 compileArg gr st vs (Q(m,id)) h0 bs =
   case lookupAbsDef gr m id of
-    Ok (_,Just _) -> (h0,bs,GLOBAL (i2i id),[])
+    Ok (_,Just _) -> (h0,bs,GLOBAL (showIdent id),[])
     _             -> let Ok ty = lookupFunType gr m id
                          (ctxt,_,_) = typeForm ty
                          c_arity    = length ctxt
                      in if c_arity == 0
-                          then (h0,bs,GLOBAL (i2i id),[])
+                          then (h0,bs,GLOBAL (showIdent id),[])
                           else let is2 = [SET (ARG_VAR (i+1)) | i <- [0..c_arity-1]]
                                    b   = CHECK_ARGS c_arity :
                                          ALLOC (c_arity+2) :
-                                         PUT_CONSTR (i2i id) :
+                                         PUT_CONSTR (showIdent id) :
                                          is2 ++
                                          TUCK (ARG_VAR 0) c_arity :
                                          EVAL (HEAP h0) (TailCall c_arity) :
@@ -224,12 +223,12 @@ compileArg gr st vs e           h0 bs =
                 diff   = c_arity-n_args
             in if diff <= 0
                  then let h2  = h1 + 2 + n_args
-                      in (h2,bs1,HEAP h1,is1 ++ (PUT_CONSTR (i2i id) : is2))
+                      in (h2,bs1,HEAP h1,is1 ++ (PUT_CONSTR (showIdent id) : is2))
                  else let h2  = h1 + 1 + n_args
                           is2 = [SET (FREE_VAR i) | i <- [0..n_args-1]] ++ [SET (ARG_VAR (i+1)) | i <- [0..diff-1]]
                           b   = CHECK_ARGS diff :
                                 ALLOC (c_arity+2) :
-                                PUT_CONSTR (i2i id) :
+                                PUT_CONSTR (showIdent id) :
                                 is2 ++
                                 TUCK (ARG_VAR 0) diff :
                                 EVAL (HEAP h0) (TailCall diff) :
@@ -297,9 +296,6 @@ freeVars xs (Abs _ x e) = freeVars (x:xs) e
 freeVars xs (Vr x)     
   | not (elem x xs)     = [x]
 freeVars xs e           = collectOp (freeVars xs) e
-
-i2i :: Ident -> CId
-i2i = utf8CId . ident2utf8
 
 push_is :: Int -> Int -> [IVal] -> [IVal]
 push_is i 0 is = is
