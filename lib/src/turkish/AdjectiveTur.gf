@@ -50,7 +50,7 @@ concrete AdjectiveTur of Adjective =
     -- and it should be inflected to `gen Sg {n = Sg; p = P3}`.
     SentAP ap sc = {
       s =
-        \\n, c => (sc.s ++ BIND ++ "si") ++ (ap.s ! n ! c)
+        \\n, c => sc.s ++ (ap.s ! n ! c)
     } ;
 
 }
