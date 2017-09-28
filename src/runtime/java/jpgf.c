@@ -508,7 +508,7 @@ jpgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
 		size_t   len = gu_string_buf_length(sbuf);
 		GuIn* in = gu_data_in((uint8_t*) str, len, tmp_pool);
 
-		ep->expr = pgf_read_expr(in, out_pool, err);
+		ep->expr = pgf_read_expr(in, out_pool, tmp_pool, err);
 		if (!gu_ok(err) || gu_variant_is_null(ep->expr)) {
 			throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be parsed");
 			gu_pool_free(tmp_pool);
@@ -1344,7 +1344,7 @@ Java_org_grammaticalframework_pgf_Expr_readExpr(JNIEnv* env, jclass clazz, jstri
 	GuIn* in = gu_data_in((uint8_t*) buf, strlen(buf), tmp_pool);
 	GuExn* err = gu_exn(tmp_pool);
 
-	PgfExpr e = pgf_read_expr(in, pool, err);
+	PgfExpr e = pgf_read_expr(in, pool, tmp_pool, err);
 	if (!gu_ok(err) || gu_variant_is_null(e)) {
 		throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The expression cannot be parsed");
 		gu_pool_free(tmp_pool);
@@ -1663,7 +1663,7 @@ Java_org_grammaticalframework_pgf_Type_readType(JNIEnv* env, jclass clazz, jstri
 	GuIn* in = gu_data_in((uint8_t*) buf, strlen(buf), tmp_pool);
 	GuExn* err = gu_exn(tmp_pool);
 
-	PgfType* ty = pgf_read_type(in, pool, err);
+	PgfType* ty = pgf_read_type(in, pool, tmp_pool, err);
 	if (!gu_ok(err)) {
 		throw_string_exception(env, "org/grammaticalframework/pgf/PGFError", "The type cannot be parsed");
 		gu_pool_free(tmp_pool);

@@ -224,20 +224,24 @@ typedef enum {
 	PGF_TOKEN_EOF,
 } PGF_TOKEN_TAG;
 
+typedef GuUCS (*PgfParserGetc)(void* state, bool mark, GuExn* err);
+
 struct PgfExprParser {
 	GuExn* err;
-	GuIn* in;
 	GuPool* expr_pool;
 	GuPool* tmp_pool;
 	PGF_TOKEN_TAG token_tag;
 	GuStringBuf* token_value;
+
+	void* getch_state;
+	PgfParserGetc getch;
 	GuUCS ch;
 };
 
 static void
-pgf_expr_parser_getc(PgfExprParser* parser)
+pgf_expr_parser_getc(PgfExprParser* parser, bool mark)
 {
-	parser->ch = gu_in_utf8(parser->in, parser->err);
+	parser->ch = parser->getch(parser->getch_state, mark, parser->err);
 	if (!gu_ok(parser->err)) {
 		gu_exn_clear(parser->err);
 		parser->ch = EOF;
@@ -284,10 +288,11 @@ pgf_is_normal_ident(PgfCId id)
 }
 
 static void
-pgf_expr_parser_token(PgfExprParser* parser)
+pgf_expr_parser_token(PgfExprParser* parser, bool mark)
 {
 	while (isspace(parser->ch)) {
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
+		mark = false;
 	}
 
 	parser->token_tag   = PGF_TOKEN_UNKNOWN;
@@ -295,72 +300,73 @@ pgf_expr_parser_token(PgfExprParser* parser)
 
 	switch (parser->ch) {
 	case EOF:
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_EOF;
 		break;
 	case '(':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_LPAR;
 		break;
 	case ')':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_RPAR;
 		break;
 	case '{':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_LCURLY;
 		break;
 	case '}':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_RCURLY;
 		break;
 	case '<':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_LTRIANGLE;
 		break;
 	case '>':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_RTRIANGLE;
 		break;
 	case '?':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_QUESTION;
 		break;
 	case '\\':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_LAMBDA;
 		break;
 	case '-':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		if (parser->ch == '>') {
-			pgf_expr_parser_getc(parser);
+			pgf_expr_parser_getc(parser, false);
 			parser->token_tag = PGF_TOKEN_RARROW;
 		}
 		break;
 	case ',':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_COMMA;
 		break;
 	case ':':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_COLON;
 		break;
 	case ';':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 		parser->token_tag = PGF_TOKEN_SEMI;
 		break;
 	case '\'':
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, mark);
 
 		GuStringBuf* chars = gu_new_string_buf(parser->tmp_pool);
 		while (parser->ch != '\'' && parser->ch != EOF) {
 			if (parser->ch == '\\') {
-				pgf_expr_parser_getc(parser);
+				pgf_expr_parser_getc(parser, false);
 			}
 			gu_out_utf8(parser->ch, gu_string_buf_out(chars), parser->err);
-			pgf_expr_parser_getc(parser);
+			pgf_expr_parser_getc(parser, false);
 		}
 		if (parser->ch == '\'') {
-			pgf_expr_parser_getc(parser);
+			pgf_expr_parser_getc(parser, false);
 			gu_out_utf8(0, gu_string_buf_out(chars), parser->err);
 			parser->token_tag   = PGF_TOKEN_IDENT;
 			parser->token_value = chars;
@@ -372,7 +378,8 @@ pgf_expr_parser_token(PgfExprParser* parser)
 		if (pgf_is_ident_first(parser->ch)) {
 			do {
 				gu_out_utf8(parser->ch, gu_string_buf_out(chars), parser->err);
-				pgf_expr_parser_getc(parser);
+				pgf_expr_parser_getc(parser, mark);
+				mark = false;
 			} while (pgf_is_ident_rest(parser->ch));
 			gu_out_utf8(0, gu_string_buf_out(chars), parser->err);
 			parser->token_tag   = PGF_TOKEN_IDENT;
@@ -380,16 +387,17 @@ pgf_expr_parser_token(PgfExprParser* parser)
 		} else if (isdigit(parser->ch)) {
 			while (isdigit(parser->ch)) {
 				gu_out_utf8(parser->ch, gu_string_buf_out(chars), parser->err);
-				pgf_expr_parser_getc(parser);
+				pgf_expr_parser_getc(parser, mark);
+				mark = false;
 			}
-			
+
 			if (parser->ch == '.') {
 				gu_out_utf8(parser->ch, gu_string_buf_out(chars), parser->err);
-				pgf_expr_parser_getc(parser);
+				pgf_expr_parser_getc(parser, false);
 				
 				while (isdigit(parser->ch)) {
 					gu_out_utf8(parser->ch, gu_string_buf_out(chars), parser->err);
-					pgf_expr_parser_getc(parser);
+					pgf_expr_parser_getc(parser, false);
 				}
 				gu_out_utf8(0, gu_string_buf_out(chars), parser->err);
 				parser->token_tag   = PGF_TOKEN_FLT;
@@ -400,11 +408,11 @@ pgf_expr_parser_token(PgfExprParser* parser)
 				parser->token_value = chars;
 			}
 		} else if (parser->ch == '"') {
-			pgf_expr_parser_getc(parser);
+			pgf_expr_parser_getc(parser, mark);
 
 			while (parser->ch != '"' && parser->ch != EOF) {
 				if (parser->ch == '\\') {
-					pgf_expr_parser_getc(parser);
+					pgf_expr_parser_getc(parser, false);
 					switch (parser->ch) {
 					case '\\':
 						gu_out_utf8('\\', gu_string_buf_out(chars), parser->err);
@@ -430,15 +438,17 @@ pgf_expr_parser_token(PgfExprParser* parser)
 				} else {
 					gu_out_utf8(parser->ch, gu_string_buf_out(chars), parser->err);
 				}
-				pgf_expr_parser_getc(parser);
+				pgf_expr_parser_getc(parser, false);
 			}
 			
 			if (parser->ch == '"') {
-				pgf_expr_parser_getc(parser);
+				pgf_expr_parser_getc(parser, false);
 				gu_out_utf8(0, gu_string_buf_out(chars), parser->err);
 				parser->token_tag   = PGF_TOKEN_STR;
 				parser->token_value = chars;
 			}
+		} else {
+			pgf_expr_parser_getc(parser, mark);
 		}
 		break;
 	}
@@ -449,51 +459,51 @@ static bool
 pgf_expr_parser_lookahead(PgfExprParser* parser, int ch)
 {
 	while (isspace(parser->ch)) {
-		pgf_expr_parser_getc(parser);
+		pgf_expr_parser_getc(parser, false);
 	}
-	
+
 	return (parser->ch == ch);
 }
 
-static PgfExpr
-pgf_expr_parser_expr(PgfExprParser* parser);
+PGF_API PgfExpr
+pgf_expr_parser_expr(PgfExprParser* parser, bool mark);
 
 static PgfType*
-pgf_expr_parser_type(PgfExprParser* parser);
+pgf_expr_parser_type(PgfExprParser* parser, bool mark);
 
 static PgfExpr
-pgf_expr_parser_term(PgfExprParser* parser)
+pgf_expr_parser_term(PgfExprParser* parser, bool mark)
 {
 	switch (parser->token_tag) {
 	case PGF_TOKEN_LPAR: {
-		pgf_expr_parser_token(parser);
-		PgfExpr expr = pgf_expr_parser_expr(parser);
+		pgf_expr_parser_token(parser, false);
+		PgfExpr expr = pgf_expr_parser_expr(parser, false);
 		if (parser->token_tag == PGF_TOKEN_RPAR) {
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, mark);
 			return expr;
 		} else {
 			return gu_null_variant;
 		}
 	}
 	case PGF_TOKEN_LTRIANGLE: {
-		pgf_expr_parser_token(parser);
-		PgfExpr expr = pgf_expr_parser_expr(parser);
+		pgf_expr_parser_token(parser, false);
+		PgfExpr expr = pgf_expr_parser_expr(parser, false);
 		if (gu_variant_is_null(expr))
 			return gu_null_variant;
-		
+
 		if (parser->token_tag != PGF_TOKEN_COLON) {
 			return gu_null_variant;
 		}
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, false);
 
-		PgfType* type = pgf_expr_parser_type(parser);
+		PgfType* type = pgf_expr_parser_type(parser, false);
 		if (type == NULL)
 			return gu_null_variant;
 
 		if (parser->token_tag != PGF_TOKEN_RTRIANGLE) {
 			return gu_null_variant;
 		}
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, mark);
 
 		return gu_new_variant_i(parser->expr_pool,
 					PGF_EXPR_TYPED,
@@ -501,14 +511,14 @@ pgf_expr_parser_term(PgfExprParser* parser)
 					expr, type);
 	}
 	case PGF_TOKEN_QUESTION: {
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, mark);
 
 		PgfMetaId id = 0;
 		if (parser->token_tag == PGF_TOKEN_INT) {
 			char* str =
 				gu_string_buf_data(parser->token_value);
 			id = atoi(str);
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, mark);
 		}
 		return gu_new_variant_i(parser->expr_pool,
 					            PGF_EXPR_META,
@@ -517,7 +527,7 @@ pgf_expr_parser_term(PgfExprParser* parser)
 	}
 	case PGF_TOKEN_IDENT: {
 		PgfCId id = gu_string_buf_data(parser->token_value);
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, mark);
 		PgfExpr e;
 		PgfExprFun* fun =
 			gu_new_flex_variant(PGF_EXPR_FUN,
@@ -528,11 +538,11 @@ pgf_expr_parser_term(PgfExprParser* parser)
 		return e;
 	}
 	case PGF_TOKEN_INT: {
-		char* str = 
+		char* str =
 			gu_string_buf_data(parser->token_value);
 		int n = atoi(str);
-		pgf_expr_parser_token(parser);
-		PgfLiteral lit = 
+		pgf_expr_parser_token(parser, mark);
+		PgfLiteral lit =
 			gu_new_variant_i(parser->expr_pool,
 			                 PGF_LITERAL_INT,
 			                 PgfLiteralInt,
@@ -545,7 +555,7 @@ pgf_expr_parser_term(PgfExprParser* parser)
 	case PGF_TOKEN_STR: {
 		char* str =
 			gu_string_buf_data(parser->token_value);
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, mark);
 		return pgf_expr_string(str, parser->expr_pool);
 	}
 	case PGF_TOKEN_FLT: {
@@ -554,8 +564,8 @@ pgf_expr_parser_term(PgfExprParser* parser)
 		double d;
 		if (!gu_string_to_double(str,&d))
 			return gu_null_variant;
-		pgf_expr_parser_token(parser);
-		PgfLiteral lit = 
+		pgf_expr_parser_token(parser, mark);
+		PgfLiteral lit =
 			gu_new_variant_i(parser->expr_pool,
 			                 PGF_LITERAL_FLT,
 			                 PgfLiteralFlt,
@@ -571,29 +581,28 @@ pgf_expr_parser_term(PgfExprParser* parser)
 }
 
 static PgfExpr
-pgf_expr_parser_arg(PgfExprParser* parser)
+pgf_expr_parser_arg(PgfExprParser* parser, bool mark)
 {
 	PgfExpr arg;
 
 	if (parser->token_tag == PGF_TOKEN_LCURLY) {
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, false);
 
-		arg = pgf_expr_parser_expr(parser);
+		arg = pgf_expr_parser_expr(parser, false);
 		if (gu_variant_is_null(arg))
 			return gu_null_variant;
 
 		if (parser->token_tag != PGF_TOKEN_RCURLY) {
 			return gu_null_variant;
 		}
-
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, mark);
 
 		arg = gu_new_variant_i(parser->expr_pool,
 				  PGF_EXPR_IMPL_ARG,
 				  PgfExprImplArg,
 				  arg);
 	} else {
-		arg = pgf_expr_parser_term(parser);
+		arg = pgf_expr_parser_term(parser, mark);
 	}
 
 	return arg;
@@ -607,17 +616,17 @@ pgf_expr_parser_bind(PgfExprParser* parser, GuBuf* binds)
 
 	if (parser->token_tag == PGF_TOKEN_LCURLY) {
 		bind_type = PGF_BIND_TYPE_IMPLICIT;
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, false);
 	}
 
 	for (;;) {
 		if (parser->token_tag == PGF_TOKEN_IDENT) {
 			var =
 				gu_string_copy(gu_string_buf_data(parser->token_value), parser->expr_pool);
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 		} else if (parser->token_tag == PGF_TOKEN_WILD) {
 			var = "_";
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 		} else {
 			return false;
 		}
@@ -635,14 +644,14 @@ pgf_expr_parser_bind(PgfExprParser* parser, GuBuf* binds)
 		    parser->token_tag != PGF_TOKEN_COMMA) {
 			break;
 		}
-		
-		pgf_expr_parser_token(parser);
+
+		pgf_expr_parser_token(parser, false);
 	}
 
 	if (bind_type == PGF_BIND_TYPE_IMPLICIT) {
 		if (parser->token_tag != PGF_TOKEN_RCURLY)
 			return false;
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, false);
 	}
 
 	return true;
@@ -660,17 +669,17 @@ pgf_expr_parser_binds(PgfExprParser* parser)
 		if (parser->token_tag != PGF_TOKEN_COMMA)
 			break;
 
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, false);
 	}
 
 	return binds;
 }
 
-static PgfExpr
-pgf_expr_parser_expr(PgfExprParser* parser)
+PGF_API PgfExpr
+pgf_expr_parser_expr(PgfExprParser* parser, bool mark)
 {
 	if (parser->token_tag == PGF_TOKEN_LAMBDA) {
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, false);
 		GuBuf* binds = pgf_expr_parser_binds(parser);
 		if (binds == NULL)
 			return gu_null_variant;
@@ -678,9 +687,9 @@ pgf_expr_parser_expr(PgfExprParser* parser)
 		if (parser->token_tag != PGF_TOKEN_RARROW) {
 			return gu_null_variant;
 		}
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, false);
 
-		PgfExpr expr = pgf_expr_parser_expr(parser);
+		PgfExpr expr = pgf_expr_parser_expr(parser, mark);
 		if (gu_variant_is_null(expr))
 			return gu_null_variant;
 
@@ -691,10 +700,9 @@ pgf_expr_parser_expr(PgfExprParser* parser)
 			((PgfExprAbs*) gu_variant_data(bind))->body = expr;
 			expr = bind;
 		}
-
 		return expr;
 	} else {
-		PgfExpr expr = pgf_expr_parser_term(parser);
+		PgfExpr expr = pgf_expr_parser_term(parser, mark);
 		if (gu_variant_is_null(expr))
 			return gu_null_variant;
 
@@ -704,17 +712,18 @@ pgf_expr_parser_expr(PgfExprParser* parser)
 		       parser->token_tag != PGF_TOKEN_RTRIANGLE &&
 		       parser->token_tag != PGF_TOKEN_COLON &&
 		       parser->token_tag != PGF_TOKEN_COMMA &&
-		       parser->token_tag != PGF_TOKEN_SEMI) {
-			PgfExpr arg = pgf_expr_parser_arg(parser);
+		       parser->token_tag != PGF_TOKEN_SEMI &&
+		       parser->token_tag != PGF_TOKEN_UNKNOWN) {
+			PgfExpr arg = pgf_expr_parser_arg(parser, mark);
 			if (gu_variant_is_null(arg))
-				return gu_null_variant;
+				return expr;
 
 			expr = gu_new_variant_i(parser->expr_pool,
 						PGF_EXPR_APP,
 						PgfExprApp,
 						expr, arg);
 		}
-		
+
 		return expr;
 	}
 }
@@ -729,16 +738,16 @@ pgf_expr_parser_hypos(PgfExprParser* parser, GuBuf* hypos)
 		if (bind_type == PGF_BIND_TYPE_EXPLICIT &&
 		    parser->token_tag == PGF_TOKEN_LCURLY) {
 			bind_type = PGF_BIND_TYPE_IMPLICIT;
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 		}
 
 		if (parser->token_tag == PGF_TOKEN_IDENT) {
 			var =
 				gu_string_copy(gu_string_buf_data(parser->token_value), parser->expr_pool);
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 		} else if (parser->token_tag == PGF_TOKEN_WILD) {
 			var = "_";
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 		} else {
 			return false;
 		}
@@ -751,14 +760,14 @@ pgf_expr_parser_hypos(PgfExprParser* parser, GuBuf* hypos)
 		if (bind_type == PGF_BIND_TYPE_IMPLICIT &&
 			parser->token_tag == PGF_TOKEN_RCURLY) {
 			bind_type = PGF_BIND_TYPE_EXPLICIT;
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 		}
 
 		if (parser->token_tag != PGF_TOKEN_COMMA) {
 			break;
 		}
 		
-		pgf_expr_parser_token(parser);
+		pgf_expr_parser_token(parser, false);
 	}
 
 	if (bind_type == PGF_BIND_TYPE_IMPLICIT)
@@ -768,14 +777,14 @@ pgf_expr_parser_hypos(PgfExprParser* parser, GuBuf* hypos)
 }
 
 static PgfType*
-pgf_expr_parser_atom(PgfExprParser* parser)
+pgf_expr_parser_atom(PgfExprParser* parser, bool mark)
 {
 	if (parser->token_tag != PGF_TOKEN_IDENT)
 		return NULL;
 
 	PgfCId cid =
 		gu_string_copy(gu_string_buf_data(parser->token_value), parser->expr_pool);
-	pgf_expr_parser_token(parser);
+	pgf_expr_parser_token(parser, mark);
 
 	GuBuf* args = gu_new_buf(PgfExpr, parser->tmp_pool);
 	while (parser->token_tag != PGF_TOKEN_EOF &&
@@ -783,10 +792,10 @@ pgf_expr_parser_atom(PgfExprParser* parser)
 		   parser->token_tag != PGF_TOKEN_RTRIANGLE &&
 		   parser->token_tag != PGF_TOKEN_RARROW) {
 		PgfExpr arg =
-			pgf_expr_parser_arg(parser);
+			pgf_expr_parser_arg(parser, mark);
 		if (gu_variant_is_null(arg))
-			return NULL;
-			
+			break;
+
 		gu_buf_push(args, PgfExpr, arg);
 	}
 
@@ -805,14 +814,14 @@ pgf_expr_parser_atom(PgfExprParser* parser)
 }
 
 static PgfType*
-pgf_expr_parser_type(PgfExprParser* parser)
+pgf_expr_parser_type(PgfExprParser* parser, bool mark)
 {
 	PgfType* type = NULL;
 	GuBuf* hypos = gu_new_buf(PgfHypo, parser->expr_pool);
 
 	for (;;) {
 		if (parser->token_tag == PGF_TOKEN_LPAR) {
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 
 			size_t n_start = gu_buf_length(hypos);
 
@@ -828,7 +837,7 @@ pgf_expr_parser_type(PgfExprParser* parser)
 				if (parser->token_tag != PGF_TOKEN_COLON)
 					return NULL;
 
-				pgf_expr_parser_token(parser);
+				pgf_expr_parser_token(parser, false);
 			} else {
 				PgfHypo* hypo = gu_buf_extend(hypos);
 				hypo->bind_type = PGF_BIND_TYPE_EXPLICIT;
@@ -838,33 +847,33 @@ pgf_expr_parser_type(PgfExprParser* parser)
 
 			size_t n_end = gu_buf_length(hypos);
 
-			PgfType* type = pgf_expr_parser_type(parser);
+			PgfType* type = pgf_expr_parser_type(parser, false);
 			if (type == NULL)
 				return NULL;
 
 			if (parser->token_tag != PGF_TOKEN_RPAR)
 				return NULL;
 
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 
 			if (parser->token_tag != PGF_TOKEN_RARROW)
 				return NULL;
 
-			pgf_expr_parser_token(parser);
-			
+			pgf_expr_parser_token(parser, false);
+
 			for (size_t i = n_start; i < n_end; i++) {
 				PgfHypo* hypo = gu_buf_index(hypos, PgfHypo, i);
 				hypo->type = type;
 			}
 		} else {
-			type = pgf_expr_parser_atom(parser);
+			type = pgf_expr_parser_atom(parser, mark);
 			if (type == NULL)
 				return NULL;
 
 			if (parser->token_tag != PGF_TOKEN_RARROW)
 				break;
 
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 
 			PgfHypo* hypo = gu_buf_extend(hypos);
 			hypo->bind_type = PGF_BIND_TYPE_EXPLICIT;
@@ -878,29 +887,34 @@ pgf_expr_parser_type(PgfExprParser* parser)
 	return type;
 }
 
-static PgfExprParser*
-pgf_new_parser(GuIn* in, GuPool* pool, GuPool* tmp_pool, GuExn* err)
+PGF_API PgfExprParser*
+pgf_new_parser(void* getc_state, PgfParserGetc getc, GuPool* pool, GuPool* tmp_pool, GuExn* err)
 {
 	PgfExprParser* parser = gu_new(PgfExprParser, tmp_pool);
 	parser->err = err;
-	parser->in = in;
 	parser->expr_pool = pool;
 	parser->tmp_pool = tmp_pool;
+	parser->getch_state = getc_state;
+	parser->getch = getc;
 	parser->ch = ' ';
-	pgf_expr_parser_token(parser);
+	pgf_expr_parser_token(parser, false);
 	return parser;
 }
 
-PGF_API PgfExpr
-pgf_read_expr(GuIn* in, GuPool* pool, GuExn* err)
+static GuUCS
+pgf_expr_parser_in_getc(void* state, bool mark, GuExn* err)
 {
-	GuPool* tmp_pool = gu_new_pool();
+	return gu_in_utf8((GuIn*) state, err);
+}
+
+PGF_API PgfExpr
+pgf_read_expr(GuIn* in, GuPool* pool, GuPool* tmp_pool, GuExn* err)
+{
 	PgfExprParser* parser =
-		pgf_new_parser(in, pool, tmp_pool, err);
-	PgfExpr expr = pgf_expr_parser_expr(parser);
+		pgf_new_parser(in, pgf_expr_parser_in_getc, pool, tmp_pool, err);
+	PgfExpr expr = pgf_expr_parser_expr(parser, true);
 	if (parser->token_tag != PGF_TOKEN_EOF)
 		return gu_null_variant;
-	gu_pool_free(tmp_pool);
 	return expr;
 }
 
@@ -911,24 +925,24 @@ pgf_read_expr_tuple(GuIn* in,
 {
 	GuPool* tmp_pool = gu_new_pool();
 	PgfExprParser* parser =
-		pgf_new_parser(in, pool, tmp_pool, err);
+		pgf_new_parser(in, pgf_expr_parser_in_getc, pool, tmp_pool, err);
 	if (parser->token_tag != PGF_TOKEN_LTRIANGLE)
 		goto fail;
-	pgf_expr_parser_token(parser);
+	pgf_expr_parser_token(parser, false);
 	for (size_t i = 0; i < n_exprs; i++) {
 		if (i > 0) {
 			if (parser->token_tag != PGF_TOKEN_COMMA)
 				goto fail;
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 		}
 
-		exprs[i] = pgf_expr_parser_expr(parser);
+		exprs[i] = pgf_expr_parser_expr(parser, false);
 		if (gu_variant_is_null(exprs[i]))
 			goto fail;
 	}
 	if (parser->token_tag != PGF_TOKEN_RTRIANGLE)
 		goto fail;
-	pgf_expr_parser_token(parser);
+	pgf_expr_parser_token(parser, false);
 	if (parser->token_tag != PGF_TOKEN_EOF)
 		goto fail;
 	gu_pool_free(tmp_pool);
@@ -947,10 +961,10 @@ pgf_read_expr_matrix(GuIn* in,
 {
 	GuPool* tmp_pool = gu_new_pool();
 	PgfExprParser* parser =
-		pgf_new_parser(in, pool, tmp_pool, err);
+		pgf_new_parser(in, pgf_expr_parser_in_getc, pool, tmp_pool, err);
 	if (parser->token_tag != PGF_TOKEN_LTRIANGLE)
 		goto fail;
-	pgf_expr_parser_token(parser);
+	pgf_expr_parser_token(parser, false);
 
 	GuBuf* buf = gu_new_buf(PgfExpr, pool);
 	
@@ -962,10 +976,10 @@ pgf_read_expr_matrix(GuIn* in,
 				if (i > 0) {
 					if (parser->token_tag != PGF_TOKEN_COMMA)
 						goto fail;
-					pgf_expr_parser_token(parser);
+					pgf_expr_parser_token(parser, false);
 				}
 
-				exprs[i] = pgf_expr_parser_expr(parser);
+				exprs[i] = pgf_expr_parser_expr(parser, false);
 				if (gu_variant_is_null(exprs[i]))
 					goto fail;
 			}
@@ -973,14 +987,14 @@ pgf_read_expr_matrix(GuIn* in,
 			if (parser->token_tag != PGF_TOKEN_SEMI)
 				break;
 
-			pgf_expr_parser_token(parser);
+			pgf_expr_parser_token(parser, false);
 		}
 
 		if (parser->token_tag != PGF_TOKEN_RTRIANGLE)
 			goto fail;
 	}
 
-	pgf_expr_parser_token(parser);
+	pgf_expr_parser_token(parser, false);
 	if (parser->token_tag != PGF_TOKEN_EOF)
 		goto fail;
 	gu_pool_free(tmp_pool);
@@ -993,15 +1007,13 @@ fail:
 }
 
 PGF_API PgfType*
-pgf_read_type(GuIn* in, GuPool* pool, GuExn* err)
+pgf_read_type(GuIn* in, GuPool* pool, GuPool* tmp_pool, GuExn* err)
 {
-	GuPool* tmp_pool = gu_new_pool();
 	PgfExprParser* parser = 
-		pgf_new_parser(in, pool, tmp_pool, err);
-	PgfType* type = pgf_expr_parser_type(parser);
+		pgf_new_parser(in, pgf_expr_parser_in_getc, pool, tmp_pool, err);
+	PgfType* type = pgf_expr_parser_type(parser, true);
 	if (parser->token_tag != PGF_TOKEN_EOF)
 		return NULL;
-	gu_pool_free(tmp_pool);
 	return type;
 }
 

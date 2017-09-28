@@ -1394,7 +1394,7 @@ pypgf_literal_callback_match(PgfLiteralCallback* self, PgfConcr* concr,
 		                      gu_string_buf_length(sbuf),
 		                      tmp_pool);
 
-		ep->expr = pgf_read_expr(in, out_pool, err);
+		ep->expr = pgf_read_expr(in, out_pool, tmp_pool, err);
 		if (!gu_ok(err) || gu_variant_is_null(ep->expr)) {
 			PyErr_SetString(PGFError, "The expression cannot be parsed");
 			gu_pool_free(tmp_pool);
@@ -2619,6 +2619,24 @@ PGF_dealloc(PGFObject* self)
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
+static PyObject *
+PGF_repr(PGFObject *self)
+{
+	GuPool* tmp_pool = gu_local_pool();
+
+	GuExn* err = gu_exn(tmp_pool);
+	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
+	GuOut* out = gu_string_buf_out(sbuf);
+
+	pgf_print(self->pgf, out, err);
+
+	PyObject* pystr = PyString_FromStringAndSize(gu_string_buf_data(sbuf),
+	                                             gu_string_buf_length(sbuf));
+
+	gu_pool_free(tmp_pool);
+	return pystr;
+}
+
 static PyObject*
 PGF_getAbstractName(PGFObject *self, void *closure)
 {
@@ -3239,7 +3257,7 @@ static PyTypeObject pgf_PGFType = {
     0,                         /*tp_as_mapping*/
     0,                         /*tp_hash */
     0,                         /*tp_call*/
-    0,                         /*tp_str*/
+    (reprfunc) PGF_repr,       /*tp_str*/
     0,                         /*tp_getattro*/
     0,                         /*tp_setattro*/
     0,                         /*tp_as_buffer*/
@@ -3313,7 +3331,7 @@ pgf_readExpr(PyObject *self, PyObject *args) {
 	GuExn* err = gu_new_exn(tmp_pool);
 
 	pyexpr->pool = gu_new_pool();
-	pyexpr->expr = pgf_read_expr(in, pyexpr->pool, err);
+	pyexpr->expr = pgf_read_expr(in, pyexpr->pool, tmp_pool, err);
 	pyexpr->master = NULL;
 	
 	if (!gu_ok(err) || gu_variant_is_null(pyexpr->expr)) {
@@ -3343,7 +3361,7 @@ pgf_readType(PyObject *self, PyObject *args) {
 	GuExn* err = gu_new_exn(tmp_pool);
 
 	pytype->pool = gu_new_pool();
-	pytype->type = pgf_read_type(in, pytype->pool, err);
+	pytype->type = pgf_read_type(in, pytype->pool, tmp_pool, err);
 	pytype->master = NULL;
 
 	if (!gu_ok(err) || pytype->type == NULL) {

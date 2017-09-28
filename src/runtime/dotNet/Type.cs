@@ -43,7 +43,7 @@ namespace PGFSharp
             using (var strNative = new Native.NativeString(typeStr))
             {
                 var in_ = NativeGU.gu_data_in(strNative.Ptr, strNative.Size, tmp_pool.Ptr);
-                var typ = Native.pgf_read_type(in_, result_pool.Ptr, exn.Ptr);
+                var typ = Native.pgf_read_type(in_, result_pool.Ptr, tmp_pool.Ptr, exn.Ptr);
                 if (exn.IsRaised || typ == IntPtr.Zero)
                 {
                     throw new PGFError();
