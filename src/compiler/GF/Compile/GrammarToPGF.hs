@@ -1,23 +1,18 @@
 {-# LANGUAGE BangPatterns, FlexibleContexts #-}
 module GF.Compile.GrammarToPGF (mkCanon2pgf) where
 
---import GF.Compile.Export
 import GF.Compile.GeneratePMCFG
 import GF.Compile.GenerateBC
 
-import PGF(CId,mkCId,utf8CId)
+import PGF(CId,mkCId)
 import PGF.Internal(fidInt,fidFloat,fidString,fidVar)
-import PGF.Internal(updateProductionIndices)
---import qualified PGF.Macros as CM
 import qualified PGF.Internal as C
 import qualified PGF.Internal as D
 import GF.Grammar.Predef
---import GF.Grammar.Printer
 import GF.Grammar.Grammar
 import qualified GF.Grammar.Lookup as Look
 import qualified GF.Grammar as A
 import qualified GF.Grammar.Macros as GM
---import GF.Compile.GeneratePMCFG
 
 import GF.Infra.Ident
 import GF.Infra.Option
@@ -31,7 +26,7 @@ import qualified Data.IntMap as IntMap
 import Data.Array.IArray
 
 mkCanon2pgf :: Options -> SourceGrammar -> ModuleName -> IOE D.PGF
-mkCanon2pgf opts gr am = do
+mkCanon2pgf opts gr am = undefined {-do
   (an,abs) <- mkAbstr am
   cncs     <- mapM mkConcr (allConcretes gr am)
   return $ updateProductionIndices (D.PGF Map.empty an abs (Map.fromList cncs))
@@ -306,3 +301,4 @@ genPrintNames cdefs =
 --mkArray    lst = listArray (0,length lst-1) lst
 mkMapArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
 mkSetArray set = listArray (0,Set.size set-1) [v | v <- Set.toList set]
+-}

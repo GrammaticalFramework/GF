@@ -1,8 +1,7 @@
 module GF.Compiler (mainGFC, linkGrammars, writePGF, writeOutputs) where
 
 import PGF
-import PGF.Internal(concretes,optimizePGF,unionPGF)
-import PGF.Internal(putSplitAbs,encodeFile,runPut)
+import PGF.Internal(optimizePGF,unionPGF,putSplitAbs)
 import GF.Compile as S(batchCompile,link,srcAbsName)
 import GF.CompileInParallel as P(parallelBatchCompile)
 import GF.Compile.Export
@@ -142,15 +141,14 @@ writePGF opts pgf =
   where
     writeNormalPGF =
        do let outfile = outputPath opts (grammarName opts pgf <.> "pgf")
-          writing opts outfile $ encodeFile outfile pgf
+          writing opts outfile $ (error "encodeFile outfile pgf")
 
     writeSplitPGF =
       do let outfile = outputPath opts (grammarName opts pgf <.> "pgf")
-         writing opts outfile $ BSL.writeFile outfile (runPut (putSplitAbs pgf))
-                                --encodeFile_ outfile (putSplitAbs pgf)
-         forM_ (Map.toList (concretes pgf)) $ \cnc -> do
-           let outfile = outputPath opts (showCId (fst cnc) <.> "pgf_c")
-           writing opts outfile $ encodeFile outfile cnc
+         writing opts outfile $ BSL.writeFile outfile (putSplitAbs pgf)
+         forM_ (languages pgf) $ \lang -> do
+           let outfile = outputPath opts (showCId lang <.> "pgf_c")
+           writing opts outfile $ (error "encodeFile outfile cnc")
 
 
 writeOutput :: Options -> FilePath-> String -> IOE ()

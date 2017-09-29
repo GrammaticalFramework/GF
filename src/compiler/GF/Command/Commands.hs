@@ -7,9 +7,9 @@ import Prelude hiding (putStrLn)
 
 import PGF
 
-import PGF.Internal(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
-import PGF.Internal(abstract,funs,cats,Expr(EFun)) ----
-import PGF.Internal(ppFun,ppCat)
+-- import PGF.Internal(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
+-- import PGF.Internal(abstract,funs,cats,Expr(EFun)) ----
+--import PGF.Internal(ppFun,ppCat)
 import PGF.Internal(optimizePGF)
 
 import GF.Compile.Export
@@ -28,7 +28,7 @@ import GF.Command.TreeOperations ---- temporary place for typecheck and compute
 
 import GF.Data.Operations
 
-import PGF.Internal (encodeFile)
+-- import PGF.Internal (encodeFile)
 import Data.List(intersperse,nub)
 import Data.Maybe
 import qualified Data.Map as Map
@@ -50,7 +50,7 @@ instance (Monad m,HasPGFEnv m) => TypeCheckArg m where
 
 pgfCommands :: HasPGFEnv m => Map.Map String (CommandInfo m)
 pgfCommands = Map.fromList [
-  ("aw", emptyCommandInfo {
+{-  ("aw", emptyCommandInfo {
      longname = "align_words",
      synopsis = "show word alignments between languages graphically",
      explanation = unlines [
@@ -745,9 +745,9 @@ pgfCommands = Map.fromList [
          _           -> do putStrLn "a single identifier or expression is expected from the command"
                            return void,
      needsTypeCheck = False
-     })
+     })-}
   ]
- where
+{- where
    getEnv exec opts ts = liftSIO . exec opts ts =<< getPGFEnv
 
    par pgf opts s = case optOpenTypes opts of
@@ -926,7 +926,7 @@ pgfCommands = Map.fromList [
      app (OOpt  op)         | Just (Left  f) <- treeOp pgf op = f
      app (OFlag op (VId x)) | Just (Right f) <- treeOp pgf op = f (mkCId x)
      app _                                                    = id
-
+-}
 treeOpOptions pgf = [(op,expl) | (op,(expl,Left  _)) <- allTreeOps pgf]
 treeOpFlags   pgf = [(op,expl) | (op,(expl,Right _)) <- allTreeOps pgf]
 
@@ -945,7 +945,7 @@ infinity :: Int
 infinity = 256
 
 prLexcLexicon :: Morpho -> String
-prLexcLexicon mo =
+prLexcLexicon mo = ""{-
   unlines $ "Multichar_Symbols":multichars:"":"LEXICON Root" : [prLexc l p ++ ":" ++ w  ++ " # ;" | (w,lps) <- morpho, (l,p) <- lps] ++ ["END"]
  where
   morpho = fullFormLexicon mo
@@ -956,18 +956,18 @@ prLexcLexicon mo =
 
   multichars = unwords $ nub $ concat [mkTags (words p) | (w,lps) <- morpho, (l,p) <- lps]
   -- thick_A+(AAdj+Posit+Gen):thick's # ;
-
+-}
 prFullFormLexicon :: Morpho -> String
-prFullFormLexicon mo =
-  unlines (map prMorphoAnalysis (fullFormLexicon mo))
+prFullFormLexicon mo = "" {-
+  unlines (map prMorphoAnalysis (fullFormLexicon mo)) -}
 
 prAllWords :: Morpho -> String
-prAllWords mo =
-  unwords [w | (w,_) <- fullFormLexicon mo]
+prAllWords mo = "" {-
+  unwords [w | (w,_) <- fullFormLexicon mo]-}
 
-prMorphoAnalysis :: (String,[(Lemma,Analysis)]) -> String
-prMorphoAnalysis (w,lps) =
-  unlines (w:[showCId l ++ " : " ++ p | (l,p) <- lps])
+-- prMorphoAnalysis :: (String,[(Lemma,Analysis)]) -> String
+prMorphoAnalysis (w,lps) = "" {-
+  unlines (w:[showCId l ++ " : " ++ p | (l,p) <- lps])-}
 
 viewGraphviz :: String -> String -> String -> [String] -> SIO CommandOutput
 viewGraphviz view format name grphs = do

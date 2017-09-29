@@ -24,7 +24,7 @@ import qualified System.Console.Haskeline as Haskeline
 --import GF.Compile.Coding(codeTerm)
 
 import PGF
-import PGF.Internal(abstract,funs,lookStartCat,emptyPGF)
+-- import PGF.Internal(abstract,funs,lookStartCat,emptyPGF)
 
 import Data.Char
 import Data.List(isPrefixOf)
@@ -318,7 +318,7 @@ data GFEnv = GFEnv {
 
 emptyGFEnv opts = GFEnv opts False emptyCmdEnv emptyCommandEnv []
 
-emptyCmdEnv = (emptyGrammar,pgfEnv emptyPGF)
+emptyCmdEnv = (emptyGrammar,pgfEnv (error "emptyPGF"))
 
 emptyCommandEnv = mkCommandEnv allCommands
 multigrammar = pgf . snd . pgfenv
@@ -336,7 +336,7 @@ wordCompletion gfenv (left,right) = do
     CmplCmd pref
       -> ret (length pref) [Haskeline.simpleCompletion name | name <- Map.keys (commands cmdEnv), isPrefixOf pref name]
     CmplStr (Just (Command _ opts _)) s0
-      -> do mb_state0 <- try (evaluate (initState pgf (optLang opts) (optType opts)))
+      -> do mb_state0 <- try (evaluate (error "initState pgf (optLang opts) (optType opts)"))
             case mb_state0 of
               Right state0 -> let (rprefix,rs) = break isSpace (reverse s0)
                                   s            = reverse rs
@@ -344,7 +344,7 @@ wordCompletion gfenv (left,right) = do
                                   ws           = words s
                               in case loop state0 ws of
                                    Nothing    -> ret 0 []
-                                   Just state -> let compls = getCompletions state prefix
+                                   Just state -> let compls = error "getCompletions state prefix"
                                                  in ret (length prefix) (map (\x -> Haskeline.simpleCompletion x) (Map.keys compls))
               Left (_ :: SomeException) -> ret 0 []
     CmplOpt (Just (Command n _ _)) pref
@@ -357,9 +357,9 @@ wordCompletion gfenv (left,right) = do
     CmplIdent (Just (Command "i" _ _)) _        -- HACK: file name completion for command i
       -> Haskeline.completeFilename (left,right)
     CmplIdent _ pref
-      -> do mb_abs <- try (evaluate (abstract pgf))
+      -> do mb_abs <- try (evaluate (error "(abstract pgf)"))
             case mb_abs of
-              Right abs -> ret (length pref) [Haskeline.simpleCompletion name | cid <- Map.keys (funs abs), let name = showCId cid, isPrefixOf pref name]
+              Right abs -> ret (length pref) [Haskeline.simpleCompletion name | cid <- Map.keys (error "funs abs"), let name = showCId cid, isPrefixOf pref name]
               Left (_ :: SomeException) -> ret (length pref) []
     _ -> ret 0 []
   where
@@ -367,13 +367,13 @@ wordCompletion gfenv (left,right) = do
     cmdEnv = commandenv gfenv
     optLang opts = valCIdOpts "lang" (head (languages pgf)) opts
     optType opts = 
-      let str = valStrOpts "cat" (showCId $ lookStartCat pgf) opts
+      let str = valStrOpts "cat" (showCId $ (error "lookStartCat pgf")) opts
       in case readType str of
            Just ty -> ty
            Nothing -> error ("Can't parse '"++str++"' as type")
 
     loop ps []     = Just ps
-    loop ps (t:ts) = case nextState ps (simpleParseInput t) of
+    loop ps (t:ts) = case error "nextState ps (simpleParseInput t)" of
                        Left  es -> Nothing
                        Right ps -> loop ps ts
 

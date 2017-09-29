@@ -40,7 +40,9 @@ module PGF (PGF, readPGF, showPGF,
             graphvizAbstractTree, graphvizParseTree, graphvizAlignment, graphvizDependencyTree,
 
             -- * Tries
-            ATree(..),Trie(..),toATree,toTrie
+            ATree(..),Trie(..),toATree,toTrie,
+            
+            defaultProbabilities, setProbabilities, readProbabilitiesFromFile,
            ) where
 
 import PGF.Internal
@@ -209,3 +211,7 @@ toTrie = combines . map ((:[]) . singleton)
           where
             combine2 (Ap f ts,Ap g us) | f==g = Just (Ap f (combines (ts++us)))
             combine2 _ = Nothing
+
+defaultProbabilities = error "defaultProbabilities is not implemented"
+setProbabilities = error "setProbabilities is not implemented"
+readProbabilitiesFromFile = error "readProbabilitiesFromFile is not implemented"

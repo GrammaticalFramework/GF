@@ -14,7 +14,7 @@ module GF.Compile.GeneratePMCFG
     ) where
 
 --import PGF.CId
-import PGF.Internal as PGF(CncCat(..),Symbol(..),fidVar)
+import PGF.Internal as PGF(Symbol(..),fidVar)
 
 import GF.Infra.Option
 import GF.Grammar hiding (Env, mkRecord, mkTable)
@@ -157,12 +157,14 @@ convert opts gr cenv loc term ty@(_,val) pargs =
             args = map Vr vars
             vars = map (\(bt,x,t) -> x) context
 
-pgfCncCat :: SourceGrammar -> Type -> Int -> CncCat
+pgfCncCat :: SourceGrammar -> Type -> Int -> (Int,Int,[String])
 pgfCncCat gr lincat index =
   let ((_,size),schema) = computeCatRange gr lincat
-  in PGF.CncCat index (index+size-1)
-                      (mkArray (map (renderStyle style{mode=OneLineMode} . ppPath) 
-                                    (getStrPaths schema)))
+  in ( index
+     , index+size-1
+     , map (renderStyle style{mode=OneLineMode} . ppPath)
+           (getStrPaths schema)
+     )
   where
     getStrPaths :: Schema Identity s c -> [Path]
     getStrPaths = collect CNil []

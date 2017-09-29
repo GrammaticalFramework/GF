@@ -10,6 +10,7 @@
 module GF.Grammar.Binary(VersionTagged(..),decodeModuleHeader,decodeModule,encodeModule) where
 
 import Prelude hiding (catch)
+import Control.Monad
 import Control.Exception(catch,ErrorCall(..),throwIO)
 import Data.Binary
 import qualified Data.Map as Map(empty)
@@ -22,7 +23,7 @@ import GF.Infra.UseIO(MonadIO(..))
 import GF.Grammar.Grammar
 
 import PGF() -- Binary instances
-import PGF.Internal(Literal(..))
+import PGF.Internal(Literal(..),Symbol(..))
 
 -- Please change this every time when the GFO format is changed
 gfoVersion = "GF04"
@@ -295,6 +296,53 @@ instance Binary Label where
            case tag of
              0 -> fmap LIdent get
              1 -> fmap LVar   get
+             _ -> decodingError
+
+instance Binary BindType where
+  put Explicit = putWord8 0
+  put Implicit = putWord8 1
+  get = do tag <- getWord8
+           case tag of
+             0 -> return Explicit
+             1 -> return Implicit
+             _ -> decodingError
+
+instance Binary Literal where
+  put (LStr s) = putWord8 0 >> put s
+  put (LInt i) = putWord8 1 >> put i
+  put (LFlt d) = putWord8 2 >> put d
+  get = do tag <- getWord8
+           case tag of
+             0 -> liftM  LStr get
+             1 -> liftM  LInt get
+             2 -> liftM  LFlt get
+             _ -> decodingError
+
+instance Binary Symbol where
+  put (SymCat n l)       = putWord8 0 >> put (n,l)
+  put (SymLit n l)       = putWord8 1 >> put (n,l)
+  put (SymVar n l)       = putWord8 2 >> put (n,l)
+  put (SymKS ts)         = putWord8 3 >> put ts
+  put (SymKP d vs)       = putWord8 4 >> put (d,vs)
+  put SymBIND            = putWord8 5
+  put SymSOFT_BIND       = putWord8 6
+  put SymNE              = putWord8 7
+  put SymSOFT_SPACE      = putWord8 8
+  put SymCAPIT           = putWord8 9
+  put SymALL_CAPIT       = putWord8 10
+  get = do tag <- getWord8
+           case tag of
+             0 -> liftM2 SymCat get get
+             1 -> liftM2 SymLit get get
+             2 -> liftM2 SymVar get get
+             3 -> liftM  SymKS  get
+             4 -> liftM2 (\d vs -> SymKP d vs) get get
+             5 -> return SymBIND
+             6 -> return SymSOFT_BIND
+             7 -> return SymNE
+             8 -> return SymSOFT_SPACE
+             9 -> return SymCAPIT
+             10-> return SymALL_CAPIT
              _ -> decodingError
 
 --putGFOVersion = mapM_ (putWord8 . fromIntegral . ord) gfoVersion
