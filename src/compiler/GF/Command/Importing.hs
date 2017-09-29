@@ -41,7 +41,8 @@ importGrammar pgf0 opts files =
     ext -> die $ "Unknown filename extension: " ++ show ext
 
 ioUnionPGF :: Maybe PGF -> PGF -> IO (Maybe PGF)
-ioUnionPGF one two = 
+ioUnionPGF Nothing    two = return (Just two)
+ioUnionPGF (Just one) two =
   case msgUnionPGF one two of
     (pgf, Just msg) -> putStrLn msg >> return pgf
     (pgf,_)         -> return pgf

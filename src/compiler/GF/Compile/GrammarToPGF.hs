@@ -50,8 +50,8 @@ grammar2PGF opts gr am =
                                    let arity = mkArity ma mdef ty]
 
     mkConcr abs cm =
-      let cdefs   = undefined
-          ex_seqs = undefined
+      let cdefs   = error "cdefs"
+          ex_seqs = error "ex_seqs"
       {-(ex_seqs,cdefs) <- addMissingPMCFGs
                             Map.empty 
                             ([((cPredefAbs,c), CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing Nothing Nothing) | c <- [cInt,cFloat,cString]] ++
@@ -183,7 +183,7 @@ genCncFuns :: Grammar
                [(FId, [FunId])],
                [(FId, [FunId])],
                [(CId,[SeqId])])
-genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats = undefined {-
+genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats = error "genCncFuns" {-
   let (fid_cnt1,funs_cnt1,funs1,lindefs,linrefs) = mkCncCats cdefs fid_cnt  0 [] IntMap.empty IntMap.empty
       (fid_cnt2,funs_cnt2,funs2,prods)           = mkCncFuns cdefs fid_cnt1 funs_cnt1 funs1 lindefs Map.empty IntMap.empty
   in (fid_cnt2,prods,lindefs,linrefs,array (0,funs_cnt2-1) funs2)

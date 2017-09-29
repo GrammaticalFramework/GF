@@ -213,5 +213,5 @@ toTrie = combines . map ((:[]) . singleton)
             combine2 _ = Nothing
 
 defaultProbabilities = error "defaultProbabilities is not implemented"
-setProbabilities = error "setProbabilities is not implemented"
+setProbabilities _ pgf = pgf -- error "setProbabilities is not implemented"
 readProbabilitiesFromFile = error "readProbabilitiesFromFile is not implemented"
