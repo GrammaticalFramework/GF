@@ -4,7 +4,6 @@ module GF.Interactive (mainGFI,mainRunGFI,mainServerGFI) where
 import Prelude hiding (putStrLn,print)
 import qualified Prelude as P(putStrLn)
 import GF.Command.Interpreter(CommandEnv(..),mkCommandEnv,interpretCommandLine)
---import GF.Command.Importing(importSource,importGrammar)
 import GF.Command.Commands(PGFEnv,HasPGFEnv(..),pgf,pgfEnv,pgfCommands)
 import GF.Command.CommonCommands(commonCommands,extend)
 import GF.Command.SourceCommands
@@ -24,7 +23,7 @@ import qualified System.Console.Haskeline as Haskeline
 --import GF.Compile.Coding(codeTerm)
 
 import PGF
--- import PGF.Internal(abstract,funs,lookStartCat,emptyPGF)
+-- import PGF.Internal(abstract,funs,lookStartCat)
 
 import Data.Char
 import Data.List(isPrefixOf)
@@ -289,8 +288,9 @@ importInEnv opts files =
       do let opts' = addOptions (setOptimization OptCSE False) opts
          pgf1 <- importGrammar pgf0 opts' files
          if (verbAtLeast opts Normal)
-           then putStrLnFlush $
-                    unwords $ "\nLanguages:" : map showCId (languages pgf1)
+           then case pgf1 of
+                  Just pgf -> putStrLnFlush $ unwords $ "\nLanguages:" : map showCId (languages pgf)
+                  Nothing  -> done
            else done
          return pgf1
 
@@ -301,10 +301,10 @@ tryGetLine = do
    Right l -> return l
 
 prompt env
-  | retain env || abs == wildCId = "> "
-  | otherwise      = showCId abs ++ "> "
-  where
-    abs = abstractName (multigrammar env)
+  | retain env = "> "
+  | otherwise  = case multigrammar env of
+                   Just pgf -> showCId (abstractName pgf) ++ "> "
+                   Nothing  -> "> "
 
 type CmdEnv = (Grammar,PGFEnv)
 
@@ -318,7 +318,7 @@ data GFEnv = GFEnv {
 
 emptyGFEnv opts = GFEnv opts False emptyCmdEnv emptyCommandEnv []
 
-emptyCmdEnv = (emptyGrammar,pgfEnv (error "emptyPGF"))
+emptyCmdEnv = (emptyGrammar,pgfEnv Nothing)
 
 emptyCommandEnv = mkCommandEnv allCommands
 multigrammar = pgf . snd . pgfenv
@@ -365,7 +365,7 @@ wordCompletion gfenv (left,right) = do
   where
     pgf    = multigrammar gfenv
     cmdEnv = commandenv gfenv
-    optLang opts = valCIdOpts "lang" (head (languages pgf)) opts
+    {-optLang opts = valCIdOpts "lang" (head (languages pgf)) opts-}
     optType opts = 
       let str = valStrOpts "cat" (showCId $ (error "lookStartCat pgf")) opts
       in case readType str of

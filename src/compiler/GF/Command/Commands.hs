@@ -37,16 +37,22 @@ import Data.List (sort)
 --import Debug.Trace
 
 
-data PGFEnv = Env {pgf::PGF,mos::Map.Map Language Morpho}
+data PGFEnv = Env {pgf::Maybe PGF,mos::Map.Map Language Morpho}
 
-pgfEnv pgf = Env pgf mos
-  where mos = Map.fromList [(la,buildMorpho pgf la) | la <- languages pgf]
+pgfEnv mb_pgf = Env mb_pgf mos
+  where mos = case mb_pgf of
+                Just pgf -> Map.fromList [(la,buildMorpho pgf la) | la <- languages pgf]
+                Nothing  -> Map.empty
 
 class (Functor m,Monad m,MonadSIO m) => HasPGFEnv m where getPGFEnv :: m PGFEnv
 
 instance (Monad m,HasPGFEnv m) => TypeCheckArg m where
-  typeCheckArg e = (either (fail . render . ppTcError) (return . fst)
-                    . flip inferExpr e . pgf) =<< getPGFEnv
+  typeCheckArg e = do env <- getPGFEnv
+                      case pgf env of
+                        Just gr -> either (fail . render . ppTcError)
+                                          (return . fst)
+                                          (inferExpr gr e)
+                        Nothing -> fail "Import a grammar before using this command"
 
 pgfCommands :: HasPGFEnv m => Map.Map String (CommandInfo m)
 pgfCommands = Map.fromList [

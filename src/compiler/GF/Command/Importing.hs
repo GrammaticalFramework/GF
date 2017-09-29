@@ -19,8 +19,8 @@ import System.FilePath
 import qualified Data.Set as Set
 
 -- import a grammar in an environment where it extends an existing grammar
-importGrammar :: PGF -> Options -> [FilePath] -> IO PGF
-importGrammar pgf0 _ [] = return pgf0
+importGrammar :: Maybe PGF -> Options -> [FilePath] -> IO (Maybe PGF)
+importGrammar pgf0 _    []    = return pgf0
 importGrammar pgf0 opts files =
   case takeExtensions (last files) of
     ".cf"   -> importCF opts files getBNFCRules bnfc2cf
@@ -40,10 +40,11 @@ importGrammar pgf0 opts files =
       ioUnionPGF pgf0 pgf2
     ext -> die $ "Unknown filename extension: " ++ show ext
 
-ioUnionPGF :: PGF -> PGF -> IO PGF
-ioUnionPGF one two = case msgUnionPGF one two of
-  (pgf, Just msg) -> putStrLn msg >> return pgf
-  (pgf,_)         -> return pgf
+ioUnionPGF :: Maybe PGF -> PGF -> IO (Maybe PGF)
+ioUnionPGF one two = 
+  case msgUnionPGF one two of
+    (pgf, Just msg) -> putStrLn msg >> return pgf
+    (pgf,_)         -> return pgf
 
 importSource :: Options -> [FilePath] -> IO SourceGrammar
 importSource opts files = fmap (snd.snd) (batchCompile opts files)
