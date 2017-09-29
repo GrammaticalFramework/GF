@@ -36,7 +36,7 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
      | VAorist    Agr
      | VImperative
      | VInfinitive
-     | Gerund
+     | Gerund Number Case
      ;
 
     UseGen = NoGen | YesGen Agr | UseIndef ;
