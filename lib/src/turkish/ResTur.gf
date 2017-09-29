@@ -14,7 +14,11 @@ resource ResTur = ParamX ** open Prelude, Predef, HarmonyTur in {
 
   oper
     Agr = {n : Number ; p : Person} ;
-    Noun = {s : Number => Case => Str; gen : Number => Agr => Str; harmony : Harmony} ;
+    Noun = {
+      s   : Number => Case => Str ;
+      gen : Number => Agr => Str  ;
+      harmony : Harmony
+    } ;
     Pron = {s : Case => Str; a : Agr} ;
 
     agrP3 : Number -> Agr ;
