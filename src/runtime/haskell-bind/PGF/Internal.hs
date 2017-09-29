@@ -12,7 +12,7 @@ module PGF.Internal(CId(..),Language,PGF(..),
                     PGF2.CodeLabel, PGF2.Instr(..), PGF2.IVal(..), PGF2.TailInfo(..),
 
                     PGF2.Builder, PGF2.B, PGF2.build,
-                    eAbs, eApp, eMeta, eFun, eVar, eTyped, eImplArg, dTyp, hypo,
+                    eAbs, eApp, eMeta, eFun, eVar, eLit, eTyped, eImplArg, dTyp, hypo,
                     PGF2.AbstrInfo, newAbstr, PGF2.ConcrInfo, newConcr, newPGF,
                      
                     -- * Write an in-memory PGF to a file
@@ -83,6 +83,9 @@ eFun (CId fun) = PGF2.eFun fun
 
 eVar :: (?builder :: PGF2.Builder s) => Int -> PGF2.B s PGF2.Expr
 eVar = PGF2.eVar
+
+eLit :: (?builder :: PGF2.Builder s) => PGF2.Literal -> PGF2.B s PGF2.Expr
+eLit = PGF2.eLit
 
 eTyped :: (?builder :: PGF2.Builder s) => PGF2.B s PGF2.Expr -> PGF2.B s PGF2.Type -> PGF2.B s PGF2.Expr
 eTyped = PGF2.eTyped

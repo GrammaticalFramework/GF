@@ -1,15 +1,13 @@
-{-# LANGUAGE BangPatterns, FlexibleContexts #-}
-module GF.Compile.GrammarToPGF (mkCanon2pgf) where
+{-# LANGUAGE ImplicitParams, BangPatterns, FlexibleContexts #-}
+module GF.Compile.GrammarToPGF (grammar2PGF) where
 
 import GF.Compile.GeneratePMCFG
 import GF.Compile.GenerateBC
 
-import PGF(CId,mkCId)
-import PGF.Internal(fidInt,fidFloat,fidString,fidVar)
-import qualified PGF.Internal as C
-import qualified PGF.Internal as D
+import PGF(CId,mkCId,Type,Hypo,Expr)
+import PGF.Internal
 import GF.Grammar.Predef
-import GF.Grammar.Grammar
+import GF.Grammar.Grammar hiding (Production)
 import qualified GF.Grammar.Lookup as Look
 import qualified GF.Grammar as A
 import qualified GF.Grammar.Macros as GM
@@ -25,15 +23,16 @@ import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Data.Array.IArray
 
-mkCanon2pgf :: Options -> SourceGrammar -> ModuleName -> IOE D.PGF
-mkCanon2pgf opts gr am = undefined {-do
-  (an,abs) <- mkAbstr am
-  cncs     <- mapM mkConcr (allConcretes gr am)
-  return $ updateProductionIndices (D.PGF Map.empty an abs (Map.fromList cncs))
+grammar2PGF :: Options -> SourceGrammar -> ModuleName -> PGF
+grammar2PGF opts gr am = 
+  build (let (an,abs) = mkAbstr am
+             cncs     = map (mkConcr abs) (allConcretes gr am)
+         in newPGF [] an abs cncs)
   where
     cenv = resourceValues opts gr
 
-    mkAbstr am = return (mi2i am, D.Abstr flags funs cats)
+    mkAbstr :: (?builder :: Builder s) => ModuleName -> (CId, B s AbstrInfo)
+    mkAbstr am = (mi2i am, newAbstr flags cats funs)
       where
         aflags = err (const noOptions) mflags (lookupModule gr am)
 
@@ -41,87 +40,83 @@ mkCanon2pgf opts gr am = undefined {-do
             [((cPredefAbs,c), AbsCat (Just (L NoLoc []))) | c <- [cFloat,cInt,cString]] ++ 
             Look.allOrigInfos gr am
 
-        flags = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF aflags]
+        flags = [(mkCId f,x) | (f,x) <- optionsPGF aflags]
 
-        funs = Map.fromList [(i2i f, (mkType [] ty, arity, mkDef gr arity mdef, 0)) | 
+        cats = [(i2i c, snd (mkContext [] cont), 0) |
+                                   ((m,c),AbsCat (Just (L _ cont))) <- adefs]
+
+        funs = [(i2i f, mkType [] ty, arity, {-mkDef gr arity mdef,-} 0) | 
                                    ((m,f),AbsFun (Just (L _ ty)) ma mdef _) <- adefs,
                                    let arity = mkArity ma mdef ty]
 
-        cats = Map.fromList [(i2i c, (snd (mkContext [] cont),catfuns c, 0)) |
-                                   ((m,c),AbsCat (Just (L _ cont))) <- adefs]
-
-        catfuns cat =
-              [(0,i2i f) | ((m,f),AbsFun (Just (L _ ty)) _ _ (Just True)) <- adefs, snd (GM.valCat ty) == cat]
-
-    mkConcr cm = do
-      let cflags  = err (const noOptions) mflags (lookupModule gr cm)
-
-      (ex_seqs,cdefs) <- addMissingPMCFGs
+    mkConcr abs cm =
+      let cdefs   = undefined
+          ex_seqs = undefined
+      {-(ex_seqs,cdefs) <- addMissingPMCFGs
                             Map.empty 
                             ([((cPredefAbs,c), CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing Nothing Nothing) | c <- [cInt,cFloat,cString]] ++
                              Look.allOrigInfos gr cm)
+-}
+          cflags = err (const noOptions) mflags (lookupModule gr cm)
+          flags  = [(mkCId f,x) | (f,x) <- optionsPGF cflags]
 
-      let flags = Map.fromList [(mkCId f,x) | (f,x) <- optionsPGF cflags]
-
-          seqs = (mkSetArray . Set.fromList . concat) $
-                     (Map.keys ex_seqs : [maybe [] elems (mseqs mi) | (m,mi) <- allExtends gr cm])
-
-          ex_seqs_arr = mkMapArray ex_seqs :: Array SeqId Sequence
+          seqs_set = (Set.fromList . concat) $
+                         (Map.keys ex_seqs : [maybe [] (map elems . elems) (mseqs mi) | (m,mi) <- allExtends gr cm])
+          seqs = Set.toList seqs_set
 
           !(!fid_cnt1,!cnccats) = genCncCats gr am cm cdefs
           !(!fid_cnt2,!productions,!lindefs,!linrefs,!cncfuns)
-                                = genCncFuns gr am cm ex_seqs_arr seqs cdefs fid_cnt1 cnccats
-        
+                                = genCncFuns gr am cm seqs_set seqs cdefs fid_cnt1 cnccats
+
           printnames = genPrintNames cdefs
-      return (mi2i cm, D.Concr flags
-                              printnames
-                              cncfuns
-                              lindefs
-                              linrefs
-                              seqs
-                              productions
-                              IntMap.empty
-                              Map.empty
-                              cnccats
-                              IntMap.empty
-                              fid_cnt2)
+
+      in (mi2i cm, newConcr abs
+                            flags
+                            printnames
+                            lindefs
+                            linrefs
+                            productions
+                            cncfuns
+                            seqs
+                            cnccats
+                            fid_cnt2)
       where
         -- if some module was compiled with -no-pmcfg, then
         -- we have to create the PMCFG code just before linking
-        addMissingPMCFGs seqs []                  = return (seqs,[])
+  {-      addMissingPMCFGs seqs []                  = return (seqs,[])
         addMissingPMCFGs seqs (((m,id), info):is) = do
           (seqs,info) <- addPMCFG opts gr cenv Nothing am cm seqs id info
           (seqs,is  ) <- addMissingPMCFGs seqs is
           return (seqs, ((m,id), info) : is)
-
+-}
 i2i :: Ident -> CId
-i2i = utf8CId . ident2utf8
+i2i = mkCId . showIdent
 
 mi2i :: ModuleName -> CId
 mi2i (MN i) = i2i i
 
-mkType :: [Ident] -> A.Type -> C.Type
+mkType :: (?builder :: Builder s) => [Ident] -> A.Type -> B s PGF.Type
 mkType scope t =
   case GM.typeForm t of
     (hyps,(_,cat),args) -> let (scope',hyps') = mkContext scope hyps
-                           in C.DTyp hyps' (i2i cat) (map (mkExp scope') args)
+                           in dTyp hyps' (i2i cat) (map (mkExp scope') args)
 
-mkExp :: [Ident] -> A.Term -> C.Expr
-mkExp scope t = 
+mkExp :: (?builder :: Builder s) => [Ident] -> A.Term -> B s Expr
+mkExp scope t =
   case t of
-    Q (_,c)  -> C.EFun (i2i c)
-    QC (_,c) -> C.EFun (i2i c)
+    Q (_,c)  -> eFun (i2i c)
+    QC (_,c) -> eFun (i2i c)
     Vr x     -> case lookup x (zip scope [0..]) of
-                  Just i  -> C.EVar  i
-                  Nothing -> C.EMeta 0
-    Abs b x t-> C.EAbs b (i2i x) (mkExp (x:scope) t)
-    App t1 t2-> C.EApp (mkExp scope t1) (mkExp scope t2)
-    EInt i   -> C.ELit (C.LInt (fromIntegral i))
-    EFloat f -> C.ELit (C.LFlt f)
-    K s      -> C.ELit (C.LStr s)
-    Meta i   -> C.EMeta i
-    _        -> C.EMeta 0
-
+                  Just i  -> eVar  i
+                  Nothing -> eMeta 0
+    Abs b x t-> eAbs b (i2i x) (mkExp (x:scope) t)
+    App t1 t2-> eApp (mkExp scope t1) (mkExp scope t2)
+    EInt i   -> eLit (LInt (fromIntegral i))
+    EFloat f -> eLit (LFlt f)
+    K s      -> eLit (LStr s)
+    Meta i   -> eMeta i
+    _        -> eMeta 0
+{-
 mkPatt scope p = 
   case p of
     A.PP (_,c) ps->let (scope',ps') = mapAccumL mkPatt scope ps
@@ -136,61 +131,59 @@ mkPatt scope p =
     A.PImplArg p-> let (scope',p') = mkPatt scope p
                    in (scope',C.PImplArg p')
     A.PTilde t  -> (  scope,C.PTilde (mkExp scope t))
-
-mkContext :: [Ident] -> A.Context -> ([Ident],[C.Hypo])
+-}
+mkContext :: (?builder :: Builder s) => [Ident] -> A.Context -> ([Ident],[B s PGF.Hypo])
 mkContext scope hyps = mapAccumL (\scope (bt,x,ty) -> let ty' = mkType scope ty
                                                       in if x == identW
-                                                           then (  scope,(bt,i2i x,ty'))
-                                                           else (x:scope,(bt,i2i x,ty'))) scope hyps 
-
+                                                           then (  scope,hypo bt (i2i x) ty')
+                                                           else (x:scope,hypo bt (i2i x) ty')) scope hyps 
+{-
 mkDef gr arity (Just eqs) = Just ([C.Equ ps' (mkExp scope' e) | L _ (ps,e) <- eqs, let (scope',ps') = mapAccumL mkPatt [] ps]
                                  ,generateByteCode gr arity eqs
                                  )
 mkDef gr arity Nothing    = Nothing
-
+-}
 mkArity (Just a) _        ty = a   -- known arity, i.e. defined function
 mkArity Nothing  (Just _) ty = 0   -- defined function with no arity - must be an axiom
 mkArity Nothing  _        ty = let (ctxt, _, _) = GM.typeForm ty  -- constructor
                                in length ctxt
 
-genCncCats gr am cm cdefs =
-  let (index,cats) = mkCncCats 0 cdefs
-  in (index, Map.fromList cats)
+genCncCats gr am cm cdefs = mkCncCats 0 cdefs
   where
     mkCncCats index []                                                = (index,[])
     mkCncCats index (((m,id),CncCat (Just (L _ lincat)) _ _ _ _):cdefs) 
       | id == cInt    = 
-            let cc            = pgfCncCat gr lincat fidInt
+            let cc            = pgfCncCat gr (i2i id) lincat fidInt
                 (index',cats) = mkCncCats index cdefs
-            in (index', (i2i id,cc) : cats)
+            in (index', cc : cats)
       | id == cFloat  = 
-            let cc            = pgfCncCat gr lincat fidFloat
+            let cc            = pgfCncCat gr (i2i id) lincat fidFloat
                 (index',cats) = mkCncCats index cdefs
-            in (index', (i2i id,cc) : cats)
+            in (index', cc : cats)
       | id == cString = 
-            let cc            = pgfCncCat gr lincat fidString
+            let cc            = pgfCncCat gr (i2i id) lincat fidString
                 (index',cats) = mkCncCats index cdefs
-            in (index', (i2i id,cc) : cats)
+            in (index', cc : cats)
       | otherwise     =
-            let cc@(C.CncCat _s e _) = pgfCncCat gr lincat index
-                (index',cats)        = mkCncCats (e+1) cdefs
-            in (index', (i2i id,cc) : cats)
-    mkCncCats index (_                      :cdefs) = mkCncCats index cdefs
+            let cc@(_, _s, e, _) = pgfCncCat gr (i2i id) lincat index
+                (index',cats)    = mkCncCats (e+1) cdefs
+            in (index', cc : cats)
+    mkCncCats index (_                                          :cdefs) = mkCncCats index cdefs
 
 genCncFuns :: Grammar
            -> ModuleName
            -> ModuleName
-           -> Array SeqId Sequence
-           -> Array SeqId Sequence
+           -> Set.Set [Symbol]
+           -> [[Symbol]]
            -> [(QIdent, Info)]
            -> FId
-           -> Map.Map CId D.CncCat
+           -> [(CId,Int,Int,[String])]
            -> (FId,
-               IntMap.IntMap (Set.Set D.Production),
-               IntMap.IntMap [FunId],
-               IntMap.IntMap [FunId],
-               Array FunId D.CncFun)
-genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats =
+               [(FId, [Production])],
+               [(FId, [FunId])],
+               [(FId, [FunId])],
+               [(CId,[SeqId])])
+genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats = undefined {-
   let (fid_cnt1,funs_cnt1,funs1,lindefs,linrefs) = mkCncCats cdefs fid_cnt  0 [] IntMap.empty IntMap.empty
       (fid_cnt2,funs_cnt2,funs2,prods)           = mkCncFuns cdefs fid_cnt1 funs_cnt1 funs1 lindefs Map.empty IntMap.empty
   in (fid_cnt2,prods,lindefs,linrefs,array (0,funs_cnt2-1) funs2)
@@ -286,9 +279,9 @@ genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats =
           | otherwise = error "binSearch"
           where
             k = (i+j) `div` 2
-
+-}
 genPrintNames cdefs =
-  Map.fromAscList [(i2i id, name) | ((m,id),info) <- cdefs, name <- prn info]
+  [(i2i id, name) | ((m,id),info) <- cdefs, name <- prn info]
   where
     prn (CncFun _ _   (Just (L _ tr)) _) = [flatten tr]
     prn (CncCat _ _ _ (Just (L _ tr)) _) = [flatten tr]
@@ -297,8 +290,3 @@ genPrintNames cdefs =
     flatten (K s)      = s
     flatten (Alts x _) = flatten x
     flatten (C x y)    = flatten x +++ flatten y
-
---mkArray    lst = listArray (0,length lst-1) lst
-mkMapArray map = array (0,Map.size map-1) [(v,k) | (k,v) <- Map.toList map]
-mkSetArray set = listArray (0,Set.size set-1) [v | v <- Set.toList set]
--}

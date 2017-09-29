@@ -13,7 +13,7 @@ module PGF2.Internal(-- * Access the internal structures
 
                      -- * Building new PGFs in memory
                      build, Builder, B,
-                     eAbs, eApp, eMeta, eFun, eVar, eTyped, eImplArg, dTyp, hypo,
+                     eAbs, eApp, eMeta, eFun, eVar, eLit, eTyped, eImplArg, dTyp, hypo,
                      AbstrInfo, newAbstr, ConcrInfo, newConcr, newPGF,
                      
                      -- * Write an in-memory PGF to a file
@@ -417,6 +417,21 @@ eVar var =
                             (#const gu_alignof(PgfExprVar))
                             pptr pool
     (#poke PgfExprVar, var) ptr (fromIntegral var :: CInt)
+    e <- peek pptr
+    return (B (Expr e touch))
+  where
+    (Builder pool touch) = ?builder
+
+eLit :: (?builder :: Builder s) => Literal -> B s Expr
+eLit value =
+  unsafePerformIO $
+  alloca $ \pptr -> do
+    ptr <- gu_alloc_variant (#const PGF_EXPR_LIT)
+                            (fromIntegral (#size PgfExprLit))
+                            (#const gu_alignof(PgfExprLit))
+                            pptr pool
+    c_value <- newLiteral value pool
+    (#poke PgfExprLit, lit) ptr c_value
     e <- peek pptr
     return (B (Expr e touch))
   where

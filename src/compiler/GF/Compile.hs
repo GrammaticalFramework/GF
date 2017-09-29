@@ -1,6 +1,6 @@
 module GF.Compile (compileToPGF, link, batchCompile, srcAbsName) where
 
-import GF.Compile.GrammarToPGF(mkCanon2pgf)
+import GF.Compile.GrammarToPGF(grammar2PGF)
 import GF.Compile.ReadFiles(ModEnv,getOptionsFromFile,getAllFiles,
                             importsOfModule)
 import GF.CompileOne(compileOne)
@@ -36,7 +36,7 @@ link :: Options -> (ModuleName,Grammar) -> IOE PGF
 link opts (cnc,gr) =
   putPointE Normal opts "linking ... " $ do
     let abs = srcAbsName gr cnc
-    pgf <- mkCanon2pgf opts gr abs
+        pgf = grammar2PGF opts gr abs
     probs <- liftIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
     when (verbAtLeast opts Normal) $ putStrE "OK"
     return $ setProbabilities probs 
