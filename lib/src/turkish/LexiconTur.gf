@@ -245,7 +245,7 @@ concrete LexiconTur of Lexicon = CatTur **
     wide_A = mkA "geniş" ;
     yellow_A = mkA "sarı" ;
     young_A = mkA "genç" ;
-    married_A2 = mkA2 (mkA "evli") with_Prep ;
+    married_A2 = mkA2 (mkA "evli") (mkPrep "ile" Nom) ;
 --Verbs
     add_V3 = mkV3 (mkV "eklemek") ;
     answer_V2S = mkV2S (mkV "yanıtlamak") ;
