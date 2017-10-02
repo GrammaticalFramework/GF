@@ -370,20 +370,17 @@ param
 
 oper
   --to be used in linref, PhraseEus ... anything where a VP is turned into string!
-  linVP : VerbPhrase -> Str = linVPTense Pres Pres ;
+  linVP : VerbPhrase -> Str = linVPTense Pres Simul ;
 
- -- TODO: fix trinkoak
-  linVPTense : Tense -> Tense -> VerbPhrase -> Str = 
-   \tnsPrc,tnsAux,vp ->
-   let prc = case vp.val of {
-      Da Izan => vp.nstem ;
-      Da Egon => vp.nstem ;
-      _       => vp.prc ! tnsPrc } ;
+  linVPTense : Tense -> Anteriority -> VerbPhrase -> Str = \t,a,vp ->
+   let verb = case isSynthetic vp.val of {
+                    True  => verbformSynthetic t a vp ;
+                    False => verbformPeriphrastic t a vp } ;     
    in 
     vp.adv 
     ++ vp.iobj.s ++ vp.dobj.s ! Pos ++ vp.comp ! Hau  --all the compls!
-    ++ prc
-    ++ (chooseAux vp ! tnsAux ! Hau).indep ;
+    ++ verb.prc
+    ++ (verb.aux ! Hau).indep ;
 
   -- Used in ComplVV : does not include aux!
   linVPPrc : VerbPhrase -> Str = \vp ->  --TODO make it less of a hack.
