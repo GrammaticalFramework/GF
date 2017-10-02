@@ -29,7 +29,6 @@ concrete AdjectiveEus of Adjective = CatEus ** open ResEus, Prelude in {
                  neureBuru : NounPhrase = empty_NP ** 
                   { s = \\cas => neure ++ "buru" 
                               ++ artDef ! getNum agr ! cas ! FinalVow ;
---                    stem = neure ++ "buru" ;
                     agr = agr } -- neure buruekin eskondua naiz / 
                                 -- geure buruekin eskonduak gara
              in applyPost a2.compl neureBuru ++ a2.s ! AF Posit ; 
