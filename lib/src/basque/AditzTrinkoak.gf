@@ -333,9 +333,9 @@ oper
                      Hauek => mkVForms "zeuden" } ;
 	           _ =>  table {
                      Ni => mkVForms "nago" ; 
-                     Hi _ => mkVForms "hago" ; 
+                     Hi _ => mkVForms "hago" "hagoe" ; 
                      Zu => mkVForms "zaude" ; 
-                     Hau => mkVForms "dago" ; 
+                     Hau => mkVForms "dago" "dagoe" ; 
                      Gu => mkVForms "gaude" ; 
                      Zuek => mkVForms "zaudete" ; 
                      Hauek => mkVForms "daude" }

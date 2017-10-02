@@ -372,6 +372,7 @@ oper
   --to be used in linref, PhraseEus ... anything where a VP is turned into string!
   linVP : VerbPhrase -> Str = linVPTense Pres Pres ;
 
+ -- TODO: fix trinkoak
   linVPTense : Tense -> Tense -> VerbPhrase -> Str = 
    \tnsPrc,tnsAux,vp ->
    let prc = case vp.val of {
