@@ -2,10 +2,7 @@
 {-# LANGUAGE CPP #-}
 module GF.Main where
 import GF.Compiler
-import qualified GF.Interactive as GFI1
-#ifdef C_RUNTIME
-import qualified GF.Interactive2 as GFI2
-#endif
+import GF.Interactive
 import GF.Data.ErrM
 import GF.Infra.Option
 import GF.Infra.UseIO
@@ -47,17 +44,7 @@ mainOpts opts files =
     case flag optMode opts of
       ModeVersion     -> putStrLn $ "Grammatical Framework (GF) version " ++ showVersion version ++ "\n" ++ buildInfo
       ModeHelp        -> putStrLn helpMessage
-      ModeServer port -> GFI1.mainServerGFI opts port files
+      ModeServer port -> mainServerGFI opts port files
       ModeCompiler    -> mainGFC opts files
-      ModeInteractive -> GFI1.mainGFI opts files
-      ModeRun         -> GFI1.mainRunGFI opts files
-#ifdef C_RUNTIME
-      ModeInteractive2 -> GFI2.mainGFI opts files
-      ModeRun2         -> GFI2.mainRunGFI opts files
-#else
-      ModeInteractive2 -> noCruntime
-      ModeRun2         -> noCruntime
-  where
-    noCruntime = do ePutStrLn "GF configured without C run-time support"
-                    exitFailure
-#endif
+      ModeInteractive -> mainGFI opts files
+      ModeRun         -> mainRunGFI opts files
