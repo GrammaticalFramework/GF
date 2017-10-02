@@ -937,7 +937,7 @@ pgf_read_pargs(PgfReader* rdr, PgfConcr* concr)
 }
 
 PGF_API bool
-pgf_production_is_lexical(PgfProductionApply *papp, 
+pgf_production_is_lexical(PgfProductionApply *papp,
                           GuBuf* non_lexical_buf, GuPool* pool)
 {
 	if (gu_seq_length(papp->args) > 0)

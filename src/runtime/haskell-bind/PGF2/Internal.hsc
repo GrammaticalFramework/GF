@@ -618,8 +618,8 @@ newConcr (B (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun c_non_lexical_buf _)
   where
     (Builder pool touch) = ?builder
 
-    pokeCncFun seqs_ptr ptr cncfun = do
-      c_cncfun <- newCncFun absfuns nullPtr cncfun pool
+    pokeCncFun seqs_ptr ptr cncfun@(funid,_) = do
+      c_cncfun <- newCncFun absfuns seqs_ptr cncfun pool
       poke ptr c_cncfun
 
     pokeSequence c_seq syms = do
@@ -657,7 +657,7 @@ newConcr (B (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun c_non_lexical_buf _)
                     pokeProductions c_ccat ptr top (bot-1) mk_index' prods
 
     pokeRefDefFunId funs_ptr ptr funid = do
-      let c_fun = funs_ptr `plusPtr` (funid * (#size PgfCncFun))
+      c_fun <- peek (funs_ptr `plusPtr` (funid * (#size PgfCncFun*)))
       (#poke PgfCncFun, absfun) c_fun c_abs_lin_fun
       poke ptr c_fun
 
@@ -776,15 +776,15 @@ newLiteral (LFlt val) pool =
 
 
 newProduction :: Ptr GuMap -> Ptr PgfCncFun -> Ptr GuBuf -> Production -> Ptr GuPool -> IO ((#type bool), GuVariant)
-newProduction c_ccats funs_ptr c_non_lexical_buf (PApply fun_id args) pool =
+newProduction c_ccats funs_ptr c_non_lexical_buf (PApply funid args) pool =
   alloca $ \pptr -> do
-    let c_fun = funs_ptr `plusPtr` (fun_id * (#size PgfCncFun))
+    c_fun <- peek (funs_ptr `plusPtr` (funid * (#size PgfCncFun*)))
     c_args <- newSequence (#size PgfPArg) pokePArg args pool
     ptr <- gu_alloc_variant (#const PGF_PRODUCTION_APPLY)
                             (fromIntegral (#size PgfProductionApply))
                             (#const gu_alignof(PgfProductionApply))
                             pptr pool
-    (#poke PgfProductionApply, fun)  ptr c_fun
+    (#poke PgfProductionApply, fun)  ptr (c_fun :: Ptr PgfCncFun)
     (#poke PgfProductionApply, args) ptr c_args
     is_lexical <- pgf_production_is_lexical ptr c_non_lexical_buf pool
     c_prod <- peek pptr
