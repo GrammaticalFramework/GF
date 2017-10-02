@@ -503,13 +503,11 @@ mapAccumL' f s (x:xs) = (s'',y:ys)
                               !(s'',ys) = mapAccumL' f s' xs
 
 addSequence :: SeqSet -> [Symbol] -> (SeqSet,SeqId)
-addSequence seqs lst =
+addSequence seqs seq =
   case Map.lookup seq seqs of
     Just id -> (seqs,id)
     Nothing -> let !last_seq = Map.size seqs
                in (Map.insert seq last_seq seqs, last_seq)
-  where
-    seq = mkArray lst
 
 
 ------------------------------------------------------------

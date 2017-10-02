@@ -36,7 +36,7 @@ link :: Options -> (ModuleName,Grammar) -> IOE PGF
 link opts (cnc,gr) =
   putPointE Normal opts "linking ... " $ do
     let abs = srcAbsName gr cnc
-        pgf = grammar2PGF opts gr abs
+    pgf <- grammar2PGF opts gr abs
     probs <- liftIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
     when (verbAtLeast opts Normal) $ putStrE "OK"
     return $ setProbabilities probs 

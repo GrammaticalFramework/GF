@@ -23,11 +23,13 @@ import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Data.Array.IArray
 
-grammar2PGF :: Options -> SourceGrammar -> ModuleName -> PGF
-grammar2PGF opts gr am = 
-  build (let (an,abs) = mkAbstr am
-             cncs     = map (mkConcr abs) (allConcretes gr am)
-         in newPGF [] an abs cncs)
+grammar2PGF :: Options -> SourceGrammar -> ModuleName -> IO PGF
+grammar2PGF opts gr am = do
+  cnc_infos <- getConcreteInfos gr am
+  return $
+    build (let (an,abs) = mkAbstr am
+               cncs     = map (mkConcr abs) cnc_infos
+           in newPGF [] an abs cncs)
   where
     cenv = resourceValues opts gr
 
@@ -49,24 +51,17 @@ grammar2PGF opts gr am =
                                    ((m,f),AbsFun (Just (L _ ty)) ma mdef _) <- adefs,
                                    let arity = mkArity ma mdef ty]
 
-    mkConcr abs cm =
-      let cdefs   = error "cdefs"
-          ex_seqs = error "ex_seqs"
-      {-(ex_seqs,cdefs) <- addMissingPMCFGs
-                            Map.empty 
-                            ([((cPredefAbs,c), CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing Nothing Nothing) | c <- [cInt,cFloat,cString]] ++
-                             Look.allOrigInfos gr cm)
--}
-          cflags = err (const noOptions) mflags (lookupModule gr cm)
+    mkConcr abs (cm,ex_seqs,cdefs) =
+      let cflags = err (const noOptions) mflags (lookupModule gr cm)
           flags  = [(mkCId f,x) | (f,x) <- optionsPGF cflags]
 
-          seqs_set = (Set.fromList . concat) $
-                         (Map.keys ex_seqs : [maybe [] (map elems . elems) (mseqs mi) | (m,mi) <- allExtends gr cm])
-          seqs = Set.toList seqs_set
+          seqs = (mkSetArray . Set.fromList . concat) $
+                       (elems (ex_seqs :: Array SeqId [Symbol]) : [maybe [] elems (mseqs mi) | (m,mi) <- allExtends gr cm])
 
           !(!fid_cnt1,!cnccats) = genCncCats gr am cm cdefs
+          cnccat_ranges = Map.fromList (map (\(cid,s,e,_) -> (cid,(s,e))) cnccats)
           !(!fid_cnt2,!productions,!lindefs,!linrefs,!cncfuns)
-                                = genCncFuns gr am cm seqs_set seqs cdefs fid_cnt1 cnccats
+                                = genCncFuns gr am cm seqs cdefs fid_cnt1 cnccat_ranges
 
           printnames = genPrintNames cdefs
 
@@ -77,18 +72,30 @@ grammar2PGF opts gr am =
                             linrefs
                             productions
                             cncfuns
-                            seqs
+                            (elems seqs)
                             cnccats
                             fid_cnt2)
+
+    getConcreteInfos gr am = mapM flatten (allConcretes gr am)
       where
+        flatten cm = do
+          (seqs,infos) <- addMissingPMCFGs cm Map.empty
+                                           (lit_infos ++ Look.allOrigInfos gr cm)
+          return (cm,mkMapArray seqs :: Array SeqId [Symbol],infos)
+
+        lit_infos = [((cPredefAbs,c), CncCat (Just (L NoLoc GM.defLinType)) Nothing Nothing Nothing Nothing) | c <- [cInt,cFloat,cString]]
+
         -- if some module was compiled with -no-pmcfg, then
         -- we have to create the PMCFG code just before linking
-  {-      addMissingPMCFGs seqs []                  = return (seqs,[])
-        addMissingPMCFGs seqs (((m,id), info):is) = do
-          (seqs,info) <- addPMCFG opts gr cenv Nothing am cm seqs id info
-          (seqs,is  ) <- addMissingPMCFGs seqs is
-          return (seqs, ((m,id), info) : is)
--}
+        addMissingPMCFGs cm seqs []                  = return (seqs,[])
+        addMissingPMCFGs cm seqs (((m,id), info):is) = do
+          (seqs,info)  <- addPMCFG opts gr cenv Nothing am cm seqs id info
+          (seqs,infos) <- addMissingPMCFGs cm seqs is
+          return (seqs, ((m,id), info) : infos)
+
+mkSetArray set = listArray (0,Set.size set-1) (Set.toList set)
+mkMapArray map = array (0,Map.size map-1) [(k,v) | (v,k) <- Map.toList map]
+
 i2i :: Ident -> CId
 i2i = mkCId . showIdent
 
@@ -173,22 +180,22 @@ genCncCats gr am cm cdefs = mkCncCats 0 cdefs
 genCncFuns :: Grammar
            -> ModuleName
            -> ModuleName
-           -> Set.Set [Symbol]
-           -> [[Symbol]]
+           -> Array SeqId [Symbol]
            -> [(QIdent, Info)]
            -> FId
-           -> [(CId,Int,Int,[String])]
+           -> Map.Map CId (Int,Int)
            -> (FId,
                [(FId, [Production])],
                [(FId, [FunId])],
                [(FId, [FunId])],
                [(CId,[SeqId])])
-genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats = error "genCncFuns" {-
+genCncFuns gr am cm seqs cdefs fid_cnt cnccat_ranges =
   let (fid_cnt1,funs_cnt1,funs1,lindefs,linrefs) = mkCncCats cdefs fid_cnt  0 [] IntMap.empty IntMap.empty
-      (fid_cnt2,funs_cnt2,funs2,prods)           = mkCncFuns cdefs fid_cnt1 funs_cnt1 funs1 lindefs Map.empty IntMap.empty
-  in (fid_cnt2,prods,lindefs,linrefs,array (0,funs_cnt2-1) funs2)
+      (fid_cnt2,funs_cnt2,funs2,prods0)          = mkCncFuns cdefs fid_cnt1 funs_cnt1 funs1 lindefs Map.empty IntMap.empty
+      prods                                      = [(fid,Set.toList prodSet) | (fid,prodSet) <- IntMap.toList prods0]
+  in (fid_cnt2,prods,IntMap.toList lindefs,IntMap.toList linrefs,funs2)
   where
-    mkCncCats []                                                        fid_cnt funs_cnt funs lindefs linrefs =
+    mkCncCats []                                                          fid_cnt funs_cnt funs lindefs linrefs =
       (fid_cnt,funs_cnt,funs,lindefs,linrefs)
     mkCncCats (((m,id),CncCat _ _ _ _ (Just (PMCFG prods0 funs0))):cdefs) fid_cnt funs_cnt funs lindefs linrefs =
       let !funs_cnt' = let (s_funid, e_funid) = bounds funs0
@@ -203,8 +210,7 @@ genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats = error "genCncFuns" {-
     mkCncFuns []                                                        fid_cnt funs_cnt funs lindefs crc prods =
       (fid_cnt,funs_cnt,funs,prods)
     mkCncFuns (((m,id),CncFun _ _ _ (Just (PMCFG prods0 funs0))):cdefs) fid_cnt funs_cnt funs lindefs crc prods =
-      let ---Ok ty_C        = fmap GM.typeForm (Look.lookupFunType gr am id)
-          ty_C           = err error (\x -> x) $ fmap GM.typeForm (Look.lookupFunType gr am id)
+      let ty_C           = err error (\x -> x) $ fmap GM.typeForm (Look.lookupFunType gr am id)
           !funs_cnt'     = let (s_funid, e_funid) = bounds funs0
                            in funs_cnt+(e_funid-s_funid+1)
           !(fid_cnt',crc',prods') 
@@ -215,23 +221,23 @@ genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats = error "genCncFuns" {-
     mkCncFuns (_                                                :cdefs) fid_cnt funs_cnt funs lindefs crc prods = 
       mkCncFuns cdefs fid_cnt funs_cnt funs lindefs crc prods
 
-    toProd lindefs (ctxt_C,res_C,_) offs st (Production fid0 funid0 args0) =
-      let !((fid_cnt,crc,prods),args) = mapAccumL mkArg st (zip ctxt_C args0) 
-          set0    = Set.fromList (map (C.PApply (offs+funid0)) (sequence args))
+    toProd lindefs (ctxt_C,res_C,_) offs st (A.Production fid0 funid0 args0) =
+      let !((fid_cnt,crc,prods),args) = mapAccumL mkArg st (zip ctxt_C args0)
+          set0    = Set.fromList (map (PApply (offs+funid0)) (sequence args))
           fid     = mkFId res_C fid0
           !prods' = case IntMap.lookup fid prods of
                      Just set -> IntMap.insert fid (Set.union set0 set) prods
                      Nothing  -> IntMap.insert fid set0 prods
       in (fid_cnt,crc,prods')
       where
-        mkArg st@(fid_cnt,crc,prods) ((_,_,ty),fid0s ) =
+        mkArg st@(fid_cnt,crc,prods) ((_,_,ty),fid0s) =
           case fid0s of
-            [fid0] -> (st,map (flip C.PArg (mkFId arg_C fid0)) ctxt)
+            [fid0] -> (st,map (flip PArg (mkFId arg_C fid0)) ctxt)
             fid0s  -> case Map.lookup fids crc of
-                        Just fid -> (st,map (flip C.PArg fid) ctxt)
+                        Just fid -> (st,map (flip PArg fid) ctxt)
                         Nothing  -> let !crc'   = Map.insert fids fid_cnt crc
-                                        !prods' = IntMap.insert fid_cnt (Set.fromList (map C.PCoerce fids)) prods
-                                    in ((fid_cnt+1,crc',prods'),map (flip C.PArg fid_cnt) ctxt)
+                                        !prods' = IntMap.insert fid_cnt (Set.fromList (map PCoerce fids)) prods
+                                    in ((fid_cnt+1,crc',prods'),map (flip PArg fid_cnt) ctxt)
           where
             (hargs_C,arg_C) = GM.catSkeleton ty
             ctxt = mapM (mkCtxt lindefs) hargs_C
@@ -239,14 +245,14 @@ genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats = error "genCncFuns" {-
 
     mkLinDefId id = prefixIdent "lindef " id
 
-    toLinDef res offs lindefs (Production fid0 funid0 args) =
+    toLinDef res offs lindefs (A.Production fid0 funid0 args) =
       if args == [[fidVar]]
         then IntMap.insertWith (++) fid [offs+funid0] lindefs
         else lindefs
       where
         fid = mkFId res fid0
 
-    toLinRef res offs linrefs (Production fid0 funid0 [fargs]) =
+    toLinRef res offs linrefs (A.Production fid0 funid0 [fargs]) =
       if fid0 == fidVar
         then foldr (\fid -> IntMap.insertWith (++) fid [offs+funid0]) linrefs fids
         else linrefs
@@ -254,23 +260,23 @@ genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats = error "genCncFuns" {-
         fids = map (mkFId res) fargs
 
     mkFId (_,cat) fid0 =
-      case Map.lookup (i2i cat) cnccats of
-        Just (C.CncCat s e _) -> s+fid0
-        Nothing               -> error ("GrammarToPGF.mkFId: missing category "++showIdent cat)
+      case Map.lookup (i2i cat) cnccat_ranges of
+        Just (s,e) -> s+fid0
+        Nothing    -> error ("GrammarToPGF.mkFId: missing category "++showIdent cat)
 
     mkCtxt lindefs (_,cat) =
-      case Map.lookup (i2i cat) cnccats of
-        Just (C.CncCat s e _) -> [(C.fidVar,fid) | fid <- [s..e], Just _ <- [IntMap.lookup fid lindefs]]
-        Nothing               -> error "GrammarToPGF.mkCtxt failed"
+      case Map.lookup (i2i cat) cnccat_ranges of
+        Just (s,e) -> [fid | fid <- [s..e], Just _ <- [IntMap.lookup fid lindefs]]
+        Nothing    -> error "GrammarToPGF.mkCtxt failed"
 
     toCncFun offs (m,id) funs (funid0,lins0) =
       let mseqs = case lookupModule gr m of
                     Ok (ModInfo{mseqs=Just mseqs}) -> mseqs
-                    _                              -> ex_seqs
-      in (offs+funid0,C.CncFun (i2i id) (amap (newIndex mseqs) lins0)):funs                                          
+                    _                              -> seqs
+      in (i2i id, map (newIndex mseqs) (elems lins0)):funs
       where
         newIndex mseqs i = binSearch (mseqs ! i) seqs (bounds seqs)
-           
+
         binSearch v arr (i,j)
           | i <= j    = case compare v (arr ! k) of
                           LT -> binSearch v arr (i,k-1)
@@ -279,7 +285,8 @@ genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccats = error "genCncFuns" {-
           | otherwise = error "binSearch"
           where
             k = (i+j) `div` 2
--}
+
+
 genPrintNames cdefs =
   [(i2i id, name) | ((m,id),info) <- cdefs, name <- prn info]
   where

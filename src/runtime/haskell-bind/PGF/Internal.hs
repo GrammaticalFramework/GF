@@ -68,7 +68,7 @@ concrSequence = PGF2.concrSequence
 
 isPredefFId = PGF2.isPredefFId
 
-type Sequence = Array Int PGF2.Symbol
+type Sequence = [PGF2.Symbol]
 
 eAbs :: (?builder :: PGF2.Builder s) => PGF2.BindType -> CId -> PGF2.B s PGF2.Expr -> PGF2.B s PGF2.Expr
 eAbs bind_type (CId var) body = PGF2.eAbs bind_type var body
@@ -143,7 +143,7 @@ ppLit (PGF2.LInt n) = int n
 ppLit (PGF2.LFlt d) = double d
 
 ppSeq (seqid,seq) = 
-  ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol (elems seq))
+  ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol seq)
 
 ppSymbol (PGF2.SymCat d r) = char '<' <> int d <> comma <> int r <> char '>'
 ppSymbol (PGF2.SymLit d r) = char '{' <> int d <> comma <> int r <> char '}'
