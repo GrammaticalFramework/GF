@@ -9,22 +9,30 @@ concrete AdjectiveEus of Adjective = CatEus ** open ResEus, Prelude in {
 
   -- : A  -> AP ;
   PositA a = a ** { 
-    s    = a.s ! AF Posit ; 
+    s    = \\agr => a.s ! AF Posit ; 
     typ  = Bare } ;
 
   -- : A  -> NP -> AP ;  -- euskara ingelesa baino errazagoa da.
   ComparA a np = a ** {
-    s    = np.s ! Abs ++ "baino" ++ a.s ! AF Compar ; 
+    s    = \\agr => np.s ! Abs ++ "baino" ++ a.s ! AF Compar ; 
     typ  = Bare } ;
 
   -- : A2 -> NP -> AP ;  -- married to her
   ComplA2 a2 np = a2 ** {
-    s    = applyPost a2.compl np ++ a2.s ! AF Posit ; 
+    s    = \\agr => applyPost a2.compl np ++ a2.s ! AF Posit ; 
     typ  = Bare } ;
 
   -- : A2 -> AP ;        -- married to itself
   ReflA2 a2 = a2 ** {
-    s    = applyPost a2.compl buru_NP ++ a2.s ! AF Posit ; 
+    s    = \\agr => 
+             let neure : Str = reflPron ! agr ;
+                 neureBuru : NounPhrase = empty_NP ** 
+                  { s = \\cas => neure ++ "buru" 
+                              ++ artDef ! getNum agr ! cas ! FinalVow ;
+--                    stem = neure ++ "buru" ;
+                    agr = agr } -- neure buruekin eskondua naiz / 
+                                -- geure buruekin eskonduak gara
+             in applyPost a2.compl neureBuru ++ a2.s ! AF Posit ; 
     typ  = Bare } ;
 
   -- : A2 -> AP ;        -- married
@@ -32,18 +40,19 @@ concrete AdjectiveEus of Adjective = CatEus ** open ResEus, Prelude in {
 
   -- : A  -> AP ;     -- warmer
   UseComparA a = a ** {
-    s    = a.s ! AF Compar ; 
+    s    = \\agr => a.s ! AF Compar ; 
     typ  = Bare } ;
 
 
   -- : CAdv -> AP -> NP -> AP ; -- as cool as John
   CAdvAP adv ap np = ap ** {
-    s = np.s ! Abs ++ adv.s ++ ap.s } ;
+    s = \\agr => np.s ! Abs ++ adv.s ++ ap.s ! agr } ;
 
 -- The superlative use is covered in $Ord$.
 
   -- : Ord -> AP ;       -- warmest
   AdjOrd ord = ord ** {
+    s = \\agr => ord.s ;
     ph = FinalCons ; --always ends in -en
     typ = Bare } ;
 
@@ -57,8 +66,8 @@ concrete AdjectiveEus of Adjective = CatEus ** open ResEus, Prelude in {
 
   -- : AdA -> AP -> AP ; 
   AdAP ada ap = ap ** {
-    s = ada.s ++ ap.s ; 
-    typ = Bare  } ;
+    s = \\agr => ada.s ++ ap.s ! agr ; 
+    typ = Bare } ;
 
 
 -- It can also be postmodified by an adverb, typically a prepositional phrase.

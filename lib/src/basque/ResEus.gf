@@ -199,10 +199,6 @@ oper
 ---      { Abs => "hargle"; Erg => "bargle" }
 -- the field .agr. is of type Agr.   
 
-  buru_NP : NounPhrase = 
-    empty_NP ** { s = \\_ => "buru" ;
-                  stem = "buru" } ;
-
   empty_NP : NounPhrase = { s = \\_ => [] ;
                            stem = [] ;
                            agr = Hau ; 
@@ -252,15 +248,23 @@ oper
   inanPron : (x1,_,_,_,x5 : Str) -> Agr -> Pronoun = \zer,zeri,zerk,zere,zertaz,a ->
     persPron zer zeri zerk zere zertaz a ** { anim = Inan } ;
 
-
+  reflPron : Agr => Str = table {
+    Ni   => "neure" ;
+    Hi _ => "heure" ;
+    Gu   => "geure" ;
+    Zu   => "zeure" ;
+    Zuek => "zeuen" ;
+    hau  => "haren" } ;
 --------------------------------------------------------------------
 -- Adjective and AP
 
-  Adjective : Type = {s : AForm => Str ; ph : Phono} ;
+  Adjective : Type = { s : AForm => Str ; ph : Phono } ;
 
   Adjective2 : Type = Adjective ** { compl : Postposizio } ;
 
-  AdjPhrase : Type = {s : Str ; ph : Phono ; typ : APType} ; 
+  AdjPhrase : Type = { s : Agr => Str ; 
+                       ph : Phono ; 
+                       typ : APType} ; 
 
   regAdj : Str -> Adjective = \s -> 
     let stem : Str = case last s of {

@@ -191,9 +191,9 @@ concrete NounEus of Noun = CatEus ** open ResEus, Prelude in {
     let a : Str = artIndef ! Abs ! cn.ph ; --`a' for FinalA, [] for other
         result : {s : Agr => Str ; ph : Phono} =
           case ap.typ of {
-                Ko => { s = \\agr => ap.s ++ cn.s ! agr ;
+                Ko => { s = \\agr => ap.s ! Hau ++ cn.s ! agr ;
                         ph = cn.ph } ;
-                Bare => { s = \\agr => cn.s ! agr ++ a ++ ap.s ;
+                Bare => { s = \\agr => cn.s ! agr ++ a ++ ap.s ! Hau ;
                           ph = ap.ph }
              } ;
       in cn ** { s  = result.s ;
@@ -252,7 +252,7 @@ concrete NounEus of Noun = CatEus ** open ResEus, Prelude in {
 --3 Conjoinable determiners and ones with adjectives
 
   -- : DAP -> AP -> DAP ;    -- the large (one)
-  AdjDAP dap ap = dap ** { s = \\cas,ph => ap.s ++ dap.s ! cas ! ph } ;
+  AdjDAP dap ap = dap ** { s = \\cas,ph => ap.s ! Hau ++ dap.s ! cas ! ph } ;
 
   -- : Det -> DAP ;          -- this (or that) 
   DetDAP det = det ;
