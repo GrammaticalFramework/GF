@@ -49,6 +49,24 @@ valStrOpts flag def opts =
     v:_ -> valueString v
     _   -> def
 
+maybeCIdOpts :: String -> a -> (CId -> a) -> [Option] -> a
+maybeCIdOpts flag def fn opts =
+  case [v | OFlag f (VId v) <- opts, f == flag] of
+    (v:_) -> fn (mkCId v)
+    _     -> def
+
+maybeIntOpts :: String -> a -> (Int -> a) -> [Option] -> a
+maybeIntOpts flag def fn opts =
+  case [v | OFlag f (VInt v) <- opts, f == flag] of
+    (v:_) -> fn v
+    _     -> def
+
+maybeStrOpts :: String -> a -> (String -> a) -> [Option] -> a
+maybeStrOpts flag def fn opts =
+  case listFlags flag opts of
+    v:_ -> fn (valueString v)
+    _   -> def
+
 listFlags flag opts = [v | OFlag f v <- opts, f == flag]
 
 valueString v =

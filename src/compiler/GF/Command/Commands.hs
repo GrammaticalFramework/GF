@@ -197,7 +197,7 @@ pgfCommands = Map.fromList [
                    Just ex -> generateRandomFromDepth gen pgf ex (Just dp)
                    Nothing -> generateRandomDepth     gen pgf (optType pgf opts) (Just dp)
        returnFromExprs $ take (optNum opts) ts
-     }),
+     }),-}
   ("gt", emptyCommandInfo {
      longname = "generate_trees",
      synopsis = "generates a list of trees, by default exhaustive",
@@ -226,7 +226,7 @@ pgfCommands = Map.fromList [
                   Just ex -> generateFromDepth pgfr ex (Just dp)
                   Nothing -> generateAllDepth pgfr (optType pgf opts) (Just dp)
        returnFromExprs $ take (optNumInf opts) ts
-     }),
+     }){-,
   ("i", emptyCommandInfo {
      longname = "import",
      synopsis = "import a grammar from source code or compiled .pgf file",
@@ -753,9 +753,9 @@ pgfCommands = Map.fromList [
      needsTypeCheck = False
      })-}
   ]
-{- where
+ where
    getEnv exec opts ts = liftSIO . exec opts ts =<< getPGFEnv
-
+{-
    par pgf opts s = case optOpenTypes opts of
                   []        -> [parse_ pgf lang (optType pgf opts) (Just dp) s | lang <- optLangs pgf opts]
                   open_typs -> [parseWithRecovery pgf lang (optType pgf opts) open_typs (Just dp) s | lang <- optLangs pgf opts]
@@ -845,9 +845,10 @@ pgfCommands = Map.fromList [
                       in cod : filter (/=cod) (map prOpt opts)
        _ -> map prOpt opts
 -}
-   optRestricted opts pgf =
-     restrictPGF (\f -> and [hasLin pgf la f | la <- optLangs pgf opts]) pgf
-
+-}
+   optRestricted opts pgf = pgf
+     --restrictPGF (\f -> and [hasLin pgf la f | la <- optLangs pgf opts]) pgf
+{-
    optLang  = optLangFlag "lang"
    optLangs = optLangsFlag "lang"
 
@@ -872,24 +873,24 @@ pgfCommands = Map.fromList [
        return (setProbabilities probs pgf)
 
    optFile opts = valStrOpts "file" "_gftmp" opts
-
-   optType pgf opts =
-     let str = valStrOpts "cat" (showCId $ lookStartCat pgf) opts
-     in case readType str of
-          Just ty -> case checkType pgf ty of
-                       Left tcErr -> error $ render (ppTcError tcErr)
-                       Right ty   -> ty
-          Nothing -> error ("Can't parse '"++str++"' as a type")
-   optViewFormat opts = valStrOpts "format" "png" opts
+-}
+   optType (Just pgf) opts =
+     let readOpt str = case readType str of
+                         Just ty -> case checkType pgf ty of
+                                      Left tcErr -> error $ render (ppTcError tcErr)
+                                      Right ty   -> ty
+                         Nothing -> error ("Can't parse '"++str++"' as a type")
+     in maybeStrOpts "cat" (startCat pgf) readOpt opts
+{-   optViewFormat opts = valStrOpts "format" "png" opts
    optViewGraph opts = valStrOpts "view" "open" opts
-   optNum opts = valIntOpts "number" 1 opts
+   optNum opts = valIntOpts "number" 1 opts-}
    optNumInf opts = valIntOpts "number" 1000000000 opts ---- 10^9
    takeOptNum opts = take (optNumInf opts)
 
    returnFromExprs es = return $ case es of
      [] -> pipeMessage "no trees found"
      _  -> fromExprs es
-
+{-
    prGrammar (Env pgf mos) opts
      | isOpt "pgf"      opts = do
           let pgf1 = if isOpt "opt" opts then optimizePGF pgf else pgf
@@ -922,11 +923,11 @@ pgfCommands = Map.fromList [
    optClitics opts = case valStrOpts "clitics" "" opts of
      "" -> []
      cs -> map reverse $ chunks ',' cs
-
+-}
    mexp xs = case xs of
      t:_ -> Just t
      _   -> Nothing
-
+{-
    -- ps -f -g s returns g (f s)
    treeOps pgf opts s = foldr app s (reverse opts) where
      app (OOpt  op)         | Just (Left  f) <- treeOp pgf op = f
