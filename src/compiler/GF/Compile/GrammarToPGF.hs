@@ -193,7 +193,7 @@ genCncFuns gr am cm seqs cdefs fid_cnt cnccat_ranges =
   let (fid_cnt1,funs_cnt1,funs1,lindefs,linrefs) = mkCncCats cdefs fid_cnt  0 [] IntMap.empty IntMap.empty
       (fid_cnt2,funs_cnt2,funs2,prods0)          = mkCncFuns cdefs fid_cnt1 funs_cnt1 funs1 lindefs Map.empty IntMap.empty
       prods                                      = [(fid,Set.toList prodSet) | (fid,prodSet) <- IntMap.toList prods0]
-  in (fid_cnt2,prods,IntMap.toList lindefs,IntMap.toList linrefs,funs2)
+  in (fid_cnt2,prods,IntMap.toList lindefs,IntMap.toList linrefs,reverse funs2)
   where
     mkCncCats []                                                          fid_cnt funs_cnt funs lindefs linrefs =
       (fid_cnt,funs_cnt,funs,lindefs,linrefs)
@@ -204,7 +204,7 @@ genCncFuns gr am cm seqs cdefs fid_cnt cnccat_ranges =
           linrefs'   = foldl' (toLinRef (am,id) funs_cnt) linrefs prods0
           funs'      = foldl' (toCncFun funs_cnt (m,mkLinDefId id)) funs (assocs funs0)
       in mkCncCats cdefs fid_cnt funs_cnt' funs' lindefs' linrefs'
-    mkCncCats (_                                                :cdefs) fid_cnt funs_cnt funs lindefs linrefs =
+    mkCncCats (_                                                  :cdefs) fid_cnt funs_cnt funs lindefs linrefs =
       mkCncCats cdefs fid_cnt funs_cnt funs lindefs linrefs
 
     mkCncFuns []                                                        fid_cnt funs_cnt funs lindefs crc prods =
@@ -213,7 +213,7 @@ genCncFuns gr am cm seqs cdefs fid_cnt cnccat_ranges =
       let ty_C           = err error (\x -> x) $ fmap GM.typeForm (Look.lookupFunType gr am id)
           !funs_cnt'     = let (s_funid, e_funid) = bounds funs0
                            in funs_cnt+(e_funid-s_funid+1)
-          !(fid_cnt',crc',prods') 
+          !(fid_cnt',crc',prods')
                          = foldl' (toProd lindefs ty_C funs_cnt)
                                   (fid_cnt,crc,prods) prods0
           funs'          = foldl' (toCncFun funs_cnt (m,id)) funs (assocs funs0)
