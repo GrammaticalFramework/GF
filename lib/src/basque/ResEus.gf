@@ -528,7 +528,7 @@ oper
     case vp.val of {
       Da x     => AditzTrinkoak.syntIntransVerb (Da x) ;
 
-      Zaio   => AditzTrinkoak.ukanZaio ! vp.iobj.agr ; --are there other Zaio (nor-nori) verbs?
+      Zaio   => AditzTrinkoak.ukanZaio ! vp.dobj.agr ; --are there other Zaio (nor-nori) verbs?
 
       Du x =>
         let aux = AditzTrinkoak.syntTransVerb (Du x) 
