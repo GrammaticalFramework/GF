@@ -7,7 +7,7 @@ import Prelude hiding (putStrLn)
 
 import PGF
 
--- import PGF.Internal(lookStartCat,functionsToCat,lookValCat,restrictPGF,hasLin)
+-- import PGF.Internal(lookStartCat,functionsToCat,lookValCat,hasLin)
 -- import PGF.Internal(abstract,funs,cats,Expr(EFun)) ----
 --import PGF.Internal(ppFun,ppCat)
 import PGF.Internal(optimizePGF)
@@ -219,12 +219,11 @@ pgfCommands = Map.fromList [
        mkEx "gt -cat=NP -depth=2    -- trees in the category NP to depth 2",
        mkEx "gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))"
        ],
-     exec = getEnv $ \ opts arg (Env (Just pgf) mos) -> do
-       let pgfr = optRestricted opts pgf
+     exec = needPGF $ \opts arg pgf mos -> do
        let dp = valIntOpts "depth" 4 opts
        let ts = case mexp (toExprs arg) of
-                  Just ex -> generateFromDepth pgfr ex (Just dp)
-                  Nothing -> generateAllDepth pgfr (optType pgf opts) (Just dp)
+                  Just ex -> generateFromDepth pgf ex (Just dp)
+                  Nothing -> generateAllDepth pgf (optType pgf opts) (Just dp)
        returnFromExprs $ take (optNumInf opts) ts
      }){-,
   ("i", emptyCommandInfo {
@@ -754,7 +753,11 @@ pgfCommands = Map.fromList [
      })-}
   ]
  where
-   getEnv exec opts ts = liftSIO . exec opts ts =<< getPGFEnv
+   needPGF exec opts ts = do
+     Env mb_pgf mos <- getPGFEnv
+     case mb_pgf of
+       Just pgf -> liftSIO $ exec opts ts pgf mos
+       _ -> fail "Import a grammar before using this command"
 {-
    par pgf opts s = case optOpenTypes opts of
                   []        -> [parse_ pgf lang (optType pgf opts) (Just dp) s | lang <- optLangs pgf opts]
@@ -845,10 +848,6 @@ pgfCommands = Map.fromList [
                       in cod : filter (/=cod) (map prOpt opts)
        _ -> map prOpt opts
 -}
--}
-   optRestricted opts pgf = pgf
-     --restrictPGF (\f -> and [hasLin pgf la f | la <- optLangs pgf opts]) pgf
-{-
    optLang  = optLangFlag "lang"
    optLangs = optLangsFlag "lang"
 
