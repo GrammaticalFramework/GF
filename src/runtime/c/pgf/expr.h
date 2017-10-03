@@ -238,11 +238,7 @@ PGF_API_DECL void
 pgf_print_expr_tuple(size_t n_exprs, PgfExpr exprs[], PgfPrintContext* ctxt,
                      GuOut* out, GuExn* err);
 
-PGF_API_DECL void
-pgf_print_category(PgfPGF *gr, PgfCId catname,
-                   GuOut* out, GuExn *err);
-
-PGF_API prob_t
+PGF_API_DECL prob_t
 pgf_compute_tree_probability(PgfPGF *gr, PgfExpr expr);
 
 #endif /* EXPR_H_ */

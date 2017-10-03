@@ -295,6 +295,9 @@ foreign import ccall "pgf/pgf.h pgf_iter_categories"
 foreign import ccall "pgf/pgf.h pgf_start_cat"
   pgf_start_cat :: Ptr PgfPGF -> Ptr GuPool -> IO PgfType
 
+foreign import ccall "pgf/pgf.h pgf_category_context"
+  pgf_category_context :: Ptr PgfPGF -> CString -> IO (Ptr GuSeq)
+
 foreign import ccall "pgf/pgf.h pgf_iter_functions"
   pgf_iter_functions :: Ptr PgfPGF -> Ptr GuMapItor -> Ptr GuExn -> IO ()
 
@@ -303,6 +306,9 @@ foreign import ccall "pgf/pgf.h pgf_iter_functions_by_cat"
 
 foreign import ccall "pgf/pgf.h pgf_function_type"
    pgf_function_type :: Ptr PgfPGF -> CString -> IO PgfType
+
+foreign import ccall "pgf/expr.h pgf_function_is_constructor"
+   pgf_function_is_constructor :: Ptr PgfPGF -> CString -> IO (#type bool)
 
 foreign import ccall "pgf/pgf.h pgf_print_name"
   pgf_print_name :: Ptr PgfConcr -> CString -> IO CString
@@ -475,9 +481,6 @@ foreign import ccall "pgf/expr.h pgf_print_expr"
 
 foreign import ccall "pgf/expr.h pgf_print_expr_tuple"
   pgf_print_expr_tuple :: CSizeT -> Ptr PgfExpr -> Ptr PgfPrintContext -> Ptr GuOut -> Ptr GuExn -> IO ()
-
-foreign import ccall "pgf/expr.h pgf_print_category"
-  pgf_print_category :: Ptr PgfPGF -> CString -> Ptr GuOut -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/expr.h pgf_print_type"
   pgf_print_type :: PgfType -> Ptr PgfPrintContext -> CInt -> Ptr GuOut -> Ptr GuExn -> IO ()
