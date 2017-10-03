@@ -17,11 +17,14 @@ oper
     mkVForms = overload {
       mkVForms : Str -> VForms = \du ->
         let due : Str = case du of {
-            _ + "en"          => init du ;        -- zen / zen
+            _ + "en"          => init du ;        -- zen / ze+la
+            _ + "on"          => init du ;        -- zitzaion / zitzaio+la
+            _ + "an"          => init du ;        -- zitzaidan / zitzaida+la
             _ + "gu"          => du ;             -- dugu / dugu+la
             _ + "u"           => du + "e" ;       -- du / due+n
             _ + "z"           => du + "e" ;       -- naiz / naize+n
             _ + "un"          => du + "a" ;       -- dun / duna+la   
+
             _ + "uk"          => init du + "a" ;  -- duk / dua+la
             x + "t"           => x + "da" ;       -- dut / duda+n
             _ + "r"           => du + "re" ;      -- dator / datorre+n
@@ -135,7 +138,7 @@ oper
                             Zuek => mkVForms "zinatekete" ; 
                             Hauek => mkVForms "lirateke" } ;
              -- Present and future are identical
-	           _     => table {Ni => mkVForms "naiz" ; 
+	           pres => table {Ni => mkVForms "naiz" ; 
                              Hi _ => mkVForms "haiz" ; 
                              Zu => mkVForms "zara" "zare" ; 
                              Hau => mkVForms "da" "de" ; 
