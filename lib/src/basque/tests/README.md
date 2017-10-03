@@ -13,7 +13,7 @@ gf --run < ukanDio.gfs > /tmp/Dio.txt
 And in the directory with Apertium, I run this:
 
 ```
-cat /tmp/Dio.txt | lt-proc -w eus.automorf.bin | egrep -o "\*(.*)$"  | sort -u
+cat /tmp/Dio.txt | lt-proc -w eus.automorf.bin | egrep -o "\*([a-zñ]*)\>" | sort -u
 *didagu$
 ...
 *zatzaie$
