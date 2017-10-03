@@ -278,27 +278,30 @@ resource SuffixTur = open Prelude, Predef, ResTur, HarmonyTur in {
                 _ => wordC.p1
               } ;
 
---  An auxiallary oper that fills in SuffixTable, used to avoid copy-paste
-    makeH4Table : {p1 : Str ; p2 : Str ; p3 : Str ; p4 : Str ;} -> {p1 : Str ; p2 : Str ; p3 : Str ; p4 : Str ; p5 : Str ; p6 : Str ; p7 : Str ; p8 : Str ;} -> SuffixTable =
-      \lirV,lirC ->
-	table {
-	  SVow => table {
-		      I_Har => lirV.p1 ;
-		      Ih_Har => lirV.p2 ;
-		      U_Har => lirV.p3 ;
-		      Uh_Har => lirV.p4
-		  } ;
-	  SCon Soft => table {
-			I_Har => lirC.p1 ;
-			Ih_Har => lirC.p2 ;
-			U_Har => lirC.p3 ;
-			Uh_Har => lirC.p4
-		      } ;
-	  SCon Hard => table {
-			I_Har => lirC.p5 ;
-			Ih_Har => lirC.p6 ;
-			U_Har => lirC.p7 ;
-			Uh_Har => lirC.p8
-		      }
-        } ;
+    --  An auxiliary oper that fills in SuffixTable, used to avoid copy-paste
+    makeH4Table : {p1 : Str ; p2 : Str ; p3 : Str ; p4 : Str ;}
+               -> {p1 : Str ; p2 : Str ; p3 : Str ; p4 : Str ;
+                   p5 : Str ; p6 : Str ; p7 : Str ; p8 : Str }
+               -> SuffixTable =
+        \lirV,lirC ->
+          table {
+            SVow => table {
+                  I_Har => lirV.p1 ;
+                  Ih_Har => lirV.p2 ;
+                  U_Har => lirV.p3 ;
+                  Uh_Har => lirV.p4
+            } ;
+            SCon Soft => table {
+              I_Har => lirC.p1 ;
+              Ih_Har => lirC.p2 ;
+              U_Har => lirC.p3 ;
+              Uh_Har => lirC.p4
+            } ;
+            SCon Hard => table {
+              I_Har => lirC.p5 ;
+              Ih_Har => lirC.p6 ;
+              U_Har => lirC.p7 ;
+              Uh_Har => lirC.p8
+            }
+          } ;
 }
