@@ -1,0 +1,6 @@
+import ../basque/LangEus.gf
+
+gt PrepNP ?  (DetCN (DetQuant DefArt NumSg) (UseN girl_N)) | l -treebank -bind
+gt PrepNP ?  (DetCN (DetQuant DefArt NumSg) (UseN boy_N)) | l -treebank -bind
+gt PrepNP ?  (DetCN (DetQuant DefArt NumSg) (UseN dog_N)) | l -treebank -bind
+gt PrepNP ?  (DetCN (DetQuant DefArt NumSg) (UseN beer_N)) | l -treebank -bind

@@ -1,0 +1,3 @@
+import ../LangEus.gf
+
+gt UseCl (TTAnt ? ?) PPos (PredVP (UsePron ?) (ComplSlash (SlashV2a see_V2) (UsePron ?))) | l 
