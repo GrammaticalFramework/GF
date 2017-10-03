@@ -219,7 +219,7 @@ pgfCommands = Map.fromList [
        mkEx "gt -cat=NP -depth=2    -- trees in the category NP to depth 2",
        mkEx "gt (AdjCN ? (UseN ?))  -- trees of form (AdjCN ? (UseN ?))"
        ],
-     exec = getEnv $ \ opts arg (Env pgf mos) -> do
+     exec = getEnv $ \ opts arg (Env (Just pgf) mos) -> do
        let pgfr = optRestricted opts pgf
        let dp = valIntOpts "depth" 4 opts
        let ts = case mexp (toExprs arg) of
@@ -874,7 +874,7 @@ pgfCommands = Map.fromList [
 
    optFile opts = valStrOpts "file" "_gftmp" opts
 -}
-   optType (Just pgf) opts =
+   optType pgf opts =
      let readOpt str = case readType str of
                          Just ty -> case checkType pgf ty of
                                       Left tcErr -> error $ render (ppTcError tcErr)
