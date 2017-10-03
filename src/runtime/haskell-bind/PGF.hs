@@ -16,7 +16,7 @@ module PGF (PGF, readPGF, showPGF,
             compute,
             rankTreesByProbs,
 
-            TcError, ppTcError, inferExpr,
+            TcError, ppTcError, inferExpr, checkType,
 
             PGF2.Type, PGF2.Hypo, showType, PGF2.readType,
             mkType, unType,
@@ -139,6 +139,11 @@ ppTcError s = s
 
 inferExpr (PGF gr _) e = 
   case PGF2.inferExpr gr e of
+    Right res -> Right res
+    Left  msg -> Left (text msg)
+
+checkType (PGF gr _) ty = 
+  case PGF2.checkType gr ty of
     Right res -> Right res
     Left  msg -> Left (text msg)
 
