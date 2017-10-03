@@ -119,7 +119,7 @@ newPGF flags (CId name) abstr concrs =
                     abstr
                     [(name,concr) | (CId name,concr) <- concrs])
 
-writePGF = PGF2.writePGF
+writePGF fpath (PGF pgf _) = PGF2.writePGF fpath pgf
 
 
 ppFunId funid = char 'F' <> int funid
