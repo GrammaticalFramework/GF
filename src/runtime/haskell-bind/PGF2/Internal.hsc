@@ -36,7 +36,7 @@ import Data.IORef
 import Data.Maybe(fromMaybe)
 import Data.List(sortBy)
 import Control.Exception(Exception,throwIO)
-import Control.Monad(foldM)
+import Control.Monad(foldM,when)
 import qualified Data.Map as Map
 
 type Token = String
@@ -240,6 +240,9 @@ concrTotalFuns c = unsafePerformIO $ do
 concrFunction :: Concr -> FunId -> (Fun,[SeqId])
 concrFunction c funid = unsafePerformIO $ do
   c_cncfuns <- (#peek PgfConcr, cncfuns) (concr c)
+  c_len <- (#peek GuSeq, len) c_cncfuns
+  when (funid >= fromIntegral (c_len :: CSizeT)) $
+    throwIO (PGFError ("Invalid concrete function: F"++show funid))
   c_cncfun <- peek (c_cncfuns `plusPtr` ((#offset GuSeq, data)+funid*(#size PgfCncFun*)))
   c_absfun <- (#peek PgfCncFun, absfun) c_cncfun
   c_name <- (#peek PgfAbsFun, name) c_absfun
@@ -263,6 +266,9 @@ concrTotalSeqs c = unsafePerformIO $ do
 concrSequence :: Concr -> SeqId -> [Symbol]
 concrSequence c seqid = unsafePerformIO $ do
   c_sequences <- (#peek PgfConcr, sequences) (concr c)
+  c_len <- (#peek GuSeq, len) c_sequences
+  when (seqid >= fromIntegral (c_len :: CSizeT)) $
+    throwIO (PGFError ("Invalid concrete sequence: S"++show seqid))
   let c_sequence = c_sequences `plusPtr` ((#offset GuSeq, data)+seqid*(#size PgfSequence))
   c_syms <- (#peek PgfSequence, syms) c_sequence
   res <- peekSequence (deRef peekSymbol) (#size GuVariant) c_syms
