@@ -79,10 +79,12 @@ oper
 
   norkUkanMid : Agr => Str = table {
     Hi Masc => "a" ;  Hi Fem  => "na" ;
-    Ni => "da" ; x => norkUkanLast ! x } ;
+    Ni => "da" ; Hauek => "e" ;
+    x => norkUkanLast ! x } ;
 
   noriUkanLast : Agr => Str = table {
-    Hau => "o" ; x => norkUkanLast ! x } ;
+    Hau => "o" ;  Hauek => "e" ;
+    x => norkUkanLast ! x } ;
 
   noriUkanMid : Agr => Str = table {
     Hau => "o" ; Hauek => "e" ; 
@@ -250,7 +252,7 @@ oper
     ---
  
     te  : Str = case nor of { Zuek => "te" ; _ => [] } ;
-    zki : Str = case getNum nori of { Sg => [] ; Pl => "zki" } ;      
+    zki : Str = case nor of { (Zu|Zuek|Gu|Hauek) => "zki" ; _ => [] } ;
 
     tenses : Tense => Str = table {
       Past => let zin : Str = norPast ! nor ;
