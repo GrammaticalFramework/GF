@@ -1,7 +1,7 @@
-module GF.Compiler (mainGFC, linkGrammars, writePGF, writeOutputs) where
+module GF.Compiler (mainGFC, linkGrammars, writeGrammar, writeOutputs) where
 
 import PGF
-import PGF.Internal(optimizePGF,unionPGF,putSplitAbs)
+import PGF.Internal(optimizePGF,unionPGF,putSplitAbs,writePGF)
 import GF.Compile as S(batchCompile,link,srcAbsName)
 import GF.CompileInParallel as P(parallelBatchCompile)
 import GF.Compile.Export
@@ -80,7 +80,7 @@ linkGrammars opts (t_src,~cnc_grs@(~(cnc,gr):_)) =
          then putIfVerb opts $ pgfFile ++ " is up-to-date."
          else do pgfs <- mapM (link opts) cnc_grs
                  let pgf = foldl1 unionPGF pgfs
-                 writePGF opts pgf
+                 writeGrammar opts pgf
                  writeOutputs opts pgf
 
 compileCFFiles :: Options -> [FilePath] -> IOE ()
@@ -94,7 +94,7 @@ compileCFFiles opts fs = do
   unless (flag optStopAfterPhase opts == Compile) $
      do probs <- liftIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
         let pgf' = setProbabilities probs $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
-        writePGF opts pgf'
+        writeGrammar opts pgf'
         writeOutputs opts pgf'
 
 unionPGFFiles :: Options -> [FilePath] -> IOE ()
@@ -118,7 +118,7 @@ unionPGFFiles opts fs =
              pgfFile = outputPath opts (grammarName opts pgf <.> "pgf")
          if pgfFile `elem` fs
            then putStrLnE $ "Refusing to overwrite " ++ pgfFile
-           else writePGF opts pgf
+           else writeGrammar opts pgf
          writeOutputs opts pgf
 
     readPGFVerbose f =
@@ -135,13 +135,13 @@ writeOutputs opts pgf = do
 -- | Write the result of compiling a grammar (e.g. with 'compileToPGF' or
 -- 'link') to a @.pgf@ file.
 -- A split PGF file is output if the @-split-pgf@ option is used.
-writePGF :: Options -> PGF -> IOE ()
-writePGF opts pgf =
+writeGrammar :: Options -> PGF -> IOE ()
+writeGrammar opts pgf =
     if flag optSplitPGF opts then writeSplitPGF else writeNormalPGF
   where
     writeNormalPGF =
        do let outfile = outputPath opts (grammarName opts pgf <.> "pgf")
-          writing opts outfile $ (error "encodeFile outfile pgf")
+          writing opts outfile (writePGF outfile pgf)
 
     writeSplitPGF =
       do let outfile = outputPath opts (grammarName opts pgf <.> "pgf")
