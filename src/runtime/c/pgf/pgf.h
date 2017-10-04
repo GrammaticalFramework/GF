@@ -84,6 +84,9 @@ pgf_start_cat(PgfPGF* pgf, GuPool* pool);
 PGF_API_DECL PgfHypos*
 pgf_category_context(PgfPGF *gr, PgfCId catname);
 
+PGF_API_DECL prob_t
+pgf_category_prob(PgfPGF* pgf, PgfCId catname);
+
 PGF_API_DECL void
 pgf_iter_functions(PgfPGF* pgf, GuMapItor* itor, GuExn* err);
 
@@ -97,7 +100,7 @@ pgf_function_type(PgfPGF* pgf, PgfCId funname);
 PGF_API_DECL bool
 pgf_function_is_constructor(PgfPGF* pgf, PgfCId funname);
 
-PGF_API_DECL double
+PGF_API_DECL prob_t
 pgf_function_prob(PgfPGF* pgf, PgfCId funname);
 
 PGF_API_DECL GuString

@@ -1650,10 +1650,10 @@ pgf_print_hypo(PgfHypo *hypo, PgfPrintContext* ctxt, int prec,
         } else {
             pgf_print_type(hypo->type, ctxt, prec, out, err);
         }
-        
+
         gu_pool_free(tmp_pool);
     }
-    
+
 	PgfPrintContext* new_ctxt = malloc(sizeof(PgfPrintContext));
 	new_ctxt->name = hypo->cid;
 	new_ctxt->next = ctxt;
@@ -1668,7 +1668,7 @@ pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
     
     if (n_hypos > 0) {
 		if (prec > 0) gu_putc('(', out, err);
-		
+
 		PgfPrintContext* new_ctxt = ctxt;
 		for (size_t i = 0; i < n_hypos; i++) {
 			PgfHypo *hypo = gu_seq_index(type->hypos, PgfHypo, i);
@@ -1704,6 +1704,22 @@ pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
 		if (prec > 3) gu_putc(')', out, err);
 	} else {
 		pgf_print_cid(type->cid, out, err);
+	}
+}
+
+PGF_API void
+pgf_print_context(PgfHypos *hypos, PgfPrintContext* ctxt,
+                  GuOut *out, GuExn *err)
+{
+	PgfPrintContext* new_ctxt = ctxt;
+
+    size_t n_hypos = gu_seq_length(hypos);
+	for (size_t i = 0; i < n_hypos; i++) {
+		if (i > 0)
+			gu_putc(' ', out, err);
+
+		PgfHypo *hypo = gu_seq_index(hypos, PgfHypo, i);
+		new_ctxt = pgf_print_hypo(hypo, new_ctxt, 4, out, err);		
 	}
 }
 

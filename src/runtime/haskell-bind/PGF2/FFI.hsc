@@ -298,6 +298,9 @@ foreign import ccall "pgf/pgf.h pgf_start_cat"
 foreign import ccall "pgf/pgf.h pgf_category_context"
   pgf_category_context :: Ptr PgfPGF -> CString -> IO (Ptr GuSeq)
 
+foreign import ccall "pgf/pgf.h pgf_category_prob"
+  pgf_category_prob :: Ptr PgfPGF -> CString -> IO (#type prob_t)
+
 foreign import ccall "pgf/pgf.h pgf_iter_functions"
   pgf_iter_functions :: Ptr PgfPGF -> Ptr GuMapItor -> Ptr GuExn -> IO ()
 
@@ -484,6 +487,9 @@ foreign import ccall "pgf/expr.h pgf_print_expr_tuple"
 
 foreign import ccall "pgf/expr.h pgf_print_type"
   pgf_print_type :: PgfType -> Ptr PgfPrintContext -> CInt -> Ptr GuOut -> Ptr GuExn -> IO ()
+
+foreign import ccall "pgf/expr.h pgf_print_context"
+  pgf_print_context :: Ptr GuSeq -> Ptr PgfPrintContext -> Ptr GuOut -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/pgf.h pgf_generate_all"
   pgf_generate_all :: Ptr PgfPGF -> PgfType -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)

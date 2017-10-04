@@ -188,7 +188,7 @@ Java_org_grammaticalframework_pgf_PGF_getFunctionProb(JNIEnv* env, jobject self,
 	PgfPGF* pgf = get_ref(env, self);
 	GuPool* tmp_pool = gu_local_pool();
 	PgfCId id = j2gu_string(env, jid, tmp_pool);
-	double prob = pgf_function_prob(pgf, id);
+	prob_t prob = pgf_function_prob(pgf, id);
 	gu_pool_free(tmp_pool);
 
 	return prob;

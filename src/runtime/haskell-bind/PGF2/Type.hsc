@@ -64,8 +64,7 @@ mkType hypos cat exprs = unsafePerformIO $ do
   typPl  <- gu_new_pool
   let n_exprs = fromIntegral (length exprs) :: CSizeT
   c_type <- gu_malloc typPl ((#size PgfType) + n_exprs * (#size PgfExpr))
-  c_hypos <- gu_make_seq (#size PgfHypo) (fromIntegral (length hypos)) typPl
-  hs <- pokeHypos (c_hypos `plusPtr` (#offset GuSeq, data)) hypos typPl
+  c_hypos <- newSequence (#size PgfHypo) (pokeHypo typPl) hypos typPl
   (#poke PgfType, hypos) c_type c_hypos
   ccat <- newUtf8CString cat typPl
   (#poke PgfType, cid) c_type ccat
@@ -73,27 +72,25 @@ mkType hypos cat exprs = unsafePerformIO $ do
   pokeExprs (c_type `plusPtr` (#offset PgfType, exprs)) exprs
   typFPl <- newForeignPtr gu_pool_finalizer typPl
   return (Type c_type (mapM_ touchHypo hypos >> mapM_ touchExpr exprs >> touchForeignPtr typFPl))
+
+pokeHypo :: Ptr GuPool -> Ptr a -> Hypo -> IO ()
+pokeHypo pool c_hypo (bind_type,cid,Type c_ty _) = do
+  (#poke PgfHypo, bind_type) c_hypo cbind_type
+  newUtf8CString cid pool >>= (#poke PgfHypo, cid) c_hypo
+  (#poke PgfHypo, type) c_hypo c_ty
   where
-    pokeHypos :: Ptr a -> [Hypo] -> Ptr GuPool -> IO ()
-    pokeHypos c_hypo []                                    typPl = return ()
-    pokeHypos c_hypo ((bind_type,cid,Type c_ty _) : hypos) typPl = do
-      (#poke PgfHypo, bind_type) c_hypo cbind_type
-      newUtf8CString cid typPl >>= (#poke PgfHypo, cid) c_hypo
-      (#poke PgfHypo, type) c_hypo c_ty
-      pokeHypos (plusPtr c_hypo (#size PgfHypo)) hypos typPl
-      where
-        cbind_type :: CInt
-        cbind_type =
-          case bind_type of
-            Explicit -> (#const PGF_BIND_TYPE_EXPLICIT)
-            Implicit -> (#const PGF_BIND_TYPE_IMPLICIT)
+    cbind_type :: CInt
+    cbind_type =
+      case bind_type of
+        Explicit -> (#const PGF_BIND_TYPE_EXPLICIT)
+        Implicit -> (#const PGF_BIND_TYPE_IMPLICIT)
 
-    pokeExprs ptr []              = return ()
-    pokeExprs ptr ((Expr e _):es) = do
-      poke ptr e
-      pokeExprs (plusPtr ptr (#size PgfExpr)) es
-
-    touchHypo (_,_,ty) = touchType ty
+pokeExprs ptr []              = return ()
+pokeExprs ptr ((Expr e _):es) = do
+  poke ptr e
+  pokeExprs (plusPtr ptr (#size PgfExpr)) es
+    
+touchHypo (_,_,ty) = touchType ty
 
 -- | Decomposes a type into a list of hypothesises, a category and 
 -- a list of arguments for the category.
@@ -125,3 +122,20 @@ unType (Type c_type touch) = unsafePerformIO $ do
                        es <- peekExprs ptr (i+1) n
                        return (Expr e touch : es)
       | otherwise = return []
+
+-- | renders a type as a 'String'. The list
+-- of identifiers is the list of all free variables
+-- in the type in order reverse to the order
+-- of binding.
+showContext :: [CId] -> [Hypo] -> String
+showContext scope hypos =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+      do (sb,out) <- newOut tmpPl
+         c_hypos <- newSequence (#size PgfHypo) (pokeHypo tmpPl) hypos tmpPl
+         printCtxt <- newPrintCtxt scope tmpPl
+         exn <- gu_new_exn tmpPl
+         pgf_print_context c_hypos printCtxt out exn
+         mapM_ touchHypo hypos
+         s <- gu_string_buf_freeze sb tmpPl
+         peekUtf8CString s
