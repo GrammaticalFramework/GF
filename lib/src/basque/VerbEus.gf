@@ -90,7 +90,9 @@ lin
 -- copula-preceded complements.
 
   -- : VPSlash -> VP ;
-  ReflVP vps = complSlash vps buru_NP ; ------ TODO
+  ReflVP vps = 
+    let neureBurua : Agr => Str = \\a => reflPron ! a ++ "burua" ;
+    in vps ** insertComp neureBurua <vps : VerbPhrase> ;
 
   -- : Comp -> VP ;
   UseComp comp = insertComp comp.s (copulaVP comp.copula) ;
@@ -138,7 +140,7 @@ lin
   -- Complement : Type = {s : Agr => Str ; copula : SyntVerb1 } ;
 
   -- : AP  -> Comp ;
-  CompAP ap = { s = \\agr => ap.s ++ artDef ! getNum agr ! Abs ! ap.ph  ;
+  CompAP ap = { s = \\agr => ap.s ! agr ++ artDef ! getNum agr ! Abs ! ap.ph  ;
                 copula = Izan };
 
   -- : CN  -> Comp ;

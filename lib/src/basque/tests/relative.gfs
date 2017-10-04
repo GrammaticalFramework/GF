@@ -1,0 +1,13 @@
+import ../LangEus.gf
+import LangEng.gfo
+
+
+l -bind DetCN (DetQuant DefArt NumSg) (RelCN (UseN boy_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a love_V2) (DetCN (DetQuant DefArt NumSg) (UseN girl_N))))))
+l -bind DetCN (DetQuant DefArt NumSg) (RelCN (UseN boy_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a love_V2) (DetCN (DetQuant DefArt NumPl) (UseN girl_N))))))
+l -bind DetCN (DetQuant DefArt NumPl) (RelCN (UseN boy_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a love_V2) (DetCN (DetQuant DefArt NumSg) (UseN girl_N))))))
+l -bind DetCN (DetQuant DefArt NumPl) (RelCN (UseN boy_N) (UseRCl (TTAnt TPres ASimul) PPos (RelVP IdRP (ComplSlash (SlashV2a love_V2) (DetCN (DetQuant DefArt NumPl) (UseN girl_N))))))
+
+l -bind DetCN (DetQuant DefArt NumSg) (RelCN (UseN boy_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (DetCN (DetQuant DefArt NumSg) (UseN girl_N)) (SlashV2a love_V2)))))
+l -bind DetCN (DetQuant DefArt NumSg) (RelCN (UseN boy_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (DetCN (DetQuant DefArt NumPl) (UseN girl_N)) (SlashV2a love_V2)))))
+l -bind DetCN (DetQuant DefArt NumPl) (RelCN (UseN boy_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (DetCN (DetQuant DefArt NumSg) (UseN girl_N)) (SlashV2a love_V2)))))
+l -bind DetCN (DetQuant DefArt NumPl) (RelCN (UseN boy_N) (UseRCl (TTAnt TPres ASimul) PPos (RelSlash IdRP (SlashVP (DetCN (DetQuant DefArt NumPl) (UseN girl_N)) (SlashV2a love_V2)))))

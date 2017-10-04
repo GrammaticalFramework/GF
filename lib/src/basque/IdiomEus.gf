@@ -7,10 +7,13 @@ concrete IdiomEus of Idiom = CatEus ** open Prelude, ResEus in {
 -- often different even in closely related languages.
 
   lin
-{-
-    ImpersCl  : VP -> Cl ;        -- it is hot
-    GenericCl : VP -> Cl ;        -- one sleeps
 
+  -- : VP -> Cl ;        -- it is hot
+  ImpersCl = clFromVP empty_NP ;
+
+  -- : VP -> Cl ;        -- one sleeps
+  GenericCl = clFromVP empty_NP ;
+{-
     CleftNP   : NP  -> RS -> Cl ; -- it is I who did it
     CleftAdv  : Adv -> S  -> Cl ; -- it is here she slept
 
