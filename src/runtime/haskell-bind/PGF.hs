@@ -29,9 +29,10 @@ module PGF (PGF, readPGF, showPGF,
             linearize, bracketedLinearize, tabularLinearizes, showBracketedString,
             ParseOutput(..), parse, parse_, complete,
             PGF2.BracketedString(..), PGF2.flattenBracketedString,
+            hasLinearization,
             showPrintName,
             
-            Morpho, buildMorpho, lookupMorpho, isInMorpho, morphoMissing,
+            Morpho, buildMorpho, lookupMorpho, isInMorpho, morphoMissing, morphoKnown,
 
             Labels, getDepLabels, CncLabels, getCncDepLabels,
 
@@ -39,14 +40,14 @@ module PGF (PGF, readPGF, showPGF,
             generateFromDepth,
 
             PGF2.GraphvizOptions(..),
-            graphvizAbstractTree, graphvizParseTree, graphvizAlignment, graphvizDependencyTree,
+            graphvizAbstractTree, graphvizParseTree, graphvizAlignment, graphvizDependencyTree, graphvizParseTreeDep,
 
             -- * Tries
             ATree(..),Trie(..),toATree,toTrie,
             
             defaultProbabilities, setProbabilities, readProbabilitiesFromFile,
             
-            groupResults
+            groupResults, conlls2latexDoc, gizaAlignment
            ) where
 
 import PGF.Internal
@@ -55,6 +56,7 @@ import qualified Data.Map as Map
 import qualified Text.ParserCombinators.ReadP as RP
 import Data.List(sortBy)
 import Text.PrettyPrint(text)
+import Data.Char(isDigit)
 
 readPGF fpath = do
   gr <- PGF2.readPGF fpath
@@ -144,6 +146,8 @@ parse pgf lang cat s =
 complete (PGF gr langs) lang cat s prefix = error "complete is not implemented"
 parse_ = error "complete is not implemented"
 
+hasLinearization pgf lang (CId f) = PGF2.hasLinearization (lookConcr pgf lang) f
+
 ppTcError s = s
 
 inferExpr (PGF gr _) e = 
@@ -189,12 +193,12 @@ type Morpho = PGF2.Concr
 buildMorpho pgf lang = lookConcr pgf lang
 lookupMorpho cnc w = [(CId lemma,CId an) | (lemma,an,_) <- PGF2.lookupMorpho cnc w]
 isInMorpho cnc w = not (null (PGF2.lookupMorpho cnc w))
-morphoMissing = error "morphoMissing is not implemented"
 
 graphvizAbstractTree (PGF gr _) (funs,cats) = PGF2.graphvizAbstractTree gr PGF2.graphvizDefaults{PGF2.noFun=not funs,PGF2.noCat=not cats}
 graphvizParseTree pgf lang  = PGF2.graphvizParseTree (lookConcr pgf lang)
 graphvizAlignment pgf langs  = PGF2.graphvizWordAlignment (map (lookConcr pgf) langs) PGF2.graphvizDefaults
 graphvizDependencyTree = error "graphvizDependencyTree is not implemented"
+graphvizParseTreeDep = error "graphvizParseTreeDep is not implemented"
 
 browse :: PGF -> CId -> Maybe (String,[CId],[CId])
 browse = error "browse is not implemented"
@@ -241,3 +245,18 @@ groupResults = Map.toList . foldr more Map.empty . start . concat
   start ls = [(l,[s]) | (l,s) <- ls]
   more (l,s) = 
     Map.insertWith (\ [x] xs -> if elem x xs then xs else (x : xs)) l s
+
+conlls2latexDoc = error "conlls2latexDoc is not implemented"
+
+
+morphoMissing  :: Morpho -> [String] -> [String]
+morphoMissing = morphoClassify False
+
+morphoKnown    :: Morpho -> [String] -> [String]
+morphoKnown = morphoClassify True
+
+morphoClassify :: Bool -> Morpho -> [String] -> [String]
+morphoClassify k mo ws = [w | w <- ws, k /= null (lookupMorpho mo w), notLiteral w] where
+  notLiteral w = not (all isDigit w) ---- should be defined somewhere
+
+gizaAlignment = error "gizaAlignment is not implemented"
