@@ -26,8 +26,8 @@ module PGF (PGF, readPGF, showPGF,
 
             Language, readLanguage, showLanguage,
             languages, startCat, languageCode,
-            linearize, bracketedLinearize, tabularLinearizes, ParseOutput(..), 
-            parse, parse_, complete,
+            linearize, bracketedLinearize, tabularLinearizes, showBracketedString,
+            ParseOutput(..), parse, parse_, complete,
             PGF2.BracketedString(..), PGF2.flattenBracketedString,
             showPrintName,
             
@@ -45,6 +45,8 @@ module PGF (PGF, readPGF, showPGF,
             ATree(..),Trie(..),toATree,toTrie,
             
             defaultProbabilities, setProbabilities, readProbabilitiesFromFile,
+            
+            groupResults
            ) where
 
 import PGF.Internal
@@ -119,6 +121,7 @@ unType ty = case PGF2.unType ty of
 linearize pgf lang e = PGF2.linearize (lookConcr pgf lang) e
 bracketedLinearize pgf lang e = PGF2.bracketedLinearize (lookConcr pgf lang) e
 tabularLinearizes pgf lang e = [PGF2.tabularLinearize (lookConcr pgf lang) e]
+showBracketedString = PGF2.showBracketedString
 
 type TcError = String
 
@@ -230,3 +233,11 @@ toTrie = combines . map ((:[]) . singleton)
 defaultProbabilities = error "defaultProbabilities is not implemented"
 setProbabilities _ pgf = pgf -- error "setProbabilities is not implemented"
 readProbabilitiesFromFile = error "readProbabilitiesFromFile is not implemented"
+
+
+groupResults :: [[(Language,String)]] -> [(Language,[String])]
+groupResults = Map.toList . foldr more Map.empty . start . concat
+ where
+  start ls = [(l,[s]) | (l,s) <- ls]
+  more (l,s) = 
+    Map.insertWith (\ [x] xs -> if elem x xs then xs else (x : xs)) l s

@@ -222,7 +222,7 @@ pgfCommands = Map.fromList [
                   Nothing -> generateAllDepth pgf (optType pgf opts) (Just dp)
        returnFromExprs $ take (optNumInf opts) ts
      }),
-{-  ("i", emptyCommandInfo {
+  ("i", emptyCommandInfo {
      longname = "import",
      synopsis = "import a grammar from source code or compiled .pgf file",
      explanation = unlines [
@@ -268,7 +268,7 @@ pgfCommands = Map.fromList [
        mkEx "gr -lang=LangHin -cat=Cl | l -table -to_devanagari -- hindi table",
        mkEx "l -unlexer=\"LangAra=to_arabic LangHin=to_devanagari\" -- different unlexers"
        ],
-     exec = getEnv $ \ opts ts (Env pgf mos) -> return . fromStrings . optLins pgf opts $ toExprs ts,
+     exec = needPGF $ \ opts ts pgf mos -> return . fromStrings . optLins pgf opts $ toExprs ts,
      options = [
        ("all",    "show all forms and variants, one by line (cf. l -list)"),
        ("bracket","show tree structure with brackets and paths to nodes"),
@@ -283,7 +283,7 @@ pgfCommands = Map.fromList [
        ("unlexer","set unlexers separately to each language (space-separated)")
        ]
      }),
-  ("lc", emptyCommandInfo {
+{-  ("lc", emptyCommandInfo {
      longname = "linearize_chunks",
      synopsis = "linearize a tree that has metavariables in maximal chunks without them",
      explanation = unlines [
@@ -783,7 +783,7 @@ pgfCommands = Map.fromList [
              pipeMessage . render $
                "The parsing is successful but the type checking failed with error(s):"
                $$ nest 2 (vcat (map (ppTcError . snd) errs))
-
+-}
    optLins pgf opts ts = case opts of
      _ | isOpt "groups" opts ->
        concatMap snd $ groupResults
@@ -812,14 +812,14 @@ pgfCommands = Map.fromList [
                     map (map (\(p,v) -> p+++":"+++unl v)) . tabularLinearizes pgf lang
        _ | isOpt "bracket" opts -> (:[]) . unwords . map showBracketedString . bracketedLinearize pgf lang
        _                        -> (:[]) . unl . linearize pgf lang
-
+{-
    -- replace each non-atomic constructor with mkC, where C is the val cat
    tree2mk pgf = showExpr [] . t2m where
      t2m t = case unApp t of
        Just (cid,ts@(_:_)) -> mkApp (mk cid) (map t2m ts)
        _ -> t
      mk = mkCId . ("mk" ++) . showCId . lookValCat (abstract pgf)
-
+-}
    unlex opts lang = stringOps Nothing (getUnlex opts lang ++ map prOpt opts) ----
 
    getUnlex opts lang = case words (valStrOpts "unlexer" "" opts) of
@@ -845,6 +845,7 @@ pgfCommands = Map.fromList [
                       in cod : filter (/=cod) (map prOpt opts)
        _ -> map prOpt opts
 -}
+
    optLang  = optLangFlag "lang"
    optLangs = optLangsFlag "lang"
 
@@ -857,7 +858,7 @@ pgfCommands = Map.fromList [
        else (mkCId (showCId (abstractName pgf) ++ la))
 
    optLangFlag f pgf opts = head $ optLangsFlag f pgf opts ++ [wildCId]
-
+{-
    optOpenTypes opts = case valStrOpts "openclass" "" opts of
      ""   -> []
      cats -> mapMaybe readType (chunks ',' cats)
