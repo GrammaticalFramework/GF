@@ -41,7 +41,7 @@ module PGF2 (-- * PGF
 
              -- ** Types
              Type, Hypo, BindType(..), startCat,
-             readType, showType,
+             readType, showType, showContext,
              mkType, unType,
 
              -- ** Type checking
@@ -1079,8 +1079,7 @@ categoryContext :: PGF -> Cat -> Maybe [Hypo]
 categoryContext p cat =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
-      do (sb,out) <- newOut tmpPl
-         c_cat <- newUtf8CString cat tmpPl
+      do c_cat <- newUtf8CString cat tmpPl
          c_hypos <- pgf_category_context (pgf p) c_cat
          if c_hypos == nullPtr
            then return Nothing
@@ -1100,6 +1099,15 @@ categoryContext p cat =
     toBindType :: CInt -> BindType
     toBindType (#const PGF_BIND_TYPE_EXPLICIT) = Explicit
     toBindType (#const PGF_BIND_TYPE_IMPLICIT) = Implicit
+
+categoryProb :: PGF -> Cat -> Float
+categoryProb p cat =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+      do c_cat <- newUtf8CString cat tmpPl
+         c_prob <- pgf_category_prob (pgf p) c_cat
+         touchPGF p
+         return (realToFrac c_prob)
 
 -----------------------------------------------------------------------------
 -- Helper functions

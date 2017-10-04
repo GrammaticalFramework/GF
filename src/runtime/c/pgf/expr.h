@@ -235,6 +235,10 @@ pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
                GuOut* out, GuExn *err);
 
 PGF_API_DECL void
+pgf_print_context(PgfHypos *hypos, PgfPrintContext* ctxt,
+                  GuOut *out, GuExn *err);
+
+PGF_API_DECL void
 pgf_print_expr_tuple(size_t n_exprs, PgfExpr exprs[], PgfPrintContext* ctxt,
                      GuOut* out, GuExn* err);
 

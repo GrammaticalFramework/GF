@@ -152,6 +152,17 @@ pgf_category_context(PgfPGF *gr, PgfCId catname)
 	return abscat->context;
 }
 
+PGF_API prob_t
+pgf_category_prob(PgfPGF* pgf, PgfCId catname)
+{
+	PgfAbsCat* abscat =
+		gu_seq_binsearch(pgf->abstract.cats, pgf_abscat_order, PgfAbsCat, catname);
+	if (abscat == NULL)
+		return INFINITY;
+
+	return abscat->prob;
+}
+
 PGF_API GuString
 pgf_language_code(PgfConcr* concr)
 {
@@ -221,7 +232,7 @@ pgf_function_is_constructor(PgfPGF* pgf, PgfCId funname)
 	return (absfun->defns == NULL);
 }
 
-PGF_API double
+PGF_API prob_t
 pgf_function_prob(PgfPGF* pgf, PgfCId funname) 
 {
 	PgfAbsFun* absfun =
