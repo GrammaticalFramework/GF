@@ -17,11 +17,14 @@ oper
     mkVForms = overload {
       mkVForms : Str -> VForms = \du ->
         let due : Str = case du of {
-            _ + "en"          => init du ;        -- zen / zen
+            _ + "en"          => init du ;        -- zen / ze+la
+            _ + "on"          => init du ;        -- zitzaion / zitzaio+la
+            _ + "an"          => init du ;        -- zitzaidan / zitzaida+la
             _ + "gu"          => du ;             -- dugu / dugu+la
             _ + "u"           => du + "e" ;       -- du / due+n
             _ + "z"           => du + "e" ;       -- naiz / naize+n
             _ + "un"          => du + "a" ;       -- dun / duna+la   
+
             _ + "uk"          => init du + "a" ;  -- duk / dua+la
             x + "t"           => x + "da" ;       -- dut / duda+n
             _ + "r"           => du + "re" ;      -- dator / datorre+n
@@ -79,10 +82,12 @@ oper
 
   norkUkanMid : Agr => Str = table {
     Hi Masc => "a" ;  Hi Fem  => "na" ;
-    Ni => "da" ; x => norkUkanLast ! x } ;
+    Ni => "da" ; Hauek => "e" ;
+    x => norkUkanLast ! x } ;
 
   noriUkanLast : Agr => Str = table {
-    Hau => "o" ; x => norkUkanLast ! x } ;
+    Hau => "o" ;  Hauek => "e" ;
+    x => norkUkanLast ! x } ;
 
   noriUkanMid : Agr => Str = table {
     Hau => "o" ; Hauek => "e" ; 
@@ -99,6 +104,12 @@ oper
     Hi _ => "hindu" ; 
     Zu => "zintu" ; Zuek => "zintuzte" ;
     Hau => nonExist ; Hauek => nonExist } ; -- formed separately
+
+  norUkanZaioNonpres : Agr => Str = table {
+    Ni => "nin" ; Gu => "gin" ;
+    Hi _ => "hin" ; 
+    Zu => "zin" ; Zuek => "zin" ;
+    Hau => "zi" ; Hauek => "zi" } ; 
 
   norUkanCond : Agr => Str = table {
     Zuek => "zintu" ; x => norUkanNonpres ! x } ;
@@ -127,7 +138,7 @@ oper
                             Zuek => mkVForms "zinatekete" ; 
                             Hauek => mkVForms "lirateke" } ;
              -- Present and future are identical
-	           _     => table {Ni => mkVForms "naiz" ; 
+	           pres => table {Ni => mkVForms "naiz" ; 
                              Hi _ => mkVForms "haiz" ; 
                              Zu => mkVForms "zara" "zare" ; 
                              Hau => mkVForms "da" "de" ; 
@@ -158,7 +169,7 @@ oper
           Hauek => norkCond_norHauek ! nork ;
 
           _     => let gintu : Str = norCond ! nor ;
-                       z     : Str = norCondZ ! nor ;
+                       z     : Str = case nor of {(Gu|Zu|Zuek) => "z" ; _ => [] } ;
                        te    : Str = norkCond ! nork ;
                     in gintu + z + "ke" + te } ;
 
@@ -192,8 +203,8 @@ oper
 
       norCond : Agr => Str = norUkanCond ;
 
-      norCondZ : Agr => Str = table { 
-        (Gu|Zu|Zuek) => "z" ; _ => [] } ;
+      --norCondZ : Agr => Str = table { 
+      --  (Gu|Zu|Zuek) => "z" ; _ => [] } ;
 
       norkPast_norHau = table { Ni => "nuen" ; Gu => "genuen" ;
                                 Hi _ => "huen" ;        
@@ -207,7 +218,7 @@ oper
 
       norkCond_norHau = table { Hi _ => "hinduke" ; Zuek => "zenukete" ; 
                                 Hau => "luke" ; Hauek => "lukete" ; 
-                                x => (tk 2 (norkPast_norHau ! x)) + "ke" } ; -- zu+en -> nu+ke
+                                x => (tk 2 (norkPast_norHau ! x)) + "ke" } ; -- nu+en -> nu+ke
 
       norkCond_norHauek = table { Hi _ => "hindukete" ; Zuek => "zenituzkete" ;
                                   Hau => "lituzke" ;  Hauek => "lituzkete" ; 
@@ -220,53 +231,47 @@ oper
   Ukan [NOR] [NORI]
   =============================================================================
 -}
+  ukanZaio : TransV = \\nor,tns,nori => mkVForms (tenses ! tns)  
 
+   where {
+    norPast : Agr => Str = norUkanZaioNonpres ;
+    noriPast : Agr => Str = noriUkanMid ;
 
-  ukanZaio : TransV = table {   --TODO: add all forms
-     -- Nori,Nor
-      Hau   => table { 
-                 Pres => table {
-                          Ni => mkVForms "zait" ;
-                          Hi Fem => mkVForms "zain" ; 
-                          Hi Masc => mkVForms "zaik" ; 
-                          Zu => mkVForms "zaizu" ;
-                          Hau => mkVForms "zaio" ;
-                          Gu => mkVForms "zaigu" ;
-                          Zuek => mkVForms "zaizue" ;
-                          Hauek => mkVForms "zaie" 
-                        } ;
-                 _    => \\agr => noVForm 
-               } ;
-      Hauek => table {
-                 Pres => table {
-                           Ni => mkVForms "zaizkit" ;
-                           Hi Fem => mkVForms "zaizkin" ;
-                           Hi Masc => mkVForms "zaizkik" ;
-                           Zu => mkVForms "zaizkizu" ;
-                           Hau => mkVForms "zaizkio" ;
-                           Gu => mkVForms "zaizkigu" ;
-                           Zuek => mkVForms "zaizkizue" ;
-                           Hauek => mkVForms "zaizkie" 
-                        } ;
-                 _    => \\agr => noVForm 
-               } ;
-      _     => table { 
-                 tns => table {
-                           agr => noVForm 
-                        }
-               }
-  } where {
-    -- For Nor-Nori inflection, map from Agr to prefix morpheme in Nor position
-    norTableZaio : Agr => Str =
-      table { Ni    => "na" ;
-              Hi _  => "ha" ;
-              Gu    => "ga" ;
-              Zu    => "za" ;
-              Zuek  => "za" ;
-              _     => []  --Hau and Hauek
-            } 
+    norCond : Agr => Str = table {
+      Hau => "li" ; Hauek => "li" ;
+      x => norPast ! x } ;
+    noriCond : Agr => Str = noriPast ;
+
+    norPres : Agr => Str = table { 
+      Ni    => "na" ; Gu    => "ga" ;
+      Hi _  => "ha" ;                
+      Zu    => "za" ; Zuek  => "za" ;
+      Hau   => []   ; Hauek => [] } ;
+
+    noriPres : Agr => Str = \\nori => case <nor,nori> of {
+      <Zuek,Ni> => "da" ; -- zai+t, zai+zki+t etc., but `za+tzai+zki_da_te', if nor is Zuek
+      <_,x>     => noriUkanLast ! x } ;
+ 
+    ---
+ 
+    te  : Str = case nor of { Zuek => "te" ; _ => [] } ;
+    zki : Str = case nor of { (Zu|Zuek|Gu|Hauek) => "zki" ; _ => [] } ;
+
+    tenses : Tense => Str = table {
+      Past => let zin : Str = norPast ! nor ;
+                  da : Str = noriPast ! nori ;
+              in zin + "tzai" + zki + da + te + "n" ;
+
+      Cond => let zin : Str = norCond ! nor ;
+                  da : Str = noriCond ! nori ;
+              in zin + "tzai" + zki + da + "ke" + te ;
+
+      pres => let za : Str = norPres ! nor ;
+                  tzai : Str = case getPers nor of { P3 => "zai" ; _ => "tzai" } ;
+                  da   : Str = noriPres ! nori ;
+              in za + tzai + zki + da + te } ;
+
   } ;
-
 
 {-
   =============================================================================
@@ -274,27 +279,13 @@ oper
   =============================================================================
 -}
 
-  ukanDio : DitransV =  -- TODO test properly /IL 2017-07
-   \\nori,nor,tns,nork => mkVForms (
-    case tns of {
-      Cond => "TODO:conditional" ;
-      Past => let zen = norkPast ! nork ;
-                  izki = norPast ! getNum nor ;
-                  da = noriPast ! nori ;
-                  te = norkPastTe ! nork ;
-               in zen + izki + da + te + "n" ;
-
-      _    => let dizki = norPres ! getNum nor ;
-                  da    = noriPres ! nori ; --form of nori depends on nork
-                  zue   = norkPres ! nork 
-               in dizki + da + zue })
-
+  ukanDio : DitransV = \\nori,nor,tns,nork => mkVForms (tenses ! tns)
    where { 
     -- Map from Number to prefix morpheme in Nor position.
     -- Specific to Nor-Nori-Nork, different forms in other auxiliaries.
     norPres : Number => Str = table { Sg => "di" ;
                                       Pl => "dizki" } ;
-    norPast : Number => Str = \\tns => drop 1 (norPres ! tns) ;
+    norPast : Number => Str = \\n => drop 1 (norPres ! n) ;
 
     ------
     -- Map from Agr to morpheme in Nori position.
@@ -311,8 +302,27 @@ oper
 
     norkPast : Agr => Str = norkUkanFirst ;
 
-    norkPastTe : Agr => Str = table { 
-      (Zuek|Hauek) => "te" ; _ => [] } 
+    norkCond : Agr => Str = table { (Hau|Hauek) => "l" ; 
+                                    x => norkPast ! x } ;
+
+    ---
+    te = case nork of { (Zuek|Hauek) => "te" ; _ => [] } ;
+
+    tenses : Tense => Str = table {
+      Cond => let zen = norkCond ! nork ;
+                  izki = norPast ! getNum nor ; -- same forms for past and cond
+                  da = noriPast ! nori ;        -- same forms for past and cond
+               in zen + izki + da + "ke" + te ;
+
+      Past => let zen = norkPast ! nork ;
+                  izki = norPast ! getNum nor ;
+                  da = noriPast ! nori ;
+               in zen + izki + da + te + "n" ;
+
+      pres => let dizki = norPres ! getNum nor ;
+                  da    = noriPres ! nori ; --form of nori depends on nork
+                  zue   = norkPres ! nork 
+               in dizki + da + zue } 
 
   } ;
 
@@ -333,9 +343,9 @@ oper
                      Hauek => mkVForms "zeuden" } ;
 	           _ =>  table {
                      Ni => mkVForms "nago" ; 
-                     Hi _ => mkVForms "hago" ; 
+                     Hi _ => mkVForms "hago" "hagoe" ; 
                      Zu => mkVForms "zaude" ; 
-                     Hau => mkVForms "dago" ; 
+                     Hau => mkVForms "dago" "dagoe" ; 
                      Gu => mkVForms "gaude" ; 
                      Zuek => mkVForms "zaudete" ; 
                      Hauek => mkVForms "daude" }

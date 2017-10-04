@@ -55,7 +55,7 @@ oper
     mkA : Str -> A -> A = \s,a -> irregAdvAdj s a 
   } ;
 
---  mkA2 : Str -> A2 = \s -> lin A2 (mkAdj s) ;
+  mkA2 : Str -> Prep -> A2 = \s,pp -> lin A2 (regAdj s ** { compl = pp }) ;
 
 
 

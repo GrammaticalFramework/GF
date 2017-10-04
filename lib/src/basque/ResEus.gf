@@ -199,10 +199,6 @@ oper
 ---      { Abs => "hargle"; Erg => "bargle" }
 -- the field .agr. is of type Agr.   
 
-  buru_NP : NounPhrase = 
-    empty_NP ** { s = \\_ => "buru" ;
-                  stem = "buru" } ;
-
   empty_NP : NounPhrase = { s = \\_ => [] ;
                            stem = [] ;
                            agr = Hau ; 
@@ -252,15 +248,23 @@ oper
   inanPron : (x1,_,_,_,x5 : Str) -> Agr -> Pronoun = \zer,zeri,zerk,zere,zertaz,a ->
     persPron zer zeri zerk zere zertaz a ** { anim = Inan } ;
 
-
+  reflPron : Agr => Str = table {
+    Ni   => "neure" ;
+    Hi _ => "heure" ;
+    Gu   => "geure" ;
+    Zu   => "zeure" ;
+    Zuek => "zeuen" ;
+    hau  => "haren" } ;
 --------------------------------------------------------------------
 -- Adjective and AP
 
-  Adjective : Type = {s : AForm => Str ; ph : Phono} ;
+  Adjective : Type = { s : AForm => Str ; ph : Phono } ;
 
   Adjective2 : Type = Adjective ** { compl : Postposizio } ;
 
-  AdjPhrase : Type = {s : Str ; ph : Phono ; typ : APType} ; 
+  AdjPhrase : Type = { s : Agr => Str ; 
+                       ph : Phono ; 
+                       typ : APType} ; 
 
   regAdj : Str -> Adjective = \s -> 
     let stem : Str = case last s of {
@@ -366,19 +370,17 @@ param
 
 oper
   --to be used in linref, PhraseEus ... anything where a VP is turned into string!
-  linVP : VerbPhrase -> Str = linVPTense Pres Pres ;
+  linVP : VerbPhrase -> Str = linVPTense Pres Simul ;
 
-  linVPTense : Tense -> Tense -> VerbPhrase -> Str = 
-   \tnsPrc,tnsAux,vp ->
-   let prc = case vp.val of {
-      Da Izan => vp.nstem ;
-      Da Egon => vp.nstem ;
-      _       => vp.prc ! tnsPrc } ;
+  linVPTense : Tense -> Anteriority -> VerbPhrase -> Str = \t,a,vp ->
+   let verb = case isSynthetic vp.val of {
+                    True  => verbformSynthetic t a vp ;
+                    False => verbformPeriphrastic t a vp } ;     
    in 
     vp.adv 
     ++ vp.iobj.s ++ vp.dobj.s ! Pos ++ vp.comp ! Hau  --all the compls!
-    ++ prc
-    ++ (chooseAux vp ! tnsAux ! Hau).indep ;
+    ++ verb.prc
+    ++ (verb.aux ! Hau).indep ;
 
   -- Used in ComplVV : does not include aux!
   linVPPrc : VerbPhrase -> Str = \vp ->  --TODO make it less of a hack.
@@ -526,7 +528,7 @@ oper
     case vp.val of {
       Da x     => AditzTrinkoak.syntIntransVerb (Da x) ;
 
-      Zaio   => AditzTrinkoak.ukanZaio ! vp.iobj.agr ; --are there other Zaio (nor-nori) verbs?
+      Zaio   => AditzTrinkoak.ukanZaio ! vp.dobj.agr ; --are there other Zaio (nor-nori) verbs?
 
       Du x =>
         let aux = AditzTrinkoak.syntTransVerb (Du x) 
