@@ -59,6 +59,9 @@ interface DiffRomance = open CommonRomance, Prelude in {
   oper serCopula : CopulaType ;
   oper estarCopula : CopulaType ;
 
+-- To decide if adverbial questions are inverted
+
+  oper iAdvQuestionInv : Direct = DInv ; -- except Fre
 
 --2 Constants that must derivatively depend on language
 

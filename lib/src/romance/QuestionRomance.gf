@@ -38,8 +38,8 @@ incomplete concrete QuestionRomance of Question =
       s = \\t,a,p,q => 
             let 
               ord = case q of {
-                QDir   => DInv ;
-                QIndir => DInv 
+                QDir   => iAdvQuestionInv ;
+                QIndir => iAdvQuestionInv 
               } ;
               cls = cl.s ! ord ! t ! a ! p ! Indic ;
               why = iadv.s

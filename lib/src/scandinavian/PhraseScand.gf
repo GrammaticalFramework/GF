@@ -12,7 +12,7 @@ incomplete concrete PhraseScand of Phrase =
 
     UttIP ip = {s = ip.s ! nominative} ; --- Acc also
     UttIAdv iadv = iadv ;
-    UttNP np = {s = np.s ! accusative} ;
+    UttNP np = {s = np.s ! nominative} ;
     UttVP vp = {s = infMark ++ infVP vp (agrP3 Utr Sg)} ;
     UttAdv adv = adv ;
     UttCN n = {s = n.s ! Sg ! DIndef ! Nom} ;
