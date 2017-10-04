@@ -27,7 +27,7 @@ module PGF2 (-- * PGF
              Cat,categories,categoryContext,
              -- ** Functions
              Fun, functions, functionsByCat,
-             functionType, functionIsConstructor, hasLinearization,
+             functionType, functionIsDataCon, hasLinearization,
              -- ** Expressions
              Expr,showExpr,readExpr,pExpr,pIdent,
              mkAbs,unAbs,
@@ -238,8 +238,8 @@ functionType p fn =
               else Just (Type c_type (touchPGF p)))
 
 -- | The type of a function
-functionIsConstructor :: PGF -> Fun -> Bool
-functionIsConstructor p fn =
+functionIsDataCon :: PGF -> Fun -> Bool
+functionIsDataCon p fn =
   unsafePerformIO $
   withGuPool $ \tmpPl -> do
     c_fn <- newUtf8CString fn tmpPl
@@ -1075,7 +1075,7 @@ categories p =
       name  <- peekUtf8CString (castPtr key)
       writeIORef ref $! (name : names)
 
-categoryContext :: PGF -> Cat -> [Hypo]
+categoryContext :: PGF -> Cat -> Maybe [Hypo]
 categoryContext p cat =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
@@ -1083,9 +1083,10 @@ categoryContext p cat =
          c_cat <- newUtf8CString cat tmpPl
          c_hypos <- pgf_category_context (pgf p) c_cat
          if c_hypos == nullPtr
-           then return []
+           then return Nothing
            else do n_hypos <- (#peek GuSeq, len) c_hypos
-                   peekHypos (c_hypos `plusPtr` (#offset GuSeq, data)) 0 n_hypos
+                   hypos <- peekHypos (c_hypos `plusPtr` (#offset GuSeq, data)) 0 n_hypos
+                   return (Just hypos)
   where
     peekHypos :: Ptr a -> Int -> Int -> IO [Hypo]
     peekHypos c_hypo i n

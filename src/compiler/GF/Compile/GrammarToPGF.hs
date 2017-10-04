@@ -22,19 +22,20 @@ import qualified Data.Set as Set
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Data.Array.IArray
+import Data.Maybe(fromMaybe)
 
-grammar2PGF :: Options -> SourceGrammar -> ModuleName -> IO PGF
-grammar2PGF opts gr am = do
+grammar2PGF :: Options -> SourceGrammar -> ModuleName -> Map.Map Ident Double -> IO PGF
+grammar2PGF opts gr am probs = do
   cnc_infos <- getConcreteInfos gr am
   return $
-    build (let (an,abs) = mkAbstr am
+    build (let (an,abs) = mkAbstr am probs
                cncs     = map (mkConcr abs) cnc_infos
            in newPGF [] an abs cncs)
   where
     cenv = resourceValues opts gr
 
-    mkAbstr :: (?builder :: Builder s) => ModuleName -> (CId, B s AbstrInfo)
-    mkAbstr am = (mi2i am, newAbstr flags cats funs)
+    mkAbstr :: (?builder :: Builder s) => ModuleName -> Map.Map Ident Double -> (CId, B s AbstrInfo)
+    mkAbstr am probs = (mi2i am, newAbstr flags cats funs)
       where
         aflags = err (const noOptions) mflags (lookupModule gr am)
 
@@ -44,7 +45,7 @@ grammar2PGF opts gr am = do
 
         flags = [(mkCId f,x) | (f,x) <- optionsPGF aflags]
 
-        cats = [(i2i c, snd (mkContext [] cont), 0) |
+        cats = [(i2i c, snd (mkContext [] cont), realToFrac (negate (log (fromMaybe 0 (Map.lookup c probs))))) |
                                    ((m,c),AbsCat (Just (L _ cont))) <- adefs]
 
         funs = [(i2i f, mkType [] ty, arity, {-mkDef gr arity mdef,-} 0) | 

@@ -6,10 +6,6 @@ module GF.Command.Commands (
 import Prelude hiding (putStrLn)
 
 import PGF
-
--- import PGF.Internal(lookStartCat,functionsToCat,lookValCat,hasLin)
--- import PGF.Internal(abstract,funs,cats,Expr(EFun)) ----
---import PGF.Internal(ppFun,ppCat)
 import PGF.Internal(optimizePGF)
 
 import GF.Compile.Export
@@ -225,8 +221,8 @@ pgfCommands = Map.fromList [
                   Just ex -> generateFromDepth pgf ex (Just dp)
                   Nothing -> generateAllDepth pgf (optType pgf opts) (Just dp)
        returnFromExprs $ take (optNumInf opts) ts
-     }){-,
-  ("i", emptyCommandInfo {
+     }),
+{-  ("i", emptyCommandInfo {
      longname = "import",
      synopsis = "import a grammar from source code or compiled .pgf file",
      explanation = unlines [
@@ -708,7 +704,7 @@ pgfCommands = Map.fromList [
        ("format","format of the visualization file (default \"png\")"),
        ("view","program to open the resulting file (default \"open\")")
        ]
-     }),
+     }),-}
   ("ai", emptyCommandInfo {
      longname = "abstract_info",
      syntax = "ai IDENTIFIER  or  ai EXPR",
@@ -721,36 +717,37 @@ pgfCommands = Map.fromList [
        "If a whole expression is given it prints the expression with refined",
        "metavariables and the type of the expression."
        ],
-     exec = getEnv $ \ opts arg (Env pgf mos) -> do
+     exec = needPGF $ \opts arg pgf mos -> do
        case toExprs arg of
-         [EFun id] -> case Map.lookup id (funs (abstract pgf)) of
-                        Just fd -> do putStrLn $ render (ppFun id fd)
-                                      let (_,_,_,prob) = fd
-                                      putStrLn ("Probability: "++show prob)
-                                      return void
-                        Nothing -> case Map.lookup id (cats (abstract pgf)) of
-                                     Just cd   -> do putStrLn $
-                                                        render (ppCat id cd $$
-                                                                if null (functionsToCat pgf id)
-                                                                  then empty
-                                                                  else ' ' $$
-                                                                       vcat [ppFun fid (ty,0,Just ([],[]),0) | (fid,ty) <- functionsToCat pgf id] $$
-                                                                       ' ')
-                                                     let (_,_,prob) = cd
-                                                     putStrLn ("Probability: "++show prob)
-                                                     return void
-                                     Nothing   -> do putStrLn ("unknown category of function identifier "++show id)
-                                                     return void
-         [e]         -> case inferExpr pgf e of
-                          Left tcErr   -> error $ render (ppTcError tcErr)
-                          Right (e,ty) -> do putStrLn ("Expression:  "++showExpr [] e)
-                                             putStrLn ("Type:        "++showType [] ty)
-                                             putStrLn ("Probability: "++show (probTree pgf e))
-                                             return void
+         [e] -> case unApp e of
+                  Just (id, []) -> let showFun id ty = kwd++" "++showCId id ++ " : " ++ showType [] ty
+                                                       where
+                                                         kwd | functionIsDataCon pgf id = "data"
+                                                             | otherwise                = "fun"
+                                   in case functionType pgf id of
+                                        Just ty -> do putStrLn (showFun id ty)
+                                                      putStrLn ("Probability: "++show (treeProbability pgf e))
+                                                      return void
+                                        Nothing -> case categoryContext pgf id of
+                                                     Just hypos -> do putStrLn ("cat "++showCId id)
+                                                                      let ls = [showFun fn ty | fn <- functionsByCat pgf id, Just ty <- [functionType pgf fn]]
+                                                                      if null ls
+                                                                        then return ()
+                                                                        else putStrLn (unlines ("":ls))
+                                                                      --putStrLn ("Probability: "++show prob)
+                                                                      return void
+                                                     Nothing    -> do putStrLn ("unknown category of function identifier "++show id)
+                                                                      return void
+                  _             -> case inferExpr pgf e of
+                                     Left tcErr   -> error $ render (ppTcError tcErr)
+                                     Right (e,ty) -> do putStrLn ("Expression:  "++showExpr [] e)
+                                                        putStrLn ("Type:        "++showType [] ty)
+                                                        putStrLn ("Probability: "++show (treeProbability pgf e))
+                                                        return void
          _           -> do putStrLn "a single identifier or expression is expected from the command"
                            return void,
      needsTypeCheck = False
-     })-}
+     })
   ]
  where
    needPGF exec opts ts = do

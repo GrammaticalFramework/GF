@@ -36,11 +36,10 @@ link :: Options -> (ModuleName,Grammar) -> IOE PGF
 link opts (cnc,gr) =
   putPointE Normal opts "linking ... " $ do
     let abs = srcAbsName gr cnc
-    pgf <- grammar2PGF opts gr abs
-    probs <- liftIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
+    probs <- liftIO (maybe (return Map.empty) readProbabilitiesFromFile (flag optProbsFile opts))
+    pgf <- grammar2PGF opts gr abs probs
     when (verbAtLeast opts Normal) $ putStrE "OK"
-    return $ setProbabilities probs 
-           $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
+    return $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
 
 -- | Returns the name of the abstract syntax corresponding to the named concrete syntax
 srcAbsName gr cnc = err (const cnc) id $ abstractOfConcrete gr cnc

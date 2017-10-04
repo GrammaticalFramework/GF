@@ -3,7 +3,8 @@ module PGF (PGF, readPGF, showPGF,
 
             CId, mkCId, wildCId, showCId, readCId,
             
-            categories, functions, functionsByCat, functionType, browse,
+            categories, categoryContext,
+            functions, functionsByCat, functionType, functionIsDataCon, browse,
 
             PGF2.Expr,Tree,showExpr,PGF2.readExpr,pExpr,pIdent,
             mkAbs,unAbs,
@@ -14,7 +15,7 @@ module PGF (PGF, readPGF, showPGF,
             PGF2.mkMeta,PGF2.unMeta,
             PGF2.exprSize, exprFunctions,PGF2.exprSubstitute,
             compute,
-            rankTreesByProbs,
+            rankTreesByProbs,treeProbability,
 
             TcError, ppTcError, inferExpr, checkType,
 
@@ -68,9 +69,12 @@ languageCode pgf lang = Just (PGF2.languageCode (lookConcr pgf lang))
 abstractName (PGF gr _) = CId (PGF2.abstractName gr)
 
 categories (PGF gr _) = map CId (PGF2.categories gr)
+categoryContext (PGF gr _) (CId c) = PGF2.categoryContext gr c
+
 functions (PGF gr _)  = map CId (PGF2.functions gr)
 functionsByCat (PGF gr _) (CId c) = map CId (PGF2.functionsByCat gr c)
 functionType (PGF gr _) (CId f) = PGF2.functionType gr f
+functionIsDataCon (PGF gr _) (CId f) = PGF2.functionIsDataCon gr f
 
 type Tree = PGF2.Expr
 type Labels = Map.Map CId [String]
@@ -170,6 +174,8 @@ compute = error "compute is not implemented"
 rankTreesByProbs :: PGF -> [PGF2.Expr] -> [(PGF2.Expr,Double)]
 rankTreesByProbs (PGF pgf _) ts = sortBy (\ (_,p) (_,q) -> compare q p) 
   [(t, realToFrac (PGF2.treeProbability pgf t)) | t <- ts]
+
+treeProbability (PGF pgf _) t = PGF2.treeProbability pgf t
 
 languages (PGF gr _) = fmap CId (Map.keys (PGF2.languages gr))
 
