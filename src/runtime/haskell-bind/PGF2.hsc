@@ -24,7 +24,7 @@ module PGF2 (-- * PGF
              -- * Abstract syntax
              AbsName,abstractName,
              -- ** Categories
-             Cat,categories,categoryContext,
+             Cat,categories,categoryContext,categoryProbability,
              -- ** Functions
              Fun, functions, functionsByCat,
              functionType, functionIsDataCon, hasLinearization,
@@ -1100,8 +1100,8 @@ categoryContext p cat =
     toBindType (#const PGF_BIND_TYPE_EXPLICIT) = Explicit
     toBindType (#const PGF_BIND_TYPE_IMPLICIT) = Implicit
 
-categoryProb :: PGF -> Cat -> Float
-categoryProb p cat =
+categoryProbability :: PGF -> Cat -> Float
+categoryProbability p cat =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
       do c_cat <- newUtf8CString cat tmpPl

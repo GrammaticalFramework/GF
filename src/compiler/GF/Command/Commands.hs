@@ -729,12 +729,12 @@ pgfCommands = Map.fromList [
                                                       putStrLn ("Probability: "++show (treeProbability pgf e))
                                                       return void
                                         Nothing -> case categoryContext pgf id of
-                                                     Just hypos -> do putStrLn ("cat "++showCId id)
+                                                     Just hypos -> do putStrLn ("cat "++showCId id++if null hypos then "" else ' ':showContext [] hypos)
                                                                       let ls = [showFun fn ty | fn <- functionsByCat pgf id, Just ty <- [functionType pgf fn]]
                                                                       if null ls
                                                                         then return ()
                                                                         else putStrLn (unlines ("":ls))
-                                                                      --putStrLn ("Probability: "++show prob)
+                                                                      putStrLn ("Probability: "++show (categoryProbability pgf id))
                                                                       return void
                                                      Nothing    -> do putStrLn ("unknown category of function identifier "++show id)
                                                                       return void

@@ -3,7 +3,7 @@ module PGF (PGF, readPGF, showPGF,
 
             CId, mkCId, wildCId, showCId, readCId,
             
-            categories, categoryContext,
+            categories, categoryContext, categoryProbability,
             functions, functionsByCat, functionType, functionIsDataCon, browse,
 
             PGF2.Expr,Tree,showExpr,PGF2.readExpr,pExpr,pIdent,
@@ -19,7 +19,7 @@ module PGF (PGF, readPGF, showPGF,
 
             TcError, ppTcError, inferExpr, checkType,
 
-            PGF2.Type, PGF2.Hypo, showType, PGF2.readType,
+            PGF2.Type, PGF2.Hypo, showType, showContext, PGF2.readType,
             mkType, unType,
 
             Token,
@@ -70,6 +70,7 @@ abstractName (PGF gr _) = CId (PGF2.abstractName gr)
 
 categories (PGF gr _) = map CId (PGF2.categories gr)
 categoryContext (PGF gr _) (CId c) = PGF2.categoryContext gr c
+categoryProbability (PGF gr _) (CId c) = PGF2.categoryProbability gr c
 
 functions (PGF gr _)  = map CId (PGF2.functions gr)
 functionsByCat (PGF gr _) (CId c) = map CId (PGF2.functionsByCat gr c)
@@ -109,6 +110,7 @@ instance Read PGF2.Expr where
                       Nothing -> []
 
 showType xs ty = PGF2.showType [x | CId x <- xs] ty
+showContext xs hypos = PGF2.showContext [x | CId x <- xs] hypos
 
 mkType hypos (CId var) es = PGF2.mkType [(bt,var,ty) | (bt,CId var,ty) <- hypos] var es
 unType ty = case PGF2.unType ty of

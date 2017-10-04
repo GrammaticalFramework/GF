@@ -127,7 +127,7 @@ unType (Type c_type touch) = unsafePerformIO $ do
 -- of identifiers is the list of all free variables
 -- in the type in order reverse to the order
 -- of binding.
-showContext :: [CId] -> [Hypo] -> String
+showContext :: [String] -> [Hypo] -> String
 showContext scope hypos =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
