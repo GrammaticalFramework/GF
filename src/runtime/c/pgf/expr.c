@@ -1650,10 +1650,10 @@ pgf_print_hypo(PgfHypo *hypo, PgfPrintContext* ctxt, int prec,
         } else {
             pgf_print_type(hypo->type, ctxt, prec, out, err);
         }
-        
+
         gu_pool_free(tmp_pool);
     }
-    
+
 	PgfPrintContext* new_ctxt = malloc(sizeof(PgfPrintContext));
 	new_ctxt->name = hypo->cid;
 	new_ctxt->next = ctxt;
@@ -1668,7 +1668,7 @@ pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
     
     if (n_hypos > 0) {
 		if (prec > 0) gu_putc('(', out, err);
-		
+
 		PgfPrintContext* new_ctxt = ctxt;
 		for (size_t i = 0; i < n_hypos; i++) {
 			PgfHypo *hypo = gu_seq_index(type->hypos, PgfHypo, i);
@@ -1708,6 +1708,22 @@ pgf_print_type(PgfType *type, PgfPrintContext* ctxt, int prec,
 }
 
 PGF_API void
+pgf_print_context(PgfHypos *hypos, PgfPrintContext* ctxt,
+                  GuOut *out, GuExn *err)
+{
+	PgfPrintContext* new_ctxt = ctxt;
+
+    size_t n_hypos = gu_seq_length(hypos);
+	for (size_t i = 0; i < n_hypos; i++) {
+		if (i > 0)
+			gu_putc(' ', out, err);
+
+		PgfHypo *hypo = gu_seq_index(hypos, PgfHypo, i);
+		new_ctxt = pgf_print_hypo(hypo, new_ctxt, 4, out, err);		
+	}
+}
+
+PGF_API void
 pgf_print_expr_tuple(size_t n_exprs, PgfExpr exprs[], PgfPrintContext* ctxt,
                      GuOut* out, GuExn* err)
 {
@@ -1718,30 +1734,6 @@ pgf_print_expr_tuple(size_t n_exprs, PgfExpr exprs[], PgfPrintContext* ctxt,
 		pgf_print_expr(exprs[i], ctxt, 0, out, err);
 	}
 	gu_putc('>', out, err);
-}
-
-PGF_API_DECL void
-pgf_print_category(PgfPGF *gr, PgfCId catname,
-                   GuOut* out, GuExn *err)
-{
-	PgfAbsCat* abscat =
-		gu_seq_binsearch(gr->abstract.cats, pgf_abscat_order, PgfAbsCat, catname);
-	if (abscat == NULL) {
-		GuExnData* exn = gu_raise(err, PgfExn);
-		exn->data = "Unknown category";
-		return;
-	}
-
-	gu_puts(abscat->name, out, err);
-
-	PgfPrintContext* ctxt = NULL;
-	size_t n_hypos = gu_seq_length(abscat->context);
-	for (size_t i = 0; i < n_hypos; i++) {
-		PgfHypo *hypo = gu_seq_index(abscat->context, PgfHypo, i);
-
-		gu_putc(' ', out, err);
-		ctxt = pgf_print_hypo(hypo, ctxt, 4, out, err);
-	}
 }
 
 PGF_API bool
