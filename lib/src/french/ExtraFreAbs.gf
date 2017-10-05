@@ -13,7 +13,11 @@ abstract ExtraFreAbs = ExtraRomanceAbs - [ProDrop] ** {
 -- These also generate indirect (subordinate) questions.
 
     QueestcequeIP : IP ;    -- qu'est-ce (que/qui) 
-    QuiestcequeIP : IP ;    -- qu'est-ce (que/qui) 
+    QuiestcequeIP : IP ;    -- qu'est-ce (que/qui)
+
+-- This is needed for compositionality in library applications.
+
+    EstcequeCl    : Cl -> QCl ;          -- est-ce qu'il pleut
 
 -- Feminine variants of pronouns (those in $Structural$ are
 -- masculine, which is the default when gender is unknown).

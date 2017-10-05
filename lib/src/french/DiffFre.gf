@@ -3,7 +3,8 @@
 instance DiffFre of DiffRomance - [
   imperClit,
   invertedClause,
-  verbHyphen
+  verbHyphen,
+  iAdvQuestionInv
   ] 
   = open CommonRomance, PhonoFre, Prelude in {
 
@@ -151,6 +152,8 @@ instance DiffFre of DiffRomance - [
       {n = Sg ; p = P2 ; g = _} => "toi" ;
       _ => c1 ++ c2
       } ;
+
+    iAdvQuestionInv : Direct = DDir ;
 
     bindHyphen : Str = BIND ++ "-" ++ BIND ;
 

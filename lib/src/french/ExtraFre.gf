@@ -20,6 +20,10 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
       a = aagr Fem Pl
       } ;
 
+    EstcequeCl cl = {
+      s = \\t,a,p,q => "est-ce" ++ elisQue ++ cl.s ! DDir ! t ! a ! p ! Indic
+      } ;
+
     i8fem_Pron = mkPronoun
       (elision "j") (elision "m") (elision "m") "moi" "mon" (elisPoss "m") "mes"
       Fem Sg P1 ;
