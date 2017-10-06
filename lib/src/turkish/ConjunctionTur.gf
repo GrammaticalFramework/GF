@@ -1,8 +1,4 @@
-concrete ConjunctionEng of Conjunction =
+concrete ConjunctionTur of Conjunction =
   CatTur ** open ResTur, Coordination, Prelude in {
 
-    lin
-
-      -- ConjNP : Conj -> ListNP -> NP
-      -- ConjNP conj ss =
-  }
+}

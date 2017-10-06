@@ -27,9 +27,10 @@ module PGF2 (-- * PGF
              -- * Abstract syntax
              AbsName,abstractName,
              -- ** Categories
-             Cat,categories,showCategory,
+             Cat,categories,categoryContext,
              -- ** Functions
-             Fun,functions, functionsByCat, functionType, hasLinearization,
+             Fun, functions, functionsByCat,
+             functionType, functionIsConstructor, hasLinearization,
              -- ** Expressions
              Expr,showExpr,readExpr,pExpr,
              mkAbs,unAbs,
@@ -44,7 +45,7 @@ module PGF2 (-- * PGF
 
              -- ** Types
              Type, Hypo, BindType(..), startCat,
-             readType, showType,
+             readType, showType, showContext,
              mkType, unType,
 
              -- ** Type checking
@@ -239,6 +240,16 @@ functionType p fn =
     return (if c_type == nullPtr
               then Nothing
               else Just (Type c_type (touchPGF p)))
+
+-- | The type of a function
+functionIsConstructor :: PGF -> Fun -> Bool
+functionIsConstructor p fn =
+  unsafePerformIO $
+  withGuPool $ \tmpPl -> do
+    c_fn <- newUtf8CString fn tmpPl
+    res <- pgf_function_is_constructor (pgf p) c_fn
+    touchPGF p
+    return (res /= 0)
 
 -- | Checks an expression against a specified type.
 checkExpr :: PGF -> Expr -> Type -> Either String Expr
@@ -1068,25 +1079,38 @@ categories p =
       name  <- peekUtf8CString (castPtr key)
       writeIORef ref $! (name : names)
 
-showCategory :: PGF -> Cat -> String
-showCategory p cat =
+categoryContext :: PGF -> Cat -> [Hypo]
+categoryContext p cat =
   unsafePerformIO $
     withGuPool $ \tmpPl ->
-      do (sb,out) <- newOut tmpPl
-         exn <- gu_new_exn tmpPl
-         c_cat <- newUtf8CString cat tmpPl
-         pgf_print_category (pgf p) c_cat out exn
+      do c_cat <- newUtf8CString cat tmpPl
+         c_hypos <- pgf_category_context (pgf p) c_cat
+         if c_hypos == nullPtr
+           then return []
+           else do n_hypos <- (#peek GuSeq, len) c_hypos
+                   peekHypos (c_hypos `plusPtr` (#offset GuSeq, data)) 0 n_hypos
+  where
+    peekHypos :: Ptr a -> Int -> Int -> IO [Hypo]
+    peekHypos c_hypo i n
+      | i < n     = do cid <- (#peek PgfHypo, cid) c_hypo >>= peekUtf8CString
+                       c_ty <- (#peek PgfHypo, type) c_hypo
+                       bt  <- fmap toBindType ((#peek PgfHypo, bind_type) c_hypo)
+                       hs <- peekHypos (plusPtr c_hypo (#size PgfHypo)) (i+1) n
+                       return ((bt,cid,Type c_ty (touchPGF p)) : hs)
+      | otherwise = return []
+
+    toBindType :: CInt -> BindType
+    toBindType (#const PGF_BIND_TYPE_EXPLICIT) = Explicit
+    toBindType (#const PGF_BIND_TYPE_IMPLICIT) = Implicit
+
+categoryProb :: PGF -> Cat -> Float
+categoryProb p cat =
+  unsafePerformIO $
+    withGuPool $ \tmpPl ->
+      do c_cat <- newUtf8CString cat tmpPl
+         c_prob <- pgf_category_prob (pgf p) c_cat
          touchPGF p
-         failed <- gu_exn_is_raised exn
-         if failed
-           then do is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
-                   if is_exn
-                     then do c_msg <- (#peek GuExn, data.data) exn
-                             msg <- peekUtf8CString c_msg
-                             throwIO (PGFError msg)
-                     else throwIO (PGFError "The abstract tree cannot be linearized")
-           else do s <- gu_string_buf_freeze sb tmpPl
-                   peekUtf8CString s
+         return (realToFrac c_prob)
 
 -----------------------------------------------------------------------------
 -- Helper functions

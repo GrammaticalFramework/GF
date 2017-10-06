@@ -1,0 +1,4 @@
+import ../LangEus.gf
+
+gt PhrUtt NoPConj (UttS (UseCl (TTAnt ? ?) PPos (PredVP (UsePron ?) (ComplSlash (Slash3V3 give_V3 (DetCN (DetQuant DefArt NumSg) (UseN car_N))) (UsePron ?))))) NoVoc | l -bind
+gt PhrUtt NoPConj (UttS (UseCl (TTAnt ? ?) PPos (PredVP (UsePron ?) (ComplSlash (Slash3V3 give_V3 (DetCN (DetQuant DefArt NumPl) (UseN car_N))) (UsePron ?))))) NoVoc | l -bind

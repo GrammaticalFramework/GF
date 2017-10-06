@@ -1,0 +1,6 @@
+import ../LangEus.gf
+
+gt UseCl (TTAnt ? ?) PPos (PredVP (UsePron ?) (ComplSlash (SlashV2a see_V2) (UsePron ?))) | l 
+
+-- Inside a relative clause
+gt UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron i_Pron) (ComplVS know_VS (UseCl (TTAnt ? ?) PPos (PredVP (UsePron ?) (ComplSlash (SlashV2a see_V2) (UsePron ?)))))) | l -bind
