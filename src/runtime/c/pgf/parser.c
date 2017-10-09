@@ -1950,6 +1950,8 @@ pgf_parsing_init(PgfConcr* concr, PgfCId cat,
 	start_ccat->prods = NULL;
 	start_ccat->n_synprods = 0;
 
+	gu_assert(start_ccat->cnccat != NULL);
+
 #ifdef PGF_COUNTS_DEBUG
 	state->ps->ccat_full_count++;
 #endif

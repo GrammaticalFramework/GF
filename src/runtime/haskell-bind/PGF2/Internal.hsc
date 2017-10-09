@@ -669,21 +669,23 @@ newConcr (B (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun c_non_lexical_buf _)
 
     pokeCncCat c_ccats ptr (name,start,end,labels) = do
       let n_lins = fromIntegral (length labels) :: CSizeT
-      c_cnccat <- gu_malloc_aligned pool 
+      c_cnccat <- gu_malloc_aligned pool
                                     ((#size PgfCncCat)+n_lins*(#size GuString))
                                     (#const gu_flex_alignof(PgfCncCat))
       case Map.lookup name abscats of
         Just c_abscat -> (#poke PgfCncCat, abscat) c_cnccat c_abscat
         Nothing       -> throwIO (PGFError ("The category "++name++" is not in the abstract syntax"))
-      c_ccats <- newSequence (#size PgfCCat*) pokeFId [start..end] pool
+      c_ccats <- newSequence (#size PgfCCat*) (pokeFId c_cnccat) [start..end] pool
       (#poke PgfCncCat, cats) c_cnccat c_ccats
+      (#poke PgfCncCat, n_lins) c_cnccat n_lins
       pokeLabels (c_cnccat `plusPtr` (#offset PgfCncCat, labels)) labels
       poke ptr c_cnccat
       where
-        pokeFId ptr fid = do
+        pokeFId c_cnccat ptr fid = do
           c_ccat <- getCCat c_ccats fid pool
+          (#poke PgfCCat, cnccat) c_ccat c_cnccat
           poke ptr c_ccat
-          
+
         pokeLabels ptr []     = return []
         pokeLabels ptr (l:ls) = do
           c_l <- newUtf8CString l pool
