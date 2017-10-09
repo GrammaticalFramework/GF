@@ -32,7 +32,8 @@ module PGF (PGF, readPGF, showPGF,
             hasLinearization,
             showPrintName,
             
-            Morpho, buildMorpho, lookupMorpho, isInMorpho, morphoMissing, morphoKnown,
+            Morpho, buildMorpho,
+            lookupMorpho, isInMorpho, morphoMissing, morphoKnown, fullFormLexicon,
 
             Labels, getDepLabels, CncLabels, getCncDepLabels,
 
@@ -196,8 +197,9 @@ languages (PGF gr _) = fmap CId (Map.keys (PGF2.languages gr))
 type Morpho = PGF2.Concr
 
 buildMorpho pgf lang = lookConcr pgf lang
-lookupMorpho cnc w = [(CId lemma,CId an) | (lemma,an,_) <- PGF2.lookupMorpho cnc w]
+lookupMorpho cnc w = [(CId lemma,an) | (lemma,an,_) <- PGF2.lookupMorpho cnc w]
 isInMorpho cnc w = not (null (PGF2.lookupMorpho cnc w))
+fullFormLexicon cnc = [(w, [(CId fun,an) | (fun,an,_) <- analyses]) | (w, analyses) <- PGF2.fullFormLexicon cnc]
 
 graphvizAbstractTree (PGF gr _) (funs,cats) = PGF2.graphvizAbstractTree gr PGF2.graphvizDefaults{PGF2.noFun=not funs,PGF2.noCat=not cats}
 graphvizParseTree pgf lang  = PGF2.graphvizParseTree (lookConcr pgf lang)

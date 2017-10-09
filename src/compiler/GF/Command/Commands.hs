@@ -921,7 +921,7 @@ infinity :: Int
 infinity = 256
 
 prLexcLexicon :: Morpho -> String
-prLexcLexicon mo = ""{-
+prLexcLexicon mo =
   unlines $ "Multichar_Symbols":multichars:"":"LEXICON Root" : [prLexc l p ++ ":" ++ w  ++ " # ;" | (w,lps) <- morpho, (l,p) <- lps] ++ ["END"]
  where
   morpho = fullFormLexicon mo
@@ -931,19 +931,17 @@ prLexcLexicon mo = ""{-
     ws -> map ('+':) ws
 
   multichars = unwords $ nub $ concat [mkTags (words p) | (w,lps) <- morpho, (l,p) <- lps]
-  -- thick_A+(AAdj+Posit+Gen):thick's # ;
--}
+
 prFullFormLexicon :: Morpho -> String
-prFullFormLexicon mo = "" {-
-  unlines (map prMorphoAnalysis (fullFormLexicon mo)) -}
+prFullFormLexicon mo =
+  unlines (map prMorphoAnalysis (fullFormLexicon mo))
 
 prAllWords :: Morpho -> String
-prAllWords mo = "" {-
-  unwords [w | (w,_) <- fullFormLexicon mo]-}
+prAllWords mo =
+  unwords [w | (w,_) <- fullFormLexicon mo]
 
--- prMorphoAnalysis :: (String,[(Lemma,Analysis)]) -> String
-prMorphoAnalysis (w,lps) = "" {-
-  unlines (w:[showCId l ++ " : " ++ p | (l,p) <- lps])-}
+prMorphoAnalysis (w,lps) =
+  unlines (w:[showCId l ++ " : " ++ p | (l,p) <- lps])
 
 viewGraphviz :: String -> String -> String -> [String] -> SIO CommandOutput
 viewGraphviz view format name grphs = do
