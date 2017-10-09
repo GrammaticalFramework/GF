@@ -650,7 +650,9 @@ newConcr (B (AbstrInfo _ _ abscats  _ absfuns c_abs_lin_fun c_non_lexical_buf _)
       (#poke PgfCCat, prods) c_ccat c_prods
       pokeProductions c_ccat (c_prods `plusPtr` (#offset GuSeq, data)) 0 (n_prods-1) mk_index prods
       where
-        pokeProductions c_ccat ptr top bot mk_index []           = return mk_index
+        pokeProductions c_ccat ptr top bot mk_index []           = do
+          (#poke PgfCCat, n_synprods) c_ccat (fromIntegral top :: CSizeT)
+          return mk_index
         pokeProductions c_ccat ptr top bot mk_index (prod:prods) = do
           (is_lexical,c_prod) <- newProduction c_ccats funs_ptr c_non_lexical_buf prod pool
           let mk_index' = \concr pool -> do pgf_parser_index concr c_ccat c_prod is_lexical pool
@@ -743,7 +745,9 @@ newPGF gflags absname (B (AbstrInfo c_aflags c_cats _ c_funs _ c_abs_lin_fun _ _
       (#poke PgfConcr, cnccats)     ptr c_cnccats
       (#poke PgfConcr, total_cats)  ptr c_total_cats
       (#poke PgfConcr, pool)        ptr nullPtr
+
       mk_index ptr pool
+      pgf_concrete_fix_internals ptr
 
 
 newFlags :: [(String,Literal)] -> Ptr GuPool -> IO (Ptr GuSeq)

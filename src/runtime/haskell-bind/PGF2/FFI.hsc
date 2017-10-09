@@ -291,6 +291,9 @@ foreign import ccall "pgf/pgf.h pgf_language_code"
 foreign import ccall "pgf/pgf.h pgf_iter_categories"
   pgf_iter_categories :: Ptr PgfPGF -> Ptr GuMapItor -> Ptr GuExn -> IO ()
 
+foreign import ccall "pgf/pgf.h pgf_concrete_fix_internals"
+  pgf_concrete_fix_internals :: Ptr PgfConcr -> IO ()
+
 foreign import ccall "pgf/pgf.h pgf_start_cat"
   pgf_start_cat :: Ptr PgfPGF -> Ptr GuPool -> IO PgfType
 

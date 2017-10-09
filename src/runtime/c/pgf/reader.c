@@ -1168,6 +1168,14 @@ pgf_read_ccat_cb(GuMapItor* fn, const void* key, void* value, GuExn* err)
 //	pgf_ccat_set_viterbi_prob(ccat);
 }
 
+// The GF compiler needs to call this function when building in memory grammars.
+PGF_API void
+pgf_concrete_fix_internals(PgfConcr* concr)
+{
+	GuMapItor clo1 = { pgf_read_ccat_cb };
+	gu_map_iter(concr->ccats, &clo1, NULL);
+}
+
 static void
 pgf_read_concrete_content(PgfReader* rdr, PgfConcr* concr)
 {
@@ -1193,8 +1201,7 @@ pgf_read_concrete_content(PgfReader* rdr, PgfConcr* concr)
 	concr->cnccats = pgf_read_cnccats(rdr, concr->abstr, concr);
 	concr->total_cats = pgf_read_int(rdr);
 
-	GuMapItor clo1 = { pgf_read_ccat_cb };
-	gu_map_iter(concr->ccats, &clo1, NULL);
+	pgf_concrete_fix_internals(concr);
 }
 
 static void
