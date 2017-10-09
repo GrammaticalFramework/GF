@@ -143,8 +143,13 @@ parse pgf lang cat s =
     PGF2.ParseOk ts -> map fst ts
     _               -> []
 
+parse_ pgf lang cat dp s =
+  case PGF2.parse (lookConcr pgf lang) cat s of
+    PGF2.ParseFailed pos _ -> (ParseFailed pos,      PGF2.Leaf s)
+    PGF2.ParseOk ts        -> (ParseOk (map fst ts), PGF2.Leaf s)
+    PGF2.ParseIncomplete   -> (ParseIncomplete,      PGF2.Leaf s)
+
 complete (PGF gr langs) lang cat s prefix = error "complete is not implemented"
-parse_ = error "complete is not implemented"
 
 hasLinearization pgf lang (CId f) = PGF2.hasLinearization (lookConcr pgf lang) f
 
