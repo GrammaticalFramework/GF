@@ -17,7 +17,7 @@ module PGF2.Internal(-- * Access the internal structures
                      AbstrInfo, newAbstr, ConcrInfo, newConcr, newPGF,
                      
                      -- * Write an in-memory PGF to a file
-                     writePGF,
+                     writePGF, writeConcr,
                      
                      -- * Predefined concrete categories
                      fidString, fidInt, fidFloat, fidVar, fidStart
@@ -995,6 +995,26 @@ writePGF fpath p = do
                       errno  <- peek perrno
                       gu_pool_free pool
                       ioError (errnoToIOError "writePGF" (Errno errno) Nothing (Just fpath))
+              else do gu_pool_free pool
+                      throwIO (PGFError "The grammar cannot be stored")
+    else do gu_pool_free pool
+            return ()
+
+writeConcr :: FilePath -> Concr -> IO ()
+writeConcr fpath c = do
+  pool <- gu_new_pool
+  exn <- gu_new_exn pool
+  withCString fpath $ \c_fpath ->
+    pgf_concrete_save (concr c) c_fpath exn
+  touchConcr c
+  failed <- gu_exn_is_raised exn
+  if failed
+    then do is_errno <- gu_exn_caught exn gu_exn_type_GuErrno
+            if is_errno
+              then do perrno <- (#peek GuExn, data.data) exn
+                      errno  <- peek perrno
+                      gu_pool_free pool
+                      ioError (errnoToIOError "writeConcr" (Errno errno) Nothing (Just fpath))
               else do gu_pool_free pool
                       throwIO (PGFError "The grammar cannot be stored")
     else do gu_pool_free pool

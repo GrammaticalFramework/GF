@@ -7,13 +7,17 @@ typedef struct {
 } PgfPrintFn;
 
 static void
-pgf_print_flags(PgfFlags* flags, GuOut *out, GuExn* err)
+pgf_print_flags(PgfFlags* flags, int indent, GuOut *out, GuExn* err)
 {
 	size_t n_flags = gu_seq_length(flags);
 	for (size_t i = 0; i < n_flags; i++) {
 		PgfFlag* flag = gu_seq_index(flags, PgfFlag, i);
-		
-		gu_puts("  flag ", out, err);
+
+		for (int k = 0; k < indent; k++) {
+			gu_putc(' ', out, err);
+		}
+
+		gu_puts("flag ", out, err);
 		pgf_print_cid(flag->name, out, err);
 		gu_puts(" = ", out, err);
 		pgf_print_literal(flag->value, out, err);
@@ -70,7 +74,7 @@ pgf_print_abstract(PgfAbstr* abstr, GuOut* out, GuExn* err)
 	pgf_print_cid(abstr->name, out, err);
 	gu_puts(" {\n", out, err);
 
-	pgf_print_flags(abstr->aflags, out, err);
+	pgf_print_flags(abstr->aflags, 2, out, err);
 	pgf_print_abscats(abstr->cats, out, err);
 	pgf_print_absfuns(abstr->funs, out, err);
 
@@ -358,7 +362,7 @@ pgf_print_concrete(PgfConcr* concr, GuOut* out, GuExn* err)
 	pgf_print_cid(concr->name, out, err);
 	gu_puts(" {\n", out, err);
 
-	pgf_print_flags(concr->cflags, out, err);
+	pgf_print_flags(concr->cflags, 2, out, err);
 
 	gu_puts("  productions\n", out, err);
 	PgfPrintFn clo2 = { { pgf_print_productions }, out };
@@ -398,6 +402,7 @@ pgf_print_concrete(PgfConcr* concr, GuOut* out, GuExn* err)
 PGF_API void
 pgf_print(PgfPGF* pgf, GuOut* out, GuExn* err)
 {
+	pgf_print_flags(pgf->gflags, 0, out, err);
 	pgf_print_abstract(&pgf->abstract, out, err);
 	
 	size_t n_concrs = gu_seq_length(pgf->concretes);

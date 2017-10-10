@@ -843,7 +843,7 @@ pgf_write_concrete_content(PgfConcr* concr, PgfWriter* wtr)
 	pgf_write_int(concr->total_cats, wtr);
 }
 
-static void
+PGF_INTERNAL void
 pgf_write_concrete(PgfConcr* concr, PgfWriter* wtr, bool with_content)
 {
 	if (with_content &&
@@ -863,18 +863,6 @@ pgf_write_concrete(PgfConcr* concr, PgfWriter* wtr, bool with_content)
 		pgf_write_concrete_content(concr, wtr);
 	}
 	gu_return_on_exn(wtr->err, );
-}
-
-PGF_API void
-pgf_concrete_save(PgfConcr* concr, GuOut* out, GuExn* err)
-{
-	GuPool* pool = gu_new_pool();
-
-	PgfWriter* wtr = pgf_new_writer(out, pool, err);
-
-	pgf_write_concrete(concr, wtr, true);
-
-	gu_pool_free(pool);
 }
 
 static void

@@ -67,6 +67,28 @@ pgf_write(PgfPGF* pgf, const char* fpath, GuExn* err)
 	fclose(outfile);
 }
 
+PGF_API void
+pgf_concrete_save(PgfConcr* concr, const char* fpath, GuExn* err)
+{
+	FILE* outfile = fopen(fpath, "wb");
+	if (outfile == NULL) {
+		gu_raise_errno(err);
+		return;
+	}
+
+	GuPool* tmp_pool = gu_local_pool();
+
+	// Create an input stream from the input file
+	GuOut* out = gu_file_out(outfile, tmp_pool);
+
+	PgfWriter* wtr = pgf_new_writer(out, tmp_pool, err);
+	pgf_write_concrete(concr, wtr, true);
+
+	gu_pool_free(tmp_pool);
+	
+	fclose(outfile);
+}
+
 PGF_API GuString
 pgf_abstract_name(PgfPGF* pgf)
 {

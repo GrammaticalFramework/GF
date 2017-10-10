@@ -28,9 +28,12 @@ grammar2PGF :: Options -> SourceGrammar -> ModuleName -> Map.Map Ident Double ->
 grammar2PGF opts gr am probs = do
   cnc_infos <- getConcreteInfos gr am
   return $
-    build (let (an,abs) = mkAbstr am probs
+    build (let gflags   = if flag optSplitPGF opts 
+                            then [(mkCId "split", LStr "true")]
+                            else []
+               (an,abs) = mkAbstr am probs
                cncs     = map (mkConcr abs) cnc_infos
-           in newPGF [] an abs cncs)
+           in newPGF gflags an abs cncs)
   where
     cenv = resourceValues opts gr
 

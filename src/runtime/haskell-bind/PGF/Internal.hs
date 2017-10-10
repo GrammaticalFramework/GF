@@ -16,13 +16,13 @@ module PGF.Internal(CId(..),Language,PGF(..),
                     PGF2.AbstrInfo, newAbstr, PGF2.ConcrInfo, newConcr, newPGF,
                      
                     -- * Write an in-memory PGF to a file
-                    writePGF,
+                    writePGF, writeConcr,
                      
                     PGF2.fidString, PGF2.fidInt, PGF2.fidFloat, PGF2.fidVar, PGF2.fidStart,
                     
                     ppFunId, ppSeqId, ppFId, ppMeta, ppLit, ppSeq,
                     
-                    optimizePGF, putSplitAbs, unionPGF, msgUnionPGF
+                    optimizePGF, unionPGF, msgUnionPGF
                    ) where
 
 import qualified PGF2
@@ -120,6 +120,7 @@ newPGF flags (CId name) abstr concrs =
                     [(name,concr) | (CId name,concr) <- concrs])
 
 writePGF fpath (PGF pgf _) = PGF2.writePGF fpath pgf
+writeConcr fpath pgf lang = PGF2.writeConcr fpath (lookConcr pgf lang)
 
 
 ppFunId funid = char 'F' <> int funid
@@ -160,6 +161,5 @@ ppSymbol (PGF2.SymKP syms alts) = text "pre" <+> braces (hsep (punctuate semi (h
 ppAlt (syms,ps) = hsep (map ppSymbol syms) <+> char '/' <+> hsep (map (doubleQuotes . text) ps)
 
 optimizePGF = error "optimizePGF is not implemented"
-putSplitAbs = error "putSplitAbs is not implemented"
 unionPGF = error "unionPGF is not implemented"
 msgUnionPGF = error "msgUnionPGF is not implemented"
