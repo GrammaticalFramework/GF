@@ -17,6 +17,7 @@ import GF.Data.ErrM
 
 import System.FilePath
 import qualified Data.Set as Set
+import qualified Data.Map as Map
 
 -- import a grammar in an environment where it extends an existing grammar
 importGrammar :: Maybe PGF -> Options -> [FilePath] -> IO (Maybe PGF)
@@ -58,7 +59,6 @@ importCF opts files get convert = impCF
       startCat <- case rules of
                     (Rule cat _ _ : _) -> return cat
                     _                  -> fail "empty CFG"
-      let pgf = cf2pgf (last files) (mkCFG startCat Set.empty rules)
-      probs <- maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf
-      return $ setProbabilities probs 
-             $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
+      probs <- maybe (return Map.empty) readProbabilitiesFromFile (flag optProbsFile opts)
+      let pgf = cf2pgf (last files) (mkCFG startCat Set.empty rules) probs
+      return $ if flag optOptimizePGF opts then optimizePGF pgf else pgf

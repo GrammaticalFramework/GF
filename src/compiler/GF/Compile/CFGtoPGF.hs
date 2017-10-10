@@ -12,28 +12,44 @@ import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Data.Array.IArray
 import Data.List
+import Data.Maybe(fromMaybe)
 
 --------------------------
 -- the compiler ----------
 --------------------------
 
-cf2pgf :: FilePath -> ParamCFG -> PGF
-cf2pgf fpath cf = 
- build (let abstr = cf2abstr cf
+cf2pgf :: FilePath -> ParamCFG -> Map.Map CId Double -> PGF
+cf2pgf fpath cf probs = 
+ build (let abstr = cf2abstr cf probs
         in newPGF [] aname abstr [(cname, cf2concr abstr cf)])
  where
    name = justModuleName fpath
    aname = mkCId (name ++ "Abs")
    cname = mkCId name
 
-cf2abstr :: (?builder :: Builder s) => ParamCFG -> B s AbstrInfo
-cf2abstr cfg = newAbstr aflags acats afuns
+cf2abstr :: (?builder :: Builder s) => ParamCFG -> Map.Map CId Double -> B s AbstrInfo
+cf2abstr cfg probs = newAbstr aflags acats afuns
   where
     aflags = [(mkCId "startcat", LStr (fst (cfgStartCat cfg)))]
 
-    acats  = [(cat2id cat, [], 0) | cat <- allCats' cfg]
-    afuns  = [(mkRuleName rule, dTyp [hypo Explicit wildCId (dTyp [] (cat2id c) []) | NonTerminal c <- ruleRhs rule] (cat2id (ruleLhs rule)) [], 0, 0)
-                            | rule <- allRules cfg]
+    acats  = [(c', [], toLogProb (fromMaybe 0 (Map.lookup c' probs))) | cat <- allCats' cfg, let c' = cat2id cat]
+    afuns  = [(f', dTyp [hypo Explicit wildCId (dTyp [] (cat2id c) []) | NonTerminal c <- ruleRhs rule] (cat2id (ruleLhs rule)) [], 0, toLogProb (fromMaybe 0 (Map.lookup f' funs_probs)))
+                            | rule <- allRules cfg
+                            , let f' = mkRuleName rule]
+
+    funs_probs = (Map.fromList . concat . Map.elems . fmap pad . Map.fromListWith (++))
+                     [(cat,[(f',Map.lookup f' probs)]) | rule <- allRules cfg,
+                                                         let cat = cat2id (ruleLhs rule),
+                                                         let f' = mkRuleName rule]
+      where
+        pad :: [(a,Maybe Double)] -> [(a,Double)]
+        pad pfs = [(f,fromMaybe deflt mb_p) | (f,mb_p) <- pfs]
+          where
+            deflt = case length [f | (f,Nothing) <- pfs] of
+                      0 -> 0
+                      n -> max 0 ((1 - sum [d | (f,Just d) <- pfs]) / fromIntegral n)
+
+    toLogProb = realToFrac . negate . log
 
     cat2id = mkCId . fst
 

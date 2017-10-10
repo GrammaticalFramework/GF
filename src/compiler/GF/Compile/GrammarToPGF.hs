@@ -24,7 +24,7 @@ import qualified Data.IntMap as IntMap
 import Data.Array.IArray
 import Data.Maybe(fromMaybe)
 
-grammar2PGF :: Options -> SourceGrammar -> ModuleName -> Map.Map Ident Double -> IO PGF
+grammar2PGF :: Options -> SourceGrammar -> ModuleName -> Map.Map CId Double -> IO PGF
 grammar2PGF opts gr am probs = do
   cnc_infos <- getConcreteInfos gr am
   return $
@@ -37,7 +37,7 @@ grammar2PGF opts gr am probs = do
   where
     cenv = resourceValues opts gr
 
-    mkAbstr :: (?builder :: Builder s) => ModuleName -> Map.Map Ident Double -> (CId, B s AbstrInfo)
+    mkAbstr :: (?builder :: Builder s) => ModuleName -> Map.Map CId Double -> (CId, B s AbstrInfo)
     mkAbstr am probs = (mi2i am, newAbstr flags cats funs)
       where
         aflags = err (const noOptions) mflags (lookupModule gr am)
@@ -48,12 +48,27 @@ grammar2PGF opts gr am probs = do
 
         flags = [(mkCId f,x) | (f,x) <- optionsPGF aflags]
 
-        cats = [(i2i c, snd (mkContext [] cont), realToFrac (negate (log (fromMaybe 0 (Map.lookup c probs))))) |
-                                   ((m,c),AbsCat (Just (L _ cont))) <- adefs]
+        toLogProb = realToFrac . negate . log
 
-        funs = [(i2i f, mkType [] ty, arity, {-mkDef gr arity mdef,-} 0) | 
+        cats = [(c', snd (mkContext [] cont), toLogProb (fromMaybe 0 (Map.lookup c' probs))) |
+                                   ((m,c),AbsCat (Just (L _ cont))) <- adefs, let c' = i2i c]
+
+        funs = [(f', mkType [] ty, arity, {-mkDef gr arity mdef,-} toLogProb (fromMaybe 0 (Map.lookup f' funs_probs))) |
                                    ((m,f),AbsFun (Just (L _ ty)) ma mdef _) <- adefs,
-                                   let arity = mkArity ma mdef ty]
+                                   let arity = mkArity ma mdef ty,
+                                   let f' = i2i f]
+                                   
+        funs_probs = (Map.fromList . concat . Map.elems . fmap pad . Map.fromListWith (++))
+                        [(i2i cat,[(i2i f,Map.lookup f' probs)]) | ((m,f),AbsFun (Just (L _ ty)) _ _ _) <- adefs,
+                                                                   let (_,(_,cat),_) = GM.typeForm ty,
+                                                                   let f' = i2i f]
+          where
+            pad :: [(a,Maybe Double)] -> [(a,Double)]
+            pad pfs = [(f,fromMaybe deflt mb_p) | (f,mb_p) <- pfs]
+              where
+                deflt = case length [f | (f,Nothing) <- pfs] of
+                          0 -> 0
+                          n -> max 0 ((1 - sum [d | (f,Just d) <- pfs]) / fromIntegral n)
 
     mkConcr abs (cm,ex_seqs,cdefs) =
       let cflags = err (const noOptions) mflags (lookupModule gr cm)

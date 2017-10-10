@@ -90,10 +90,10 @@ compileCFFiles opts fs = do
   startCat <- case rules of
                 (Rule cat _ _ : _) -> return cat
                 _                  -> fail "empty CFG"
-  let pgf = cf2pgf (last fs) (mkCFG startCat Set.empty rules)
+  probs <- liftIO (maybe (return Map.empty) readProbabilitiesFromFile (flag optProbsFile opts))
+  let pgf = cf2pgf (last fs) (mkCFG startCat Set.empty rules) probs
   unless (flag optStopAfterPhase opts == Compile) $
-     do probs <- liftIO (maybe (return . defaultProbabilities) readProbabilitiesFromFile (flag optProbsFile opts) pgf)
-        let pgf' = setProbabilities probs $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
+     do let pgf' = if flag optOptimizePGF opts then optimizePGF pgf else pgf
         writeGrammar opts pgf'
         writeOutputs opts pgf'
 

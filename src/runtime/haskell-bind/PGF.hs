@@ -46,7 +46,7 @@ module PGF (PGF, readPGF, showPGF,
             -- * Tries
             ATree(..),Trie(..),toATree,toTrie,
             
-            defaultProbabilities, setProbabilities, readProbabilitiesFromFile,
+            readProbabilitiesFromFile,
             
             groupResults, conlls2latexDoc, gizaAlignment
            ) where
@@ -241,10 +241,10 @@ toTrie = combines . map ((:[]) . singleton)
             combine2 (Ap f ts,Ap g us) | f==g = Just (Ap f (combines (ts++us)))
             combine2 _ = Nothing
 
-defaultProbabilities = error "defaultProbabilities is not implemented"
-setProbabilities _ pgf = pgf -- error "setProbabilities is not implemented"
-readProbabilitiesFromFile = error "readProbabilitiesFromFile is not implemented"
-
+readProbabilitiesFromFile :: FilePath -> IO (Map.Map CId Double)
+readProbabilitiesFromFile fpath = do
+  s <- readFile fpath
+  return $ Map.fromList [(mkCId f,read p) | f:p:_ <- map words (lines s)]
 
 groupResults :: [[(Language,String)]] -> [(Language,[String])]
 groupResults = Map.toList . foldr more Map.empty . start . concat
