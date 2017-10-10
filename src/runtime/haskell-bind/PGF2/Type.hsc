@@ -22,6 +22,13 @@ type Hypo = (BindType,String,Type)
 instance Show Type where
   show = showType []
 
+instance Eq Type where
+  (Type ty1 ty1_touch) == (Type ty2 ty2_touch) =
+    unsafePerformIO $ do
+      res <- pgf_type_eq ty1 ty2
+      ty1_touch >> ty2_touch
+      return (res /= 0)
+
 -- | parses a 'String' as a type
 readType :: String -> Maybe Type
 readType str =

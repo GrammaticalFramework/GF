@@ -457,6 +457,9 @@ foreign import ccall "pgf/expr.h pgf_expr_arity"
 foreign import ccall "pgf/expr.h pgf_expr_eq"
   pgf_expr_eq :: PgfExpr -> PgfExpr -> IO CInt
 
+foreign import ccall "pgf/expr.h pgf_type_eq"
+  pgf_type_eq :: PgfType -> PgfType -> IO (#type bool)
+
 foreign import ccall "pgf/expr.h pgf_expr_hash"
   pgf_expr_hash :: GuHash -> PgfExpr -> IO GuHash
 
