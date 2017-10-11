@@ -72,10 +72,15 @@ pgf_write_cid(PgfCId id, PgfWriter* wtr)
 PGF_INTERNAL void
 pgf_write_string(GuString val, PgfWriter* wtr)
 {	
-	size_t len = strlen(val);
+	size_t len = 0;
+	const uint8_t* buf = (const uint8_t*) val;
+	const uint8_t* p   = buf;
+	while (gu_utf8_decode(&p) != 0)
+		len++;
+
 	pgf_write_len(len, wtr);
 	gu_return_on_exn(wtr->err, );
-	gu_out_bytes(wtr->out, (uint8_t*) val, len, wtr->err);
+	gu_out_bytes(wtr->out, (uint8_t*) val, (p-buf)-1, wtr->err);
 }
 
 PGF_INTERNAL void
