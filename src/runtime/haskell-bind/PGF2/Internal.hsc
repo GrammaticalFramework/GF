@@ -708,7 +708,8 @@ newPGF gflags absname (B (AbstrInfo c_aflags c_cats _ c_funs _ c_abs_lin_fun _ _
     c_gflags  <- newFlags gflags pool
     c_absname <- newUtf8CString absname pool
     let c_abstr = ptr `plusPtr` (#offset PgfPGF, abstract)
-    c_concrs  <- newSequence (#size PgfConcr) (pokeConcr c_abstr) concrs pool
+    c_concrs <- gu_make_seq (#size PgfConcr) (fromIntegral (length concrs)) pool
+    langs <- pokeConcrs c_abstr (c_concrs `plusPtr` (#offset GuSeq, data)) Map.empty concrs
     (#poke PgfPGF, major_version)   ptr (2 :: (#type uint16_t))
     (#poke PgfPGF, minor_version)   ptr (0 :: (#type uint16_t))
     (#poke PgfPGF, gflags)          ptr c_gflags
@@ -719,11 +720,18 @@ newPGF gflags absname (B (AbstrInfo c_aflags c_cats _ c_funs _ c_abs_lin_fun _ _
     (#poke PgfPGF, abstract.abs_lin_fun) ptr c_abs_lin_fun
     (#poke PgfPGF, concretes)       ptr c_concrs
     (#poke PgfPGF, pool)            ptr pool
-    return (B (PGF ptr Map.empty touch))
+    return (B (PGF ptr langs touch))
   where
     (Builder pool touch) = ?builder
 
-    pokeConcr c_abstr ptr (name, B (ConcrInfo c_cflags c_printnames c_ccats c_cncfuns c_seqs c_cnccats mk_index c_total_cats)) = do
+    pokeConcrs c_abstr ptr langs []                  = return langs
+    pokeConcrs c_abstr ptr langs ((name, B info):xs) = do
+      pokeConcr c_abstr ptr name info
+      pokeConcrs c_abstr (ptr `plusPtr` (fromIntegral (#size PgfConcr)))
+                         (Map.insert name (Concr ptr touch) langs)
+                         xs
+
+    pokeConcr c_abstr ptr name (ConcrInfo c_cflags c_printnames c_ccats c_cncfuns c_seqs c_cnccats mk_index c_total_cats) = do
       c_name <- newUtf8CString name pool
       c_fun_indices <- gu_make_map (#size GuString) gu_string_hasher
                                    (#size PgfCncOverloadMap*) gu_null_struct
