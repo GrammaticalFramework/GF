@@ -992,8 +992,9 @@ writePGF :: FilePath -> PGF -> IO ()
 writePGF fpath p = do
   pool <- gu_new_pool
   exn <- gu_new_exn pool
-  withCString fpath $ \c_fpath ->
-    pgf_write (pgf p) c_fpath exn
+  withArrayLen ((map concr . Map.elems . languages) p) $ \n_concrs concrs ->
+   withCString fpath $ \c_fpath ->
+     pgf_write (pgf p) (fromIntegral n_concrs) concrs c_fpath exn
   touchPGF p
   failed <- gu_exn_is_raised exn
   if failed

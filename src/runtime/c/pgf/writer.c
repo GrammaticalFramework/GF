@@ -866,21 +866,19 @@ pgf_write_concrete(PgfConcr* concr, PgfWriter* wtr, bool with_content)
 }
 
 static void
-pgf_write_concretes(PgfConcrs* concretes, PgfWriter* wtr, bool with_content)
+pgf_write_concretes(size_t n_concrs, PgfConcr** concrs, PgfWriter* wtr, bool with_content)
 {
-	size_t n_concrs = gu_seq_length(concretes);
 	pgf_write_len(n_concrs, wtr);
 	gu_return_on_exn(wtr->err, );
 
 	for (size_t i = 0; i < n_concrs; i++) {
-		PgfConcr* concr = gu_seq_index(concretes, PgfConcr, i);
-		pgf_write_concrete(concr, wtr, with_content);
+		pgf_write_concrete(concrs[i], wtr, with_content);
 		gu_return_on_exn(wtr->err, );
 	}
 }
 
 PGF_INTERNAL void
-pgf_write_pgf(PgfPGF* pgf, PgfWriter* wtr) {
+pgf_write_pgf(PgfPGF* pgf, size_t n_concrs, PgfConcr** concrs, PgfWriter* wtr) {
 	gu_out_u16be(wtr->out, pgf->major_version, wtr->err);
 	gu_return_on_exn(wtr->err, );
 
@@ -895,7 +893,7 @@ pgf_write_pgf(PgfPGF* pgf, PgfWriter* wtr) {
 
 	bool with_content =
 		(gu_seq_binsearch(pgf->gflags, pgf_flag_order, PgfFlag, "split") == NULL);
-	pgf_write_concretes(pgf->concretes, wtr, with_content);
+	pgf_write_concretes(n_concrs, concrs, wtr, with_content);
 	gu_return_on_exn(wtr->err, );
 }
 

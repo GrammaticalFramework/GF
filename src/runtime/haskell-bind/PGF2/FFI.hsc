@@ -266,7 +266,7 @@ foreign import ccall "pgf/pgf.h pgf_read"
   pgf_read :: CString -> Ptr GuPool -> Ptr GuExn -> IO (Ptr PgfPGF)
 
 foreign import ccall "pgf/pgf.h pgf_write"
-  pgf_write :: Ptr PgfPGF -> CString -> Ptr GuExn -> IO ()
+  pgf_write :: Ptr PgfPGF -> CSizeT -> Ptr (Ptr PgfConcr) -> CString -> Ptr GuExn -> IO ()
 
 foreign import ccall "pgf/writer.h pgf_concrete_save"
   pgf_concrete_save :: Ptr PgfConcr -> CString -> Ptr GuExn -> IO ()

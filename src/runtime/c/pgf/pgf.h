@@ -58,7 +58,7 @@ PGF_API_DECL void
 pgf_concrete_unload(PgfConcr* concr);
 
 PGF_API_DECL void
-pgf_write(PgfPGF* pgf, const char* fpath, GuExn* err);
+pgf_write(PgfPGF* pgf, size_t n_concrs, PgfConcr** concrs, const char* fpath, GuExn* err);
 
 PGF_API_DECL GuString
 pgf_abstract_name(PgfPGF*);
