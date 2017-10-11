@@ -132,7 +132,22 @@ readPGF fpath =
                                      throwIO (PGFError "The grammar cannot be loaded")
                    else return pgf
      pgfFPtr <- newForeignPtr gu_pool_finalizer pool
-     return (PGF pgf (touchForeignPtr pgfFPtr))
+     let touch = touchForeignPtr pgfFPtr
+     ref <- newIORef Map.empty
+     allocaBytes (#size GuMapItor) $ \itor ->
+        do fptr <- wrapMapItorCallback (getLanguages ref touch)
+           (#poke GuMapItor, fn) itor fptr
+           pgf_iter_languages pgf itor nullPtr
+           freeHaskellFunPtr fptr
+     langs <- readIORef ref
+     return (PGF pgf langs touch)
+  where
+    getLanguages :: IORef (Map.Map String Concr) -> Touch -> MapItorCallback
+    getLanguages ref touch itor key value exn = do
+      langs <- readIORef ref
+      name  <- peekUtf8CString (castPtr key)
+      concr <- fmap (\ptr -> Concr ptr touch) $ peek (castPtr value)
+      writeIORef ref $! Map.insert name concr langs
 
 showPGF :: PGF -> String
 showPGF p =
@@ -147,22 +162,7 @@ showPGF p =
 
 -- | List of all languages available in the grammar.
 languages :: PGF -> Map.Map ConcName Concr
-languages p =
-  unsafePerformIO $
-    do ref <- newIORef Map.empty
-       allocaBytes (#size GuMapItor) $ \itor ->
-                   do fptr <- wrapMapItorCallback (getLanguages ref)
-                      (#poke GuMapItor, fn) itor fptr
-                      pgf_iter_languages (pgf p) itor nullPtr
-                      freeHaskellFunPtr fptr
-       readIORef ref
-  where
-    getLanguages :: IORef (Map.Map String Concr) -> MapItorCallback
-    getLanguages ref itor key value exn = do
-      langs <- readIORef ref
-      name  <- peekUtf8CString (castPtr key)
-      concr <- fmap (\ptr -> Concr ptr (touchPGF p)) $ peek (castPtr value)
-      writeIORef ref $! Map.insert name concr langs
+languages p = langs p
 
 -- | The abstract language name is the name of the top-level
 -- abstract module
@@ -249,15 +249,15 @@ functionIsDataCon p fn =
 
 -- | Checks an expression against a specified type.
 checkExpr :: PGF -> Expr -> Type -> Either String Expr
-checkExpr (PGF p _) (Expr c_expr touch1) (Type c_ty touch2) =
+checkExpr p (Expr c_expr touch1) (Type c_ty touch2) =
   unsafePerformIO $
   alloca $ \pexpr ->
   withGuPool $ \tmpPl -> do
     exn <- gu_new_exn tmpPl
     exprPl <- gu_new_pool
     poke pexpr c_expr
-    pgf_check_expr p pexpr c_ty exn exprPl
-    touch1 >> touch2
+    pgf_check_expr (pgf p) pexpr c_ty exn exprPl
+    touchPGF p >> touch1 >> touch2
     status <- gu_exn_is_raised exn
     if not status
       then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
@@ -276,15 +276,15 @@ checkExpr (PGF p _) (Expr c_expr touch1) (Type c_ty touch2) =
 -- possible to infer its type in the GF type system.
 -- In this case the function returns an error.
 inferExpr :: PGF -> Expr -> Either String (Expr, Type)
-inferExpr (PGF p _) (Expr c_expr touch1) =
+inferExpr p (Expr c_expr touch1) =
   unsafePerformIO $
   alloca $ \pexpr ->
   withGuPool $ \tmpPl -> do
     exn <- gu_new_exn tmpPl
     exprPl <- gu_new_pool
     poke pexpr c_expr
-    c_ty <- pgf_infer_expr p pexpr exn exprPl
-    touch1
+    c_ty <- pgf_infer_expr (pgf p) pexpr exn exprPl
+    touchPGF p >> touch1
     status <- gu_exn_is_raised exn
     if not status
       then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
@@ -302,15 +302,15 @@ inferExpr (PGF p _) (Expr c_expr touch1) =
 -- | Check whether a type is consistent with the abstract
 -- syntax of the grammar.
 checkType :: PGF -> Type -> Either String Type
-checkType (PGF p _) (Type c_ty touch1) =
+checkType p (Type c_ty touch1) =
   unsafePerformIO $
   alloca $ \pty ->
   withGuPool $ \tmpPl -> do
     exn <- gu_new_exn tmpPl
     typePl <- gu_new_pool
     poke pty c_ty
-    pgf_check_type p pty exn typePl
-    touch1
+    pgf_check_type (pgf p) pty exn typePl
+    touchPGF p >> touch1
     status <- gu_exn_is_raised exn
     if not status
       then do typeFPl <- newForeignPtr gu_pool_finalizer typePl
@@ -325,13 +325,13 @@ checkType (PGF p _) (Type c_ty touch1) =
                 else throwIO (PGFError msg)
 
 compute :: PGF -> Expr -> Expr
-compute (PGF p _) (Expr c_expr touch1) =
+compute p (Expr c_expr touch1) =
   unsafePerformIO $
   withGuPool $ \tmpPl -> do
     exn <- gu_new_exn tmpPl
     exprPl <- gu_new_pool
-    c_expr <- pgf_compute p c_expr exn tmpPl exprPl
-    touch1
+    c_expr <- pgf_compute (pgf p) c_expr exn tmpPl exprPl
+    touchPGF p >> touch1
     status <- gu_exn_is_raised exn
     if not status
       then do exprFPl <- newForeignPtr gu_pool_finalizer exprPl
@@ -342,10 +342,10 @@ compute (PGF p _) (Expr c_expr touch1) =
               throwIO (PGFError msg)
 
 treeProbability :: PGF -> Expr -> Float
-treeProbability (PGF p _) (Expr c_expr touch1) =
+treeProbability p (Expr c_expr touch1) =
   unsafePerformIO $ do
-    res <- pgf_compute_tree_probability p c_expr
-    touch1
+    res <- pgf_compute_tree_probability (pgf p) c_expr
+    touchPGF p >> touch1
     return (realToFrac res)
 
 exprHash :: Int32 -> Expr -> Int32

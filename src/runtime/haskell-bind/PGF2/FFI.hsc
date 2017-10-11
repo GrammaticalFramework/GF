@@ -15,12 +15,13 @@ import Control.Exception
 import GHC.Ptr
 import Data.Int
 import Data.Word
+import qualified Data.Map as Map
 
 type Touch = IO ()
 
 -- | An abstract data type representing multilingual grammar
 -- in Portable Grammar Format.
-data PGF = PGF {pgf :: Ptr PgfPGF, touchPGF :: Touch}
+data PGF = PGF {pgf :: Ptr PgfPGF, langs :: Map.Map String Concr, touchPGF :: Touch}
 data Concr = Concr {concr :: Ptr PgfConcr, touchConcr :: Touch}
 
 ------------------------------------------------------------------

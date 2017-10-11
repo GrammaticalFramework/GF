@@ -719,7 +719,7 @@ newPGF gflags absname (B (AbstrInfo c_aflags c_cats _ c_funs _ c_abs_lin_fun _ _
     (#poke PgfPGF, abstract.abs_lin_fun) ptr c_abs_lin_fun
     (#poke PgfPGF, concretes)       ptr c_concrs
     (#poke PgfPGF, pool)            ptr pool
-    return (B (PGF ptr touch))
+    return (B (PGF ptr Map.empty touch))
   where
     (Builder pool touch) = ?builder
 

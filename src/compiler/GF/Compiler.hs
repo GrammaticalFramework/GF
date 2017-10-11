@@ -69,7 +69,7 @@ compileSourceFiles opts fs =
 -- in the 'Options') from the output of 'parallelBatchCompile'.
 -- If a @.pgf@ file by the same name already exists and it is newer than the
 -- source grammar files (as indicated by the 'UTCTime' argument), it is not
--- recreated. Calls 'writePGF' and 'writeOutputs'.
+-- recreated. Calls 'writeGrammar' and 'writeOutputs'.
 linkGrammars opts (t_src,~cnc_grs@(~(cnc,gr):_)) =
     do let abs = render (srcAbsName gr cnc)
            pgfFile = outputPath opts (grammarName' opts abs<.>"pgf")

@@ -59,28 +59,26 @@ import Data.List(sortBy)
 import Text.PrettyPrint(text)
 import Data.Char(isDigit)
 
-readPGF fpath = do
-  gr <- PGF2.readPGF fpath
-  return (PGF gr (PGF2.languages gr))
+readPGF = PGF2.readPGF
 
-showPGF (PGF gr _) = PGF2.showPGF gr
+showPGF gr = PGF2.showPGF gr
 
 readLanguage = readCId
 showLanguage (CId s) = s
 
-startCat (PGF pgf _) = PGF2.startCat pgf
+startCat = PGF2.startCat
 languageCode pgf lang = Just (PGF2.languageCode (lookConcr pgf lang))
 
-abstractName (PGF gr _) = CId (PGF2.abstractName gr)
+abstractName gr = CId (PGF2.abstractName gr)
 
-categories (PGF gr _) = map CId (PGF2.categories gr)
-categoryContext (PGF gr _) (CId c) = PGF2.categoryContext gr c
-categoryProbability (PGF gr _) (CId c) = PGF2.categoryProbability gr c
+categories gr = map CId (PGF2.categories gr)
+categoryContext gr (CId c) = PGF2.categoryContext gr c
+categoryProbability gr (CId c) = PGF2.categoryProbability gr c
 
-functions (PGF gr _)  = map CId (PGF2.functions gr)
-functionsByCat (PGF gr _) (CId c) = map CId (PGF2.functionsByCat gr c)
-functionType (PGF gr _) (CId f) = PGF2.functionType gr f
-functionIsDataCon (PGF gr _) (CId f) = PGF2.functionIsDataCon gr f
+functions gr  = map CId (PGF2.functions gr)
+functionsByCat gr (CId c) = map CId (PGF2.functionsByCat gr c)
+functionType gr (CId f) = PGF2.functionType gr f
+functionIsDataCon gr (CId f) = PGF2.functionIsDataCon gr f
 
 type Tree = PGF2.Expr
 type Labels = Map.Map CId [String]
@@ -150,18 +148,18 @@ parse_ pgf lang cat dp s =
     PGF2.ParseOk ts        -> (ParseOk (map fst ts), PGF2.Leaf s)
     PGF2.ParseIncomplete   -> (ParseIncomplete,      PGF2.Leaf s)
 
-complete (PGF gr langs) lang cat s prefix = error "complete is not implemented"
+complete gr lang cat s prefix = error "complete is not implemented"
 
 hasLinearization pgf lang (CId f) = PGF2.hasLinearization (lookConcr pgf lang) f
 
 ppTcError s = s
 
-inferExpr (PGF gr _) e = 
+inferExpr gr e = 
   case PGF2.inferExpr gr e of
     Right res -> Right res
     Left  msg -> Left (text msg)
 
-checkType (PGF gr _) ty = 
+checkType gr ty = 
   case PGF2.checkType gr ty of
     Right res -> Right res
     Left  msg -> Left (text msg)
@@ -174,7 +172,7 @@ showPrintName pgf lang (CId f) =
 getDepLabels = error "getDepLabels is not implemented"
 getCncDepLabels = error "getCncDepLabels is not implemented"
 
-generateAllDepth (PGF gr _) ty _ = map fst (PGF2.generateAll gr ty)
+generateAllDepth gr ty _ = map fst (PGF2.generateAll gr ty)
 generateFromDepth = error "generateFromDepth is not implemented"
 generateRandom = error "generateRandom is not implemented"
 generateRandomFrom = error "generateRandomFrom is not implemented"
@@ -187,12 +185,12 @@ compute = error "compute is not implemented"
 
 -- | rank from highest to lowest probability
 rankTreesByProbs :: PGF -> [PGF2.Expr] -> [(PGF2.Expr,Double)]
-rankTreesByProbs (PGF pgf _) ts = sortBy (\ (_,p) (_,q) -> compare q p) 
+rankTreesByProbs pgf ts = sortBy (\ (_,p) (_,q) -> compare q p) 
   [(t, realToFrac (PGF2.treeProbability pgf t)) | t <- ts]
 
-treeProbability (PGF pgf _) t = PGF2.treeProbability pgf t
+treeProbability = PGF2.treeProbability
 
-languages (PGF gr _) = fmap CId (Map.keys (PGF2.languages gr))
+languages pgf = fmap CId (Map.keys (PGF2.languages pgf))
 
 type Morpho = PGF2.Concr
 
@@ -201,7 +199,7 @@ lookupMorpho cnc w = [(CId lemma,an) | (lemma,an,_) <- PGF2.lookupMorpho cnc w]
 isInMorpho cnc w = not (null (PGF2.lookupMorpho cnc w))
 fullFormLexicon cnc = [(w, [(CId fun,an) | (fun,an,_) <- analyses]) | (w, analyses) <- PGF2.fullFormLexicon cnc]
 
-graphvizAbstractTree (PGF gr _) (funs,cats) = PGF2.graphvizAbstractTree gr PGF2.graphvizDefaults{PGF2.noFun=not funs,PGF2.noCat=not cats}
+graphvizAbstractTree pgf (funs,cats) = PGF2.graphvizAbstractTree pgf PGF2.graphvizDefaults{PGF2.noFun=not funs,PGF2.noCat=not cats}
 graphvizParseTree pgf lang  = PGF2.graphvizParseTree (lookConcr pgf lang)
 graphvizAlignment pgf langs  = PGF2.graphvizWordAlignment (map (lookConcr pgf) langs) PGF2.graphvizDefaults
 graphvizDependencyTree = error "graphvizDependencyTree is not implemented"

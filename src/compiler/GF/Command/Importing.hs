@@ -45,8 +45,8 @@ ioUnionPGF :: Maybe PGF -> PGF -> IO (Maybe PGF)
 ioUnionPGF Nothing    two = return (Just two)
 ioUnionPGF (Just one) two =
   case msgUnionPGF one two of
-    (pgf, Just msg) -> putStrLn msg >> return pgf
-    (pgf,_)         -> return pgf
+    (pgf, Just msg) -> putStrLn msg >> return (Just pgf)
+    (pgf,_)         -> return (Just pgf)
 
 importSource :: Options -> [FilePath] -> IO SourceGrammar
 importSource opts files = fmap (snd.snd) (batchCompile opts files)
