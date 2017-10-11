@@ -19,7 +19,7 @@ lin ask_V2Q = mkV2Q "galdetu" ;
 ----
 -- B
 
-lin baby_N = mkN "haur" ; -- | mkN "ume" | mkN "kreatura" ; --Apertium
+lin baby_N = mkN "haur" animate ; -- | mkN "ume" | mkN "kreatura" ; --Apertium
 lin back_N = mkN "bizkar" ;
 lin bad_A = mkA "txar" ;
 lin bank_N = mkN "banku" ; --| mkN "erribera" | mkN "ertz" ; --Apertium
@@ -40,15 +40,15 @@ lin blue_A = mkA "urdin" ;
 lin boat_N = mkN "itsasontzi" ;
 lin bone_N = mkN "hezur" ; --Apertium
 lin boot_N = mkN "bota" ; --Apertium
-lin boss_N = mkN "nagusi" ; --Apertium
+lin boss_N = mkN "nagusi" animate ; --Apertium
 lin book_N = mkN "liburu" ;
-lin boy_N  = mkN "mutil" ;
+lin boy_N  = mkN "mutil" animate ;
 lin bread_N = mkN "ogi" ; --Apertium
 lin break_V2 = mkV2 "izorratu" ; --Apertium
 lin breast_N = mkN "bular" ; --Apertium
 lin breathe_V = mkV "arnastu" ; --Apertium
 lin broad_A = mkA "zabal" ; --Apertium
-lin brother_N2 = mkN2 "anaia" ;
+lin brother_N2 = mkN2 (mkN "anaia" animate) ;
 lin brown_A = mkA "marroi" ; --Apertium
 lin burn_V = mkV "erre" ; -- | mkV "kiskali" ; --Apertium
 lin butter_N = mkN "gurin" ; --Apertium
@@ -65,7 +65,7 @@ lin cat_N = mkN "katu" ;
 lin ceiling_N = mkN "sabai" ; --Apertium
 lin chair_N = mkN "aulki" ; --Apertium
 lin cheese_N = mkN "gazta" ; --Apertium
-lin child_N = mkN "ume" ; --| mkN "umetxo" ; --Apertium
+lin child_N = mkN "ume" animate ; --| mkN "umetxo" ; --Apertium
 lin church_N = mkN "eliza" ; --Apertium
 lin city_N = mkN "hiri" ; --Apertium
 lin clean_A = mkA "garbi" ; --Apertium
@@ -79,7 +79,7 @@ lin computer_N = mkN "ordenagailu" ; --| mkN "ordenatzaile" ; --Apertium
 lin correct_A = mkA "zuzen" ; --Apertium
 lin count_V2 = mkV2 "kontatu" ; -- | mkV2 "zenbatu" ; --Apertium
 lin country_N = mkN "herri" ; --Apertium
-lin cousin_N = mkN "lehengusu" ; --Apertium
+lin cousin_N = mkN "lehengusu" animate ; --Apertium
 lin cow_N = mkN "behi" ; --Apertium
 lin cut_V2 = mkV2 "ebaki" ; -- | mkV2 "moztu" ; --Apertium
 
@@ -92,7 +92,7 @@ lin dig_V = mkV "zulatu" ; --Apertium
 lin dirty_A = mkA "likits" ; --| mkA "zikin" ; --Apertium
 -- lin distance_N3 = mkN3 (mkN "distantzia") fromP toP ; --Apertium
 lin do_V2 = lin V2 egin_V ;
-lin doctor_N = mkN "mediku" ; --| mkN "doktore" ; --Apertium
+lin doctor_N = mkN "mediku" animate ; --| mkN "doktore" ; --Apertium
 lin dog_N = mkN "txakur" ;
 lin door_N = mkN "ate" ;
 lin drink_V2 = mkV2 "edan" ;
@@ -108,7 +108,7 @@ lin earth_N = mkN "lur" ; --Apertium
 lin eat_V2 = mkV2 "jan" ; -- | mkV2 "bazkaldu" ; --Apertium
 lin egg_N = mkN "arrautza" ; --Apertium
 lin empty_A = mkA "huts" ; --| mkA "bakarti" ; --Apertium
-lin enemy_N = mkN "etsai" ; --| mkN "arerio" ; --Apertium
+lin enemy_N = mkN "etsai" animate ; --| mkN "arerio" ; --Apertium
 lin eye_N = mkN "begi" ;
 
 ----
@@ -118,7 +118,7 @@ lin factory_N = mkN "fabrika" ; --| mkN "lantegi" ; --Apertium
 lin fall_V = mkV "amildu" ; -- | mkV "erori" ; --Apertium
 lin far_Adv = mkAdv "urrun" ;
 lin fat_N = mkN "gantz" ; --| mkN "koipe" ; --Apertium
-lin father_N2 = mkN2 "aita" ; --genitive
+lin father_N2 = mkN2 (mkN "aita" animate) ;
 lin fear_V2 = ukanV "beldur" ; -- beldur nauzu `you are afraid of me'
 lin fear_VS = izanV "beldur" ; -- beldur naiz [ez datorrela] `I'm afraid s/he won't come'
 lin feather_N = mkN "luma" ; --Apertium
@@ -147,7 +147,7 @@ lin full_A = mkA "bete" ; --Apertium
 -- G
 
 lin garden_N = mkN "lorategi" ; --Apertium
-lin girl_N  = mkN "neska" ;
+lin girl_N  = mkN "neska" animate ;
 lin give_V3 = mkV3 "eman" ; --Apertium
 lin glove_N = mkN "eskularru" | mkN "eskularru" ; --Apertium
 lin go_V = joan_V ; 
@@ -178,7 +178,7 @@ lin horse_N = mkN "zaldi" ; --Apertium
 lin hot_A = mkA "bero" ; --Apertium
 lin house_N = mkN "etxe" ; --Apertium
 lin hunt_V2 = mkV2 "ehizatu" ;
-lin husband_N = mkN "senar" ; --Apertium
+lin husband_N = mkN "senar" animate ; --Apertium
 
 ----
 -- I
@@ -192,7 +192,7 @@ lin iron_N = mkN "burdina" ; -- | mkN "plantxa" ; --Apertium
 
 lin jump_V = mkV "jauzi" egin_V ; --Apertium
 lin kill_V2 = mkV2 "hil" ; --Apertium
-lin king_N = mkN "errege" ; --Apertium
+lin king_N = mkN "errege" animate ; --Apertium
 lin knee_N = mkN "belaun" ; --Apertium
 lin know_V2 = lin V2 jakin_V2 ; -- synthetic verb
 lin know_VQ = lin VQ jakin_V2 ; -- synthetic verb
@@ -259,12 +259,12 @@ lin paper_N = mkN "paper" ; --Apertium
 lin paris_PN = mkPN "Paris" ; 
 lin peace_N = mkN "bake" ; -- | mkN "sosegu" ; --Apertium
 lin pen_N = mkN "boligrafo" ; --Apertium
-lin person_N = mkN "pertsona" ; --| mkN "gizakume" | mkN "jende" ; --Apertium
+lin person_N = mkN "pertsona" animate ; --| mkN "gizakume" | mkN "jende" ; --Apertium
 lin planet_N = mkN "planeta" ; --Apertium
 lin plastic_N = mkN "plastiko" ; --Apertium
 lin play_V = mkV "jokatu" ; -- | mkV "jolastu" ; --Apertium
 lin policeman_N = mkN "ertzain" ; --Apertium
-lin priest_N = mkN "apaiz" ; -- | mkN "artzain" ; --Apertium -- FIXME: split 
+lin priest_N = mkN "artzain" animate ; 
 lin pull_V2 = mkV2 "tenkatu" ; -- | mkV2 "tiratu" ; --Apertium
 lin push_V2 = mkV2 "bultzatu" ; -- | mkV2 "estutu" ; --Apertium
 lin put_V2 = mkV2 "ezarri" ; -- |  mkV2 "jarri" ; --Apertium
@@ -272,7 +272,7 @@ lin put_V2 = mkV2 "ezarri" ; -- |  mkV2 "jarri" ; --Apertium
 --------
 -- Q - R
 
-lin queen_N = mkN "erregina" ; --Apertium
+lin queen_N = mkN "erregina" animate ; --Apertium
 lin question_N = mkN "galdera" ; --Apertium
 lin radio_N = mkN "erradio" ; --| mkN "irrati" ; --Apertium
 lin rain_N = mkN "euri" ; --Apertium
@@ -400,7 +400,7 @@ lin water_N = mkN "ura" ; --Definite form is ura, not urra ('hazelnut')
 lin wet_A = mkA "busti" ; --Apertium
 lin white_A = mkA "zuri" ; --| mkA "txuri" ; --Apertium
 lin wide_A = mkA "zabal" ; --Apertium
-lin wife_N = mkN "emazte" ; --Apertium
+lin wife_N = mkN "emazte" animate ; --Apertium
 lin win_V2 = mkV2 "garaitu" ; --| mkV2 "irabazi" ; --Apertium
 lin wind_N = mkN "haize" ; --Apertium
 lin window_N = mkN "leiho" ;

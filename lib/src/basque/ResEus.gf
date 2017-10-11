@@ -149,7 +149,7 @@ oper
     in { s = stem ; ph = phono ; anim=Inan } ; 
 
   mkNoun2 : Str -> Case -> Noun2 = \s,cas -> mkNoun s ** { compl1 = mkPost [] cas False } ;
-
+  n2Noun2 : Noun -> Case -> Noun2 = \n,cas -> n ** { compl1 = mkPost [] cas False } ;
   mkPNoun : Str -> PNoun = \s -> mkNoun s ** {nbr = Sg ; anim=Anim} ; 
 
 
@@ -526,9 +526,9 @@ oper
   --TODO: add other synthetic transitive verbs
   chooseAuxPol : Polarity -> VerbPhrase -> IntransV = \pol,vp -> 
     case vp.val of {
-      Da x     => AditzTrinkoak.syntIntransVerb (Da x) ;
+      Da x => AditzTrinkoak.syntIntransVerb (Da x) ;
 
-      Zaio   => AditzTrinkoak.ukanZaio ! vp.dobj.agr ; --are there other Zaio (nor-nori) verbs?
+      Zaio => AditzTrinkoak.ukanZaio ! vp.dobj.agr ; --are there other Zaio (nor-nori) verbs?
 
       Du x =>
         let aux = AditzTrinkoak.syntTransVerb (Du x) 
