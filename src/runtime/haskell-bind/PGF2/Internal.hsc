@@ -17,7 +17,7 @@ module PGF2.Internal(-- * Access the internal structures
                      AbstrInfo, newAbstr, ConcrInfo, newConcr, newPGF,
                      
                      -- * Write an in-memory PGF to a file
-                     writePGF, writeConcr,
+                     unionPGF, writePGF, writeConcr,
                      
                      -- * Predefined concrete categories
                      fidString, fidInt, fidFloat, fidVar, fidStart
@@ -986,6 +986,17 @@ newMap key_size hasher newKey elem_size pokeElem values pool = do
       c_elem <- gu_map_insert map c_key
       pokeElem c_elem elem
       insert map values pool
+
+
+unionPGF :: PGF -> PGF -> Maybe PGF
+unionPGF one@(PGF ptr1 langs1 touch1) two@(PGF ptr2 langs2 touch2)
+  | PGF2.abstractName one == PGF2.abstractName two && haveSameFunsPGF one two = Just (PGF ptr1 (Map.union langs1 langs2) (touch1 >> touch2))
+  | otherwise = Nothing
+  where
+    haveSameFunsPGF one two = 
+      let fsone = [(f,PGF2.functionType one f) | f <- PGF2.functions one]
+          fstwo = [(f,PGF2.functionType two f) | f <- PGF2.functions two]
+      in fsone == fstwo
 
 
 writePGF :: FilePath -> PGF -> IO ()

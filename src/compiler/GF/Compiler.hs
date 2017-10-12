@@ -79,7 +79,7 @@ linkGrammars opts (t_src,~cnc_grs@(~(cnc,gr):_)) =
        if t_pgf >= Just t_src
          then putIfVerb opts $ pgfFile ++ " is up-to-date."
          else do pgfs <- mapM (link opts) cnc_grs
-                 let pgf = foldl1 unionPGF pgfs
+                 let pgf = foldl1 (\one two -> fromMaybe two (unionPGF one two)) pgfs
                  writeGrammar opts pgf
                  writeOutputs opts pgf
 
@@ -113,7 +113,7 @@ unionPGFFiles opts fs =
 
     doIt =
       do pgfs <- mapM readPGFVerbose fs
-         let pgf0 = foldl1 unionPGF pgfs
+         let pgf0 = foldl1 (\one two -> fromMaybe two (unionPGF one two)) pgfs
              pgf  = if flag optOptimizePGF opts then optimizePGF pgf0 else pgf0
              pgfFile = outputPath opts (grammarName opts pgf <.> "pgf")
          if pgfFile `elem` fs

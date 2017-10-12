@@ -22,7 +22,7 @@ module PGF.Internal(CId(..),Language,PGF2.PGF,
                     
                     ppFunId, ppSeqId, ppFId, ppMeta, ppLit, ppSeq,
                     
-                    optimizePGF, unionPGF, msgUnionPGF
+                    optimizePGF, unionPGF
                    ) where
 
 import qualified PGF2
@@ -161,16 +161,5 @@ ppAlt (syms,ps) = hsep (map ppSymbol syms) <+> char '/' <+> hsep (map (doubleQuo
 
 optimizePGF = error "optimizePGF is not implemented"
 
-unionPGF :: PGF -> PGF -> PGF
-unionPGF one two = fst $ msgUnionPGF one two
+unionPGF = PGF2.unionPGF
 
-msgUnionPGF :: PGF -> PGF -> (PGF, Maybe String)
-msgUnionPGF one@(PGF ptr1 langs1 touch1) two@(PGF ptr2 langs2 touch2)
-  | PGF2.abstractName one == PGF2.abstractName two && haveSameFunsPGF one two = (PGF ptr1 (Map.union langs1 langs2) (touch1 >> touch2), Nothing)
-  | otherwise = (two,    -- abstracts don't match, discard the old one  -- error msg in Importing.ioUnionPGF
-                 Just "Abstract changed, previous concretes discarded.")
-  where
-    haveSameFunsPGF one two = 
-      let fsone = [(f,PGF2.functionType one f) | f <- PGF2.functions one]
-          fstwo = [(f,PGF2.functionType two f) | f <- PGF2.functions two]
-      in fsone == fstwo

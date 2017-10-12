@@ -1,7 +1,7 @@
 module GF.Command.Importing (importGrammar, importSource) where
 
 import PGF
-import PGF.Internal(optimizePGF,unionPGF,msgUnionPGF)
+import PGF.Internal(optimizePGF,unionPGF)
 
 import GF.Compile
 import GF.Compile.Multi (readMulti)
@@ -18,6 +18,7 @@ import GF.Data.ErrM
 import System.FilePath
 import qualified Data.Set as Set
 import qualified Data.Map as Map
+import Control.Monad(foldM)
 
 -- import a grammar in an environment where it extends an existing grammar
 importGrammar :: Maybe PGF -> Options -> [FilePath] -> IO (Maybe PGF)
@@ -37,16 +38,15 @@ importGrammar pgf0 opts files =
         Bad msg -> do putStrLn ('\n':'\n':msg)
                       return pgf0
     ".pgf" -> do
-      pgf2 <- mapM readPGF files >>= return . foldl1 unionPGF
-      ioUnionPGF pgf0 pgf2
+      mapM readPGF files >>= foldM ioUnionPGF pgf0
     ext -> die $ "Unknown filename extension: " ++ show ext
 
 ioUnionPGF :: Maybe PGF -> PGF -> IO (Maybe PGF)
 ioUnionPGF Nothing    two = return (Just two)
 ioUnionPGF (Just one) two =
-  case msgUnionPGF one two of
-    (pgf, Just msg) -> putStrLn msg >> return (Just pgf)
-    (pgf,_)         -> return (Just pgf)
+  case unionPGF one two of
+    Nothing         -> putStrLn "Abstract changed, previous concretes discarded." >> return (Just two)
+    Just pgf        -> return (Just pgf)
 
 importSource :: Options -> [FilePath] -> IO SourceGrammar
 importSource opts files = fmap (snd.snd) (batchCompile opts files)
