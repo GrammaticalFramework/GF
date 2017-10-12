@@ -89,6 +89,41 @@ pgf_concrete_save(PgfConcr* concr, const char* fpath, GuExn* err)
 	fclose(outfile);
 }
 
+PGF_API bool
+pgf_have_same_abstract(PgfPGF *one, PgfPGF *two)
+{
+	if (strcmp(one->abstract.name, two->abstract.name) != 0)
+		return false;
+
+	size_t n_cats = gu_seq_length(one->abstract.cats);
+	if (n_cats != gu_seq_length(two->abstract.cats))
+		return false;
+	size_t n_funs = gu_seq_length(one->abstract.funs);
+	if (n_funs != gu_seq_length(two->abstract.funs))
+		return false;
+
+	for (size_t i = 0; i < n_cats; i++) {
+		PgfAbsCat* cat1 = gu_seq_index(one->abstract.cats, PgfAbsCat, i);
+		PgfAbsCat* cat2 = gu_seq_index(two->abstract.cats, PgfAbsCat, i);
+		
+		if (strcmp(cat1->name, cat2->name) != 0)
+			return false;
+	}
+
+	for (size_t i = 0; i < n_funs; i++) {
+		PgfAbsFun* fun1 = gu_seq_index(one->abstract.funs, PgfAbsFun, i);
+		PgfAbsFun* fun2 = gu_seq_index(two->abstract.funs, PgfAbsFun, i);
+		
+		if (strcmp(fun1->name, fun2->name) != 0)
+			return false;
+
+		if (!pgf_type_eq(fun1->type, fun2->type))
+			return false;
+	}
+
+	return true;
+}
+
 PGF_API GuString
 pgf_abstract_name(PgfPGF* pgf)
 {

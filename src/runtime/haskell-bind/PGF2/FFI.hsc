@@ -271,6 +271,9 @@ foreign import ccall "pgf/pgf.h pgf_write"
 foreign import ccall "pgf/writer.h pgf_concrete_save"
   pgf_concrete_save :: Ptr PgfConcr -> CString -> Ptr GuExn -> IO ()
 
+foreign import ccall "pgf/pgf.h pgf_have_same_abstract"
+  pgf_have_same_abstract :: Ptr PgfPGF -> Ptr PgfPGF -> (#type bool)
+
 foreign import ccall "pgf/pgf.h pgf_abstract_name"
   pgf_abstract_name :: Ptr PgfPGF -> IO CString
 

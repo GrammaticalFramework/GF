@@ -60,6 +60,9 @@ pgf_concrete_unload(PgfConcr* concr);
 PGF_API_DECL void
 pgf_write(PgfPGF* pgf, size_t n_concrs, PgfConcr** concrs, const char* fpath, GuExn* err);
 
+PGF_API_DECL bool
+pgf_have_same_abstract(PgfPGF *one, PgfPGF *two);
+
 PGF_API_DECL GuString
 pgf_abstract_name(PgfPGF*);
 

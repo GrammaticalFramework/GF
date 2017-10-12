@@ -990,14 +990,8 @@ newMap key_size hasher newKey elem_size pokeElem values pool = do
 
 unionPGF :: PGF -> PGF -> Maybe PGF
 unionPGF one@(PGF ptr1 langs1 touch1) two@(PGF ptr2 langs2 touch2)
-  | PGF2.abstractName one == PGF2.abstractName two && haveSameFunsPGF one two = Just (PGF ptr1 (Map.union langs1 langs2) (touch1 >> touch2))
-  | otherwise = Nothing
-  where
-    haveSameFunsPGF one two = 
-      let fsone = [(f,PGF2.functionType one f) | f <- PGF2.functions one]
-          fstwo = [(f,PGF2.functionType two f) | f <- PGF2.functions two]
-      in fsone == fstwo
-
+  | pgf_have_same_abstract ptr1 ptr2 /= 0 = Just (PGF ptr1 (Map.union langs1 langs2) (touch1 >> touch2))
+  | otherwise                             = Nothing
 
 writePGF :: FilePath -> PGF -> IO ()
 writePGF fpath p = do
