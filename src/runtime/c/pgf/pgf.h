@@ -244,7 +244,8 @@ pgf_callbacks_map_add_literal(PgfConcr* concr, PgfCallbacksMap* callbacks,
                               PgfCId cat, PgfLiteralCallback* callback);
 
 PGF_API_DECL void
-pgf_print(PgfPGF* pgf, GuOut* out, GuExn* err); 
+pgf_print(PgfPGF* pgf, size_t n_concrs, PgfConcr** concrs,
+          GuOut* out, GuExn* err);
 
 PGF_API_DECL void
 pgf_check_expr(PgfPGF* gr, PgfExpr* pe, PgfType* ty,

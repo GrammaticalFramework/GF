@@ -400,14 +400,12 @@ pgf_print_concrete(PgfConcr* concr, GuOut* out, GuExn* err)
 }
 
 PGF_API void
-pgf_print(PgfPGF* pgf, GuOut* out, GuExn* err)
+pgf_print(PgfPGF* pgf, size_t n_concrs, PgfConcr** concrs, GuOut* out, GuExn* err)
 {
 	pgf_print_flags(pgf->gflags, 0, out, err);
 	pgf_print_abstract(&pgf->abstract, out, err);
-	
-	size_t n_concrs = gu_seq_length(pgf->concretes);
+
 	for (size_t i = 0; i < n_concrs; i++) {
-		PgfConcr* concr = gu_seq_index(pgf->concretes, PgfConcr, i);
-		pgf_print_concrete(concr, out, err);
+		pgf_print_concrete(concrs[i], out, err);
 	}
 }

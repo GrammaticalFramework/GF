@@ -155,7 +155,8 @@ showPGF p =
     withGuPool $ \tmpPl ->
       do (sb,out) <- newOut tmpPl
          exn <- gu_new_exn tmpPl
-         pgf_print (pgf p) out exn
+         withArrayLen ((map concr . Map.elems . languages) p) $ \n_concrs concrs ->
+           pgf_print (pgf p) (fromIntegral n_concrs) concrs out exn
          touchPGF p
          s <- gu_string_buf_freeze sb tmpPl
          peekUtf8CString s

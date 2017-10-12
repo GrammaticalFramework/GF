@@ -2619,6 +2619,21 @@ PGF_dealloc(PGFObject* self)
     Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
+typedef struct {
+	GuMapItor fn;
+	PGFObject* grammar;
+	void* collection;
+} PyPGFClosure;
+
+static void
+pgf_collect_langs_seq(GuMapItor* fn, const void* key, void* value, GuExn* err)
+{
+    PgfConcr* concr = *((PgfConcr**) value);
+    PyPGFClosure* clo = (PyPGFClosure*) fn;
+    
+	gu_buf_push((GuBuf*) clo->collection, PgfConcr*, concr);
+}
+
 static PyObject *
 PGF_repr(PGFObject *self)
 {
@@ -2628,7 +2643,14 @@ PGF_repr(PGFObject *self)
 	GuStringBuf* sbuf = gu_new_string_buf(tmp_pool);
 	GuOut* out = gu_string_buf_out(sbuf);
 
-	pgf_print(self->pgf, out, err);
+	GuBuf* languages = gu_new_buf(PgfConcr*, tmp_pool);
+
+	PyPGFClosure clo = { { pgf_collect_langs_seq }, self, languages };
+	pgf_iter_languages(self->pgf, &clo.fn, err);
+
+	pgf_print(self->pgf, gu_buf_length(languages), 
+	                     gu_buf_data(languages),
+	                     out, err);
 
 	PyObject* pystr = PyString_FromStringAndSize(gu_string_buf_data(sbuf),
 	                                             gu_string_buf_length(sbuf));
@@ -2643,14 +2665,8 @@ PGF_getAbstractName(PGFObject *self, void *closure)
     return PyString_FromString(pgf_abstract_name(self->pgf));
 }
 
-typedef struct {
-	GuMapItor fn;
-	PGFObject* grammar;
-	PyObject* object;
-} PyPGFClosure;
-
 static void
-pgf_collect_langs(GuMapItor* fn, const void* key, void* value, GuExn* err)
+pgf_collect_langs_dict(GuMapItor* fn, const void* key, void* value, GuExn* err)
 {
 	PgfCId name = (PgfCId) key;
     PgfConcr* concr = *((PgfConcr**) value);
@@ -2675,7 +2691,7 @@ pgf_collect_langs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 	((ConcrObject *) py_lang)->grammar = clo->grammar;
 	Py_INCREF(clo->grammar);
 
-    if (PyDict_SetItem(clo->object, py_name, py_lang) != 0) {
+    if (PyDict_SetItem((PyObject*) clo->collection, py_name, py_lang) != 0) {
 		gu_raise(err, PgfExn);
 		goto end;
 	}
@@ -2697,7 +2713,7 @@ PGF_getLanguages(PGFObject *self, void *closure)
 	// Create an exception frame that catches all errors.
 	GuExn* err = gu_new_exn(tmp_pool);
 
-	PyPGFClosure clo = { { pgf_collect_langs }, self, languages };
+	PyPGFClosure clo = { { pgf_collect_langs_dict }, self, languages };
 	pgf_iter_languages(self->pgf, &clo.fn, err);
 	if (!gu_ok(err)) {
 		Py_DECREF(languages);
@@ -2727,7 +2743,7 @@ pgf_collect_cats(GuMapItor* fn, const void* key, void* value, GuExn* err)
 		goto end;
 	}
 
-    if (PyList_Append(clo->object, py_name) != 0) {
+    if (PyList_Append((PyObject*) clo->collection, py_name) != 0) {
 		gu_raise(err, PgfExn);
 		goto end;
 	}
@@ -2794,7 +2810,7 @@ pgf_collect_funs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 		goto end;
 	}
 
-    if (PyList_Append(clo->object, py_name) != 0) {
+    if (PyList_Append((PyObject*) clo->collection, py_name) != 0) {
 		gu_raise(err, PgfExn);
 		goto end;
 	}
@@ -3142,7 +3158,7 @@ pgf_embed_funs(GuMapItor* fn, const void* key, void* value, GuExn* err)
 
 	Py_INCREF(pyexpr->master);
 
-    if (PyModule_AddObject(clo->object, name, (PyObject*) pyexpr) != 0) {
+    if (PyModule_AddObject((PyObject*) clo->collection, name, (PyObject*) pyexpr) != 0) {
 		Py_DECREF(pyexpr);
 		gu_raise(err, PgfExn);
 	}
