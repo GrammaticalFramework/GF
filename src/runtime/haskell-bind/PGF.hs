@@ -148,7 +148,9 @@ parse_ pgf lang cat dp s =
     PGF2.ParseOk ts        -> (ParseOk (map fst ts), PGF2.Leaf s)
     PGF2.ParseIncomplete   -> (ParseIncomplete,      PGF2.Leaf s)
 
-complete gr lang cat s prefix = error "complete is not implemented"
+complete pgf lang cat s prefix = 
+  let compls = Map.fromListWith (++) [(tok,[CId fun]) | (tok,_,fun,_) <- PGF2.complete (lookConcr pgf lang) cat s prefix]
+  in (PGF2.Leaf [],s,compls)
 
 hasLinearization pgf lang (CId f) = PGF2.hasLinearization (lookConcr pgf lang) f
 

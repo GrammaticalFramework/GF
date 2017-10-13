@@ -2295,7 +2295,7 @@ pgf_parser_completions_next(GuEnum* self, void* to, GuPool* pool)
 }
 
 PGF_API GuEnum*
-pgf_complete(PgfConcr* concr, PgfType* type, GuString sentence, 
+pgf_complete(PgfConcr* concr, PgfType* type, GuString sentence,
              GuString prefix, GuExn *err, GuPool* pool)
 {
 	if (concr->sequences == NULL ||

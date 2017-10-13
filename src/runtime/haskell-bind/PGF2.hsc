@@ -60,7 +60,7 @@ module PGF2 (-- * PGF
 
              alignWords,
              -- ** Parsing
-             ParseOutput(..), parse, parseWithHeuristics,
+             ParseOutput(..), parse, parseWithHeuristics, complete,
              -- ** Sentence Lookup
              lookupSentence,
              -- ** Generation
@@ -614,6 +614,26 @@ mkCallbacksMap concr callbacks pool = do
 
     predict_callback _ _ _ = return nullPtr
 
+complete :: Concr      -- ^ the language with which we do word completion
+         -> Type       -- ^ the start category
+         -> String     -- ^ the input sentence
+         -> String     -- ^ prefix for the word to be completed
+         -> [(String, Cat, Fun, Float)]
+complete lang (Type ctype _) sent prefix =
+  unsafePerformIO $
+    do pl      <- gu_new_pool
+       exn     <- gu_new_exn pl
+       sent    <- newUtf8CString sent   pl
+       prefix  <- newUtf8CString prefix pl
+       enum    <- pgf_complete (concr lang) ctype sent prefix exn pl
+       failed  <- gu_exn_is_raised exn
+       if failed
+         then do gu_pool_free pl
+                 return []
+         else do fpl    <- newForeignPtr gu_pool_finalizer pl
+                 tokens <- fromPgfTokenEnum enum fpl
+                 return tokens
+
 lookupSentence :: Concr      -- ^ the language with which we parse
                -> Type       -- ^ the start category
                -> String     -- ^ the input sentence
@@ -1113,7 +1133,7 @@ categoryProbability p cat =
 -----------------------------------------------------------------------------
 -- Helper functions
 
-fromPgfExprEnum :: Ptr GuEnum -> ForeignPtr GuPool -> IO () -> IO [(Expr, Float)]
+fromPgfExprEnum :: Ptr GuEnum -> ForeignPtr GuPool -> Touch -> IO [(Expr, Float)]
 fromPgfExprEnum enum fpl touch =
   do pgfExprProb <- alloca $ \ptr ->
                       withForeignPtr fpl $ \pl ->
@@ -1126,6 +1146,22 @@ fromPgfExprEnum enum fpl touch =
                ts <- unsafeInterleaveIO (fromPgfExprEnum enum fpl touch)
                prob <- (#peek PgfExprProb, prob) pgfExprProb
                return ((Expr expr touch,prob) : ts)
+
+fromPgfTokenEnum :: Ptr GuEnum -> ForeignPtr GuPool -> IO [(String, Cat, Fun, Float)]
+fromPgfTokenEnum enum fpl =
+  do pgfTokenProb <- alloca $ \ptr ->
+                      withForeignPtr fpl $ \pl ->
+                        do gu_enum_next enum ptr pl
+                           peek ptr
+     if pgfTokenProb == nullPtr
+       then do finalizeForeignPtr fpl
+               return []
+       else do tok  <- (#peek PgfTokenProb, tok)  pgfTokenProb >>= peekUtf8CString
+               cat  <- (#peek PgfTokenProb, cat)  pgfTokenProb >>= peekUtf8CString
+               fun  <- (#peek PgfTokenProb, fun)  pgfTokenProb >>= peekUtf8CString
+               prob <- (#peek PgfTokenProb, prob) pgfTokenProb
+               ts <- unsafeInterleaveIO (fromPgfTokenEnum enum fpl)
+               return ((tok,cat,fun,prob) : ts)
 
 -----------------------------------------------------------------------
 -- Exceptions

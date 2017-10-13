@@ -369,6 +369,9 @@ foreign import ccall "pgf/pgf.h pgf_align_words"
 foreign import ccall "pgf/pgf.h pgf_parse_with_heuristics"
   pgf_parse_with_heuristics :: Ptr PgfConcr -> PgfType -> CString -> Double -> Ptr PgfCallbacksMap -> Ptr GuExn -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
 
+foreign import ccall "pgf/pgf.h pgf_complete"
+  pgf_complete :: Ptr PgfConcr -> PgfType -> CString -> CString -> Ptr GuExn -> Ptr GuPool -> IO (Ptr GuEnum)
+
 foreign import ccall "pgf/pgf.h pgf_lookup_sentence"
   pgf_lookup_sentence :: Ptr PgfConcr -> PgfType -> CString -> Ptr GuPool -> Ptr GuPool -> IO (Ptr GuEnum)
 
