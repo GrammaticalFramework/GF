@@ -19,7 +19,7 @@ param
           | Du SyntVerb2 
           | Zaio | Dio ;  --always Ukan ?
 
-
+  AuxForm = APres | ACond | APast | AImp ; -- TODO: subjunctive & potential
 
 {-
    Type of adjectival phrase, e.g.
