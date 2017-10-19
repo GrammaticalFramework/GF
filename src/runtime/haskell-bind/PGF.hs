@@ -204,7 +204,9 @@ fullFormLexicon cnc = [(w, [(CId fun,an) | (fun,an,_) <- analyses]) | (w, analys
 graphvizAbstractTree pgf (funs,cats) = PGF2.graphvizAbstractTree pgf PGF2.graphvizDefaults{PGF2.noFun=not funs,PGF2.noCat=not cats}
 graphvizParseTree pgf lang  = PGF2.graphvizParseTree (lookConcr pgf lang)
 graphvizAlignment pgf langs  = PGF2.graphvizWordAlignment (map (lookConcr pgf) langs) PGF2.graphvizDefaults
-graphvizDependencyTree = error "graphvizDependencyTree is not implemented"
+graphvizDependencyTree format debug lbls cnclbls pgf lang e = 
+  let to_lbls' lbls = Map.fromList [(id,xs) | (CId id,xs) <- Map.toList lbls]
+  in PGF2.graphvizDependencyTree format debug (fmap to_lbls' lbls) cnclbls (lookConcr pgf lang) e
 graphvizParseTreeDep = error "graphvizParseTreeDep is not implemented"
 
 browse :: PGF -> CId -> Maybe (String,[CId],[CId])
