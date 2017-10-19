@@ -528,15 +528,18 @@ graphvizDependencyTree format debug mlab mclab concr t =
         Just [p] -> p
         _        -> cat
 
-    getDeps n_fid xs e = 
-      case unApp e of
-        Just (f,es) -> let (n_fid_1,ds) = descend n_fid xs es
-                           (mb_h, deps) = selectHead f ds
-                       in case mb_h of
-                            Just (fid,deps0) -> (n_fid_1+1,(fid,deps0++
-                                                                [(n_fid_1,(dep_lbl,fid))]++
-                                                                concat [(m,(lbl,fid)):ds | (lbl,(m,ds)) <- deps]))
-                            Nothing          -> (n_fid+1,(n_fid,[]))
+    getDeps n_fid xs e =
+      case unAbs e of
+        Just (_, x, e) -> getDeps n_fid (x:xs) e
+        Nothing        -> case unApp e of
+                            Just (f,es) -> let (n_fid_1,ds) = descend n_fid xs es
+                                               (mb_h, deps) = selectHead f ds
+                                           in case mb_h of
+                                                Just (fid,deps0) -> (n_fid_1+1,(fid,deps0++
+                                                                                    [(n_fid_1,(dep_lbl,fid))]++
+                                                                                    concat [(m,(lbl,fid)):ds | (lbl,(m,ds)) <- deps]))
+                                                Nothing          -> (n_fid_1+1,(n_fid_1,concat [(m,(lbl,n_fid_1)):ds | (lbl,(m,ds)) <- deps]))
+                            Nothing     -> (n_fid+1,(n_fid,[]))
 
     descend n_fid xs es = mapAccumL (\n_fid e -> getDeps n_fid xs e) n_fid es
 
