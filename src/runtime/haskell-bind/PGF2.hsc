@@ -70,7 +70,8 @@ module PGF2 (-- * PGF
              -- ** Visualizations
              GraphvizOptions(..), graphvizDefaults,
              graphvizAbstractTree, graphvizParseTree,
-             graphvizDependencyTree, graphvizWordAlignment,
+             graphvizDependencyTree, conlls2latexDoc, getCncDepLabels,
+             graphvizWordAlignment,
 
              -- * Exceptions
              PGFError(..),

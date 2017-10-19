@@ -171,8 +171,11 @@ showPrintName pgf lang (CId f) =
     Just n  -> n
     Nothing -> f
 
-getDepLabels = error "getDepLabels is not implemented"
-getCncDepLabels = error "getCncDepLabels is not implemented"
+getDepLabels :: String -> Labels
+getDepLabels s = Map.fromList [(mkCId f,ls) | f:ls <- map words (lines s)]
+
+getCncDepLabels :: String -> CncLabels
+getCncDepLabels = PGF2.getCncDepLabels
 
 generateAllDepth gr ty _ = map fst (PGF2.generateAll gr ty)
 generateFromDepth = error "generateFromDepth is not implemented"
