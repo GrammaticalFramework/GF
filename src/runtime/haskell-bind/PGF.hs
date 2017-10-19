@@ -105,7 +105,7 @@ unApp e = case PGF2.unApp e of
             Just (f,es) -> Just (CId f,es)
             Nothing     -> Nothing
 
-unapply = error "unapply is not implemented"
+unapply = PGF2.unapply
 
 instance Read PGF2.Expr where
     readsPrec _ s = case PGF2.readExpr s of

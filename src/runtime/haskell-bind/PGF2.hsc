@@ -31,7 +31,7 @@ module PGF2 (-- * PGF
              -- ** Expressions
              Expr,showExpr,readExpr,pExpr,pIdent,
              mkAbs,unAbs,
-             mkApp,unApp,
+             mkApp,unApp,unapply,
              mkStr,unStr,
              mkInt,unInt,
              mkFloat,unFloat,

@@ -30,8 +30,8 @@ pgf_expr_unwrap(PgfExpr expr)
 	}
 }
 
-PGF_API int
-pgf_expr_arity(PgfExpr expr)
+static PgfExprTag
+pgf_expr_arity(PgfExpr expr, int *arity)
 {
 	int n = 0;
 	while (true) {
@@ -44,10 +44,9 @@ pgf_expr_arity(PgfExpr expr)
 			n = n + 1;
 			break;
 		}
-		case PGF_EXPR_FUN:
-			return n;
 		default:
-			return -1;
+			*arity = n;
+			return i.tag;
 		}
 	}
 }
@@ -55,8 +54,8 @@ pgf_expr_arity(PgfExpr expr)
 PGF_API PgfApplication*
 pgf_expr_unapply(PgfExpr expr, GuPool* pool)
 {
-	int arity = pgf_expr_arity(expr);
-	if (arity < 0) {
+	int arity;
+	if (pgf_expr_arity(expr, &arity) != PGF_EXPR_FUN) {
 		return NULL;
 	}
 	PgfApplication* appl = gu_new_flex(pool, PgfApplication, args, arity);
@@ -68,10 +67,35 @@ pgf_expr_unapply(PgfExpr expr, GuPool* pool)
 		appl->args[n] = app->arg;
 		expr = app->fun;
 	}
-	PgfExpr e = pgf_expr_unwrap(expr);
-	gu_assert(gu_variant_tag(e) == PGF_EXPR_FUN);
-	PgfExprFun* fun = gu_variant_data(e);
+	appl->efun = pgf_expr_unwrap(expr);
+	gu_assert(gu_variant_tag(appl->efun) == PGF_EXPR_FUN);
+	PgfExprFun* fun = gu_variant_data(appl->efun);
 	appl->fun = fun->fun;
+	return appl;
+}
+
+PGF_API PgfApplication*
+pgf_expr_unapply_ex(PgfExpr expr, GuPool* pool)
+{
+	int arity;
+	pgf_expr_arity(expr, &arity);
+
+	PgfApplication* appl = gu_new_flex(pool, PgfApplication, args, arity);
+	appl->n_args = arity;
+	for (int n = arity - 1; n >= 0; n--) {
+		PgfExpr e = pgf_expr_unwrap(expr);
+		gu_assert(gu_variant_tag(e) == PGF_EXPR_APP);
+		PgfExprApp* app = gu_variant_data(e);
+		appl->args[n] = app->arg;
+		expr = app->fun;
+	}
+	appl->efun = pgf_expr_unwrap(expr);
+	if (gu_variant_tag(appl->efun) == PGF_EXPR_FUN) {
+		PgfExprFun* fun = gu_variant_data(appl->efun);
+		appl->fun = fun->fun;
+	} else {
+		appl->fun = NULL;
+	}
 	return appl;
 }
 

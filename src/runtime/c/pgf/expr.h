@@ -126,12 +126,10 @@ typedef struct {
 	PgfExpr expr;
 } PgfExprProb;
 
-PGF_API_DECL int
-pgf_expr_arity(PgfExpr expr);
-
 typedef struct PgfApplication PgfApplication;
 
 struct PgfApplication {
+	PgfExpr efun;
 	PgfCId fun;
 	int n_args;
 	PgfExpr args[];
@@ -139,6 +137,9 @@ struct PgfApplication {
 
 PGF_API_DECL PgfApplication*
 pgf_expr_unapply(PgfExpr expr, GuPool* pool);
+
+PGF_API_DECL PgfApplication*
+pgf_expr_unapply_ex(PgfExpr expr, GuPool* pool);
 
 PGF_API_DECL PgfExpr
 pgf_expr_apply(PgfApplication*, GuPool* pool);

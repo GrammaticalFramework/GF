@@ -433,6 +433,9 @@ foreign import ccall "pgf/pgf.h pgf_expr_apply"
 
 foreign import ccall "pgf/pgf.h pgf_expr_unapply"
   pgf_expr_unapply :: PgfExpr -> Ptr GuPool -> IO (Ptr PgfApplication)
+  
+foreign import ccall "pgf/pgf.h pgf_expr_unapply_ex"
+  pgf_expr_unapply_ex :: PgfExpr -> Ptr GuPool -> IO (Ptr PgfApplication)
 
 foreign import ccall "pgf/pgf.h pgf_expr_abs"
   pgf_expr_abs :: PgfBindType -> CString -> PgfExpr -> Ptr GuPool -> IO PgfExpr
@@ -457,9 +460,6 @@ foreign import ccall "pgf/pgf.h pgf_expr_float"
 
 foreign import ccall "pgf/pgf.h pgf_expr_unlit"
   pgf_expr_unlit :: PgfExpr -> CInt -> IO (Ptr a)
-
-foreign import ccall "pgf/expr.h pgf_expr_arity"
-  pgf_expr_arity :: PgfExpr -> IO CInt
 
 foreign import ccall "pgf/expr.h pgf_expr_eq"
   pgf_expr_eq :: PgfExpr -> PgfExpr -> IO CInt

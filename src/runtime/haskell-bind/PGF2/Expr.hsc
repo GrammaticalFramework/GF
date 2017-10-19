@@ -97,6 +97,17 @@ unApp (Expr expr touch) =
            c_args <- peekArray (fromIntegral arity) (appl `plusPtr` (#offset PgfApplication, args))
            return $ Just (fun, [Expr c_arg touch | c_arg <- c_args])
 
+-- | Decomposes an expression into an application of a function
+unapply :: Expr -> (Expr,[Expr])
+unapply (Expr expr touch) =
+  unsafePerformIO $
+    withGuPool $ \pl -> do
+      appl <- pgf_expr_unapply_ex expr pl
+      efun  <- (#peek PgfApplication, efun) appl
+      arity <- (#peek PgfApplication, n_args) appl :: IO CInt 
+      c_args <- peekArray (fromIntegral arity) (appl `plusPtr` (#offset PgfApplication, args))
+      return (Expr efun touch, [Expr c_arg touch | c_arg <- c_args])
+
 -- | Constructs an expression from a string literal
 mkStr :: String -> Expr
 mkStr str =
