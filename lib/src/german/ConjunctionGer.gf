@@ -20,6 +20,10 @@ concrete ConjunctionGer of Conjunction =
       c = ss.c
       } ;
 
+    ConjCN conj ss = conjunctDistrTable3 Adjf Number Case conj ss ** {
+      rc = \\_ => [] ; ext = [] ; adv = [] ; g = ss.g
+      } ;
+
 
 -- These fun's are generated from the list cat's.
 
@@ -56,6 +60,17 @@ concrete ConjunctionGer of Conjunction =
 	  	ext = []} ;
     BaseRS x y = twoTable RelGenNum x y ** {c = y.c} ;
     ConsRS xs x = consrTable RelGenNum comma xs x ** {c = xs.c} ;
+    BaseCN x y = {
+      s1 = bigCN x ;
+      s2 = bigCN y ;
+      g  = x.g ; --- gender of first CN, used e.g. in articles
+      } ; 
+    ConsCN x xs = {
+      s1 = \\a,n,c => bigCN x ! a ! n ! c ++ comma ++ xs.s1 ! a ! n ! c ;
+      s2 = xs.s2 ;
+      g  = x.g ; --- gender of first CN, used e.g. in articles
+      } ; 
+      
 
   lincat
     [S] = {s1,s2 : Order => Str} ;
@@ -63,8 +78,12 @@ concrete ConjunctionGer of Conjunction =
     [NP] = {s1,s2 : PCase => Str ; a : Agr} ;
     [AP] = {s1,s2 : AForm => Str ; isPre : Bool; c : Str * Str ; ext : Str} ;
     [RS] = {s1,s2 : RelGenNum => Str ; c : Case} ;
+    [CN] = {s1,s2 : Adjf => Number => Case => Str ; g : Gender} ;
 
   oper
     bigAP : AP -> AForm => Str = \ap ->
 		\\a => ap.c.p1 ++ ap.s ! a ++ ap.c.p2 ++ ap.ext;
+    bigCN : CN -> Adjf => Number => Case => Str = \cn ->
+		\\a,n,c => cn.s ! a ! n ! c ++ cn.adv ++ cn.ext ++ cn.rc ! n ;
+		
 }
