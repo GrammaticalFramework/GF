@@ -1,7 +1,10 @@
 --# -path=.:../common:../abstract
 
 concrete ExtendFin of Extend =
-  CatFin ** ExtendFunctor - [VPI2,VPS2,MkVPS2,ConjVPS2,ComplVPS2,MkVPI2,ConjVPI2,ComplVPI2,ComplVPIVV]
+  CatFin ** ExtendFunctor - [
+    VPI2,VPS2,MkVPS2,ConjVPS2,ComplVPS2,MkVPI2,ConjVPI2,ComplVPI2,ComplVPIVV
+    ,ExistCN, ExistMassCN
+    ]
   with
     (Grammar = GrammarFin) **
 
@@ -14,6 +17,26 @@ concrete ExtendFin of Extend =
     Prelude,
     MorphoFin,
     ParadigmsFin in {
+
+lin
+   ExistCN cn =
+      let
+         pos = ExistNP (DetCN (DetQuant IndefArt NumSg) cn) ;
+         neg = ExistNP (partCN cn) ;
+      in posNegClause pos neg ;
+   ExistMassCN cn = ExistNP (partCN cn) ;
+
+oper
+    partCN : CN -> GrammarFin.NP ;
+    partCN cn = 
+      let 
+        acn = DetCN (DetQuant IndefArt NumSg) cn
+      in acn ** {
+        s = table {
+          NPCase Nom | NPAcc => acn.s ! NPCase ResFin.Part ;
+          c => acn.s ! c
+          }
+	} ; 
 
 
   lincat
