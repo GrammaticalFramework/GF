@@ -11,7 +11,8 @@ concrete ExtendEng of Extend =
     Base_nr_RNP, Base_rn_RNP, Base_rr_RNP, ByVP, CompBareCN,
     CompIQuant, CompQS, CompS, CompVP, ComplBareVS, ComplGenVV, ComplSlashPartLast, ComplVPSVV, CompoundAP,
     CompoundN, ConjRNP, ConjVPS, ConsVPS, Cons_nr_RNP, Cons_rr_RNP, DetNPFem, EmbedPresPart, EmptyRelSlash,
-    ExistsNP, FocusAP, FocusAdV, FocusAdv, FocusObj, GenIP, GenModIP, GenModNP, GenNP, GenRP,
+    ExistsNP, ExistCN, ExistMassCN, ExistPluralCN,
+    FocusAP, FocusAdV, FocusAdv, FocusObj, GenIP, GenModIP, GenModNP, GenNP, GenRP,
     GerundAdv, GerundCN, GerundNP, IAdvAdv, ICompAP, InOrderToVP, MkVPS, NominalizeVPSlashNP,
     PassAgentVPSlash, PassVPSlash, PastPartAP, PastPartAgentAP, PositAdVAdj, PredVPS, PredVPSVV, PredetRNP, PrepCN,
     PresPartAP, PurposeVP, ReflPoss, ReflPron, ReflRNP, SlashBareV2S, SlashV2V, StrandQuestSlash, StrandRelSlash,
@@ -219,6 +220,22 @@ concrete ExtendEng of Extend =
    ExistsNP np = 
       mkClause "there" (agrP3 (fromAgr np.a).n) 
         (insertObj (\\_ => np.s ! NPAcc) (predV (regV "exist"))) ;
+
+   ExistCN cn =
+      let
+         pos = ExistNP (DetCN (DetQuant IndefArt NumSg) cn) ;
+         neg = ExistNP (DetCN (DetQuant no_Quant NumSg) cn) ;
+      in posNegClause pos neg ;
+   ExistMassCN cn =
+      let
+         pos = ExistNP (MassNP cn) ;
+         neg = ExistNP (DetCN (DetQuant no_Quant NumSg) cn) ;
+      in posNegClause pos neg ;
+   ExistPluralCN cn =
+      let
+         pos = ExistNP (DetCN (DetQuant IndefArt NumPl) cn) ;
+         neg = ExistNP (DetCN (DetQuant no_Quant NumPl) cn) ;
+      in posNegClause pos neg ;
 
 
    ComplBareVS  v s = insertExtra s.s (predV v) ;
