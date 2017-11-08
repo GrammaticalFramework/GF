@@ -3,5 +3,5 @@
 concrete AllFre of AllFreAbs = 
   LangFre,
   IrregFre,
-  ExtraFre
+  ExtendFre ---- ExtraFre
   ** {} ;
