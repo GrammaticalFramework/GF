@@ -1,7 +1,7 @@
 module GF.Compiler (mainGFC, linkGrammars, writeGrammar, writeOutputs) where
 
 import PGF
-import PGF.Internal(optimizePGF,unionPGF,writePGF,writeConcr)
+import PGF.Internal(unionPGF,writePGF,writeConcr)
 import GF.Compile as S(batchCompile,link,srcAbsName)
 import GF.CompileInParallel as P(parallelBatchCompile)
 import GF.Compile.Export
@@ -91,11 +91,10 @@ compileCFFiles opts fs = do
                 (Rule cat _ _ : _) -> return cat
                 _                  -> fail "empty CFG"
   probs <- liftIO (maybe (return Map.empty) readProbabilitiesFromFile (flag optProbsFile opts))
-  let pgf = cf2pgf (last fs) (mkCFG startCat Set.empty rules) probs
+  let pgf = cf2pgf opts (last fs) (mkCFG startCat Set.empty rules) probs
   unless (flag optStopAfterPhase opts == Compile) $
-     do let pgf' = if flag optOptimizePGF opts then optimizePGF pgf else pgf
-        writeGrammar opts pgf'
-        writeOutputs opts pgf'
+     do writeGrammar opts pgf
+        writeOutputs opts pgf
 
 unionPGFFiles :: Options -> [FilePath] -> IOE ()
 unionPGFFiles opts fs =
@@ -113,8 +112,7 @@ unionPGFFiles opts fs =
 
     doIt =
       do pgfs <- mapM readPGFVerbose fs
-         let pgf0 = foldl1 (\one two -> fromMaybe two (unionPGF one two)) pgfs
-             pgf  = if flag optOptimizePGF opts then optimizePGF pgf0 else pgf0
+         let pgf = foldl1 (\one two -> fromMaybe two (unionPGF one two)) pgfs
              pgfFile = outputPath opts (grammarName opts pgf <.> "pgf")
          if pgfFile `elem` fs
            then putStrLnE $ "Refusing to overwrite " ++ pgfFile

@@ -1,6 +1,7 @@
 module GF.Compile (compileToPGF, link, batchCompile, srcAbsName) where
 
 import GF.Compile.GrammarToPGF(grammar2PGF)
+import GF.Compile.OptimizePGF
 import GF.Compile.ReadFiles(ModEnv,getOptionsFromFile,getAllFiles,
                             importsOfModule)
 import GF.CompileOne(compileOne)
@@ -22,7 +23,6 @@ import Data.List(nub)
 import Data.Time(UTCTime)
 import GF.Text.Pretty(render,($$),(<+>),nest)
 
-import PGF.Internal(optimizePGF)
 import PGF(PGF,readProbabilitiesFromFile)
 
 -- | Compiles a number of source files and builds a 'PGF' structure for them.
@@ -39,7 +39,7 @@ link opts (cnc,gr) =
     probs <- liftIO (maybe (return Map.empty) readProbabilitiesFromFile (flag optProbsFile opts))
     pgf <- grammar2PGF opts gr abs probs
     when (verbAtLeast opts Normal) $ putStrE "OK"
-    return $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
+    return pgf
 
 -- | Returns the name of the abstract syntax corresponding to the named concrete syntax
 srcAbsName gr cnc = err (const cnc) id $ abstractOfConcrete gr cnc

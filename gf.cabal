@@ -130,6 +130,7 @@ executable gf
     GF.Compile.GrammarToPGF
     GF.Compile.Multi
     GF.Compile.Optimize
+    GF.Compile.OptimizePGF
     GF.Compile.PGFtoHaskell
     GF.Compile.PGFtoJava
     GF.Haskell

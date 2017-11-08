@@ -3,6 +3,8 @@ module GF.Compile.CFGtoPGF (cf2pgf) where
 
 import GF.Grammar.CFG
 import GF.Infra.UseIO
+import GF.Infra.Option
+import GF.Compile.OptimizePGF
 
 import PGF
 import PGF.Internal
@@ -18,8 +20,8 @@ import Data.Maybe(fromMaybe)
 -- the compiler ----------
 --------------------------
 
-cf2pgf :: FilePath -> ParamCFG -> Map.Map CId Double -> PGF
-cf2pgf fpath cf probs = 
+cf2pgf :: Options -> FilePath -> ParamCFG -> Map.Map CId Double -> PGF
+cf2pgf opts fpath cf probs = 
  build (let abstr = cf2abstr cf probs
         in newPGF [] aname abstr [(cname, cf2concr abstr cf)])
  where

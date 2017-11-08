@@ -22,7 +22,7 @@ module PGF.Internal(CId(..),Language,PGF2.PGF,
                     
                     ppFunId, ppSeqId, ppFId, ppMeta, ppLit, ppSeq,
                     
-                    optimizePGF, unionPGF
+                    unionPGF
                    ) where
 
 import qualified PGF2
@@ -158,8 +158,6 @@ ppSymbol PGF2.SymALL_CAPIT = text "ALL_CAPIT"
 ppSymbol (PGF2.SymKP syms alts) = text "pre" <+> braces (hsep (punctuate semi (hsep (map ppSymbol syms) : map ppAlt alts)))
 
 ppAlt (syms,ps) = hsep (map ppSymbol syms) <+> char '/' <+> hsep (map (doubleQuotes . text) ps)
-
-optimizePGF = error "optimizePGF is not implemented"
 
 unionPGF = PGF2.unionPGF
 

@@ -1,7 +1,7 @@
 module GF.Command.Importing (importGrammar, importSource) where
 
 import PGF
-import PGF.Internal(optimizePGF,unionPGF)
+import PGF.Internal(unionPGF)
 
 import GF.Compile
 import GF.Compile.Multi (readMulti)
@@ -60,5 +60,5 @@ importCF opts files get convert = impCF
                     (Rule cat _ _ : _) -> return cat
                     _                  -> fail "empty CFG"
       probs <- maybe (return Map.empty) readProbabilitiesFromFile (flag optProbsFile opts)
-      let pgf = cf2pgf (last files) (mkCFG startCat Set.empty rules) probs
-      return $ if flag optOptimizePGF opts then optimizePGF pgf else pgf
+      let pgf = cf2pgf opts (last files) (mkCFG startCat Set.empty rules) probs
+      return pgf

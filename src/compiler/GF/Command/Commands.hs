@@ -6,7 +6,7 @@ module GF.Command.Commands (
 import Prelude hiding (putStrLn)
 
 import PGF
-import PGF.Internal(optimizePGF,writePGF)
+import PGF.Internal(writePGF)
 
 import GF.Compile.Export
 import GF.Compile.ToAPI
@@ -860,9 +860,8 @@ pgfCommands = Map.fromList [
 
    prGrammar pgf mos opts
      | isOpt "pgf"      opts = do
-          let pgf1 = if isOpt "opt" opts then optimizePGF pgf else pgf
           let outfile = valStrOpts "file" (showCId (abstractName pgf) ++ ".pgf") opts
-          restricted $ writePGF outfile pgf1
+          restricted $ writePGF outfile pgf
           putStrLn $ "wrote file " ++ outfile
           return void
      | isOpt "cats"     opts = return $ fromString $ unwords $ map showCId $ categories pgf
