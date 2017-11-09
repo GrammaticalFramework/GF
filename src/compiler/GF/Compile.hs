@@ -1,7 +1,6 @@
 module GF.Compile (compileToPGF, link, batchCompile, srcAbsName) where
 
 import GF.Compile.GrammarToPGF(grammar2PGF)
-import GF.Compile.OptimizePGF
 import GF.Compile.ReadFiles(ModEnv,getOptionsFromFile,getAllFiles,
                             importsOfModule)
 import GF.CompileOne(compileOne)

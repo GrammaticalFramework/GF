@@ -23,7 +23,7 @@ import Data.Maybe(fromMaybe)
 cf2pgf :: Options -> FilePath -> ParamCFG -> Map.Map CId Double -> PGF
 cf2pgf opts fpath cf probs = 
  build (let abstr = cf2abstr cf probs
-        in newPGF [] aname abstr [(cname, cf2concr abstr cf)])
+        in newPGF [] aname abstr [(cname, cf2concr opts abstr cf)])
  where
    name = justModuleName fpath
    aname = mkCId (name ++ "Abs")
@@ -55,12 +55,15 @@ cf2abstr cfg probs = newAbstr aflags acats afuns
 
     cat2id = mkCId . fst
 
-cf2concr :: (?builder :: Builder s) => B s AbstrInfo -> ParamCFG -> B s ConcrInfo
-cf2concr abstr cfg = 
-  newConcr abstr [] []
-           lindefsrefs lindefsrefs
-           (IntMap.toList productions) cncfuns
-           sequences cnccats totalCats
+cf2concr :: (?builder :: Builder s) => Options -> B s AbstrInfo -> ParamCFG -> B s ConcrInfo
+cf2concr opts abstr cfg = 
+  let (lindefs',linrefs',productions',cncfuns',sequences',cnccats') =
+           (if flag optOptimizePGF opts then optimizePGF (mkCId (fst (cfgStartCat cfg))) else id)
+                (lindefsrefs,lindefsrefs,IntMap.toList productions,cncfuns,sequences,cnccats)
+  in newConcr abstr [] []
+              lindefs' linrefs'
+              productions' cncfuns'
+              sequences' cnccats' totalCats
   where
     cats  = allCats' cfg
     rules = allRules cfg

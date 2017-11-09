@@ -3,6 +3,7 @@ module GF.Compile.GrammarToPGF (grammar2PGF) where
 
 import GF.Compile.GeneratePMCFG
 import GF.Compile.GenerateBC
+import GF.Compile.OptimizePGF
 
 import PGF(CId,mkCId,Type,Hypo,Expr)
 import PGF.Internal
@@ -32,16 +33,15 @@ grammar2PGF opts gr am probs = do
                             then [(mkCId "split", LStr "true")]
                             else []
                (an,abs) = mkAbstr am probs
-               cncs     = map (mkConcr abs) cnc_infos
+               cncs     = map (mkConcr opts abs) cnc_infos
            in newPGF gflags an abs cncs)
   where
     cenv = resourceValues opts gr
+    aflags = err (const noOptions) mflags (lookupModule gr am)
 
     mkAbstr :: (?builder :: Builder s) => ModuleName -> Map.Map CId Double -> (CId, B s AbstrInfo)
     mkAbstr am probs = (mi2i am, newAbstr flags cats funs)
       where
-        aflags = err (const noOptions) mflags (lookupModule gr am)
-
         adefs =
             [((cPredefAbs,c), AbsCat (Just (L NoLoc []))) | c <- [cFloat,cInt,cString]] ++ 
             Look.allOrigInfos gr am
@@ -70,7 +70,7 @@ grammar2PGF opts gr am probs = do
                           0 -> 0
                           n -> max 0 ((1 - sum [d | (f,Just d) <- pfs]) / fromIntegral n)
 
-    mkConcr abs (cm,ex_seqs,cdefs) =
+    mkConcr opts abs (cm,ex_seqs,cdefs) =
       let cflags = err (const noOptions) mflags (lookupModule gr cm)
           flags  = [(mkCId f,x) | (f,x) <- optionsPGF cflags]
 
@@ -84,15 +84,21 @@ grammar2PGF opts gr am probs = do
 
           printnames = genPrintNames cdefs
 
+          startCat = mkCId (fromMaybe "S" (flag optStartCat opts))
+
+          (lindefs',linrefs',productions',cncfuns',sequences',cnccats') =
+               (if flag optOptimizePGF opts then optimizePGF startCat else id)
+                    (lindefs,linrefs,productions,cncfuns,elems seqs,cnccats)
+
       in (mi2i cm, newConcr abs
                             flags
                             printnames
-                            lindefs
-                            linrefs
-                            productions
-                            cncfuns
-                            (elems seqs)
-                            cnccats
+                            lindefs'
+                            linrefs'
+                            productions'
+                            cncfuns'
+                            sequences'
+                            cnccats'
                             fid_cnt2)
 
     getConcreteInfos gr am = mapM flatten (allConcretes gr am)
