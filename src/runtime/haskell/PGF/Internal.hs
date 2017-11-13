@@ -4,16 +4,12 @@
 -- Stability   : unstable
 --
 -------------------------------------------------
-module PGF.Internal(module Internal) where
-import PGF.Binary as Internal
-import PGF.Data as Internal
-import PGF.Macros as Internal
-import PGF.Optimize as Internal
-import PGF.Printer as Internal
-import PGF.Utilities as Internal
-import PGF.ByteCode as Internal
+module PGF.Internal(CId,
+                    FId,isPredefFId,
+                    FunId,SeqId,LIndex,
+                    Production(..),PArg(..),Symbol(..),
+                    
+                    fidString, fidInt, fidFloat, fidVar, fidStart
+                    ) where
 
-import Data.Binary as Internal
-import Data.Binary.Get as Internal
-import Data.Binary.IEEE754 as Internal
-import Data.Binary.Put as Internal
+import PGF.Data
