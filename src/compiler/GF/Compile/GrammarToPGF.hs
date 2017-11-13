@@ -84,7 +84,7 @@ grammar2PGF opts gr am probs = do
 
           printnames = genPrintNames cdefs
 
-          startCat = mkCId (fromMaybe "S" (flag optStartCat opts))
+          startCat = mkCId (fromMaybe "S" (flag optStartCat aflags))
 
           (lindefs',linrefs',productions',cncfuns',sequences',cnccats') =
                (if flag optOptimizePGF opts then optimizePGF startCat else id)
