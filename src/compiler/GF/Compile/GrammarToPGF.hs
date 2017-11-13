@@ -80,7 +80,7 @@ grammar2PGF opts gr am probs = do
           !(!fid_cnt1,!cnccats) = genCncCats gr am cm cdefs
           cnccat_ranges = Map.fromList (map (\(cid,s,e,_) -> (cid,(s,e))) cnccats)
           !(!fid_cnt2,!productions,!lindefs,!linrefs,!cncfuns)
-                                = genCncFuns gr am cm seqs cdefs fid_cnt1 cnccat_ranges
+                                = genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt1 cnccat_ranges
 
           printnames = genPrintNames cdefs
 
@@ -206,6 +206,7 @@ genCncFuns :: Grammar
            -> ModuleName
            -> ModuleName
            -> Array SeqId [Symbol]
+           -> Array SeqId [Symbol]
            -> [(QIdent, Info)]
            -> FId
            -> Map.Map CId (Int,Int)
@@ -214,7 +215,7 @@ genCncFuns :: Grammar
                [(FId, [FunId])],
                [(FId, [FunId])],
                [(CId,[SeqId])])
-genCncFuns gr am cm seqs cdefs fid_cnt cnccat_ranges =
+genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccat_ranges =
   let (fid_cnt1,funs_cnt1,funs1,lindefs,linrefs) = mkCncCats cdefs fid_cnt  0 [] IntMap.empty IntMap.empty
       (fid_cnt2,funs_cnt2,funs2,prods0)          = mkCncFuns cdefs fid_cnt1 funs_cnt1 funs1 lindefs Map.empty IntMap.empty
       prods                                      = [(fid,Set.toList prodSet) | (fid,prodSet) <- IntMap.toList prods0]
@@ -297,7 +298,7 @@ genCncFuns gr am cm seqs cdefs fid_cnt cnccat_ranges =
     toCncFun offs (m,id) funs (funid0,lins0) =
       let mseqs = case lookupModule gr m of
                     Ok (ModInfo{mseqs=Just mseqs}) -> mseqs
-                    _                              -> seqs
+                    _                              -> ex_seqs
       in (i2i id, map (newIndex mseqs) (elems lins0)):funs
       where
         newIndex mseqs i = binSearch (mseqs ! i) seqs (bounds seqs)
