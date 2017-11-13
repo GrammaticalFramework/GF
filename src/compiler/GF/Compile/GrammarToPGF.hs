@@ -292,7 +292,7 @@ genCncFuns gr am cm ex_seqs seqs cdefs fid_cnt cnccat_ranges =
 
     mkCtxt lindefs (_,cat) =
       case Map.lookup (i2i cat) cnccat_ranges of
-        Just (s,e) -> [fid | fid <- [s..e], Just _ <- [IntMap.lookup fid lindefs]]
+        Just (s,e) -> [(fid,fid) | fid <- [s..e], Just _ <- [IntMap.lookup fid lindefs]]
         Nothing    -> error "GrammarToPGF.mkCtxt failed"
 
     toCncFun offs (m,id) funs (funid0,lins0) =

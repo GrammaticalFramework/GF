@@ -185,5 +185,5 @@ filterProductions prods0 hoc0 prods
 
     isLive fid = isPredefFId fid || IntMap.member fid prods0 || IntSet.member fid hoc0
 
-    accumHOC hoc (PApply funid args) = List.foldl' (\hoc (PArg hypos _) -> List.foldl' (\hoc fid -> IntSet.insert fid hoc) hoc hypos) hoc args
+    accumHOC hoc (PApply funid args) = List.foldl' (\hoc (PArg hypos _) -> List.foldl' (\hoc fid -> IntSet.insert fid hoc) hoc (map snd hypos)) hoc args
     accumHOC hoc _                   = hoc

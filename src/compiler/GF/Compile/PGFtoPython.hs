@@ -61,7 +61,7 @@ pyProduction :: Production -> String
 pyProduction (PCoerce arg)       = pyTuple 0 id [pyStr "", pyList 0 pyCat [arg]]
 pyProduction (PApply funid args) = pyTuple 0 id [pyFun funid, pyList 0 pyPArg args]
     where pyPArg (PArg [] fid) = pyCat fid
-          pyPArg (PArg hypos fid) = pyTuple 0 pyCat (fid : hypos)
+          pyPArg (PArg hypos fid) = pyTuple 0 pyCat (fid : map snd hypos)
 
 pySymbol :: Symbol -> String
 pySymbol (SymCat n l)    = pyTuple 0 show [n, l]

@@ -57,7 +57,7 @@ data Production
   = PApply  {-# UNPACK #-} !FunId [PArg]
   | PCoerce {-# UNPACK #-} !FId
   deriving (Eq,Ord,Show)
-data PArg = PArg [FId] {-# UNPACK #-} !FId deriving (Eq,Ord,Show)
+data PArg = PArg [(FId,FId)] {-# UNPACK #-} !FId deriving (Eq,Ord,Show)
 type FunId = Int
 type SeqId = Int
 data Literal =
@@ -224,7 +224,7 @@ concrProductions c fid = unsafePerformIO $ do
           hypos <- peekSequence (deRef peekFId) (#size int) c_hypos
           c_ccat <- (#peek PgfPArg, ccat) ptr
           fid  <- peekFId c_ccat
-          return (PArg hypos fid)
+          return (PArg [(fid,fid) | fid <- hypos] fid)
 
 peekFId c_ccat = do
   c_fid <- (#peek PgfCCat, fid) c_ccat
@@ -813,7 +813,7 @@ newProduction c_ccats funs_ptr c_non_lexical_buf (PApply funid args) pool =
     pokePArg ptr (PArg hypos ccat) = do
       c_ccat <- getCCat c_ccats ccat pool
       (#poke PgfPArg, ccat) ptr c_ccat
-      c_hypos <- newSequence (#size PgfCCat*) pokeCCat hypos pool
+      c_hypos <- newSequence (#size PgfCCat*) pokeCCat (map snd hypos) pool
       (#poke PgfPArg, hypos) ptr c_hypos
 
     pokeCCat ptr ccat = do

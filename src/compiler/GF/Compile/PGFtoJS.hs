@@ -58,7 +58,7 @@ frule2js :: Production -> JS.Expr
 frule2js (PApply funid args) = new "Apply"  [JS.EInt funid, JS.EArray (map farg2js args)]
 frule2js (PCoerce arg)       = new "Coerce" [JS.EInt arg]
 
-farg2js (PArg hypos fid) = new "PArg" (map JS.EInt hypos ++ [JS.EInt fid])
+farg2js (PArg hypos fid) = new "PArg" (map (JS.EInt . snd) hypos ++ [JS.EInt fid])
 
 ffun2js (f,lins) = new "CncFun" [JS.EStr (showCId f), JS.EArray (map JS.EInt lins)]
 
