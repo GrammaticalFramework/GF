@@ -360,6 +360,12 @@ concrete LexiconTur of Lexicon = CatTur **
     -- Currently it is the former which might be wrong.
     easy_A2V = mkA2 (mkA "kolay") icinP ;
 
+    -- TODO: It is not obvious to me why these are inflected so putting
+    -- this here as an implementation stub.
+    left_Ord   = { s = \\_,_ => "sol" } ;
+    right_Ord  = { s = \\_,_ => "sağ" } ;
+
+
   oper
     icinP = mkPrep "için" Gen ;
 }
