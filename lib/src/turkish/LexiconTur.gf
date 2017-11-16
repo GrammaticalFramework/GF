@@ -349,4 +349,6 @@ concrete LexiconTur of Lexicon = CatTur **
     wipe_V2 = mkV2 (mkV "silmek") ;
     wonder_VQ = mkV "merak" et_Aux ;
     write_V2 = mkV2 (mkV "yazmak") ;
+
+    alas_Interj = { s = "ne yazık ki" } ;
 }
