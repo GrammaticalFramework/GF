@@ -351,4 +351,6 @@ concrete LexiconTur of Lexicon = CatTur **
     write_V2 = mkV2 (mkV "yazmak") ;
 
     alas_Interj = { s = "ne yazık ki" } ;
+
+    already_Adv = { s = "zaten" } ;
 }
