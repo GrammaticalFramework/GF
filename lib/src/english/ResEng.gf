@@ -556,6 +556,14 @@ param
           }
     } ;
 
+-- for pos/neg variation other than negation word, e.g. "there is a car"/"there is no car"
+   posNegClause : Clause -> Clause -> Clause = \pos,neg -> {
+     s = \\t,a,b,o => case b of {
+         CPos  => pos.s ! t ! a ! b ! o ;
+         _     => neg.s ! t ! a ! CPos ! o
+         }
+     } ;
+     
 
 -- For $Numeral$.
 
