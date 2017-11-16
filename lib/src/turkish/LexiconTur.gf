@@ -355,6 +355,7 @@ concrete LexiconTur of Lexicon = CatTur **
     already_Adv = { s = "zaten" } ;
     far_Adv     = { s = "uzak"  } ;
     now_Adv     = { s = "şimdi" } ;
+    today_Adv   = { s = "bugün" } ;
 
     -- TODO: should `linearize easy_A2V` be "kolay" or "için kolay"?
     -- Currently it is the former which might be wrong.
