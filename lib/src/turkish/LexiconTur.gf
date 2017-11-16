@@ -353,6 +353,7 @@ concrete LexiconTur of Lexicon = CatTur **
     alas_Interj = { s = "ne yazık ki" } ;
 
     already_Adv = { s = "zaten" } ;
+    far_Adv     = { s = "uzak"  } ;
 
     easy_A2V = { s = "için kolay" } ;
 }
