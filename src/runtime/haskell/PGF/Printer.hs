@@ -81,6 +81,7 @@ ppLinDefs (fid,funids) =
 ppLinRefs (fid,funids) = 
   [ppFId fidVar <+> text "->" <+> ppFunId funid <> brackets (ppFId fid) | funid <- funids]
 
+ppSeq :: (SeqId,Sequence) -> Doc
 ppSeq (seqid,seq) = 
   ppSeqId seqid <+> text ":=" <+> hsep (map ppSymbol (elems seq))
 
