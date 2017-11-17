@@ -348,6 +348,7 @@ concrete LexiconTur of Lexicon = CatTur **
     win_V2 = mkV2 (mkV "kazanmak") ;
     wipe_V2 = mkV2 (mkV "silmek") ;
     wonder_VQ = mkV "merak" et_Aux ;
+    know_VQ =  mkV "bilmek" SgSylConIrreg ;
     write_V2 = mkV2 (mkV "yazmak") ;
 
     alas_Interj = { s = "ne yazık ki" } ;
@@ -369,6 +370,7 @@ concrete LexiconTur of Lexicon = CatTur **
     probable_AS = mkAS (mkA "olası") ;
 
     fun_AV = mkAV (mkA "neşe") ;
+
 
   oper
     icinP = mkPrep "için" Gen ;
