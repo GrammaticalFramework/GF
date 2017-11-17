@@ -8,6 +8,7 @@ module PGF.Expr(Tree, BindType(..), Expr(..), Literal(..), Patt(..), Equation(..
                 mkDouble, unDouble,
                 mkFloat,  unFloat,
                 mkMeta,   unMeta,
+                exprSubstitute,
 
                 normalForm,
 
@@ -168,6 +169,16 @@ unMeta (EMeta i)     = Just i
 unMeta (ETyped e ty) = unMeta e
 unMeta (EImplArg e)  = unMeta e
 unMeta _             = Nothing
+
+exprSubstitute :: Expr -> [Expr] -> Expr
+exprSubstitute e es =
+  case e of
+    EAbs b x e -> EAbs b x (exprSubstitute e es)
+    EApp e1 e2 -> EApp (exprSubstitute e1 es) (exprSubstitute e2 es)
+    ELit l     -> ELit l
+    EMeta i    -> es !! i
+    EFun x     -> EFun x
+
 
 -----------------------------------------------------
 -- Parsing

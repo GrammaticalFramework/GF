@@ -53,6 +53,8 @@ module PGF(
            mkDouble, unDouble,
            mkFloat,  unFloat,
            mkMeta,   unMeta,
+           exprSubstitute,
+
            -- extra
            pExpr, exprSize, exprFunctions,
 
