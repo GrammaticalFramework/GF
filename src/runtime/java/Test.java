@@ -6,7 +6,7 @@ public class Test {
 	public static void main(String[] args) throws IOException {		
 		PGF gr = null;
 		try {
-			gr = PGF.readPGF("/home/krasimir/www.grammaticalframework.org/examples/phrasebook/Phrasebook.pgf");
+			gr = PGF.readPGF("/home/krasimir/GF/examples/phrasebook/PhrasebookBul.pgf");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			return;

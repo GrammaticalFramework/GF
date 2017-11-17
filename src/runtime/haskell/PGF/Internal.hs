@@ -8,20 +8,32 @@ module PGF.Internal(CId,
                     Concr,lookConcr,
                     FId,isPredefFId,
                     FunId,SeqId,LIndex,Token,
-                    Production(..),PArg(..),Symbol(..),Literal(..),
+                    Production(..),PArg(..),Symbol(..),Literal(..),BindType(..),Sequence,
+                    globalFlags, abstrFlags, concrFlags,
                     concrTotalCats, concrCategories, concrProductions,
                     concrTotalFuns, concrFunction,
                     concrTotalSeqs, concrSequence,
 
-                    fidString, fidInt, fidFloat, fidVar, fidStart
+                    CodeLabel, Instr(..), IVal(..), TailInfo(..),
+
+                    fidString, fidInt, fidFloat, fidVar, fidStart,
+                    
+                    ppFunId, ppSeqId, ppFId, ppMeta, ppLit, ppSeq
                     ) where
 
 import PGF.Data
 import PGF.Macros
+import PGF.Printer
+import PGF.ByteCode
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set
 import Data.Array.IArray
+
+
+globalFlags pgf = gflags pgf
+abstrFlags pgf = aflags (abstract pgf)
+concrFlags concr = cflags concr
 
 concrTotalCats = totalCats
 

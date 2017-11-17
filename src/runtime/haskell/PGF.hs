@@ -16,7 +16,7 @@
 module PGF(
            -- * PGF
            PGF,
-           readPGF,
+           readPGF, showPGF,
 
            -- * Identifiers
            CId, mkCId, wildCId,
@@ -169,6 +169,8 @@ import PGF.Binary()
 import qualified PGF.Forest as Forest
 import qualified PGF.Parse as Parse
 import PGF.Utilities(replace)
+import PGF.Printer
+import Text.PrettyPrint
 
 --import Data.Char
 import qualified Data.Map as Map
@@ -255,6 +257,8 @@ functionType :: PGF -> CId -> Maybe Type
 ---------------------------------------------------
 
 readPGF f = decodeFile f
+
+showPGF pgf = render (ppPGF pgf)
 
 parse pgf lang typ s =
   case parse_ pgf lang typ (Just 4) s of
