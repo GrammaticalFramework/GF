@@ -5,7 +5,7 @@
 -- Stability   : unstable
 --
 -------------------------------------------------
-module PGF.Internal(CId,
+module PGF.Internal(CId,Language,PGF,
                     Concr,lookConcr,
                     FId,isPredefFId,
                     FunId,SeqId,LIndex,Token,
@@ -18,6 +18,7 @@ module PGF.Internal(CId,
                     CodeLabel, Instr(..), IVal(..), TailInfo(..),
 
                     Builder, B, build,
+                    eAbs, eApp, eMeta, eFun, eVar, eLit, eTyped, eImplArg, dTyp, hypo,
                     AbstrInfo, newAbstr, ConcrInfo, newConcr, newPGF,
                     dTyp, hypo,
 
@@ -79,6 +80,37 @@ build x = let ?builder = undefined
           in case x of
                B x -> x
 
+eAbs :: (?builder :: Builder s) => BindType -> CId -> B s Expr -> B s Expr
+eAbs bind_type var (B body) = B (EAbs bind_type var body)
+
+eApp :: (?builder :: Builder s) => B s Expr -> B s Expr -> B s Expr
+eApp (B f) (B x) = B (EApp f x)
+
+eMeta :: (?builder :: Builder s) => Int -> B s Expr
+eMeta i = B (EMeta i)
+
+eFun :: (?builder :: Builder s) => CId -> B s Expr
+eFun f = B (EFun f)
+
+eVar :: (?builder :: Builder s) => Int -> B s Expr
+eVar i = B (EVar i)
+
+eLit :: (?builder :: Builder s) => Literal -> B s Expr
+eLit l = B (ELit l)
+
+eTyped :: (?builder :: Builder s) => B s Expr -> B s Type -> B s Expr
+eTyped (B e) (B ty) = B (ETyped e ty)
+
+eImplArg :: (?builder :: Builder s) => B s Expr -> B s Expr
+eImplArg (B e) = B (EImplArg e)
+
+hypo :: BindType -> CId -> B s Type -> (B s Hypo)
+hypo bind_type var (B ty) = B (bind_type,var,ty)
+
+dTyp :: (?builder :: Builder s) => [B s Hypo] -> CId -> [B s Expr] -> B s Type
+dTyp hypos cat es = B (DTyp [hypo | B hypo <- hypos] cat [e | B e <- es])
+
+
 type AbstrInfo = Abstr
 
 newAbstr :: (?builder :: Builder s) => [(CId,Literal)] ->
@@ -131,11 +163,6 @@ newPGF gflags absname (B abstract) concretes =
          ,concretes = Map.fromList [(cname,concr) | (cname,B concr) <- concretes]
          })
 
-hypo :: BindType -> CId -> B s Type -> (B s Hypo)
-hypo bind_type var (B ty) = B (bind_type,var,ty)
-
-dTyp :: (?builder :: Builder s) => [B s Hypo] -> CId -> [B s Expr] -> B s Type
-dTyp hypos cat es = B (DTyp [hypo | B hypo <- hypos] cat [e | B e <- es])
 
 ppSeq (seqid,seq) = PGF.Printer.ppSeq (seqid,mkArray seq)
 
