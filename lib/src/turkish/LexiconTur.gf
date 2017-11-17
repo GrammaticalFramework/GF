@@ -368,6 +368,8 @@ concrete LexiconTur of Lexicon = CatTur **
 
     probable_AS = mkAS (mkA "olası") ;
 
+    fun_AV = mkAV (mkA "neşe") ;
+
   oper
     icinP = mkPrep "için" Gen ;
 }
