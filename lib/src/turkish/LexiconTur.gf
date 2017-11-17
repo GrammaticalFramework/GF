@@ -366,6 +366,7 @@ concrete LexiconTur of Lexicon = CatTur **
     left_Ord   = { s = \\_,_ => "sol" } ;
     right_Ord  = { s = \\_,_ => "sağ" } ;
 
+    probable_AS = mkAS (mkA "olası") ;
 
   oper
     icinP = mkPrep "için" Gen ;
