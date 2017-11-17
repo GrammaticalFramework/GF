@@ -347,9 +347,10 @@ concrete LexiconTur of Lexicon = CatTur **
     watch_V2 = mkV2 (mkV "izlemek") ;
     win_V2 = mkV2 (mkV "kazanmak") ;
     wipe_V2 = mkV2 (mkV "silmek") ;
-    wonder_VQ = mkV "merak" et_Aux ;
-    know_VQ =  mkV "bilmek" SgSylConIrreg ;
     write_V2 = mkV2 (mkV "yazmak") ;
+
+    wonder_VQ = mkV "merak"  et_Aux ;
+    know_VQ   = mkV "bilmek" SgSylConIrreg ;
 
     alas_Interj = { s = "ne yazık ki" } ;
 
