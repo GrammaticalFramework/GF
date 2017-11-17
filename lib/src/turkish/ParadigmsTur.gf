@@ -13,8 +13,9 @@ resource ParadigmsTur = open
     coding=utf8 ; optimize=noexpand ;
 
   oper
-    -- Paradigms for verb
+    AS, AV : Type = A ;
 
+    -- Paradigms for verb
     mkV : overload {
       -- make regular verbs, one form is enough
       mkV : (esmek : Str) -> V ;
