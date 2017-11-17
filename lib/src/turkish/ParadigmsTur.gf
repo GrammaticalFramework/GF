@@ -156,6 +156,9 @@ resource ParadigmsTur = open
       mkA : Str -> Str -> HarVowP -> A ;
     } ;
 
+    mkAS : A -> AS ;
+    mkAV : A -> AV ;
+
     mkA2 : overload {
       -- (biri) ile evli
       mkA2 : A -> Prep -> A2 ;
@@ -441,6 +444,9 @@ resource ParadigmsTur = open
       -- pürdikkat
       mkA : (base, base1 : Str) -> (ih_har : HarVowP) -> A = \base,base1,ih_har -> (irregN_h base base ih_har) ** lin A {adv = addSuffix base (mkHar ih_har (getHarConP base)) adjAdvSuffix};
     } ;
+
+    mkAS v = v ;
+    mkAV v = v ;
 
     mkA2 =
       overload {
