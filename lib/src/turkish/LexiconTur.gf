@@ -354,10 +354,10 @@ concrete LexiconTur of Lexicon = CatTur **
 
     alas_Interj = { s = "ne yazık ki" } ;
 
-    already_Adv = { s = "zaten" } ;
-    far_Adv     = { s = "uzak"  } ;
-    now_Adv     = { s = "şimdi" } ;
-    today_Adv   = { s = "bugün" } ;
+    already_Adv = mkAdv "zaten" ;
+    far_Adv     = mkAdv "uzak"  ;
+    now_Adv     = mkAdv "şimdi" ;
+    today_Adv   = mkAdv "bugün" ;
 
     -- TODO: should `linearize easy_A2V` be (A) "kolay" (Eng "easy") or (B)
     -- ("için kolay") (Eng "easy for")? I got the latter from the English
