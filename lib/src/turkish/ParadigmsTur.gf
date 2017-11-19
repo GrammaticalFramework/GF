@@ -188,6 +188,10 @@ resource ParadigmsTur = open
     makeDigit : Str -> Str -> Number -> {s : CardOrd => Number => Case => Str ; n : Number} ;
 
 
+  -- Adverbs
+
+  mkAdv : Str -> Adv ;
+
   --Implementation of verb paradigms
 
     mkV = overload {
@@ -428,6 +432,9 @@ resource ParadigmsTur = open
     mkN2 base = (mkN base) ** lin N2 {c = lin Prep {s=[]; c=Gen}} ;
 
     mkN3 base = (mkN base) ** lin N3 {c1,c2 = lin Prep {s=[]; c=Gen}} ;
+
+    -- Implementation for adverb paradigms.
+    mkAdv s = lin Adv { s = s } ;
 
     -- Implementation of adjactive paradigms
     mkA = overload {
