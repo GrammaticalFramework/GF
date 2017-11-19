@@ -359,8 +359,11 @@ concrete LexiconTur of Lexicon = CatTur **
     now_Adv     = { s = "şimdi" } ;
     today_Adv   = { s = "bugün" } ;
 
-    -- TODO: should `linearize easy_A2V` be "kolay" or "için kolay"?
-    -- Currently it is the former which might be wrong.
+    -- TODO: should `linearize easy_A2V` be (A) "kolay" (Eng "easy") or (B)
+    -- ("için kolay") (Eng "easy for")? I got the latter from the English
+    -- linearization but the following seems to be the correct way using the
+    -- paradigms.  I might need to do something so that the resulting
+    -- linearization is (B).
     easy_A2V = mkA2 (mkA "kolay") icinP ;
 
     -- TODO: It is not obvious to me why these are inflected so putting
