@@ -55,7 +55,12 @@ oper
    in
    case vino of {
      _ + "o" => {s = case n of {
-       "c" | "g" => numForms vino (vin + "hi") ;
+       -- "c" | "g" => numForms vino (vin + "hi") ;
+       "c" => case last (init vin) of {
+         "i" => numForms vino (vin + "i") ; -- amico -> amici
+         _   => numForms vino (vin + "hi")  -- attacco -> attacchi
+         } ;
+       "g"       => numForms vino (vin + "hi") ;
        "i"       => numForms vino vin ;
        _         => numForms vino (vin + "i")
        } ; g = Masc} ;
