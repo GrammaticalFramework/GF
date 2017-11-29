@@ -54,13 +54,12 @@ oper
      n = last vin
    in
    case vino of {
+     _ + "ico" => {s = numForms vino (vin + "i") -- amico -> amici
+       ; g = Masc} ;
+     _ + "ccia" => {s = numForms vino (init vin + "e") -- doccia -> docce
+       ; g = Fem} ;
      _ + "o" => {s = case n of {
-       -- "c" | "g" => numForms vino (vin + "hi") ;
-       "c" => case last (init vin) of {
-         "i" => numForms vino (vin + "i") ; -- amico -> amici
-         _   => numForms vino (vin + "hi")  -- attacco -> attacchi
-         } ;
-       "g"       => numForms vino (vin + "hi") ;
+       "c" | "g" => numForms vino (vin + "hi") ;
        "i"       => numForms vino vin ;
        _         => numForms vino (vin + "i")
        } ; g = Masc} ;
