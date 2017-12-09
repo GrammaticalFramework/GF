@@ -17,15 +17,16 @@ welcome!
 automatic indentation and lets you run the GF Shell in an emacs buffer.
 See installation instructions inside.
 
+==Atom==
+[language-gf https://atom.io/packages/language-gf], by John J. Camilleri
+
 ==Eclipse==
 
-[GF Eclipse Plugin http://www.grammaticalframework.org/eclipse/index.html]
+[GF Eclipse Plugin http://www.grammaticalframework.org/eclipse/index.html], by John J. Camilleri
 
 ==Gedit==
 
-[John J. Camilleri http://johnjcamilleri.com/]
-provided the following syntax highlighting mode for
-[Gedit http://www.gedit.org/] (the default text editor in Ubuntu).
+By John J. Camilleri
 
 Copy the file below to
 ``~/.local/share/gtksourceview-3.0/language-specs/gf.lang`` (under Ubuntu).
@@ -37,7 +38,7 @@ Some helpful notes/links:
 
 - The code is based heavily on the ``haskell.lang`` file which I found in
   ``/usr/share/gtksourceview-2.0/language-specs/haskell.lang``.
-- Ruslan Osmanov recommends 
+- Ruslan Osmanov recommends
   [registering your file extension as its own MIME type http://osmanov-dev-notes.blogspot.com/2011/04/how-to-add-new-highlight-mode-in-gedit.html]
   (see also [here https://help.ubuntu.com/community/AddingMimeTypes]),
   however on my system the ``.gf`` extension was already registered
@@ -51,8 +52,9 @@ Some helpful notes/links:
 
 ==Geany==
 
-[John J. Camilleri http://johnjcamilleri.com/] provided the following
-[custom filetype http://www.geany.org/manual/dev/index.html#custom-filetypes]
+By John J. Camilleri
+
+[Custom filetype http://www.geany.org/manual/dev/index.html#custom-filetypes]
 config files for syntax highlighting in [Geany http://www.geany.org/].
 
 Copy one of the files below to ``/usr/share/geany/filetypes.GF.conf``

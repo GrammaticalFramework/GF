@@ -8,7 +8,7 @@
 -- syntax. To build a lexicon, it is better to use $ParadigmsIta$, which
 -- gives a higher-level access to this module.
 
-resource MorphoIta = CommonRomance, ResIta ** 
+resource MorphoIta = CommonRomance, ResIta **
   open PhonoIta, Prelude, Predef in {
 
   flags optimize=all ;
@@ -23,7 +23,7 @@ resource MorphoIta = CommonRomance, ResIta **
 
 oper
   numForms : (_,_ : Str) -> Number => Str = \vino, vini ->
-    table {Sg => vino ; Pl => vini} ; 
+    table {Sg => vino ; Pl => vini} ;
 
 -- For example:
 
@@ -41,19 +41,23 @@ oper
 
 -- Common nouns are inflected in number and have an inherent gender.
 
-  mkNoun : (Number => Str) -> Gender -> Noun = \mecmecs,gen -> 
+  mkNoun : (Number => Str) -> Gender -> Noun = \mecmecs,gen ->
     {s = mecmecs ; g = gen} ;
 
-  mkNounIrreg : Str -> Str -> Gender -> Noun = \mec,mecs -> 
+  mkNounIrreg : Str -> Str -> Gender -> Noun = \mec,mecs ->
     mkNoun (numForms mec mecs) ;
 
-  mkNomReg : Str -> Noun = \vino -> 
+  mkNomReg : Str -> Noun = \vino ->
    let
      o = last vino ;
      vin = init vino ;
      n = last vin
    in
    case vino of {
+     _ + "ico" => {s = numForms vino (vin + "i") -- amico -> amici
+       ; g = Masc} ;
+     _ + "ccia" => {s = numForms vino (init vin + "e") -- doccia -> docce
+       ; g = Fem} ;
      _ + "o" => {s = case n of {
        "c" | "g" => numForms vino (vin + "hi") ;
        "i"       => numForms vino vin ;
@@ -90,22 +94,22 @@ oper
 
 -- Then the regular and invariant patterns.
 
-  adjSolo : Str -> Adj = \solo -> 
-    let 
+  adjSolo : Str -> Adj = \solo ->
+    let
       sol = Predef.tk 1 solo
     in
     mkAdj solo (sol + "a") (sol + "i") (sol + "e") (sol + "amente") ;
 
-  adjTale : Str -> Adj = \tale -> 
-    let 
+  adjTale : Str -> Adj = \tale ->
+    let
       tal  = Predef.tk 1 tale ;
       tali = tal + "i" ;
       tala = if_then_Str (pbool2bool (Predef.occur (Predef.dp 1 tal) "lr")) tal tale
     in
     mkAdj tale tale tali tali (tala + "mente") ;
 
-  adjBlu : Str -> Adj = \blu -> 
-    mkAdj blu blu blu blu blu ; --- 
+  adjBlu : Str -> Adj = \blu ->
+    mkAdj blu blu blu blu blu ; ---
 
 
   mkAdjReg : Str -> Adj = \solo ->
@@ -117,7 +121,12 @@ oper
    in
    case o of {
      "o" => case l of {
-       "c" | "g" => mkAdj solo (sol + "a") (sol + "hi") (sol + "he") solamente ;
+     -- "c" | "g" => mkAdj solo (sol + "a") (sol + "hi") (sol + "he") solamente ;
+       "c" => case last (init sol) of {
+         "i" => mkAdj solo (sol + "a") (sol + "i") (sol + "he") solamente ; -- pubblico -> pubblici
+         _   => mkAdj solo (sol + "a") (sol + "hi") (sol + "he") solamente  -- ricco -> ricchi
+         } ;
+       "g"       => mkAdj solo (sol + "a") (sol + "hi") (sol + "he") solamente ;
        "i"       => mkAdj solo (sol + "a") sol (sol + "e") solamente ;
        _         => mkAdj solo (sol + "a") (sol + "i") (sol + "e") solamente
        } ;
@@ -138,7 +147,7 @@ oper
 -- given in $DiffIta.argPron$ and therefore wouldn't be needed in the
 -- pronoun itself.)
 
-  mkPronoun : (_,_,_,_,_,_,_,_,_ : Str) -> 
+  mkPronoun : (_,_,_,_,_,_,_,_,_ : Str) ->
               Gender -> Number -> Person -> Pronoun =
     \il,le,lui,glie,Lui,son,sa,ses,see,g,n,p ->
     let
@@ -155,14 +164,14 @@ oper
        <Sg,Masc> => son ;
        <Sg,Fem>  => sa ;
        <Pl,Masc> => ses ;
-       <Pl,Fem>  => see 
+       <Pl,Fem>  => see
        } ;
     a = Ag g n p ;
     hasClit = True ; isPol = False
     } ;
 
 {- --e
-  mkPronoun : (_,_,_,_,_,_,_,_,_ : Str) -> 
+  mkPronoun : (_,_,_,_,_,_,_,_,_ : Str) ->
               Gender -> Number -> Person -> Pronoun =
     \il,le,lui,glie,Lui,son,sa,ses,see,g,n,p ->
     {s = table {
