@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#if defined(__MINGW32__) || defined(_MSC_VER)
+#include <malloc.h>
+#endif
 
 //#define PGF_LOOKUP_DEBUG
 //#define PGF_LINEARIZER_DEBUG
