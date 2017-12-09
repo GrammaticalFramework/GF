@@ -19,6 +19,14 @@
 #define PGF_INTERNAL_DECL
 #define PGF_INTERNAL
 
+#elif defined(__MINGW32__)
+
+#define PGF_API_DECL
+#define PGF_API
+
+#define PGF_INTERNAL_DECL
+#define PGF_INTERNAL
+
 #else
 
 #define PGF_API_DECL
