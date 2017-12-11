@@ -1,6 +1,6 @@
 --# -path=.:../romance:../abstract:../common:prelude
 
-instance DiffSpa of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRomance, PhonoSpa, BeschSpa, Prelude in {
+instance DiffSpa of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits,contractInf] = open CommonRomance, PhonoSpa, BeschSpa, Prelude in {
 
   flags optimize=noexpand ;
     coding=utf8 ;
@@ -10,7 +10,7 @@ instance DiffSpa of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
     partAgr : VType -> Bool = \vtyp -> False ;
     vpAgrSubj : Verb -> VPAgrType = \v -> <verbDefaultPart v, False> ;
     vpAgrClits : Verb -> AAgr -> VPAgrType = \v,a -> <verbDefaultPart v, False> ;
-
+    contractInf : Bool -> Bool -> Bool = orB ; --- the effect of this is that the clitic is bound to the infinitive: matarte
 --------------------------------
 
   param 
