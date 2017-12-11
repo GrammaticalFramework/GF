@@ -347,6 +347,35 @@ concrete LexiconTur of Lexicon = CatTur **
     watch_V2 = mkV2 (mkV "izlemek") ;
     win_V2 = mkV2 (mkV "kazanmak") ;
     wipe_V2 = mkV2 (mkV "silmek") ;
-    wonder_VQ = mkV "merak" et_Aux ;
     write_V2 = mkV2 (mkV "yazmak") ;
+
+    wonder_VQ = mkV "merak"  et_Aux ;
+    know_VQ   = mkV "bilmek" SgSylConIrreg ;
+
+    alas_Interj = { s = "ne yazık ki" } ;
+
+    already_Adv = mkAdv "zaten" ;
+    far_Adv     = mkAdv "uzak"  ;
+    now_Adv     = mkAdv "şimdi" ;
+    today_Adv   = mkAdv "bugün" ;
+
+    -- TODO: should `linearize easy_A2V` be (A) "kolay" (Eng "easy") or (B)
+    -- ("için kolay") (Eng "easy for")? I got the latter from the English
+    -- linearization but the following seems to be the correct way using the
+    -- paradigms.  I might need to do something so that the resulting
+    -- linearization is (B).
+    easy_A2V = mkA2 (mkA "kolay") icinP ;
+
+    -- TODO: It is not obvious to me why these are inflected so putting
+    -- this here as an implementation stub.
+    left_Ord   = { s = \\_,_ => "sol" } ;
+    right_Ord  = { s = \\_,_ => "sağ" } ;
+
+    probable_AS = mkAS (mkA "olası") ;
+
+    fun_AV = mkAV (mkA "neşe") ;
+
+
+  oper
+    icinP = mkPrep "için" Gen ;
 }
