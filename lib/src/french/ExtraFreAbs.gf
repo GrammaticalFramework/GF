@@ -58,5 +58,7 @@ abstract ExtraFreAbs = ExtraRomanceAbs - [ProDrop] ** {
     InvQuestCl : Cl -> QCl ;      -- dort-il
     InvQuestIAdvCl : IAdv -> Cl -> QCl ;      -- dort-il
 
+    quel_IComp : IComp ; -- quelle est votre nationalité
+
 
 }

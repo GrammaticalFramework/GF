@@ -110,6 +110,11 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
               }
       } ;
 
+    quel_IComp = {
+      s = aagrForms "quel" "quelle" "quels" "quelles" ;
+      cop = <> ;
+      } ;
+
 --- in ExtraRomance
 --    PassAgentVPSlash vps np = passVPSlash 
 --      vps ("par" ++ (np.s ! Acc).ton) ;
