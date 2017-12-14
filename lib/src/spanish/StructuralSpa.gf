@@ -139,8 +139,8 @@ lin
   when_Subj = ss "cuando" ** {m = Indic} ;
   where_IAdv = ss "dónde" ;
   which_IQuant = {s = table {
-    Sg => \\g,c => prepCase c ++ "qué" ; --- cual
-    Pl => \\g,c => prepCase c ++ "qué" 
+    Sg => \\g,c => prepCase c ++ "cual" ; 
+    Pl => \\g,c => prepCase c ++ "cuales" 
     }
    } ;
   whoPl_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Masc Pl} ;
