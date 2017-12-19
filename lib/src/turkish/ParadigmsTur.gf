@@ -13,8 +13,9 @@ resource ParadigmsTur = open
     coding=utf8 ; optimize=noexpand ;
 
   oper
-    -- Paradigms for verb
+    AS, AV : Type = A ;
 
+    -- Paradigms for verb
     mkV : overload {
       -- make regular verbs, one form is enough
       mkV : (esmek : Str) -> V ;
@@ -155,6 +156,9 @@ resource ParadigmsTur = open
       mkA : Str -> Str -> HarVowP -> A ;
     } ;
 
+    mkAS : A -> AS ;
+    mkAV : A -> AV ;
+
     mkA2 : overload {
       -- (biri) ile evli
       mkA2 : A -> Prep -> A2 ;
@@ -183,6 +187,10 @@ resource ParadigmsTur = open
     regDigit : Str -> {s : CardOrd => Number => Case => Str ; n : Number} ;
     makeDigit : Str -> Str -> Number -> {s : CardOrd => Number => Case => Str ; n : Number} ;
 
+
+  -- Adverbs
+
+  mkAdv : Str -> Adv ;
 
   --Implementation of verb paradigms
 
@@ -425,6 +433,9 @@ resource ParadigmsTur = open
 
     mkN3 base = (mkN base) ** lin N3 {c1,c2 = lin Prep {s=[]; c=Gen}} ;
 
+    -- Implementation for adverb paradigms.
+    mkAdv s = lin Adv { s = s } ;
+
     -- Implementation of adjactive paradigms
     mkA = overload {
       -- güzel
@@ -440,6 +451,9 @@ resource ParadigmsTur = open
       -- pürdikkat
       mkA : (base, base1 : Str) -> (ih_har : HarVowP) -> A = \base,base1,ih_har -> (irregN_h base base ih_har) ** lin A {adv = addSuffix base (mkHar ih_har (getHarConP base)) adjAdvSuffix};
     } ;
+
+    mkAS v = v ;
+    mkAV v = v ;
 
     mkA2 =
       overload {

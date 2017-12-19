@@ -34,4 +34,6 @@ abstract ExtraSpaAbs = ExtraRomanceAbs ** {
 
     UseComp_estar : Comp -> VP ; -- esta lleno, as opposed to es lleno
 
+    cual_IComp : IComp ; -- cual es ...
+
 }

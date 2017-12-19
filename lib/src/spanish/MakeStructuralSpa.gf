@@ -20,4 +20,56 @@ oper
     } ;
 
 
+  mkQuant = overload {
+    -- Does not inflect for number or gender
+    mkQuant : Str -> Quant = \s ->
+      let
+        questo : Number => Gender => Case => Str = \\n,g,c => prepCase c ++ s ;
+      in lin Quant {
+        s = \\b => questo ;
+        sp = questo ;
+        s2 = [] ;
+        isNeg = False
+      } ;
+    -- Inflects for number and gender
+    mkQuant : Str -> Str -> Str -> Str -> Quant = \tutto,tutta,tutti,tutte ->
+      let
+        questo : Number => Gender => Case => Str = table {
+          Sg => table {
+            Masc => \\c => prepCase c ++ tutto ;
+            Fem  => \\c => prepCase c ++ tutta
+          } ;
+          Pl => table {
+            Masc => \\c => prepCase c ++ tutti ;
+            Fem  => \\c => prepCase c ++ tutte
+          }
+        }
+      in lin Quant {
+        s = \\b => questo ;
+        sp = questo ;
+        s2 = [] ;
+        isNeg = False
+      } ;
+  } ;
+
+  mkDet = overload {
+    -- Does not inflect for number
+    mkDet : Str -> Number -> Det = \piu,n -> lin Det {
+      s,sp = \\_,_ => piu ;
+      n = n ;
+      s2 = [] ;
+      isNeg = False
+    } ;
+    -- Inflects for number
+    mkDet : Str -> Str -> Number -> Det = \alcuni,alcune,n -> lin Det {
+      s,sp = table {
+        Masc => \\_ => alcuni ;
+        Fem  => \\_ => alcune
+      } ;
+      n = n ;
+      s2 = [] ;
+      isNeg = False
+    } ;
+  } ;
+
 }

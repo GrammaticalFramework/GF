@@ -99,8 +99,20 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
             let cls = cl.s ! DInv ! t ! a ! p 
             in table {
               QDir   => cls ! Indic ;
-              QIndir => subjIf ++ cls ! Indic
+              QIndir => subjIf ++ cl.s ! DDir ! t ! a ! p ! Indic
               }
+      } ;
+    InvQuestIAdvCl iadv cl = {s = \\t,a,p =>                             -- dort-il ?
+            let cls = cl.s ! DInv ! t ! a ! p 
+            in table {
+              QDir   => iadv.s ++ cls ! Indic ;
+              QIndir => iadv.s ++ cl.s ! DDir ! t ! a ! p ! Indic
+              }
+      } ;
+
+    quel_IComp = {
+      s = aagrForms "quel" "quelle" "quels" "quelles" ;
+      cop = <> ;
       } ;
 
 --- in ExtraRomance
