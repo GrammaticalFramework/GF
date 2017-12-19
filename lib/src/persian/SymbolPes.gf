@@ -7,8 +7,8 @@ concrete SymbolPes of Symbol = CatPes ** open Prelude, ResPes in {
  lin
 -- SymbPN i = {s = \\_ => i.s ; g = Masc} ;
   SymbPN i = {s = i.s ; animacy = Inanimate} ; -- "از" is removed for Phrasebook
-  IntPN i  = {s = i.s ++ "از" ; animacy = Inanimate} ;
-  FloatPN i = {s = i.s ++ "از" ; animacy = Inanimate} ;
+  IntPN i  = {s = i.s ; animacy = Inanimate} ;
+  FloatPN i = {s = i.s ; animacy = Inanimate} ;
   NumPN i = {s = i.s ; animacy = Inanimate} ;
   CNIntNP cn i = {
     s = \\ez => cn.s ! aEzafa ! Sg  ++ i.s ;
