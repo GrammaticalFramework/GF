@@ -21,6 +21,7 @@ import qualified Data.IntMap as IntMap
 import qualified PGF.TrieMap as TrieMap
 import qualified Data.List as List
 import Control.Monad.ST
+import Debug.Trace
 
 optimizePGF :: PGF -> PGF
 optimizePGF pgf = pgf{concretes=fmap (updateConcrete (abstract pgf) . 
@@ -178,26 +179,26 @@ topDownFilter startCat cnc =
 
 
 bottomUpFilter :: Concr -> Concr
-bottomUpFilter cnc = cnc{productions=filterProductions IntMap.empty IntSet.empty (productions cnc)}
+bottomUpFilter cnc = cnc{productions=filterProductions IntMap.empty (productions cnc)}
 
-filterProductions prods0 hoc0 prods
+filterProductions prods0 prods
   | prods0 == prods1 = prods0
-  | otherwise        = filterProductions prods1 hoc1 prods
+  | otherwise        = filterProductions prods1 prods
   where
-    (prods1,hoc1) = IntMap.foldWithKey foldProdSet (IntMap.empty,IntSet.empty) prods
+    prods1 = IntMap.foldWithKey foldProdSet IntMap.empty prods
+    hoc    = IntMap.fold (\set !hoc -> Set.fold accumHOC hoc set) IntSet.empty prods
 
-    foldProdSet fid set (!prods,!hoc)
-      | Set.null set1 = (prods,hoc)
-      | otherwise     = (IntMap.insert fid set1 prods,hoc1)
+    foldProdSet fid set !prods
+      | Set.null set1 = prods
+      | otherwise     = IntMap.insert fid set1 prods
       where
         set1 = Set.filter filterRule set
-        hoc1 = Set.fold accumHOC hoc set1
 
     filterRule (PApply funid args) = all (\(PArg _ fid) -> isLive fid) args
     filterRule (PCoerce fid)       = isLive fid
     filterRule _                   = True
 
-    isLive fid = isPredefFId fid || IntMap.member fid prods0 || IntSet.member fid hoc0
+    isLive fid = isPredefFId fid || IntMap.member fid prods0 || IntSet.member fid hoc
 
     accumHOC (PApply funid args) hoc = List.foldl' (\hoc (PArg hypos _) -> List.foldl' (\hoc (_,fid) -> IntSet.insert fid hoc) hoc hypos) hoc args
     accumHOC _                   hoc = hoc
@@ -241,7 +242,7 @@ splitLexicalRules cnc p_prods =
         seq2prefix (SymALL_CAPIT    :syms) = TrieMap.fromList [wf ["&|"]]
 
 updateConcrete abs cnc = 
-  let p_prods0      = filterProductions IntMap.empty IntSet.empty (productions cnc)
+  let p_prods0      = filterProductions IntMap.empty (productions cnc)
       (lex,p_prods) = splitLexicalRules cnc p_prods0
       l_prods       = linIndex cnc p_prods0
   in cnc{pproductions = p_prods, lproductions = l_prods, lexicon = lex}
