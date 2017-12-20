@@ -755,14 +755,14 @@ resource ResGer = ParamX ** open Prelude in {
   infVP : Bool -> VP -> ((Agr => Str) * Str * Str * Str) = \isAux, vp -> let vps = useVP vp in
     <
      \\agr => (vp.nn ! agr).p1 ++ (vp.nn ! agr).p2 ++  vp.a2,
-     vp.a1 ! Pos ++ (vps.s ! (notB isAux) ! agrP3 Sg ! VPInfinit Simul).inf,
+     vp.a1 ! Pos ++ vp.adj ++ (vps.s ! (notB isAux) ! agrP3 Sg ! VPInfinit Simul).inf,
      vp.inf,
-     vp.ext
+     vp.infExt ++ vp.ext
     > ;
 
   useInfVP : Bool -> VP -> Str = \isAux,vp ->
     let vpi = infVP isAux vp in
-    vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ;
+    vpi.p1 ! agrP3 Sg ++ vpi.p3 ++ vpi.p2 ++ vpi.p4 ;
 
 -- The nominative case is not used as reflexive, but defined here
 -- so that we can reuse this in personal pronouns. 
