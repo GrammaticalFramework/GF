@@ -506,12 +506,14 @@ mkInterj : Str -> Interj
       cries = (regN cry).s ! Pl ! Nom ; -- !
       cried : Str = case cries of {
         _ + "es" => init cries + "d" ;
+        _ + "ers" => init cries + "ed" ;
         _        => duplFinal cry + "ed"
         } ;
       crying : Str = case cry of {
         _  + "ee" => cry + "ing" ;
         d  + "ie" => d  + "ying" ;
         us + "e"  => us + "ing" ; 
+        ent + "er" => ent + "ered" ;
         _         => duplFinal cry + "ing"
         }
     in mk5V cry cries cried cried crying ;
