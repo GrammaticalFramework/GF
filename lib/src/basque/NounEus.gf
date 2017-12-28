@@ -94,14 +94,14 @@ concrete NounEus of Noun = CatEus ** open ResEus, Prelude in {
 
   -- : Quant -> Num -> Det ; 
   DetQuant quant num = quant ** 
-    { s = \\c,ph => case <num.isNum,num.n> of { --numeral 1 ("bat") goes after NP!
-                 <True,Sg> => num.s ++ quant.s ! num.n ! c ! FinalCons ; 
+    { s = \\c,ph => case <num.isNum,num.n> of { 
+                 <True,Sg> => num.s ; --numeral 1 ("bat") goes after NP, and no other article
                  _         => quant.s ! num.n ! c ! ph 
                } ;
       nbr = num.n ;
       pref = case num.n of {
-                Sg => quant.pref ;
-                Pl => quant.pref ++ num.s 
+                Sg => quant.pref ; -- empty in case of numeral 1
+                Pl => quant.pref ++ num.s -- the numeral itself in case of other numerals
               } ;
       isDef = orB quant.isDef num.isNum } ;
 

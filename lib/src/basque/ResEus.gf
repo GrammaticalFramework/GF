@@ -149,7 +149,7 @@ oper
     in { s = stem ; ph = phono ; anim=Inan } ; 
 
   mkNoun2 : Str -> Case -> Noun2 = \s,cas -> mkNoun s ** { compl1 = mkPost [] cas False } ;
-
+  n2Noun2 : Noun -> Case -> Noun2 = \n,cas -> n ** { compl1 = mkPost [] cas False } ;
   mkPNoun : Str -> PNoun = \s -> mkNoun s ** {nbr = Sg ; anim=Anim} ; 
 
 
@@ -502,21 +502,21 @@ oper
   verbformPeriphrastic : Tense -> Anteriority -> VerbPhrase -> {aux : Agr => VForms ; prc : Str} = \t,a,vp ->
     let adl : IntransV = chooseAux vp ;
     in case <t,a> of {
-      <Pres,Simul> => {aux = adl ! Pres ; prc = vp.prc ! Pres} ; --noa / lo egiten da
-      <Pres,Anter> => {aux = adl ! Pres ; prc = vp.prc ! Past} ; --joan da / lo egin da
-      <Past,Simul> => {aux = adl ! Past ; prc = vp.prc ! Pres} ; --nindoan / lo egiten zen
-      <Past,Anter> => {aux = adl ! Past ; prc = vp.prc ! Past} ; --joan nintzen / ...
-      <Fut,Simul>  => {aux = adl ! Pres ; prc = vp.prc ! Fut} ;  --joango da
-      <Fut,Anter>  => {aux = adl ! Pres ; prc = vp.prc ! Fut} ; --joango nintzen
-      <Cond,Simul> => {aux = adl ! Cond ; prc = vp.prc ! Fut} ;  --joango nintzateke
-      <Cond,Anter> => {aux = adl ! Cond ; prc = vp.prc ! Past} } ;--joan nintzateke
+      <Pres,Simul> => {aux = adl ! APres ; prc = vp.prc ! Pres} ; --noa / lo egiten da
+      <Pres,Anter> => {aux = adl ! APres ; prc = vp.prc ! Past} ; --joan da / lo egin da
+      <Past,Simul> => {aux = adl ! APast ; prc = vp.prc ! Pres} ; --nindoan / lo egiten zen
+      <Past,Anter> => {aux = adl ! APast ; prc = vp.prc ! Past} ; --joan nintzen / ...
+      <Fut,Simul>  => {aux = adl ! APres ; prc = vp.prc ! Fut} ;  --joango da
+      <Fut,Anter>  => {aux = adl ! APres ; prc = vp.prc ! Fut} ; --joango nintzen
+      <Cond,Simul> => {aux = adl ! ACond ; prc = vp.prc ! Fut} ;  --joango nintzateke
+      <Cond,Anter> => {aux = adl ! ACond ; prc = vp.prc ! Past} } ;--joan nintzateke
   
   --TODO: write a fallback for synthetic verbs without all forms
   verbformSynthetic : Tense -> Anteriority -> VerbPhrase -> {aux : Agr => VForms ; prc : Str} = \t,a,vp ->
     let adt : IntransV = chooseAux vp ;
     in case <t,a> of {
-      <Pres,Simul> => {aux = adt ! Pres ; prc = []} ;         --noa 
-      <Past,Simul> => {aux = adt ! Past ; prc = []} ;         --nindoan
+      <Pres,Simul> => {aux = adt ! APres ; prc = []} ;         --noa 
+      <Past,Simul> => {aux = adt ! APast ; prc = []} ;         --nindoan
       _            => verbformPeriphrastic t a (vp ** {val = defaultAux vp.val}) } ;
 
 
@@ -526,9 +526,9 @@ oper
   --TODO: add other synthetic transitive verbs
   chooseAuxPol : Polarity -> VerbPhrase -> IntransV = \pol,vp -> 
     case vp.val of {
-      Da x     => AditzTrinkoak.syntIntransVerb (Da x) ;
+      Da x => AditzTrinkoak.syntIntransVerb (Da x) ;
 
-      Zaio   => AditzTrinkoak.ukanZaio ! vp.dobj.agr ; --are there other Zaio (nor-nori) verbs?
+      Zaio => AditzTrinkoak.ukanZaio ! vp.dobj.agr ; --are there other Zaio (nor-nori) verbs?
 
       Du x =>
         let aux = AditzTrinkoak.syntTransVerb (Du x) 

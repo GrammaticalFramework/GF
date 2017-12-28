@@ -60,14 +60,14 @@ lin pot1 d =
    n = Pl} ;
 lin pot1plus d e =
   {s = case d.even20 of {
-              Even => d.s ! Twenty ++ "ta" ++ e.s ! Unit ;   
-              Ten  => d.s ! Twenty ++ "ta" ++ e.s ! Teen } ; 
+              Even => d.s ! Twenty ++ "eta" ++ e.s ! Unit ;   
+              Ten  => d.s ! Twenty ++ "eta" ++ e.s ! Teen } ; 
    n = Pl} ;
 
 lin pot1as2 n = n ** { isHundred = False } ; 
 lin pot2 d = {s = d.s ! Hund ; n = Pl ; isHundred = True } ;
 lin pot2plus d e =
-  { s = d.s ! Hund ++ "ta" ++ e.s ;
+  { s = d.s ! Hund ++ "eta" ++ e.s ;
     n = Pl ;
     isHundred = True } ;
 lin pot2as3 n = n ;
@@ -77,7 +77,7 @@ lin pot3 n =
 
   
 lin pot3plus n m =
-  let ta = if_then_Str m.isHundred [] "ta" ; --no `ta' between 1000 and 100
+  let ta = if_then_Str m.isHundred [] "eta" ; --no `ta' between 1000 and 100
   in 
     { s = table {Sg => [] ; Pl => n.s } ! n.n ++ "mila" ++ ta ++ m.s ;
       n = n.n } ;

@@ -46,6 +46,9 @@ oper
   mkN2 = overload {
     mkN2 : Str -> N2 = \s -> lin N2 (mkNoun2 s genitive) ; 
     mkN2 : Str -> Case -> N2 = \s,cas -> lin N2 (mkNoun2 s cas) ;
+    mkN2 : N -> N2 = \n -> lin N2 (n2Noun2 n genitive) ;
+    mkN2 : N -> Case -> N2 = \n,cas -> lin N2 (n2Noun2 n cas) ;
+
   } ;
 
 --2 Adjectives

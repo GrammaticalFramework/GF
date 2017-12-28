@@ -162,7 +162,11 @@ oper
 
   copulaVP : SyntVerb1 -> VerbPhrase = \izan ->
     ResEus.useV { prc = \\tns => [] ; 
-                  nstem = case izan of { Izan => "izate" ; _ => "egote" } ; --TODO is this correct?
+                  nstem = case izan of { 
+                            Izan => "izate" ; 
+                            Egon => "egote" ;
+                            Ibili => "ibiltze" ;
+                            _     => nonExist } ; 
                   val = Da izan } ;
 } 
 
