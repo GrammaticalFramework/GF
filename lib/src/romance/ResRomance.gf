@@ -178,6 +178,16 @@ oper
 
   mkVPSlash : Compl -> VP -> VP ** {c2 : Compl} = \c,vp -> vp ** {c2 = c} ;
 
+  Clause : Type = {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} ;
+  
+-- for pos/neg variation other than negation word, e.g. "il y a du vin" / "il n'y a pas de vin"
+   posNegClause : Clause -> Clause -> RPolarity -> Clause = \pos,neg,pol -> {
+     s = \\d,t,a,b,m => case b of {
+         RPos  => pos.s ! d ! t ! a ! b ! m ;
+         _     => neg.s ! d ! t ! a ! pol ! m
+         }
+     } ;
+
   mkClause : Str -> Bool -> Bool -> Agr -> VP -> 
       {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} =
     mkClausePol False ;

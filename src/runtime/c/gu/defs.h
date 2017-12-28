@@ -23,6 +23,14 @@
 
 #define restrict __restrict
 
+#elif defined(__MINGW32__)
+
+#define GU_API_DECL
+#define GU_API
+
+#define GU_INTERNAL_DECL
+#define GU_INTERNAL
+
 #else
 
 #define GU_API_DECL
@@ -30,7 +38,9 @@
 
 #define GU_INTERNAL_DECL  __attribute__ ((visibility ("hidden")))
 #define GU_INTERNAL       __attribute__ ((visibility ("hidden")))
+
 #endif
+
 // end MSVC workaround
 
 #include <stddef.h>

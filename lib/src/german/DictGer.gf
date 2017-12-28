@@ -35875,7 +35875,7 @@ lin
   ss_mann_N = mkN  "SS-Mann" "SS-Männer" masculine ;
   ss_N = mkN  "ẞ" "ẞ" neuter ;
   st_vincent_undgrenadinen_N = mkN  "St. Vincent undGrenadinen" "St. Vincent undGrenadinen" neuter ;
-  staat_N = mkN  "Staat" "Staaten" masculine ;
+  staat_N = mkN  "Staat" "Staat" "Staat" "Staats" "Staaten" "Staaten" masculine ;
   staatlich_A = regA "staatlich" ;
   staatsanleihe_N = mkN  "Staatsanleihe" "Staatsanleihen" feminine ;
   staatsanwaeltin_N = mkN  "Staatsanwältin" "Staatsanwältinnen" feminine ;

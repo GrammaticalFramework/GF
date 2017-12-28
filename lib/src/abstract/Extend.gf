@@ -109,6 +109,12 @@ abstract Extend = Cat ** {
 
     ExistsNP : NP -> Cl ;  -- there exists a number / there exist numbers
 
+-- existentials with a/no variation
+
+    ExistCN       : CN -> Cl ;  -- there is a car / there is no car
+    ExistMassCN   : CN -> Cl ;  -- there is beer / there is no beer
+    ExistPluralCN : CN -> Cl ;  -- there are trees / there are no trees
+
 -- infinitive for purpose AR 21/8/2013
 
     PurposeVP : VP -> Adv ;  -- to become happy

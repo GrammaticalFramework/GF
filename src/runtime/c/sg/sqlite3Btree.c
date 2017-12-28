@@ -5040,6 +5040,30 @@ SQLITE_PRIVATE int sqlite3VdbeRecordCompareWithSkip(int, const void *, UnpackedR
 */
 /* #include "sqliteInt.h" */
 
+/* An array to map all upper-case characters into their corresponding
+** lower-case character. 
+**
+** SQLite only considers US-ASCII (or EBCDIC) characters.  We do not
+** handle case conversions for the UTF character set since the tables
+** involved are nearly as big or bigger than SQLite itself.
+*/
+const unsigned char sqlite3UpperToLower[] = {
+      0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,
+     18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+     36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
+     54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 97, 98, 99,100,101,102,103,
+    104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,
+    122, 91, 92, 93, 94, 95, 96, 97, 98, 99,100,101,102,103,104,105,106,107,
+    108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,
+    126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,
+    144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,
+    162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,
+    180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,
+    198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,
+    216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,
+    234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,
+    252,253,254,255
+};
 /* EVIDENCE-OF: R-02982-34736 In order to maintain full backwards
 ** compatibility for legacy applications, the URI filename capability is
 ** disabled by default.
@@ -9063,6 +9087,22 @@ SQLITE_PRIVATE int sqlite3Strlen30(const char *z){
   return 0x3fffffff & (int)strlen(z);
 }
 
+/* Convenient short-hand */
+#define UpperToLower sqlite3UpperToLower
+
+int sqlite3StrICmp(const char *zLeft, const char *zRight){
+  unsigned char *a, *b;
+  int c;
+  a = (unsigned char *)zLeft;
+  b = (unsigned char *)zRight;
+  for(;;){
+    c = (int)UpperToLower[*a] - (int)UpperToLower[*b];
+    if( c || *a==0 ) break;
+    a++;
+    b++;
+  }
+  return c;
+}
 /*
 ** The string z[] is an text representation of a real number.
 ** Convert this string to a double and write it into *pResult.
@@ -17831,13 +17871,6 @@ struct winFile {
 #define WINFILE_PSOW            0x10   /* SQLITE_IOCAP_POWERSAFE_OVERWRITE */
 
 /*
- * The size of the buffer used by sqlite3_win32_write_debug().
- */
-#ifndef SQLITE_WIN32_DBG_BUF_SIZE
-#  define SQLITE_WIN32_DBG_BUF_SIZE   ((int)(4096-sizeof(DWORD)))
-#endif
-
-/*
  * The value used with sqlite3_win32_set_directory() to specify that
  * the temporary directory should be changed.
  */
@@ -18786,43 +18819,6 @@ SQLITE_PRIVATE int sqlite3_win32_reset_heap(){
 #endif /* SQLITE_WIN32_MALLOC */
 
 /*
-** This function outputs the specified (ANSI) string to the Win32 debugger
-** (if available).
-*/
-
-SQLITE_PRIVATE void sqlite3_win32_write_debug(const char *zBuf, int nBuf){
-  char zDbgBuf[SQLITE_WIN32_DBG_BUF_SIZE];
-  int nMin = MIN(nBuf, (SQLITE_WIN32_DBG_BUF_SIZE - 1)); /* may be negative. */
-  if( nMin<-1 ) nMin = -1; /* all negative values become -1. */
-  assert( nMin==-1 || nMin==0 || nMin<SQLITE_WIN32_DBG_BUF_SIZE );
-#if defined(SQLITE_WIN32_HAS_ANSI)
-  if( nMin>0 ){
-    memset(zDbgBuf, 0, SQLITE_WIN32_DBG_BUF_SIZE);
-    memcpy(zDbgBuf, zBuf, nMin);
-    osOutputDebugStringA(zDbgBuf);
-  }else{
-    osOutputDebugStringA(zBuf);
-  }
-#elif defined(SQLITE_WIN32_HAS_WIDE)
-  memset(zDbgBuf, 0, SQLITE_WIN32_DBG_BUF_SIZE);
-  if ( osMultiByteToWideChar(
-          osAreFileApisANSI() ? CP_ACP : CP_OEMCP, 0, zBuf,
-          nMin, (LPWSTR)zDbgBuf, SQLITE_WIN32_DBG_BUF_SIZE/sizeof(WCHAR))<=0 ){
-    return;
-  }
-  osOutputDebugStringW((LPCWSTR)zDbgBuf);
-#else
-  if( nMin>0 ){
-    memset(zDbgBuf, 0, SQLITE_WIN32_DBG_BUF_SIZE);
-    memcpy(zDbgBuf, zBuf, nMin);
-    fprintf(stderr, "%s", zDbgBuf);
-  }else{
-    fprintf(stderr, "%s", zBuf);
-  }
-#endif
-}
-
-/*
 ** The following routine suspends the current thread for at least ms
 ** milliseconds.  This is equivalent to the Win32 Sleep() interface.
 */
@@ -19261,40 +19257,6 @@ SQLITE_PRIVATE char *sqlite3_win32_utf8_to_mbcs(const char *zFilename){
   zFilenameMbcs = winUnicodeToMbcs(zTmpWide);
   sqlite3_free(zTmpWide);
   return zFilenameMbcs;
-}
-
-/*
-** This function sets the data directory or the temporary directory based on
-** the provided arguments.  The type argument must be 1 in order to set the
-** data directory or 2 in order to set the temporary directory.  The zValue
-** argument is the name of the directory to use.  The return value will be
-** SQLITE_OK if successful.
-*/
-SQLITE_PRIVATE int sqlite3_win32_set_directory(DWORD type, LPCWSTR zValue){
-  char **ppDirectory = 0;
-#ifndef SQLITE_OMIT_AUTOINIT
-  int rc = sqlite3BtreeInitialize();
-  if( rc ) return rc;
-#endif
-  if( type==SQLITE_WIN32_TEMP_DIRECTORY_TYPE ){
-    ppDirectory = &sqlite3_temp_directory;
-  }
-  assert( !ppDirectory || type==SQLITE_WIN32_TEMP_DIRECTORY_TYPE
-  );
-  assert( !ppDirectory || sqlite3MemdebugHasType(*ppDirectory, MEMTYPE_HEAP) );
-  if( ppDirectory ){
-    char *zValueUtf8 = 0;
-    if( zValue && zValue[0] ){
-      zValueUtf8 = winUnicodeToUtf8(zValue);
-      if ( zValueUtf8==0 ){
-        return SQLITE_NOMEM;
-      }
-    }
-    sqlite3_free(*ppDirectory);
-    *ppDirectory = zValueUtf8;
-    return SQLITE_OK;
-  }
-  return SQLITE_ERROR;
 }
 
 /*
@@ -22368,9 +22330,6 @@ static int winOpen(
   if( isReadonly ){
     pFile->ctrlFlags |= WINFILE_RDONLY;
   }
-  if( sqlite3_uri_boolean(zName, "psow", SQLITE_POWERSAFE_OVERWRITE) ){
-    pFile->ctrlFlags |= WINFILE_PSOW;
-  }
   pFile->lastErrno = NO_ERROR;
   pFile->zPath = zName;
 #if SQLITE_MAX_MMAP_SIZE>0
@@ -22587,43 +22546,6 @@ static BOOL winIsDriveLetterAndColon(
   const char *zPathname
 ){
   return ( sqlite3Isalpha(zPathname[0]) && zPathname[1]==':' );
-}
-
-/*
-** Returns non-zero if the specified path name should be used verbatim.  If
-** non-zero is returned from this function, the calling function must simply
-** use the provided path name verbatim -OR- resolve it into a full path name
-** using the GetFullPathName Win32 API function (if available).
-*/
-static BOOL winIsVerbatimPathname(
-  const char *zPathname
-){
-  /*
-  ** If the path name starts with a forward slash or a backslash, it is either
-  ** a legal UNC name, a volume relative path, or an absolute path name in the
-  ** "Unix" format on Windows.  There is no easy way to differentiate between
-  ** the final two cases; therefore, we return the safer return value of TRUE
-  ** so that callers of this function will simply use it verbatim.
-  */
-  if ( winIsDirSep(zPathname[0]) ){
-    return TRUE;
-  }
-
-  /*
-  ** If the path name starts with a letter and a colon it is either a volume
-  ** relative path or an absolute path.  Callers of this function must not
-  ** attempt to treat it as a relative path name (i.e. they should simply use
-  ** it verbatim).
-  */
-  if ( winIsDriveLetterAndColon(zPathname) ){
-    return TRUE;
-  }
-
-  /*
-  ** If we get to this point, the path name should almost certainly be a purely
-  ** relative one (i.e. not a UNC name, not absolute, and not volume relative).
-  */
-  return FALSE;
 }
 
 /*

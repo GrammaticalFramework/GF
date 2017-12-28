@@ -305,7 +305,13 @@ oper
 
   glueTok : Str -> Str = \s -> "&+" ++ s ;
 
-
+-- for pos/neg variation other than just negation word, e.g. case in "on ongelma"/"ei ole ongelmaa"
+   posNegClause : Clause -> Clause -> Clause = \pos,neg -> {
+     s = \\t,a,b,o => case b of {
+         Pos  => pos.s ! t ! a ! b ! o ;
+         _    => neg.s ! t ! a ! b ! o
+         }
+     } ;
 -- This is used for subjects of passives: therefore isFin in False.
 
   subjForm : NP -> SubjCase -> Polarity -> Str = \np,sc,b -> 

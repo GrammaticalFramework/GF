@@ -612,7 +612,7 @@ pgfCommands = Map.fromList [
                                                Nothing -> let funs = functionsByCat pgf id
                                                           in showCat id funs))
                                   where
-                                    showCat c funs = "cat "++showCategory pgf c++
+                                    showCat c funs = "cat "++c++
                                                      " ;\n\n"++
                                                      unlines [showFun f ty| f<-funs,
                                                                             Just ty <- [functionType pgf f]]

@@ -313,7 +313,11 @@ oper
   mkVV  : V -> VV ; -- e.g. want (to VP)
   infVV : V -> VV ; -- e.g. want (to VP)
   ingVV : V -> VV ; -- e.g. start (VPing)
-  mkV2V : V -> Prep -> Prep -> V2V ;  -- e.g. want (noPrep NP) (to VP)
+  mkV2V : overload {
+    mkV2V : Str -> V2V ;
+    mkV2V : V -> V2V ;
+    mkV2V : V -> Prep -> Prep -> V2V ;  -- e.g. want (noPrep NP) (to VP)
+    } ;
   ingV2V : V -> Prep -> Prep -> V2V ; -- e.g. prevent (noPrep NP) (from VP-ing)
   mkVA  : V -> VA ; -- e.g. become (AP)
   mkV2A : V -> Prep -> V2A ; -- e.g. paint (NP) (AP)
@@ -502,12 +506,14 @@ mkInterj : Str -> Interj
       cries = (regN cry).s ! Pl ! Nom ; -- !
       cried : Str = case cries of {
         _ + "es" => init cries + "d" ;
+        _ + "ers" => init cries + "ed" ;
         _        => duplFinal cry + "ed"
         } ;
       crying : Str = case cry of {
         _  + "ee" => cry + "ing" ;
         d  + "ie" => d  + "ying" ;
         us + "e"  => us + "ing" ; 
+        ent + "er" => ent + "ered" ;
         _         => duplFinal cry + "ing"
         }
     in mk5V cry cries cried cried crying ;
@@ -582,7 +588,12 @@ mkInterj : Str -> Interj
 
   mkV0  v = v ;
   mkV2S v p = lin V2S (prepV2 v p) ;
-  mkV2V v p t = lin V2V (prepV2 v p ** {c3 = t.s ; typ = VVAux}) ;
+  mkV2V = overload {
+    mkV2V : Str -> V2V = \s -> lin V2V (dirV2 (regV s) ** {c3 = [] ; typ = VVAux}) ;
+    mkV2V : V -> V2V = \v -> lin V2V (dirV2 v ** {c3 = [] ; typ = VVAux}) ;
+    mkV2V : V -> Prep -> Prep -> V2V = \v,p,t -> lin V2V (prepV2 v p ** {c3 = t.s ; typ = VVAux}) ;
+    } ;
+
   ingV2V v p t = lin V2V (prepV2 v p ** {c3 = t.s ; typ = VVPresPart}) ;
   mkVA  v = lin VA v ;
   mkV2A v p = lin V2A (prepV2 v p) ;

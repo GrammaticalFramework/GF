@@ -80,4 +80,10 @@ concrete ExtraSpa of ExtraSpaAbs = ExtraRomanceSpa **
 
     UseComp_estar comp = insertComplement comp.s (predV I.estar_V) ;
 
+    cual_IComp = {
+      s = aagrForms "cual" "cual" "cuáles" "cuáles" ;
+      cop = serCopula ;
+      } ;
+
+
 }
