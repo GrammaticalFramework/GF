@@ -60,19 +60,18 @@ concrete QuestionDut of Question = CatDut ** open ResDut in {
       } ;
 
     PrepIP p ip = {
-      s = appPrep p (noMerge ** ip)
+      s = appPrep p ip
       } ;
 
-    AdvIP ip adv = {
+    AdvIP ip adv = ip ** {
       s = \\c => ip.s ! c ++ adv.s ;
-      n = ip.n
       } ;
 
     IdetCN idet cn = 
       let 
         g = cn.g ;
         n = idet.n
-      in {
+      in noMerge ** {
       s = \\c => idet.s ! g ++ cn.s ! Weak ! NF n Nom ; 
       n = n
       } ;
@@ -83,7 +82,9 @@ concrete QuestionDut of Question = CatDut ** open ResDut in {
         n = idet.n
       in {
         s = \\_ => idet.s ! g ;
-        n = n
+        n = n ;
+        mergesWithPrep = idet.mergesWithPrep ;
+        mergeForm = idet.mergeForm
       } ;
 
     IdetQuant idet num = 
@@ -91,7 +92,9 @@ concrete QuestionDut of Question = CatDut ** open ResDut in {
         n = num.n
       in {
       s = \\g => idet.s ! n ! g ++ num.s  ; 
-      n = n
+      n = n ;
+      mergesWithPrep = idet.mergesWithPrep ;
+      mergeForm = idet.mergeForm
       } ;
 
     AdvIAdv i a = {s = i.s ++ a.s} ;

@@ -21,10 +21,10 @@ concrete CatDut of Cat =
 -- Question
 
     QCl = {s : ResDut.Tense => Anteriority => Polarity => QForm => Str} ;
-    IP = {s : NPCase => Str ; n : Number} ;
+    IP = MergesWithPrep ** {s : NPCase => Str ; n : Number} ; -- met wat -> waarmee
     IComp  = {s : Agr => Str} ; 
-    IDet   = {s : Gender => Str ; n : Number} ;
-    IQuant = {s : Number => Gender => Str} ;
+    IDet   = MergesWithPrep ** {s : Gender => Str ; n : Number} ;
+    IQuant = MergesWithPrep ** {s : Number => Gender => Str} ;
 
 -- Relative
 

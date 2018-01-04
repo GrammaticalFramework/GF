@@ -44,7 +44,8 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   in8front_Prep = mkPrep "voor" ;
   i_Pron = mkPronoun "ik" "me" "mijn" "ik" "mij" "mijn" "mijne" Utr Sg P1 ;
   in_Prep = mkPrep "in" ;
-  it_Pron = mkPronoun "het" "het" "zijn" "het" "het" "zijn" "zijne" Neutr Sg P3 ;
+  it_Pron = mkPronoun "het" "het" "zijn" "het" "het" "zijn" "zijne" Neutr Sg P3 **
+             { mergesWithPrep = True ; mergeForm = "er" } ;
 
   less_CAdv = X.mkCAdv "minder" "dan" ;
   many_Det = mkDet "veel" "veel" Pl ;
@@ -90,16 +91,16 @@ concrete StructuralDut of Structural = CatDut, Prelude **
 
   we_Pron = mkPronoun "we" "ons" "ons" "wij" "ons" "onze" "onze" Utr Pl P3 ; ----
 
-  whatSg_IP = {s = \\_ => "wat" ; n = Sg} ;
-  whatPl_IP = {s = \\_ => "wat" ; n = Pl} ;
+  whatSg_IP = {s = \\_ => "wat" ; n = Sg ; mergesWithPrep = True ; mergeForm = "waar"} ;
+  whatPl_IP = {s = \\_ => "wat" ; n = Pl ; mergesWithPrep = True ; mergeForm = "waar"} ;
 
   when_IAdv = ss "wanneer" ;
   when_Subj = ss "als" ;
   where_IAdv = ss "waar" ;
-  which_IQuant = mkPredet "welke" "welk" ;
+  which_IQuant = mkPredet "welke" "welk" ** { mergesWithPrep = True ; mergeForm = "waar"} ;
 
-  whoSg_IP = {s = \\_ => "wie" ; n = Sg} ;
-  whoPl_IP = {s = \\_ => "wie" ; n = Pl} ;
+  whoSg_IP = noMerge ** {s = \\_ => "wie" ; n = Sg} ;
+  whoPl_IP = noMerge ** {s = \\_ => "wie" ; n = Pl} ;
   why_IAdv = ss "waarom" ;
   without_Prep = nomergePrep "zonder" ; -- doesn't combine
   with_Prep = mkPrep "met" ** { mergeForm = "mee" } ;
