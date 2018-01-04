@@ -42,7 +42,7 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
       c2 = slash.c2
     } ;
 
-    SlashPrep cl prep = cl ** {c2 = prep.s} ;
+    SlashPrep cl prep = cl ** {c2 = prep} ;
 
     SlashVS np vs slash = 
         mkClause (np.s ! NPNom) np.a 

@@ -3,43 +3,47 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
   flags optimize=all_subs ;
 
   lin
-    DetCN det cn = {
+    DetCN det cn = noMerge ** {
       s = \\c => det.s ! cn.g ++ cn.s ! det.a ! NF det.n Nom ;
       a = agrP3 det.n ;
-      isPron = False
+      isPron = False ;
       } ;
 
     DetNP det = {
       s = \\_ => det.sp ! Neutr ;
       a = agrP3 det.n ;
-      isPron = False
+      isPron = False ;
+      mergesWithPrep = det.mergesWithPrep ;
+      mergeForm = det.mergeForm
       } ;
 
-    UsePN pn = {s = pn.s ; a = agrP3 Sg ; isPron = False} ;
+    UsePN pn = noMerge ** {s = pn.s ; a = agrP3 Sg ; isPron = False} ;
 
     UsePron pron = {
       s = table {NPNom => pron.unstressed.nom ; NPAcc => pron.unstressed.acc} ;
       a = pron.a ;
-      isPron = True
+      isPron = True ;
+      mergesWithPrep = pron.mergesWithPrep ;
+      mergeForm = pron.mergeForm
       } ;
 
-    PredetNP pred np = heavyNP {
+    PredetNP pred np = np ** heavyNP {
       s = \\c => 
         pred.s ! np.a.n ! np.a.g ++ np.s ! c ; ---- g
       a = np.a
       } ;
 
-    PPartNP np v2 = heavyNP {
+    PPartNP np v2 = np ** heavyNP {
       s = \\c => np.s ! c ++ v2.s ! VPerf ; -- invar part
       a = np.a
       } ;
 
-    AdvNP np adv = heavyNP {
+    AdvNP np adv = np ** heavyNP {
       s = \\c => np.s ! c ++ adv.s ;
       a = np.a
       } ;
 
-    ExtAdvNP np adv = heavyNP {
+    ExtAdvNP np adv = np ** heavyNP {
       s = \\c => np.s ! c ++ embedInCommas adv.s ;
       a = np.a
       } ;
@@ -54,7 +58,9 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
         sp = \\g => quant.sp ! n ! g ++ 
                       num.s ++ ord.s ! agrAdj g quant.a (NF n Nom) ;
         n = n ;
-        a = a
+        a = a ;
+        mergesWithPrep = quant.mergesWithPrep ;
+        mergeForm = quant.mergeForm
         } ;
 
     DetQuant quant num = 
@@ -68,12 +74,14 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 	  True  => quant.s ! True ! n ! g ++ num.s
 	  } ;
         n = n ;
-        a = a
+        a = a ;
+        mergesWithPrep = quant.mergesWithPrep ;
+        mergeForm = quant.mergeForm
         } ;
 
-    PossPron p = {
+    PossPron p = noMerge ** {
       s  = \\_,n,g => p.unstressed.poss ;
-      sp = \\n,g => p.substposs ;
+      sp = \\n,g => DefArt.s ! True ! n ! g ++ p.substposs ! n ;
       a = Weak
       } ;
 
@@ -94,13 +102,13 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 
     OrdNumeralSuperl n a = {s = \\af => n.s ! NOrd af ++ a.s ! Superl ! af} ;
 
-    DefArt = {
+    DefArt = noMerge ** {
       s = \\_,n,g  => case <n,g> of {<Sg,Neutr> => "het" ; _ => "de"} ;
       sp = \\n,g => "die" ;
       a = Weak
       } ;
 
-    IndefArt = {
+    IndefArt = noMerge ** {
       s = table {
         True => \\_,_ => [] ; 
         False => table {
@@ -115,7 +123,7 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       a = Strong
       } ;
 
-    MassNP cn = {
+    MassNP cn = noMerge ** {
       s = \\c => cn.s ! Strong ! NF Sg Nom ;
       a = agrP3 Sg ;
       isPron = False
@@ -127,12 +135,12 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       } ;
 
     ComplN2 f x = {
-      s = \\_,nc => f.s ! nc ++ appPrep f.c2 x.s ;
+      s = \\_,nc => f.s ! nc ++ appPrep f.c2 x ;
       g = f.g
       } ;
 
     ComplN3 f x = {
-      s = \\nc => f.s ! nc ++ appPrep f.c2 x.s ;
+      s = \\nc => f.s ! nc ++ appPrep f.c2 x ;
       g = f.g ; 
       c2 = f.c3
       } ;
@@ -165,7 +173,7 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       g = cn.g
       } ;
 
-    RelNP np rs = {
+    RelNP np rs = np ** {
       s = \\c => np.s ! c ++ "," ++ rs.s ! np.a.g ! np.a.n ;
       a = np.a ;
       isPron = False

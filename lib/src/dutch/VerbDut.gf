@@ -28,9 +28,9 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
     SlashV2a v = predV (v2v v) ** {c2 = v.c2} ; 
       
     Slash2V3 v np =
-      insertObj (\\_ => appPrep v.c2.p1 np.s) (predVv v) ** {c2 = v.c3} ;
+      insertObj (\\_ => appPrep v.c2.p1 np) (predVv v) ** {c2 = v.c3} ;
     Slash3V3 v np =
-      insertObj (\\_ => appPrep v.c3.p1 np.s) (predVv v) ** {c2 = v.c2} ;
+      insertObj (\\_ => appPrep v.c3.p1 np) (predVv v) ** {c2 = v.c2} ;
 
     SlashV2S v s = 
       insertExtrapos (conjThat ++ s.s ! Sub) (predVv v) ** {c2 = v.c2} ;
@@ -48,7 +48,7 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
       insertObj (\\_ => ap.s ! APred) (predVGen False BetweenObjs (v2v v)) ** {c2 = v.c2} ;
 
     --vp.c2.p2: if the verb has a preposition or not
-    ComplSlash vp np = insertObjNP np.isPron (case vp.c2.p2 of {True => BeforeObjs; False => vp.negPos}) (\\_ => appPrep vp.c2.p1 np.s) vp ;
+    ComplSlash vp np = insertObjNP np.isPron (case vp.c2.p2 of {True => BeforeObjs; False => vp.negPos}) (\\_ => appPrep vp.c2.p1 np) vp ;
 
     SlashVV v vp = 
       let 
@@ -66,7 +66,7 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
       insertExtrapos vpi.p3 (
         insertInf vpi.p2 (
           insertObj vpi.p1 (
-            insertObj (\\_ => appPrep v.c2.p1 np.s) (
+            insertObj (\\_ => appPrep v.c2.p1 np) (
               predVGen v.isAux vp.negPos v)))) ** {c2 = v.c2} ;
 
     -- BeforeObjs, because negation comes before copula complement 
@@ -87,11 +87,13 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
 
     AdVVP adv vp = insertAdV adv.s vp ;
 
-    ReflVP vp = insertObj (\\a => appPrep vp.c2.p1 (\\_ => reflPron ! a)) vp ;
+    ReflVP vp = insertObj (\\a => appPrep vp.c2.p1 
+                                          (npLite (\\_ => reflPron ! a))
+                          ) vp ;
 
     PassV2 v = insertInf (v.s ! VPerf) (predV worden_V) ;
 
-    VPSlashPrep vp prep = vp ** {c2 = <prep.s,True>} ;
+    VPSlashPrep vp prep = vp ** {c2 = <prep,True>} ;
 
 ---- workaround for a subtyping bug
   oper

@@ -23,12 +23,13 @@ concrete RelativeDut of Relative = CatDut ** open ResDut in {
 
     RelSlash rp slash = {
       s = \\t,a,p,g,n => 
-          appPrep slash.c2 (\\_ => rp.s ! g ! n) ++ slash.s ! t ! a ! p ! Sub ;
+          appPrep slash.c2 (npLite (\\_ => rp.s ! g ! n))
+          ++ slash.s ! t ! a ! p ! Sub ;
       c = slash.c2.c
       } ;
 
     FunRP p np rp = {
-      s = \\g,n => np.s ! NPNom ++ appPrep p.s (\\_ => rp.s ! g ! n) ;
+      s = \\g,n => np.s ! NPNom ++ appPrep p (npLite (\\_ => rp.s ! g ! n)) ;
       a = RAg np.a.n np.a.p
       } ;
 

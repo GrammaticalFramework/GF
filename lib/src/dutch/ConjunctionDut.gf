@@ -9,7 +9,7 @@ concrete ConjunctionDut of Conjunction =
 
     ConjAdv conj ss = conjunctDistrSS conj ss ;
 
-    ConjNP conj ss = heavyNP (conjunctDistrTable NPCase conj ss ** {
+    ConjNP conj ss = noMerge ** heavyNP (conjunctDistrTable NPCase conj ss ** {
       a = {g = Utr ; n = conjNumber conj.n ss.a.n ; p = ss.a.p}
       }) ;
 

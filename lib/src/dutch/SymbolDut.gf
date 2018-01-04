@@ -10,17 +10,17 @@ lin
   FloatPN i  = {s = \\c => i.s ; g = Neutr} ; --- c
   NumPN i  = {s = \\_ => i.s ! Neutr ! Nom ; g = Neutr} ; --- c
 
-  CNIntNP cn i = {
+  CNIntNP cn i = noMerge ** {
     s = \\c => cn.s ! Weak ! NF Sg Nom ++ i.s ;
     a = agrP3 Sg ;
     isPron = False
     } ;
-  CNSymbNP det cn xs = let g = cn.g in {
+  CNSymbNP det cn xs = let g = cn.g in noMerge ** {
     s = \\c => det.s ! g ++ cn.s ! det.a ! NF det.n Nom ++ xs.s ; 
     a = agrP3 det.n ;
     isPron = False
     } ;
-  CNNumNP cn i = {
+  CNNumNP cn i = noMerge ** {
     s = \\c => artDef Sg cn.g ++ cn.s ! Weak ! NF Sg Nom ++ i.s ! Neutr ! Nom ;
     a = agrP3 Sg ;
     isPron = False

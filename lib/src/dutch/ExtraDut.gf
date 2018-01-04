@@ -1,5 +1,5 @@
 concrete ExtraDut of ExtraDutAbs = CatDut ** 
-  open ResDut, MorphoDut, Coordination, Prelude, IrregDut, (P = ParadigmsDut) in 
+  open ResDut, MorphoDut, Coordination, Prelude, IrregDut, (P = ParadigmsDut), NounDut in 
 {
 
   flags coding=utf8 ;
@@ -117,12 +117,12 @@ lin
     PassVPSlash vps = 
       insertInf (vps.s.s ! VPerf) (predV ResDut.worden_V) ;
     PassAgentVPSlash vps np = 
-      insertAdv (appPrep "door" np.s) (insertInf (vps.s.s ! VPerf) (predV ResDut.worden_V)) ;
+      insertAdv (appPrep (P.mkPrep "door") np) (insertInf (vps.s.s ! VPerf) (predV ResDut.worden_V)) ;
 
 lin
  NominalizeVPSlashNP vpslash np =
            --False for negation place; doesn't matter because vp.a1 ! Pos is chosen
-           let  vp : ResDut.VP = insertObjNP np.isPron AfterObjs (\\_ => appPrep vpslash.c2.p1 np.s) vpslash ;
+           let  vp : ResDut.VP = insertObjNP np.isPron AfterObjs (\\_ => appPrep vpslash.c2.p1 np) vpslash ;
                 agrDef : Agr = agrP3 Sg ; 
                 compl : Str = vp.n0 ! agrDef ++ vp.a1 ! Pos ++ vp.n2 ! agrDef ++ vp.s.prefix ; 
                 inf : Str = vp.inf.p1 ;
@@ -134,10 +134,7 @@ lin
 lin
   zullen_VV = lin VV (zullen_V ** {isAux = True}) ;
 
-  StressedPron pron = {
-      s = table {NPNom => pron.stressed.nom ; NPAcc => pron.stressed.acc} ;
-      a = pron.a ;
-      isPron = True
-      } ; 
+  StressedPron pron = UsePron pron ** {
+      s = table {NPNom => pron.stressed.nom ; NPAcc => pron.stressed.acc} } ; 
 
 }

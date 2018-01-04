@@ -19,7 +19,7 @@ resource ResDut = ParamX ** open Prelude, Predef in {
 
     NPCase = NPNom | NPAcc ;
 
-  oper 
+  oper     
     Noun = {s : NForm => Str ; g : Gender} ;
 
     mkNoun : (_,_ : Str) -> Gender -> Noun = \sg,pl,g -> {
@@ -380,23 +380,25 @@ param
   worden_V = irregVerb2 "worden" "werd" "werden" "geworden" ** {
     aux = VZijn ; prefix = [] ; particle = [] ; vtype = VAct} ; 
 
-    Pronoun : Type = {
+    Pronoun : Type = MergesWithPrep ** {
       unstressed,stressed : {nom, acc, poss : Str} ;
-      substposs : Str ;
-      a : Agr
+      substposs : Number => Str ;
+      a : Agr ;
       } ; 
 
     mkPronoun : (x1,_,_,_,_,x6,x7 : Str) -> Gender -> Number -> Person -> Pronoun = 
-      \ik,me,mn,Ik,mij,mijn,mijne,g,n,p -> {
+      \ik,me,mn,Ik,mij,mijn,mijne,g,n,p -> noMerge ** {
          unstressed = {nom = ik ; acc = me  ; poss = mn} ;
          stressed   = {nom = Ik ; acc = mij ; poss = mijn} ;
-         substposs  = mijne ;
+         substposs  = table {Sg => mijne ; Pl => mijne + "n" } ; --overgenerates *jullien /IL2018
          a = {g = g ; n = n ; p = p}
          } ;
 
     het_Pron : Pronoun = mkPronoun "het" "het" "ze" "hij" "hem" "zijn" "zijne" Neutr Sg P3 ; -- cunger: 't -> het 
 
 
+    MergesWithPrep = { mergesWithPrep : Bool ; mergeForm : Str } ;
+    noMerge : MergesWithPrep = { mergesWithPrep = False ; mergeForm = [] } ;
 -- Complex $CN$s, like adjectives, have strong and weak forms.
 
 param
@@ -423,8 +425,22 @@ param
 ---- clause, inverted, or subordinate.
 
   oper 
-    Preposition = Str ; 
-    appPrep : Preposition -> (NPCase => Str) -> Str = \p,np -> p ++ np ! NPAcc ; ----
+    Preposition : Type = MergesWithPrep ** { s : Str } ;
+
+    -- This is a hack for appPrep: sometimes we don't really need a full NP
+    NPLite : Type = MergesWithPrep ** { s : NPCase => Str } ;
+    npLite : (NPCase => Str) -> NPLite = \nplite -> noMerge ** {s = nplite} ;
+
+    -- Applying a preposition to a noun phrase
+    -- In order to decide whether to merge, have to check both NP and Prep:
+    -- e.g. deze + met -> hiermee , but zonder + met -> "met zonder"
+    appPrep : Preposition -> NPLite -> Str 
+     = \prep,np -> 
+          case <np.mergesWithPrep,prep.mergesWithPrep> of {
+            <True,True> => glue np.mergeForm prep.mergeForm ;
+            _           => prep.s ++ np.s ! NPAcc } ;
+
+
 
   param  
     Order = Main | Inv | Sub ;
@@ -685,20 +701,22 @@ param
  
   infPart : Bool -> Str = \b -> if_then_Str b [] "te" ;
 
-  mkDet : Str -> Str -> Number -> {s,sp : Gender => Str ; n : Number ; a : Adjf} =
-    \deze,dit,n -> {
+  Determiner : Type = MergesWithPrep ** {s,sp : Gender => Str ; n : Number ; a : Adjf} ;
+
+  mkDet : Str -> Str -> Number -> Determiner =
+    \deze,dit,n -> noMerge ** {
       s  = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
       sp = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
       n = n ;
       a = Weak
       } ;
-
-  mkQuant : Str -> Str -> {
-    s  : Bool => Number => Gender => Str ; 
-    sp : Number => Gender => Str ; 
-    a  : Adjf
-    } = 
-    \deze,dit -> {
+  Quantifier : Type = MergesWithPrep ** {
+      s  : Bool => Number => Gender => Str ; 
+      sp : Number => Gender => Str ; 
+      a  : Adjf
+      } ;
+  mkQuant : Str -> Str -> Quantifier = 
+    \deze,dit -> noMerge ** {
       s  = \\_ ,n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
       sp = \\   n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
       a = Weak
@@ -709,8 +727,9 @@ param
       s  = \\n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze}
       } ;
 
-  mkNP : Str -> Gender -> Number -> {s : NPCase => Str ; a : Agr ; isPron : Bool} = 
-    \s,g,n -> heavyNP {
+  NounPhrase : Type = MergesWithPrep ** {s : NPCase => Str ; a : Agr ; isPron : Bool } ; 
+  mkNP : Str -> Gender -> Number -> NounPhrase = 
+    \s,g,n -> noMerge ** heavyNP {
       s = \\_ => s ;
       a = agrgP3 g n ;
       } ;

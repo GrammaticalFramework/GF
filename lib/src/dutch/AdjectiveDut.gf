@@ -30,12 +30,12 @@ concrete AdjectiveDut of Adjective = CatDut ** open ResDut, Prelude in
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
     ComplA2 a np = {
-      s = \\af => a.s ! Posit ! af ++ appPrep a.c2 np.s ; 
+      s = \\af => a.s ! Posit ! af ++ appPrep a.c2 np ; 
       isPre = True
       } ;
 
     ReflA2 a = {
-      s = \\af => a.s ! Posit ! APred ++ appPrep a.c2 (\\_ => reflPron ! agrP3 Sg) ; --- agr 
+      s = \\af => a.s ! Posit ! APred ++ appPrep a.c2 (npLite (\\_ => reflPron ! agrP3 Sg)) ; --- agr 
       isPre = True
       } ;
 

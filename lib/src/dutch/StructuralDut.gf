@@ -22,9 +22,9 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   both7and_DConj = {s1 = "zowel" ; s2 = "als" ; n = Pl} ;
   but_PConj = ss "maar" ;
   by8agent_Prep = mkPrep "door" ;
-  by8means_Prep = mkPrep "met" ;
+  by8means_Prep = mkPrep "met" ** {mergeForm = "mee"} ;
   can8know_VV, can_VV = auxVV kunnen_V ;
-  during_Prep = mkPrep "tijdens" ;
+  during_Prep = nomergePrep "tijdens" ; -- doesn't combine
   either7or_DConj = {s1 = "ofwel" ; s2 = "of" ; n = Pl} ;
   everybody_NP = mkNP "alle" Utr Pl ; ----
   every_Det = mkDet "elke" "elk" Sg ; ----
@@ -43,7 +43,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   if_Subj = ss "als" ;
   in8front_Prep = mkPrep "voor" ;
   i_Pron = mkPronoun "ik" "me" "mijn" "ik" "mij" "mijn" "mijne" Utr Sg P1 ;
-  in_Prep = ss "in" ;
+  in_Prep = mkPrep "in" ;
   it_Pron = mkPronoun "het" "het" "zijn" "het" "het" "zijn" "zijne" Neutr Sg P3 ;
 
   less_CAdv = X.mkCAdv "minder" "dan" ;
@@ -71,7 +71,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   someSg_Det = mkDet "enige" "enig" Sg ;
   something_NP = mkNP "iets" Utr Sg ;
   somewhere_Adv = ss "ergens" ;
-  that_Quant = mkQuant "die" "dat" ;
+  that_Quant = mkQuant "die" "dat" ** { mergesWithPrep = True ; mergeForm = "daar" } ;
   that_Subj = ss "dat" ;
   there_Adv = ss "daar" ;
   there7to_Adv = ss "daar" ;
@@ -80,7 +80,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
 
   they_Pron = mkPronoun "ze" "ze" "hun" "zij" "hen" "hun" "hunne" Utr Pl P3 ; ----
 
-  this_Quant = mkQuant "deze" "dit" ;
+  this_Quant = mkQuant "deze" "dit" ** { mergesWithPrep = True ; mergeForm = "hier" } ;
   through_Prep = mkPrep "door" ;
   too_AdA = ss "te" ;
   to_Prep = mkPrep "naar" ;
@@ -101,8 +101,8 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   whoSg_IP = {s = \\_ => "wie" ; n = Sg} ;
   whoPl_IP = {s = \\_ => "wie" ; n = Pl} ;
   why_IAdv = ss "waarom" ;
-  without_Prep = mkPrep "zonder" ;
-  with_Prep = mkPrep "met" ;
+  without_Prep = nomergePrep "zonder" ; -- doesn't combine
+  with_Prep = mkPrep "met" ** { mergeForm = "mee" } ;
   youSg_Pron = mkPronoun "je" "je" "je" "jij" "jou" "je" "jouwe" Neutr Sg P2 ;  --- Neutr as hack for familiarity
   youPl_Pron = mkPronoun "jullie" "jullie" "je" "jullie" "jullie" "jullie" "uwe" Utr Pl P2 ;
   youPol_Pron = mkPronoun "u" "u" "uw" "u" "u" "uw" "uwe" Utr Sg P2 ;
@@ -115,7 +115,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   nothing_NP = mkNP "niets" Neutr Sg ;
   at_least_AdN = ss "ten minste" ;
   at_most_AdN = ss "hooguit" ;
-  except_Prep = mkPrep "met uitzondering van" ;
+  except_Prep = nomergePrep "met uitzondering van" ; -- doesn't combine like "met dat" -> "daarmee"
 
   as_CAdv = X.mkCAdv "zo" "als" ;
   have_V2 = mkV2 ParadigmsDut.hebben_V ;
