@@ -143,7 +143,8 @@ resource ParadigmsIce = open
 		} ;
 
 		neutrNForms3 : (_,_,_ : Str) -> NForms = \nom,gen,pl -> case <nom,gen,pl> of {
-			_					=> dBarn nom pl
+		    <_+"ur", _+"nns", _+"nn"> => dMaður nom gen pl ;
+			_                         => dBarn nom pl
 		} ;
 
 		neutrNForms4 : (_,_,_,_ : Str) -> NForms = \sgNom,sgGen,plNom,plGen -> case <sgNom,sgGen,plNom,plGen> of {
@@ -294,36 +295,35 @@ resource ParadigmsIce = open
 		weakPosit : (_,_ : Str) -> AForms = \mas,fem -> case <mas,fem> of {
 			<front + "ur",_ + "ur">		=> dPositW (front + "r") ;
 			<stem + "ur",_>			=> dPositW stem ;
+			<#consonant* + "ei" + ("ll" | "nn"),_>	=> dSeinn mas ;
 			<front + "ill",_>		=> dPositW (í2i front + "l") ;
 			<front + "inn",_>		=> dPositW (front + "n") ;
 			_				=> dPositW fem
 		} ;
 
 		compar1 : Str -> AForms = \s -> case s of {
-			front + "ni"		=> dI (init s) ;
-			stem + "ari"		=> dAri stem ;
-			stem + "ri"		=> dRi stem ;
-			front + mid@("leg" | "ug") + "ur"	=> dRi (front + mid) ;
-			stem + "ur"		=> dAri stem ;
-			front + "inn"		=> dAri (front + "n") ;
-			_ + ("ll" | "nn")	=> dI s
-		} ;
+			front + "ni"                       => dI (init s) ;
+            stem + "ari"                       => dAri stem ;
+            stem + "ri"                        => dRi stem ;
+            front + mid@("leg"|"ug") + "ur"    => dRi (front + mid) ;
+            stem + "ur"                        => dAri stem ;
+            #consonant* + "ei" + ("ll" | "nn") => dSeinn s ;
+            front + "inn"                      => dAri (front + "n") ;
+            _ + ("ll" | "nn")                  => dI s
+        } ;
 
-		compar2 : (_,_ : Str) -> AForms = \mas,fem -> case <mas,fem> of {
-			<front + "ur",_ + "ur">		=> dAri (front + "r") ;
-			<front + mid@("leg" | "ug") + "ur",_>	=> dRi (front + mid) ;
-			<stem + "ur", _>		=> dAri stem ;
-			<front + "inn",_>		=> dAri (front + "n") ;
-			<_ + ("ll" | "nn"),_>		=> dI mas ;
-			<_ + "r", _ + ("á" | "ó" | "ú" | "ý" | "æ")>	=> dRi fem ; 
-			<_,_ + ("r" | "s" | (#consonant + "n"))>	=> dAri fem
-		} ;
+        compar2 : (_,_ : Str) -> AForms = \mas,fem -> case <mas,fem> of {
+            <front + "ur",_ + "ur">               => dAri (front + "r") ;
+            <front + mid@("leg"|"ug") + "ur",_>   => dRi (front + mid) ;
+            <stem + "ur", _>                      => dAri stem ;
+            <_ + ("ll" | "nn"),_>                 => compar1 mas ;
+            <_ + "r", _ + ("á"|"ó"|"ú"|"ý"|"æ")>  => dRi fem ;
+            <_,_ + ("r"|"s"|(#consonant + "n"))>  => dAri fem
+        } ;
 
 		weakSuperl : (_,_ : Str) -> AForms = \mas,fem -> case <mas,fem> of {
 			<front + "ni",_>		=> dSuperlW (front + "nst") (front + "nust") ;
 			<stem + "ari",_>		=> dSuperlW (stem + "ast") (stem + "ust") ;
-			<stem + "rri",_>		=> dSuperlW (stem + "st") (stem + "st") ;
-			<stem + "t" + "ri",_>		=> dSuperlW (stem + "st") (stem + "st") ;
 			<stem + "ri",_>			=> dSuperlW (stem + "st") (stem + "st") ;
 			<frontm + "ur",frontf + "ur">	=> dSuperlW (frontm + "rast") (frontf + "rust") ;
 			<front + "ur",_>		=> dSuperlW (front + "ast") (front + "ust") ;
@@ -332,22 +332,23 @@ resource ParadigmsIce = open
 			_				=> dSuperlW (fem + "ast") (fem + "ust")
 		} ;
 
-		strongSuperl1 : Str -> AForms = \s -> case s of {
-			front + "ni"		=> dFalastur (front + "nstur") (front + "nst") ;
+		strongSuperl1 : Str -> AForms = \t -> case t of {
+		    front + "ni"		=> dFalastur (front + "nstur") (front + "nst") ;
 			stem + "ari"		=> dFalastur (stem + "astur") (stem + "ust") ;
-			stem + "rri"		=> dFalastur (stem + "stur") (stem + "st") ;
-			stem + "ri"		=> dFalastur (stem + "stur") (stem + "st") ;
-			front + "inn" 		=> dFalastur (front + "nastur") ((a2ö front) + "nust") ;
-			stem + "ur"		=> dFalastur (stem + "astur") ((a2ö stem) + "ust") ;
-			front + end@("ll" | "nn")	=> dFalastur (front + (init end) + "astur") ((a2ö front) + (init end) + "ust")
+			stem + "ri"		    => dFalastur (stem + "stur") (stem + "st") ;
+			stem@(_ + "ei") +
+			 end@("ll" | "nn")	   => dFalastur (stem + init end + "astur") (a2ö stem + init end + "ust") ;
+			stem + "inn" 		   => dFalastur (stem + "nastur") (a2ö stem + "nust") ;
+			stem + end@("ll"|"nn") => dFalastur (stem + init end + "astur") (a2ö stem + init end + "ust") ;
+			stem + "ur"	           => dFalastur (stem + "astur") ((a2ö stem) + "ust") 
 		} ;
 
 		strongSuperl2 : (_,_ : Str) -> AForms = \mas,fem -> case <mas,fem> of {
-			<frontm + "ur",frontf + "ur">		=> dFalastur (frontm + "rastur") (frontf + "rust") ;
-			<frontm + "ur", _>			=> dFalastur (frontm + "astur") (fem + "ust") ;
+			<frontm + "ur",frontf + "ur">	=> dFalastur (frontm + "rastur") (frontf + "rust") ;
+			<frontm + "ur", _>		    	=> dFalastur (frontm + "astur") (fem + "ust") ;
 			<_, _ + ("á" | "ú" | "ó")>		=> dFalastur (fem + "astur") (fem + "ust") ;
 			<_, _ + ("ý" | "æ")>			=> dFalastur (fem + "jastur") (fem + "just") ;
-			<front + end@("ll" | "nn"),_>		=> dFalastur (front + (init end) + "astur") ((a2ö front) + (init end) + "ust") ;
+			<_+("ll" | "nn"), _>            => strongSuperl1 mas ;
 			<_,_ + ("r" | "s" | (#consonant + "n"))>	=> dFalastur (fem + "astur") (fem + "ust")
 		} ;
 
