@@ -51,6 +51,15 @@ oper
 
   } ;
 
+  mkN3 = overload {
+    mkN3 : Str -> N3 = \s -> lin N3 (mkNoun3 s absolutive dative) ; 
+    mkN3 : Str -> Case -> Case -> N3 = \s,c1,c2 -> lin N3 (mkNoun3 s c1 c2) ;
+    mkN3 : Str -> Prep -> Prep -> N3 = \s,p1,p2 -> lin N3 (mkNoun3 s absolutive dative) ** {compl1 = p1 ; compl2 = p2 } ;
+    mkN3 : N -> N3 = \n -> lin N3 (n2Noun3 n absolutive dative) ;
+    mkN3 : N -> Case -> Case -> N3 = \n,c1,c2 -> lin N3 (n2Noun3 n c1 c2) ;
+    mkN3 : N -> Prep -> Prep -> N3 = \n,p1,p2 -> lin N3 (n2Noun3 n absolutive dative) ** {compl1 = p1 ; compl2 = p2 } ;
+  } ;
+
 --2 Adjectives
 
   mkA = overload {

@@ -150,9 +150,11 @@ oper
 
   mkNoun2 : Str -> Case -> Noun2 = \s,cas -> mkNoun s ** { compl1 = mkPost [] cas False } ;
   n2Noun2 : Noun -> Case -> Noun2 = \n,cas -> n ** { compl1 = mkPost [] cas False } ;
+
+  mkNoun3 : Str  -> (_,_ : Case) -> Noun3 = \s,c1,c2 -> mkNoun2 s c1 ** { compl2 = mkPost [] c2 False } ;
+  n2Noun3 : Noun -> (_,_ : Case) -> Noun3 = \n,c1,c2 -> n2Noun2 n c1 ** { compl2 = mkPost [] c2 False } ;
+
   mkPNoun : Str -> PNoun = \s -> mkNoun s ** {nbr = Sg ; anim=Anim} ; 
-
-
 
   CNoun : Type = { s    : Agr => Str ; -- When we combine CN with RS, we introduce Agr distinction
                    comp : Str ; -- For PartNP; "s = baso | bat | comp = ardo gorri"

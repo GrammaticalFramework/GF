@@ -1,5 +1,5 @@
 concrete LexiconEus of Lexicon = CatEus **
-  open ParadigmsEus, Prelude, (R=ResEus) in {
+  open ParadigmsEus, Prelude, (R=ResEus), (S=StructuralEus) in {
 
 ----
 -- A
@@ -90,7 +90,7 @@ lin day_N = mkN "egun" ; --Apertium
 lin die_V = izanV "hil" ; -- | mkV "zendu" ; --Apertium
 lin dig_V = mkV "zulatu" ; --Apertium
 lin dirty_A = mkA "likits" ; --| mkA "zikin" ; --Apertium
--- lin distance_N3 = mkN3 (mkN "distantzia") fromP toP ; --Apertium
+lin distance_N3 = mkN3 (mkN "distantzia") toPrep S.from_Prep ; --Apertium
 lin do_V2 = lin V2 egin_V ;
 lin doctor_N = mkN "mediku" animate ; --| mkN "doktore" ; --Apertium
 lin dog_N = mkN "txakur" ;
@@ -100,6 +100,7 @@ lin dry_A = mkA "lehor" ; --Apertium
 lin dull_A = mkA "aspergarri" ; --Apertium
 lin dust_N = mkN "hauts" ; --Apertium
 
+oper toPrep = (locPrep "ra") ;
 ----
 -- E
 
@@ -190,6 +191,7 @@ lin iron_N = mkN "burdina" ; -- | mkN "plantxa" ; --Apertium
 --------
 -- J - K
 
+lin john_PN = mkPN "Jon" ;
 lin jump_V = mkV "jauzi" egin_V ; --Apertium
 lin kill_V2 = mkV2 "hil" ; --Apertium
 lin king_N = mkN "errege" animate ; --Apertium
