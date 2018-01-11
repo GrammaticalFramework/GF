@@ -677,6 +677,8 @@ abstract IrregItaAbs = Cat [V] ** {
   fun escludere_V : V ;
   fun precludere_V : V ;
   fun sospendere_V : V ;
+  fun estendere_V : V ;
   fun correggere_V : V ;
   fun decidere_V : V ;
+  fun persistere_V : V ;
 }
