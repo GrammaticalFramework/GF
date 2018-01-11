@@ -82,15 +82,26 @@ lin which_IQuant = R.defDet "zein" sg ** { s = R.artDef } ;
 
 lin everybody_NP = defNP "dena" N.NumPl ;
 lin everything_NP = defNP "dena" N.NumSg ;
-lin nobody_NP = defNP "ez inor" N.NumSg ; --TODO: negation should be in the verb; "ez da inor"
+lin nobody_NP = defNP "ez inor" N.NumSg ; -- OBS. impossible to make grammatical on this level: negation should be in the verb; "ez da inor"
 lin nothing_NP = defNP "ezer" N.NumSg ;
---lin somebody_NP =
---lin something_NP =
+lin somebody_NP = defNP "norbait" N.NumSg ;
+lin something_NP = defNP "zerbait" N.NumSg ;
+
+ {- TODO1: custom inflection. norbait, norbaitek, norabait, not *norbaitak, *norbaitera.
+ 		   make a proper generalisation instead of the quick incomplete hack in defNP.
+
+	TODO2: should they be definite or indefinite?
+		   e.g. do they become partitive in negated clauses?
+ -}
 
 oper 
  defNP : Str -> Num -> NP = \dena,num ->
-   N.DetCN (N.DetQuant N.DefArt num) 
-           (N.UseN (R.mkNoun dena)) ;
+   let dena_NP = N.DetCN (N.DetQuant N.DefArt num) (N.UseN (R.mkNoun dena))
+   in dena_NP ** { s = table { Erg => glue dena "ek" ;
+                               Dat => glue dena "i" ;
+                               x   => dena_NP.s ! x }
+                 } ;
+
 -------
 -- Prep
 
