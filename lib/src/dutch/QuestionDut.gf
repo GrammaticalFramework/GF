@@ -29,7 +29,7 @@ concrete QuestionDut of Question = CatDut ** open ResDut in {
       s = \\t,a,p => 
             let 
               cls = slash.s ! t ! a ! p ;
-              who = appPrep slash.c2 (noMerge ** ip)
+              who = appPrep slash.c2 ip
             in table {
               QDir   => who ++ cls ! Inv ;
               QIndir => who ++ cls ! Sub
