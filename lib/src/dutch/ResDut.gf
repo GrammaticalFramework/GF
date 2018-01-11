@@ -34,16 +34,18 @@ resource ResDut = ParamX ** open Prelude, Predef in {
 
     regNoun : Str -> Noun = \s -> case s of {
       _ + ("a" | "o" | "y" | "u" | "oe" | "é") => mkNoun s (s + "'s") Utr ;
-      _ + ("oir" | "ion" | "je") => mkNoun s (s + "s") Neutr ;
+      _ + ("oir" | "ion" | "je" | "c") => mkNoun s (s + "s") Neutr ;
       ? + ? + ? + _ + 
         ("el" | "em" | "en" | "er" | "erd" | "aar" | "aard" | "ie") => -- unstressed
                                             mkNoun s (s + "s") Utr ;
       _ +                     ("i"|"u")  => mkNoun s (endCons s + "en") Utr ;
       b + v@("aa"|"ee"|"oo"|"uu") + c@?  => mkNoun s (b + shortVoc v c + "en") Utr ; 
       b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ? => mkNoun s (endCons s + "en") Utr ;
-      _ + "ie" => mkNoun s (s + "ën") Utr ;
-      b + v@("a"|"e"|"i"|"o"|"u" ) + c@? => mkNoun s (b + v + c + c + "en") Utr ;
-      _ => mkNoun s (endCons s + "en") Utr
+      _ + ("ie"|"ee") => mkNoun s (s + "ën") Utr ; -- zee→zeeën, knie→knieën. 
+                                                   -- olie→oliën, industrie→industrieën with 2-arg constructor.
+      b + v@("a"|"e"|"i"|"o"|"u") + c@? => mkNoun s (b + v + c + c + "en") Utr ;
+      _ + "e" => mkNoun s (s + "s") Utr ; -- vrede→vredes. Might not be a good generalisation though. /IL2018
+      _       => mkNoun s (endCons s + "en") Utr
       } ;
 
     regNounG : Str -> Gender -> Noun = \s,g -> {
@@ -180,17 +182,22 @@ param
      } ;
 
 	-- Pattern matching verbs
+  -- Checking if the verb starts with "ver" is due to a bugfix in mkStem regarding ≥2-syllable verbs. /IL2018
     smartVerb : (_,_:Str) -> Verb = \verb,stem ->
     	let raw = Predef.tk 2 verb;
+          vg : {ver : Str ; geet : Str } = case verb of { 
+            "ver" + geten => {ver = "ver" ; geet = mkStem geten } ;
+            _             => {ver = []    ; geet = stem } } ;
+          vergeten : Str = verb ;
+          vergeet : Str = vg.ver + vg.geet ;
     	in
     	case raw of {
-    	 _+ ("k"|"f"|"s"|"c"|"h"|"p") => t_regVerb verb stem;
-    	 _+ "v" => v_regVerb verb;
-    	 _+ "z" => z_regVerb verb;
-    	 _+ ("t" | "tt") => t_end_regVerb verb;
-    	 _+ "d" => d_end_regVerb verb;
-    	 
-    	 _ => d_regVerb verb stem
+    	 _+ ("k"|"f"|"s"|"c"|"h"|"p") => t_regVerb vergeten vergeet ;
+    	 _+ "v" => v_regVerb vergeten vergeet ;
+    	 _+ "z" => z_regVerb vergeten vergeet ;
+    	 _+ ("t" | "tt") => t_end_regVerb vergeten vergeet ;
+    	 _+ "d" => d_end_regVerb vergeten vergeet ;    	 
+    	 _ => d_regVerb vergeten vergeet 
     	 
     	};
      consonant : pattern Str = #("b"|"c"|"d"|"f"|"g"|"h"|"j"|"k"|"l"|"m"|"n"|"p"|"q"|"r"|"s"|"t"|"v"|"w"|"x"|"y"|"z") ;
@@ -200,10 +207,9 @@ param
     -- If a stem ends in a 'z' then the 'z' changes into an 's'
     -- If a stem ends on a double consonant then one of them disappears
     -- If a stem ends on a consonant but that consonant has exactly 1 vowel before it
-    -- then we have to double this vowel
-      -- Only if it's a monosyllable stem! 
-    mkStem : Str -> Str =\lopen -> 
-    let 
+    -- then we have to double this vowel (but only if it's a monosyllable stem!)
+    mkStem : Str -> Str = \lopen -> 
+    let
       lop  = tk 2 lopen ;    --drop the -en
       lo   = init lop ;
       o    = last lo  ;
@@ -218,10 +224,15 @@ param
       werk = lop           -- no changes to stem
       
     in
-    case lop of {                                  -- stress is on the first vowel, so latter one doesn't double.
-      _+ #vowel + #consonant + #vowel + _ => lop ; -- this catches ademen, rekenen, schakelen etc. / IL2018
-        #vowel + #consonant => loop ;
-    	_+ #consonant + #vowel + #consonant => loop ; -- stressed vowel doubles.
+    case lop of {
+                                                    -- Penultimate is vowel, but it doesn't double: either because
+      _+ #vowel + _ + #vowel + #consonant => kerf ; -- a) ≥2 syllables, e.g. ademen, rekenen, schakelen
+                                                    -- b) diphthong, e.g. vriezen  (ij + #consonant falls into the default case!)
+                                                    -- OBS. will do the wrong thing, if you use it on prefix verbs
+
+      _ + #vowel + ("w"|"j")  => werk ; -- Don't double a vowel before a w or j (are there other consonants?)
+
+      _ + #vowel + #consonant => loop ; -- In other cases, a single penultimate vowel doubles.
     	_+ ("bb" | "dd" | "ff" | "gg" | "kk" | "ll" | "mm" | "nn" | "pp" | 
             "rr" | "ss" | "tt")    => zeg ;
     	_+ #consonant + ("v"|"z")  => kerf ;
@@ -238,55 +249,40 @@ param
     
     -- For regular verbs with past tense 'd'
     d_regVerb : (_,_ :Str) -> Verb = \geeuwen,geeuw ->
-    	let stem = geeuw --- mkStem geeuwen
-    	in
-    	mkVerb stem (stem + "t") geeuwen 
-    	  (stem + "de") (stem + "de") (stem + "den") 
-    	  ("ge" + stem + "d");	
+      mkVerb geeuw (geeuw + "t") geeuwen 
+            (geeuw + "de") (geeuw + "de") (geeuw + "den")
+            ("ge" + geeuw + "d");	
 
 	-- For regular verbs with past tense 't'
    	t_regVerb : (_,_ :Str) -> Verb = \botsen,bots ->
-   		let bots = mkStem botsen
-   		in
    		mkVerb bots (bots + "t") botsen 
    		  (bots + "te") (bots + "te") (bots + "ten")
    		  ("ge" + bots + "t");
      
  	-- For verbs that dont need an extra 't' at the end
-    t_end_regVerb : Str -> Verb = \achten ->
-   		let acht = mkStem achten
-   		in
+    t_end_regVerb : (_,_ : Str) -> Verb = \achten,acht ->
       	mkVerb acht (acht) achten
      		(acht + "te") (acht +"te") (acht+"ten") ("ge"+acht);
     
     -- For verbs that dont need an extra 'd' at the end
-    d_end_regVerb : Str -> Verb = \aarden ->
-   		let aard = mkStem aarden
-   		in
+    d_end_regVerb : (_,_ : Str) -> Verb = \aarden,aard ->
       	mkVerb aard (aard+"t") aarden
      		(aard + "de") (aard +"de") (aard+"den") ("ge"+aard);
   
 	-- For verbs that need a vowel doubled in singular
-	 add_vowel_regVerb : Str -> Verb = \absorberen ->
-		let stem = mkStem absorberen 
-		in
+	 add_vowel_regVerb : (_,_ : Str) -> Verb = \absorberen,stem ->
 		case stem of {
 			_+ ("t"|"k"|"f"|"s"|"c"|"h"|"p") => t_regVerb absorberen stem;
 			_ => d_regVerb absorberen stem
 		};
 
 	-- For verbs that have their stem ending with a 'z'
-	z_regVerb : Str -> Verb = \omhelzen ->
-	let stem = mkStem omhelzen
-	in
-	d_regVerb omhelzen stem;
+	z_regVerb : (_,_ : Str) -> Verb = \omhelzen,stem ->
+    d_regVerb omhelzen stem;
 	
 	-- For verbs that have their stem ending with a 'v'
-	v_regVerb : Str -> Verb = \hoeven ->
-	let hoef = mkStem hoeven
-	in
-	mkVerb hoef (hoef +"t") hoeven (hoef+"de") (hoef+"de") (hoef+"den")
-		("ge"+hoef+"d");  
+	v_regVerb : (_,_ : Str) -> Verb = \hoeven,hoef ->
+    mkVerb hoef (hoef +"t") hoeven (hoef+"de") (hoef+"de") (hoef+"den") ("ge"+hoef+"d");  
 
   zijn_V : VVerb = {
     s = table {
@@ -427,7 +423,7 @@ param
 ---- The order of sentence is depends on whether it is used as a main
 ---- clause, inverted, or subordinate.
 
-  oper 
+  oper
     Preposition : Type = MergesWithPrep ** { s : Str } ;
 
     -- This is a hack for appPrep: sometimes we don't really need a full NP
@@ -442,7 +438,6 @@ param
           case <np.mergesWithPrep,prep.mergesWithPrep> of {
             <True,True> => glue np.mergeForm prep.mergeForm ;
             _           => prep.s ++ np.s ! NPAcc } ;
-
 
 
   param  
