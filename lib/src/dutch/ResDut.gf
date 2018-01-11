@@ -101,6 +101,7 @@ resource ResDut = ParamX ** open Prelude, Predef in {
           _ + ("i"|"u"|"ij") => endCons s + "e" ;
           b + v@("aa"|"ee"|"oo"|"uu") + c@?             => b + shortVoc v c + "e" ;
           b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ?  => endCons s + "e" ;
+          b + v@("a"|"e"|"i"|"o"|"u" )            + "w" => s + "e" ; -- to prevent *blauwwe -- does this happen to other end consonants?
           b + v@("a"|"e"|"i"|"o"|"u" )            + c@? => b + v + c + c + "e" ;
           _ => endCons s + "e"
           } ;
@@ -200,6 +201,7 @@ param
     -- If a stem ends on a double consonant then one of them disappears
     -- If a stem ends on a consonant but that consonant has exactly 1 vowel before it
     -- then we have to double this vowel
+      -- Only if it's a monosyllable stem! 
     mkStem : Str -> Str =\lopen -> 
     let 
       lop  = tk 2 lopen ;    --drop the -en
@@ -216,9 +218,10 @@ param
       werk = lop           -- no changes to stem
       
     in
-    case lop of {
+    case lop of {                                  -- stress is on the first vowel, so latter one doesn't double.
+      _+ #vowel + #consonant + #vowel + _ => lop ; -- this catches ademen, rekenen, schakelen etc. / IL2018
         #vowel + #consonant => loop ;
-    	_+ #consonant + #vowel + #consonant => loop ; 
+    	_+ #consonant + #vowel + #consonant => loop ; -- stressed vowel doubles.
     	_+ ("bb" | "dd" | "ff" | "gg" | "kk" | "ll" | "mm" | "nn" | "pp" | 
             "rr" | "ss" | "tt")    => zeg ;
     	_+ #consonant + ("v"|"z")  => kerf ;
