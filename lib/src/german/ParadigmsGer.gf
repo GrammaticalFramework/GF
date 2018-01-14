@@ -382,7 +382,7 @@ mkV2 : overload {
 
   regN : Str -> N = \hund -> case hund of {
     _ + "e" => mk6N hund hund hund hund (hund + "n") (hund + "n") Fem ;
-    _ + ("ion" | "ung") => mk6N hund hund hund hund (hund + "en") (hund + "en") Fem ;
+    _ + ("ion" | "ung" | "keit" | "heit" | "schaft") => mk6N hund hund hund hund (hund + "en") (hund + "en") Fem ;
     _ + ("er" | "en" | "el") => mk6N hund hund hund (genitS (True | False) hund) hund (pluralN hund) Masc ; 
     _ + "nis" => mk6N hund hund hund hund (hund + "se") (hund + "sen") Neutr ;
     _  => mk6N hund hund hund (genitS (True | False) hund) (hund + "e") (pluralN hund) Masc
