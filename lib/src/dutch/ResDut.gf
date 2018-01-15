@@ -432,7 +432,7 @@ param
 
     -- Applying a preposition to a noun phrase
     -- In order to decide whether to merge, have to check both NP and Prep:
-    -- e.g. deze + met -> hiermee , but zonder + met -> "met zonder"
+    -- e.g. deze + met -> hiermee , but zonder + deze -> "zonder deze"
     appPrep : Preposition -> NPLite -> Str 
      = \prep,np -> 
           case <np.mergesWithPrep,prep.mergesWithPrep> of {
