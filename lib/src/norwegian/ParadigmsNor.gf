@@ -45,6 +45,7 @@ oper
   masculine : Gender ; -- the "en" gender
   feminine  : Gender ; -- the "ei" gender
   neutrum   : Gender ; -- the "et" gender
+  utrum     : Gender ; -- the "en" gender, same as masculine
 
 -- To abstract over number names, we define the following.
 
@@ -82,7 +83,9 @@ oper
     mkN : Str -> N ; -- predictable noun, feminine for "-e" otherwise masculine
     mkN : Str -> Gender -> N ; -- force gender
     mkN : (bil,bilen : Str) -> N ; --%
-    mkN  : (dreng,drengen,drenger,drengene : Str) -> N -- worst case
+    mkN : (dreng,drengen,drenger,drengene : Str) -> N ; -- worst case, gender guessed
+    mkN : (dreng,drengen,drenger,drengene : Str) -> Gender -> N ; -- worst case
+
   } ;
 
 
@@ -279,6 +282,7 @@ oper
   masculine = NUtr Masc ; 
   feminine = NUtr Fem ; 
   neutrum = NNeutr ;
+  utrum = masculine ;
   singular = Sg ;
   plural = Pl ;
   nominative = Nom ;
@@ -303,6 +307,19 @@ oper
        NUtr Masc   => mk4N x (x      + "en") (x + "er") (x + "ene") ;
        NUtr Fem    => mk4N x (x      + "a")  (x + "er") (x + "ene") ;
        NNeutr      => mk4N x (x      + "et") (x + "")   (x + "a")
+       }
+    } ;
+    
+  mk2gN x y g = case last x of {
+    "e" => case g of {
+       NUtr Masc   => mk4N x (x      + "n") y (x + "ne") ;
+       NUtr Fem    => mk4N x (init x + "a") y (x + "ne") ;
+       NNeutr      => mk4N x (x      + "t") y (init x + "a") ----
+       } ;
+    _ => case g of {
+       NUtr Masc   => mk4N x (x      + "en") y (x + "ene") ;
+       NUtr Fem    => mk4N x (x      + "a")  y (x + "ene") ;
+       NNeutr      => mk4N x (x      + "et") y (x + "a")
        }
     } ;
 
@@ -435,15 +452,17 @@ oper
 ---------
 
   mk2N : (bil,bilen : Str) -> N ;
+  mk2gN : (bil,bilen : Str) -> Gender -> N ;
   mk4N  : (dreng,drengen,drenger,drengene : Str) -> N ;
   regN : Str -> N ;
   regGenN : Str -> Gender -> N ;
-  mk2N : (bil,bilen : Str) -> N ;
 
   mkN = overload {
     mkN : Str -> N = regN ;
     mkN : Str -> Gender -> N = regGenN ;
     mkN : (bil,bilen : Str) -> N = mk2N ;
+    mkN : (bil,biler : Str) -> Gender -> N = mk2gN ;
+    mkN : (dreng,drengen,drenge,drengene : Str) -> Gender -> N = \x,y,z,u,g -> mk4N x y z u ** {g = g} ;
     mkN  : (dreng,drengen,drenger,drengene : Str) -> N = mk4N
   } ;
 

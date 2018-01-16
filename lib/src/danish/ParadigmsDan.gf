@@ -81,7 +81,8 @@ oper
 -- This function takes the singular indefinite and definite forms; the
 -- gender is computed from the definite form.
 
-    mkN : (bil,bilen : Str) -> N ; -- better prediction from both singular and plural
+    mkN : (bil,bilen : Str) -> N ; -- prediction from both singular indefinite and definite
+    mkN : (bil,biler : Str) -> Gender -> N ; -- prediction from both singular and plural plus gender
 
 -- This function takes the singular indefinite and definite and the plural
 -- indefinite
@@ -91,7 +92,9 @@ oper
 -- Worst case: give all four forms. The gender is computed from the
 -- last letter of the second form (if "n", then $utrum$, otherwise $neutrum$).
 
-    mkN : (dreng,drengen,drenge,drengene : Str) -> N ; -- worst case
+    mkN : (dreng,drengen,drenge,drengene : Str) -> N ; -- almost worst case, gender guessed from Sg Def
+    mkN : (dreng,drengen,drenge,drengene : Str) -> Gender -> N ; -- worst case
+
   } ;
 
 
@@ -325,6 +328,17 @@ oper
      "n" => mk3N x y (init y + "r") ;
      _   => mk3N x y x
      } ;
+     
+   mk2gN x y g = case last x of {
+    "e" => case g of {
+       Utr        => mk4N x (x      + "n") y (y + "ne") ;
+       Neutr      => mk4N x (x      + "t") y (y + "e")
+       } ;
+    _ => case g of {
+       Utr        => mk4N x (x      + "en") y (x + "ne") ;
+       Neutr      => mk4N x (x      + "et") y (y + "ene")
+       }
+    } ;
 
    mk3N x y z = let u = ifTok Str x z "ene" "ne" in mk4N x y z (z + u) ;
 
@@ -452,7 +466,9 @@ oper
     mkN : Str -> N = regN ;
     mkN : Str -> Gender -> N = regGenN ;
     mkN : (bil,bilen : Str) -> N = mk2N ;
+    mkN : (bil,biler : Str) -> Gender -> N = mk2gN ;
     mkN : (bil,bilen,biler : Str) -> N = mk3N ;
+    mkN : (dreng,drengen,drenge,drengene : Str) -> Gender -> N = \x,y,z,u,g -> mk4N x y z u ** {g = g} ;
     mkN : (dreng,drengen,drenge,drengene : Str) -> N = mk4N ;
   } ;
 
@@ -460,6 +476,7 @@ oper
   regN : Str -> N ;
   regGenN : Str -> Gender -> N ;
   mk2N : (bil,bilen : Str) -> N ;
+  mk2gN : (bil,biler : Str) -> Gender -> N ;
   mk3N : (bil,bilen,biler : Str) -> N ;
   mk4N  : (dreng,drengen,drenge,drengene : Str) -> N ;
 
