@@ -82,7 +82,9 @@ oper
     mkN : Str -> N ; -- predictable noun, feminine for "-e" otherwise masculine
     mkN : Str -> Gender -> N ; -- force gender
     mkN : (bil,bilen : Str) -> N ; --%
-    mkN  : (dreng,drengen,drenger,drengene : Str) -> N -- worst case
+    mkN : (dreng,drengen,drenger,drengene : Str) -> N ; -- worst case, gender guessed
+    mkN : (dreng,drengen,drenger,drengene : Str) -> Gender -> N ; -- worst case
+
   } ;
 
 
@@ -444,6 +446,7 @@ oper
     mkN : Str -> N = regN ;
     mkN : Str -> Gender -> N = regGenN ;
     mkN : (bil,bilen : Str) -> N = mk2N ;
+    mkN : (dreng,drengen,drenge,drengene : Str) -> Gender -> N = \x,y,z,u,g -> mk4N x y z u ** {g = g} ;
     mkN  : (dreng,drengen,drenger,drengene : Str) -> N = mk4N
   } ;
 

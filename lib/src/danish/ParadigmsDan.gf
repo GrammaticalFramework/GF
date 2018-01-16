@@ -91,7 +91,8 @@ oper
 -- Worst case: give all four forms. The gender is computed from the
 -- last letter of the second form (if "n", then $utrum$, otherwise $neutrum$).
 
-    mkN : (dreng,drengen,drenge,drengene : Str) -> N ; -- worst case
+    mkN : (dreng,drengen,drenge,drengene : Str) -> Gender -> N ; -- worst case
+    mkN : (dreng,drengen,drenge,drengene : Str) -> N ; -- worst case, gender guessed
   } ;
 
 
@@ -453,6 +454,7 @@ oper
     mkN : Str -> Gender -> N = regGenN ;
     mkN : (bil,bilen : Str) -> N = mk2N ;
     mkN : (bil,bilen,biler : Str) -> N = mk3N ;
+    mkN : (dreng,drengen,drenge,drengene : Str) -> Gender -> N = \x,y,z,u,g -> mk4N x y z u ** {g = g} ;
     mkN : (dreng,drengen,drenge,drengene : Str) -> N = mk4N ;
   } ;
 
