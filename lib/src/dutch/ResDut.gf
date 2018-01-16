@@ -132,7 +132,7 @@ param
   oper
     Verb : Type = {s: VForm => Str};
     
-  mkVerb : (_,_,_,_,_,_,_ : Str) -> Verb =
+  mkVerb : (x1,_,_,_,_,_,x7 : Str) -> Verb =
     \aai, aait, aaien, aaide, aaidet, aaiden, geaaid ->
 	  mkVerb8 aai aait aait aaien aaide aaidet aaiden geaaid ;
 
