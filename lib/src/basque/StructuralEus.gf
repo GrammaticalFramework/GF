@@ -48,7 +48,7 @@ lin either7or_DConj = mkConj "bai" "edo" pl ;
 
 lin but_PConj = ss "baina" ;
 lin otherwise_PConj = ss "bestela" ;
---lin therefore_PConj
+lin therefore_PConj = ss "beraz" ;
 
 
 -----------------
