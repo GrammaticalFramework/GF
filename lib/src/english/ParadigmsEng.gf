@@ -513,7 +513,7 @@ mkInterj : Str -> Interj
         _  + "ee" => cry + "ing" ;
         d  + "ie" => d  + "ying" ;
         us + "e"  => us + "ing" ; 
-        ent + "er" => ent + "ered" ;
+        ent + "er" => ent + "ering" ;
         _         => duplFinal cry + "ing"
         }
     in mk5V cry cries cried cried crying ;
