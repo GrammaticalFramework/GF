@@ -128,6 +128,9 @@ oper
 
   adjIndien : Str -> Adj = \indien -> 
     mkAdj indien (indien+"s") (indien+"ne") (indien+"nement") ;
+    
+  adjTel : Str -> Adj = \tel -> 
+    mkAdj tel (tel+"s") (tel+"le") (tel+"lement") ;
 
   adjFrancais : Str -> Adj = \francais -> 
     mkAdj francais francais (francais+"e") (francais+"ement") ;
@@ -136,14 +139,20 @@ oper
     let {ch = Predef.tk 2 cher} in
     mkAdj cher (cher + "s") (ch + "ère") (ch + "èrement") ; 
 
+  adjPublic : Str -> Adj = \public ->
+    let publique = init public + "que" in
+    mkAdj public (init public+"s") (publique) (publique+"ment") ;
+
   mkAdjReg : Str -> Adj = \creux ->
     case Predef.dp 3 creux of {
       "eux" => adjHeureux creux ;
       _ => case Predef.dp 2 creux of {
         "al" => adjBanal creux ;
         "en" => adjIndien creux ;
+        "el" => adjTel creux ;
         "on" => adjIndien creux ;
         "er" => adjCher creux ;
+	"ic" => adjPublic creux ;
         _ => case Predef.dp 1 creux of {
           "s" => adjFrancais creux ;
           "x" => adjFrancais creux ;

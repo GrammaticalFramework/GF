@@ -44,7 +44,8 @@ public class Translator {
         new Language("ru-RU", "Russian", "AppRus", R.xml.cyrillic),
         new Language("es-ES", "Spanish", "AppSpa", R.xml.qwerty),
         new Language("sv-SE", "Swedish", "AppSwe", R.xml.nordic),
-        new Language("th-TH", "Thai",    "AppTha", R.xml.thai_page1, R.xml.thai_page2)
+        new Language("th-TH", "Thai",    "AppTha", R.xml.thai_page1, R.xml.thai_page2),
+	new Language("ur-PK", "Urdu",    "AppUrd", R.xml.qwerty), // TODO language code and keyboard to check
     };
 
     private Context mContext;

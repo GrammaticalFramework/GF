@@ -29,5 +29,9 @@ oper
  mmkQuant : Quant -> A -> Quant = \q,a -> q ** {
    s,sp = \\x,n,g,c => q.s ! x ! n ! g ! c ++ a.s ! Posit ! agrAdj g q.a n ((prepC c).c)   
    } ;
+ -- e.g. derjenige
+ mmbQuant : Quant -> A -> Quant = \q,a -> q ** {
+   s,sp = \\x,n,g,c => q.s ! x ! n ! g ! c + a.s ! Posit ! agrAdj g q.a n ((prepC c).c)   
+   } ;
 
 }
