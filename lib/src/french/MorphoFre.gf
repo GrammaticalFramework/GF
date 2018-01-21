@@ -141,7 +141,11 @@ oper
 
   adjPublic : Str -> Adj = \public ->
     let publique = init public + "que" in
-    mkAdj public (init public+"s") (publique) (publique+"ment") ;
+    mkAdj public (public+"s") (publique) (publique+"ment") ;
+
+  adjVif : Str -> Adj = \vif ->
+    let vive = init vif + "ve" in
+    mkAdj vif (vif+"s") (vive) (vive+"ment") ;
 
   mkAdjReg : Str -> Adj = \creux ->
     case Predef.dp 3 creux of {
@@ -153,6 +157,7 @@ oper
         "on" => adjIndien creux ;
         "er" => adjCher creux ;
 	"ic" => adjPublic creux ;
+	"if" => adjVif creux ;
         _ => case Predef.dp 1 creux of {
           "s" => adjFrancais creux ;
           "x" => adjFrancais creux ;
