@@ -373,7 +373,7 @@ mkInterj : Str -> Interj
     _ + ("io" | "oo")                         => w + "s" ;   -- radio, bamboo
     _ + ("s" | "z" | "x" | "sh" | "ch" | "o") => w + "es" ;  -- bus, hero
     _ + ("a" | "o" | "u" | "e") + "y"  => w + "s" ;   -- boy
-    x + "y"                            => x + "ies" ; -- fly
+    _ + "y"                            => init w + "ies" ; -- fly
     _                                  => w + "s"     -- car
     } ;
 
