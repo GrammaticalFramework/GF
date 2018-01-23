@@ -52,9 +52,11 @@ getSourceModule opts file0 =
             let mi =mi0 {mflags=mflags mi0 `addOptions` opts, msrc=file0}
                 optCoding' = renameEncoding `fmap` flag optEncoding (mflags mi0)
             case (optCoding,optCoding') of
+              {-
               (Nothing,Nothing) ->
                   unless (BS.all isAscii raw) $
                     ePutStrLn $ file0++":\n    Warning: default encoding has changed from Latin-1 to UTF-8"
+              -}
               (_,Just coding') -> 
                   when (coding/=coding') $
                   raise $ "Encoding mismatch: "++coding++" /= "++coding'
