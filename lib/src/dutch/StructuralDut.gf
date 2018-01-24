@@ -26,11 +26,11 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   can8know_VV, can_VV = auxVV kunnen_V ;
   during_Prep = nomergePrep "tijdens" ; -- doesn't combine
   either7or_DConj = {s1 = "ofwel" ; s2 = "of" ; n = Pl} ;
-  everybody_NP = mkNP "alle" Utr Pl ; ----
+  everybody_NP = mkNP "iedereen" Utr Pl ; ----
   every_Det = mkDet "elke" "elk" Sg ; ----
   everything_NP = mkNP "alles" Neutr Sg ; ----
   everywhere_Adv = ss "overal" ;
-  few_Det = mkDet "weinig" "weinig" Pl ;
+  few_Det = mkDet "weinig" "weinig" "weinigen" Pl ;
   for_Prep = mkPrep "voor" ;
   from_Prep = mkPrep "uit" ;
   he_Pron = mkPronoun "hij" "hem" "zijn" "hij" "hem" "zijn" "zijne" Utr Sg P3 ;
@@ -39,7 +39,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   here_Adv = ss "hier" ;
   how_IAdv = ss "hoe" ;
   how8much_IAdv = ss "hoeveel" ;
-  how8many_IDet = mkDet "hoeveel" "hoeveel" Pl ;
+  how8many_IDet = mkDet2 "hoeveel" "hoeveel" Pl ;
   if_Subj = ss "als" ;
   in8front_Prep = mkPrep "voor" ;
   i_Pron = mkPronoun "ik" "me" "mijn" "ik" "mij" "mijn" "mijne" Utr Sg P1 ;
@@ -48,7 +48,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
              { mergesWithPrep = True ; mergeForm = "er" } ;
 
   less_CAdv = X.mkCAdv "minder" "dan" ;
-  many_Det = mkDet "veel" "veel" Pl ;
+  many_Det = mkDet "veel" "veel" "velen" Pl ;
   more_CAdv = X.mkCAdv "meer" "dan" ;
   most_Predet = mkPredet "meeste" "meeste" ;
   much_Det = mkDet "veel" "veel" Sg ;
@@ -68,7 +68,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
 
   so_AdA = ss "zo" ;
   somebody_NP = mkNP "iemand" Utr Sg ;
-  somePl_Det = mkDet "sommige" "sommige" Pl ;
+  somePl_Det = mkDet "sommige" "sommige" "sommigen" Pl ;
   someSg_Det = mkDet "enige" "enig" Sg ;
   something_NP = mkNP "iets" Utr Sg ;
   somewhere_Adv = ss "ergens" ;

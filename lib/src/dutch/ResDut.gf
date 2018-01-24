@@ -701,13 +701,26 @@ param
 
   Determiner : Type = MergesWithPrep ** {s,sp : Gender => Str ; n : Number ; a : Adjf} ;
 
-  mkDet : Str -> Str -> Number -> Determiner =
+  mkDet2 : Str -> Str -> Number -> Determiner =
     \deze,dit,n -> noMerge ** {
-      s  = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
-      sp = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
-      n = n ;
-      a = Weak
-      } ;
+        s  = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
+        sp = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
+        n = n ;
+        a = Weak } ;
+
+  mkDet = overload {
+    mkDet : Str -> Str -> Number -> Determiner = mkDet2 ;
+
+       -- NB: this function has 3 arguments to separate it from the previous one
+       -- where the independent NP form is the same as the attribute form
+       -- ("deze mensen" and "deze").
+       -- In contrast, here we have a different NP form: 
+       -- "er zijn veel/weinig mensen" 
+       -- "velen zijn geroepen, maar weinigen uitverkoren."
+    mkDet : Str -> Str -> Str -> Number -> Determiner =
+      \weinig,_,weinigen,n -> 
+        mkDet2 weinig weinig n ** { sp = \\g => weinigen } 
+   } ;
   Quantifier : Type = MergesWithPrep ** {
       s  : Bool => Number => Gender => Str ; 
       sp : Number => Gender => Str ; 
