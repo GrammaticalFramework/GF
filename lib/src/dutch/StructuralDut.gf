@@ -26,7 +26,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   can8know_VV, can_VV = auxVV kunnen_V ;
   during_Prep = nomergePrep "tijdens" ; -- doesn't combine
   either7or_DConj = {s1 = "ofwel" ; s2 = "of" ; n = Pl} ;
-  everybody_NP = mkNP "iedereen" Utr Pl ; ----
+  everybody_NP = mkNP "iedereen" Utr Sg ;
   every_Det = mkDet "elke" "elk" Sg ; ----
   everything_NP = mkNP "alles" Neutr Sg ; ----
   everywhere_Adv = ss "overal" ;
