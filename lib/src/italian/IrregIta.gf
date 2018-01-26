@@ -685,4 +685,5 @@ concrete IrregIta of IrregItaAbs = CatIta [V] ** open ParadigmsIta, BeschIta in 
   lin correggere_V = verboV (leggere_56 "correggere") ;
   lin decidere_V = verboV (ridere_74 "decidere") ;
   lin persistere_V = verboV (assistere_24 "persistere") ;
+  lin incidere_V = verboV (ridere_74 "incidere") ;
 }
