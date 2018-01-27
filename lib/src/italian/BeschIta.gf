@@ -8,7 +8,7 @@ oper Verbo = {s : VForm => Str} ;
 
 -- machine-generated GF file
 
-oper essere_1 : Str -> Verbo = \essere -> 
+oper essere_1 : Str -> Verbo = \essere ->
   let x_ = Predef.tk 6 essere in
  {s = table {
     Inf => x_ + "essere" ;
@@ -70,7 +70,7 @@ oper essere_1 : Str -> Verbo = \essere ->
     }
   } ;
 
-oper avere_2 : Str -> Verbo = \avere -> 
+oper avere_2 : Str -> Verbo = \avere ->
   let x_ = Predef.tk 5 avere in
  {s = table {
     Inf => x_ + "avere" ;
@@ -132,7 +132,7 @@ oper avere_2 : Str -> Verbo = \avere ->
     }
   } ;
 
-oper amare_6 : Str -> Verbo = \amare -> 
+oper amare_6 : Str -> Verbo = \amare ->
   let am_ = Predef.tk 3 amare in
  {s = table {
     Inf => am_ + "are" ;
@@ -194,7 +194,7 @@ oper amare_6 : Str -> Verbo = \amare ->
     }
   } ;
 
-oper cercare_7 : Str -> Verbo = \cercare -> 
+oper cercare_7 : Str -> Verbo = \cercare ->
   let cerc_ = Predef.tk 3 cercare in
  {s = table {
     Inf => cerc_ + "are" ;
@@ -256,7 +256,7 @@ oper cercare_7 : Str -> Verbo = \cercare ->
     }
   } ;
 
-oper legare_8 : Str -> Verbo = \legare -> 
+oper legare_8 : Str -> Verbo = \legare ->
   let leg_ = Predef.tk 3 legare in
  {s = table {
     Inf => leg_ + "are" ;
@@ -318,7 +318,7 @@ oper legare_8 : Str -> Verbo = \legare ->
     }
   } ;
 
-oper cominciare_9 : Str -> Verbo = \cominciare -> 
+oper cominciare_9 : Str -> Verbo = \cominciare ->
   let cominc_ = Predef.tk 4 cominciare in
  {s = table {
     Inf => cominc_ + "iare" ;
@@ -380,7 +380,7 @@ oper cominciare_9 : Str -> Verbo = \cominciare ->
     }
   } ;
 
-oper mangiare_10 : Str -> Verbo = \mangiare -> 
+oper mangiare_10 : Str -> Verbo = \mangiare ->
   let mang_ = Predef.tk 4 mangiare in
  {s = table {
     Inf => mang_ + "iare" ;
@@ -442,7 +442,7 @@ oper mangiare_10 : Str -> Verbo = \mangiare ->
     }
   } ;
 
-oper inviare_11 : Str -> Verbo = \inviare -> 
+oper inviare_11 : Str -> Verbo = \inviare ->
   let invi_ = Predef.tk 3 inviare in
  {s = table {
     Inf => invi_ + "are" ;
@@ -504,7 +504,7 @@ oper inviare_11 : Str -> Verbo = \inviare ->
     }
   } ;
 
-oper studiare_12 : Str -> Verbo = \studiare -> 
+oper studiare_12 : Str -> Verbo = \studiare ->
   let studi_ = Predef.tk 3 studiare in
  {s = table {
     Inf => studi_ + "are" ;
@@ -566,7 +566,7 @@ oper studiare_12 : Str -> Verbo = \studiare ->
     }
   } ;
 
-oper giocare_13 : Str -> Verbo = \giocare -> 
+oper giocare_13 : Str -> Verbo = \giocare ->
   let gioc_ = Predef.tk 3 giocare in
  {s = table {
     Inf => gioc_ + "are" ;
@@ -628,7 +628,7 @@ oper giocare_13 : Str -> Verbo = \giocare ->
     }
   } ;
 
-oper andare_14 : Str -> Verbo = \andare -> 
+oper andare_14 : Str -> Verbo = \andare ->
   let x_ = Predef.tk 6 andare in
  {s = table {
     Inf => x_ + "andare" ;
@@ -690,7 +690,7 @@ oper andare_14 : Str -> Verbo = \andare ->
     }
   } ;
 
-oper riandare_14b : Str -> Verbo = \riandare -> 
+oper riandare_14b : Str -> Verbo = \riandare ->
   let ri_ = Predef.tk 6 riandare in
  {s = table {
     Inf => ri_ + "andare" ;
@@ -752,7 +752,7 @@ oper riandare_14b : Str -> Verbo = \riandare ->
     }
   } ;
 
-oper dare_15 : Str -> Verbo = \dare -> 
+oper dare_15 : Str -> Verbo = \dare ->
   let d_ = Predef.tk 3 dare in
  {s = table {
     Inf => d_ + "are" ;
@@ -814,7 +814,7 @@ oper dare_15 : Str -> Verbo = \dare ->
     }
   } ;
 
-oper stare_16 : Str -> Verbo = \stare -> 
+oper stare_16 : Str -> Verbo = \stare ->
   let st_ = Predef.tk 3 stare in
  {s = table {
     Inf => st_ + "are" ;
@@ -876,7 +876,7 @@ oper stare_16 : Str -> Verbo = \stare ->
     }
   } ;
 
-oper agitare_17 : Str -> Verbo = \agitare -> 
+oper agitare_17 : Str -> Verbo = \agitare ->
   let agit_ = Predef.tk 3 agitare in
  {s = table {
     Inf => agit_ + "are" ;
@@ -938,7 +938,7 @@ oper agitare_17 : Str -> Verbo = \agitare ->
     }
   } ;
 
-oper immaginare_18 : Str -> Verbo = \immaginare -> 
+oper immaginare_18 : Str -> Verbo = \immaginare ->
   let immagin_ = Predef.tk 3 immaginare in
  {s = table {
     Inf => immagin_ + "are" ;
@@ -1000,7 +1000,7 @@ oper immaginare_18 : Str -> Verbo = \immaginare ->
     }
   } ;
 
-oper modificare_19 : Str -> Verbo = \modificare -> 
+oper modificare_19 : Str -> Verbo = \modificare ->
   let modific_ = Predef.tk 3 modificare in
  {s = table {
     Inf => modific_ + "are" ;
@@ -1062,7 +1062,7 @@ oper modificare_19 : Str -> Verbo = \modificare ->
     }
   } ;
 
-oper temere_20 : Str -> Verbo = \temere -> 
+oper temere_20 : Str -> Verbo = \temere ->
   let tem_ = Predef.tk 3 temere in
  {s = table {
     Inf => tem_ + "ere" ;
@@ -1124,7 +1124,7 @@ oper temere_20 : Str -> Verbo = \temere ->
     }
   } ;
 
-oper accendere_21 : Str -> Verbo = \accendere -> 
+oper accendere_21 : Str -> Verbo = \accendere ->
   let acce_ = Predef.tk 5 accendere in
  {s = table {
     Inf => acce_ + "ndere" ;
@@ -1186,7 +1186,7 @@ oper accendere_21 : Str -> Verbo = \accendere ->
     }
   } ;
 
-oper affiggere_22 : Str -> Verbo = \affiggere -> 
+oper affiggere_22 : Str -> Verbo = \affiggere ->
   let affi_ = Predef.tk 5 affiggere in
  {s = table {
     Inf => affi_ + "ggere" ;
@@ -1248,7 +1248,7 @@ oper affiggere_22 : Str -> Verbo = \affiggere ->
     }
   } ;
 
-oper ardere_23 : Str -> Verbo = \ardere -> 
+oper ardere_23 : Str -> Verbo = \ardere ->
   let ar_ = Predef.tk 4 ardere in
  {s = table {
     Inf => ar_ + "dere" ;
@@ -1310,7 +1310,7 @@ oper ardere_23 : Str -> Verbo = \ardere ->
     }
   } ;
 
-oper assistere_24 : Str -> Verbo = \assistere -> 
+oper assistere_24 : Str -> Verbo = \assistere ->
   let assist_ = Predef.tk 3 assistere in
  {s = table {
     Inf => assist_ + "ere" ;
@@ -1372,7 +1372,7 @@ oper assistere_24 : Str -> Verbo = \assistere ->
     }
   } ;
 
-oper assolvere_25 : Str -> Verbo = \assolvere -> 
+oper assolvere_25 : Str -> Verbo = \assolvere ->
   let assol_ = Predef.tk 4 assolvere in
  {s = table {
     Inf => assol_ + "vere" ;
@@ -1434,7 +1434,7 @@ oper assolvere_25 : Str -> Verbo = \assolvere ->
     }
   } ;
 
-oper assumere_26 : Str -> Verbo = \assumere -> 
+oper assumere_26 : Str -> Verbo = \assumere ->
   let assu_ = Predef.tk 4 assumere in
  {s = table {
     Inf => assu_ + "mere" ;
@@ -1496,7 +1496,7 @@ oper assumere_26 : Str -> Verbo = \assumere ->
     }
   } ;
 
-oper bere_27 : Str -> Verbo = \bere -> 
+oper bere_27 : Str -> Verbo = \bere ->
   let be_ = Predef.tk 2 bere in
  {s = table {
     Inf => be_ + "re" ;
@@ -1558,7 +1558,7 @@ oper bere_27 : Str -> Verbo = \bere ->
     }
   } ;
 
-oper cadere_28 : Str -> Verbo = \caere -> 
+oper cadere_28 : Str -> Verbo = \caere ->
   let ca_ = Predef.tk 3 caere in
  {s = table {
     Inf => ca_ + "ere" ;
@@ -1620,7 +1620,7 @@ oper cadere_28 : Str -> Verbo = \caere ->
     }
   } ;
 
-oper chiedere_29 : Str -> Verbo = \chiedere -> 
+oper chiedere_29 : Str -> Verbo = \chiedere ->
   let chie_ = Predef.tk 4 chiedere in
  {s = table {
     Inf => chie_ + "dere" ;
@@ -1682,7 +1682,7 @@ oper chiedere_29 : Str -> Verbo = \chiedere ->
     }
   } ;
 
-oper chiudere_30 : Str -> Verbo = \chiudere -> 
+oper chiudere_30 : Str -> Verbo = \chiudere ->
   let chiu_ = Predef.tk 4 chiudere in
  {s = table {
     Inf => chiu_ + "dere" ;
@@ -1744,7 +1744,7 @@ oper chiudere_30 : Str -> Verbo = \chiudere ->
     }
   } ;
 
-oper cingere_31 : Str -> Verbo = \cingere -> 
+oper cingere_31 : Str -> Verbo = \cingere ->
   let cin_ = Predef.tk 4 cingere in
  {s = table {
     Inf => cin_ + "gere" ;
@@ -1806,7 +1806,7 @@ oper cingere_31 : Str -> Verbo = \cingere ->
     }
   } ;
 
-oper cogliere_32 : Str -> Verbo = \cogliere -> 
+oper cogliere_32 : Str -> Verbo = \cogliere ->
   let co_ = Predef.tk 6 cogliere in
  {s = table {
     Inf => co_ + "gliere" ;
@@ -1868,7 +1868,7 @@ oper cogliere_32 : Str -> Verbo = \cogliere ->
     }
   } ;
 
-oper compiere_33 : Str -> Verbo = \compiere -> 
+oper compiere_33 : Str -> Verbo = \compiere ->
   let compi_ = Predef.tk 3 compiere in
  {s = table {
     Inf => compi_ + "ere" ;
@@ -1930,7 +1930,7 @@ oper compiere_33 : Str -> Verbo = \compiere ->
     }
   } ;
 
-oper compire_33b : Str -> Verbo = \cire -> 
+oper compire_33b : Str -> Verbo = \cire ->
   let c_ = Predef.tk 3 cire in
  {s = table {
     Inf => c_ + "ire" ;
@@ -1992,7 +1992,7 @@ oper compire_33b : Str -> Verbo = \cire ->
     }
   } ;
 
-oper comprimere_34 : Str -> Verbo = \comprimere -> 
+oper comprimere_34 : Str -> Verbo = \comprimere ->
   let compr_ = Predef.tk 5 comprimere in
  {s = table {
     Inf => compr_ + "imere" ;
@@ -2054,7 +2054,7 @@ oper comprimere_34 : Str -> Verbo = \comprimere ->
     }
   } ;
 
-oper concedere_35 : Str -> Verbo = \concedere -> 
+oper concedere_35 : Str -> Verbo = \concedere ->
   let conce_ = Predef.tk 4 concedere in
  {s = table {
     Inf => conce_ + "dere" ;
@@ -2116,7 +2116,7 @@ oper concedere_35 : Str -> Verbo = \concedere ->
     }
   } ;
 
-oper condurre_36 : Str -> Verbo = \condurre -> 
+oper condurre_36 : Str -> Verbo = \condurre ->
   let cond_ = Predef.tk 4 condurre in
  {s = table {
     Inf => cond_ + "urre" ;
@@ -2178,7 +2178,7 @@ oper condurre_36 : Str -> Verbo = \condurre ->
     }
   } ;
 
-oper conoscere_37 : Str -> Verbo = \conoscere -> 
+oper conoscere_37 : Str -> Verbo = \conoscere ->
   let cono_ = Predef.tk 5 conoscere in
  {s = table {
     Inf => cono_ + "scere" ;
@@ -2240,7 +2240,7 @@ oper conoscere_37 : Str -> Verbo = \conoscere ->
     }
   } ;
 
-oper correre_38 : Str -> Verbo = \correre -> 
+oper correre_38 : Str -> Verbo = \correre ->
   let cor_ = Predef.tk 4 correre in
  {s = table {
     Inf => cor_ + "rere" ;
@@ -2302,7 +2302,7 @@ oper correre_38 : Str -> Verbo = \correre ->
     }
   } ;
 
-oper crescere_39 : Str -> Verbo = \crescere -> 
+oper crescere_39 : Str -> Verbo = \crescere ->
   let cre_ = Predef.tk 5 crescere in
  {s = table {
     Inf => cre_ + "scere" ;
@@ -2364,7 +2364,7 @@ oper crescere_39 : Str -> Verbo = \crescere ->
     }
   } ;
 
-oper cuocere_40 : Str -> Verbo = \cuocere -> 
+oper cuocere_40 : Str -> Verbo = \cuocere ->
   let c_ = Predef.tk 6 cuocere in
  {s = table {
     Inf => c_ + "uocere" ;
@@ -2426,7 +2426,7 @@ oper cuocere_40 : Str -> Verbo = \cuocere ->
     }
   } ;
 
-oper dire_41 : Str -> Verbo = \dire -> 
+oper dire_41 : Str -> Verbo = \dire ->
   let d_ = Predef.tk 3 dire in
  {s = table {
     Inf => d_ + "ire" ;
@@ -2488,7 +2488,7 @@ oper dire_41 : Str -> Verbo = \dire ->
     }
   } ;
 
-oper dirigere_42 : Str -> Verbo = \dirigere -> 
+oper dirigere_42 : Str -> Verbo = \dirigere ->
   let dir_ = Predef.tk 5 dirigere in
  {s = table {
     Inf => dir_ + "igere" ;
@@ -2550,7 +2550,7 @@ oper dirigere_42 : Str -> Verbo = \dirigere ->
     }
   } ;
 
-oper discutere_43 : Str -> Verbo = \discutere -> 
+oper discutere_43 : Str -> Verbo = \discutere ->
   let discu_ = Predef.tk 4 discutere in
  {s = table {
     Inf => discu_ + "tere" ;
@@ -2612,7 +2612,7 @@ oper discutere_43 : Str -> Verbo = \discutere ->
     }
   } ;
 
-oper distinguere_44 : Str -> Verbo = \distinguere -> 
+oper distinguere_44 : Str -> Verbo = \distinguere ->
   let distin_ = Predef.tk 5 distinguere in
  {s = table {
     Inf => distin_ + "guere" ;
@@ -2674,7 +2674,7 @@ oper distinguere_44 : Str -> Verbo = \distinguere ->
     }
   } ;
 
-oper distruggere_45 : Str -> Verbo = \distruggere -> 
+oper distruggere_45 : Str -> Verbo = \distruggere ->
   let distru_ = Predef.tk 5 distruggere in
  {s = table {
     Inf => distru_ + "ggere" ;
@@ -2736,7 +2736,7 @@ oper distruggere_45 : Str -> Verbo = \distruggere ->
     }
   } ;
 
-oper dolere_46 : Str -> Verbo = \dolere -> 
+oper dolere_46 : Str -> Verbo = \dolere ->
   let d_ = Predef.tk 5 dolere in
  {s = table {
     Inf => d_ + "olere" ;
@@ -2798,7 +2798,7 @@ oper dolere_46 : Str -> Verbo = \dolere ->
     }
   } ;
 
-oper dovere_47 : Str -> Verbo = \dovere -> 
+oper dovere_47 : Str -> Verbo = \dovere ->
   let d_ = Predef.tk 5 dovere in
  {s = table {
     Inf => d_ + "overe" ;
@@ -2860,7 +2860,7 @@ oper dovere_47 : Str -> Verbo = \dovere ->
     }
   } ;
 
-oper emergere_28 : Str -> Verbo = \emergere -> 
+oper emergere_28 : Str -> Verbo = \emergere ->
   let emer_ = Predef.tk 4 emergere in
  {s = table {
     Inf => emer_ + "gere" ;
@@ -2922,7 +2922,7 @@ oper emergere_28 : Str -> Verbo = \emergere ->
     }
   } ;
 
-oper espandere_49 : Str -> Verbo = \espandere -> 
+oper espandere_49 : Str -> Verbo = \espandere ->
   let espan_ = Predef.tk 4 espandere in
  {s = table {
     Inf => espan_ + "dere" ;
@@ -2984,7 +2984,7 @@ oper espandere_49 : Str -> Verbo = \espandere ->
     }
   } ;
 
-oper espellere_50 : Str -> Verbo = \espellere -> 
+oper espellere_50 : Str -> Verbo = \espellere ->
   let esp_ = Predef.tk 6 espellere in
  {s = table {
     Inf => esp_ + "ellere" ;
@@ -3046,7 +3046,7 @@ oper espellere_50 : Str -> Verbo = \espellere ->
     }
   } ;
 
-oper esplodere_51 : Str -> Verbo = \esplodere -> 
+oper esplodere_51 : Str -> Verbo = \esplodere ->
   let esplo_ = Predef.tk 4 esplodere in
  {s = table {
     Inf => esplo_ + "dere" ;
@@ -3108,7 +3108,7 @@ oper esplodere_51 : Str -> Verbo = \esplodere ->
     }
   } ;
 
-oper fare_52 : Str -> Verbo = \fare -> 
+oper fare_52 : Str -> Verbo = \fare ->
   let f_ = Predef.tk 3 fare in
  {s = table {
     Inf => f_ + "are" ;
@@ -3170,7 +3170,72 @@ oper fare_52 : Str -> Verbo = \fare ->
     }
   } ;
 
-oper flettere_53 : Str -> Verbo = \flettere -> 
+-- A variant of fare, found in _at least_ the verb "soffisfare"
+-- Source: http://www.wordreference.com/conj/ItVerbs.aspx?v=soddisfare
+-- Attested by forms "soddisfi" and "soddisfini" in GDPR
+oper fare_52' : Str -> Verbo = \fare ->
+  let f_ = Predef.tk 3 fare in
+ {s = table {
+    Inf => f_ + "are" ;
+    InfClit => f_ + "ar" ;
+    Indi Pres Sg P1 => f_ + "ò" ;
+    Indi Pres Sg P2 => f_ + "i" ;
+    Indi Pres Sg P3 => f_ + "a" ;
+    Indi Pres Pl P1 => f_ + "iamo" ;
+    Indi Pres Pl P2 => f_ + "ate" ;
+    Indi Pres Pl P3 => f_ + "ano" ;
+    Indi Imperf Sg P1 => f_ + "acevo" ; --# notpresent
+    Indi Imperf Sg P2 => f_ + "acevi" ; --# notpresent
+    Indi Imperf Sg P3 => f_ + "aceva" ; --# notpresent
+    Indi Imperf Pl P1 => f_ + "acevamo" ; --# notpresent
+    Indi Imperf Pl P2 => f_ + "acevate" ; --# notpresent
+    Indi Imperf Pl P3 => f_ + "acevano" ; --# notpresent
+    Pass Sg P1 => f_ + "eci" ; --# notpresent
+    Pass Sg P2 => f_ + "acesti" ; --# notpresent
+    Pass Sg P3 => f_ + "ece" ; --# notpresent
+    Pass Pl P1 => f_ + "acemmo" ; --# notpresent
+    Pass Pl P2 => f_ + "aceste" ; --# notpresent
+    Pass Pl P3 => f_ + "ecero" ; --# notpresent
+    Fut Sg P1 => f_ + "erò" ; --# notpresent
+    Fut Sg P2 => f_ + "erai" ; --# notpresent
+    Fut Sg P3 => f_ + "erà" ; --# notpresent
+    Fut Pl P1 => f_ + "eremo" ; --# notpresent
+    Fut Pl P2 => f_ + "erete" ; --# notpresent
+    Fut Pl P3 => f_ + "eranno" ; --# notpresent
+    Cong Pres Sg P1 => f_ + "i" ;
+    Cong Pres Sg P2 => f_ + "i" ;
+    Cong Pres Sg P3 => f_ + "i" ;
+    Cong Pres Pl P1 => f_ + "iamo" ;
+    Cong Pres Pl P2 => f_ + "iate" ;
+    Cong Pres Pl P3 => f_ + "ino" ;
+    Cong Imperf Sg P1 => f_ + "acessi" ; --# notpresent
+    Cong Imperf Sg P2 => f_ + "acessi" ; --# notpresent
+    Cong Imperf Sg P3 => f_ + "acesse" ; --# notpresent
+    Cong Imperf Pl P1 => f_ + "acessimo" ; --# notpresent
+    Cong Imperf Pl P2 => f_ + "aceste" ; --# notpresent
+    Cong Imperf Pl P3 => f_ + "acessero" ; --# notpresent
+    Cond Sg P1 => f_ + "erei" ; --# notpresent
+    Cond Sg P2 => f_ + "eresti" ; --# notpresent
+    Cond Sg P3 => f_ + "erebbe" ; --# notpresent
+    Cond Pl P1 => f_ + "eremmo" ; --# notpresent
+    Cond Pl P2 => f_ + "ereste" ; --# notpresent
+    Cond Pl P3 => f_ + "erebbero" ; --# notpresent
+    Imper SgP2 => f_ + "a'" ;
+    Imper PlP1 => f_ + "acciamo" ;
+    Imper PlP2 => f_ + "ate" ;
+    Ger => f_ + "acendo" ;
+    Part PresP Masc Sg => f_ + "acente" ;
+    Part PresP Masc Pl => f_ + "acenti" ;
+    Part PresP Fem Sg => f_ + "acente" ;
+    Part PresP Fem Pl => f_ + "acenti" ;
+    Part PassP Masc Sg => f_ + "atto" ;
+    Part PassP Masc Pl => f_ + "atti" ;
+    Part PassP Fem Sg => f_ + "atta" ;
+    Part PassP Fem Pl => f_ + "atte"
+    }
+  } ;
+
+oper flettere_53 : Str -> Verbo = \flettere ->
   let fle_ = Predef.tk 5 flettere in
  {s = table {
     Inf => fle_ + "ttere" ;
@@ -3232,7 +3297,7 @@ oper flettere_53 : Str -> Verbo = \flettere ->
     }
   } ;
 
-oper fondere_54 : Str -> Verbo = \fondere -> 
+oper fondere_54 : Str -> Verbo = \fondere ->
   let f_ = Predef.tk 6 fondere in
  {s = table {
     Inf => f_ + "ondere" ;
@@ -3294,7 +3359,7 @@ oper fondere_54 : Str -> Verbo = \fondere ->
     }
   } ;
 
-oper giungere_55 : Str -> Verbo = \giungere -> 
+oper giungere_55 : Str -> Verbo = \giungere ->
   let giun_ = Predef.tk 4 giungere in
  {s = table {
     Inf => giun_ + "gere" ;
@@ -3356,7 +3421,7 @@ oper giungere_55 : Str -> Verbo = \giungere ->
     }
   } ;
 
-oper leggere_56 : Str -> Verbo = \leggere -> 
+oper leggere_56 : Str -> Verbo = \leggere ->
   let le_ = Predef.tk 5 leggere in
  {s = table {
     Inf => le_ + "ggere" ;
@@ -3418,7 +3483,7 @@ oper leggere_56 : Str -> Verbo = \leggere ->
     }
   } ;
 
-oper mettere_57 : Str -> Verbo = \mettere -> 
+oper mettere_57 : Str -> Verbo = \mettere ->
   let m_ = Predef.tk 6 mettere in
  {s = table {
     Inf => m_ + "ettere" ;
@@ -3480,7 +3545,7 @@ oper mettere_57 : Str -> Verbo = \mettere ->
     }
   } ;
 
-oper muovere_58 : Str -> Verbo = \muovere -> 
+oper muovere_58 : Str -> Verbo = \muovere ->
   let m_ = Predef.tk 6 muovere in
  {s = table {
     Inf => m_ + "uovere" ;
@@ -3542,7 +3607,7 @@ oper muovere_58 : Str -> Verbo = \muovere ->
     }
   } ;
 
-oper nascere_59 : Str -> Verbo = \nascere -> 
+oper nascere_59 : Str -> Verbo = \nascere ->
   let na_ = Predef.tk 5 nascere in
  {s = table {
     Inf => na_ + "scere" ;
@@ -3604,7 +3669,7 @@ oper nascere_59 : Str -> Verbo = \nascere ->
     }
   } ;
 
-oper nuocere_60 : Str -> Verbo = \nuocere -> 
+oper nuocere_60 : Str -> Verbo = \nuocere ->
   let n_ = Predef.tk 6 nuocere in
  {s = table {
     Inf => n_ + "uocere" ;
@@ -3666,7 +3731,7 @@ oper nuocere_60 : Str -> Verbo = \nuocere ->
     }
   } ;
 
-oper parere_61 : Str -> Verbo = \parere -> 
+oper parere_61 : Str -> Verbo = \parere ->
   let pa_ = Predef.tk 4 parere in
  {s = table {
     Inf => pa_ + "rere" ;
@@ -3728,7 +3793,7 @@ oper parere_61 : Str -> Verbo = \parere ->
     }
   } ;
 
-oper perdere_62 : Str -> Verbo = \perdere -> 
+oper perdere_62 : Str -> Verbo = \perdere ->
   let per_ = Predef.tk 4 perdere in
  {s = table {
     Inf => per_ + "dere" ;
@@ -3790,7 +3855,7 @@ oper perdere_62 : Str -> Verbo = \perdere ->
     }
   } ;
 
-oper persuadere_63 : Str -> Verbo = \persuadere -> 
+oper persuadere_63 : Str -> Verbo = \persuadere ->
   let persua_ = Predef.tk 4 persuadere in
  {s = table {
     Inf => persua_ + "dere" ;
@@ -3852,7 +3917,7 @@ oper persuadere_63 : Str -> Verbo = \persuadere ->
     }
   } ;
 
-oper piacere_64 : Str -> Verbo = \piacerecere -> 
+oper piacere_64 : Str -> Verbo = \piacerecere ->
   let piacerec_ = Predef.tk 3 piacerecere in
  {s = table {
     Inf => piacerec_ + "ere" ;
@@ -3914,7 +3979,7 @@ oper piacere_64 : Str -> Verbo = \piacerecere ->
     }
   } ;
 
-oper piangere_65 : Str -> Verbo = \piangere -> 
+oper piangere_65 : Str -> Verbo = \piangere ->
   let pian_ = Predef.tk 4 piangere in
  {s = table {
     Inf => pian_ + "gere" ;
@@ -3976,7 +4041,7 @@ oper piangere_65 : Str -> Verbo = \piangere ->
     }
   } ;
 
-oper piovere_66 : Str -> Verbo = \piovere -> 
+oper piovere_66 : Str -> Verbo = \piovere ->
   let piov_ = Predef.tk 3 piovere in
  {s = table {
     Inf => piov_ + "ere" ;
@@ -4038,7 +4103,7 @@ oper piovere_66 : Str -> Verbo = \piovere ->
     }
   } ;
 
-oper porgere_67 : Str -> Verbo = \porgere -> 
+oper porgere_67 : Str -> Verbo = \porgere ->
   let por_ = Predef.tk 4 porgere in
  {s = table {
     Inf => por_ + "gere" ;
@@ -4100,7 +4165,7 @@ oper porgere_67 : Str -> Verbo = \porgere ->
     }
   } ;
 
-oper porre_68 : Str -> Verbo = \porre -> 
+oper porre_68 : Str -> Verbo = \porre ->
   let po_ = Predef.tk 3 porre in
  {s = table {
     Inf => po_ + "rre" ;
@@ -4162,7 +4227,7 @@ oper porre_68 : Str -> Verbo = \porre ->
     }
   } ;
 
-oper potere_69 : Str -> Verbo = \potere -> 
+oper potere_69 : Str -> Verbo = \potere ->
   let p_ = Predef.tk 5 potere in
  {s = table {
     Inf => p_ + "otere" ;
@@ -4224,7 +4289,7 @@ oper potere_69 : Str -> Verbo = \potere ->
     }
   } ;
 
-oper prendere_70 : Str -> Verbo = \prendere -> 
+oper prendere_70 : Str -> Verbo = \prendere ->
   let pre_ = Predef.tk 5 prendere in
  {s = table {
     Inf => pre_ + "ndere" ;
@@ -4286,7 +4351,7 @@ oper prendere_70 : Str -> Verbo = \prendere ->
     }
   } ;
 
-oper radere_71 : Str -> Verbo = \radere -> 
+oper radere_71 : Str -> Verbo = \radere ->
   let ra_ = Predef.tk 4 radere in
  {s = table {
     Inf => ra_ + "dere" ;
@@ -4348,7 +4413,7 @@ oper radere_71 : Str -> Verbo = \radere ->
     }
   } ;
 
-oper redigere_72 : Str -> Verbo = \redigere -> 
+oper redigere_72 : Str -> Verbo = \redigere ->
   let red_ = Predef.tk 5 redigere in
  {s = table {
     Inf => red_ + "igere" ;
@@ -4410,7 +4475,7 @@ oper redigere_72 : Str -> Verbo = \redigere ->
     }
   } ;
 
-oper redimere_73 : Str -> Verbo = \redimere -> 
+oper redimere_73 : Str -> Verbo = \redimere ->
   let red_ = Predef.tk 5 redimere in
  {s = table {
     Inf => red_ + "imere" ;
@@ -4472,7 +4537,7 @@ oper redimere_73 : Str -> Verbo = \redimere ->
     }
   } ;
 
-oper ridere_74 : Str -> Verbo = \ridere -> 
+oper ridere_74 : Str -> Verbo = \ridere ->
   let ri_ = Predef.tk 4 ridere in
  {s = table {
     Inf => ri_ + "dere" ;
@@ -4534,7 +4599,7 @@ oper ridere_74 : Str -> Verbo = \ridere ->
     }
   } ;
 
-oper rimanere_75 : Str -> Verbo = \rimanere -> 
+oper rimanere_75 : Str -> Verbo = \rimanere ->
   let rima_ = Predef.tk 4 rimanere in
  {s = table {
     Inf => rima_ + "nere" ;
@@ -4596,7 +4661,7 @@ oper rimanere_75 : Str -> Verbo = \rimanere ->
     }
   } ;
 
-oper rispondere_76 : Str -> Verbo = \rispondere -> 
+oper rispondere_76 : Str -> Verbo = \rispondere ->
   let rispo_ = Predef.tk 5 rispondere in
  {s = table {
     Inf => rispo_ + "ndere" ;
@@ -4658,7 +4723,7 @@ oper rispondere_76 : Str -> Verbo = \rispondere ->
     }
   } ;
 
-oper rompere_77 : Str -> Verbo = \roompere -> 
+oper rompere_77 : Str -> Verbo = \roompere ->
   let ro_ = Predef.tk 6 roompere in
  {s = table {
     Inf => ro_ + "ompere" ;
@@ -4720,7 +4785,7 @@ oper rompere_77 : Str -> Verbo = \roompere ->
     }
   } ;
 
-oper sapere_78 : Str -> Verbo = \sapere -> 
+oper sapere_78 : Str -> Verbo = \sapere ->
   let s_ = Predef.tk 5 sapere in
  {s = table {
     Inf => s_ + "apere" ;
@@ -4782,7 +4847,7 @@ oper sapere_78 : Str -> Verbo = \sapere ->
     }
   } ;
 
-oper scegliere_79 : Str -> Verbo = \scegliere -> 
+oper scegliere_79 : Str -> Verbo = \scegliere ->
   let sce_ = Predef.tk 6 scegliere in
  {s = table {
     Inf => sce_ + "gliere" ;
@@ -4844,7 +4909,7 @@ oper scegliere_79 : Str -> Verbo = \scegliere ->
     }
   } ;
 
-oper scendere_80 : Str -> Verbo = \scendere -> 
+oper scendere_80 : Str -> Verbo = \scendere ->
   let sce_ = Predef.tk 5 scendere in
  {s = table {
     Inf => sce_ + "ndere" ;
@@ -4906,7 +4971,7 @@ oper scendere_80 : Str -> Verbo = \scendere ->
     }
   } ;
 
-oper scindere_81 : Str -> Verbo = \scindere -> 
+oper scindere_81 : Str -> Verbo = \scindere ->
   let sci_ = Predef.tk 5 scindere in
  {s = table {
     Inf => sci_ + "ndere" ;
@@ -4968,7 +5033,7 @@ oper scindere_81 : Str -> Verbo = \scindere ->
     }
   } ;
 
-oper scrivere_82 : Str -> Verbo = \scrivere -> 
+oper scrivere_82 : Str -> Verbo = \scrivere ->
   let scri_ = Predef.tk 4 scrivere in
  {s = table {
     Inf => scri_ + "vere" ;
@@ -5030,7 +5095,7 @@ oper scrivere_82 : Str -> Verbo = \scrivere ->
     }
   } ;
 
-oper scuotere_83 : Str -> Verbo = \scuotere -> 
+oper scuotere_83 : Str -> Verbo = \scuotere ->
   let sc_ = Predef.tk 6 scuotere in
  {s = table {
     Inf => sc_ + "uotere" ;
@@ -5092,7 +5157,7 @@ oper scuotere_83 : Str -> Verbo = \scuotere ->
     }
   } ;
 
-oper sedere_84 : Str -> Verbo = \sedere -> 
+oper sedere_84 : Str -> Verbo = \sedere ->
   let s_ = Predef.tk 5 sedere in
  {s = table {
     Inf => s_ + "edere" ;
@@ -5154,7 +5219,7 @@ oper sedere_84 : Str -> Verbo = \sedere ->
     }
   } ;
 
-oper spargere_85 : Str -> Verbo = \spargere -> 
+oper spargere_85 : Str -> Verbo = \spargere ->
   let spar_ = Predef.tk 4 spargere in
  {s = table {
     Inf => spar_ + "gere" ;
@@ -5216,7 +5281,7 @@ oper spargere_85 : Str -> Verbo = \spargere ->
     }
   } ;
 
-oper spegnere_86 : Str -> Verbo = \spegnere -> 
+oper spegnere_86 : Str -> Verbo = \spegnere ->
   let spe_ = Predef.tk 5 spegnere in
  {s = table {
     Inf => spe_ + "gnere" ;
@@ -5278,7 +5343,7 @@ oper spegnere_86 : Str -> Verbo = \spegnere ->
     }
   } ;
 
-oper stringere_87 : Str -> Verbo = \striingere -> 
+oper stringere_87 : Str -> Verbo = \striingere ->
   let stri_ = Predef.tk 6 striingere in
  {s = table {
     Inf => stri_ + "ingere" ;
@@ -5340,7 +5405,7 @@ oper stringere_87 : Str -> Verbo = \striingere ->
     }
   } ;
 
-oper svellere_88 : Str -> Verbo = \svellere -> 
+oper svellere_88 : Str -> Verbo = \svellere ->
   let svel_ = Predef.tk 4 svellere in
  {s = table {
     Inf => svel_ + "lere" ;
@@ -5402,7 +5467,7 @@ oper svellere_88 : Str -> Verbo = \svellere ->
     }
   } ;
 
-oper tenere_89 : Str -> Verbo = \tenere -> 
+oper tenere_89 : Str -> Verbo = \tenere ->
   let t_ = Predef.tk 5 tenere in
  {s = table {
     Inf => t_ + "enere" ;
@@ -5464,7 +5529,7 @@ oper tenere_89 : Str -> Verbo = \tenere ->
     }
   } ;
 
-oper torcere_90 : Str -> Verbo = \torcere -> 
+oper torcere_90 : Str -> Verbo = \torcere ->
   let tor_ = Predef.tk 4 torcere in
  {s = table {
     Inf => tor_ + "cere" ;
@@ -5526,7 +5591,7 @@ oper torcere_90 : Str -> Verbo = \torcere ->
     }
   } ;
 
-oper trarre_91 : Str -> Verbo = \trarre -> 
+oper trarre_91 : Str -> Verbo = \trarre ->
   let tra_ = Predef.tk 3 trarre in
  {s = table {
     Inf => tra_ + "rre" ;
@@ -5588,7 +5653,7 @@ oper trarre_91 : Str -> Verbo = \trarre ->
     }
   } ;
 
-oper valere_92 : Str -> Verbo = \valere -> 
+oper valere_92 : Str -> Verbo = \valere ->
   let va_ = Predef.tk 4 valere in
  {s = table {
     Inf => va_ + "lere" ;
@@ -5650,7 +5715,7 @@ oper valere_92 : Str -> Verbo = \valere ->
     }
   } ;
 
-oper vedere_93 : Str -> Verbo = \vedereedere -> 
+oper vedere_93 : Str -> Verbo = \vedereedere ->
   let vedere_ = Predef.tk 5 vedereedere in
  {s = table {
     Inf => vedere_ + "edere" ;
@@ -5712,7 +5777,7 @@ oper vedere_93 : Str -> Verbo = \vedereedere ->
     }
   } ;
 
-oper vincere_94 : Str -> Verbo = \vincere -> 
+oper vincere_94 : Str -> Verbo = \vincere ->
   let vin_ = Predef.tk 4 vincere in
  {s = table {
     Inf => vin_ + "cere" ;
@@ -5774,7 +5839,7 @@ oper vincere_94 : Str -> Verbo = \vincere ->
     }
   } ;
 
-oper vivere_95 : Str -> Verbo = \viverevere -> 
+oper vivere_95 : Str -> Verbo = \viverevere ->
   let vivere_ = Predef.tk 4 viverevere in
  {s = table {
     Inf => vivere_ + "vere" ;
@@ -5836,7 +5901,7 @@ oper vivere_95 : Str -> Verbo = \viverevere ->
     }
   } ;
 
-oper volere_96 : Str -> Verbo = \volere -> 
+oper volere_96 : Str -> Verbo = \volere ->
   let v_ = Predef.tk 5 volere in
  {s = table {
     Inf => v_ + "olere" ;
@@ -5898,7 +5963,7 @@ oper volere_96 : Str -> Verbo = \volere ->
     }
   } ;
 
-oper volgere_97 : Str -> Verbo = \volgere -> 
+oper volgere_97 : Str -> Verbo = \volgere ->
   let vol_ = Predef.tk 4 volgere in
  {s = table {
     Inf => vol_ + "gere" ;
@@ -5963,7 +6028,7 @@ oper volgere_97 : Str -> Verbo = \volgere ->
 ---- solere_98a
 ---- suggere_98b
 
-oper sentire_99 : Str -> Verbo = \sentire -> 
+oper sentire_99 : Str -> Verbo = \sentire ->
   let sen_ = Predef.tk 4 sentire in
  {s = table {
     Inf => sen_ + "tire" ;
@@ -6025,7 +6090,7 @@ oper sentire_99 : Str -> Verbo = \sentire ->
     }
   } ;
 
-oper dormire_99b : Str -> Verbo = \dormire -> 
+oper dormire_99b : Str -> Verbo = \dormire ->
   let dorm_ = Predef.tk 3 dormire in
  {s = table {
     Inf => dorm_ + "ire" ;
@@ -6087,7 +6152,7 @@ oper dormire_99b : Str -> Verbo = \dormire ->
     }
   } ;
 
-oper finire_100 : Str -> Verbo = \finire -> 
+oper finire_100 : Str -> Verbo = \finire ->
   let fin_ = Predef.tk 3 finire in
  {s = table {
     Inf => fin_ + "ire" ;
@@ -6151,7 +6216,7 @@ oper finire_100 : Str -> Verbo = \finire ->
 
 ---- apparire_101
 
-oper aprire_102 : Str -> Verbo = \aprire -> 
+oper aprire_102 : Str -> Verbo = \aprire ->
   let ap_ = Predef.tk 4 aprire in
  {s = table {
     Inf => ap_ + "rire" ;
@@ -6214,7 +6279,7 @@ oper aprire_102 : Str -> Verbo = \aprire ->
   } ;
 
 
-oper cucire_103 : Str -> Verbo = \cucire -> 
+oper cucire_103 : Str -> Verbo = \cucire ->
   let cuc_ = Predef.tk 3 cucire in
  {s = table {
     Inf => cuc_ + "ire" ;
@@ -6276,7 +6341,7 @@ oper cucire_103 : Str -> Verbo = \cucire ->
     }
   } ;
 
-oper fuggire_104 : Str -> Verbo = \fuggire -> 
+oper fuggire_104 : Str -> Verbo = \fuggire ->
   let fugg_ = Predef.tk 3 fuggire in
  {s = table {
     Inf => fugg_ + "ire" ;
@@ -6338,9 +6403,9 @@ oper fuggire_104 : Str -> Verbo = \fuggire ->
     }
   } ;
 
-oper morire_105 : Str -> Verbo = \morire -> 
+oper morire_105 : Str -> Verbo = \morire ->
   let mor_ = Predef.tk 3 morire ;
-      m_   = Predef.tk 5 morire 
+      m_   = Predef.tk 5 morire
   in
  {s = table {
     Inf => mor_ + "ire" ;
@@ -6402,33 +6467,33 @@ oper morire_105 : Str -> Verbo = \morire ->
     }
   } ;
 
-oper salire_106 : Str -> Verbo = \salire -> 
+oper salire_106 : Str -> Verbo = \salire ->
   let x_ = Predef.tk 6 salire in
-    mkVerbo 
-     (x_ + "salire") (x_ + "salgo") (x_ + "sale") (x_ + "saliamo") 
-     (x_ + "salirò") (x_ + "salii") (x_ + "salisti") (x_ + "salì") 
+    mkVerbo
+     (x_ + "salire") (x_ + "salgo") (x_ + "sale") (x_ + "saliamo")
+     (x_ + "salirò") (x_ + "salii") (x_ + "salisti") (x_ + "salì")
      (x_ + "salirono") (x_ + "sali") (x_ + "salito") ;
 
-oper seguire_107 : Str -> Verbo = \seguire -> 
+oper seguire_107 : Str -> Verbo = \seguire ->
   let x_ = Predef.tk 7 seguire in
-    mkVerbo 
-     (x_ + "seguire") (x_ + "seguo") (x_ + "segue") (x_ + "seguiamo") 
-     (x_ + "seguirò") (x_ + "seguii") (x_ + "seguisti") (x_ + "seguì") 
+    mkVerbo
+     (x_ + "seguire") (x_ + "seguo") (x_ + "segue") (x_ + "seguiamo")
+     (x_ + "seguirò") (x_ + "seguii") (x_ + "seguisti") (x_ + "seguì")
      (x_ + "seguirono") (x_ + "segui") (x_ + "seguito") ;
- 
-oper udire_108 : Str -> Verbo = \udire -> 
+
+oper udire_108 : Str -> Verbo = \udire ->
   let x_ = Predef.tk 5 udire in
-    mkVerbo (x_ + "udire") (x_ + "odo") (x_ + "ode") (x_ + "udiamo") 
-     (x_ + "udirò") (x_ + "udii") (x_ + "udisti") (x_ + "udì") 
+    mkVerbo (x_ + "udire") (x_ + "odo") (x_ + "ode") (x_ + "udiamo")
+     (x_ + "udirò") (x_ + "udii") (x_ + "udisti") (x_ + "udì")
      (x_ + "udirono") (x_ + "odi") (x_ + "udito") ;
 
-oper uscire_109 : Str -> Verbo = \uscire -> 
+oper uscire_109 : Str -> Verbo = \uscire ->
   let x_ = Predef.tk 6 uscire in
-    mkVerbo (x_ + "uscire") (x_ + "esco") (x_ + "esce") 
-      (x_ + "usciamo") (x_ + "uscirò") (x_ + "uscii") (x_ + "uscisti") 
+    mkVerbo (x_ + "uscire") (x_ + "esco") (x_ + "esce")
+      (x_ + "usciamo") (x_ + "uscirò") (x_ + "uscii") (x_ + "uscisti")
       (x_ + "uscì") (x_ + "uscirono") (x_ + "esci") (x_ + "uscito") ;
 
-oper venire_110 : Str -> Verbo = \venire -> 
+oper venire_110 : Str -> Verbo = \venire ->
   let v_ = Predef.tk 5 venire in
  {s = table {
     Inf => v_ + "enire" ;
@@ -6490,10 +6555,10 @@ oper venire_110 : Str -> Verbo = \venire ->
     }
   } ;
 
-  verbBesch : {s : VForm => Str} -> {s : VF => Str} = \amare -> {s = table { 
+  verbBesch : {s : VForm => Str} -> {s : VF => Str} = \amare -> {s = table {
     VInfin False           => amare.s ! Inf ;
     VInfin True            => amare.s ! InfClit ;
-    VFin (VPres   Indic) n p    => amare.s ! Indi Pres n p ; 
+    VFin (VPres   Indic) n p    => amare.s ! Indi Pres n p ;
     VFin (VPres   Conjunct) n p => amare.s ! Cong Pres n p ;
     VFin (VImperf Indic) n p    => amare.s ! Indi Imperf n p ;  --# notpresent
     VFin (VImperf Conjunct) n p => amare.s ! Cong Imperf n p ; --# notpresent
@@ -6507,7 +6572,7 @@ oper venire_110 : Str -> Verbo = \venire ->
     }
   } ;
 
-param 
+param
   Tempo =
      Pres
    | Imperf --# notpresent
@@ -6530,10 +6595,10 @@ param
    ;
 
  oper
-  mkVerbo : (x1,_,_,_,_,_,_,_,_,_,x11 : Str) -> Verbo ; 
+  mkVerbo : (x1,_,_,_,_,_,_,_,_,_,x11 : Str) -> Verbo ;
   mkVerbo
-    dovere devo deve dobbiamo dovro 
-    dovetti dovesti dovette dovettero dovi dovuto = 
+    dovere devo deve dobbiamo dovro
+    dovetti dovesti dovette dovettero dovi dovuto =
    let
      dove  = Predef.tk 2 dovere ;
      dov   = init dove ;
