@@ -323,8 +323,8 @@ oper
     } ;
   mkV3 = overload {
     mkV3 : V -> Prep -> Prep -> V3 = mkmaxV3 ;
-    mkV3 : V -> Prep -> V3 = \v,p -> mkmaxV3 v (mkPrep []) p ; 
-    mkV3 : V -> V3 = \v -> mkmaxV3 v (mkPrep []) (mkPrep []) ; 
+    mkV3 : V -> Prep -> V3 = \v,p -> mkmaxV3 v noPrep p ;
+    mkV3 : V -> V3 = \v -> mkmaxV3 v noPrep noPrep ;
     } ;
   mkmaxV3 : V -> Prep -> Prep -> V3 = \v,c,d -> lin V3 (v ** {c2 = <c,True> ; c3 = <d,True>}) ;
 
@@ -435,7 +435,7 @@ oper
   mkAdv s = {s = s ; lock_Adv = <>} ;
 --
 --  mkPrep s c = {s = s ; c = c ; lock_Prep = <>} ;
-  noPrep = mkPrep [] ;
+  noPrep = nomergePrep [] ;
 --  datPrep = mkPrep [] dative ;
 --  genPrep = mkPrep [] genitive ;
 --  von_Prep = mkPrep "von" dative ;
