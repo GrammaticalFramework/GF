@@ -145,7 +145,7 @@ resource AdjectiveMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
       x + "zny" => model4 form (x+"źni");
       x + "chy" => model4 form (x+"si");
       x + "hy" => model4 form (x+"zi"); -- błahy - błazi (not really in use)
-      x + y@("py"|"by"|"fy"|"wy"|"my"|"sy"|"zy"|"ny") => model4 form ((Predef.tk 1 form)+"i")
+      x + y@("py"|"by"|"fy"|"wy"|"my"|"sy"|"zy"|"ny") => model4 form (Predef.tk 1 form + "i")
     };
   
   -- oper for simple forms
@@ -196,5 +196,74 @@ resource AdjectiveMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
   addComplToAdj a s c = { pos = a.pos; comp=a.comp; super=a.super;
     advpos=a.advpos; advcomp=a.advcomp; advsuper=a.advsuper;
     c = mkCompl s c
-  };  
+  };
+
+----------------------------
+
+---- AR 6/2/2018 work-around to a probable compiler bug: replaces + with Predef.BIND in model4s
+
+  oper mkRegAdj_s = overload {
+    mkRegAdj_s : Str -> Str -> Str -> Str -> Adj =
+    \pos, comp, advpos, advcomp -> {
+      pos = guess_model_s pos;
+      comp = model_comp comp;
+      super = model_comp ("naj" + comp);
+      advpos = advpos;
+      advcomp = advcomp;
+      advsuper = "naj" + advcomp;
+    };
+    mkRegAdj_s : Str -> Str -> Adj =
+    \pos, comp -> {
+      pos = guess_model_s pos;
+      comp = model_comp comp;
+      super = model_comp ("naj" + comp);
+      advpos = "["++pos ++ [": the adverb positive form does not exist]"];
+      advcomp = "["++pos ++ [": the adverb comparative form does not exist]"];
+      advsuper = "["++pos ++ [": the adverb superlative form does not exist]"]
+    };
+  };
+
+  oper model4s : Str -> Str -> Str -> adj11forms = \form,x,si -> -- glupi
+    let stem = Predef.tk 1 form in 
+    {
+      s1=stem + "y"; s2=stem + "ego"; s3=stem + "emu"; s4=stem + "ym";
+      s5=stem + "e"; s6=stem + "a"; s7=stem + "ej"; s8=stem + "ą";
+      s9=x++Predef.BIND++si ; s10=stem + "ych"; s11=stem + "ymi" 
+    };
+
+  oper guess_model_s : Str -> adj11forms = \form ->
+    case form of {
+      x + ("pi"|"bi"|"fi"|"wi"|"mi"|"si"|"zi"|"ci"|"dzi"|"ni") => model1 form;
+      x + "li" => model1l form;
+      x + ("ii"|"yi"|"ai"|"ei"|"oi"|"ui"|"ói") => model1j form;
+      x + ("czy"|"dży"|"rzy"|"cy"|"dzy") => model2 form;
+      x + "ki" => model3k form;
+      x + "gi" => model3g form;
+      x + "smy" => model4s form (x)("śmi");
+      x + "zmy" => model4s form (x)("źmi");
+      x + "sty" => model4s form (x)("śći");
+      x + "ty" => model4s form (x)("ci");
+      x + "zdy" => model4s form (x)("ździ");
+      x + "dy" => model4s form (x)("dzi");
+      x + "szy" => model4s form (x)("si");
+      x + "smy" => model4s form (x)("śmi");
+      x + "ży" => model4s form (x)("zi");
+      x + "ry" => model4s form (x)("rzy");
+      x + "rzły" => model4s form (x)("źli"); --obmierzły - obmierźli (probably misprint in the article)
+      x + "szły" => model4s form (x)("szli");
+      x + "zły" => model4s form (x)("źli");
+      x + "ły" => model4s form (x)("li");
+      x + "sny" => model4s form (x)("śni");
+      x + "szny" => model4s form (x)("szni");
+      x + "rzny" => model4s form (x)("rzni");
+      x + "zny" => model4s form (x)("źni");
+      x + "chy" => model4s form (x)("si");
+      x + "hy" => model4s form (x)("zi"); -- błahy - błazi (not really in use)
+      x + y@("py"|"by"|"fy"|"wy"|"my"|"sy"|"zy"|"ny") => model4s form (Predef.tk 1 form)("i")
+    };
+
+------------------------------- END workaround
+
+
+
 }

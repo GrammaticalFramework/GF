@@ -229,6 +229,15 @@
     MascPersPl | OthersPl => Pl ;
     _ => Sg
     } ;
+  --- AR 6/2/2018 
+  oper genGenNum : GenNum -> Gender = \n -> case n of {
+    MascPersSg => Masc Personal ;
+    MascAniSg => Masc Animate ;
+    MascInaniSg => Masc Inanimate ;
+    FemSg => Fem ;
+    NeutSg => Neut ; ---- NeutGr ?
+    _ => Plur
+    } ;
 
   param MaybeGenNum = NoGenNum | JustGenNum GenNum;
 
