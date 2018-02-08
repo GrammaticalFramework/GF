@@ -1,5 +1,5 @@
 concrete StructuralDan of Structural = CatDan ** 
-  open MorphoDan, ParadigmsDan, (X = ConstructX), IrregDan, Prelude in {
+  open MorphoDan, ParadigmsDan, (X = ConstructX), (M=MakeStructuralDan),  IrregDan, Prelude in {
 
   flags optimize=all ;
     coding=utf8 ;
@@ -121,6 +121,26 @@ concrete StructuralDan of Structural = CatDan **
   youPol_Pron = MorphoDan.mkNP "De" "Dem" "Deres" "Deres" "Deres"  Utr Sg P2 ; --- wrong in refl
   have_V2 = dirV2 have_V ;
 
+ not_Predet = {s = \\_,_ => "ikke" ; p = [] ; a = PNoAg} ;
+ 
+no_Quant = 
+    {s,sp = table {
+       Sg => \\_,_ => genderForms "ingen" "intet" ; 
+       Pl => \\_,_,_ => "ingen"
+       } ;
+     det = DIndef
+    } ;
+
+ if_then_Conj = {s1 = "hvis" ; s2 = "så" ; n = singular ; isDiscont = False} ; ----
+  nobody_NP = regNP "ingen" "ingens" Utr Sg ;
+  nothing_NP = regNP "intet" "intets" Neutr Sg ;
+
+  at_least_AdN = ss "mindst" ;
+  at_most_AdN = ss "højst" ;
+
+  except_Prep = ss "uden" ;
+  as_CAdv = X.mkCAdv "lige" "som" ;
+  
 -- Auxiliaries that are used repeatedly.
 
   oper
