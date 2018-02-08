@@ -115,7 +115,6 @@ oper
   van_Prep : Prep ;
   te_Prep  : Prep ;
 
-
 --
 --2 Verbs
 
@@ -231,7 +230,7 @@ oper
 
   mkN2 = overload {
     mkN2 : N -> N2 
-    = \n -> lin N2 (n ** {c2 = mkPrep "van"}) ; 
+    = \n -> lin N2 (n ** {c2 = van_Prep}) ; 
     mkN2 : N -> Prep -> N2 
     = \n,p -> lin N2 (n ** {c2 = p}) ; 
     } ;   
