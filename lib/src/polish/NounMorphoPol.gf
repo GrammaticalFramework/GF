@@ -7862,6 +7862,27 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
       SF Pl Voc => x + "ludzie"
     };
 
+--created for sukienka and kurtka. Paula Pawlowski 6/2/2018
+  oper mkNTable0670p : Str -> SubstForm => Str; --%
+    oper mkNTable0670p lexem = 
+      let x = Predef.tk 2 lexem in
+    table { 
+      SF Sg Nom => x + "ka";
+      SF Sg Gen => x + "ki";
+      SF Sg Dat => x + "ce";
+      SF Sg Acc => x + "kę";
+      SF Sg Instr => x + "ką";
+      SF Sg Loc => x + "ce";
+      SF Sg Voc => x + "ko";
+      SF Pl Nom => x + "ki";
+      SF Pl Gen => x + "ek";
+      SF Pl Dat => x + "kom";
+      SF Pl Acc => x + "ki";
+      SF Pl Instr => x + "kami";
+      SF Pl Loc => x + "kach";
+      SF Pl Voc => x + "ki"
+    };
+
     oper mkNTable0671: Str -> SubstForm => Str; --%
     oper mkNTable0671 lexem = 
       let x = Predef.tk 1 lexem in

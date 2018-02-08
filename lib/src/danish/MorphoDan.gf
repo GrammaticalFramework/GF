@@ -66,6 +66,9 @@ oper
 
   aRask : Str -> Adj = \rask -> 
     mkAdject rask rask (rask + "e") (rask + "ere") (rask + "est") ;
+    
+  aDejlig : Str -> Adj = \dejlig -> 
+    mkAdject dejlig (dejlig+"t") (dejlig + "e") (dejlig + "ere") (dejlig + "st") ;
 
 
 -- verbs
