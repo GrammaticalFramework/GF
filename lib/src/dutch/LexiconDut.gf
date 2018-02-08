@@ -3,7 +3,7 @@
 -- work by Aarne Ranta
 
 concrete LexiconDut of Lexicon = CatDut ** 
-  open Prelude, ParadigmsDut, IrregDut in {
+  open Prelude, ParadigmsDut, IrregDut, StructuralDut in {
 
 flags 
   coding=utf8 ;
@@ -32,9 +32,9 @@ lin
   die_V = sterven_V ;
   distance_N3 = mkN3 (mkN "afstand") van_Prep (mkPrep "naar") ;
   drink_V2 = mkV2 drinken_V ;
-  easy_A2V = mkA2 (mkA "gemakkelijk") noPrep ;
+  easy_A2V = mkA2 (mkA "gemakkelijk") for_Prep ; -- "gemakkelijk voor me" or "gemakkelijk te doen"? 
   eat_V2 = mkV2 eten_V ;
-  father_N2 = mkN2 (mkN "vader") van_Prep ;
+  father_N2 = mkN2 (mkN "vader") ;
   fear_VS = mkVS (mkV "vrezen") ;
   fish_N = mkN "vis" ;
   go_V = zijnV gaan_V ;
@@ -42,7 +42,7 @@ lin
   house_N = mkN "huis" neuter ;
   know_VQ = mkVQ weten_V ;
   know_VS = mkVS weten_V ;
-  married_A2 = mkA2 (mkA "getrouwd") (mkPrep "met") ;
+  married_A2 = mkA2 (mkA "getrouwd") with_Prep ;
   mother_N2 = mkN2 (mkN "moeder") ;
   now_Adv = mkAdv "nu" ;
   paint_V2A = mkV2A (mkV "schilderen" "schildert") ;

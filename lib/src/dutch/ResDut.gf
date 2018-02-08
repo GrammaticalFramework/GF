@@ -364,7 +364,7 @@ param
        VPastSg   => "kon" ; --# notpresent
        VPastPl   => "konden" ; --# notpresent
        VImp2     => "kan" ;  ---- not used
-       VImp3     => "kant" ;
+       VImp3     => "kan" ;
        VImpPl    => "kunnen" ; ----
        VPerf     => "gekund" ;
        VPresPart => "kunnende" ;
@@ -396,7 +396,7 @@ param
     het_Pron : Pronoun = mkPronoun "het" "het" "ze" "hij" "hem" "zijn" "zijne" Neutr Sg P3 ; -- cunger: 't -> het 
 
 
-    MergesWithPrep = { mergesWithPrep : Bool ; mergeForm : Str } ;
+    MergesWithPrep : Type = { mergesWithPrep : Bool ; mergeForm : Str } ;
     noMerge : MergesWithPrep = { mergesWithPrep = False ; mergeForm = [] } ;
 -- Complex $CN$s, like adjectives, have strong and weak forms.
 
@@ -432,7 +432,7 @@ param
 
     -- Applying a preposition to a noun phrase
     -- In order to decide whether to merge, have to check both NP and Prep:
-    -- e.g. deze + met -> hiermee , but zonder + deze -> "zonder deze"
+    -- e.g. met + deze -> hiermee , but zonder + deze -> "zonder deze"
     appPrep : Preposition -> NPLite -> Str 
      = \prep,np -> 
           case <np.mergesWithPrep,prep.mergesWithPrep> of {
