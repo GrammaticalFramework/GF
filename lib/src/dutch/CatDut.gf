@@ -39,7 +39,7 @@ concrete CatDut of Cat =
 
 -- Adjective
 
-    AP = {s : AForm => Str ; isPre : Bool} ; 
+    AP = {s : Agr => AForm => Str ; isPre : Bool} ; 
 
 -- Noun
 

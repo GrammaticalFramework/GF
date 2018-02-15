@@ -35,7 +35,7 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 
     PPartNP np v2 = np ** heavyNP {
       s = \\c => np.s ! c ++ v2.s ! VPerf ; -- invar part
-      a = np.a
+      a = np.a ;
       } ;
 
     AdvNP np adv = np ** heavyNP {
@@ -163,7 +163,7 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       in {
         s = \\a,n => 
                preOrPost ap.isPre
-                 (ap.s ! agrAdj g a n)
+                 (ap.s ! agrP3 Sg ! agrAdj g a n)
                  (cn.s ! a ! n) ;
         g = g
         } ;

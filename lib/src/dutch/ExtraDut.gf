@@ -38,7 +38,7 @@ concrete ExtraDut of ExtraDutAbs = CatDut **
 
 
 lin
-    ICompAP ap = {s = \\_ => "hoe" ++ ap.s ! APred} ; 
+    ICompAP ap = {s = \\agr => "hoe" ++ ap.s ! agr ! APred} ; 
 
     IAdvAdv adv = {s = "hoe" ++ adv.s} ;
 

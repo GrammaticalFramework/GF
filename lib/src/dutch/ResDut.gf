@@ -479,11 +479,16 @@ param
 
 --2 Transformations between parameter types
 
-  oper Agr : Type = {g : Gender ; n : Number ; p : Person} ;
+  -- IL2018-02: a whole lot of times we only need number and person, not gender
+  -- maybe switch to PersAgr at some point and halve the number of fields
+  oper PersAgr : Type = {n : Number ; p : Person} ;
+  oper Agr : Type = PersAgr ** {g : Gender} ; 
 
   oper
-    agrP3 : Number -> Agr = agrgP3 Neutr ;
+    pagr : Agr -> PersAgr = \agr -> { p = agr.p ; n = agr.n } ;
+    pagrP3 : Number -> PersAgr = \num -> {p = P3; n = num } ;
 
+    agrP3 : Number -> Agr = agrgP3 Neutr ;
     agrgP3 : Gender -> Number -> Agr = \g,n -> 
       {g = g ; n = n ; p = P3} ;
 
@@ -677,12 +682,12 @@ param
     vpi.p1 ! agrP3 Sg ++ vpi.p2 ++ vpi.p3 ; -- TODO
 
   reflPron : Agr => Str = table {
-    {n = Sg ; p = P1} => "me" ;
-    {n = Sg ; p = P2} => "je" ;
-    {n = Sg ; p = P3} => "zich" ;
-    {n = Pl ; p = P1} => "ons" ;
-    {n = Pl ; p = P2} => "je" ;
-    {n = Pl ; p = P3} => "zich"
+    {n = Sg ; p = P1} => "mijzelf" ;
+    {n = Sg ; p = P2} => "jezelf" ;
+    {n = Sg ; p = P3} => "zichzelf" ;
+    {n = Pl ; p = P1} => "onszelf" ;
+    {n = Pl ; p = P2} => "jezelf" ;
+    {n = Pl ; p = P3} => "zichzelf"
     } ;
 
   conjThat : Str = "dat" ;
@@ -749,6 +754,6 @@ param
 
   heavyNP : 
     {s : NPCase => Str ; a : Agr} -> {s : NPCase => Str ; a : Agr ; isPron : Bool} = \np ->
-    np ** {isPron = False} ;
+     np ** {isPron = False ; mergesWithPrep = False ; mergeForm = [] } ;
 
 }
