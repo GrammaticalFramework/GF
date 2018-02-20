@@ -12923,6 +12923,26 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
       SF Pl Voc => x + "szy"
     };
 
+    oper mkNTable1007a: Str -> SubstForm => Str; --forms for "ucho"
+    oper mkNTable1007a lexem = 
+      let x = Predef.tk 3 lexem in
+    table { 
+      SF Sg Nom => x + "cho";
+      SF Sg Gen => x + "cha";
+      SF Sg Dat => x + "chu";
+      SF Sg Acc => x + "cho";
+      SF Sg Instr => x + "chem";
+      SF Sg Loc => x + "chu";
+      SF Sg Voc => x + "cho";
+      SF Pl Nom => x + "szy";
+      SF Pl Gen => x + "szów";
+      SF Pl Dat => x + "szom";
+      SF Pl Acc => x + "szy";
+      SF Pl Instr => x + "szami";
+      SF Pl Loc => x + "szach";
+      SF Pl Voc => x + "szy"
+    };
+
     oper mkNTable1008: Str -> SubstForm => Str; --%
     oper mkNTable1008 lexem = 
       let x = Predef.tk 2 lexem in
