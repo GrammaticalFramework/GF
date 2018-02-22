@@ -743,17 +743,15 @@ param
       s  = \\n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze}
       } ;
 
-  NounPhrase : Type = MergesWithPrep ** {s : NPCase => Str ; a : Agr ; isPron : Bool } ; 
+  NounPhrase : Type = MergesWithPrep ** {s : NPCase => Str ; a : Agr ; isPron : Bool } ;
+
   mkNP : Str -> Gender -> Number -> NounPhrase = 
-    \s,g,n -> noMerge ** heavyNP {
-      s = \\_ => s ;
-      a = agrgP3 g n ;
-      } ;
+    \s,g,n -> heavyNP { s = \\_ => s ;
+                        a = agrgP3 g n } ;
 
   auxVV : VVerb -> VVerb ** {isAux : Bool} = \v -> v ** {isAux = True} ;
 
-  heavyNP : 
-    {s : NPCase => Str ; a : Agr} -> {s : NPCase => Str ; a : Agr ; isPron : Bool} = \np ->
-     np ** {isPron = False ; mergesWithPrep = False ; mergeForm = [] } ;
+  heavyNP : {s : NPCase => Str ; a : Agr} -> NounPhrase = \np ->
+    noMerge ** { isPron = False ; s = np.s ; a = np.a } ;
 
 }

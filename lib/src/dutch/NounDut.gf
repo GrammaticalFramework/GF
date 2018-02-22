@@ -27,23 +27,23 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       mergeForm = pron.mergeForm
       } ;
 
-    PredetNP pred np = np ** heavyNP {
+    PredetNP pred np = heavyNP {
       s = \\c => 
         pred.s ! np.a.n ! np.a.g ++ np.s ! c ; ---- g
       a = np.a
       } ;
 
-    PPartNP np v2 = np ** heavyNP {
+    PPartNP np v2 = heavyNP {
       s = \\c => np.s ! c ++ v2.s ! VPerf ; -- invar part
       a = np.a ;
       } ;
 
-    AdvNP np adv = np ** heavyNP {
+    AdvNP np adv = heavyNP {
       s = \\c => np.s ! c ++ adv.s ;
       a = np.a
       } ;
 
-    ExtAdvNP np adv = np ** heavyNP {
+    ExtAdvNP np adv = heavyNP {
       s = \\c => np.s ! c ++ embedInCommas adv.s ;
       a = np.a
       } ;
@@ -173,10 +173,9 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       g = cn.g
       } ;
 
-    RelNP np rs = np ** {
+    RelNP np rs = heavyNP {
       s = \\c => np.s ! c ++ "," ++ rs.s ! np.a.g ! np.a.n ;
-      a = np.a ;
-      isPron = False
+      a = np.a
       } ;
 
     SentCN cn s = {
