@@ -1,4 +1,4 @@
---1 Pornish auxiliary operations.
+--1 Portuguese auxiliary operations.
 --
 ---- This module contains operations that are needed to make the
 ---- resource syntax work. To define everything that is needed to
@@ -7,7 +7,6 @@
 --
 
 instance ResPor of ResRomance = DiffPor ** open CommonRomance, Prelude in {
-
----  flags optimize=noexpand ;
-
+  oper
+    vowel : pattern Str = #("a" | "e" | "i" | "o" | "u") ;
 } ;
