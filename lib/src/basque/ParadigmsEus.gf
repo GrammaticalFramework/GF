@@ -93,6 +93,7 @@ oper
       lin V2 (egin ** { prc = \\t => lo ++ egin.prc ! t ;
                         val = Du Ukan }) ;
 
+    mkV2 : V -> V2 = \x -> lin V2 x ;
   } ;
 
   mkVA : Str -> VA = \s -> lin VA (mkVerbDa s) ; -- Nor
