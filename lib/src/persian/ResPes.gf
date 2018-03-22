@@ -101,6 +101,7 @@ oper
      | VCondSimul
      | VCondAnter -- subj           na       "I می گْ"
      | VVVForm -- AR 21/3/2018 for mustCl after Nasrin
+     | VRoot1  -- AR 22/3/2018 for mustCl past after Nasrin
     ;
  
 
@@ -348,7 +349,8 @@ mkSlClause : NP -> VPH -> SlClause = \np,vp -> {
 		    <Neg,VCondSimul> => vp.s ! VPTense Neg (VPCond Simul) (AgPes n p) ;
 		    <Neg,VCondAnter> => vp.s ! VPTense Neg (VPCond Anter) (AgPes n p) ; -- verb form to be confirmed
 		    
-		    <_,  VVVForm>    => vp.s ! VVForm (AgPes n p) -- AR 21/3/2018
+		    <_,  VVVForm>    => vp.s ! VVForm (AgPes n p) ; -- AR 21/3/2018
+		    <_,  VRoot1>     => vp.s ! VPStem1 {- ++ Predef.Bind ++ "ه" -}             -- AR 22/3/2018
 		      };
 		----		     VVForm (AgPes n p) => {inf = verb.s ! Vvform (AgPes n p)} ;		
 		    
@@ -393,7 +395,9 @@ mkSClause : Str -> AgrPes -> VPH -> Clause = \subj,agr,vp -> {
 				    False => vp.s ! VPTense Neg (VPFutr Anter) (AgPes n p) };  -- verb form need to be confirmed
 		    <Neg,VCondSimul> => vp.s ! VPTense Neg (VPCond Simul) (AgPes n p) ;
 		    <Neg,VCondAnter> => vp.s ! VPTense Neg (VPCond Anter) (AgPes n p) ; -- verb form to be confirmed
-		    	    		    <_,  VVVForm>    => vp.s ! VVForm (AgPes n p) -- AR 21/3/2018
+		    	    		    <_,  VVVForm>    => vp.s ! VVForm (AgPes n p) ; -- AR 21/3/2018
+					    <_,  VRoot1>     => vp.s ! VPStem1 {- ++ Predef.Bind ++ "ه" -} -- AR 22/3/2018
+
 		      };
 					
 		    
@@ -422,7 +426,7 @@ mkSClause : Str -> AgrPes -> VPH -> Clause = \subj,agr,vp -> {
 	     VPTense pol (VPFutr Anter) (AgPes n p) =>  { inf =  verb.inf ! AX pol (AuxFut FtAorist) p n } ; -- this is to be confirmed
 	     VPTense pol (VPCond Simul) (AgPes n p) => { inf = verb.inf ! AX pol (AuxFut FtAorist)  p n } ;
 	     VPTense pol (VPCond Anter) (AgPes n p) => { inf = verb.inf ! AX pol (AuxPast PstImperf)  p n } ;
-	     VVForm  (AgPes n p) => {inf = ""} ; -- to be checked
+	     VVForm  (AgPes n p) => {inf = ""} ; -- to be checked => {inf = verb.s ! Vvform (AgPes n p)} ;
 	     VPStem1 => { inf =  ""};
 	     VPStem2 => { inf =  "بود"} ;
 	     VPImp _ _ => { inf = ""} -- need to be confirmed 
