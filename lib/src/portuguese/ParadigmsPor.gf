@@ -31,6 +31,7 @@ resource ParadigmsPor =
     CatPor in {
 
   flags optimize=all ;
+        coding=utf8 ;
 
 --2 Parameters
 --
@@ -92,7 +93,7 @@ oper
   mascN : N -> N ;
   mascN x = {s = x.s ; g = masculine ; lock_N = <>} ;
 
-  mk2N : (baston,bastones : Str) -> Gender -> N ;
+  mk2N : (bastão, bastões : Str) -> Gender -> N ;
   mk2N x y g = mkNounIrreg x y g ** {lock_N = <>} ;
 
   --- [] update this docstring
@@ -188,6 +189,11 @@ oper
                              a.s ! Posit ! f} ;
                 isPre = a.isPre ; lock_A = <>} ;
 
+{-  superlADeg : A -> A ;
+  superlADeg a = {s = table {Posit => a.s ! Posit ;
+                             Compar => a.s ! Compar ;
+                             Superl => a.s ! Compar}} ;
+-}
   regA : Str -> A ;
   regA a = compADeg {s = \\_ => (mkAdjReg a).s ; isPre = False ;
                      lock_A = <>} ;
@@ -267,31 +273,39 @@ oper
 --2 Verbs
 
   regV : Str -> V ;
-  regV x = -- cortar actuar cazar guiar pagar sacar
+  regV v = -- cortar actuar cazar guiar pagar sacar
     let
-      ar = Predef.dp 2 x ;
-      z  = Predef.dp 1 (Predef.tk 2 x) ;
-      verb = case ar of {
-        "ir" =>  vivir_7 x ;
-        "er" =>  deber_6 x ;
-        "ar" => case z of {
-          "u" => actuar_9 x ;
-          "z" => cazar_21 x ;
-          "i" => guiar_43 x ;
-          "g" => pagar_53 x ;
-          "c" => sacar_72 x ;
-          _   => cortar_5 x
+      xr = Predef.dp 2 v ; -- -ar
+      z  = Predef.dp 1 (Predef.tk 2 v) ; -- i in -iar
+      verb = case xr of {
+        "ir" => case z of {
+          "g" => redigir_52 v ;
+          "a" => sair_68 v ;
+          "u" => distribuir_73 v ;
+          _ => garantir_6 v
           } ;
-        _ => Predef.error ("regular verb infinitive must end ar/ir/er, not satisfied by" ++ x) -- rm this?
+        "er" => case z of {
+          "c" => aquecer_25 v ;
+          _ => vender_5 v
+            } ;
+        "ar" => case z of {
+          "e" => recear_15 v ;
+          "i" => anunciar_16 v ;
+          "o" => perdoar_20 v ;
+          "u" => averiguar_21 v ;
+          _ => comprar_4 v
+          } ;
+        "or" => pôr_45 v ;
+        _ => comprar_4 v -- hole
         }
     in verboV verb ;
 
-  regAltV : (mostrar,muestro : Str) -> V ;
+{-  regAltV : (mostrar,muestro : Str) -> V ;
   regAltV x y = case x of {
     _ + "ar" => verboV (regAlternV x y) ;
     _  => verboV (regAlternVEr x y)
     } ;
-
+-}
   verboV : Verbum -> V ;
   verboV ve = verbBesch ve ** {vtyp = VHabere ; p = [] ;
                                lock_V = <>} ;
@@ -311,7 +325,8 @@ oper
 
 -- Verbs with vowel alternation in the stem - easiest to give with two
 -- forms, e.g. "mostrar"/"muestro".
-    mkV : (mostrar,muestro : Str) -> V = regAltV ;
+  --  mkV : (mostrar,muestro : Str) -> V = regAltV ;
+  -- rm'ed as is uncommon in Por
 
 -- Most irregular verbs are found in $IrregPor$. If this is not
 -- enough, the module $BeschPor$ gives all the patterns of the

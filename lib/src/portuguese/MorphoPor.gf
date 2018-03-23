@@ -12,7 +12,7 @@ resource MorphoPor = CommonRomance, ResPor **
   CatPor in {
 
   flags optimize=all ;
-
+        coding=utf8 ;
 --2 Nouns
 --
 -- The following macro is useful for creating the forms of

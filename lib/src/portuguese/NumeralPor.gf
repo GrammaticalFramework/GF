@@ -1,6 +1,8 @@
 concrete NumeralPor of Numeral = CatPor [Numeral,Digits] **
   open CommonRomance, ResRomance, MorphoPor, Prelude in {
 
+  flags coding=utf8 ;
+
 lincat
   Digit = {s : DForm => CardOrd => Str} ;
   Sub10 = {s : DForm => CardOrd => Str ; n : Number} ;

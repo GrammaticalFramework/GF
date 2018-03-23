@@ -1,6 +1,7 @@
+
 --# -path=.:../abstract:../common
 
-concrete TerminologyPor of Terminology = CatPor ** open 
+concrete TerminologyPor of Terminology = CatPor ** open
   ResPor,
   CommonRomance,
   ParadigmsPor,
@@ -17,29 +18,29 @@ lincat
   Category = G.N ;
   ParameterType = G.N ;
   Parameter = G.N ;
-  
+
   Heading = {s : Str} ;
-  
+
 
 lin
-  noun_Category = mkN "sustantivo" ;
+  noun_Category = mkN "substantivo" ;
   adjective_Category = mkN "adjetivo" ;
   verb_Category = mkN "verbo" masculine ;
 
-  gender_ParameterType = mkN "género" masculine ;
+  gender_ParameterType = mkN "gênero" masculine ;
 
   singular_Parameter = mkN "singular" ;
   plural_Parameter = mkN "plural" ;
 
   masculine_Parameter = mkN "masculino" ;
-  feminine_Parameter = mkN "femenino" ;
+  feminine_Parameter = mkN "feminino" ;
   neuter_Parameter = mkN "neutro" ;
 
   nominative_Parameter = mkN "nominativo" ;
   genitive_Parameter = mkN "genitivo" ;
   dative_Parameter = mkN "dativo" ;
-  accusative_Parameter = mkN "accusativo" ;
-  
+  accusative_Parameter = mkN "acusativo" ;
+
   imperative_Parameter = mkN "imperativo" ;
   indicative_Parameter = mkN "indicativo" ;
   conjunctive_Parameter = mkN "subjuntivo" ;
@@ -49,11 +50,11 @@ lin
   past_Parameter = mkN "pretérito" ;
   future_Parameter = mkN "futuro" ;
   conditional_Parameter = mkN "condicional" ;
-  perfect_Parameter = mkN "perfecto compuesto" ; ----
-  imperfect_Parameter = mkN "imperfecto" ;
-  simple_past_Parameter = mkN "perfecto simple" ; ----
+  perfect_Parameter = mkN "perfeito composto" ; ----
+  imperfect_Parameter = mkN "imperfeito" ;
+  simple_past_Parameter = mkN "perfeito simples" ; ----
 
-  participle_Parameter = mkN "participio" ;
+  participle_Parameter = mkN "particípio" ;
   aux_verb_Parameter = mkN "auxiliar" ; ----
 
   positive_Parameter = mkN "positivo" ;
@@ -63,6 +64,6 @@ lin
 
   nounHeading n = ss (n.s ! Sg) ;
 
-  exampleGr_N = mkN "ejemplo" masculine ;
+  exampleGr_N = mkN "examplo" masculine ;
 
 }

@@ -3,6 +3,7 @@ concrete StructuralPor of Structural = CatPor **
        MakeStructuralPor, (X = ConstructX), Prelude in {
 
   flags optimize=all ;
+        coding=utf8 ;
 
   lin
     -- have_V3
@@ -60,8 +61,8 @@ concrete StructuralPor of Structural = CatPor **
     but_PConj = ss "mas" ;
     by8agent_Prep = mkPrep "por" ;
     by8means_Prep = mkPrep "por" ;
-    can8know_VV = mkVV (verboV (saber_71 "saber")) ;
-    can_VV = mkVV (verboV (poder_58 "poder")) ;
+    can8know_VV = mkVV (verboV (saber_35 "saber")) ;
+    can_VV = mkVV (verboV (poder_36 "poder")) ;
     during_Prep = mkPrep "durante" ;
     either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
     everybody_NP = makeNP ["todos"] Masc Pl ;
@@ -91,7 +92,7 @@ concrete StructuralPor of Structural = CatPor **
     most_Predet = {s = \\_,c => prepCase c ++ ["a maior parte"] ; c = CPrep P_de ;
                    a = PNoAg} ;
     much_Det = mkDeterminer "muito" "muita" Sg False ;
-    must_VV = mkVV (verboV (deber_6 "dever")) ;
+    must_VV = mkVV (regV "dever") ;
     no_Quant =
       let
         ningun : ParadigmsPor.Number => ParadigmsPor.Gender => Case => Str = table {
@@ -135,7 +136,7 @@ concrete StructuralPor of Structural = CatPor **
     to_Prep = complDat ;
     under_Prep = mkPrep "embaixo" ;
     very_AdA = ss "muito" ;
-    want_VV = mkVV (verboV (querer_64 "querer")) ;
+    want_VV = mkVV (verboV (querer_38 "querer")) ;
     whatSg_IP = {s = \\c => prepCase c ++ ["que"] ; a = aagr Masc Sg} ;
     whatPl_IP = {s = \\c => prepCase c ++ ["que"] ; a = aagr Masc Pl} ; ---
     when_IAdv = ss "quando" ;
@@ -166,7 +167,7 @@ concrete StructuralPor of Structural = CatPor **
       Masc Pl P2 ;
   lin
     as_CAdv = X.mkCAdv "tão" conjThan ; ----
-    have_V2 = dirV2 (verboV (tener_4 "ter")) ;
+    have_V2 = dirV2 (verboV (ter_1 "ter")) ;
     that_Subj = {s = "que" ; m = Conjunct} ;
 
   lin language_title_Utt = ss "português" ;
