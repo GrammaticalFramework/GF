@@ -39,6 +39,7 @@ concrete ConjunctionPol of Conjunction =
     ConjAP conj list = {
         adv = conj.s1 ++ list.ap1.adv ++ conj.s2 ++ list.ap2.adv;
         s = \\af=>conj.s1 ++ list.ap1.s!af ++ conj.s2 ++ list.ap2.s!af;
+	isPost = list.ap2.isPost ---
     };
     ConjRS = conjunctDistrTable GenNum;
 
@@ -72,18 +73,18 @@ concrete ConjunctionPol of Conjunction =
         }
     };
     
-    BaseAP  ap1 ap2 =  { ap1=ap1; ap2=ap2 };
+    BaseAP  ap1 ap2 =  { ap1=ap1; ap2=ap2 ; isPost = ap2.isPost};
     ConsAP  ap apl = { ap2=apl.ap2; ap1={
         s = \\af=> ap.s!af ++ "," ++ apl.ap1.s!af;
-        adv = ap.adv ++ "," ++ apl.ap1.adv
-    } };
+        adv = ap.adv ++ "," ++ apl.ap1.adv ; isPost = apl.isPost
+    }  ; isPost = apl.isPost};
   
   lincat
 
     [S]   = {s1,s2 : Str} ;
     [Adv] = {s1,s2 : Str} ;
     [NP]  = {np1,np2 : NounPhrase} ;
-    [AP]  = {ap1,ap2 : AdjPhrase} ;
+    [AP]  = {ap1,ap2 : AdjPhrase ; isPost : Bool} ;
     [RS]  = {s1,s2 : GenNum => Str} ;
 
 }

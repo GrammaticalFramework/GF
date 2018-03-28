@@ -174,7 +174,7 @@
 
   param AForm = AF GenNum Case;
 
-  oper AdjPhrase = { s : AForm => Str; adv:Str };
+  oper AdjPhrase = { s : AForm => Str; adv:Str ; isPost : Bool };
 
 --4 Pronoun
 
