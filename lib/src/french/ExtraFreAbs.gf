@@ -55,6 +55,7 @@ abstract ExtraFreAbs = ExtraRomanceAbs - [ProDrop] ** {
 -- alternative forms of questions
 
     EstcequeQuestCl : Cl -> QCl ; -- est-ce qu'il dort
+    EstcequeQuestIAdvCl : IAdv -> Cl -> QCl ; -- où est-ce qu'il dort
     InvQuestCl : Cl -> QCl ;      -- dort-il
     InvQuestIAdvCl : IAdv -> Cl -> QCl ;      -- dort-il
 

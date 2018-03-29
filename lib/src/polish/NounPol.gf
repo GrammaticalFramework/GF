@@ -54,7 +54,10 @@ concrete NounPol of Noun = CatPol ** open ResPol, Prelude, PronounMorphoPol, Mor
     };
     
     AdjCN mily facet = {
-      s = \\n,c =>  (mily.s ! AF (cast_gennum!<facet.g,n>) c) ++ (facet.s ! n ! c);
+      s = \\n,c => case mily.isPost of {
+        True =>  (facet.s ! n ! c) ++ (mily.s ! AF (cast_gennum!<facet.g,n>) c) ;
+        _  => (mily.s ! AF (cast_gennum!<facet.g,n>) c) ++ (facet.s ! n ! c)
+        } ;
       g = facet.g    
     };
     

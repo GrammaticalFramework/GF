@@ -174,7 +174,7 @@
 
   param AForm = AF GenNum Case;
 
-  oper AdjPhrase = { s : AForm => Str; adv:Str };
+  oper AdjPhrase = { s : AForm => Str; adv:Str ; isPost : Bool };
 
 --4 Pronoun
 
@@ -228,6 +228,15 @@
   oper numGenNum : GenNum -> Number = \n -> case n of {
     MascPersPl | OthersPl => Pl ;
     _ => Sg
+    } ;
+  --- AR 6/2/2018 
+  oper genGenNum : GenNum -> Gender = \n -> case n of {
+    MascPersSg => Masc Personal ;
+    MascAniSg => Masc Animate ;
+    MascInaniSg => Masc Inanimate ;
+    FemSg => Fem ;
+    NeutSg => Neut ; ---- NeutGr ?
+    _ => Plur
     } ;
 
   param MaybeGenNum = NoGenNum | JustGenNum GenNum;

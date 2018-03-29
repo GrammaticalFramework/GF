@@ -81,7 +81,10 @@ incomplete concrete NounScand of Noun =
       sp = \\b,g => quant.sp ! num.n ! b ! md b ! g ++ 
                     num.s ! g ;
       n = num.n ;
-      det = quant.det
+      det = case <quant.det,num.isDet> of {
+        <DDef Def,True> => DDef detDef ;
+        <d,_> => d
+        }
       } ;
 
     DetNP det = 

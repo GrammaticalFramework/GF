@@ -95,6 +95,14 @@ concrete ExtraFre of ExtraFreAbs = ExtraRomanceFre **
               QIndir => subjIf ++ cls ! Indic
               }
       } ;
+    EstcequeQuestIAdvCl iadv cl = 
+    {s = \\t,a,p =>                             -- est-ce qu'il dort ?
+            let cls = cl.s ! DDir ! t ! a ! p 
+            in table {
+              QDir   => iadv.s ++ "est-ce" ++ elisQue ++ cls ! Indic ;
+              QIndir => iadv.s ++ cls ! Indic
+              }
+      } ;
     InvQuestCl cl = {s = \\t,a,p =>                             -- dort-il ?
             let cls = cl.s ! DInv ! t ! a ! p 
             in table {

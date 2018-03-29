@@ -20,7 +20,7 @@ concrete PhraseDut of Phrase = CatDut ** open Prelude, ResDut in
     UttAdv adv = adv ;
     UttCN n = {s = n.s ! Strong ! NF Sg Nom} ;
     UttCard n = {s = n.s ! Utr ! Nom} ;
-    UttAP ap = {s = ap.s ! APred} ;
+    UttAP ap = {s = ap.s ! agrP3 Sg ! APred} ;
 
     UttInterj i = i ;
     UttAdV a = a ;

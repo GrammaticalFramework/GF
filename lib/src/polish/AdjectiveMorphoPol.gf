@@ -145,7 +145,8 @@ resource AdjectiveMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
       x + "zny" => model4 form (x+"źni");
       x + "chy" => model4 form (x+"si");
       x + "hy" => model4 form (x+"zi"); -- błahy - błazi (not really in use)
-      x + y@("py"|"by"|"fy"|"wy"|"my"|"sy"|"zy"|"ny") => model4 form ((Predef.tk 1 form)+"i")
+      x + y@("py"|"by"|"fy"|"wy"|"my"|"sy"|"zy"|"ny") => model4 form (Predef.tk 1 form + "i") ;
+      _ => Predef.error (form ++ "not matched as adjective in AdjectiveMorphoPol.guess_model)")
     };
   
   -- oper for simple forms
@@ -196,5 +197,7 @@ resource AdjectiveMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
   addComplToAdj a s c = { pos = a.pos; comp=a.comp; super=a.super;
     advpos=a.advpos; advcomp=a.advcomp; advsuper=a.advsuper;
     c = mkCompl s c
-  };  
+  };
+
+
 }

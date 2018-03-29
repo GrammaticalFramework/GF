@@ -7862,6 +7862,27 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
       SF Pl Voc => x + "ludzie"
     };
 
+--created for sukienka and kurtka. Paula Pawlowski 6/2/2018
+  oper mkNTable0670p : Str -> SubstForm => Str; --%
+    oper mkNTable0670p lexem = 
+      let x = Predef.tk 2 lexem in
+    table { 
+      SF Sg Nom => x + "ka";
+      SF Sg Gen => x + "ki";
+      SF Sg Dat => x + "ce";
+      SF Sg Acc => x + "kę";
+      SF Sg Instr => x + "ką";
+      SF Sg Loc => x + "ce";
+      SF Sg Voc => x + "ko";
+      SF Pl Nom => x + "ki";
+      SF Pl Gen => x + "ek";
+      SF Pl Dat => x + "kom";
+      SF Pl Acc => x + "ki";
+      SF Pl Instr => x + "kami";
+      SF Pl Loc => x + "kach";
+      SF Pl Voc => x + "ki"
+    };
+
     oper mkNTable0671: Str -> SubstForm => Str; --%
     oper mkNTable0671 lexem = 
       let x = Predef.tk 1 lexem in
@@ -12898,6 +12919,26 @@ resource NounMorphoPol = ResPol ** open Prelude, (Predef=Predef) in {
       SF Pl Dat => x + "szom";
       SF Pl Acc => x + "szy";
       SF Pl Instr => x + "szyma";
+      SF Pl Loc => x + "szach";
+      SF Pl Voc => x + "szy"
+    };
+
+    oper mkNTable1007a: Str -> SubstForm => Str; --forms for "ucho"
+    oper mkNTable1007a lexem = 
+      let x = Predef.tk 3 lexem in
+    table { 
+      SF Sg Nom => x + "cho";
+      SF Sg Gen => x + "cha";
+      SF Sg Dat => x + "chu";
+      SF Sg Acc => x + "cho";
+      SF Sg Instr => x + "chem";
+      SF Sg Loc => x + "chu";
+      SF Sg Voc => x + "cho";
+      SF Pl Nom => x + "szy";
+      SF Pl Gen => x + "szów";
+      SF Pl Dat => x + "szom";
+      SF Pl Acc => x + "szy";
+      SF Pl Instr => x + "szami";
       SF Pl Loc => x + "szach";
       SF Pl Voc => x + "szy"
     };

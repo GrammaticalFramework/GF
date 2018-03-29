@@ -13,7 +13,7 @@ concrete ConjunctionDut of Conjunction =
       a = {g = Utr ; n = conjNumber conj.n ss.a.n ; p = ss.a.p}
       }) ;
 
-    ConjAP conj ss = conjunctDistrTable AForm conj ss ** {
+    ConjAP conj ss = conjunctDistrTable2 Agr AForm conj ss ** {
       isPre = ss.isPre
       } ;
 
@@ -27,8 +27,8 @@ concrete ConjunctionDut of Conjunction =
     ConsAdv = consrSS comma ;
     BaseNP x y = twoTable NPCase x y ** {a = conjAgr x.a y.a} ;
     ConsNP xs x = consrTable NPCase comma xs x ** {a = conjAgr xs.a x.a} ;
-    BaseAP x y = twoTable AForm x y ** {isPre = andB x.isPre y.isPre} ;
-    ConsAP xs x = consrTable AForm comma xs x ** {isPre = andB xs.isPre x.isPre} ;
+    BaseAP x y = twoTable2 Agr AForm x y ** {isPre = andB x.isPre y.isPre} ;
+    ConsAP xs x = consrTable2 Agr AForm comma xs x ** {isPre = andB xs.isPre x.isPre} ;
     BaseRS x y = twoTable2 Gender Number x y ** {c = y.c} ;
     ConsRS xs x = consrTable2 Gender Number comma xs x ;
 
@@ -36,7 +36,7 @@ concrete ConjunctionDut of Conjunction =
     [S] = {s1,s2 : Order => Str} ;
     [Adv] = {s1,s2 : Str} ;
     [NP] = {s1,s2 : NPCase => Str ; a : Agr} ;
-    [AP] = {s1,s2 : AForm => Str ; isPre : Bool} ;
+    [AP] = {s1,s2 : Agr => AForm => Str ; isPre : Bool} ;
     [RS] = {s1,s2 : Gender => Number => Str} ;
 
 }

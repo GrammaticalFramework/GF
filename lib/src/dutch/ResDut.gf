@@ -364,7 +364,7 @@ param
        VPastSg   => "kon" ; --# notpresent
        VPastPl   => "konden" ; --# notpresent
        VImp2     => "kan" ;  ---- not used
-       VImp3     => "kant" ;
+       VImp3     => "kan" ;
        VImpPl    => "kunnen" ; ----
        VPerf     => "gekund" ;
        VPresPart => "kunnende" ;
@@ -396,7 +396,7 @@ param
     het_Pron : Pronoun = mkPronoun "het" "het" "ze" "hij" "hem" "zijn" "zijne" Neutr Sg P3 ; -- cunger: 't -> het 
 
 
-    MergesWithPrep = { mergesWithPrep : Bool ; mergeForm : Str } ;
+    MergesWithPrep : Type = { mergesWithPrep : Bool ; mergeForm : Str } ;
     noMerge : MergesWithPrep = { mergesWithPrep = False ; mergeForm = [] } ;
 -- Complex $CN$s, like adjectives, have strong and weak forms.
 
@@ -432,7 +432,7 @@ param
 
     -- Applying a preposition to a noun phrase
     -- In order to decide whether to merge, have to check both NP and Prep:
-    -- e.g. deze + met -> hiermee , but zonder + deze -> "zonder deze"
+    -- e.g. met + deze -> hiermee , but zonder + deze -> "zonder deze"
     appPrep : Preposition -> NPLite -> Str 
      = \prep,np -> 
           case <np.mergesWithPrep,prep.mergesWithPrep> of {
@@ -479,11 +479,16 @@ param
 
 --2 Transformations between parameter types
 
-  oper Agr : Type = {g : Gender ; n : Number ; p : Person} ;
+  -- IL2018-02: a whole lot of times we only need number and person, not gender
+  -- maybe switch to PersAgr at some point and halve the number of fields
+  oper PersAgr : Type = {n : Number ; p : Person} ;
+  oper Agr : Type = PersAgr ** {g : Gender} ; 
 
   oper
-    agrP3 : Number -> Agr = agrgP3 Neutr ;
+    pagr : Agr -> PersAgr = \agr -> { p = agr.p ; n = agr.n } ;
+    pagrP3 : Number -> PersAgr = \num -> {p = P3; n = num } ;
 
+    agrP3 : Number -> Agr = agrgP3 Neutr ;
     agrgP3 : Gender -> Number -> Agr = \g,n -> 
       {g = g ; n = n ; p = P3} ;
 
@@ -677,12 +682,12 @@ param
     vpi.p1 ! agrP3 Sg ++ vpi.p2 ++ vpi.p3 ; -- TODO
 
   reflPron : Agr => Str = table {
-    {n = Sg ; p = P1} => "me" ;
-    {n = Sg ; p = P2} => "je" ;
-    {n = Sg ; p = P3} => "zich" ;
-    {n = Pl ; p = P1} => "ons" ;
-    {n = Pl ; p = P2} => "je" ;
-    {n = Pl ; p = P3} => "zich"
+    {n = Sg ; p = P1} => "mijzelf" ;
+    {n = Sg ; p = P2} => "jezelf" ;
+    {n = Sg ; p = P3} => "zichzelf" ;
+    {n = Pl ; p = P1} => "onszelf" ;
+    {n = Pl ; p = P2} => "jezelf" ;
+    {n = Pl ; p = P3} => "zichzelf"
     } ;
 
   conjThat : Str = "dat" ;
@@ -701,13 +706,26 @@ param
 
   Determiner : Type = MergesWithPrep ** {s,sp : Gender => Str ; n : Number ; a : Adjf} ;
 
-  mkDet : Str -> Str -> Number -> Determiner =
+  mkDet2 : Str -> Str -> Number -> Determiner =
     \deze,dit,n -> noMerge ** {
-      s  = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
-      sp = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
-      n = n ;
-      a = Weak
-      } ;
+        s  = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
+        sp = \\g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze} ;
+        n = n ;
+        a = Weak } ;
+
+  mkDet = overload {
+    mkDet : Str -> Str -> Number -> Determiner = mkDet2 ;
+
+       -- NB: this function has 3 arguments to separate it from the previous one
+       -- where the independent NP form is the same as the attribute form
+       -- ("deze mensen" and "deze").
+       -- In contrast, here we have a different NP form: 
+       -- "er zijn veel/weinig mensen" 
+       -- "velen zijn geroepen, maar weinigen uitverkoren."
+    mkDet : Str -> Str -> Str -> Number -> Determiner =
+      \weinig,_,weinigen,n -> 
+        mkDet2 weinig weinig n ** { sp = \\g => weinigen } 
+   } ;
   Quantifier : Type = MergesWithPrep ** {
       s  : Bool => Number => Gender => Str ; 
       sp : Number => Gender => Str ; 
@@ -725,17 +743,15 @@ param
       s  = \\n,g => case <n,g> of {<Sg,Neutr> => dit ; _ => deze}
       } ;
 
-  NounPhrase : Type = MergesWithPrep ** {s : NPCase => Str ; a : Agr ; isPron : Bool } ; 
+  NounPhrase : Type = MergesWithPrep ** {s : NPCase => Str ; a : Agr ; isPron : Bool } ;
+
   mkNP : Str -> Gender -> Number -> NounPhrase = 
-    \s,g,n -> noMerge ** heavyNP {
-      s = \\_ => s ;
-      a = agrgP3 g n ;
-      } ;
+    \s,g,n -> heavyNP { s = \\_ => s ;
+                        a = agrgP3 g n } ;
 
   auxVV : VVerb -> VVerb ** {isAux : Bool} = \v -> v ** {isAux = True} ;
 
-  heavyNP : 
-    {s : NPCase => Str ; a : Agr} -> {s : NPCase => Str ; a : Agr ; isPron : Bool} = \np ->
-    np ** {isPron = False} ;
+  heavyNP : {s : NPCase => Str ; a : Agr} -> NounPhrase = \np ->
+    noMerge ** { isPron = False ; s = np.s ; a = np.a } ;
 
 }

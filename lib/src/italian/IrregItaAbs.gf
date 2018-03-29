@@ -682,4 +682,9 @@ abstract IrregItaAbs = Cat [V] ** {
   fun correggere_V : V ;
   fun decidere_V : V ;
   fun persistere_V : V ;
+  fun incidere_V : V ;
+  fun soddisfare_V' : V ;
+  fun proteggere_V : V ;
+  fun offrire_V : V ;
+  fun soffrire_V : V ;
 }

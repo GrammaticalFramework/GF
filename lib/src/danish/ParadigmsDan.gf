@@ -368,6 +368,7 @@ oper
 
   regADeg a = case Predef.dp 2 a of {
     "sk" => aRask a ;
+    "ig" => aDejlig a ;
     _ => case last a of {
     "t" => aAbstrakt a ;
     _ => aRod a
