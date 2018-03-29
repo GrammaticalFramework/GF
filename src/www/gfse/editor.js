@@ -832,7 +832,7 @@ function draw_abstract(g) {
 }
 
 function draw_comment(g) {
-    return div_class("comment",editable("span",text(g.comment || ""),g,edit_comment,"Edit grammar description"));
+    return div_class("comment",editable("span",text(g.comment || "…"),g,edit_comment,"Edit grammar description"));
 }
 
 function module_name(g,ix) {
