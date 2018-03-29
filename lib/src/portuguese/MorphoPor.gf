@@ -57,6 +57,9 @@ oper
       _ => error "input must be vowel character."
     } ;
 
+  nomReptil : Str -> Number => Str = \reptil ->
+    numForms reptil (tk 2 reptil + "eis") ;
+
   nomFenol : Str -> Number => Str = \fenol ->
     case fenol of {
       fen + v@("a"|"e"|"i"|"o"|"u") + "l" => numForms fenol (fen + acuteVowel v + "is")
@@ -125,6 +128,16 @@ oper
        }
     } ;
 
+  mkAdj2N : (_,_: N) -> Str -> Adj = \mascN, femN, burramente ->
+    {s = table {
+       AF Masc n => mascN.s ! n ;
+       AF Fem  n => femN.s ! n ;
+       AA => burramente
+       }
+    } ;
+
+  mkAdjN : N -> Str -> Adj = \n, burramente -> mkAdj2N n n burramente ;
+
 -- Then the regular and invariant patterns.
 
   adjPreto : Str -> Adj = \preto ->
@@ -148,7 +161,7 @@ oper
     mkAdj blu blu blu blu blu ; --- blasé
 
  -- francês francesa franceses francesas
-  adjEs : Str -> Adj = \francês ->
+  adjFrances : Str -> Adj = \francês ->
     let franc  : Str = Predef.tk 2 francês ;
         frances : Str = franc + "es" ;
     in mkAdj francês (frances + "a") (frances + "es") (frances + "as") (frances + "amente") ;
@@ -176,7 +189,7 @@ oper
       pret + "o" => adjPreto a ;
       anarquist + v@("e" | "a") => adjUtil (anarquist + v) (anarquist + v + "s") ;
       ouvido + "r" => adjOuvidor a (ouvido + "ra") ;
-      chin + "ês" => adjEs a ;
+      chin + "ês" => adjFrances a ;
       europ + "eu" => adjEuropeu a ;
       alem + "ão" => adjVo a ;
       _   => adjUtil a (a + "s")

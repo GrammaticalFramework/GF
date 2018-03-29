@@ -1,4 +1,4 @@
--- Structures special for Spanish. These are not implemented in other
+-- Structures special for Portuguese. These are not implemented in other
 -- Romance languages.
 
 abstract ExtraPorAbs = ExtraRomanceAbs ** {

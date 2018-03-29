@@ -193,13 +193,18 @@ oper
   superlADeg a = {s = table {Posit => a.s ! Posit ;
                              Compar => a.s ! Compar ;
                              Superl => a.s ! Compar}} ;
--}
+    -}
+
+  -- redundant
+--  regADeg : Str -> A ;
+--  regADeg a = compADeg (regA a) ;
+
   regA : Str -> A ;
   regA a = compADeg {s = \\_ => (mkAdjReg a).s ; isPre = False ;
                      lock_A = <>} ;
 
   mk2A : (espanhol,espanhola : Str) -> A ;
-  mk2A a b = compADeg {s = \\_ => (adjOuvidor a b).s ; isPre = False ;
+  mk2A a b = compADeg {s = \\_ => (mkAdj2N (mkN a) (mkN b) (b + "mente")).s ; isPre = False ;
                        lock_A = <>} ;
 
   mk5A : (solo,sola,solos,solas,solamente : Str) -> A ;
@@ -217,19 +222,19 @@ oper
 -- For regular adjectives, all forms are derived from the masculine
 -- singular. The types of adjectives that are recognized are "alto",
 -- "fuerte", "util". Comparison is formed by "mas".
-    mkA : (util : Str) -> A  = regA ; -- predictable adjective
+    mkA : (bobo : Str) -> A  = regA ; -- predictable adjective
 
 -- Some adjectives need the feminine form separately.
-    mkA : (espanol,espanola : Str) -> A  = mk2A ;
+    mkA : (espanhol,espanhola : Str) -> A  = mk2A ;
 
 -- One-place adjectives compared with "mais" need five forms in the
 -- worst case (masc and fem singular, masc plural, adverbial).
-    mkA : (solo,sola,solos,solas,solamente : Str) -> A = mk5A ;
+    mkA : (bobo,boba,bobos,bobas,bobamente : Str) -> A = mk5A ;
 
 -- In the worst case, two separate adjectives are given: the positive
 -- ("bueno"), and the comparative ("mejor").
     -- special comparison with "mais" as default
-    mkA : (bueno : A) -> (mejor : A) -> A = mkADeg ;
+    mkA : (bom : A) -> (melhor : A) -> A = mkADeg ;
     } ;
 
 -- The functions above create postfix adjectives. To switch them to
@@ -319,7 +324,7 @@ oper
 -- the complete set of "Bescherelle" conjugations.
 
     mkV : (pagar : Str) -> V = \s -> case s of {
-      far + "-se" => reflV (regV far) ;
+      chamar + "-se" => reflV (regV chamar) ;
       _ => regV s
       } ; -- regular in "-ar", "-er", "-ir"
 
@@ -499,9 +504,6 @@ oper
                   hasClit = False ;
                   isPol = False ;
                   isNeg = False} ** {lock_NP = <>} ;
-
-  regADeg : Str -> A ;
-  regADeg a = compADeg (regA a) ;
 
   reflVerboV : Verbum -> V = \ve -> reflV (verboV ve) ;
 

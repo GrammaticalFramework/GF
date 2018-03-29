@@ -76,7 +76,7 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
       _ => Acc
       } ;
 
-    auxVerb : VType -> (VF => Str) = \_ -> haber_V.s ;
+    auxVerb : VType -> (VF => Str) = \_ -> haver_V.s ;
 
     vpAgrClit : Agr -> VPAgr = \a ->
       vpAgrNone ;
@@ -204,13 +204,15 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
       _ => False
       } ;
 
-    auxPassive : Verb = verbBeschH (estar_10 "estar") ;
+    auxPassive : Verb = copula ;
 
-    copula : Verb = verbBeschH (ser_3 []) ;
+    copula : Verb = verbBeschH (ser_3 "ser") ;
 
     estar_V : Verb = verbBeschH (estar_10 "estar") ;
 
-    haber_V : Verb = verbBeschH (haver_2 "haver") ;
+    haver_V : Verb = verbBeschH (haver_2 "haver") ;
+
+    ficar_V : Verb = verbBeschH (ficar_12 "ficar") ;
 
     verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere ; p = []} ;
 

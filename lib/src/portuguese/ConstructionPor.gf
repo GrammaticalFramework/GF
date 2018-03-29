@@ -1,7 +1,7 @@
 --# -path=alltenses:.:../abstract
 
 concrete ConstructionPor of Construction = CatPor **
-  open SyntaxPor, SymbolicPor, ParadigmsPor,
+  open SyntaxPor, SymbolicPor, ParadigmsPor, BeschPor,
        (L = LexiconPor), (E = ExtraPor), (I = IrregPor), (R = ResPor), (C = CommonRomance),
        Prelude in {
   flags coding=utf8 ;
@@ -19,7 +19,7 @@ lin
   how_far_QCl x = mkQCl (lin IAdv (ss "a que distância")) (mkCl x I.estar_V) ;
 
 -- some more things
-  weather_adjCl ap = mkCl (mkVP (mkVA I.hacer_V) (lin AP ap)) ;
+  weather_adjCl ap = mkCl (mkVP (mkVA I.fazer_V) (lin AP ap)) ;
 
   is_right_VP = E.ComplCN have_V2 (mkCN (mkN "razão")) ;
   is_wrong_VP = mkVP (mkVA I.estar_V) (mkAP (mkA "errado")) ;

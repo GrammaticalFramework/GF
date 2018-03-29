@@ -1,5 +1,5 @@
---# -path=.:../spanish:../romance:../common:../abstract:../prelude
+--# -path=.:../portuguese:../romance:../common:../abstract:../prelude
 
-resource SymbolicPor = Symbolic with 
+resource SymbolicPor = Symbolic with
   (Symbol = SymbolPor),
   (Grammar = GrammarPor) ;

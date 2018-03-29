@@ -228,6 +228,7 @@ langsCoding = [
   (("nynorsk",  "Nno"),""),
   (("persian",  "Pes"),""),
   (("polish",   "Pol"),""),
+  (("portuguese", "Por"), ""),
   (("punjabi",   "Pnb"),""),
   (("romanian", "Ron"),""),
   (("russian",  "Rus"),""),
@@ -271,7 +272,7 @@ langsPGF = langsLang `except` ["Ara","Hin","Ron","Tha"]
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Lav","Spa","Swe"]
 
-gfc bi modes summary files = 
+gfc bi modes summary files =
     parallel_ [gfcn bi mode summary files | mode<-modes]
 gfcn bi mode summary files = do
   let dir = getRGLBuildDir (lbi bi) mode
