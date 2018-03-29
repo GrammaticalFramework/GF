@@ -179,6 +179,7 @@ function draw_grammar_list() {
 					 td(title(tip,
 						  a(jsurl('open_public("'+file+'")'),
 						    [text(basename)]))),
+					 td(text(files[i].comment||"")),
 					 td(when)]))
 		}
 	    }
