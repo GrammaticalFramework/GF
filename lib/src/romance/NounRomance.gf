@@ -4,8 +4,8 @@ incomplete concrete NounRomance of Noun =
   flags optimize=all_subs ; coding = utf8 ;
 
   lin
-    DetCN det cn = 
-      let 
+    DetCN det cn =
+      let
         g = cn.g ;
         n = det.n
       in heavyNPpol det.isNeg {
@@ -18,7 +18,7 @@ incomplete concrete NounRomance of Noun =
 
     UsePron p = p ** {isNeg = False} ;
 
-    PredetNP pred np = 
+    PredetNP pred np =
       let agr = complAgr np.a in
       heavyNPpol np.isNeg {
         s = \\c => pred.s ! agr ! c ++ (np.s ! pred.c).ton ;
@@ -26,7 +26,7 @@ incomplete concrete NounRomance of Noun =
         hasClit = False
       } ;
 
-    PPartNP np v2 = 
+    PPartNP np v2 =
       let agr = complAgr np.a in
       heavyNPpol np.isNeg {
         s = \\c => (np.s ! c).ton ++ v2.s ! VPart agr.g agr.n ;
@@ -53,7 +53,7 @@ incomplete concrete NounRomance of Noun =
       } ;
 
     DetQuantOrd quant num ord = {
-      s,sp = \\g,c => quant.s ! num.isNum ! num.n ! g ! c ++ num.s ! g ++ 
+      s,sp = \\g,c => quant.s ! num.isNum ! num.n ! g ! c ++ num.s ! g ++
                    ord.s ! aagr g num.n ;
       s2 = quant.s2 ;
       n = num.n ;
@@ -61,18 +61,18 @@ incomplete concrete NounRomance of Noun =
       } ;
 
     DetQuant quant num = {
-      s  = \\g,c => quant.s ! num.isNum ! num.n ! g ! c ++ num.s ! g ; 
+      s  = \\g,c => quant.s ! num.isNum ! num.n ! g ! c ++ num.s ! g ;
       sp = \\g,c => case num.isNum of {
-        True  => quant.s ! True ! num.n ! g ! c ++ num.s ! g ; 
+        True  => quant.s ! True ! num.n ! g ! c ++ num.s ! g ;
         False => quant.sp ! num.n ! g ! c ++ num.s ! g
-        } ; 
+        } ;
       s2 = quant.s2 ;
       n  = num.n ;
       isNeg = quant.isNeg
       } ;
 
-    DetNP det = 
-      let 
+    DetNP det =
+      let
         g = Masc ;  ---- Fem in Extra
         n = det.n
       in heavyNPpol det.isNeg {
@@ -103,24 +103,24 @@ incomplete concrete NounRomance of Noun =
 
     OrdSuperl adj = {s = \\a => adj.s ! Superl ! AF a.g a.n} ;
 
-    OrdNumeralSuperl num adj = {s = \\a => num.s ! NOrd a.g a.n ++ adj.s ! Superl ! AF a.g a.n} ; -- la terza più grande 
+    OrdNumeralSuperl num adj = {s = \\a => num.s ! NOrd a.g a.n ++ adj.s ! Superl ! AF a.g a.n} ; -- la terza più grande
     ---- could be discontinuous: la terza città più grande
 
     DefArt = {
-      s = \\_,n,g,c => artDef False g n c ;  
-      sp = \\n,g,c => artDef True g n c ; 
+      s = \\_,n,g,c => artDef False g n c ;
+      sp = \\n,g,c => artDef True g n c ;
       s2 = [] ;
       isNeg = False
       } ;
 
     IndefArt = {
       s = \\b,n,g,c => if_then_Str b (prepCase c) (artIndef False g n c) ;
-      sp = \\n,g,c => artIndef True g n c ; 
+      sp = \\n,g,c => artIndef True g n c ;
       s2 = [] ;
       isNeg = False
       } ;
 
-    MassNP cn = let 
+    MassNP cn = let
         g = cn.g ;
         n = Sg
       in heavyNP {
@@ -149,9 +149,9 @@ incomplete concrete NounRomance of Noun =
       c2 = f.c3
       } ;
 
-    AdjCN ap cn = 
-      let 
-        g = cn.g 
+    AdjCN ap cn =
+      let
+        g = cn.g
       in {
         s = \\n => preOrPost ap.isPre (ap.s ! (AF g n)) (cn.s ! n) ;
         g = g ;
@@ -179,4 +179,14 @@ incomplete concrete NounRomance of Noun =
       s = \\n => cn.s ! n ++ appCompl {s = [] ; c = genitive ; isDir = False} np ;
       g = cn.g ;
       } ;
+
+    -- PartNP and CounNP missing: how to define 'of' in the functor?
+
+    AdjDAP det ap = {
+      s = \\g => det.s ! g ++ ap.s ! AF g det.n ;
+      n = det.n ;
+      } ;
+
+    DetDAP det = {s = \\g => det.s ! g ! Nom ; n = det.n } ;
+
 }
