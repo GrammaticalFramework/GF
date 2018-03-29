@@ -158,15 +158,16 @@ function draw_grammar_list() {
 	    clear(gt)
 	    if(files.length>0) {
 		sort_grammars()
-		//var unique_id=local.get("unique_id","-")
+		var unique_id=local.get("unique_id","-")
 		for(var i in files) {
 		    var file=files[i].path
 		    var parts=file.split(/[-.]/)
 		    var basename=parts[0]
 		    var unique_name=parts[1]+"-"+parts[2]
 		    var mine = my_grammar(unique_name)!=null
-		    var del = mine
-			? delete_button(rmpublic(file),"Don't publish this grammar")
+		    var from_me = parts[1] == unique_id
+		    var del = from_me || mine
+			? delete_button(rmpublic(file),"Remove this public grammar")
 			: []
 		    var tip = mine
 			? "This is a copy of your grammar"
