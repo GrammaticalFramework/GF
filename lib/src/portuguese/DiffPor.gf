@@ -3,7 +3,7 @@
 instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRomance, PhonoPor, BeschPor, Prelude in {
 
   flags optimize=noexpand ;
-    coding=utf8 ;
+        coding=utf8 ;
 
 ---- exceptions ----------------
   oper
@@ -13,7 +13,7 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
 
 --------------------------------
 
-  param 
+  param
     Prepos = P_de | P_a ;
     VType = VHabere | VRefl ;
 
@@ -23,7 +23,7 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
 
     prepCase = \c -> case c of {
       Nom => [] ;
-      Acc => [] ; 
+      Acc => [] ;
       CPrep P_de => "de" ;
       CPrep P_a  => "a"
       } ;
@@ -32,31 +32,31 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
     artDef : Bool -> Gender -> Number -> Case -> Str = \isNP,g,n,c ->
       case isNP of {
        True => case <g,n,c> of {
-        <Masc,Sg, _>          => prepCase c ++ "el" ;
-	<Fem, Sg, _> => prepCase c ++ "la" ; ----- ??
-        <Masc,Pl, _> => prepCase c ++ "los" ;
-        <Fem ,Pl, _> => prepCase c ++ "las"
+        <Masc,Sg, _>          => prepCase c ++ "o" ;
+	<Fem, Sg, _> => prepCase c ++ "a" ; ----- ??
+        <Masc,Pl, _> => prepCase c ++ "os" ;
+        <Fem ,Pl, _> => prepCase c ++ "as"
         } ;
-      _ => case <g,n,c> of {
-        <Masc,Sg, CPrep P_de> => "del" ;
-        <Masc,Sg, CPrep P_a>  => "al" ;
-        <Masc,Sg, _>          => prepCase c ++ "el" ;
-        <Fem ,Sg, CPrep P_de> => chooseDeLa ;
-        <Fem ,Sg, CPrep P_a>  => chooseALa ;
-	<Fem, Sg, _> => prepCase c ++ chooseLa ;
-        <Masc,Pl, _> => prepCase c ++ "los" ;
-        <Fem ,Pl, _> => prepCase c ++ "las"
+       False => case <g,n,c> of {
+        <Masc,Sg, CPrep P_de> => "do" ;
+        <Masc,Sg, CPrep P_a>  => "ao" ;
+        <Masc,Sg, _>          => prepCase c ++ "o" ;
+        <Fem ,Sg, CPrep P_de> => "da" ;
+        <Fem ,Sg, CPrep P_a>  => "à" ;
+	<Fem, Sg, _> => prepCase c ++ "a" ;
+        <Masc,Pl, _> => prepCase c ++ "os" ;
+        <Fem ,Pl, _> => prepCase c ++ "as"
         }
       } ;
 
     artIndef = \isNP,g,n,c -> case isNP of {
       True => case n of {
-        Sg  => prepCase c ++ genForms "uno"  "una" ! g ;
-        _   => prepCase c ++ genForms "unos" "unas" ! g  
+        Sg  => prepCase c ++ genForms "um"  "uma" ! g ;
+        _   => prepCase c ++ genForms "uns" "umas" ! g
         } ;
       _ => case n of {
-        Sg  => prepCase c ++ genForms "un"   "una" ! g ;
-        _   => prepCase c 
+        Sg  => prepCase c ++ genForms "um"   "uma" ! g ;
+        _   => prepCase c
         }
       } ;
 
@@ -73,16 +73,16 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
 
     conjunctCase : Case -> Case = \c -> case c of {
       Nom => Nom ;
-      _ => Acc 
+      _ => Acc
       } ;
 
-    auxVerb : VType -> (VF => Str) = \_ -> haber_V.s ;
+    auxVerb : VType -> (VF => Str) = \_ -> haver_V.s ;
 
     vpAgrClit : Agr -> VPAgr = \a ->
       vpAgrNone ;
 
-    pronArg = \n,p,acc,dat -> 
-      let 
+    pronArg = \n,p,acc,dat ->
+      let
         paccp = case acc of {
           CRefl   => <reflPron n p Acc, p,True> ;
           CPron ag an ap => <argPron ag an ap Acc, ap,True> ;
@@ -101,7 +101,7 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
           } ;
         defaultPronArg = <pdatp.p1 ++ paccp.p1, [], peither>
 ----        defaultPronArg = <pdatp.p1 ++ paccp.p1, [], orB paccp.p3 pdatp.p3>
-      in 
+      in
       ----  case <<paccp.p2, pdatp.p2> : Person * Person> of {
       ----     <P3,P3> => <"se" ++ paccp.p1, [], True> ;
       ----     _ => defaultPronArg
@@ -113,16 +113,16 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
     infForm _ _ _ _  = True ;
 
     mkImperative b p vp =
-      \\pol,g,n => 
-        let 
+      \\pol,g,n =>
+        let
           pe    = case b of {True => P3 ; _ => p} ;
           agr   = {g = g ; n = n ; p = pe} ;
           refl  = case vp.s.vtyp of {
             VRefl => <reflPron n pe Acc,True> ;
-            _ => <[],False> 
+            _ => <[],False>
             } ;
 
-          clpr  =  <vp.clit1 ++ vp.clit2, [],vp.clit3.hasClit> ; 
+          clpr  =  <vp.clit1 ++ vp.clit2, [],vp.clit3.hasClit> ;
 ----          clpr  = <[],[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
 ----e          verb  = case <aag.n, pol,pe> of {
 ----e            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul clpr.p3).inf ! aag ;
@@ -151,32 +151,32 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
 
     clitInf b cli inf = inf ++ bindIf b ++ cli ;
 
-    relPron : Bool => AAgr => Case => Str = \\b,a,c => 
+    relPron : Bool => AAgr => Case => Str = \\b,a,c =>
       case c of {
         Nom | Acc => "que" ;
-        CPrep P_a => "cuyo" ;
-        _ => prepCase c ++ "cuyo"
+        CPrep P_a => "cujo" ;
+        _ => prepCase c ++ "cujo"
         } ;
 
-    pronSuch : AAgr => Str = aagrForms "tál" "tál" "tales" "tales" ;
+    pronSuch : AAgr => Str = aagrForms "tal" "tal" "tais" "tais" ;
 
-    quelPron : AAgr => Str = aagrForms "cuál" "cuál" "cuales" "cuales" ;
+    quelPron : AAgr => Str = aagrForms "qual" "qual" "quais" "quais" ;
 
     partQIndir = [] ; ---- ?
 
-    reflPron : Number -> Person -> Case -> Str = \n,p,c -> 
-        let pro = argPron Fem n p c 
+    reflPron : Number -> Person -> Case -> Str = \n,p,c ->
+        let pro = argPron Fem n p c
         in
-        case p of { 
+        case p of {
         P3 => case c of {
           Acc | CPrep P_a => "se" ;
           _ => "sí"
           } ;
         _ => pro
-        } ; 
+        } ;
 
-    argPron : Gender -> Number -> Person -> Case -> Str = 
-      let 
+    argPron : Gender -> Number -> Person -> Case -> Str =
+      let
         cases : (x,y : Str) -> Case -> Str = \me,moi,c -> case c of {
           Acc | CPrep P_a => me ;
           _ => moi
@@ -186,8 +186,8 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
           CPrep P_a => leur ;
           _ => eux
           } ;
-      in 
-      \g,n,p -> case <<g,n,p> : Gender * Number * Person> of { 
+      in
+      \g,n,p -> case <<g,n,p> : Gender * Number * Person> of {
         <_,Sg,P1> => cases "me" "mí" ;
         <_,Sg,P2> => cases "te" "tí" ;
         <_,Pl,P1> => cases "nos" "nosotras" ; --- nosotros
@@ -204,13 +204,15 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
       _ => False
       } ;
 
-    auxPassive : Verb = verbBeschH (estar_2 "estar") ;
+    auxPassive : Verb = copula ;
 
-    copula : Verb = verbBeschH (ser_1 "ser") ;
+    copula : Verb = verbBeschH (ser_3 "ser") ;
 
-    estar_V : Verb = verbBeschH (estar_2 "estar") ;
-    
-    haber_V : Verb = verbBeschH (haber_3 "haber") ;
+    estar_V : Verb = verbBeschH (estar_10 "estar") ;
+
+    haver_V : Verb = verbBeschH (haver_2 "haver") ;
+
+    ficar_V : Verb = verbBeschH (ficar_12 "ficar") ;
 
     verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere ; p = []} ;
 
