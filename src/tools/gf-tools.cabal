@@ -10,3 +10,22 @@ Executable gfdoc
 Executable htmls
   main-is: Htmls.hs
   build-depends: base
+
+
+library
+  hs-source-dirs:      gftest
+  exposed-modules:     Grammar
+  other-modules:       Mu, Graph, FMap, EqRel
+  build-depends:       base
+                     , containers
+                     , pgf2
+
+executable gftest
+  hs-source-dirs:      gftest
+  main-is:             Main.hs
+  build-depends:       base
+                     , pgf2
+                     , cmdargs
+                     , containers
+                     , filepath
+                     , gf-tools
