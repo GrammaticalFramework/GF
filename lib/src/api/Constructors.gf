@@ -1597,10 +1597,6 @@ incomplete resource Constructors = open Grammar in {  --%
 
 --.
 
-
-      the_Art : Art = DefArt ;     -- the
-      a_Art   : Art = IndefArt ;   -- a
-
     ---- obsol
 
     mkQuantSg : Quant -> QuantSg = SgQuant ;
