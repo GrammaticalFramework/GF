@@ -26,7 +26,6 @@ library
 
   extra-libraries:     sg pgf gu
   cc-options:          -std=c99
-  default-language:    Haskell2010
   c-sources:           utils.c
 
 executable pgf-shell
