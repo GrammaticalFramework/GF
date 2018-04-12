@@ -1236,6 +1236,7 @@ pgf_new_parse_state(PgfParsing* ps, size_t start_offset,
 			PgfLexiconIdxEntry* entry = gu_buf_extend(state->lexicon_idx);
 			entry->idx    = seq->idx;
 			entry->offset = state->start_offset;
+			entry->sym_idx= 0;
 		}
 
 		// Add non-epsilon lexical rules to the bottom up index
