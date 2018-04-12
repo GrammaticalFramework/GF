@@ -1,6 +1,6 @@
 --# -path=.:../abstract:../common
 
--- documentation of Pornish in Pornish: the default introduced in LangPor
+-- documentation of Portuguese in Portuguese: the default introduced in LangPor
 
-concrete DocumentationPor of Documentation = CatPor ** 
+concrete DocumentationPor of Documentation = CatPor **
   DocumentationPorFunctor with (Terminology = TerminologyPor) ;

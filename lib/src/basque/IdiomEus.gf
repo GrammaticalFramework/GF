@@ -1,7 +1,7 @@
 
 --1 Idiom: Idiomatic Expressions
 
-concrete IdiomEus of Idiom = CatEus ** open Prelude, ResEus in {
+concrete IdiomEus of Idiom = CatEus ** open Prelude, ResEus, VerbEus in {
 
 -- This module defines constructions that are formed in fixed ways,
 -- often different even in closely related languages.
@@ -16,9 +16,12 @@ concrete IdiomEus of Idiom = CatEus ** open Prelude, ResEus in {
 {-
     CleftNP   : NP  -> RS -> Cl ; -- it is I who did it
     CleftAdv  : Adv -> S  -> Cl ; -- it is here she slept
-
-    ExistNP   : NP -> Cl ;        -- there is a house
-    ExistIP   : IP -> QCl ;       -- which houses are there
+    -}
+  -- : NP -> Cl ;        -- there is a house
+  ExistNP np = let vp = UseComp (CompNP np)
+		in clFromVP empty_NP vp ;
+  
+{-    ExistIP   : IP -> QCl ;       -- which houses are there
 
 -- 7/12/2012 generalizations of these
 

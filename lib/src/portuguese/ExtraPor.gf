@@ -1,66 +1,43 @@
-concrete ExtraPor of ExtraPorAbs = ExtraRomancePor ** 
-  open CommonRomance, PhonoPor, MorphoPor, ParadigmsPor, ParamX, ResPor, BeschPor, (I = IrregPor),
+concrete ExtraPor of ExtraPorAbs = ExtraRomancePor **
+  open CommonRomance, PhonoPor, MorphoPor, ParadigmsPor, ParamX, ResPor, BeschPor, (I = IrregPor), (S = StructuralPor),
   Prelude in {
   flags coding=utf8 ;
-  
+
   lin
-    i8fem_Pron =  mkPronoun
-      "yo" "me" "me" "mí"
-      "mi" "mi" "mis" "mis"
-      Fem Sg P1 ;
+    --- Prons
+    i8fem_Pron = pronAgr S.i_Pron Fem Sg P1 ;
+    youSg8fem_Pron = pronAgr S.youSg_Pron Fem Sg P3 ;
+    we8fem_Pron = pronAgr S.we_Pron Fem Pl P1 ;
+    youPl8fem_Pron = pronAgr S.youPl_Pron Fem Pl P3 ;
+    youPolPl_Pron = S.youPlPol_Pron ;
+    youPol8fem_Pron = pronAgr S.youSgPol_Pron Fem Sg P2 ;
+    youPolPl8fem_Pron = pronAgr S.youPlPol_Pron Fem Pl P2 ;
+    they8fem_Pron = mkPronFrom S.they_Pron "elas" "as" "lhes" "elas" Fem Pl P3 ;
+
+
     these8fem_NP = makeNP ["estas"] Fem Pl ;
-    they8fem_Pron = mkPronoun
-      "ellas" "las" "les" "ellas"
-      "su" "su" "sus" "sus"
-      Fem Pl P3 ;
     this8fem_NP = pn2np (mkPN ["esta"] Fem) ;
-    those8fem_NP = makeNP ["esas"] Fem Pl ;
+    those8fem_NP = makeNP ["essas"] Fem Pl ;
 
-    we8fem_Pron = mkPronoun 
-      "nosotras" "nos" "nos" "nosotras"
-      "nuestro" "nuestra" "nuestros" "nuestras"
-      Fem Pl P1 ;
-    whoPl8fem_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Pl} ;
-    whoSg8fem_IP = {s = \\c => prepCase c ++ "quién" ; a = aagr Fem Sg} ;
+    whoPl8fem_IP = {s = \\c => prepCase c ++ "quem" ; a = aagr Fem Pl} ;
+    whoSg8fem_IP = {s = \\c => prepCase c ++ "quem" ; a = aagr Fem Sg} ;
 
-    youSg8fem_Pron = mkPronoun 
-      "tú" "te" "te" "ti"
-      "tu" "tu" "tus" "tus"
-      Fem Sg P2 ;
-    youPl8fem_Pron = mkPronoun
-      "vosotras" "os" "os" "vosotras"
-      "vuestro" "vuestra" "vuestros" "vuestras"
-      Fem Pl P2 ;
-    youPol8fem_Pron = mkPronoun
-      "usted" "la" "le" "usted"
-      "su" "su" "sus" "sus"
-      Fem Sg P3 ;
-
-    youPolPl_Pron = mkPronoun
-      "ustedes" "los" "les" "usted"
-      "su" "su" "sus" "sus"
-      Masc Pl P3 ;
-    youPolPl8fem_Pron = mkPronoun
-      "ustedes" "las" "les" "usted"
-      "su" "su" "sus" "sus"
-      Fem Pl P3 ;
-
-   ImpNeg np vp = lin Utt{ 
-      s = (mkClause (np.s ! Nom).comp np.hasClit False np.a vp).s 
+   ImpNeg np vp = lin Utt{
+      s = (mkClause (np.s ! Nom).comp np.hasClit False np.a vp).s
           ! DInv ! RPres ! Simul ! RNeg False ! Conjunct
       } ;
 
    InvQuestCl cl = {
-      s = \\t,a,p => 
-            let cls = cl.s ! DInv ! t ! a ! p 
+      s = \\t,a,p =>
+            let cls = cl.s ! DInv ! t ! a ! p
             in table {
               QDir   => cls ! Indic ;
               QIndir => subjIf ++ cls ! Indic
               }
       } ;
 
-    -- ExtraRomance.PassVPSlash uses estar 
-    PassVPSlash_ser vps = 
+    -- ExtraRomance.PassVPSlash uses estar
+    PassVPSlash_ser vps =
       let auxvp = predV copula
       in
       insertComplement (\\a => let agr = complAgr a in vps.s.s ! VPart agr.g agr.n) {
@@ -75,7 +52,7 @@ concrete ExtraPor of ExtraPorAbs = ExtraRomancePor **
         ext   = vps.ext
         } ;
 
-    ExistsNP np = 
+    ExistsNP np =
       mkClause [] True False np.a (insertComplement (\\_ => (np.s ! Nom).ton) (predV (mkV "existir"))) ;
 
     UseComp_estar comp = insertComplement comp.s (predV I.estar_V) ;

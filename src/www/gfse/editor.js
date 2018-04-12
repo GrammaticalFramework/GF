@@ -126,35 +126,70 @@ function draw_grammar_list() {
 	function rmpublic(file) {
 	    return function() { remove_public(file,draw_grammar_list) }
 	}
-	publiclist.appendChild(wrap("h3",text("Public grammars")))
-	if(files.length>0) {
-	    var unique_id=local.get("unique_id","-")
-	    var t=empty_class("table","grammar_list")
-	    for(var i in files) {
-		var file=files[i].path
-		var parts=file.split(/[-.]/)
-		var basename=parts[0]
-		var unique_name=parts[1]+"-"+parts[2]
-		var mine = my_grammar(unique_name)!=null
-		var del = mine
-		    ? delete_button(rmpublic(file),"Don't publish this grammar")
-		    : []
-		var tip = mine
-		    ? "This is a copy of your grammar"
-		    : "Click to download a copy of this grammar"
-		var modt=new Date(files[i].time)
-		var fmtmodt=modt.toDateString()+", "+modt.toTimeString().split(" ")[0]
-		var when=wrap_class("small","modtime",text(" "+fmtmodt))
-		t.appendChild(edtr([td(del),
-				    td(title(tip,
-					     a(jsurl('open_public("'+file+'")'),
-					       [text(basename)]))),
-				    td(when)]))
-	    }
-	    publiclist.appendChild(t)
+	var h=wrap("h3",text("Public grammars"))
+	var ordermenu=wrap("select",[option("Newest first","byAge"),
+				     option("Alphabetical","byName")])
+	ordermenu.value=local.get("publicOrder","byAge")
+	ordermenu.onchange=function(){
+	    local.put("publicOrder",ordermenu.value)
+	    if(n>1) show_grammars()
 	}
+	var n=files.length
+	var count=n==1 ? " (One grammar)" : " ("+n + " grammars)"
+	var t=table(tr([td(h),td(text(count)),td(ordermenu)]))
+	publiclist.appendChild(t)
+	for(var i in files) {
+	    var file=files[i]
+	    file.t=new Date(file.time)
+	    file.s=file.t.getTime()
+	}
+	function sort_grammars() {
+	    switch(ordermenu.value) {
+	    case "byAge":
+		files.sort((f1,f2)=>f2.s-f1.s)
+		break;
+	    case "byName":
+		files.sort((f1,f2)=>(f1.path>f2.path)-(f1.path<f2.path))
+	    }
+	}
+	var gt=empty_class("table","grammar_list")
+	publiclist.appendChild(gt)
+	function show_grammars() {
+	    clear(gt)
+	    if(files.length>0) {
+		sort_grammars()
+		var unique_id=local.get("unique_id","-")
+		for(var i in files) {
+		    var file=files[i].path
+		    var parts=file.split(/[-.]/)
+		    var basename=parts[0]
+		    var unique_name=parts[1]+"-"+parts[2]
+		    var mine = my_grammar(unique_name)!=null
+		    var from_me = parts[1] == unique_id
+		    var del = from_me || mine
+			? delete_button(rmpublic(file),"Remove this public grammar")
+			: []
+		    var tip = mine
+			? "This is a copy of your grammar"
+			: "Click to download a copy of this grammar"
+		    var modt=new Date(files[i].time)
+		    var fmtmodt=modt.toDateString()+", "+modt.toTimeString().split(" ")[0]
+		    var when=wrap_class("small","modtime",text(" "+fmtmodt))
+		    gt.appendChild(edtr([td(del),
+					 td(title(tip,
+						  a(jsurl('open_public("'+file+'")'),
+						    [text(basename)]))),
+					 td(text(files[i].comment||"")),
+					 td(when)]))
+		}
+	    }
 	else
 	    publiclist.appendChild(p(text("No public grammars are available.")))
+	    // This is outside the table so it won't be cleared,
+	    // but show_grammars is only called once then there is less
+	    // than 2 grammars, so it's OK.
+	}
+	show_grammars()
     }
     if(navigator.onLine)
 	gfcloud_public_json("ls-l",{},show_public,no_public)
@@ -799,7 +834,7 @@ function draw_abstract(g) {
 }
 
 function draw_comment(g) {
-    return div_class("comment",editable("span",text(g.comment || ""),g,edit_comment,"Edit grammar description"));
+    return div_class("comment",editable("span",text(g.comment || "…"),g,edit_comment,"Edit grammar description"));
 }
 
 function module_name(g,ix) {

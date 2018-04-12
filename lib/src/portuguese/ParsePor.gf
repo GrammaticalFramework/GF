@@ -1,5 +1,5 @@
 --# -path=alltenses
-concrete ParsePor of ParseEngAbs = 
+concrete ParsePor of ParseEngAbs =
   TensePor,
 --  CatPor,
   NounPor - [PPartNP],
@@ -19,7 +19,7 @@ concrete ParsePor of ParseEngAbs =
             VPI, VPIForm, VPIInf, VPIPresPart, ListVPI, VV, MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
             ClSlash, RCl, EmptyRelSlash],
 
-  DictEngPor ** 
+  DictEngPor **
 open MorphoPor, ResPor, ParadigmsPor, SyntaxPor, Prelude in {
 
 flags
@@ -30,11 +30,11 @@ flags
 lin
 -- missing from ExtraPor; should not really be there either
 
-  GenNP np = 
+  GenNP np =
     let denp = (np.s ! ResPor.genitive).ton in {
-      s = \\_,_,_,_ => [] ; 
+      s = \\_,_,_,_ => [] ;
       sp = \\_,_,_ => denp ;
-      s2 = denp ; 
+      s2 = denp ;
       isNeg = False ;
     } ;
 
@@ -46,12 +46,12 @@ lin
 
 -- lexical entries
 
-  another_Quant = mkQuantifier "otro" "otra" "otros" "otras" ;
-  some_Quant = mkQuantifier "algún" "alguna" "algunos" "algunas" ;
-  anySg_Det = mkDeterminer "algún" "alguna" Sg False ; ---- also meaning "whichever" ? 
+  another_Quant = mkQuantifier "outro" "outra" "outros" "outras" ;
+  some_Quant = mkQuantifier "algum" "alguma" "alguns" "algumas" ;
+  anySg_Det = mkDeterminer "algum" "alguma" Sg False ; ---- also meaning "whichever" ?
   each_Det = SyntaxPor.every_Det ;
 
-  but_Subj = {s = "pero" ; m = Indic} ; ---- strange to have this as Subj
+  but_Subj = {s = "mas" ; m = Indic} ; ---- strange to have this as Subj
 
 {-
   myself_NP = regNP "myself" singular ;
@@ -70,7 +70,7 @@ lin
     g = cn.g
   } ;
 
-{-  
+{-
   DashCN noun1 noun2 = {
     s = \\n,c => noun1.s ! Sg ! Nom ++ "-" ++ noun2.s ! n ! c ;
     g = noun2.g
@@ -80,7 +80,7 @@ lin
     s = \\n,c => v.s ! VPresPart ;
     g = Neutr
   } ;
-  
+
   GerundAP v = {
     s = \\agr => v.s ! VPresPart ;
     isPre = True
@@ -108,11 +108,11 @@ lin
                                            infVP v.typ vp ant.a p.p a)
                                    (predVc v) ;
 
-  SlashVPIV2V v p vpi = insertObjc (\\a => p.s ++ 
-                                           v.c3 ++ 
+  SlashVPIV2V v p vpi = insertObjc (\\a => p.s ++
+                                           v.c3 ++
                                            vpi.s ! VVAux ! a)
                                    (predVc v) ;
-  ComplVV v a p vp = insertObj (\\agr => a.s ++ p.s ++ 
+  ComplVV v a p vp = insertObj (\\agr => a.s ++ p.s ++
                                          infVP v.typ vp a.a p.p agr)
                                (predVV v) ;
 -}
@@ -126,10 +126,10 @@ lin
 
 {-
   CompQS qs = {s = \\_ => qs.s ! QIndir} ;
-  CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
+  CompVP ant p vp = {s = \\a => ant.s ++ p.s ++
                                 infVP VVInf vp ant.a p.p a} ;
 
-  VPSlashVS vs vp = 
+  VPSlashVS vs vp =
     insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs) **
     {c2 = ""; gapInMiddle = False} ;
 
@@ -147,11 +147,11 @@ lin
     s = \\c => np1.s ! c ++ "," ++ np2.s ! npNom ;
     a = np1.a
   } ;
-  
+
   AdAdV = cc2 ;
-  
+
   UttAdV adv = adv;
 
--}    
+-}
 
 }
