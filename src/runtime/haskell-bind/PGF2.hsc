@@ -542,7 +542,7 @@ parseWithHeuristics :: Concr      -- ^ the language with which we parse
                                   -- If a literal has been recognized then the output should
                                   -- be Just (expr,probability,end_offset)
                     -> ParseOutput
-parseWithHeuristics lang (Type ctype _) sent heuristic callbacks =
+parseWithHeuristics lang (Type ctype touchType) sent heuristic callbacks =
   unsafePerformIO $
     do exprPl  <- gu_new_pool
        parsePl <- gu_new_pool
@@ -550,6 +550,7 @@ parseWithHeuristics lang (Type ctype _) sent heuristic callbacks =
        sent    <- newUtf8CString sent parsePl
        callbacks_map <- mkCallbacksMap (concr lang) callbacks parsePl
        enum    <- pgf_parse_with_heuristics (concr lang) ctype sent heuristic callbacks_map exn parsePl exprPl
+       touchType
        failed  <- gu_exn_is_raised exn
        if failed
          then do is_parse_error <- gu_exn_caught exn gu_exn_type_PgfParseError
