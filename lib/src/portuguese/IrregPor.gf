@@ -8,7 +8,7 @@ concrete IrregPor of IrregPorAbs = CatPor **
 flags optimize=values ;
     coding=utf8 ;
 
-  lin estar_V = verboV (estar_10 "estar") ;
-  lin fazer_V = verboV (fazer_31 "fazer") ;
+  lin estar_V = mkV (estar_10 "estar") ;
+  lin fazer_V = mkV (fazer_31 "fazer") ;
 
 }

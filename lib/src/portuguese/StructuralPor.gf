@@ -61,8 +61,8 @@ concrete StructuralPor of Structural = CatPor **
     but_PConj = ss "mas" ;
     by8agent_Prep = mkPrep "por" ;
     by8means_Prep = mkPrep "por" ;
-    can8know_VV = mkVV (verboV (saber_35 "saber")) ;
-    can_VV = mkVV (verboV (poder_36 "poder")) ;
+    can8know_VV = mkVV (mkV (saber_35 "saber")) ;
+    can_VV = mkVV (mkV (poder_36 "poder")) ;
     during_Prep = mkPrep "durante" ;
     either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
     everybody_NP = makeNP ["todos"] Masc Pl ;
@@ -136,7 +136,7 @@ concrete StructuralPor of Structural = CatPor **
     to_Prep = complDat ;
     under_Prep = mkPrep "embaixo" ;
     very_AdA = ss "muito" ;
-    want_VV = mkVV (verboV (querer_38 "querer")) ;
+    want_VV = mkVV (mkV (querer_38 "querer")) ;
     whatSg_IP = {s = \\c => prepCase c ++ ["que"] ; a = aagr Masc Sg} ;
     whatPl_IP = {s = \\c => prepCase c ++ ["que"] ; a = aagr Masc Pl} ; ---
     when_IAdv = ss "quando" ;
@@ -167,7 +167,7 @@ concrete StructuralPor of Structural = CatPor **
       Masc Pl P2 ;
   lin
     as_CAdv = X.mkCAdv "tão" conjThan ; ----
-    have_V2 = dirV2 (verboV (ter_1 "ter")) ;
+    have_V2 = dirV2 (mkV (ter_1 "ter")) ;
     that_Subj = {s = "que" ; m = Conjunct} ;
 
   lin language_title_Utt = ss "português" ;

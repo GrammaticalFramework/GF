@@ -112,7 +112,7 @@ oper
       \s,p -> regN s ** {s = numForms s p} ;
     -- force gender
     mkN : Str -> Gender -> N =
-      \s,g -> regN s ** {g = g};
+      \s,g -> regN s ** {g = g} ;
     -- The worst case has two forms (singular + plural) and the
     -- gender.
     mkN : (bastão,bastões : Str) -> Gender -> N = mk2N
@@ -207,13 +207,16 @@ oper
   mk2A a b = compADeg {s = \\_ => (mkAdj2N (mkN a) (mkN b) (b + "mente")).s ; isPre = False ;
                        lock_A = <>} ;
 
-  mk5A : (solo,sola,solos,solas,solamente : Str) -> A ;
+  mk5A : (preto,preta,pretos,pretas,pretamente : Str) -> A ;
   mk5A a b c d e = compADeg {s = \\_ => (mkAdj a b c d e).s ;
                              isPre = False ; lock_A = <>} ;
 
   mkADeg : A -> A -> A ;
   mkADeg a b = {s = table {Posit => a.s ! Posit ;
-                           _ => b.s ! Posit} ;
+                           _ => b.s ! Posit
+--                          Compar => b.s ! Posit ;
+--                           Superl => "o" ++ b.s ! Posit ;
+                  } ;
                 isPre = a.isPre ; lock_A = <>} ;
 
 

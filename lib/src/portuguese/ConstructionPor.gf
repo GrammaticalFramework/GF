@@ -12,7 +12,7 @@ lin
   tired_VP = mkVP (mkA "cansado") ;
   scared_VP = mkVP (mkA "assustado") ;
   ill_VP = mkVP (mkA "doente") ;
---  ready_VP = mkVP (mkA "pronto") ; -- are this and the above using copula or estar? can only test when compiling
+  ready_VP = mkVP (mkA "pronto") ;
   has_age_VP card = mkVP have_V2 (mkNP <lin Card card : Card> L.year_N) ;
 
   have_name_Cl x y = mkCl x (mkV2 (reflV (mkV "chamar"))) y ;
