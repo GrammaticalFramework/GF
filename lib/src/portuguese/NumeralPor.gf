@@ -3,12 +3,12 @@ concrete NumeralPor of Numeral = CatPor [Numeral,Digits] **
 
   flags coding=utf8 ;
 
-lincat
-  Digit = {s : DForm => CardOrd => Str} ;
-  Sub10 = {s : DForm => CardOrd => Str ; n : Number} ;
-  Sub100 = {s : CardOrd => Str ; n : Number} ;
-  Sub1000 = {s : CardOrd => Str ; n : Number} ;
-  Sub1000000 = {s : CardOrd => Str ; n : Number} ;
+  lincat
+    Digit = {s : DForm => CardOrd => Str} ;
+    Sub10 = {s : DForm => CardOrd => Str ; n : Number} ;
+    Sub100 = {s : CardOrd => Str ; n : Number} ;
+    Sub1000 = {s : CardOrd => Str ; n : Number} ;
+    Sub1000000 = {s : CardOrd => Str ; n : Number} ;
 
   lin
     num x = x ;
@@ -25,29 +25,28 @@ lincat
       mkTal "três" "treze" "trinta" "trezentos"
       "terceiro" "trigésimo" "tricentésimo" ;
     n4 =
-      mkTal "quatro" (variants {"catorze" ; "quatorze"}) "quarenta"
+      mkTal "quatro" ("catorze" | "quatorze") "quarenta"
       "quatrocentos" "quarto" "quadragésimo" "quadringentésimo" ;
     n5 =
       mkTal "cinco" "quinze" "cinquenta" "quinhentos"
       "quinto" "quinquagésimo" "guingentésimo" ;
     n6 =
-      mkTal "seis" (variants {"dezesseis"; "dezasseis"})
-      "sessenta" "seiscentos" "sexto" "sexagésimo" "sexcentésimo" ;
+      mkTal "seis" ("dezesseis" | "dezasseis") "sessenta" "seiscentos"
+      "sexto" "sexagésimo" "sexcentésimo" ;
     n7 =
-      mkTal "sete" (variants {"dezessete" ; "dezassete"}) "setenta"
+      mkTal "sete" ("dezessete" | "dezassete") "setenta"
       "setecentos" "sétimo" "septuagésimo" "septingentésimo" ;
     n8 =
       mkTal "oito" "dezoito"  "oitenta"   "oitocentos"
         "oitavo" "octogésimo" "octingentésimo" ;
     n9 =
-      mkTal "nove" (variants {"dezenove" ; "dezanove"}) "noventa"
+      mkTal "nove" ("dezenove" | "dezanove") "noventa"
       "novecentos" "nono" "nonagésimo" "noningentésimo";
 
     pot01 =
       let um = (mkTal "um" "onze" "dez" "cento" "primeiro"
                   "décimo" "centésimo").s in
       {s =\\f,g => case <f,g> of {
-         <unit, NCard Masc> => "um" ;
          <unit, NCard Fem> => "uma" ;
          _ => um ! f ! g
          } ;

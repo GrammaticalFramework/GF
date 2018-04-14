@@ -269,8 +269,9 @@ oper
       } ;
 
    mkIDet : (quantos, quantas : Str) -> Number -> IDet = \quantos,quantas,number ->
-     lin IDet {
-       s = \\g,c => prepCase c ++ genForms quantos quantas ! g ;
-       n = number
-       } ;
+  lin IDet {
+        s = \\g,c => prepCase c ++ genForms quantos quantas ! g ;
+        n = number
+        } ;
+
 }
