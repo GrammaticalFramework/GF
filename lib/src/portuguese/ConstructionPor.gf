@@ -9,6 +9,10 @@ concrete ConstructionPor of Construction = CatPor **
 lin
   hungry_VP = E.ComplCN have_V2 (mkCN (mkN "fome" feminine)) ;
   thirsty_VP = E.ComplCN have_V2 (mkCN (mkN "sede" feminine)) ;
+  tired_VP = mkVP (mkA "cansado") ;
+  scared_VP = mkVP (mkA "assustado") ;
+  ill_VP = mkVP (mkA "doente") ;
+  ready_VP = mkVP (mkA "pronto") ;
   has_age_VP card = mkVP have_V2 (mkNP <lin Card card : Card> L.year_N) ;
 
   have_name_Cl x y = mkCl x (mkV2 (reflV (mkV "chamar"))) y ;
@@ -45,15 +49,21 @@ lin
   come_from_there_VP = mkVP (mkVP L.come_V) (mkAdv "de allí") ; -- "de allá"
 -}
 
-lincat
-  Weekday = N ;
-  Monthday = NP ;
-  Month = N ;
-  Year = NP ;
+  lincat
+    Timeunit = N ;
+    Weekday = N ;
+    Monthday = NP ;
+    Month = N ;
+    Year = NP ;
 oper
   noPrep : Prep = mkPrep [] ;
 
-lin
+  lin
+    timeunitAdv n time =
+      let n_card : Card = lin Card n;
+          n_hours_NP : NP = mkNP n_card time ;
+      in  SyntaxPor.mkAdv for_Prep n_hours_NP ;--| SyntaxPor.mkAdv (n_hours_NP.s ! R.Nom) ;
+
   weekdayPunctualAdv w = lin Adv {s = w.s ! C.Sg} ;         -- lundi
   weekdayHabitualAdv w = SyntaxPor.mkAdv noPrep (mkNP the_Det w) ; -- il lunedí ----
   weekdayLastAdv w = SyntaxPor.mkAdv noPrep (mkNP the_Det (mkCN (mkA "passado") w)) ; -- il lunedí scorso
@@ -75,6 +85,7 @@ lin InLanguage l = SyntaxPor.mkAdv (mkPrep "em") (mkNP l) ;
 
 lin
   weekdayN w = w ;
+  monthN m = m ;
 
   weekdayPN w = mkPN w ;
   monthPN m = mkPN m ;
@@ -86,6 +97,13 @@ oper mkLanguage : Str -> N = \s -> mkN s ;
 
 ----------------------------------------------
 ---- lexicon of special names
+lin second_Timeunit = mkN "segundo" ;
+lin minute_Timeunit = mkN "minuto" ;
+lin hour_Timeunit = mkN "hora" ;
+lin day_Timeunit = mkN "dia" masculine ;
+lin week_Timeunit = mkN "semana" ;
+lin month_Timeunit = mkN "mês" "meses" ;
+lin year_Timeunit = mkN "ano" ;
 
 lin monday_Weekday    = mkN "segunda" ;
 lin tuesday_Weekday   = mkN "terça" ;
