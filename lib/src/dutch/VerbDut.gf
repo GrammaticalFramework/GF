@@ -50,6 +50,7 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
 
     --vp.c2.p2: if the verb has a preposition or not
     ComplSlash vp np = insertObjNP np.isPron (case vp.c2.p2 of {True => BeforeObjs; False => vp.negPos}) (\\_ => appPrep vp.c2.p1 np) vp ;
+
     SlashVV v vp = 
       let 
         vpi = infVP v.isAux vp 
@@ -69,9 +70,7 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
             insertObj (\\_ => appPrep v.c2.p1 np) (
               predVGen v.isAux vp.negPos v)))) ** {c2 = v.c2} ;
 
-    -- BeforeObjs, because negation comes before copula complement 
-    -- "ik ben niet groot" but "ik begrijp hem niet"
-    UseComp comp = insertObjNP False BeforeObjs comp.s (predV zijn_V) ; -- agr not used
+    UseComp comp = insertObj comp.s (compV zijn_V) ;
 
     UseCopula = predV zijn_V; 
 

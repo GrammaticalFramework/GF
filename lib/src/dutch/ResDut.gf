@@ -504,17 +504,19 @@ param
 
   oper VP : Type = {
       s  : VVerb ;
-      a1 : Polarity => Str ; -- niet
-      n0 : Agr => Str ;      -- je
-      n2 : Agr => Str ;      -- je vrouw
-      a2 : Str ;             -- vandaag
+      a1 : Polarity => Str ; -- niet: negation or AdV
+      n0 : Agr => Str ;      -- je: pronoun complement (agr for reflexive)
+      n2 : Agr => Str ;      -- je vrouw: non-pronoun complement (agr for CompCN)
+      a2 : Str ;             -- vandaag: adverb
       isAux : Bool ;         -- is a double infinitive
       negPos : NegPosition ; -- ik schoop X niet ; ik houd niet van X ; dat is niet leuk
       inf : Str * Bool ;     -- zeggen (True = non-empty)
       ext : Str              -- dat je komt
       } ;
 
-  predV : VVerb -> VP = predVGen False AfterObjs;
+  predV : VVerb -> VP = predVGen False AfterObjs ;
+
+  compV : VVerb -> VP = predVGen False BeforeObjs ;
 
   predVGen : Bool -> NegPosition -> VVerb -> VP = \isAux, negPos, verb -> {
     s = verb ;
@@ -542,64 +544,26 @@ param
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> insertObjNP False vp.negPos obj vp;
 
   --this is needed when we call insertObjNP in ComplSlash: VPSlash is a subtype of VP so it works
-  insertObjNP : Bool -> NegPosition -> (Agr => Str) -> VP -> VP = \isPron,negPos,obj,vp -> {
-    s = vp.s ;
-    a1 = vp.a1 ;
+  insertObjNP : Bool -> NegPosition -> (Agr => Str) -> VP -> VP = \isPron,negPos,obj,vp -> vp ** {
     n0 = \\a => case isPron of {True  => obj ! a ; _ => []} ++ vp.n0 ! a ;
     n2 = \\a => case isPron of {False => obj ! a ; _ => []} ++ vp.n2 ! a ;
-    a2 = vp.a2 ;
-    isAux = vp.isAux ;
     negPos = negPos ;
-    inf = vp.inf ;
-    ext = vp.ext
     } ;
 
-  insertAdV : Str -> VP -> VP = \adv,vp -> {
-    s = vp.s ;
+  insertAdV : Str -> VP -> VP = \adv,vp -> vp ** {
     a1 = \\a => adv ++ vp.a1 ! a ; -- immer nicht
-    n0 = vp.n0 ;
-    n2 = vp.n2 ;
-    a2 = vp.a2 ;
-    isAux = vp.isAux ;
-    negPos = vp.negPos ;
-    inf = vp.inf ;
-    ext = vp.ext
     } ;
 
-  insertAdv : Str -> VP -> VP = \adv,vp -> {
-    s = vp.s ;
-    a1 = vp.a1 ;
-    n0 = vp.n0 ;
-    n2 = vp.n2 ;
+  insertAdv : Str -> VP -> VP = \adv,vp -> vp ** {
     a2 = vp.a2 ++ adv ;
-    isAux = vp.isAux ;
-    negPos = vp.negPos ;
-    inf = vp.inf ;
-    ext = vp.ext
     } ;
 
-  insertExtrapos : Str -> VP -> VP = \ext,vp -> {
-    s = vp.s ;
-    a1 = vp.a1 ;
-    n0 = vp.n0 ;
-    n2 = vp.n2 ;
-    a2 = vp.a2 ;
-    isAux = vp.isAux ;
-    negPos = vp.negPos ;
-    inf = vp.inf ;
+  insertExtrapos : Str -> VP -> VP = \ext,vp -> vp ** {
     ext = vp.ext ++ ext
     } ;
 
-  insertInf : Str -> VP -> VP = \inf,vp -> {
-    s = vp.s ;
-    a1 = vp.a1 ;
-    n0 = vp.n0 ;
-    n2 = vp.n2 ;
-    a2 = vp.a2 ;
-    isAux = vp.isAux ; ----
-    negPos = vp.negPos ;
+  insertInf : Str -> VP -> VP = \inf,vp -> vp ** {
     inf = <inf ++ vp.inf.p1, True> ;
-    ext = vp.ext
     } ;
 
 -- For $Sentence$.
@@ -673,6 +637,7 @@ param
      let vverb = vp.s 
      in 
      vp.a1 ! Pos ++ 
+     vverb.particle ++
      if_then_Str isAux (vverb.s ! VInfFull) (vverb.prefix ++ "te" ++ vverb.s ! VInf),
      vp.inf.p1 ++ vp.ext
     > ;
