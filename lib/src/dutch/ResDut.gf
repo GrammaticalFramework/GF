@@ -642,9 +642,9 @@ param
      vp.inf.p1 ++ vp.ext
     > ;
 
-  useInfVP : Bool -> VP -> Str = \isAux,vp ->
+  useInfVP : Bool -> VP -> Agr => Str = \isAux,vp ->
     let vpi = infVP isAux vp in
-    vpi.p1 ! agrP3 Sg ++ vpi.p2 ++ vpi.p3 ; -- TODO
+    \\agr => vpi.p1 ! agr ++ vpi.p2 ++ vpi.p3 ;
 
   reflPron : Agr => Str = table {
     {n = Sg ; p = P1} => "mijzelf" ;

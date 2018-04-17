@@ -11,7 +11,7 @@ concrete ExtraDut of ExtraDutAbs = CatDut **
     BaseVPI = twoTable Bool ;
     ConsVPI = consrTable Bool comma ;
 
-    MkVPI vp = {s = \\b => useInfVP b vp} ;
+    MkVPI vp = {s = \\b => useInfVP b vp ! agrP3 Sg } ;
     ConjVPI = conjunctDistrTable Bool ;
 
     ComplVPIVV v vpi = 

@@ -51,7 +51,7 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
 
     EmbedS  s  = {s = conjThat ++ s.s ! Sub} ;
     EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = useInfVP False vp} ;
+    EmbedVP vp = {s = useInfVP False vp ! agrP3 Sg } ;
 
     UseCl t p cl = {
       s = \\o => t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! o
