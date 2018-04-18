@@ -1034,9 +1034,16 @@ This is done by using the option <tt>-split-pgf</tt> in the compiler:
 <pre class="java">
 $ gf -make -split-pgf App12.pgf
 </pre>
+This creates the following files:
+<pre class="java">
+Writing App.pgf...
+Writing AppEng.pgf_c...
+Writing AppSwe.pgf_c...
+...
+</pre>
 </p>
 
-Now you can load the grammar as usual but this time only the
+Now you can load the grammar <tt>App.pgf</tt> as usual but this time only the
 abstract syntax will be loaded. You can still use the <tt>languages</tt>
 property to get the list of languages and the corresponding
 concrete syntax objects:
