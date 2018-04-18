@@ -2,7 +2,7 @@
 
 concrete ExtendDut of Extend =
   CatDut ** ExtendFunctor
---   - []                   -- put the names of your own definitions here
+   - [PastPartAP]
   with
     (Grammar = GrammarDut) **
   open
@@ -11,6 +11,11 @@ concrete ExtendDut of Extend =
     Coordination,
     Prelude,
     ParadigmsDut in {
-    -- put your own definitions here
+  lin
+
+   PastPartAP vp = {
+      s = \\agr,af => (infClause [] agr vp).s ! Past ! Anter ! Pos ! Sub ;
+      isPre = notB vp.inf.p2
+      } ;
     
     }
