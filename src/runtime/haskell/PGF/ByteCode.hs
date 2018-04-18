@@ -2,7 +2,7 @@ module PGF.ByteCode(Literal(..),
                     CodeLabel, Instr(..), IVal(..), TailInfo(..),
                     ppLit, ppCode, ppInstr
                    ) where
-
+import Prelude hiding ((<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 import PGF.CId
 import Text.PrettyPrint
 

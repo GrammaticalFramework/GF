@@ -3,7 +3,7 @@ module GF.Command.Commands (
   PGFEnv,HasPGFEnv(..),pgf,mos,pgfEnv,pgfCommands,
   options,flags,
   ) where
-import Prelude hiding (putStrLn)
+import Prelude hiding (putStrLn,(<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 
 import PGF
 

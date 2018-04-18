@@ -22,6 +22,7 @@ module GF.Grammar.Printer
            , ppMeta
            , getAbs
            ) where
+import Prelude hiding ((<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 
 import GF.Infra.Ident
 import GF.Infra.Option

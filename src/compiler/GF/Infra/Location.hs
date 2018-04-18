@@ -1,5 +1,6 @@
 -- | Source locations
 module GF.Infra.Location where
+import Prelude hiding ((<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 import GF.Text.Pretty
 
 -- ** Source locations

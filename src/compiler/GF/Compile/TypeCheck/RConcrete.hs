@@ -1,5 +1,6 @@
 {-# LANGUAGE PatternGuards #-}
 module GF.Compile.TypeCheck.RConcrete( checkLType, inferLType, computeLType, ppType ) where
+import Prelude hiding ((<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 
 import GF.Infra.CheckM
 import GF.Data.Operations

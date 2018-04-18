@@ -23,6 +23,7 @@ module PGF.VisualizeTree
              , gizaAlignment
              , conlls2latexDoc
              ) where
+import Prelude hiding ((<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 
 import PGF.CId (wildCId,showCId,ppCId,mkCId) --CId,pCId,
 import PGF.Data

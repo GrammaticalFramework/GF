@@ -1,6 +1,7 @@
 -- | Abstract syntax and a pretty printer for a subset of Haskell
 {-# LANGUAGE DeriveFunctor #-}
 module GF.Haskell where
+import Prelude hiding ((<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 import GF.Infra.Ident(Ident,identS)
 import GF.Text.Pretty
 

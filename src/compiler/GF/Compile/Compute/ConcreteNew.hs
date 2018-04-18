@@ -5,6 +5,7 @@ module GF.Compile.Compute.ConcreteNew
             normalForm,
             Value(..), Bind(..), Env, value2term, eval, vapply
            ) where
+import Prelude hiding ((<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 
 import GF.Grammar hiding (Env, VGen, VApp, VRecType)
 import GF.Grammar.Lookup(lookupResDefLoc,allParamValues)

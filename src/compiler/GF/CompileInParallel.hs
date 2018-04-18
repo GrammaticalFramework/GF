@@ -1,6 +1,6 @@
 -- | Parallel grammar compilation
 module GF.CompileInParallel(parallelBatchCompile) where
-import Prelude hiding (catch)
+import Prelude hiding (catch,(<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 import Control.Monad(join,ap,when,unless)
 import Control.Applicative
 import GF.Infra.Concurrency

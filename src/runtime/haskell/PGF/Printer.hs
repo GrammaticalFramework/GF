@@ -1,5 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 module PGF.Printer (ppPGF,ppCat,ppFId,ppFunId,ppSeqId,ppSeq,ppFun) where
+import Prelude hiding ((<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 
 import PGF.CId
 import PGF.Data

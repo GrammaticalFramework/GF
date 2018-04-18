@@ -100,6 +100,11 @@ newtype Builder = Builder {
         runBuilder :: (Buffer -> [S.ByteString]) -> Buffer -> [S.ByteString]
     }
 
+#if MIN_VERSION_base(4,11,0)
+instance Semigroup Builder where
+  (<>) = append
+#endif
+
 instance Monoid Builder where
     mempty  = empty
     {-# INLINE mempty #-}

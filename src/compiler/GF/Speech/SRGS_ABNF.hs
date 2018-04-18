@@ -18,6 +18,7 @@
 -----------------------------------------------------------------------------
 
 module GF.Speech.SRGS_ABNF (srgsAbnfPrinter, srgsAbnfNonRecursivePrinter) where
+import Prelude hiding ((<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 
 --import GF.Data.Utilities
 import GF.Infra.Option

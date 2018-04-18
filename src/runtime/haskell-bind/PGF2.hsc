@@ -82,7 +82,7 @@ module PGF2 (-- * PGF
              LiteralCallback,literalCallbacks
             ) where
 
-import Prelude hiding (fromEnum)
+import Prelude hiding (fromEnum,(<>)) -- GHC 8.4.1 clash with Text.PrettyPrint
 import Control.Exception(Exception,throwIO)
 import Control.Monad(forM_)
 import System.IO.Unsafe(unsafePerformIO,unsafeInterleaveIO)
