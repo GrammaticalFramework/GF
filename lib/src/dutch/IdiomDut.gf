@@ -7,11 +7,11 @@ concrete IdiomDut of Idiom = CatDut **
     ImpersCl vp = mkClause "het" (agrP3 Sg) vp ; -- cunger: 't -> het
     GenericCl vp = mkClause "men" (agrP3 Sg) vp ;
 
-    CleftNP np rs = mkClause "'t" (agrP3 Sg) 
+    CleftNP np rs = mkClause "het" (agrP3 Sg)
       (insertExtrapos (rs.s ! np.a.g ! np.a.n) ----
         (insertObj (\\_ => np.s ! NPNom) (predV zijn_V))) ;
 
-    CleftAdv ad s = mkClause "'t" (agrP3 Sg) 
+    CleftAdv ad s = mkClause "het" (agrP3 Sg)
       (insertExtrapos (conjThat ++ s.s ! Sub)
         (insertObj (\\_ => ad.s) (predV zijn_V))) ;
 

@@ -54,7 +54,7 @@ lin
   send_V3 = mkV3 (mkV "sturen") (mkPrep "naar") ;
   sleep_V = slapen_V ;
   small_A = mkA "klein" ;
-  talk_V3 = mkV3 (mkV "praten") (mkPrep "met") (mkPrep "over") ;
+  talk_V3 = mkV3 (mkV "praten") with_Prep (mkPrep "over") ;
   warm_A = mkA "warm" ;
   wine_N = mkN "wijn" ;
   john_PN = mkPN "Jan" ;
