@@ -123,7 +123,7 @@ param
      | VImp3     -- weest
      | VImpPl    -- wezen
      | VPerf     -- geweest
-     | VPerfInfl -- geweeste --# notpresent
+     | VPerfInfl -- geweeste 
      | VPresPart -- zijnde
      | VGer      -- zijnde
      ;
@@ -149,7 +149,7 @@ param
     		VPastSg          => aaide; -- ik aaide  --# notpresent
     		VPastPl          => aaiden; -- hij/zij/het/wij aaiden --# notpresent
     		VPerf            => geaaid ; -- ik heb geaaid
-		VPerfInfl        => geaaide ; -- inflected form of participle --# notpresent
+		VPerfInfl        => geaaide ; -- inflected form of participle 
                 VPresPart        => aaien + "de" ;
                 VGer             => aaien + "d"
     	  }
@@ -617,10 +617,10 @@ param
           verb : Str * Str = case <isPart,t,a> of {
 
 	    -- <Experimental: only used in ExtendDut.PastPartAP>
-	    <Inf,Fut|Pres, _>  => <vp.s.s ! VPresPart, []> ; --# notpresent
-	    <Inf,Past|Cond,_>  => <case agr.g of { Utr => vp.s.s ! VPerfInfl ;
-						 _   => vperf }
-	                          ,[]> ; --# notpresent
+	    <Inf,Pres, _>  => <vp.s.s ! VPresPart, []> ;
+	    <Inf,_,_>  => <case agr.g of { Utr => vp.s.s ! VPerfInfl ;
+					                                    _   => vperf }
+	                                          ,[]> ; 
 	    -- </Experimental>
 
 	    <_,Fut|Cond,Simul> => <zullen_V.s ! vform, vp.s.s ! VInf> ; --# notpresent
@@ -633,8 +633,8 @@ param
           obj0  = vp.n0 ! agr ;
           obj   = vp.n2 ! agr ;
 	  part  = vp.s.particle ;
-	  pref  = case a of {
-	            Anter => [] ;        -- prefix is part of participle: toegevoegd
+	  pref  = case <a : Anteriority> of {
+	            Anter => [] ;        -- prefix is part of participle: toegevoegd  --# notpresent
 		    _     => vp.s.prefix -- prefix not present in verb form
 	            } ;
 	  compl = case vp.negPos of {
@@ -654,10 +654,10 @@ param
             -- gezien zou/zal hebben  
                <Fut|Cond,Anter,False> => vperf ++ fin ++ auxv ! VInf ++ vp.inf.p1 ; --# notpresent
             -- zou/zal zien
-               <Fut|Cond,Simul,False> => fin ++ verb.p2 ++ vp.inf.p1 ;
+               <Fut|Cond,Simul,False> => fin ++ verb.p2 ++ vp.inf.p1  ; --# notpresent
 
             -- wil kunnen zien (first line in inf)
-               _                      => fin ++ inf  -- double inf    --# notpresent
+               _                      => fin ++ inf  -- double inf   
             }                                                  
         in
         case o of {
