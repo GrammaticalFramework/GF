@@ -318,6 +318,8 @@ Library
   else
     build-depends: unix, terminfo>=0.4
 
+  if impl(ghc>=8.2)
+    ghc-options: -fhide-source-paths
 
 Executable gf
   hs-source-dirs: src/programs
@@ -334,6 +336,8 @@ Executable gf
 
   ghc-prof-options: -auto-all
 
+  if impl(ghc>=8.2)
+    ghc-options: -fhide-source-paths
 
 executable pgf-shell
 --if !flag(c-runtime)
