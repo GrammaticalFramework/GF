@@ -575,10 +575,6 @@ param
   mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp -> {
       s = \\t,a,b,o =>
         let
-          ord   = case o of {
-            Sub => True ;  -- glue prefix to verb
-            _ => False
-            } ;
           vform = vForm t agr.g agr.n agr.p o ;
           auxv = (auxVerb vp.s.aux).s ;
           vperf = vp.s.s ! VPerf ;
@@ -593,12 +589,16 @@ param
           obj0  = vp.n0 ! agr ;
           obj   = vp.n2 ! agr ;
 	  part  = vp.s.particle ;
+	  pref  = case a of {
+	            Anter => [] ;        -- prefix is part of participle: toegevoegd
+		    _     => vp.s.prefix -- prefix not present in verb form
+	            } ;
 	  compl = case vp.negPos of {
-	    BeforeObjs  => neg ++ obj0 ++ obj ++ part ++ vp.a2 ++ vp.s.prefix ;
-	    AfterObjs   => obj0 ++ obj ++ neg ++ part ++ vp.a2 ++ vp.s.prefix ;
-      BetweenObjs => obj0 ++ neg ++ obj ++ part ++ vp.a2 ++ vp.s.prefix 
+	    BeforeObjs  => neg ++ obj0 ++ obj ++ part ++ vp.a2 ++ pref ;
+	    AfterObjs   => obj0 ++ obj ++ neg ++ part ++ vp.a2 ++ pref ;
+	    BetweenObjs => obj0 ++ neg ++ obj ++ part ++ vp.a2 ++ pref
 	  } ;
-          inf : Str  =                                               
+          inf : Str =
             case <vp.isAux, vp.inf.p2, a> of {                  
               <True,True,Anter> => vp.s.s ! VInf ++ vp.inf.p1 ; --# notpresent
               _                 => verb.p2 ++ vp.inf.p1 } ; -- cunger: changed from vp.inf.p1 ++ verb.p2 
@@ -608,15 +608,12 @@ param
           inffin : Str =                                           
             case <t,a,vp.isAux> of {                          
             -- gezien zou/zal hebben  
-                <Cond,Anter,False> => vperf ++ fin ++ auxv ! VInf ; --# notpresent
-                <Fut,Anter,False>  => vperf ++ fin ++ auxv ! VInf ; --# notpresent
+               <Fut|Cond,Anter,False> => vperf ++ fin ++ auxv ! VInf ++ vp.inf.p1 ; --# notpresent
             -- zou/zal zien
-               <Cond,Simul,False> => fin ++ verb.p2 ;          
-               <Fut,Simul,False>  => fin ++ verb.p2 ;          
+               <Fut|Cond,Simul,False> => fin ++ verb.p2 ++ vp.inf.p1 ;
+
             -- wil kunnen zien (first line in inf)
-               <_,Anter,True> => fin ++ inf ; -- double inf    --# notpresent
-               _   =>  fin ++ inf                              
-            -- no inf ++ fin, this is not German :-P
+               _                      => fin ++ inf  -- double inf    --# notpresent
             }                                                  
         in
         case o of {
@@ -631,20 +628,27 @@ param
     VZijn   => zijn_V 
     } ;
 
-  infVP : Bool -> VP -> ((Agr => Str) * Str * Str) = \isAux, vp -> 
-    <
-     \\agr => vp.n0 ! agr ++ vp.n2 ! agr ++ vp.a2,
-     let vverb = vp.s 
-     in 
-     vp.a1 ! Pos ++ 
-     vverb.particle ++
-     if_then_Str isAux (vverb.s ! VInfFull) (vverb.prefix ++ "te" ++ vverb.s ! VInf),
-     vp.inf.p1 ++ vp.ext
-    > ;
+  infVP : Bool -> VP -> {obj : (Agr => Str) ; inf : Str ; ext : Str} = \isAux,vp ->
+    let vverb = vp.s in {
+      obj = \\agr => vp.n0 ! agr ++ vp.n2 ! agr ++ vp.a2 ;
+      inf = vp.a1 ! Pos ++     -- altijd
+	    vverb.particle ++  -- leuk
+            if_then_Str isAux
+              (vverb.s ! VInfFull)                       -- toevoegen
+              (vverb.prefix ++ "te" ++ vverb.s ! VInf) ; -- te vinden
+      ext = vp.inf.p1 ++ vp.ext } ;
+
+  insertInfVP : Bool -> VP -> (VP -> VP) = \isAux,vp ->
+    let
+      vpi = infVP isAux vp
+    in
+      \vps -> insertExtrapos vpi.ext
+                (insertInf vpi.inf
+                  (insertObj vpi.obj vps)) ;
 
   useInfVP : Bool -> VP -> Agr => Str = \isAux,vp ->
     let vpi = infVP isAux vp in
-    \\agr => vpi.p1 ! agr ++ vpi.p2 ++ vpi.p3 ;
+    \\agr => vpi.obj ! agr ++ vpi.inf ++ vpi.ext ;
 
   reflPron : Agr => Str = table {
     {n = Sg ; p = P1} => "mijzelf" ;

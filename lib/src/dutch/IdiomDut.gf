@@ -32,16 +32,14 @@ concrete IdiomDut of Idiom = CatDut **
               }
       } ;
 
-    ProgrVP vp = insertObj (\\agr => "aan" ++ "het" ++ useInfVP True vp ! agr) (predV zijn_V) ;
+    ProgrVP vp = let vpi = infVP True vp in
+      insertAdv ("aan het" ++ vpi.inf ++ vpi.ext)
+        (insertObj vpi.obj (compV zijn_V)) ;
 
     ImpPl1 vp =
       let 
         v   = laten_V ;
-        vpi = infVP True vp ;
-        vvp = insertExtrapos vpi.p3 (
-                insertInf vpi.p2 (
-                  insertObj vpi.p1 (
-                    predVGen True vp.negPos v))) ;
+        vvp = insertInfVP True vp (predVGen True vp.negPos v) ;
       in 
       {s = (mkClause "we" {g = Utr ; n = Pl ; p = P1} vvp).s ! 
                            Pres ! Simul ! Pos ! Inv 
