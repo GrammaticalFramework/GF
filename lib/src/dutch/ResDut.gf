@@ -714,8 +714,13 @@ param
   conjAgr : Agr -> Agr -> Agr = \a,b -> {
       g = Utr ; ----
       n = conjNumber a.n b.n ;
-      p = conjPerson a.p b.p
+      p = conjPerson' a.p b.p
       } ;
+
+  conjPerson' : Person -> Person -> Person = \a,b -> case <a,b> of {
+    <P1,x> => x ;
+    <P3,x> => P3 ;
+    <P2,x> => case x of {P3 => P3 ; _ => P2} } ;
 
 -- The infinitive particle "te" is used if and only if $vv.isAux = False$.
  
