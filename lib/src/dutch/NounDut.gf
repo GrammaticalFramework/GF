@@ -20,7 +20,7 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
     UsePN pn = noMerge ** {s = pn.s ; a = agrP3 Sg ; isPron = False} ;
 
     UsePron pron = {
-      s = table {NPNom => pron.unstressed.nom ; NPAcc => pron.unstressed.acc} ;
+      s = table {NPNom => pron.stressed.nom ; NPAcc => pron.stressed.acc} ;
       a = pron.a ;
       isPron = True ;
       mergesWithPrep = pron.mergesWithPrep ;
@@ -80,7 +80,7 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
         } ;
 
     PossPron p = noMerge ** {
-      s  = \\_,n,g => p.unstressed.poss ;
+      s  = \\_,n,g => p.stressed.poss ;
       sp = \\n,g => DefArt.s ! True ! n ! g ++ p.substposs ! n ;
       a = Weak
       } ;
