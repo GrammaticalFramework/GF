@@ -31,7 +31,7 @@ concrete AdjectiveDut of Adjective = CatDut ** open ResDut, Prelude in
 
     ComplA2 a np = {
       s = \\agr,af => a.s ! Posit ! af ++ appPrep a.c2 np ; 
-      isPre = True
+      isPre = False
       } ;
 
     ReflA2 a = {

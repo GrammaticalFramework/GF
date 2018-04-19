@@ -161,10 +161,14 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       let 
         g = cn.g 
       in {
-        s = \\a,n => 
-               preOrPost ap.isPre
-                 (ap.s ! agrP3 Sg ! agrAdj g a n)
-                 (cn.s ! a ! n) ;
+        s = \\a,n =>
+               let gan : Gender*Adjf*NForm = case ap.isPre of {
+                    True  => <g,a,n> ;
+                    False => <Neutr,Strong,NF Sg Nom> } ;
+                   af = agrAdj gan.p1 gan.p2 gan.p3 ;
+               in preOrPost ap.isPre
+                    (ap.s ! agrP3 Sg ! af)
+                    (cn.s ! a ! n) ;
         g = g
         } ;
 
