@@ -80,7 +80,7 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
                                           (npLite (\\_ => reflPron ! a))
                           ) vp ;
 
-    PassV2 v = insertInf (v.s ! VPerf) (predV worden_V) ;
+    PassV2 v = insertInf (v.s ! VPerf APred) (predV worden_V) ;
 
     VPSlashPrep vp prep = vp ** {c2 = <prep,True>} ;
 

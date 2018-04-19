@@ -122,8 +122,7 @@ param
      | VImp2     -- wees
      | VImp3     -- weest
      | VImpPl    -- wezen
-     | VPerf     -- geweest
-     | VPerfInfl -- geweeste 
+     | VPerf AForm -- geweest / geweeste / geweests (e.g. "iets verdwaalds")
      | VPresPart -- zijnde
      | VGer      -- zijnde
      ;
@@ -135,24 +134,25 @@ param
     
   mkVerb : (x1,_,_,_,_,_,x7 : Str) -> Verb =
     \aai, aait, aaien, aaide, aaidet, aaiden, geaaid ->
-	  mkVerb8 aai aait aait aaien aaide aaidet aaiden geaaid ;
+          mkVerb8 aai aait aait aaien aaide aaidet aaiden geaaid ;
 
   mkVerb8 : (_,_,_,_,_,_,_,_ : Str) -> Verb =
     \aai, aaitt, aait, aaien, aaide, _, aaiden, geaaid ->
      let geaaide = inflParticiple geaaid
       in { s = table {
-                VInf | VInfFull |
-	        VImpPl | VPresPl => aaien; -- hij/zij/het/wij aaien
-    		VPresSg1 | VImp2 => aai; -- ik aai
-    		VPresSg2         => aaitt ; -- jij aait
-    		VPresSg3 | VImp3 => aait; -- hij/zij aait
-    		VPastSg          => aaide; -- ik aaide  --# notpresent
-    		VPastPl          => aaiden; -- hij/zij/het/wij aaiden --# notpresent
-    		VPerf            => geaaid ; -- ik heb geaaid
-		VPerfInfl        => geaaide ; -- inflected form of participle 
-                VPresPart        => aaien + "de" ;
-                VGer             => aaien + "d"
-    	  }
+                 VInf | VInfFull |
+                 VImpPl | VPresPl => aaien; -- hij/zij/het/wij aaien
+                 VPresSg1 | VImp2 => aai; -- ik aai
+                 VPresSg2         => aaitt ; -- jij aait
+                 VPresSg3 | VImp3 => aait; -- hij/zij aait
+                 VPastSg          => aaide; -- ik aaide  --# notpresent
+                 VPastPl          => aaiden; -- hij/zij/het/wij aaiden --# notpresent
+                 VPerf APred      => geaaid ; -- ik heb geaaid
+                 VPerf AAttr      => geaaide ; -- geaaide X
+                 VPerf AGen       => geaaid + "s" ; -- iets geaaids
+                 VPresPart        => aaien + "de" ;
+                 VGer             => aaien + "d"
+              }
     };
 
   inflParticiple : Str -> Str = \gezien ->
@@ -187,7 +187,7 @@ param
       --  if_then_Str b (ein + geb) geb ;
     in
     {s = table {
-      f@(VInfFull | VPerf) => ein + vs ! f; 
+      f@(VInfFull | VPerf _) => ein + vs ! f;
       f => vs ! f
       } ;
      prefix = ein ;
@@ -196,25 +196,24 @@ param
      vtype = verb.vtype 
      } ;
 
-	-- Pattern matching verbs
-  -- Checking if the verb starts with "ver" is due to a bugfix in mkStem regarding ≥2-syllable verbs. /IL2018
+    -- Pattern matching verbs
+    -- Checking if the verb starts with "ver" is due to a bugfix in mkStem regarding ≥2-syllable verbs. /IL2018
     smartVerb : (_,_:Str) -> Verb = \verb,stem ->
-    	let raw = Predef.tk 2 verb;
+        let raw = Predef.tk 2 verb;
           vg : {ver : Str ; geet : Str } = case verb of { 
             "ver" + geten => {ver = "ver" ; geet = mkStem geten } ;
             _             => {ver = []    ; geet = stem } } ;
           vergeten : Str = verb ;
           vergeet : Str = vg.ver + vg.geet ;
-    	in
-    	case raw of {
-    	 _+ ("k"|"f"|"s"|"c"|"h"|"p") => t_regVerb vergeten vergeet ;
-    	 _+ "v" => v_regVerb vergeten vergeet ;
-    	 _+ "z" => z_regVerb vergeten vergeet ;
-    	 _+ ("t" | "tt") => t_end_regVerb vergeten vergeet ;
-    	 _+ "d" => d_end_regVerb vergeten vergeet ;    	 
-    	 _ => d_regVerb vergeten vergeet 
-    	 
-    	};
+        in
+        case raw of {
+         _+ ("k"|"f"|"s"|"c"|"h"|"p") => t_regVerb vergeten vergeet ;
+         _+ "v" => v_regVerb vergeten vergeet ;
+         _+ "z" => z_regVerb vergeten vergeet ;
+         _+ ("t" | "tt") => t_end_regVerb vergeten vergeet ;
+         _+ "d" => d_end_regVerb vergeten vergeet ;
+         _ => d_regVerb vergeten vergeet
+        };
 
     consonant : pattern Str = #("b"|"c"|"d"|"f"|"g"|"h"|"j"|"k"|"l"|"m"|"n"|"p"|"q"|"r"|"s"|"t"|"v"|"w"|"x"|"y"|"z") ;
     vowel : pattern Str = #("a"|"e"|"i"|"o"|"u") ;
@@ -230,10 +229,10 @@ param
       lo   = init lop ;
       o    = last lo  ;
       p    = case last lop of { 
-	       "v" => "f" ;
-	       "z" => "s" ;
-	       p   => p
-	      } ;
+               "v" => "f" ;
+               "z" => "s" ;
+               p   => p
+              } ;
       loop = lo + o + p ;  -- voiced consonant to unvoiced, vowel doubling
       kerf = lo + p ;      -- voiced consonant to unvoiced, no vowel doubling
       zeg  = tk 3 lopen ;  -- double consonant disappearing
@@ -249,74 +248,74 @@ param
       _ + #vowel + ("w"|"j")  => werk ; -- Don't double a vowel before a w or j (are there other consonants?)
 
       _ + #vowel + #consonant => loop ; -- In other cases, a single penultimate vowel doubles.
-    	_+ ("bb" | "dd" | "ff" | "gg" | "kk" | "ll" | "mm" | "nn" | "pp" | 
-            "rr" | "ss" | "tt")    => zeg ;
-    	_+ #consonant + ("v"|"z")  => kerf ;
-    	_                          => werk --default case, #consonant + #consonant 
+      _+ ("bb" | "dd" | "ff" | "gg" | "kk" | "ll" | "mm" | "nn" | "pp" |
+          "rr" | "ss" | "tt")    => zeg ;
+      _+ #consonant + ("v"|"z")  => kerf ;
+      _                          => werk --default case, #consonant + #consonant
     };
     
     
-	-- To add a particle to a verb
+    -- To add a particle to a verb
     --  addPartVerb : Str -> Verb -> Verb = \aanmoedigen ->
     --  let verbpiece = Predef.drop 3 aanmoedigen;
-    --	part = Predef.take 3 aanmoedigen;
-    --	in
-    --	mkVerb (smartVerb verbpiece) part;
+    --    part = Predef.take 3 aanmoedigen;
+    --    in
+    --    mkVerb (smartVerb verbpiece) part;
     
     -- For regular verbs with past tense 'd'
     d_regVerb : (_,_ :Str) -> Verb = \geeuwen,geeuw ->
       mkVerb geeuw (geeuw + "t") geeuwen 
             (geeuw + "de") (geeuw + "de") (geeuw + "den")
-            ("ge" + geeuw + "d");	
+            ("ge" + geeuw + "d");
 
-	-- For regular verbs with past tense 't'
-   	t_regVerb : (_,_ :Str) -> Verb = \botsen,bots ->
-   		mkVerb bots (bots + "t") botsen 
-   		  (bots + "te") (bots + "te") (bots + "ten")
-   		  ("ge" + bots + "t");
-     
- 	-- For verbs that dont need an extra 't' at the end
+        -- For regular verbs with past tense 't'
+    t_regVerb : (_,_ :Str) -> Verb = \botsen,bots ->
+      mkVerb bots (bots + "t") botsen (bots + "te")
+            (bots + "te") (bots + "ten") ("ge" + bots + "t");
+
+         -- For verbs that dont need an extra 't' at the end
     t_end_regVerb : (_,_ : Str) -> Verb = \achten,acht ->
-      	mkVerb acht (acht) achten
-     		(acht + "te") (acht +"te") (acht+"ten") ("ge"+acht);
+      mkVerb acht (acht) achten (acht + "te")
+            (acht +"te") (acht+"ten") ("ge"+acht);
     
     -- For verbs that dont need an extra 'd' at the end
     d_end_regVerb : (_,_ : Str) -> Verb = \aarden,aard ->
-      	mkVerb aard (aard+"t") aarden
-     		(aard + "de") (aard +"de") (aard+"den") ("ge"+aard);
+      mkVerb aard (aard+"t") aarden (aard + "de")
+            (aard +"de") (aard+"den") ("ge"+aard);
   
-	-- For verbs that need a vowel doubled in singular
-	 add_vowel_regVerb : (_,_ : Str) -> Verb = \absorberen,stem ->
-		case stem of {
-			_+ ("t"|"k"|"f"|"s"|"c"|"h"|"p") => t_regVerb absorberen stem;
-			_ => d_regVerb absorberen stem
-		};
+    -- For verbs that need a vowel doubled in singular
+    add_vowel_regVerb : (_,_ : Str) -> Verb = \absorberen,stem ->
+      case stem of {
+        _+ ("t"|"k"|"f"|"s"|"c"|"h"|"p") => t_regVerb absorberen stem;
+        _ => d_regVerb absorberen stem };
 
-	-- For verbs that have their stem ending with a 'z'
-	z_regVerb : (_,_ : Str) -> Verb = \omhelzen,stem ->
-    d_regVerb omhelzen stem;
-	
-	-- For verbs that have their stem ending with a 'v'
-	v_regVerb : (_,_ : Str) -> Verb = \hoeven,hoef ->
-    mkVerb hoef (hoef +"t") hoeven (hoef+"de") (hoef+"de") (hoef+"den") ("ge"+hoef+"d");  
+    -- For verbs that have their stem ending with a 'z'
+    z_regVerb : (_,_ : Str) -> Verb = \omhelzen,stem ->
+      d_regVerb omhelzen stem;
+
+        -- For verbs that have their stem ending with a 'v'
+    v_regVerb : (_,_ : Str) -> Verb = \hoeven,hoef ->
+      mkVerb hoef (hoef +"t") hoeven (hoef+"de")
+            (hoef+"de") (hoef+"den") ("ge"+hoef+"d");
 
   zijn_V : VVerb = {
     s = table {
-       VInf      => "zijn" ;
-       VInfFull  => "zijn" ;
-       VPresSg1  => "ben" ; 
-       VPresSg2  => "bent" ;
-       VPresSg3  => "is" ;
-       VPresPl   => "zijn" ;
-       VPastSg   => "was" ; --# notpresent
-       VPastPl   => "waren" ; --# notpresent
-       VImp2     => "wees" ;
-       VImp3     => "weest" ;
-       VImpPl    => "wezen" ;
-       VPerf     => "geweest" ;
-       VPerfInfl => "geweeste" ;
-       VPresPart => "zijnde" ;
-       VGer      => "wezend"
+       VInf        => "zijn" ;
+       VInfFull    => "zijn" ;
+       VPresSg1    => "ben" ;
+       VPresSg2    => "bent" ;
+       VPresSg3    => "is" ;
+       VPresPl     => "zijn" ;
+       VPastSg     => "was" ; --# notpresent
+       VPastPl     => "waren" ; --# notpresent
+       VImp2       => "wees" ;
+       VImp3       => "weest" ;
+       VImpPl      => "wezen" ;
+       VPerf APred => "geweest" ;
+       VPerf AAttr => "geweeste" ;
+       VPerf AGen  => "geweests" ;
+       VPresPart   => "zijnde" ;
+       VGer        => "wezend"
        } ;
     aux = VZijn ;
     prefix = [] ;
@@ -326,21 +325,22 @@ param
 
   hebben_V : VVerb = {
     s = table {
-       VInf      => "hebben" ;
-       VInfFull  => "hebben" ;
-       VPresSg1  => "heb" ; 
-       VPresSg2  => "hebt" ;
-       VPresSg3  => "heeft" ;
-       VPresPl   => "hebben" ;
-       VPastSg   => "had" ; --# notpresent
-       VPastPl   => "hadden" ; --# notpresent
-       VImp2     => "heb" ;
-       VImp3     => "heeft" ;
-       VImpPl    => "hebben" ;
-       VPerf     => "gehad" ;
-       VPerfInfl => "gehadde" ;
-       VPresPart => "hebbende" ;
-       VGer      => "hebbend"
+       VInf        => "hebben" ;
+       VInfFull    => "hebben" ;
+       VPresSg1    => "heb" ;
+       VPresSg2    => "hebt" ;
+       VPresSg3    => "heeft" ;
+       VPresPl     => "hebben" ;
+       VPastSg     => "had" ; --# notpresent
+       VPastPl     => "hadden" ; --# notpresent
+       VImp2       => "heb" ;
+       VImp3       => "heeft" ;
+       VImpPl      => "hebben" ;
+       VPerf APred => "gehad" ;
+       VPerf AAttr  => "gehadde" ;
+       VPerf AGen  => "gehads" ;
+       VPresPart   => "hebbende" ;
+       VGer        => "hebbend"
        } ;
     aux = VHebben ;
     prefix = [] ;
@@ -350,21 +350,22 @@ param
 
   zullen_V : VVerb = {
     s = table {
-       VInf      => "zullen" ;
-       VInfFull  => "zullen" ;
-       VPresSg1  => "zal" ; 
-       VPresSg2  => "zult" ;
-       VPresSg3  => "zal" ;
-       VPresPl   => "zullen" ;
-       VPastSg   => "zou" ; --# notpresent
-       VPastPl   => "zouden" ; --# notpresent
-       VImp2     => "zoud" ;  ---- not used
-       VImp3     => "zoudt" ;
-       VImpPl    => "zouden" ; ----
-       VPerf     => "gezoudt" ;
-       VPerfInfl => "gezoude" ;
-       VPresPart => "zullende" ;
-       VGer      => "zullend" 
+       VInf        => "zullen" ;
+       VInfFull    => "zullen" ;
+       VPresSg1    => "zal" ;
+       VPresSg2    => "zult" ;
+       VPresSg3    => "zal" ;
+       VPresPl     => "zullen" ;
+       VPastSg     => "zou" ; --# notpresent
+       VPastPl     => "zouden" ; --# notpresent
+       VImp2       => "zoud" ;  ---- not used
+       VImp3       => "zoudt" ;
+       VImpPl      => "zouden" ; ----
+       VPerf APred => "gezoudt" ;
+       VPerf AAttr => "gezoude" ;
+       VPerf AGen  => "gezouds" ;
+       VPresPart   => "zullende" ;
+       VGer        => "zullend"
        } ;
     aux = VHebben ;
     prefix = [] ;
@@ -374,21 +375,22 @@ param
 
   kunnen_V : VVerb = {
     s = table {
-       VInf      => "kunnen" ;
-       VInfFull  => "kunnen" ;
-       VPresSg1  => "kan" ; 
-       VPresSg2  => "kunt" ;
-       VPresSg3  => "kan" ; ---- kun je
-       VPresPl   => "kunnen" ;
-       VPastSg   => "kon" ; --# notpresent
-       VPastPl   => "konden" ; --# notpresent
-       VImp2     => "kan" ;  ---- not used
-       VImp3     => "kan" ;
-       VImpPl    => "kunnen" ; ----
-       VPerf     => "gekund" ;
-       VPerfInfl => "gekunde" ;
-       VPresPart => "kunnende" ;
-       VGer      => "kunnend"
+       VInf        => "kunnen" ;
+       VInfFull    => "kunnen" ;
+       VPresSg1    => "kan" ;
+       VPresSg2    => "kunt" ;
+       VPresSg3    => "kan" ; ---- kun je
+       VPresPl     => "kunnen" ;
+       VPastSg     => "kon" ; --# notpresent
+       VPastPl     => "konden" ; --# notpresent
+       VImp2       => "kan" ;  ---- not used
+       VImp3       => "kan" ;
+       VImpPl      => "kunnen" ; ----
+       VPerf APred => "gekund" ;
+       VPerf AAttr => "gekunde" ;
+       VPerf AGen  => "gekunds" ;
+       VPresPart   => "kunnende" ;
+       VGer        => "kunnend"
        } ;
     aux = VHebben ;
     prefix = [] ;
@@ -425,9 +427,9 @@ param
 
 
   oper VVerb = Verb ** {prefix : Str ;       -- af + stappen
-			particle : Str ;     -- non-inflecting component, e.g. leuk vinden
-			aux : VAux ;         -- hebben or zijn
-			vtype : VType} ;     -- active or reflexive
+                        particle : Str ;     -- non-inflecting component, e.g. leuk vinden
+                        aux : VAux ;         -- hebben or zijn
+                        vtype : VType} ;     -- active or reflexive
 
   param VAux = VHebben | VZijn ;
 
@@ -531,7 +533,8 @@ param
       isAux : Bool ;         -- is a double infinitive
       negPos : NegPosition ; -- ik schoop X niet ; ik houd niet van X ; dat is niet leuk
       inf : Str * Bool ;     -- zeggen (True = non-empty)
-      ext : Str              -- dat je komt
+      ext : Str ;            -- dat je komt
+      isHeavy : Bool ;       -- has any other field than s. Affects any VP* -> AP function.
       } ;
 
   predV : VVerb -> VP = predVGen False AfterObjs ;
@@ -550,7 +553,8 @@ param
     isAux = isAux ; 
     negPos = negPos ;
     inf : Str * Bool = <[],False> ;
-    ext : Str = []
+    ext : Str = [] ;
+    isHeavy = False ;
     } ;
 
   negation : Polarity => Str = table {
@@ -568,6 +572,7 @@ param
     n0 = \\a => case isPron of {True  => obj ! a ; _ => []} ++ vp.n0 ! a ;
     n2 = \\a => case isPron of {False => obj ! a ; _ => []} ++ vp.n2 ! a ;
     negPos = negPos ;
+    isHeavy = True ;
     } ;
 
   insertAdV : Str -> VP -> VP = \adv,vp -> vp ** {
@@ -579,11 +584,13 @@ param
     } ;
 
   insertExtrapos : Str -> VP -> VP = \ext,vp -> vp ** {
-    ext = vp.ext ++ ext
+    ext = vp.ext ++ ext ;
+    isHeavy = True ;
     } ;
 
   insertInf : Str -> VP -> VP = \inf,vp -> vp ** {
     inf = <inf ++ vp.inf.p1, True> ;
+    isHeavy = True ;
     } ;
 
 -- For $Sentence$.
@@ -596,34 +603,31 @@ param
     s : Tense => Anteriority => Polarity => Order => Str
     } ;
 
-  -- To be used for normal clauses
+  -- To be used for normal clauses. APred chooses the noninflected past participle.
   mkClause : Str -> Agr -> VP -> Clause = \subj,agr,vp ->
-    mkClause' subj agr vp ! Fin ;
+    mkClause' subj agr vp APred Fin ;
 
   -- To be used for ExtendDut.PastPartAP
   -- If we need more variants, extend mkClause'
-  infClause : Str -> Agr -> VP -> Clause = \subj,agr,vp ->
-    mkClause' subj agr vp ! Inf ;
+  infClause : Str -> Agr -> VP -> AForm -> Clause = \subj,agr,vp,af ->
+    mkClause' subj agr vp af  Inf ;
 
-  -- Lines 615-618 add a possibility to choose a participle verb form.
+  -- Added a possibility to choose a participle verb form.
   -- This is so far only used in ExtendDut.PastPartAP. /IL2018
-  mkClause' : Str -> Agr -> VP -> (ClType => Clause) = \subj,agr,vp ->
-    \\isPart => {
+  mkClause' : Str -> Agr -> VP -> AForm -> ClType -> Clause = \subj,agr,vp,af,isPart -> {
       s = \\t,a,b,o =>
         let
           vform = vForm t agr.g agr.n agr.p o ;
           auxv = (auxVerb vp.s.aux).s ;
-          vperf = vp.s.s ! VPerf ;
+          vperf = vp.s.s ! VPerf af ;
           verb : Str * Str = case <isPart,t,a> of {
 
-	    -- <Experimental: only used in ExtendDut.PastPartAP>
-	    <Inf,Pres, _>  => <vp.s.s ! VPresPart, []> ;
-	    <Inf,_,_>  => <case agr.g of { Utr => vp.s.s ! VPerfInfl ;
-					                                    _   => vperf }
-	                                          ,[]> ; 
-	    -- </Experimental>
+            -- <Experimental: only used in ExtendDut.PastPartAP>
+            <Inf,Pres, _>  => <vp.s.s ! VPresPart, []> ;
+            <Inf,_,    _>  => <vperf,[]> ;
+            -- </Experimental>
 
-	    <_,Fut|Cond,Simul> => <zullen_V.s ! vform, vp.s.s ! VInf> ; --# notpresent
+            <_,Fut|Cond,Simul> => <zullen_V.s ! vform, vp.s.s ! VInf> ; --# notpresent
             <_,Fut|Cond,Anter> => <zullen_V.s ! vform, vperf ++ auxv ! VInf> ; --# notpresent
             <_,_,       Anter> => <auxv ! vform,       vperf> ; --# notpresent
             <_,_,       Simul> => <vp.s.s ! vform,     []>
@@ -632,16 +636,16 @@ param
           neg   = vp.a1 ! b ;
           obj0  = vp.n0 ! agr ;
           obj   = vp.n2 ! agr ;
-	  part  = vp.s.particle ;
-	  pref  = case <a : Anteriority> of {
-	            Anter => [] ;        -- prefix is part of participle: toegevoegd  --# notpresent
-		    _     => vp.s.prefix -- prefix not present in verb form
-	            } ;
-	  compl = case vp.negPos of {
-	    BeforeObjs  => neg ++ obj0 ++ obj ++ part ++ vp.a2 ++ pref ;
-	    AfterObjs   => obj0 ++ obj ++ neg ++ part ++ vp.a2 ++ pref ;
-	    BetweenObjs => obj0 ++ neg ++ obj ++ part ++ vp.a2 ++ pref
-	  } ;
+          part  = vp.s.particle ;
+          pref  = case <a : Anteriority> of {
+                    Anter => [] ;        -- prefix is part of participle: toegevoegd  --# notpresent
+                    _     => vp.s.prefix -- prefix not present in verb form
+                    } ;
+          compl = case vp.negPos of {
+            BeforeObjs  => neg ++ obj0 ++ obj ++ part ++ vp.a2 ++ pref ;
+            AfterObjs   => obj0 ++ obj ++ neg ++ part ++ vp.a2 ++ pref ;
+            BetweenObjs => obj0 ++ neg ++ obj ++ part ++ vp.a2 ++ pref
+          } ;
           inf : Str =
             case <vp.isAux, vp.inf.p2, a> of {                  
               <True,True,Anter> => vp.s.s ! VInf ++ vp.inf.p1 ; --# notpresent
@@ -676,7 +680,7 @@ param
     let vverb = vp.s in {
       obj = \\agr => vp.n0 ! agr ++ vp.n2 ! agr ++ vp.a2 ;
       inf = vp.a1 ! Pos ++     -- altijd
-	    vverb.particle ++  -- leuk
+            vverb.particle ++  -- leuk
             if_then_Str isAux
               (vverb.s ! VInfFull)                       -- toevoegen
               (vverb.prefix ++ "te" ++ vverb.s ! VInf) ; -- te vinden
@@ -688,7 +692,7 @@ param
     in
       \vps -> insertExtrapos vpi.ext
                 (insertInf vpi.inf
-                  (insertObj vpi.obj vps)) ;
+                  (insertObj vpi.obj (vps ** {isHeavy=True}))) ;
 
   useInfVP : Bool -> VP -> Agr => Str = \isAux,vp ->
     let vpi = infVP isAux vp in

@@ -289,7 +289,7 @@ oper
 
   no_geV v = let vs = v.s in {
     s = table {
-      VPerf => Predef.drop 2 (vs ! VPerf) ;
+      VPerf x => Predef.drop 2 (vs ! VPerf x) ;
       p => vs ! p
       } ;
     prefix = v.prefix ; lock_V = v.lock_V ; particle = v.particle ; aux = v.aux ; vtype = v.vtype
@@ -297,7 +297,7 @@ oper
 
   fixprefixV s v = let vs = v.s in {
     s = table {
-      VPerf => s + Predef.drop 2 (vs ! VPerf) ;
+      VPerf x => s + Predef.drop 2 (vs ! VPerf x) ;
       p => s + vs ! p
       } ;
     prefix = v.prefix ; lock_V = v.lock_V ; aux = v.aux ; particle = v.particle ; vtype = v.vtype

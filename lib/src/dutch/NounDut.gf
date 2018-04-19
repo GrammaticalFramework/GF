@@ -34,7 +34,7 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       } ;
 
     PPartNP np v2 = heavyNP {
-      s = \\c => np.s ! c ++ v2.s ! VPerf ; -- invar part
+      s = \\c => np.s ! c ++ v2.s ! VPerf APred ; -- invar part
       a = np.a ;
       } ;
 

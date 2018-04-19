@@ -58,7 +58,7 @@ lin
           b = p.p ;
           vform = vForm t agr.g agr.n agr.p o ;
           auxv = (auxVerb vp.s.aux).s ;
-          vperf = vp.s.s ! VPerf ;
+          vperf = vp.s.s ! VPerf APred ;
           verb : Str * Str = case <t,a> of {
             <Fut|Cond,Simul>  => <zullen_V.s ! vform, vp.s.s ! VInf> ; --# notpresent
             <Fut|Cond,Anter>  => <zullen_V.s ! vform, vperf ++ auxv ! VInf> ; --# notpresent
@@ -96,9 +96,9 @@ lin
     ConjVPS = conjunctDistrTable2 Order Agr ;
 
     PassVPSlash vps = 
-      insertInf (vps.s.s ! VPerf) (predV ResDut.worden_V) ;
+      insertInf (vps.s.s ! VPerf APred) (predV ResDut.worden_V) ;
     PassAgentVPSlash vps np = 
-      insertAdv (appPrep (P.mkPrep "door") np) (insertInf (vps.s.s ! VPerf) (predV ResDut.worden_V)) ;
+      insertAdv (appPrep (P.mkPrep "door") np) (insertInf (vps.s.s ! VPerf APred) (predV ResDut.worden_V)) ;
 
 lin
  NominalizeVPSlashNP vpslash np =

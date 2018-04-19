@@ -13,9 +13,12 @@ concrete ExtendDut of Extend =
     ParadigmsDut in {
   lin
 
-   PastPartAP vp = {
-      s = \\agr,af => (infClause [] agr vp).s ! Past ! Anter ! Pos ! Sub ;
-      isPre = notB vp.inf.p2
-      } ;
+  PastPartAP vp = {
+    s = \\agr,af => let aForm = case vp.isHeavy of {
+                          True  => APred ;
+                          False => af } ;
+                     in (infClause [] agr vp aForm).s ! Past ! Anter ! Pos ! Sub ;
+    isPre = notB vp.isHeavy ;
+   } ;
     
-    }
+ }
