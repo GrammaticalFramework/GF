@@ -100,10 +100,10 @@
 <P>
 This document is a reference manual to the GF programming language.
 GF, Grammatical Framework, is a special-purpose programming language,
-designed to support definitions of grammars. 
+designed to support definitions of grammars.
 </P>
 <P>
-This document is not an introduction to GF; such introduction can be 
+This document is not an introduction to GF; such introduction can be
 found in the GF tutorial available on line on the GF web page,
 </P>
 <P>
@@ -118,7 +118,7 @@ do with the language specification.
 <P>
 This manual is meant to be fully compatible with GF version 3.0.
 Main discrepancies with version 2.8 are indicated,
-as well as with the reference article on GF, 
+as well as with the reference article on GF,
 </P>
 <P>
 A. Ranta, "Grammatical Framework. A Type Theoretical Grammar Formalism",
@@ -139,17 +139,17 @@ As metalinguistic notation, we will use the symbols
 <H2>Overview of GF</H2>
 <P>
 GF is a typed functional language,
-borrowing many of its constructs from ML and Haskell: algebraic datatypes, 
+borrowing many of its constructs from ML and Haskell: algebraic datatypes,
 higher-order functions, pattern matching. The module system bears resemblance
 to ML (functors) but also to object-oriented languages (inheritance).
 The type theory used in the abstract syntax part of GF is inherited from
 logical frameworks, in particular ALF ("Another Logical Framework"; in a
 sense, GF is Yet Another ALF). From ALF comes also the use of dependent
-types, including the use of explicit type variables instead of 
+types, including the use of explicit type variables instead of
 Hindley-Milner polymorphism.
 </P>
 <P>
-The look and feel of GF is close to Java and 
+The look and feel of GF is close to Java and
 C, due to the use of curly brackets and semicolons in structuring the code;
 the expression syntax, however, follows Haskell in using juxtaposition for
 function application and parentheses only for grouping.
@@ -173,7 +173,7 @@ abstract syntax, however, is fully recursive.
 </P>
 <P>
 Even though run-time GF grammars manipulate just nested tuples, at compile
-time these are represented by by the more fine-grained labelled records 
+time these are represented by by the more fine-grained labelled records
 and finite functions over algebraic datatypes. This enables the programmer
 to write on a higher abstraction level, and also adds type distinctions
 and hence raises the level of checking of programs.
@@ -187,7 +187,7 @@ The big picture of GF as a programming language for multilingual grammars
 explains its principal module structure. Any GF grammar must have an
 abstract syntax module; it can in addition have any number of concrete
 syntax modules matching that abstract syntax. Before going to details,
-we give a simple example: a module defining the <B>category</B> <CODE>A</CODE> 
+we give a simple example: a module defining the <B>category</B> <CODE>A</CODE>
 of adjectives and one adjective-forming <B>function</B>, the zero-place function
 <CODE>Even</CODE>. We give the module the name <CODE>Adj</CODE>. The GF code for the
 module looks as follows:
@@ -202,20 +202,20 @@ module looks as follows:
 Here are two concrete syntax modules, one intended for mapping the trees
 to English, the other to Swedish. The mappling is defined by
 <CODE>lincat</CODE> definitions assigning a <B>linearization type</B> to each category,
-and <CODE>lin</CODE> definitions assigning a <B>linearization</B> to each function. 
+and <CODE>lin</CODE> definitions assigning a <B>linearization</B> to each function.
 </P>
 <PRE>
     concrete AdjEng of Adj = {
       lincat A = {s : Str} ;
       lin Even = {s = "even"} ;
     }
-  
+
     concrete AdjSwe of Adj = {
       lincat A = {s : AForm =&gt; Str} ;
       lin Even = {s = table {
-        ASg Utr   =&gt; "j�mn" ;
-        ASg Neutr =&gt; "j�mnt" ;
-        APl       =&gt; "j�mna"
+        ASg Utr   =&gt; "jämn" ;
+        ASg Neutr =&gt; "jämnt" ;
+        APl       =&gt; "jämna"
         }
       } ;
       param AForm = ASg Gender | APl ;
@@ -262,7 +262,7 @@ much more module structure than strictly required in top-level grammars.
 </P>
 <P>
 <B>Inheritance</B>, also known as <B>extension</B>, means that a module can inherit the
-contents of one or more other modules to which new judgements are added, 
+contents of one or more other modules to which new judgements are added,
 e.g.
 </P>
 <PRE>
@@ -278,7 +278,7 @@ in several concrete syntaxes,
     resource MorphoFre = {
       param Number = Sg | Pl ;
       param Gender = Masc | Fem ;
-      oper regA : Str -&gt; {s : Gender =&gt; Number =&gt; Str} = 
+      oper regA : Str -&gt; {s : Gender =&gt; Number =&gt; Str} =
         \fin -&gt; {
           s = table {
             Masc =&gt; table {Sg =&gt; fin ; Pl =&gt; fin + "s"} ;
@@ -288,7 +288,7 @@ in several concrete syntaxes,
     }
 </PRE>
 <P>
-By <B>opening</B>, a module can use the contents of a resource module 
+By <B>opening</B>, a module can use the contents of a resource module
 without inheriting them, e.g.
 </P>
 <PRE>
@@ -307,7 +307,7 @@ modules, e.g.
       oper Adjective : Type ;
       oper even_A : Adjective ;
     }
-  
+
     instance LexiconEng of Lexicon = {
       oper Adjective = {s : Str} ;
       oper even_A = {s = "even"} ;
@@ -315,7 +315,7 @@ modules, e.g.
 </PRE>
 <P>
 <B>Functors</B> i.e. <B>parametrized modules</B> i.e. <B>incomplete modules</B>, defining
-a concrete syntax in terms of an interface. 
+a concrete syntax in terms of an interface.
 </P>
 <PRE>
     incomplete concrete AdjI of Adj = open Lexicon in {
@@ -335,7 +335,7 @@ A functor can be <B>instantiated</B> by providing instances of its open interfac
 <P>
 The compilation unit of GF source code is a file that contains a module.
 Judgements outside modules are supported only for backward compatibility,
-as explained <a href="#oldgf">here</a>. 
+as explained <a href="#oldgf">here</a>.
 Every source file, suffixed <CODE>.gf</CODE>, is compiled to a "GF object file",
 suffixed <CODE>.gfo</CODE> (as of GF Version 3.0 and later). For runtime grammar objects
 used for parsing and linearization, a set of <CODE>.gfo</CODE> files is linked to
@@ -363,42 +363,42 @@ grammar.pgf
 Both <CODE>.gf</CODE> and <CODE>.gfo</CODE> files are written in the GF source language;
 <CODE>.pgf</CODE> files are written in a lower-level format. The process of translating
 <CODE>.gf</CODE> to <CODE>.gfo</CODE> consists of <B>name resolution</B>, <B>type annotation</B>,
-<B>partial evaluation</B>, and <B>optimization</B>. 
+<B>partial evaluation</B>, and <B>optimization</B>.
 There is a great advantage in the possibility to do this
-separately for GF modules and saving the result in <CODE>.gfo</CODE> files. The partial 
+separately for GF modules and saving the result in <CODE>.gfo</CODE> files. The partial
 evaluation phase, in particular, is time and memory consuming, and GF libraries
 are therefore distributed in <CODE>.gfo</CODE> to make their use less arduous.
 </P>
 <P>
-<I>In GF before version 3.0, the object files are in a format called <CODE>.gfc</CODE>,</I> 
+<I>In GF before version 3.0, the object files are in a format called <CODE>.gfc</CODE>,</I>
 <I>and the multilingual runtime grammar is in a format called <CODE>.gfcm</CODE>.</I>
 </P>
 <P>
 The standard compiler has a built-in <B>make facility</B>, which finds out what
-other modules are needed when compiling an explicitly given module. 
-This facility builds a dependency graph and decides which of the involved 
+other modules are needed when compiling an explicitly given module.
+This facility builds a dependency graph and decides which of the involved
 modules need recompilation (from <CODE>.gf</CODE> to <CODE>.gfo</CODE>), and for which the
-GF object can be used directly. 
+GF object can be used directly.
 </P>
 <A NAME="toc5"></A>
 <H3>Names</H3>
 <P>
 Each module <I>M</I> defines a set of <B>names</B>, which are visible in <I>M</I>
-itself, in all modules extending <I>M</I> (unless excluded, as explained 
+itself, in all modules extending <I>M</I> (unless excluded, as explained
 <a href="#restrictedinheritance">here</a>), and
 all modules opening <I>M</I>. These names can stand for abstract syntax
 categories and functions, parameter types and parameter constructors,
 and operations. All these names live in the same <B>name space</B>, which
 means that a name entering a module more than once due to inheritance or
-opening can lead to a <B>conflict</B>. It is specified 
+opening can lead to a <B>conflict</B>. It is specified
 <a href="#renaming">here</a> how these
 conflicts are resolved.
 </P>
 <P>
 The names of modules live in a name space separate from the other names.
-Even here, all names must be distinct in a set of files compiled to a 
+Even here, all names must be distinct in a set of files compiled to a
 multilingual grammar. In particular, even files residing in different directories
-must have different names, since GF has no notion of hierarchic 
+must have different names, since GF has no notion of hierarchic
 module names.
 </P>
 <P>
@@ -439,7 +439,7 @@ Any of the parts <I>extends</I>, <I>opens</I>, and <I>body</I> may be empty.
 If they are all filled, delimiters and keywords separate the parts in the
 following way:
 <center>
-<I>moduletype</I> <I>name</I> <CODE>=</CODE> 
+<I>moduletype</I> <I>name</I> <CODE>=</CODE>
   <I>extends</I> <CODE>**</CODE> <CODE>open</CODE> <I>opens</I> <CODE>in</CODE> <CODE>{</CODE> <I>body</I> <CODE>}</CODE>
 </center>
 The part <I>moduletype</I> <I>name</I> looks slightly different if the
@@ -447,18 +447,18 @@ type is <CODE>concrete</CODE> or <CODE>instance</CODE>: the <I>name</I> intrudes
 the type keyword and the name of the module being implemented and which
 really belongs to the type of the module:
 <center>
-  <CODE>concrete</CODE> <I>name</I> <CODE>of</CODE> <I>abstractname</I> 
+  <CODE>concrete</CODE> <I>name</I> <CODE>of</CODE> <I>abstractname</I>
 </center>
 The only exception to the schema of functor syntax
 is functor instantiations: the instantiation
 list is given in a special way between <I>extends</I> and <I>opens</I>:
 <center>
-<CODE>incomplete concrete</CODE> <I>name</I> <CODE>of</CODE> <I>abstractname</I> <CODE>=</CODE> 
-  <I>extends</I> <CODE>**</CODE> <I>functorname</I> <CODE>with</CODE> <I>instantiations</I> <CODE>**</CODE> 
+<CODE>incomplete concrete</CODE> <I>name</I> <CODE>of</CODE> <I>abstractname</I> <CODE>=</CODE>
+  <I>extends</I> <CODE>**</CODE> <I>functorname</I> <CODE>with</CODE> <I>instantiations</I> <CODE>**</CODE>
   <CODE>open</CODE> <I>opens</I> <CODE>in</CODE> <CODE>{</CODE> <I>body</I> <CODE>}</CODE>
 </center>
 Logically, the part "<I>functorname</I> <CODE>with</CODE> <I>instantiations</I>" should
-really be one of the <I>extends</I>. This is also shown by the fact that 
+really be one of the <I>extends</I>. This is also shown by the fact that
 it can have restricted inheritance (concept defined <a href="#restrictedinheritance">here</a>).
 </P>
 <A NAME="toc7"></A>
@@ -538,7 +538,7 @@ The table uses the following shorthands for lists of module types:
 </UL>
 
 <P>
-The legality of judgements in the body is checked before the judgements 
+The legality of judgements in the body is checked before the judgements
 themselves are checked.
 </P>
 <P>
@@ -550,7 +550,7 @@ The forms of judgement are explained <a href="#judgementforms">here</a>.
 Why are the legality conditions of opens and extends so complicated? The best way
 to grasp them is probably to consider a simplified logical model of the module
 system, replacing modules by types and functions. This model could actually
-be developed towards treating modules in GF as first-class objects; so far, 
+be developed towards treating modules in GF as first-class objects; so far,
 however, this step has not been motivated by any practical needs.
 </P>
 <TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
@@ -603,7 +603,7 @@ GADTs and record types:
   tuples over strings and integers
 <LI>an interface is a labelled record type
 <LI>an instance is a record of the type defined by the interface
-<LI>a functor, with a module body opening an interface, is a function 
+<LI>a functor, with a module body opening an interface, is a function
   on its instances
 <LI>the instantiation of a functor is an application of the function to
   some instance
@@ -627,7 +627,7 @@ When an abstract is used as an interface and a concrete as its instance, they
 are actually reinterpreted so that they match the model. Then the abstract is
 no longer a GADT, but a system of <I>abstract</I> datatypes, with a record field
 of type <CODE>Type</CODE> for each category, and a function among these types for each
-abstract syntax function. A concrete syntax instantiates this record with 
+abstract syntax function. A concrete syntax instantiates this record with
 linearization types and linearizations.
 </P>
 <A NAME="toc9"></A>
@@ -643,7 +643,7 @@ error: GF provides no way to redefine an inherited constant.
 </P>
 <P>
 Simple as the definition of a conflict may sound, it has to take care of the
-inheritance hierarchy. A very common pattern of inheritance is the 
+inheritance hierarchy. A very common pattern of inheritance is the
 <B>diamond</B>: inheritance from two modules which themselves inherit a common
 base module. Assume that the base module defines a name <CODE>f</CODE>:
 </P>
@@ -681,16 +681,16 @@ Inheritance can be <B>restricted</B>. This means that a module can be specified
 as inheriting <I>only</I> explicitly listed constants, or all constants
 <I>except</I> ones explicitly listed. The syntax uses constant names in brackets,
 prefixed by a minus sign in the case of an exclusion list. In the following
-configuration, N inherits <CODE>a,b,c</CODE> from <CODE>M1</CODE>, and all names but <CODE>d</CODE> 
+configuration, N inherits <CODE>a,b,c</CODE> from <CODE>M1</CODE>, and all names but <CODE>d</CODE>
 from <CODE>M2</CODE>
 </P>
 <PRE>
     N = M1 {a,b,c}, M2-{d}
 </PRE>
 <P>
-Restrictions are performed as a part of inheritance linking, module by module: 
+Restrictions are performed as a part of inheritance linking, module by module:
 the link is created for a constant if and only if it is both
-included in the module and compatible with the restriction. Thus, 
+included in the module and compatible with the restriction. Thus,
 for instance, an inadvertent usage can exclude a constant from one module
 but inherit it from another one. In the following
 configuration, <CODE>f</CODE> is inherited via <CODE>M1</CODE>, if <CODE>M1</CODE> inherits it.
@@ -709,11 +709,11 @@ exclusion has the effect of creating an ill-formed module:
     M [f]   ===&gt; {fun f : C ;}
 </PRE>
 <P>
-One might expect inheritance restriction to be transitive: if an included 
+One might expect inheritance restriction to be transitive: if an included
 constant <I>b</I> depends on some other constant <I>a</I>, then <I>a</I> should be
 included automatically. However, this rule would leave to hard-to-detect
 inheritances. And it could only be applied later in the compilation phase,
-when the compiler has not only collected the names defined, but also 
+when the compiler has not only collected the names defined, but also
 resolved the names used in definitions.
 </P>
 <P>
@@ -725,9 +725,9 @@ must replicate all restrictions of the functor.
 <A NAME="toc10"></A>
 <H3>Opening</H3>
 <P>
-Opening makes constants from other modules usable in judgements, without 
+Opening makes constants from other modules usable in judgements, without
 inheriting them. This means that, unlike inheritance, opening is not
-transitive. 
+transitive.
 </P>
 <P>
 <a name="qualifiednames"></a>
@@ -736,7 +736,7 @@ transitive.
 Opening cannot be restricted as inheritance can, but it can be <B>qualified</B>.
 This means that the names from the opened modules cannot be used as such, but
 only as prefixed by a qualifier and a dot (<CODE>.</CODE>). The qualifier can be any
-identifier, including the name of the module. Here is an example of 
+identifier, including the name of the module. Here is an example of
 an <I>opens</I> list:
 </P>
 <PRE>
@@ -759,7 +759,7 @@ Thus qualification by real module name is always possible, and one and the same
 module can be qualified in different ways at the same time (the latter can
 be useful if you want to be able to change the implementations of some
 constants to a different resource later). Since the qualification with real
-module name is always possible, it is not possible to "swap" the names of 
+module name is always possible, it is not possible to "swap" the names of
 modules locally:
 </P>
 <PRE>
@@ -785,8 +785,8 @@ hence not dependent on e.g. types, which are known only at a later phase.
 <P>
 Qualification of names is the main device for avoiding conflicts in
 name resolution. No other information is used, such as priorities between
-modules. However, if a name is defined in different opened modules 
-but never used in the module body, 
+modules. However, if a name is defined in different opened modules
+but never used in the module body,
 a conflict does not arise: conflicts arise only
 when names are used. Also in this respect, opening is thus different from
 inheritance, where conflicts are checked independently of use.
@@ -807,10 +807,10 @@ equations, assigning an instance to every interface. Here is a typical
 example, displaying the full generality:
 </P>
 <PRE>
-    concrete FoodsEng of Foods = PhrasesEng ** 
-      FoodsI-[Pizza] with 
+    concrete FoodsEng of Foods = PhrasesEng **
+      FoodsI-[Pizza] with
         (Syntax = SyntaxEng),
-        (LexFoods = LexFoodsEng) ** 
+        (LexFoods = LexFoodsEng) **
       open SyntaxEng, ParadigmsEng in {
         lin Pizza = mkCN (mkA "Italian") (mkN "pie") ;
     }
@@ -856,12 +856,12 @@ have a definition part. While a <CODE>resource</CODE> must be complete, an
 parts of judgements are optional.
 </P>
 <P>
-An <CODE>instance</CODE> is complete with respect to an <CODE>interface</CODE>, if it 
+An <CODE>instance</CODE> is complete with respect to an <CODE>interface</CODE>, if it
 gives the definition parts of all <CODE>oper</CODE> and <CODE>param</CODE> judgements
 that are omitted in the <CODE>interface</CODE>. Giving definitions to judgements
 that have already been defined in the <CODE>interface</CODE> is illegal.
 Type signatures, on the other hand, can be repeated if the same types
-are used. 
+are used.
 </P>
 <P>
 In addition to completing the definitions in an <CODE>interface</CODE>,
@@ -881,7 +881,7 @@ above variations:
       } ;
       oper regNoun : Str -&gt; Noun ; -- no definition
     }
-  
+
     instance PosEng of Pos = {
       param Case = Nom | Gen ;     -- definition of Case
                                    -- Number and Noun inherited
@@ -915,7 +915,7 @@ There are several different <B>forms of judgement</B>, identified by different
 <B>judgement keywords</B>. Here is a list of all these forms, together
 with syntax descriptions and the types of modules in which each form can occur.
 The table moreover indicates whether the judgement has a default value, and
-whether it contributes to the <B>name base</B>, i.e. introduces a new 
+whether it contributes to the <B>name base</B>, i.e. introduces a new
 name to the scope.
 </P>
 <TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
@@ -1026,7 +1026,7 @@ Judgements that have default values are rarely used, except <CODE>lincat</CODE> 
 </P>
 <P>
 Introducing a name twice in the same module is an error. In other words,
-all judgements that have a "yes" in the name base column, must 
+all judgements that have a "yes" in the name base column, must
 have distinct identifiers on their left-hand sides.
 </P>
 <P>
@@ -1043,7 +1043,7 @@ each form. There are moreover two kinds of syntactic sugar common to all forms:
 <center>
 <CODE>keyw J ; K ;</CODE>  ===  <CODE>keyw J ; keyw K ;</CODE>
 </center>
-<LI>the right-hand sides of colon (<CODE>:</CODE>) and equality (<CODE>=</CODE>) 
+<LI>the right-hand sides of colon (<CODE>:</CODE>) and equality (<CODE>=</CODE>)
   can be shared, by using comma (<CODE>,</CODE>) as separator of left-hand sides, which
   must consist of identifiers
 <center>
@@ -1065,13 +1065,13 @@ can be correct even though <CODE>f</CODE> and <CODE>g</CODE> required different
 function types.
 </P>
 <P>
-Within a module, judgements can occur in any order. In particular, 
-a name can be used before it is introduced. 
+Within a module, judgements can occur in any order. In particular,
+a name can be used before it is introduced.
 </P>
 <P>
-The explanations of judgement forms refer to the notions 
+The explanations of judgement forms refer to the notions
 of <B>type</B> and <B>term</B> (the latter also called <B>expression</B>).
-These notions will be explained in detail <a href="#expressions">here</a>. 
+These notions will be explained in detail <a href="#expressions">here</a>.
 </P>
 <A NAME="toc16"></A>
 <H3>Category declarations, cat</H3>
@@ -1079,7 +1079,7 @@ These notions will be explained in detail <a href="#expressions">here</a>.
 <a name="catjudgements"></a>
 </P>
 <P>
-Category declarations 
+Category declarations
 <center>
 <CODE>cat</CODE> <I>C</I> <I>G</I>
 </center>
@@ -1110,7 +1110,7 @@ and a sequence does not have any separator symbols. As syntactic sugar,
 <center>
 <CODE>(</CODE> <I>x,y</I> <CODE>:</CODE> <I>T</I> <CODE>)</CODE>  ===  <CODE>(</CODE> <I>x</I> <CODE>:</CODE> <I>T</I> <CODE>)</CODE> <CODE>(</CODE> <I>y</I> <CODE>:</CODE> <I>T</I> <CODE>)</CODE>
 </center>
-<LI>a <B>wildcard</B> can be used for a variable not occurring in types 
+<LI>a <B>wildcard</B> can be used for a variable not occurring in types
   later in the context,
 <center>
 <CODE>(</CODE> <CODE>_</CODE> <CODE>:</CODE> <I>T</I> <CODE>)</CODE> === <CODE>(</CODE> <I>x</I> <CODE>:</CODE> <I>T</I> <CODE>)</CODE>
@@ -1142,16 +1142,16 @@ the function type constructor <CODE>-&gt;</CODE>. Thus its form is
 <center>
   (<i>x</i><sub>1</sub> <CODE>:</CODE> <i>A</i><sub>1</sub>) <CODE>-&gt;</CODE> ... <CODE>-&gt;</CODE> (<i>x</i><sub>n</sub> <CODE>:</CODE> <i>A</i><sub>n</sub>) <CODE>-&gt;</CODE> <I>B</I>
 </center>
-where <I>Ai</I> are types, called the <B>argument types</B>, and <I>B</I> is a 
+where <I>Ai</I> are types, called the <B>argument types</B>, and <I>B</I> is a
 basic type, called the <B>value type</B> of <I>f</I>. The <B>value category</B> of
 <I>f</I> is the category that forms the type <I>B</I>.
 </P>
 <P>
 A <B>syntax tree</B> is formed from <I>f</I> by applying it to a full list of
-arguments, so that the result is of a basic type. 
+arguments, so that the result is of a basic type.
 </P>
 <P>
-A <B>higher-order function</B> is one that has a function type as an 
+A <B>higher-order function</B> is one that has a function type as an
 argument. The concrete syntax of GF does not support displaying the
 bound variables of functions of higher than second order, but they are
 legal in abstract syntax.
@@ -1184,7 +1184,7 @@ The set of <CODE>def</CODE> definitions for <I>f</I> can be scattered around
 the module in which <I>f</I> is introduced as a function. The compiler
 builds the set of pattern equations in the order in which the
 equations appear; this order is significant in the case of
-overlapping patterns. All equations must appear in the same module in 
+overlapping patterns. All equations must appear in the same module in
 which <I>f</I> itself declared.
 </P>
 <P>
@@ -1195,8 +1195,8 @@ syntax, <B>constructor patterns</B> are those of the form
   <I>C</I> <i>p</i><sub>1</sub> ... <i>p</i><sub>n</sub>
 </center>
 where <I>C</I> is declared as <CODE>data</CODE> for some abstract syntax category
-(see next section). A <B>variable pattern</B> is either an identifier or 
-a wildcard. 
+(see next section). A <B>variable pattern</B> is either an identifier or
+a wildcard.
 </P>
 <P>
 A common pitfall is to forget to declare a constructor as data, which
@@ -1208,7 +1208,7 @@ and in general by using <B>pattern matching</B>. Computation and pattern matchin
 are explained commonly for abstract and concrete syntax <a href="#patternmatching">here</a>.
 </P>
 <P>
-In contrast to concrete syntax, abstract syntax computation is 
+In contrast to concrete syntax, abstract syntax computation is
 completely <B>symbolic</B>: it does not produce a value, but just another
 term. Hence it is not an error to have incomplete systems of
 pattern equations for a function. In addition, the definitions
@@ -1224,7 +1224,7 @@ A data constructor definition,
 </center>
 defines the functions <I>f1</I>...<I>fn</I> to be <B>constructors</B>
 of the category <I>C</I>. This means that they are recognized as constructor
-patterns when used in function definitions. 
+patterns when used in function definitions.
 </P>
 <P>
 In order for the data constructor definition to be correct,
@@ -1240,7 +1240,7 @@ must appear in the same module in which the category is itself defined.
 There is syntactic sugar for declaring a function as a constructor at
 the same time as introducing it:
 <center>
-<CODE>data</CODE> <I>f</I> : <i>A</i><sub>1</sub> <CODE>-&gt;</CODE> ... <CODE>-&gt;</CODE> <i>A</i><sub>n</sub> <CODE>-&gt;</CODE> <I>C</I> <i>t</i><sub>1</sub> ... <i>t</i><sub>m</sub> 
+<CODE>data</CODE> <I>f</I> : <i>A</i><sub>1</sub> <CODE>-&gt;</CODE> ... <CODE>-&gt;</CODE> <i>A</i><sub>n</sub> <CODE>-&gt;</CODE> <I>C</I> <i>t</i><sub>1</sub> ... <i>t</i><sub>m</sub>
 </P>
 <P>
   ===
@@ -1267,8 +1267,8 @@ whereas the primitive notion status is overridden by any of the two others.
 </P>
 <P>
 This distinction is relevant for the semantics of abstract syntax, not
-for concrete syntax. It shows in the way patterns are treated in 
-equations in <CODE>def</CODE> definitions: a constructor 
+for concrete syntax. It shows in the way patterns are treated in
+equations in <CODE>def</CODE> definitions: a constructor
 in a pattern matches only itself, whereas
 any other name is treated as a variable pattern, which matches
 anything.
@@ -1324,7 +1324,7 @@ where the type <I>T</I>* is defined as follows depending on <I>T</I>:
 </UL>
 
 <P>
-The second case is relevant for higher-order functions only. It says that 
+The second case is relevant for higher-order functions only. It says that
 the linearization type of the value type is extended by adding a string field
 for each argument types; these fields store the variable symbol used for
 the binding of each variable.
@@ -1356,22 +1356,22 @@ A linearization default definition,
   <CODE>lindef</CODE> <I>C</I> <CODE>=</CODE> <I>t</I>
 </center>
 defines the default linearization of category <I>C</I>, i.e. the function
-applicable to a string to make it into an object of the linearization 
+applicable to a string to make it into an object of the linearization
 type of <I>C</I>.
 </P>
 <P>
 Linearization defaults are invoked when linearizing variable bindings
 in higher-order abstract syntax. A variable symbol is then presented
 as a string, which must be converted to correct type in order for
-the linearization not to fail with an error. 
+the linearization not to fail with an error.
 </P>
 <P>
 The other use of the defaults is for linearizing metavariables
 and abstract functions without linearization in the concrete syntax.
-In the first case the default linearization is applied to 
-the string <CODE>"?X"</CODE> where <CODE>X</CODE> is the unique index 
-of the metavariable, and in the second case the string is 
-<CODE>"[f]"</CODE> where <CODE>f</CODE> is the name of the abstract 
+In the first case the default linearization is applied to
+the string <CODE>"?X"</CODE> where <CODE>X</CODE> is the unique index
+of the metavariable, and in the second case the string is
+<CODE>"[f]"</CODE> where <CODE>f</CODE> is the name of the abstract
 function with missing linearization.
 
 </P>
@@ -1422,10 +1422,10 @@ The reference linearization is also used for linearizing metavariables
 which stand in function position. For example the tree
 <CODE>f (? x1 x2 .. xn)</CODE> is linearized as follows. Each
 of the arguments <CODE>x1 x2 .. xn</CODE> is linearized, and after that
-the reference linearization of the its category is applied 
+the reference linearization of the its category is applied
 to the output of the linearization. The result is a sequence of <CODE>n</CODE>
 strings which are concatenated into a single string. The final string
-is the input to the default linearization of the category 
+is the input to the default linearization of the category
 for the argument of <CODE>f</CODE>. After applying the default linearization
 we get an object that we could safely pass to <CODE>f</CODE>.
 </P>
@@ -1441,7 +1441,7 @@ definition is by structural recursion on the type:
 <LI>reference({r1 : R1; ... rn : Rn},o) = reference(R1, o.r1) || reference(R2, o.r2) || ... || reference(Rn, o.rn)
 </UL>
 Here each call to reference returns either <CODE>(Just o)</CODE> or <CODE>Nothing</CODE>.
-When we compute the reference for a table or a record then we pick 
+When we compute the reference for a table or a record then we pick
 the reference for the first expression for which the recursive call
 gives us <CODE>Just</CODE>. If we get <CODE>Nothing</CODE> for
 all of them then the final result is <CODE>Nothing</CODE> too.
@@ -1510,7 +1510,7 @@ names must be distinct in a module.
 </P>
 <P>
 A parameter type may not be recursive, i.e. <I>P</I> itself may not occur in
-the contexts of its constructors. This restriction extends to mutual 
+the contexts of its constructors. This restriction extends to mutual
 recursion: we say that <I>P</I> <B>depends</B> on the types that occur
 in the contexts of its constructors and on all types that those types
 depend on, and state that <I>P</I> may not depend on itself.
@@ -1531,7 +1531,7 @@ without defining it,
 All parameter types are finite, and the GF compiler will internally
 compute them to <B>lists of parameter values</B>. These lists are formed by
 traversing the <CODE>param</CODE> definitions, usually respecting the
-order of constructors in the source code. For records, bibliographical 
+order of constructors in the source code. For records, bibliographical
 sorting is applied. However, both the order of traversal of <CODE>param</CODE>
 definitions and the order of fields in a record are specified
 in a compiler-internal way, which means that the programmer should not
@@ -1542,7 +1542,7 @@ The order of the list of parameter values can affect the program in two
 cases:
 </P>
 <UL>
-<LI>in the default <CODE>lindef</CODE> definition (<a href="#lindefjudgements">here</a>), 
+<LI>in the default <CODE>lindef</CODE> definition (<a href="#lindefjudgements">here</a>),
   the first value is chosen
 <LI>in course-of-value tables (<a href="#tables">here</a>), the compiler-internal order is
   followed
@@ -1581,7 +1581,7 @@ which works in two cases
 </P>
 <UL>
 <LI>the type can be inferred from <I>t</I> (compiler-dependent)
-<LI>the definition occurs in an <CODE>instance</CODE> and the type is given in 
+<LI>the definition occurs in an <CODE>instance</CODE> and the type is given in
   the <CODE>interface</CODE>
 </UL>
 
@@ -1616,18 +1616,18 @@ concrete syntax code (as explained <a href="#functionelimination">here</a>).
 </P>
 <P>
 One and the same operation name <I>h</I> can be used for different operations,
-which have to have different types. For each call of <I>h</I>, the type checker 
+which have to have different types. For each call of <I>h</I>, the type checker
 selects one of these operations depending on what type is expected in the
 context of the call. The syntax of overloaded operation definitions is
 <center>
-<CODE>oper</CODE> <I>h</I> 
+<CODE>oper</CODE> <I>h</I>
  <CODE>= overload {</CODE><I>h</I> : <i>T</i><sub>1</sub> = <i>t</i><sub>1</sub> ; ... ; <I>h</I> : <i>T</i><sub>n</sub> = <i>t</i><sub>n</sub><CODE>}</CODE>
 </center>
 Notice that <I>h</I> must be the same in all cases.
 This format can be used to give the complete implementation; to give just
 the types, e.g. in an interface, one can use the form
 <center>
-<CODE>oper</CODE> <I>h</I> 
+<CODE>oper</CODE> <I>h</I>
  <CODE>: overload {</CODE><I>h</I> : <i>T</i><sub>1</sub> ; ... ; <I>h</I> : <i>T</i><sub>n</sub><CODE>}</CODE>
 </center>
 The implementation of this operation typing is given by a judgement of
@@ -1641,7 +1641,7 @@ A flag definition,
   <CODE>flags</CODE> <I>o</I> <CODE>=</CODE> <I>v</I>
 </center>
 sets the value of the flag <I>o</I>, to be used when compiling or using
-the module. 
+the module.
 </P>
 <P>
 The flag <I>o</I> is an identifier, and the value <I>v</I> is either an identifier
@@ -1649,11 +1649,11 @@ or a quoted string.
 </P>
 <P>
 Flags are a kind of metadata, which do not strictly belong to the GF
-language. For instance, compilers do not necessarily check the 
+language. For instance, compilers do not necessarily check the
 consistency of flags, or the meaningfulness of their values.
 The inheritance of flags is not well-defined; the only certain rule
 is that flags set in the module body override the settings from
-inherited modules. 
+inherited modules.
 </P>
 <P>
 Here are some flags commonly included in grammars.
@@ -1672,28 +1672,26 @@ Here are some flags commonly included in grammars.
 <TD>concrete</TD>
 </TR>
 <TR>
-<TD><CODE>lexer</CODE></TD>
-<TD>predefined lexer</TD>
-<TD>lexer before parsing</TD>
-<TD>concrete</TD>
-</TR>
-<TR>
 <TD><CODE>startcat</CODE></TD>
 <TD>category</TD>
 <TD>default target of parsing</TD>
 <TD>abstract</TD>
 </TR>
-<TR>
-<TD><CODE>unlexer</CODE></TD>
-<TD>predefined unlexer</TD>
-<TD>unlexer after linearization</TD>
-<TD>concrete</TD>
-</TR>
 </TABLE>
 
 <P></P>
 <P>
-The possible values of these flags are specified <a href="#flagvalues">here</a>.
+The possible values of these flags are
+specified <a href="#flagvalues">here</a>. Note that
+the <code>lexer</code> and <code>unlexer</code> flags are
+deprecated. If you need their functionality, you should use supply
+them to GF shell commands like so:
+
+<center><pre><code>put_string -lextext "страви, напої" | parse</code></pre></center>
+
+A summary of their possible values can be found at the <a href="http://www.grammaticalframework.org/doc/gf-shell-reference.html">GF shell
+  reference</a>.
+</p>
 </P>
 <A NAME="toc31"></A>
 <H2>Types and expressions</H2>
@@ -1703,14 +1701,14 @@ The possible values of these flags are specified <a href="#flagvalues">here</a>.
 <a name="expressions"></a>
 </P>
 <P>
-Like many dependently typed languages, GF makes no syntactic distinction 
+Like many dependently typed languages, GF makes no syntactic distinction
 between expressions and types. An illegal use of a type as an expression or
 vice versa comes out as a type error. Whether a variable, for instance,
 stands for a type or an expression value, can only be resolved from its
-context of use. 
+context of use.
 </P>
 <P>
-One practical consequence of the common syntax is that global and local definitions 
+One practical consequence of the common syntax is that global and local definitions
 (<CODE>oper</CODE> judgements and <CODE>let</CODE> expressions, respectively) work in the same way
 for types and expressions. Thus it is possible to abbreviate a type
 occurring in a type expression:
@@ -1925,7 +1923,7 @@ essentially the <B>functional fragment</B>
 of the syntax. This fragment comprises two kinds of types:
 </P>
 <UL>
-<LI><B>basic types</B>, of form <I>C a1...an</I> where 
+<LI><B>basic types</B>, of form <I>C a1...an</I> where
   <UL>
   <LI><CODE>cat</CODE> <I>C</I> (<i>x</i><sub>1</sub> : <i>A</i><sub>1</sub>)...(<i>x</i><sub>n</sub> : <i>A</i><sub>n</sub>), including the predefined
     categories <CODE>Int</CODE>, <CODE>Float</CODE>, and <CODE>String</CODE> explained <a href="#predefabs">here</a>
@@ -1942,17 +1940,17 @@ of the syntax. This fragment comprises two kinds of types:
 </UL>
 
 <P>
-When defining basic types, we used the notation 
+When defining basic types, we used the notation
 <I>t</I>{<i>x</i><sub>1</sub> = <i>t</i><sub>1</sub>,...,<i>x</i><sub>n</sub>=<i>t</i><sub>n</sub>}
 for the <B>substitution</B> of values to variables. This is a metalevel notation,
 which denotes a term that is formed by replacing the free occurrences of
-each variable <i>x</i><sub>i</sub> by <i>t</i><sub>i</sub>. 
+each variable <i>x</i><sub>i</sub> by <i>t</i><sub>i</sub>.
 </P>
 <P>
 These types have six kinds of expressions:
 </P>
 <UL>
-<LI><B>constants</B>, <I>f</I> : <I>A</I> where 
+<LI><B>constants</B>, <I>f</I> : <I>A</I> where
   <UL>
   <LI><CODE>fun</CODE> <I>f</I> : <I>A</I>
   </UL>
@@ -1963,7 +1961,7 @@ These types have six kinds of expressions:
 </UL>
 
 <UL>
-<LI><B>variables</B>, <I>x</I> : <I>A</I> where 
+<LI><B>variables</B>, <I>x</I> : <I>A</I> where
   <UL>
   <LI><I>x</I> has been introduced by a binding
   </UL>
@@ -2006,13 +2004,13 @@ subexpressions as follows:
 
 <P>
 As syntactic sugar, function types have sharing of types and
-suppression of variables, in the same way as contexts 
+suppression of variables, in the same way as contexts
 (defined <a href="#contexts">here</a>):
 </P>
 <UL>
 <LI>variables can share a type,
 <center>
-<CODE>(</CODE> <I>x,y</I> <CODE>:</CODE> <I>A</I> <CODE>)</CODE> <CODE>-&gt;</CODE> <I>B</I> ===  
+<CODE>(</CODE> <I>x,y</I> <CODE>:</CODE> <I>A</I> <CODE>)</CODE> <CODE>-&gt;</CODE> <I>B</I> ===
   <CODE>(</CODE> <I>x</I> <CODE>:</CODE> <I>A</I> <CODE>) -&gt; (</CODE> <I>y</I> <CODE>:</CODE> <I>A</I> <CODE>) -&gt;</CODE> <I>B</I>
 </center>
 <LI>a <B>wildcard</B> can be used for a variable not occurring later in the type,
@@ -2048,7 +2046,7 @@ Among expressions, there is a relation of <B>definitional equality</B> defined
 by four <B>conversion rules</B>:
 </P>
 <UL>
-<LI><B>alpha conversion</B>: 
+<LI><B>alpha conversion</B>:
   <CODE>\</CODE><I>x</I> <CODE>-&gt;</CODE> <I>b</I> = <CODE>\</CODE><I>y</I> <CODE>-&gt;</CODE> <I>b</I>{<I>x</I>=<I>y</I>}
 </UL>
 
@@ -2061,12 +2059,12 @@ by four <B>conversion rules</B>:
   <UL>
   <LI>there is a definition <CODE>def</CODE> <I>f</I> <i>p</i><sub>1</sub> ... <i>p</i><sub>n</sub> = <I>t</I>
   <LI>this definition is the first for <I>f</I> that matches the sequence
-    <i>a</i><sub>1</sub> .... <i>a</i><sub>n</sub>, with the substitution <I>g</I> 
+    <i>a</i><sub>1</sub> .... <i>a</i><sub>n</sub>, with the substitution <I>g</I>
   </UL>
 </UL>
 
 <UL>
-<LI><B>eta conversion</B>: <I>c</I> = <CODE>\</CODE><I>x</I> <CODE>-&gt;</CODE> <I>c x</I>, 
+<LI><B>eta conversion</B>: <I>c</I> = <CODE>\</CODE><I>x</I> <CODE>-&gt;</CODE> <I>c x</I>,
   if <I>c</I> : (<I>x</I> : <I>A</I>) <CODE>-&gt;</CODE> <I>B</I>
 </UL>
 
@@ -2075,7 +2073,7 @@ Pattern matching substitution used in delta conversion
 is defined <a href="#patternmatching">here</a>.
 </P>
 <P>
-An expression is in <B>beta-eta-normal form</B> if 
+An expression is in <B>beta-eta-normal form</B> if
 </P>
 <UL>
 <LI>it has no subexpressions to which beta conversion applies (beta normality)
@@ -2095,9 +2093,9 @@ in beta-normal form.
 </P>
 <P>
 The <B>syntax trees</B> defined by an abstract syntax are well-typed
-expressions of basic types in beta-eta normal form. 
+expressions of basic types in beta-eta normal form.
 Linearization defined in concrete
-syntax applies to all and only these expressions. 
+syntax applies to all and only these expressions.
 </P>
 <P>
 There is also a direct definition of syntax trees, which does not
@@ -2110,7 +2108,7 @@ where <I>Ai</I> are types and <I>B</I> is a basic type, a syntax tree is an expr
 <center>
 <I>b</I> <i>t</i><sub>1</sub> ... <i>t</i><sub>n</sub> : <I>B'</I>
 </center>
-where 
+where
 </P>
 <UL>
 <LI><I>B'</I> is the basic type <I>B</I>{<i>x</i><sub>1</sub> = <i>t</i><sub>1</sub>,...,<i>x</i><sub>n</sub> = <i>t</i><sub>n</sub>}
@@ -2174,11 +2172,11 @@ to <B>concrete syntax objects</B>. These objects comprise
 </UL>
 
 <P>
-Thus functions are not concrete syntax objects; however, the 
+Thus functions are not concrete syntax objects; however, the
 mappings themselves are expressed as functions, and the source code
 of a concrete syntax can use functions under the condition that
 they can be eliminated from the final compiled grammar (which they
-can; this is one of the fundamental properties of compilation, as 
+can; this is one of the fundamental properties of compilation, as
 explained in more detail in the <I>JFP</I> article).
 </P>
 <P>
@@ -2186,20 +2184,20 @@ Concrete syntax thus has the same function types and expression forms as
 abstract syntax, specified <a href="#functiontype">here</a>. The basic types defined
 by categories (<CODE>cat</CODE> judgements) are available via grammar reuse
 explained <a href="#reuse">here</a>; this also comprises the
-predefined categories <CODE>Float</CODE> and <CODE>String</CODE>. 
+predefined categories <CODE>Float</CODE> and <CODE>String</CODE>.
 </P>
 <A NAME="toc38"></A>
 <H3>Values, canonical forms, and run-time variables</H3>
 <P>
 In abstract syntax, the conversion rules fiven <a href="#conversions">here</a>
 define a computational relation
-among expressions, but there is no separate notion of a <B>value</B> of 
+among expressions, but there is no separate notion of a <B>value</B> of
 computation: the value (the end point) of a computation chain is
 simply an expression to which no more conversions apply. In general,
 we are interested in expressions that satisfy the conditions of being
 syntax trees (as defined <a href="#syntaxtrees">here</a>), but there can be many computationally
 equivalent syntax trees which nonetheless are distinct syntax trees
-and hence have different linearizations. The main use of computation 
+and hence have different linearizations. The main use of computation
 in abstract syntax is to compare types in dependent type checking.
 </P>
 <P>
@@ -2227,7 +2225,7 @@ variables <i>x</i><sub>1</sub>,...,<i>x</i><sub>n</sub> in
 </center>
 where
 <center>
-<CODE>fun</CODE> <I>f</I> <CODE>:</CODE> 
+<CODE>fun</CODE> <I>f</I> <CODE>:</CODE>
 (<i>x</i><sub>1</sub> : <i>A</i><sub>1</sub>)  <CODE>-&gt;</CODE> ...  <CODE>-&gt;</CODE> (<i>x</i><sub>n</sub> : <i>A</i><sub>n</sub>) <CODE>-&gt;</CODE> <I>B</I>
 </center>
 Notice that this definition refers to the <B>eta-expanded</B> linearization term,
@@ -2242,7 +2240,7 @@ expression forms:
 </P>
 <UL>
 <LI>gluing (<CODE>s + t</CODE>), defined <a href="#gluing">here</a>
-<LI>pattern matching on strings, defined <a href="#patternmatching">here</a> 
+<LI>pattern matching on strings, defined <a href="#patternmatching">here</a>
 <LI>predefined string operations, defined <a href="#predefcnc">here</a> (those taking
   <CODE>Str</CODE> arguments)
 </UL>
@@ -2265,7 +2263,7 @@ Expressions of type <CODE>Str</CODE> have the following canonical forms:
 <LI><B>tokens</B>, i.e. <B>string literals</B>, in double quotes, e.g. <CODE>"foo"</CODE>
 <LI><B>the empty token list</B>, <CODE>[]</CODE>
 <LI><B>concatenation</B>, <I>s</I> <CODE>++</CODE> <I>t</I>, where <I>s,t</I> : <CODE>Str</CODE>
-<LI><B>prefix-dependent choice</B>, 
+<LI><B>prefix-dependent choice</B>,
   <CODE>pre {</CODE> <I>s</I> ; <i>s</i><sub>1</sub> <CODE>/</CODE> <i>p</i><sub>1</sub> ; ... ; <i>s</i><sub>n</sub> <CODE>/</CODE> <i>p</i><sub>n</sub>}, where
   <UL>
   <LI><I>s</I>, <i>s</i><sub>1</sub>,...,<i>s</i><sub>n</sub>, <i>p</i><sub>1</sub>,...,<i>p</i><sub>n</sub> : <CODE>Str</CODE>
@@ -2275,14 +2273,14 @@ Expressions of type <CODE>Str</CODE> have the following canonical forms:
 <P>
 For convenience, the notation is overloaded so that tokens are identified
 with singleton token lists, and there is no separate type of tokens
-(this is a change from the <I>JFP</I> article). 
+(this is a change from the <I>JFP</I> article).
 The notion of a token
 is still important for compilation: all tokens introduced by
 the grammar must be known at compile time. This, in turn, is
 required by the parsing algorithms used for parsing with GF grammars.
 </P>
 <P>
-In addition to string literals, tokens can be formed by a specific 
+In addition to string literals, tokens can be formed by a specific
 non-canonical operator:
 </P>
 <UL>
@@ -2304,7 +2302,7 @@ empty token lists can be ignored:
 </UL>
 
 <P>
-Since tokens must be known at compile time, 
+Since tokens must be known at compile time,
 the operands of gluing may not depend on run-time variables,
 as defined <a href="#runtimevariables">here</a>.
 </P>
@@ -2317,7 +2315,7 @@ spaces separate tokens:
 </UL>
 
 <P>
-Notice that there are no empty tokens, but the expression <CODE>[]</CODE> 
+Notice that there are no empty tokens, but the expression <CODE>[]</CODE>
 can be used in a context requiring a token, in particular in gluing expression
 below. Since <CODE>[]</CODE> denotes an empty token list, the following computation laws
 are valid:
@@ -2336,7 +2334,7 @@ Moreover, concatenation and gluing are associative:
 </UL>
 
 <P>
-For the programmer, associativity and the empty token laws mean 
+For the programmer, associativity and the empty token laws mean
 that the compiler can use them to simplify string expressions.
 It also means that these laws are respected in pattern matching
 on strings.
@@ -2355,14 +2353,14 @@ This expression can be computed in the context of a subsequent token:
 <LI><CODE>pre {</CODE> <I>s</I> ; <i>s</i><sub>1</sub> <CODE>/</CODE> <i>p</i><sub>1</sub> ; ... ; <i>s</i><sub>n</sub> <CODE>/</CODE> <i>p</i><sub>n</sub><CODE>} ++</CODE> <I>t</I>
   ==>
   <UL>
-  <LI><i>s</i><sub>i</sub> for the first <I>i</I> such that the prefix <i>p</i><sub>i</sub> 
+  <LI><i>s</i><sub>i</sub> for the first <I>i</I> such that the prefix <i>p</i><sub>i</sub>
     matches <I>t</I>, if it exists
   <LI><I>s</I> otherwise
   </UL>
 </UL>
 
 <P>
-The <B>matching prefix</B> is defined by comparing the string with the prefix of 
+The <B>matching prefix</B> is defined by comparing the string with the prefix of
 the token. If the prefix is a variant list of strings, then it matches
 the token if any of the strings in the list matches it.
 </P>
@@ -2373,11 +2371,11 @@ they are not given a subsequent token to compare with, or because the
 subsequent token depends on a run-time variable.
 </P>
 <P>
-The prefix-dependent choice expression itself may not depend on run-time 
+The prefix-dependent choice expression itself may not depend on run-time
 variables.
 </P>
 <P>
-<I>In GF prior to 3.0, a specific type</I> <CODE>Strs</CODE> 
+<I>In GF prior to 3.0, a specific type</I> <CODE>Strs</CODE>
 <I>is used for defining prefixes,</I>
 <I>instead of just</I> <CODE>variants</CODE> <I>of</I> <CODE>Str</CODE>.
 </P>
@@ -2407,12 +2405,12 @@ may optionally indicate the type, as in <I>r</I> : <I>A</I> = <I>a</I>.
 </P>
 <P>
 The order of fields in record types and records is insignificant: two record
-types (or records) are equal if they have the same fields, in any order, and a 
+types (or records) are equal if they have the same fields, in any order, and a
 record is an object of a record type, if it has type-correct value assignments
-for all fields of the record type. 
-The latter definition implies the even stronger 
+for all fields of the record type.
+The latter definition implies the even stronger
 principle of <B>record subtyping</B>: a record can have any type that has some
-subset of its fields. This principle is explained further 
+subset of its fields. This principle is explained further
 <a href="#subtyping">here</a>.
 </P>
 <P>
@@ -2420,12 +2418,12 @@ All fields in a record must have distinct labels. Thus it is not possible
 e.g. to "redefine" a field "later" in a record.
 </P>
 <P>
-Lexically, labels are identifiers (defined <a href="#identifiers">here</a>). 
+Lexically, labels are identifiers (defined <a href="#identifiers">here</a>).
 This is with the exception
 of the labels selecting bound variables in the linearization of higher-order
 abstract syntax, which have the form <CODE>$</CODE><I>i</I> for an integer <I>i</I>,
-as specified <a href="#HOAS">here</a>. 
-In source code, these labels should not appear in records fields, 
+as specified <a href="#HOAS">here</a>.
+In source code, these labels should not appear in records fields,
 but only in selections.
 </P>
 <P>
@@ -2447,12 +2445,12 @@ The computation rule for projection returns the value assigned to that field:
 <CODE>{</CODE> ... <CODE>;</CODE> <I>r</I> = <I>a</I> <CODE>;</CODE> ... <CODE>}.</CODE><I>r</I> ==> <I>a</I>
 </center>
 Notice that the dot notation <I>t</I>.<I>r</I> is also used for qualified names
-as specified <a href="#qualifiednames">here</a>. 
+as specified <a href="#qualifiednames">here</a>.
 This ambiguity follows tradition and convenience. It is
 resolved by the following rules (before type checking):
 </P>
 <OL>
-<LI>if <I>t</I> is a bound variable or a constant in scope, 
+<LI>if <I>t</I> is a bound variable or a constant in scope,
   <I>t</I>.<I>r</I> is type-checked as a projection
 <LI>otherwise, <I>t</I>.<I>r</I> is type-checked as a qualified name
 </OL>
@@ -2517,7 +2515,7 @@ That <I>A</I> is a subtype of <I>B</I> means that <I>a : A</I> implies <I>a : B<
 This is clearly satisfied for records with superfluous fields:
 </P>
 <UL>
-<LI>if <I>R</I> is a record type without the label <I>r</I>, 
+<LI>if <I>R</I> is a record type without the label <I>r</I>,
   then <I>R</I> <CODE>** {</CODE> <I>r</I> : <I>A</I> <CODE>}</CODE> is a subtype of <I>R</I>
 </UL>
 
@@ -2526,15 +2524,15 @@ The GF grammar compiler extends subtyping to function types by <B>covariance</B>
 and <B>contravariance</B>:
 </P>
 <UL>
-<LI>covariance: if <I>A</I> is a subtype of <I>B</I>, 
+<LI>covariance: if <I>A</I> is a subtype of <I>B</I>,
   then <I>C</I> <CODE>-&gt;</CODE> <I>A</I> is a subtype of <I>C</I> <CODE>-&gt;</CODE> <I>B</I>
-<LI>contravariance: if <I>A</I> is a subtype of <I>B</I>, 
+<LI>contravariance: if <I>A</I> is a subtype of <I>B</I>,
   then <I>B</I> <CODE>-&gt;</CODE> <I>C</I> is a subtype of <I>A</I> <CODE>-&gt;</CODE> <I>C</I>
 </UL>
 
 <P>
-The logic of these rules is natural: if a function is returns a value 
-in a subtype, then this value is <I>a fortiori</I> in the supertype. 
+The logic of these rules is natural: if a function is returns a value
+in a subtype, then this value is <I>a fortiori</I> in the supertype.
 If a function is defined for some type, then it is <I>a fortiori</I> defined
 for any subtype.
 </P>
@@ -2551,7 +2549,7 @@ contravariance, GF implements subtyping for initial segments of integers:
 As the last rule, subtyping is transitive:
 </P>
 <UL>
-<LI>if <I>A</I> is a subtype of <I>B</I> and <I>B</I> is a subtype of <I>C</I>, then 
+<LI>if <I>A</I> is a subtype of <I>B</I> and <I>B</I> is a subtype of <I>C</I>, then
   <I>A</I> is a subtype of <I>C</I>.
 </UL>
 
@@ -2564,7 +2562,7 @@ As the last rule, subtyping is transitive:
 One of the most characteristic constructs of GF is <B>tables</B>, also called
 <B>finite functions</B>. That these functions are finite means that it
 is possible to finitely enumerate all argument-value pairs; this, in
-turn, is possible because the argument types are finite. 
+turn, is possible because the argument types are finite.
 </P>
 <P>
 A <B>table type</B> has the form
@@ -2580,11 +2578,11 @@ Canonical expressions of table types are <B>tables</B>, of the form
 <CODE>table</CODE> <CODE>{</CODE> <i>V</i><sub>1</sub> <CODE>=&gt;</CODE> <i>t</i><sub>1</sub> ; ... ; <i>V</i><sub>n</sub> <CODE>=&gt;</CODE> <i>t</i><sub>n</sub> <CODE>}</CODE>
 </center>
 where <i>V</i><sub>1</sub>,...,<i>V</i><sub>n</sub> is the complete list of the parameter values of
-the argument type <I>P</I> (defined <a href="#paramvalues">here</a>), and each <i>t</i><sub>i</sub> is 
+the argument type <I>P</I> (defined <a href="#paramvalues">here</a>), and each <i>t</i><sub>i</sub> is
 an expression of the value type <I>T</I>.
 </P>
 <P>
-In addition to explicit enumerations, 
+In addition to explicit enumerations,
 tables can be given by <B>pattern matching</B>,
 <center>
 <CODE>table</CODE> <CODE>{</CODE><i>p</i><sub>1</sub> <CODE>=&gt;</CODE> <i>t</i><sub>1</sub> ; ... ; <i>p</i><sub>m</sub> <CODE>=&gt;</CODE> <i>t</i><sub>m</sub><CODE>}</CODE>
@@ -2625,11 +2623,11 @@ patterns following the enumeration of all values of the argument type,
 this order no longer matters, because no overlap remains between patterns.
 </P>
 <P>
-The GF compiler performs <B>table expansion</B>, i.e. an analogue of 
+The GF compiler performs <B>table expansion</B>, i.e. an analogue of
 eta expansion defined <a href="#conversions">here</a>, where a table is applied to all
 values to its argument type:
 <center>
-<I>t</I> : <I>P</I> <CODE>=&gt;</CODE> <I>T</I> ==> 
+<I>t</I> : <I>P</I> <CODE>=&gt;</CODE> <I>T</I> ==>
 <CODE>table</CODE> <I>P</I> <CODE>[</CODE><I>t</I> <CODE>!</CODE> <i>V</i><sub>1</sub> ; ... ; <I>t</I> <CODE>!</CODE> <i>V</i><sub>n</sub><CODE>]</CODE>
 </center>
 As syntactic sugar, one-branch tables can be written in a way similar to
@@ -2661,29 +2659,29 @@ We start with the patterns available for all parameter types, as well
 as for the types <CODE>Integer</CODE> and <CODE>Str</CODE>.
 </P>
 <UL>
-<LI>A constructor pattern <I>C</I> <i>p</i><sub>1</sub>...<i>p</i><sub>n</sub> 
+<LI>A constructor pattern <I>C</I> <i>p</i><sub>1</sub>...<i>p</i><sub>n</sub>
   binds the union of all variables bound in the subpatterns
-  <i>p</i><sub>1</sub>,...,<i>p</i><sub>n</sub>. 
-  It matches any value 
-  <I>C</I> <i>V</i><sub>1</sub>...<i>V</i><sub>n</sub> where each <i>p</i><sub>i</sub># matches <i>V</i><sub>i</sub>, 
+  <i>p</i><sub>1</sub>,...,<i>p</i><sub>n</sub>.
+  It matches any value
+  <I>C</I> <i>V</i><sub>1</sub>...<i>V</i><sub>n</sub> where each <i>p</i><sub>i</sub># matches <i>V</i><sub>i</sub>,
   and the matching substitution is the union of these substitutions.
-<LI>A record pattern 
+<LI>A record pattern
   <CODE>{</CODE> <i>r</i><sub>1</sub> <CODE>=</CODE> <i>p</i><sub>1</sub> <CODE>;</CODE> ... <CODE>;</CODE> <i>r</i><sub>n</sub> <CODE>=</CODE> <i>p</i><sub>n</sub> <CODE>}</CODE>
   binds the union of all variables bound in the subpatterns
-  <i>p</i><sub>1</sub>,...,<i>p</i><sub>n</sub>. 
-  It matches any value 
+  <i>p</i><sub>1</sub>,...,<i>p</i><sub>n</sub>.
+  It matches any value
   <CODE>{</CODE> <i>r</i><sub>1</sub> <CODE>=</CODE> <i>V</i><sub>1</sub> <CODE>;</CODE> ... <CODE>;</CODE> <i>r</i><sub>n</sub> <CODE>=</CODE> <i>V</i><sub>n</sub> <CODE>;</CODE> ...<CODE>}</CODE>
-  where each <i>p</i><sub>i</sub># matches <i>V</i><sub>i</sub>, 
+  where each <i>p</i><sub>i</sub># matches <i>V</i><sub>i</sub>,
   and the matching substitution is the union of these substitutions.
-<LI>A variable pattern <I>x</I> 
-  (identifier other than parameter constructor) 
-  binds the variable <I>x</I>. 
+<LI>A variable pattern <I>x</I>
+  (identifier other than parameter constructor)
+  binds the variable <I>x</I>.
   It matches any value <I>V</I>, with the substitution {<I>x</I> = <I>V</I>}.
 <LI>The wild card <CODE>_</CODE> binds no variables.
   It matches any value, with the empty substitution.
 <LI>A disjunctive pattern <I>p</I> <CODE>|</CODE> <I>q</I> binds the intersection of
   the variables bound by <I>p</I> and <I>q</I>.
-  It matches anything that 
+  It matches anything that
   either <I>p</I> or <I>q</I> matches, with the first substitution starting
   with <I>p</I> matches, from which those
   variables that are not bound by both patterns are removed.
@@ -2712,7 +2710,7 @@ The following patterns are only available for the type <CODE>Str</CODE>:
 </UL>
 
 <P>
-The following pattern is only available for the types <CODE>Integer</CODE> 
+The following pattern is only available for the types <CODE>Integer</CODE>
 and <CODE>Ints</CODE> <I>n</I>:
 </P>
 <UL>
@@ -2729,14 +2727,14 @@ about unions of binding sets and substitutions.
 <P>
 Pattern matching is performed in the order in which the branches
 appear in the source code: the branch of the first matching pattern is followed.
-In concrete syntax, the type checker reject sets of patterns that are 
+In concrete syntax, the type checker reject sets of patterns that are
 not exhaustive, and warns for completely overshadowed patterns.
 It also checks the type correctness of patterns with respect to the
 argument type. In abstract syntax, only type correctness is checked,
 no exhaustiveness or overshadowing.
 </P>
 <P>
-It follows from the definition of record pattern matching 
+It follows from the definition of record pattern matching
 that it can utilize partial records: the branch
 </P>
 <PRE>
@@ -2767,7 +2765,7 @@ An expressions of the form
 </center>
 where all <i>t</i><sub>i</sub> are of the same type <I>T</I>, has itseld type <I>T</I>.
 This expression presents <i>t</i><sub>i</sub>,...,<i>t</i><sub>n</sub> as being in <B>free variation</B>:
-the choice between them is not determined by semantics or parameters. 
+the choice between them is not determined by semantics or parameters.
 A limiting case is
 <center>
 <CODE>variants {}</CODE>
@@ -2777,7 +2775,7 @@ thing, e.g. that a certain inflectional form does not exist.
 </P>
 <P>
 A common wisdom in linguistics is that "there is no free variation", which
-refers to the situation where <I>all</I> aspects are taken into account. For 
+refers to the situation where <I>all</I> aspects are taken into account. For
 instance, the English negation contraction could be expressed as free variation,
 </P>
 <PRE>
@@ -2794,7 +2792,7 @@ informal and formal style:
 <P>
 Since there is not way to choose a particular element from a ``variants` list,
 free variants is normally not adequate in libraries, nor in grammars meant for
-natural language generation. In application grammars 
+natural language generation. In application grammars
 meant to parse user input, free variation is a way to avoid cluttering the
 abstract syntax with semantically insignificant distinctions and even to
 tolerate some grammatical errors.
@@ -2804,7 +2802,7 @@ Permitting <CODE>variants</CODE> in all types involves a major modification of t
 semantics of GF expressions. All computation rules have to be lifted to
 deal with lists of expressions and values. For instance,
 <center>
-<I>t</I> <CODE>!</CODE> <CODE>variants</CODE> <CODE>{</CODE><i>t</i><sub>1</sub> ; ... ; <i>t</i><sub>n</sub><CODE>}</CODE> ==> 
+<I>t</I> <CODE>!</CODE> <CODE>variants</CODE> <CODE>{</CODE><i>t</i><sub>1</sub> ; ... ; <i>t</i><sub>n</sub><CODE>}</CODE> ==>
 <CODE>variants</CODE> <CODE>{</CODE><I>t</I> <CODE>!</CODE> <i>t</i><sub>1</sub> ; ... ; <I>t</I> <CODE>!</CODE> <i>t</i><sub>n</sub><CODE>}</CODE>
 </center>
 This is done in such a way that
@@ -2844,7 +2842,7 @@ Computation is performed by substituting <I>t</I> for <I>x</I> in <I>e</I>:
 <center>
 <CODE>let</CODE> <I>x</I> : <I>T</I> = <I>t</I> <CODE>in</CODE> <I>e</I> ==> <I>e</I> {<I>x</I> = <I>t</I>}
 </center>
-As syntactic sugar, the type can be omitted if the type checker is 
+As syntactic sugar, the type can be omitted if the type checker is
 able to infer it:
 <center>
 <CODE>let</CODE> <I>x</I> = <I>t</I> <CODE>in</CODE> <I>e</I>
@@ -2877,27 +2875,27 @@ to bind variables on the left of the equality sign.
 </P>
 <P>
 Fully compiled concrete syntax may not include expressions of function types
-except on the outermost level of <CODE>lin</CODE> rules, as defined <a href="#linexpansion">here</a>. 
-However, 
+except on the outermost level of <CODE>lin</CODE> rules, as defined <a href="#linexpansion">here</a>.
+However,
 in the source code, and especially in <CODE>oper</CODE> definitions, functions
 are the main vehicle of code reuse and abstraction. Thus function types and
 functions follow the same rules as in abstract syntax, as specified
-<a href="#functiontype">here</a>. In 
+<a href="#functiontype">here</a>. In
 particular, the application of a lambda abstract is computed by beta conversion.
 </P>
 <P>
 To ensure the elimination of functions, GF uses a special computation rule
-for pushing function applications inside tables, since otherwise run-time 
+for pushing function applications inside tables, since otherwise run-time
 variables could block their applications:
 <center>
-(<CODE>table</CODE> <CODE>{</CODE><i>p</i><sub>1</sub> <CODE>=&gt;</CODE> <i>f</i><sub>1</sub> ; ... ; 
-  <i>p</i><sub>n</sub> <CODE>=&gt;</CODE> <i>f</i><sub>n</sub> <CODE>}</CODE> <CODE>!</CODE> <I>e</I>) <I>a</I>  
+(<CODE>table</CODE> <CODE>{</CODE><i>p</i><sub>1</sub> <CODE>=&gt;</CODE> <i>f</i><sub>1</sub> ; ... ;
+  <i>p</i><sub>n</sub> <CODE>=&gt;</CODE> <i>f</i><sub>n</sub> <CODE>}</CODE> <CODE>!</CODE> <I>e</I>) <I>a</I>
  ==>
-  <CODE>table</CODE> <CODE>{</CODE><i>p</i><sub>1</sub> <CODE>=&gt;</CODE> <i>f</i><sub>1</sub> <I>a</I> ; ... ; 
-  <i>p</i><sub>n</sub> <CODE>=&gt;</CODE> <i>f</i><sub>n</sub> <I>a</I><CODE>}</CODE> <CODE>!</CODE> <I>e</I> 
+  <CODE>table</CODE> <CODE>{</CODE><i>p</i><sub>1</sub> <CODE>=&gt;</CODE> <i>f</i><sub>1</sub> <I>a</I> ; ... ;
+  <i>p</i><sub>n</sub> <CODE>=&gt;</CODE> <i>f</i><sub>n</sub> <I>a</I><CODE>}</CODE> <CODE>!</CODE> <I>e</I>
 </center>
-Also parameter constructors with non-empty contexts, as defined 
-<a href="#paramjudgements">here</a>, 
+Also parameter constructors with non-empty contexts, as defined
+<a href="#paramjudgements">here</a>,
 result in expressions in application form. These expressions are never
 a problem if their arguments are just constructors, because they can then
 be translated to integers corresponding to the position of the expression
@@ -2905,10 +2903,10 @@ in the enumaration of the values of its type.
 However, a constructor
 applied to a run-time variable may need to be converted as follows:
 <center>
-<I>C</I>...<I>x</I>... ==> <CODE>case</CODE> <I>x</I> of <CODE>{_ =&gt;</CODE> <I>C</I>...<I>x</I><CODE>}</CODE> 
+<I>C</I>...<I>x</I>... ==> <CODE>case</CODE> <I>x</I> of <CODE>{_ =&gt;</CODE> <I>C</I>...<I>x</I><CODE>}</CODE>
 </center>
-The resulting expression, when processed by table expansion as explained 
-<a href="#tables">here</a>, 
+The resulting expression, when processed by table expansion as explained
+<a href="#tables">here</a>,
 results in <I>C</I> being applied to just values of the type of <I>x</I>, and the
 application thereby disappears.
 </P>
@@ -2922,7 +2920,7 @@ application thereby disappears.
 <I>discipline of GF 2.8.</I>
 </P>
 <P>
-As explained <a href="#openabstract">here</a>, 
+As explained <a href="#openabstract">here</a>,
 abstract syntax modules can be opened as interfaces
 and concrete syntaxes as their instances. This means that judgements are,
 as it were, translated in the following way:
@@ -2962,7 +2960,7 @@ is available:
 <P>
 In object-oriented terms, the type <I>C</I> itself is <B>protected</B>, whereas
 <I>MkC</I> is a <B>public constructor</B> of <I>C</I>. Of course, it is possible to
-make these constructors overloaded (concept explained <a href="#overloading">here</a>), 
+make these constructors overloaded (concept explained <a href="#overloading">here</a>),
 to enable easy access to special cases.
 </P>
 <A NAME="toc48"></A>
@@ -2983,7 +2981,7 @@ The following concrete syntax types are predefined:
 
 <P>
 The last two types are, in a way, extended by user-written grammars,
-since new parameter types can be defined in the way shown <a href="#paramjudgements">here</a>, 
+since new parameter types can be defined in the way shown <a href="#paramjudgements">here</a>,
 and every paramater type is also a type. From the point of view of the values
 of expressions, however, a <CODE>param</CODE> declaration does not extend
 <CODE>PType</CODE>, since all parameter types get compiled to initial
@@ -3008,7 +3006,7 @@ literals).
 <P>
 The following predefined operations are defined in the resource module
 <CODE>prelude/Predef.gf</CODE>. Their implementations are defined as
-a part of the GF grammar compiler. 
+a part of the GF grammar compiler.
 </P>
 <TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
 <TR>
@@ -3157,45 +3155,6 @@ are always written in UTF8 encoding. The presence of the flag
 file.
 </P>
 <P>
-The flag <CODE>lexer</CODE> in concrete syntax sets the lexer, 
-i.e. the processor that turns
-strings into token lists sent to the parser. Some GF implementations
-support the following lexers.
-</P>
-<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
-<TR>
-<TH>lexer</TH>
-<TH COLSPAN="2">description</TH>
-</TR>
-<TR>
-<TD><CODE>words</CODE></TD>
-<TD>(default) tokens are separated by spaces or newlines</TD>
-</TR>
-<TR>
-<TD><CODE>literals</CODE></TD>
-<TD>like words, but integer and string literals recognized</TD>
-</TR>
-<TR>
-<TD><CODE>chars</CODE></TD>
-<TD>each character is a token</TD>
-</TR>
-<TR>
-<TD><CODE>code</CODE></TD>
-<TD>program code conventions (uses Haskell's lex)</TD>
-</TR>
-<TR>
-<TD><CODE>text</CODE></TD>
-<TD>with conventions on punctuation and capital letters</TD>
-</TR>
-<TR>
-<TD><CODE>codelit</CODE></TD>
-<TD>like code, but recognize literals (unknown words as strings)</TD>
-</TR>
-<TR>
-<TD><CODE>textlit</CODE></TD>
-<TD>like text, but recognize literals (unknown words as strings)</TD>
-</TR>
-</TABLE>
 
 <P></P>
 <P>
@@ -3205,41 +3164,7 @@ on category. Its legal values are the categories defined or inherited in
 the abstract syntax.
 </P>
 <P>
-The flag <CODE>unlexer</CODE> in concrete syntax sets the lexer, 
-i.e. the processor that turns
-token lists obrained from the linearizer to strings. Some GF implementations
-support the following unlexers.
-</P>
-<TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
-<TR>
-<TH>unlexer</TH>
-<TH COLSPAN="2">description</TH>
-</TR>
-<TR>
-<TD><CODE>unwords</CODE></TD>
-<TD>(default) space-separated token list</TD>
-</TR>
-<TR>
-<TD><CODE>text</CODE></TD>
-<TD>format as text: punctuation, capitals, paragraph &lt;p&gt;</TD>
-</TR>
-<TR>
-<TD><CODE>code</CODE></TD>
-<TD>format as code (spacing, indentation)</TD>
-</TR>
-<TR>
-<TD><CODE>textlit</CODE></TD>
-<TD>like text, but remove string literal quotes</TD>
-</TR>
-<TR>
-<TD><CODE>codelit</CODE></TD>
-<TD>like code, but remove string literal quotes</TD>
-</TR>
-<TR>
-<TD><CODE>concat</CODE></TD>
-<TD>remove all spaces</TD>
-</TR>
-</TABLE>
+
 
 <P></P>
 <A NAME="toc52"></A>
@@ -3269,7 +3194,7 @@ For instance, the line
 <P>
 in the top of <CODE>FILE.gf</CODE> causes the GF compiler, when invoked on <CODE>FILE.gf</CODE>,
 to search through the current directory (<CODE>.</CODE>) and the directories
-<CODE>present</CODE>, <CODE>prelude</CODE>, and <CODE>/home/aarne/GF/tmp</CODE>, in this order. 
+<CODE>present</CODE>, <CODE>prelude</CODE>, and <CODE>/home/aarne/GF/tmp</CODE>, in this order.
 If a directory <CODE>DIR</CODE> is not found relative to the working directory,
 also <CODE>$(GF_LIB_PATH)/DIR</CODE> is searched.
 </P>
@@ -3277,7 +3202,7 @@ also <CODE>$(GF_LIB_PATH)/DIR</CODE> is searched.
 <H2>Alternative grammar input formats</H2>
 <P>
 While the GF language as specified in this document is the most versatile
-and powerful way of writing GF grammars, there are several other formats 
+and powerful way of writing GF grammars, there are several other formats
 that a GF compiler may make available for users, either to get started
 with small grammars or to semiautomatically convert grammars from other
 formats to GF. Here are the ones supported by GF 2.8 and 3.0.
@@ -3293,7 +3218,7 @@ all kinds of judgement could be written in all files, without
 any headers. This format is still available, and the compiler
 (version 2.8) detects automatically if a file is in the current
 or the old format. However, the old format is not recommended
-because of pure modularity and missing separate compilation, 
+because of pure modularity and missing separate compilation,
 and also because libraries are not available, since the old
 and the new format cannot be mixed. With version 2.8, grammars
 in the old format can be converted to modular grammar with the
@@ -3303,7 +3228,7 @@ command
     &gt; import -o FILE.gf
 </PRE>
 <P>
-which rewrites the grammar divided into three files: 
+which rewrites the grammar divided into three files:
 an abstract, a concrete, and a resource module.
 </P>
 <A NAME="toc55"></A>
@@ -3334,13 +3259,13 @@ the compiler in GF 2.8.
 <A NAME="toc56"></A>
 <H3>Extended BNF grammars</H3>
 <P>
-Extended BNF (<CODE>FILE.ebnf</CODE>) 
+Extended BNF (<CODE>FILE.ebnf</CODE>)
 goes one step further from the shortcut notation of previous section.
 The rules have the form
 <center>
 <I>Cat</I> <CODE>::=</CODE> <I>RHS</I> <CODE>;</CODE>
 </center>
-where an <I>RHS</I> can be any regular expression 
+where an <I>RHS</I> can be any regular expression
 built from quoted strings and category symbols, in the following ways:
 </P>
 <TABLE ALIGN="center" CELLPADDING="4" BORDER="1">
@@ -3380,7 +3305,7 @@ built from quoted strings and category symbols, in the following ways:
 
 <P></P>
 <P>
-Parentheses are used to override standard precedences, where 
+Parentheses are used to override standard precedences, where
 <CODE>|</CODE> binds weaker than sequencing, which binds weaker than the unary operations.
 </P>
 <P>
@@ -3421,7 +3346,7 @@ Here is an example, from <CODE>GF/examples/animal/</CODE>:
 <PRE>
     --# -resource=../../lib/present/LangEng.gfc
     --# -path=.:present:prelude
-  
+
     incomplete concrete QuestionsI of Questions = open Lang in {
       lincat
         Phrase = Phr ;
@@ -3442,9 +3367,9 @@ Notice that the variables <CODE>love_V2</CODE>, <CODE>man_N</CODE>, etc, are
 actually constants in the library. In the resulting rules, such as
 </P>
 <PRE>
-    lin Whom = \man_N -&gt; \love_V2 -&gt; 
-      PhrUtt NoPConj (UttQS (UseQCl TPres ASimul PPos 
-        (QuestSlash whoPl_IP (SlashV2 (DetCN (DetSg (SgQuant 
+    lin Whom = \man_N -&gt; \love_V2 -&gt;
+      PhrUtt NoPConj (UttQS (UseQCl TPres ASimul PPos
+        (QuestSlash whoPl_IP (SlashV2 (DetCN (DetSg (SgQuant
           DefArt)NoOrd)(UseN man_N)) love_V2)))) NoVoc ;
 </PRE>
 <P>
@@ -3610,9 +3535,9 @@ Single-line comments begin with --.Multiple-line comments are  enclosed with {- 
 <A NAME="toc64"></A>
 <H2>The syntactic structure of GF</H2>
 <P>
-Non-terminals are enclosed between &lt; and &gt;. 
-The symbols -&gt; (production),  <B>|</B>  (union) 
-and <B>eps</B> (empty rule) belong to the BNF notation. 
+Non-terminals are enclosed between &lt; and &gt;.
+The symbols -&gt; (production),  <B>|</B>  (union)
+and <B>eps</B> (empty rule) belong to the BNF notation.
 All other symbols are terminals.
 </P>
 <TABLE ALIGN="center" CELLPADDING="4">
