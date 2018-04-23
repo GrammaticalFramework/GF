@@ -32,7 +32,7 @@ concrete IdiomEus of Idiom = CatEus ** open Prelude, ResEus, VerbEus in {
   ProgrVP vp = vp ** { prc = \\tns => vp.prc ! Pres ++ "ari" } ;
 
   -- : VP -> Utt ;       -- let's go
-  ImpPl1 vp = { s = linVPPrc vp } ;
+  ImpPl1 vp = { s = linVPPrc vp ! Gu } ;
 {-
 
     ImpP3     : NP -> VP -> Utt ; -- let John walk

@@ -35,7 +35,7 @@ lin
 
 --2 Imperatives
   -- : VP -> Imp ; 
- ImpVP vp = { s = linVPPrc vp } ; --TODO: check negation
+ ImpVP vp = { s = linVPPrc vp ! Hau } ; --TODO: check negation
 
 --2 Embedded sentences
 
@@ -47,7 +47,7 @@ lin
   EmbedQS qs = { s = linSSub (qs.s ! Indir) "la" } ; --???
 
   -- : VP -> SC ;                     -- ikusi
-  EmbedVP vp = { s = linVPPrc vp } ;
+  EmbedVP vp = { s = linVPPrc vp ! Hau } ;
 
 --2 Sentences
 

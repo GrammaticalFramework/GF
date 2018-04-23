@@ -385,9 +385,9 @@ oper
     ++ (verb.aux ! Hau).indep ;
 
   -- Used in ComplVV : does not include aux!
-  linVPPrc : VerbPhrase -> Str = \vp ->  --TODO make it less of a hack.
-    vp.adv 
-    ++ vp.iobj.s ++ vp.dobj.s ! Pos ++ vp.comp ! Hau  --all the compls!
+  linVPPrc : VerbPhrase -> Agr => Str = \vp ->
+    \\agr => vp.adv
+    ++ vp.iobj.s ++ vp.dobj.s ! Pos ++ vp.comp ! agr  --all the compls!
     ++ vp.prc ! Past ; --If we choose Past, then it will work with Jakin ...
                       
 
