@@ -36,20 +36,25 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
                 (predVGen False BetweenObjs (v2v v)) ** {c2 = v.c2} ;
 
     ComplSlash vp np =
-      let obj : Agr => Str = \\_ => appPrep vp.c2.p1 np ;
+      let hasInf = vp.inf.p2 ;
+          hasPrep = vp.c2.p2 ;
+          obj : Str = appPrep vp.c2.p1 np ;
 
-	  -- If there is an infinitive, put the old object before it.
-	  -- If not, just keep the old vp.
-	  vp': VP = case vp.inf.p2 of {
-                      True  => let emptyObjVP : VP = vp ** {n0, n2 = \\_ => [] } ;
-                                   infCompl = vp.n0 ! np.a ++ vp.n2 ! np.a ;
-                                in insertInf infCompl emptyObjVP ;
-                      False => vp } ;
+          -- If the verb has a preposition, insert the new object as an Adv.
+          insertArg = case hasPrep of {
+	              True => insertAdv obj ;
+                      False => insertObjNP np.isPron vp.negPos (\\_ => obj) } ;
 
-          negPos  = case vp.c2.p2 of { -- if the verb has a preposition or not
-	              True => BeforeObjs ;
-                      False => vp.negPos } ;
-      in insertObjNP np.isPron negPos obj vp' ;
+	  -- If there is an infinitive, put old object before the infinitive
+          -- and choose its agreement based on the new object.
+	  -- Otherwise, keep the old VP.
+	  newVP : VP = case hasInf of {
+                         True  => let emptyObjVP : VP = vp ** {n0, n2 = \\_ => [] } ;
+                                      infCompl = vp.n0 ! np.a ++ vp.n2 ! np.a ;
+                                   in insertInf infCompl emptyObjVP ;
+                         _     => vp } ;
+
+       in insertArg newVP ;
 
     SlashVV v vp =
       insertInfVP v.isAux vp (predVGen v.isAux vp.negPos v) ** {c2 = vp.c2} ;
