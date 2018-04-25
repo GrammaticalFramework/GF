@@ -2,8 +2,8 @@
 
 concrete AllDut of AllDutAbs = 
   LangDut,
-  IrregDut,
-  ExtraDut
+  IrregDut
+  , ExtendDut 
   ** 
 {
 --{} ;

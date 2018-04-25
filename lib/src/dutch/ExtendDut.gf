@@ -11,14 +11,15 @@ concrete ExtendDut of Extend =
     Coordination,
     Prelude,
     ParadigmsDut in {
-  lin
 
-  PastPartAP vp = {
-    s = \\agr,af => let aForm = case vp.isHeavy of {
-                          True  => APred ;
-                          False => af } ;
-                     in (infClause [] agr vp aForm).s ! Past ! Anter ! Pos ! Sub ;
-    isPre = notB vp.isHeavy ;
-   } ;
+lin --# notpresent
+
+  PastPartAP vp = { --# notpresent
+    s = \\agr,af => let aForm = case vp.isHeavy of { --# notpresent
+                          True  => APred ; --# notpresent
+                          False => af } ; --# notpresent
+                     in (infClause [] agr vp aForm).s ! Past ! Anter ! Pos ! Sub ; --# notpresent
+    isPre = notB vp.isHeavy ; --# notpresent
+   } ; --# notpresent
     
  }

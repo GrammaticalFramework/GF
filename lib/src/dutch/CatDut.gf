@@ -34,7 +34,7 @@ concrete CatDut of Cat =
 -- Verb
 
     VP = ResDut.VP ;
-    VPSlash = ResDut.VP ** {c2 : Preposition * Bool} ;
+    VPSlash = ResDut.VP ** {c2 : Preposition * Bool} ; -- False = empty prep
     Comp = {s : Agr => Str} ; 
 
 -- Adjective

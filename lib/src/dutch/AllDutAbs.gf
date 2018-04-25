@@ -3,7 +3,7 @@
 abstract AllDutAbs = 
   Lang,
   IrregDutAbs,
-  ExtraDutAbs
+  Extend -- ExtraDutAbs
   ** 
 {
 --{} ;
