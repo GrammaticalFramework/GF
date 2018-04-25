@@ -35,8 +35,15 @@ oper
       = \a,b -> lin A (mkAdj a b) ;
     } ; 
 
-  mkA2 : Str -> A2 = \a -> lin A2 (simpleAdj a ** {c2 = emptyPrep}) ;
-
+  mkA2 = overload {
+    mkA2 : Str -> A2
+      = \a -> lin A2 (simpleAdj a ** {c2 = emptyPrep}) ;
+    mkA2 : A -> A2
+      = \a -> lin A2 (a ** {c2 = emptyPrep}) ;
+    mkA2 : A -> Prep -> A2
+      = \a,p -> lin A2 (a ** {c2 = p}) ;
+    } ;
+    
   mkV = overload {      
     mkV : (walk : Str) -> V 
       = \walk -> case walk of {
