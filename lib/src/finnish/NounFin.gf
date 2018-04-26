@@ -218,11 +218,11 @@ concrete NounFin of Noun = CatFin ** open ResFin, MorphoFin, StemFin, Prelude in
       s = \\nf => ap.s ! True ! (n2nform nf) ++ cn.s ! nf ;
       h = cn.h } ;
 
-    RelCN cn rs = {s = \\nf => cn.s ! nf ++ rs.s ! agrP3 (numN nf) ;
+    RelCN cn rs = {s = \\nf => cn.s ! nf ++ BIND ++ "," ++  rs.s ! agrP3 (numN nf) ;
                    h = cn.h } ;
 
     RelNP np rs = {
-      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a ; 
+      s = \\c => np.s ! c ++ BIND ++ "," ++ rs.s ! np.a ; 
       a = np.a ;  
       isPron = np.isPron ; ---- correct ?
       isNeg = np.isNeg
