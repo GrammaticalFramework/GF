@@ -1,7 +1,7 @@
 concrete SentencesEst of Sentences = NumeralEst ** SentencesI -
   [NameNN, ObjMass,
-   NPPlace, CNPlace, placeNP, mkCNPlace, mkCNPlacePl,
-   CitiNat,
+   NPPlace, CNPlace, placeNP, mkCNPlace, mkCNPlacePl, NPNationality, mkNPNationality,
+   CitiNat, Citizenship, Nationality, ACitizen, PropCit, PCitizenship,
    GObjectPlease
   ] with 
   (Syntax = SyntaxEst),
@@ -11,9 +11,15 @@ concrete SentencesEst of Sentences = NumeralEst ** SentencesI -
 
   flags optimize = noexpand ;
 
+  lincat
+    Citizenship = ACitizenship ;
+    Nationality = NPNationality ;
+        
   oper
-    NPPlace = {name : NP ; at : Adv ; to : Adv ; from : Adv} ;
-    CNPlace = {name : CN ; at : Prep ; to : Prep ; from : Prep ; isPl : Bool} ;
+    NPPlace : Type = {name : NP ; at : Adv ; to : Adv ; from : Adv} ;
+    CNPlace : Type = {name : CN ; at : Prep ; to : Prep ; from : Prep ; isPl : Bool} ;
+    ACitizenship : Type = { prop : A ; nat : A } ;
+    NPNationality : Type = ACitizenship ** {lang : NP ; country : NP} ;
 
   placeNP : Det -> CNPlace -> NPPlace = \det,kind ->
     let name : NP = mkNP det kind.name in {
@@ -50,6 +56,8 @@ concrete SentencesEst of Sentences = NumeralEst ** SentencesI -
 
     GObjectPlease o = lin Text (mkPhr noPConj (mkUtt o) (lin Voc (ss "palun"))) ;
 
-    CitiNat n = n.prop ;
-
-  }
+    CitiNat n = n ; -- keep just prop and nat fields
+    PropCit c = c.prop ; 
+    PCitizenship c = mkPhrase (mkUtt (mkAP c.prop)) ;
+    ACitizen p n = mkCl p.name n.nat ;
+}

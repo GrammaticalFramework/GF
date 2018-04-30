@@ -61,7 +61,7 @@ concrete WordsEst of Words = SentencesEst **
     School = mkPlace (mkN "kool") ssa ; -- different in Fin
 
     CitRestaurant cit = {
-      name = mkCN cit (mkN "restoran") ;
+      name = mkCN cit.prop (mkN "restoran") ;
       at = casePrep inessive ;
       to = casePrep illative;
       from = casePrep elative ;
@@ -94,32 +94,32 @@ concrete WordsEst of Words = SentencesEst **
     Yuan = mkCN (mkN "jüään") ;
 
 -- Citizenship
-    Belgian = mkA "belgia" ;
-    Indian = mkA "india" ;
+    Belgian = { prop = invA "belgia" ; nat = mkA "belglane" } ;
+    Indian = { prop = invA "india" ; nat = mkA "indialane" } ;
 
 -- Country
     Belgium = mkNP (mkPN "Belgia") ;
     India = mkNP (mkPN "India") ;
 
 -- Nationality
-    Bulgarian = mkNat "bulgaaria" (mkPN "Bulgaaria") ;
-    Catalan = mkNat "katalaani" (mkPN "Kataloonia") ;
-    Chinese = mkNat "hiina" (mkPN "Hiina") ;
-    Danish = mkNat "taani" (mkPN "Taani") ;
-    Dutch = mkNat "hollandi" (mkPN "Holland") ;
-    English = mkNat "inglise" (mkPN "Inglismaa") ;
-    Finnish = mkNat "soome" (mkPN "Soome") ;
+    Bulgarian = mkNat "bulgaaria" "bulgaarlane" (mkPN "Bulgaaria") ;
+    Catalan = mkNat "katalaani" "kataloonlane" (mkPN "Kataloonia") ;
+    Chinese = mkNat "hiina" "hiinlane" (mkPN "Hiina") ;
+    Danish = mkNat "taani" "taanlane" (mkPN "Taani") ;
+    Dutch = mkNat "hollandi" "hollandlane" (mkPN "Holland") ;
+    English = mkNat "inglise" "inglane" (mkPN "Inglismaa") ;
+    Finnish = mkNat "soome" "soomlane" (mkPN "Soome") ;
     Flemish = mkNP (mkPN "flaami keel") ; -- Language
     Hindi = mkNP (mkPN "hindi keel") ; -- Language
-    French = mkNat "prantsuse" (mkPN "Prantsusmaa") ;
-    German = mkNat "saksa" (mkPN "Saksamaa") ;
-    Italian = mkNat "itaalia" (mkPN "Itaalia") ;
-    Norwegian = mkNat "norra" (mkPN "Norra") ;
-    Polish = mkNat "poola" (mkPN "Poola") ;
-    Romanian = mkNat "rumeenia" (mkPN "Rumeenia") ;
-    Russian = mkNat "vene" (mkPN "Venemaa") ;
-    Spanish = mkNat "hispaania" (mkPN "Hispaania") ;
-    Swedish = mkNat "rootsi" (mkPN "Rootsi") ;
+    French = mkNat "prantsuse" "prantslane" (mkPN "Prantsusmaa") ;
+    German = mkNat "saksa" "sakslane" (mkPN "Saksamaa") ;
+    Italian = mkNat "itaalia" "itaallane" (mkPN "Itaalia") ;
+    Norwegian = mkNat "norra" "norralane" (mkPN "Norra") ;
+    Polish = mkNat "poola" "poolapärane" (mkPN "Poola") ; -- Is there a -lane adjective for poola? Didn't find one at EKSS /IL2018
+    Romanian = mkNat "rumeenia" "rumeenlane" (mkPN "Rumeenia") ;
+    Russian = mkNat "vene" "venelane" (mkPN "Venemaa") ;
+    Spanish = mkNat "hispaania" "hispaanlane" (mkPN "Hispaania") ;
+    Swedish = mkNat "rootsi" "rootslane" (mkPN "Rootsi") ;
 
     ---- it would be nice to have a capitalization Predef function
 
@@ -153,7 +153,7 @@ concrete WordsEst of Words = SentencesEst **
     ALive p co = mkCl p.name (mkVP (mkVP L.live_V) (SyntaxEst.mkAdv in_Prep co)) ;
     ALove p q = mkCl p.name L.love_V2 q.name ;
     AMarried p = mkCl p.name (ParadigmsEst.mkAdv "abielus") ;
-    AReady p = mkCl p.name (ParadigmsEst.mkA "valmis") ;
+    AReady p = mkCl p.name (ParadigmsEst.invA "valmis" ) ;
     -- Eng: I am scared
     -- Fin: Minua pelottaa (partitive)
     -- Est: Mina kardan (nominative)
@@ -170,9 +170,7 @@ concrete WordsEst of Words = SentencesEst **
     -- Est: Mina olen väsinud.
     -- ATired p = mkCl p.name (caseV partitive (mkV "väsitada")) ;
     ATired p = mkCl p.name (ParadigmsEst.mkA "väsinud") ;
-    -- TODO: better: aru saama / saan aru
-    -- AUnderstand p = mkCl p.name L.understand_V2 ;
-    AUnderstand p = mkCl p.name (mkV "mõistma") ;
+    AUnderstand p = mkCl p.name (mkV "aru" (mkV "saama")) ;
     AWant p obj = mkCl p.name (mkV2 "tahtma") obj ;
     AWantGo p place = mkCl p.name want_VV (mkVP (mkVP L.go_V) place.to) ;
 
@@ -180,8 +178,8 @@ concrete WordsEst of Words = SentencesEst **
 
     QWhatName p = mkQS (mkQCl whatSg_IP (mkVP (nameOf p))) ;
     QWhatAge p = mkQS (mkQCl (E.ICompAP (mkAP L.old_A)) p.name) ;
-    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (mkV "maksma"))) ;
-    ItCost item price = mkCl item (mkV2 (mkV "maksma")) price ;
+    HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item maksma_V)) ;
+    ItCost item price = mkCl item (mkV2 maksma_V) price ;
 
     PropOpen p = mkCl p.name open_Adv ;
     PropClosed p = mkCl p.name closed_Adv ;
@@ -257,11 +255,13 @@ concrete WordsEst of Words = SentencesEst **
   oper
     kroon : N = mkN "kroon" "krooni" "krooni" "krooni" "kroonide" "kroone" ;
     kroon2 : Str -> N = \taani -> mkN (taani + " ") kroon ;
+    maksma_V : V = mkV "maksma" "maksta" "maksab" ;
 
-    mkNat : Str -> PN ->
-      {lang : NP ; prop : A ; country : NP} = \pro,co ->
-        {lang = mkNP (mkCN (mkN pro (mkN "keel" "keele" "keelt" "keelde" "keelte" "keeli")));
-         prop = mkA (mkN pro) R.Invariable ;
+    mkNat : Str -> Str -> PN -> NPNationality
+       = \attr,pred,co ->
+        {lang = mkNP (mkCN (mkN (attr + " ") (mkN "keel" "keele" "keelt" "keelde" "keelte" "keeli")));
+         prop = invA attr ;
+         nat = mkA pred ;
          country = mkNP co
         } ;
 
@@ -328,7 +328,7 @@ concrete WordsEst of Words = SentencesEst **
 --------------------------------------------------
 
   lin
-    Thai = mkNat ("tai") (mkPN "Tai") ;
+    Thai = mkNat ("tai") "tailane" (mkPN "Tai") ;
     Baht = mkCN (mkN "baht") ;
 
     Rice = mkCN (mkN "riis") ;
