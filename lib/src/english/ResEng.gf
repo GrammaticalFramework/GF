@@ -242,10 +242,13 @@ param
     } ;
 
 
-  SlashVP = VP ** {c2 : Str ; gapInMiddle : Bool} ;
+  SlashVP = VP ** {c2 : Str ;
+                   gapInMiddle : Bool;
+                   missingAdv : Bool -- The sentence has been through VPSlashPrep, and the only missing thing is just an adverbial and shouldn't affect the agreement.
+} ;
 
   predVc : (Verb ** {c2 : Str}) -> SlashVP = \verb -> 
-    predV verb ** {c2 = verb.c2 ; gapInMiddle = True} ;
+    predV verb ** {c2 = verb.c2 ; gapInMiddle = True; missingAdv = False} ;
 
   cBind : Str -> Str = \s -> Predef.BIND ++ ("'" + s) ;
 
@@ -369,6 +372,16 @@ param
       False => {aux = x ; adv = "not" ; fin = [] ; inf = z}
       } ;
 
+{- IL 24/04/2018 To fix scope of reflexives:
+  a) ComplSlash ( … ReflVP … ) X:    reflexive should agree with X
+    LangEng> l PredVP (UsePron i_Pron) (ComplSlash (SlashV2V beg_V2V (ReflVP (SlashV2a like_V2))) (UsePron he_Pron))
+    I beg him to like /himself/
+  b) ReflVP ... ( … ComplSlash … X): reflexive should agree with subject
+    LangEng> l PredVP (UsePron i_Pron) (SelfAdVVP (ComplSlash (SlashV2VNP beg_V2V (UsePron he_Pron) (SlashV2a like_V2)) (UsePron he_Pron)))
+    I /myself/ beg him to like him -}
+  objAgr : { a : Agr } -> VP -> VP = \obj,vp -> vp ** {
+    s2 = \\a => vp.s2 ! obj.a } ;
+
   insertObj : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
     s2 = \\a => vp.s2 ! a ++ obj ! a ;
     isSimple = False ;
@@ -380,9 +393,9 @@ param
     } ;
 
   insertObjc : (Agr => Str) -> SlashVP -> SlashVP = \obj,vp -> 
-    insertObj obj vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
+    insertObj obj vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle ; missingAdv = vp.missingAdv } ;
   insertExtrac : Str -> SlashVP -> SlashVP = \obj,vp -> 
-    insertExtra obj vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
+    insertExtra obj vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle ; missingAdv = vp.missingAdv } ;
 
 --- AR 7/3/2013 move the particle after the object
   insertObjPartLast : (Agr => Str) -> VP -> VP = \obj,vp -> {

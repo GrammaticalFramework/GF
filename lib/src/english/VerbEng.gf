@@ -5,9 +5,9 @@ concrete VerbEng of Verb = CatEng ** open ResEng, Prelude in {
   lin
     UseV = predV ;
 
-    SlashV2a v = predV v ** {c2 = v.c2 ; gapInMiddle = False} ;
+    SlashV2a v = predVc v ** {c2 = v.c2 ; gapInMiddle = False} ;
     Slash2V3 v np = 
-      insertObjc (\\_ => v.c2 ++ np.s ! NPAcc) (predV v ** {c2 = v.c3 ; gapInMiddle = False}) ;
+      insertObjc (\\_ => v.c2 ++ np.s ! NPAcc) (predVc v ** {c2 = v.c3 ; gapInMiddle = False}) ;
     Slash3V3 v np = 
       insertObjc (\\_ => v.c3 ++ np.s ! NPAcc) (predVc v) ; ----
 
@@ -23,18 +23,26 @@ concrete VerbEng of Verb = CatEng ** open ResEng, Prelude in {
     SlashV2Q v q  = insertExtrac (q.s ! QIndir) (predVc v) ;
     SlashV2A v ap = insertObjc (\\a => ap.s ! a) (predVc v) ; ----
 
-    ComplSlash vp np = case vp.gapInMiddle of {
-      True  => insertObjPre (\\_ => vp.c2 ++ np.s ! NPAcc) vp ;
-      False => insertObj    (\\_ => vp.c2 ++ np.s ! NPAcc) vp
-      } ;
+    ComplSlash vp np =
+      let vp' = case vp.gapInMiddle of {
+                  True  => insertObjPre (\\_ => vp.c2 ++ np.s ! NPAcc) vp ;
+                  False => insertObj    (\\_ => vp.c2 ++ np.s ! NPAcc) vp } ;
 
-    SlashVV vv vp = 
-      insertObj (\\a => infVP vv.typ vp Simul CPos a) (predVV vv) **
-        {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
-    SlashV2VNP vv np vp = 
+          -- IL 24/04/2018
+          -- If the missing argument is not an adverbial, make previous object
+          -- agree with the argument of ComplSlash.
+          -- Example: "you help /me/ like /myself/", not "*you help me like yourself".
+          -- Different order of ReflVP and ComplSlash produces "you /yourself/ help me like me".
+            f = case vp.missingAdv of {
+                  True => id VP ;
+                  False => objAgr np } ;
+      in f vp' ;
+
+    SlashVV vv vp = vp **
+      insertObj (\\a => infVP vv.typ vp Simul CPos a) (predVV vv) ;
+    SlashV2VNP vv np vp = vp **
       insertObjPre (\\_ => vv.c2 ++ np.s ! NPAcc)
-        (insertObjc (\\a => vv.c3 ++ infVP vv.typ vp Simul CPos a) (predVc vv)) **
-          {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
+      (insertObjc (\\a => vv.c3 ++ infVP vv.typ vp Simul CPos a) (predVc vv)) ;
 
     UseComp comp = insertObj comp.s (predAux auxBe) ;
 
@@ -42,8 +50,8 @@ concrete VerbEng of Verb = CatEng ** open ResEng, Prelude in {
     ExtAdvVP vp adv = insertObj (\\_ => frontComma ++ adv.s ++ finalComma) vp ;
     AdVVP adv vp = insertAdV adv.s vp ;
 
-    AdvVPSlash vp adv = insertObj (\\_ => adv.s) vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
-    AdVVPSlash adv vp = insertAdV adv.s vp ** {c2 = vp.c2 ; gapInMiddle = vp.gapInMiddle} ;
+    AdvVPSlash vp adv = vp ** insertObj (\\_ => adv.s) vp ;
+    AdVVPSlash adv vp = vp ** insertAdV adv.s vp ;
 
     ReflVP v = insertObjPre (\\a => v.c2 ++ reflPron ! a) v ;
 
@@ -62,6 +70,6 @@ concrete VerbEng of Verb = CatEng ** open ResEng, Prelude in {
 
     UseCopula = predAux auxBe ;
 
-    VPSlashPrep vp p = vp ** {c2 = p.s ; gapInMiddle = False} ;
+    VPSlashPrep vp p = vp ** {c2 = p.s ; gapInMiddle = False; missingAdv = True } ;
 
 }

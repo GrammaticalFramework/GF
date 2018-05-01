@@ -111,7 +111,7 @@ concrete CatEng of Cat = CommonX - [Pol] ** open ResEng, Prelude in {
     ClSlash = \s -> {s = \\t,a,p,o => s; c2 = ""} ;
 
     VP = \s -> predV {s = \\_ => s; p = ""; isRefl = False} ;
-    VPSlash = \s -> predV {s = \\_ => s; p = ""; isRefl = False} ** {c2 = ""; gapInMiddle = False} ;
+    VPSlash = \s -> predV {s = \\_ => s; p = ""; isRefl = False} ** {c2 = ""; gapInMiddle = False; missingAdv = False } ;
 
     V, VS, VQ, VA = \s -> {s = \\_ => s; p = ""; isRefl = False} ;
     V2, V2A, V2Q, V2S = \s -> {s = \\_ => s; p = ""; isRefl = False; c2=""} ;
