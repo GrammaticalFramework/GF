@@ -8,7 +8,6 @@ concrete ChunkRus of Chunk = CatRus, ExtensionsRus [VPS,VPI] **
     ResRus, (P = ParadigmsRus) in {
 
 lin VPI_Chunk vpi = {s = vpi.s} ;
---CN = {nounpart : NForm => Str; relcl : Number => Case => Str; g : Gender; anim : Animacy} ;  
 lin CN_Pl_Chunk, CN_Pl_Gen_Chunk = \cn -> {s = cn.nounpart ! NF Pl allCases allSizes ++ cn.relcl ! Pl ! allCases} ;
 lin CN_Sg_Chunk, CN_Sg_Gen_Chunk = \cn -> {s = cn.nounpart ! NF Sg allCases allSizes ++ cn.relcl ! Sg ! allCases} ;
 lin Conj_Chunk c = {s = c.s1 | c.s2 };
