@@ -40,11 +40,11 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 
 -- Adjective
     
-    AP = {s : AdjForm => Str; p : IsPostfixAdj} ; 
+    AP = {s : AdjForm => Str ; p : IsPostfixAdj ; preferShort : ShortFormPreference} ; 
 
 -- Noun
 
-    CN = {s : NForm => Str; g : Gender; anim : Animacy} ;  
+    CN = {nounpart : NForm => Str; relcl : Number => Case => Str; g : Gender; anim : Animacy} ;  
     NP = { s : PronForm => Str ; n : Number ; p : Person ;
            g: PronGen ; anim : Animacy ;  pron: Bool} ;     
     Pron = { s : PronForm => Str ; n : Number ; p : Person ;
@@ -59,12 +59,13 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 -- like "mnogo"
 -- The determined noun has the case parameter specific for the determiner
 
-    Det = {s : AdjForm => Str; n: Number; g: PronGen; c: Case; size: Size} ; 
+    Det = {s : Case => Animacy => Gender => Str; n: Number; g: PronGen; c: Case; size: Size} ; 
     Predet, Quant = {s : AdjForm => Str; g: PronGen; c: Case; size: Size} ; 
 
 -- Numeral
 
-    Num, Numeral, Card = {s : Gender => Animacy => Case => Str ; n : Number ; size: Size} ;
+    Num = {s : Gender => Animacy => Case => Str ; n : Number ; size: Size} ;
+    Numeral, Card = {s : Gender => Animacy => Case => Str ; n : Number ; size: Size} ;
     Digits = {s : Str ; n : Number ; size: Size} ; ---- 
     
 -- Structural
@@ -85,7 +86,7 @@ concrete CatRus of Cat = CommonX ** open ResRus, Prelude in {
 --    VV = {s : VVForm => Str ; isAux : Bool} ;
 
     Ord =  {s : AdjForm => Str} ;
-    A =  {s : Degree => AdjForm => Str} ;
+    A =  {s : Degree => AdjForm => Str ; p : IsPostfixAdj ; preferShort : ShortFormPreference} ;
     A2 = A ** {c2 : Complement} ;
 
  -- Substantives moreover have an inherent gender. 

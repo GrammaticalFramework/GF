@@ -87,19 +87,19 @@ concrete VerbRus of Verb = CatRus ** open ResRus, Prelude in {
   CompCN zloj ={
  s= \\clf,gn,p => 
    let num = numGenNum gn ;
-       zlojsg = zloj.s ! NF Sg Nom nom ;
-       zlojpl = zloj.s ! NF Pl Nom plg
+       zlojsg = zloj.nounpart ! NF Sg Nom nom ++ zloj.relcl ! Sg ! Nom ;
+       zlojpl = zloj.nounpart ! NF Pl Nom plg ++ zloj.relcl ! Pl ! Nom 
    in
    case clf of { 
 -- person is ignored !
-       ClInfinit => "быть" ++ zloj.s ! NF Sg Inst nom ; 
+       ClInfinit => "быть" ++ zloj.nounpart ! NF Sg Inst nom ++ zloj.relcl ! Sg ! Inst ; 
         ClImper => case gn of 
-          {  (GSg _) => "будь" ++ zloj.s ! NF Sg Inst plg ;
-             GPl => "будьте" ++ zloj.s ! NF Pl Inst plg 
+          {  (GSg _) => "будь" ++ zloj.nounpart ! NF Sg Inst plg ++ zloj.relcl ! Sg ! Inst ;
+             GPl => "будьте" ++ zloj.nounpart ! NF Pl Inst plg ++ zloj.relcl ! Pl ! Inst
           };  
 -- infinitive does not save GenNum, 
 -- but indicative does for the sake of adjectival predication !
-        ClIndic Present _ | ClCondit =>  zloj.s ! NF num Nom nom ;
+        ClIndic Present _ | ClCondit =>  zloj.nounpart ! NF num Nom nom ++ zloj.relcl ! num ! Nom ;
         ClIndic PastRus _ => case gn of
        { (GSg Fem)   => "была" ++ zlojsg ;
           (GSg Masc)  => "был" ++ zlojsg ;

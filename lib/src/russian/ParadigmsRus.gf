@@ -275,7 +275,8 @@ foreign = Foreign; -- +++ MG_UR: added +++
   perfective = Perfective ;
  -- present = Present ;
   --past = Past ;
-  --  Degree     = Pos | Comp | Super ;
+  Degree     = Posit | Compar | Superl ;
+              
  -- Person     = P1 | P2 | P3 ;
  -- AfterPrep  = Yes | No ; 
  -- Possessive = NonPoss | Poss GenNum ;
@@ -373,11 +374,11 @@ foreign = Foreign; -- +++ MG_UR: added +++
     mkN2 : N -> Prep -> N2 = mkFun;
   } ;
 
-  mkFun : N -> Prep -> N2 = \f,p -> UseN f ** {c2 = p ; lock_N2 = <>} ;
+  mkFun : N -> Prep -> N2 = \f,p -> f ** {c2 = p ; lock_N2 = <>} ;
 
   nullPrep : Prep = {s = []; c= Gen; lock_Prep=<>} ;  
 
-  mkN3 f p2 p3 = (UseN f) ** {c2 = p2; c3 = p3; lock_N3 = <>} ; 
+  mkN3 f p2 p3 = f ** {c2 = p2; c3 = p3; lock_N3 = <>} ; 
 
 
   -- mkPN = \ivan, g, n, anim -> 
@@ -408,7 +409,11 @@ foreign = Foreign; -- +++ MG_UR: added +++
    mkA = overload {
      mkA : (positive : Str) -> A = mk1A ;
      mkA : (positive : Str) -> AdjType -> A = mk1Ab ;
-     mkA : (positive, comparative : Str) -> A = mk2A;
+     mkA : (positive, shortMasc, shortFem, shortNeut, shortPl : Str) -> A = mk3A ;  -- to make correct short forms (Liza Zimina 04/2018)
+     mkA : (positive, comparative : Str) -> A = mk2A ;
+     mkA : (positive : Str) -> ShortFormPreference -> A  = mk4A ; -- adjectives preferring full forms in conjunction 
+                                                                  -- (e.g. "он классический и элегантный" vs "он классический и элегантен") Liza Zimina 04/2018
+     mkA : (positive : Str) -> Bool -> A  = mk5A ; -- postfix adjectives (e.g. "цвета кости") Liza Zimina 04/2018
   } ;
 
   mk1A : Str -> A = \positive -> 
@@ -423,7 +428,7 @@ foreign = Foreign; -- +++ MG_UR: added +++
       stem+"ий"                        => mkAdjDeg (aRegSoft Qual stem) comparative ;
       stem                             => mkAdjDeg (adjInvar stem) comparative
     } ;
-
+    
   mk1Ab : Str -> AdjType -> A = \positive, at -> 
     let { stem = Predef.tk 2 positive;
 	  comparative = stem + "ее"
@@ -441,12 +446,25 @@ foreign = Foreign; -- +++ MG_UR: added +++
   adjInvar : Str -> Adjective = \stem -> { s = \\_ => stem } ;
 
   oper mkAdjDeg: Adjective -> Str -> A = \adj, s ->
-   {  s = table
+   {s = table
            {
               Posit => adj.s ;
               Compar => \\af => s ;
               Superl => \\af =>  samuj.s !af ++ adj.s ! af
-           }
+           } ;
+    p = False ;
+    preferShort = PrefShort
+  } ** {lock_A = <>};
+  
+  oper mkAdjDegFull: Adjective -> Str -> ShortFormPreference -> A = \adj, s,sfp ->
+   {s = table
+           {
+              Posit => adj.s ;
+              Compar => \\af => s ;
+              Superl => \\af =>  samuj.s !af ++ adj.s ! af
+           } ;
+    p = False ;
+    preferShort = sfp
   } ** {lock_A = <>};
 
 
@@ -551,5 +569,40 @@ foreign = Foreign; -- +++ MG_UR: added +++
    mkV2S v p cas = v ** {c2 = {s=p; c=cas}; lock_V2S = <>};
    mkV2Q v p cas = v ** {c2 = {s=p; c=cas}; lock_V2Q = <>};
    mkV2A v p cas = v ** {c2 = {s=p; c=cas}; lock_V2A = <>};
-} ;
+  
+-- Liza Zimina 04/2018: to make correct short forms of adjectives
 
+  mk3A : Str -> Str -> Str -> Str -> Str -> A = \positive,shortMasc,shortFem,shortNeut,shortPl  -> 
+    let {koren = Predef.tk 2 positive ;
+         comparative = koren + "ее"} in  
+    case positive of {
+      stem+"ый"                        => mkAdjDeg (aRegHardWorstCase StemStress Qual stem shortMasc shortFem shortNeut shortPl) comparative ;
+      stem+"ой"                        => mkAdjDeg (aRegHardWorstCase EndStress Qual stem shortMasc shortFem shortNeut shortPl) comparative ;
+      stem@(_+("г"|"к"|"х"))+"ий"       => mkAdjDeg (aRegHardWorstCase StemStress Qual stem shortMasc shortFem shortNeut shortPl) comparative;
+      stem@(_+("ш"|"ж"|"ч"|"щ"))+"ий" => mkAdjDeg (aRegHardWorstCase StemStress Qual stem shortMasc shortFem shortNeut shortPl) comparative;
+      stem+"ий"                        => mkAdjDeg (aRegSoftWorstCase Qual stem shortMasc shortFem shortNeut shortPl) comparative ;
+      stem                             => mkAdjDeg (adjInvar stem) comparative
+    } ;
+    
+  mk4A : Str -> ShortFormPreference -> A = \positive,prefshort -> 
+    let {koren = Predef.tk 2 positive ;
+         comparative = koren + "ее"} in 
+    case positive of {
+      stem+"ый"                        => mkAdjDegFull (aRegHardFull StemStress Qual stem) comparative prefshort ;
+      stem+"ой"                        => mkAdjDegFull (aRegHardFull EndStress Qual stem) comparative prefshort ;
+      stem@(_+("г"|"к"|"х"))+"ий"       => mkAdjDegFull (aRegHardFull StemStress Qual stem) comparative prefshort ;
+      stem@(_+("ш"|"ж"|"ч"|"щ"))+"ий" => mkAdjDegFull (aRegHardFull StemStress Qual stem) comparative prefshort ;
+      stem+"ий"                        => mkAdjDegFull (aRegSoftFull Qual stem) comparative prefshort ;
+      stem                             => mkAdjDegFull (adjInvar stem) comparative prefshort
+    } ;
+  
+  mk5A : Str -> Bool -> A = \adj,postfix -> 
+    case postfix of {
+      False => mk1A adj ;
+      True => lin A {
+        s = \\d,af => adj ;
+        p = True ; 
+        preferShort = PrefFull
+        }
+      } ;
+} ;

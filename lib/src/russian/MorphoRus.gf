@@ -826,9 +826,6 @@ oper eEnd_Decl: Str -> CommNoun =  \vs ->
 	 AdvF => stem + "е"
      } } ;
 
-
-
-
    vseDetPl: Adjective   =  extAdjFromSubst (eEnd_Decl "вс") ;
    extAdjFromSubst: CommNoun -> Adjective = \ vse ->
     {s = \\af => vse.s ! NF (numAF af) (caseAF af) plg } ;
@@ -1391,4 +1388,146 @@ oper ProperName : Type = {s :  Case => Str ; g : Gender ; anim : Animacy} ;
                      (Prepos _) => lubercy + "ах" };
           g = Neut ; anim = anim };
 
+  oper aRegHardWorstCase : AdjStress -> AdjType -> Str -> Str -> Str -> Str -> Str -> Adjective = \stress, at, stem, shortMasc, shortFem, shortNeut, shortPl ->
+    let i = iAfter stem in
+    let o = case stress of {
+	       EndStress  => "о" ;
+	       StemStress => oAfter stem } in
+    { s = table {
+	 AF Nom _ (GSg Masc)               => stem + case stress of {
+                                                        EndStress => "ой";
+							StemStress => iAfter stem + "й" } ;
+	 AF Nom _ (GSg Neut)               => stem + o+"е";
+	 AF Gen _ (GSg (Masc|Neut))        => stem + o+"го";
+	 AF Dat _ (GSg (Masc|Neut))        => stem + o+"му";
+	 AF Acc Inanimate (GSg Masc)       => stem + i+"й";
+	 AF Acc Animate (GSg Masc)         => stem + o+"го";
+	 AF Acc _ (GSg Neut)               => stem + o+"е";
+	 AF Inst _ (GSg (Masc|Neut))       => stem + i+"м";
+	 AF (Prepos _) _ (GSg (Masc|Neut)) => stem + o+"м";
+
+	 AF Nom  _ (GSg Fem) => stem + "ая";
+	 AF Acc  _ (GSg Fem) => stem + "ую";
+	 AF _    _ (GSg Fem) => stem + o+"й";
+
+	 AF Nom _ GPl          => stem + i+"е";
+	 AF Acc  Inanimate GPl => stem + i+"е";
+	 AF Acc  Animate GPl   => stem + i+"х";
+	 AF Gen  _ GPl         => stem + i+"х";
+	 AF Inst _ GPl         => stem + i+"ми";
+	 AF Dat  _ GPl         => stem + i+"м";
+	 AF (Prepos _) _ GPl   => stem + i+"х";
+
+	 AFShort (GSg Masc) => shortMasc ;
+	 AFShort (GSg Fem)  => shortFem ;
+	 AFShort (GSg Neut) => shortNeut ;
+	 AFShort GPl        => shortPl ;
+
+	 AdvF => stem + o
+   } } ;
+
+-- Liza Zimina 04/2018: to make correct short forms of adjectives
+
+  oper aRegSoftWorstCase : AdjType -> Str -> Str -> Str -> Str -> Str -> Adjective = \at, stem, shortMasc, shortFem, shortNeut, shortPl ->
+    { s = table {
+	 AF Nom _ (GSg Masc)               => stem + "ий" ;
+	 AF Nom _ (GSg Neut)               => stem + "ее";
+	 AF Gen _ (GSg (Masc|Neut))        => stem + "его";
+	 AF Dat _ (GSg (Masc|Neut))        => stem + "ему";
+	 AF Acc Inanimate (GSg Masc)       => stem + "ий";
+	 AF Acc Animate (GSg Masc)         => stem + "его";
+	 AF Acc _ (GSg Neut)               => stem + "ее";
+	 AF Inst _ (GSg (Masc|Neut))       => stem + "им";
+	 AF (Prepos _) _ (GSg (Masc|Neut)) => stem + "ем";
+
+	 AF Nom  _ (GSg Fem) => stem + "яя";
+	 AF Acc  _ (GSg Fem) => stem + "юю";
+	 AF _    _ (GSg Fem) => stem + "ей";
+
+	 AF Nom _ GPl          => stem + "ие";
+	 AF Acc  Inanimate GPl => stem + "ие";
+	 AF Acc  Animate GPl   => stem + "их";
+	 AF Gen  _ GPl         => stem + "их";
+	 AF Inst _ GPl         => stem + "ими";
+	 AF Dat  _ GPl         => stem + "им";
+	 AF (Prepos _) _ GPl   => stem + "их";
+
+	 AFShort (GSg Masc) => shortMasc ;
+	 AFShort (GSg Fem)  => shortFem ;
+	 AFShort (GSg Neut) => shortNeut ;
+	 AFShort GPl        => shortPl ;
+	 AdvF => stem + "е"
+   } } ;
+   
+   oper aRegHardFull : AdjStress -> AdjType -> Str -> Adjective = \stress, at, stem ->
+     let i = iAfter stem in
+     let o = case stress of {
+ 	       EndStress  => "о" ;
+ 	       StemStress => oAfter stem } in
+     { s = table {
+ 	 AF Nom _ (GSg Masc)               => stem + case stress of {
+                                                         EndStress => "ой";
+ 							StemStress => iAfter stem + "й" } ;
+ 	 AF Nom _ (GSg Neut)               => stem + o+"е";
+ 	 AF Gen _ (GSg (Masc|Neut))        => stem + o+"го";
+ 	 AF Dat _ (GSg (Masc|Neut))        => stem + o+"му";
+ 	 AF Acc Inanimate (GSg Masc)       => stem + i+"й";
+ 	 AF Acc Animate (GSg Masc)         => stem + o+"го";
+ 	 AF Acc _ (GSg Neut)               => stem + o+"е";
+ 	 AF Inst _ (GSg (Masc|Neut))       => stem + i+"м";
+ 	 AF (Prepos _) _ (GSg (Masc|Neut)) => stem + o+"м";
+
+ 	 AF Nom  _ (GSg Fem) => stem + "ая";
+ 	 AF Acc  _ (GSg Fem) => stem + "ую";
+ 	 AF _    _ (GSg Fem) => stem + o+"й";
+
+ 	 AF Nom _ GPl          => stem + i+"е";
+ 	 AF Acc  Inanimate GPl => stem + i+"е";
+ 	 AF Acc  Animate GPl   => stem + i+"х";
+ 	 AF Gen  _ GPl         => stem + i+"х";
+ 	 AF Inst _ GPl         => stem + i+"ми";
+ 	 AF Dat  _ GPl         => stem + i+"м";
+ 	 AF (Prepos _) _ GPl   => stem + i+"х";
+
+ 	 AFShort (GSg Masc) => stem + case stress of {
+              EndStress => "ой";
+ 							StemStress => iAfter stem + "й" } ;
+ 	 AFShort (GSg Fem)  => stem + "ая";
+ 	 AFShort (GSg Neut) => stem + o+"е";
+ 	 AFShort GPl        => stem + i+"е";
+
+ 	 AdvF => stem + o
+      } } ;
+
+   oper aRegSoftFull : AdjType -> Str -> Adjective = \at, stem ->
+     { s = table {
+ 	 AF Nom _ (GSg Masc)               => stem + "ий" ;
+ 	 AF Nom _ (GSg Neut)               => stem + "ее";
+ 	 AF Gen _ (GSg (Masc|Neut))        => stem + "его";
+ 	 AF Dat _ (GSg (Masc|Neut))        => stem + "ему";
+ 	 AF Acc Inanimate (GSg Masc)       => stem + "ий";
+ 	 AF Acc Animate (GSg Masc)         => stem + "его";
+ 	 AF Acc _ (GSg Neut)               => stem + "ее";
+ 	 AF Inst _ (GSg (Masc|Neut))       => stem + "им";
+ 	 AF (Prepos _) _ (GSg (Masc|Neut)) => stem + "ем";
+
+ 	 AF Nom  _ (GSg Fem) => stem + "яя";
+ 	 AF Acc  _ (GSg Fem) => stem + "юю";
+ 	 AF _    _ (GSg Fem) => stem + "ей";
+
+ 	 AF Nom _ GPl          => stem + "ие";
+ 	 AF Acc  Inanimate GPl => stem + "ие";
+ 	 AF Acc  Animate GPl   => stem + "их";
+ 	 AF Gen  _ GPl         => stem + "их";
+ 	 AF Inst _ GPl         => stem + "ими";
+ 	 AF Dat  _ GPl         => stem + "им";
+ 	 AF (Prepos _) _ GPl   => stem + "их";
+
+ 	 AFShort (GSg Masc) => stem + "ий" ;
+ 	 AFShort (GSg Fem)  => stem + "яя";
+ 	 AFShort (GSg Neut) => stem + "ее";
+ 	 AFShort GPl        => stem + "ие";
+
+ 	 AdvF => stem + "е"
+      } } ;
 };

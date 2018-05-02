@@ -33,11 +33,15 @@ lin
   during_Prep  = { s = ["в течение"] ; c = Gen};
   either7or_DConj  = sd2 "либо" [", либо"]  ** {n = Sg} ;
 -- comma is not visible in GUI!
-  every_Det  = kazhdujDet ** {n = Sg ; g = PNoGen; c= Nom; size = nom} ; 
-  everybody_NP = mkNP Pl (UseN ((eEnd_Decl "вс")**{lock_N=<>})) ;
+  every_Det = {
+    s = \\c,a,g => kazhdujDet.s ! AF c a (gennum g Sg) ;
+    n = Sg ; g = PNoGen ; c = Nom ; size = nom} ;
+  everybody_NP = DetCN (DetQuant IndefArt NumPl) (UseN ((eEnd_Decl "вс")**{lock_N=<>})) ;
   everything_NP  = UsePron (pronVseInanimate ** {lock_Pron=<>}) ;
   everywhere_Adv = ss "везде" ;
-  few_Det = nemnogoSgDet **{lock_Det= <>; n= Sg; g = PNoGen; c = Nom; size = plg};
+  few_Det = {
+    s = \\c,a,g => nemnogoSgDet.s ! AF c a (gennum g Sg) ;
+    n = Sg ; g = PNoGen ; c = Nom ; size = plg} ;
 --- DEPREC  first_Ord = (uy_j_EndDecl  "перв" ) ** {lock_A = <>};  --AStaruyj 
   for_Prep = { s = "для" ; c = Gen };
   from_Prep  = { s = "от" ; c = Gen };
@@ -54,13 +58,17 @@ lin
   in_Prep = { s = "в" ; c = Prepos PrepVNa } ;
   it_Pron    = pronOno ;
   less_CAdv = {s="менее"; p=""} ;
-  many_Det  = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen; size = plg} ; 
+  many_Det  = {
+    s = \\c,a,g => mnogoSgDet.s ! AF c a (gennum g Sg) ;
+    n = Sg; g = (PGen Neut); c = Gen; size = plg} ; 
   more_CAdv = {s="более"; p=""} ;
   most_Predet   = bolshinstvoSgDet ** {n = Sg; g = (PGen Neut); c= Gen; size = plg} ; 
-  -- inanimate, Sg: "большинство телефонов безмолству-ет" 
+  -- inanimate, Sg: "большинство телефонов безмолвству-ет" 
 --  most8many_Det = bolshinstvoPlDet ** {n = Pl; g = (PGen Neut); c= Gen} ;  
   -- animate, Pl: "большинство учащихся хорошо подготовлен-ы"
- much_Det   = mnogoSgDet ** {n = Sg; g = (PGen Neut); c= Gen; size = plg} ; -- same as previous
+ much_Det = {
+    s = \\c,a,g => mnogoSgDet.s ! AF c a (gennum g Sg) ;
+    n = Sg ; g = (PGen Neut) ; c= Gen ; size = plg} ; -- same as previous
  must_VV  = verbDolzhen ;
  no_Utt  = ss ["Нет"] ;
  on_Prep = { s = "на" ; c = Prepos PrepVNa };
@@ -76,8 +84,12 @@ lin
   she_Pron   = pronOna ;
   so_AdA = ss "так";
   somebody_NP = UsePron (pronKtoTo** {lock_Pron = <>});
-  someSg_Det   = nekotorujDet ** {n = Sg; g = PNoGen; c= Nom; size = nom} ;
-  somePl_Det = nekotorujDet ** {n = Pl; g = PNoGen; c= Nom; size = nom} ;  
+  someSg_Det   = {
+    s = \\c,a,g => nekotorujDet.s ! AF c a (gennum g Sg) ;
+    n = Sg ; g = PNoGen ; c= Nom ; size = nom} ;
+  somePl_Det = {
+    s = \\c,a,g => nekotorujDet.s ! AF c a (gennum g Pl) ;
+    n = Pl ; g = PNoGen ; c= Nom ; size = nom} ;  
   something_NP  = UsePron (pronChtoTo** {lock_Pron=<> }) ;
   somewhere_Adv  = ss "где-нибудь" ;
   that_Quant   = totDet ** {n = Sg; g = PNoGen; c= Nom; size = nom} ;
@@ -107,7 +119,7 @@ lin
   whoPl_IP = pron2NounPhraseNum pronKto Animate Pl;
   whoSg_IP = pron2NounPhraseNum pronKto Animate Sg;
   why_IAdv  = ss "почему" ;
-  with_Prep  = { s = "с" ; c = Inst};
+  with_Prep  = {s = pre {#sconsonant => "со" ; ("щ"|"Щ") => "со" ; _ => "с"} ; c = Inst} ;
   without_Prep  = { s = "без" ; c = Gen};
   youPl_Pron  = pronVu Masc;
   yes_Utt  = ss ["Да"] ;
@@ -134,4 +146,9 @@ lin
 ---  AgentPrep = { s = "" ; c = Nom}; -- missing in Russian
 
   lin language_title_Utt = ss "Русский" ;
+  
+oper
+  sconsonant : pattern Str = #(("с"|"з"|"ж"|"ш"|"л"|"ль"|"р"|"м"|"в"|"С"|"З"|"Ж"|"Ш"|"Л"|"Ль"|"Р"|"М"|"В"|"ЛЬ") + 
+               ("б" | "в" | "г" | "д" | "ж" | "з" | "й" | "к" | "л" | "м" | "н" | "п" | "р" | "с" | "т" | "ф" | "х" | "ц" | "ч" | "ш" | "щ" |
+                "Б" | "В" | "Г" | "Д" | "Ж" | "З" | "Й" | "К" | "Л" | "М" | "Н" | "П" | "Р" | "С" | "Т" | "Ф" | "Х" | "Ц" | "Ч" | "Ш" | "Щ")) ;
 }
