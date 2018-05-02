@@ -161,7 +161,9 @@ oper
 -- In the worst case, two separate adjectives are given: 
 -- the positive ("bueno"), and the comparative ("mejor"). 
 
-    mkA : (bueno : A) -> (mejor : A) -> A -- special comparison (default with "mas")
+    mkA : (bueno : A) -> (mejor : A) -> A ; -- special comparison (default with "mas")
+
+    mkA : (blanco : A) -> (hueso : Str) -> A -- noninflecting component after the adjective
     } ;
 
 -- The functions above create postfix adjectives. To switch
@@ -505,6 +507,8 @@ oper
     mkA : (espanol,espanola : Str) -> A  = mk2A ;
     mkA : (solo,sola,solos,solas,solamente : Str) -> A = mk5A ;
     mkA : (bueno : A) -> (mejor : A) -> A = mkADeg ;
+    mkA : (blanco : A) -> (hueso : Str) -> A = \blanco,hueso -> blanco ** 
+      { s = \\x,y => blanco.s ! x ! y ++ hueso } ;
     } ;
 
   mk5A : (solo,sola,solos,solas,solamente : Str) -> A ;
