@@ -287,7 +287,8 @@ oper
 -- Fixing this would require changing the Degree type.
 param
   AdjForm = AF Case Animacy GenNum | AFShort GenNum | AdvF;
-
+  ShortFormPreference = PrefShort | PrefFull ;
+  
 oper
   Complement = {s : Str ; c : Case} ;
 
@@ -318,7 +319,7 @@ oper numAF: AdjForm -> Number = \af ->
    case af of { AdvF => Sg; AFShort gn => numGenNum gn; AF _ _  gn => (numGenNum gn) } ;
 
 oper genAF: AdjForm -> Gender = \af ->
-   case af of { AdvF => Neut; AFShort gn => genGNum gn; AF _ _  gn => (genGNum gn) } ;
+   case af of { AdvF => Neut; AFShort gn => genGNum gn; AF _ _  gn => genGNum gn } ;
 
 oper caseAF: AdjForm -> Case = \af ->
    case af of { AdvF => Nom; AFShort _ => Nom; AF c _ _ => c } ;

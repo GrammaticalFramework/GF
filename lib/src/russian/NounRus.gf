@@ -5,30 +5,31 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
   flags optimize=all_subs ; coding=utf8 ;
 
   lin
+  
     DetCN kazhduj okhotnik = {
       s = \\c => case kazhduj.size of {
 	nom =>
-              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g Sg) ++ 
-              okhotnik.s ! NF kazhduj.n (extCase c) nom  ;
+              kazhduj.s ! extCase c ! okhotnik.anim ! okhotnik.g ++ 
+              okhotnik.nounpart ! NF Sg (extCase c) nom ++ okhotnik.relcl ! kazhduj.n ! (extCase c) ;
 	nompl =>
-              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g Pl) ++ 
-              okhotnik.s ! NF kazhduj.n (extCase c) nompl  ;
+              kazhduj.s ! extCase c ! okhotnik.anim ! okhotnik.g ++ 
+              okhotnik.nounpart ! NF kazhduj.n (extCase c) nompl ++ okhotnik.relcl ! kazhduj.n ! (extCase c) ;
 	sgg =>
 	  case c of {
 	    PF Nom _ _ => 
-              kazhduj.s ! AF Nom okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
-              okhotnik.s ! NF Sg Gen sgg; 
+              kazhduj.s ! Nom ! okhotnik.anim ! okhotnik.g ++ 
+              okhotnik.nounpart ! NF Sg Gen sgg ++ okhotnik.relcl ! kazhduj.n ! (extCase c) ; 
 	    _ => 
-              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
-              okhotnik.s ! NF Pl (extCase c) sgg } ;
+              kazhduj.s ! extCase c ! okhotnik.anim ! okhotnik.g ++ 
+              okhotnik.nounpart ! NF Pl (extCase c) sgg ++ okhotnik.relcl ! kazhduj.n ! (extCase c)} ;
 	plg =>
 	  case c of {
 	    PF Nom _ _ => 
-              kazhduj.s ! AF Nom okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
-              okhotnik.s ! NF Pl Gen plg ; 
+              kazhduj.s ! Nom ! okhotnik.anim ! okhotnik.g ++ 
+              okhotnik.nounpart ! NF Pl Gen plg ++ okhotnik.relcl ! kazhduj.n ! (extCase c) ; 
 	    _ => 
-              kazhduj.s ! AF (extCase c) okhotnik.anim (gennum okhotnik.g kazhduj.n) ++ 
-              okhotnik.s ! NF Pl (extCase c) plg }
+              kazhduj.s ! extCase c ! okhotnik.anim ! okhotnik.g ++ 
+              okhotnik.nounpart ! NF Pl (extCase c) plg ++ okhotnik.relcl ! kazhduj.n ! (extCase c)}
 	  };
       n = kazhduj.n ; 
       p = P3 ;
@@ -79,7 +80,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
        g = Neut ; ----
        anim = Inanimate ;
      in {
-      s = \\c => kazhduj.s ! AF (extCase c) anim (gennum g kazhduj.n) ;
+      s = \\c => kazhduj.s ! extCase c ! anim ! g ;
       n = kazhduj.n ; 
       p = P3 ;
       pron = False;
@@ -87,21 +88,6 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       anim = anim 
     } ;
 
-    DetQuantOrd quant num ord = {
-      s =  \\af => quant.s !af ++ num.s ! (genAF af) ! (animAF af) ! (caseAF af)  ++ ord.s!af ; 
-      n = num.n ;
-      g = quant.g;
-      c = quant.c;
-      size = quant.size
-      } ;
-
-    DetQuant quant num = {
-      s =  \\af => quant.s !af ++ num.s ! (genAF af) ! (animAF af) ! (caseAF af);
-      n = num.n ;
-      g = quant.g;
-      c = quant.c;
-      size = num.size
-      } ;
 {-
     DetArtOrd quant num ord = {
       s =  \\af => quant.s !af ++ num.s! (caseAF af) ! (genAF af)  ++ ord.s!af ; 
@@ -117,10 +103,10 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       c = quant.c
       } ;
 -}
---    MassDet = {s = \\_=>[] ; c=Nom; g = PNoGen; n = Sg} ;
+--    MassDet = {s = \\_=>[] ; c = Nom; g = PNoGen; n = Sg} ;
 
     MassNP okhotnik = {
-      s = \\c => okhotnik.s ! NF Sg (extCase c) nom ; 
+      s = \\c => okhotnik.nounpart ! NF Sg (extCase c) nom ++ okhotnik.relcl ! Sg ! extCase c ; 
       n = Sg ; 
       p = P3 ;
       pron = False;
@@ -135,7 +121,7 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       n = Sg ; 
       p = P3 ;
       pron = False;
-      g = case kazhduj.g of { PNoGen => (PGen okhotnik.g); _ => kazhduj.g };
+      g = case kazhduj.g of { PNoGen => (PGen okhotnik.g); _ => kazhduj.g};
       anim = okhotnik.anim 
     } ;
 
@@ -152,10 +138,6 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -}
     PossPron p = {s = \\af => p.s ! mkPronForm (caseAF af) No (Poss (gennum (genAF af) (numAF af) )); c=Nom; g = PNoGen; size = nom} ;
 
-   NumCard c = c ;
-   NumSg = {s = \\_,_,_ => [] ; n = Sg ; size = nom} ;
-   NumPl = {s = \\_,_,_ => [] ; n = Pl ; size = nompl} ;
-
    OrdNumeral numeral = variants {} ; ---- TODO; needed to compile Constructors
    OrdDigits numeral = variants {} ; ---- TODO; needed to compile Constructors
 ----   OrdDigits TODO
@@ -166,13 +148,24 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 
     AdNum adn num = {s = \\c,a,n => adn.s ++ num.s!c!a!n ; n = num.n ; size = num.size} ;
 
-    OrdSuperl a = {s = a.s!Posit};
+    OrdSuperl a = {s = a.s ! Posit} ;
 
     DefArt = {s = \\_=>[] ; c=Nom; g = PNoGen; size = nom };
     IndefArt = { s = \\_=>[] ; c=Nom; g = PNoGen; size = nom };
+  
+  UseN noun = {
+    nounpart = \\nf => noun.s ! nf ;
+    relcl = \\n,c => "" ;
+    g = noun.g ; 
+    anim = noun.anim 
+    } ;
 
-  UseN noun = noun ;
-  UseN2 noun = noun ;
+  UseN2 noun = {
+    nounpart = noun.s ;
+    relcl = \\n,c => "" ;
+    g = noun.g ; 
+    anim = noun.anim 
+    } ;
 
 -- The application of a function gives, in the first place, a common noun:
 -- "ключ от дома". From this, other rules of the resource grammar 
@@ -183,11 +176,12 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- of the readings is meaningful.
 
   ComplN2 f x = {
-    s = \\nf => case x.pron of {
+    nounpart = \\nf => case x.pron of {
                   True => x.s ! (case nf of {NF n c size => mkPronForm c No (Poss (gennum f.g n))}) ++ f.s ! nf ;
                   False => f.s ! nf ++ f.c2.s ++ 
                            x.s ! (case nf of {NF n c size => mkPronForm f.c2.c Yes (Poss (gennum f.g n))})
-                };
+                } ;
+    relcl = \\n,c => "" ;
     g = f.g ;
     anim = f.anim
     } ;
@@ -224,9 +218,13 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- later, in the chapter on verbs.
 
   AdjCN ap cn = {
-    s = \\nf => ap.s ! case nf of {NF Sg Gen sgg => AF Nom cn.anim GPl ;
-                                   NF n c size => AF c cn.anim (gennum cn.g n)} ++ 
-                cn.s ! nf ;
+    nounpart = \\nf => case ap.p of {
+      False => ap.s ! case nf of {NF Sg Gen sgg => AF Nom cn.anim GPl ;
+                                  NF n c size => AF c cn.anim (gennum cn.g n)} ++ cn.nounpart ! nf ;
+      True => cn.nounpart ! nf ++ ap.s ! case nf of {NF Sg Gen sgg => AF Nom cn.anim GPl ;
+                                                     NF n c size => AF c cn.anim (gennum cn.g n)} 
+      } ;
+    relcl = cn.relcl ;
     g = cn.g ;
     anim = cn.anim
     } ;
@@ -236,7 +234,8 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- Semantics will have to make finer distinctions among adverbials.
 
   AdvCN cn adv = {
-    s = \\nf => cn.s ! nf ++ adv.s ;
+    nounpart = \\nf => cn.nounpart ! nf ++ adv.s ;
+    relcl = cn.relcl ;
     g = cn.g ;
     anim = cn.anim 
     } ;
@@ -245,20 +244,23 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
 -- first place as common nouns, so that one can also have "a suggestion that...".
 
   SentCN idea x = {
-    s = \\nf => idea.s ! nf ++ x.s ; 
+    nounpart = \\nf => idea.nounpart ! nf ; 
+    relcl = \\n,c => idea.relcl ! n ! c ++ x.s ;
     g = idea.g ;
     anim = idea.anim
     } ;
 
   RelCN idea x = {
-    s = \\nf => idea.s ! nf ++ case nf of {NF n c size => x.s ! (gennum idea.g n)!c!idea.anim} ; 
+    nounpart = \\nf => idea.nounpart ! nf; 
+    relcl = \\n,c => idea.relcl ! n ! c ++ x.s ! (gennum idea.g n)! c ! idea.anim ;
     g = idea.g ;
     anim = idea.anim
     } ;
-
+ 
   ---- AR 17/12/2008
   ApposCN cn s = {
-    s = \\nf => cn.s ! nf ++ s.s ! (case nf of {NF n c size => PF c No NonPoss}) ; 
+    nounpart = \\nf => cn.nounpart ! nf ++ s.s ! (case nf of {NF n c size => PF c No NonPoss}) ; 
+    relcl = cn.relcl ;
     g = cn.g ;
     anim = cn.anim
     } ;
@@ -273,6 +275,30 @@ concrete NounRus of Noun = CatRus ** open ResRus, Prelude, MorphoRus in {
       nComp = np.nComp
       } ;
 
+---- Liza Zimina 04/2018
+-- changed to make Ord agree in number with Num
 
+  DetQuantOrd quant num ord = { 
+    s =  \\c,a,gen => quant.s ! AF c a (gennum gen num.n) ++ num.s ! gen ! a ! c  ++ case num.n of {
+      Sg => ord.s ! AF c a (GSg gen) ; 
+      Pl => ord.s ! AF c a GPl 
+      } ;
+    n = num.n ;
+    g = quant.g;
+    c = quant.c;
+    size = quant.size
+    } ;
+
+  DetQuant quant num = {
+    s =  \\c,a,gen => quant.s ! AF c a (gennum gen num.n) ++ num.s ! gen ! a ! c ;
+    n = num.n ;
+    g = quant.g;
+    c = quant.c;
+    size = num.size
+    } ;
+    
+  NumCard c = c ;
+  NumSg = {s = \\_,_,_ => [] ; n = Sg ; size = nom} ;
+  NumPl = {s = \\_,_,_ => [] ; n = Pl ; size = nompl} ;
 }
 

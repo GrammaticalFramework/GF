@@ -8,9 +8,8 @@ concrete ChunkRus of Chunk = CatRus, ExtensionsRus [VPS,VPI] **
     ResRus, (P = ParadigmsRus) in {
 
 lin VPI_Chunk vpi = {s = vpi.s} ;
-
-lin CN_Pl_Chunk, CN_Pl_Gen_Chunk = \cn -> {s = cn.s ! NF Pl allCases allSizes} ;
-lin CN_Sg_Chunk, CN_Sg_Gen_Chunk = \cn -> {s = cn.s ! NF Sg allCases allSizes} ;
+lin CN_Pl_Chunk, CN_Pl_Gen_Chunk = \cn -> {s = cn.nounpart ! NF Pl allCases allSizes ++ cn.relcl ! Pl ! allCases} ;
+lin CN_Sg_Chunk, CN_Sg_Gen_Chunk = \cn -> {s = cn.nounpart ! NF Sg allCases allSizes ++ cn.relcl ! Sg ! allCases} ;
 lin Conj_Chunk c = {s = c.s1 | c.s2 };
 lin IP_Chunk ip = {s = ip.s ! (PF allCases allAfterPrep allPossessive)};
 lin Predet_Chunk predet = {s = predet.s ! AF allCases allAnimacy allGenNum};
@@ -54,4 +53,5 @@ oper
   allSizes   = nom | nompl | sgg | plg ;
   allAfterPrep = Yes | No ;
   allPossessive = NonPoss | Poss (GSg allGender | GPl) ;
+
 }

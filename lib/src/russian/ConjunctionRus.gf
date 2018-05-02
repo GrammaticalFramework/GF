@@ -15,9 +15,18 @@ concrete ConjunctionRus of Conjunction =
     conjunctDistrTable PronForm c xs ** {n = conjNumber c.n xs.n ; 
       p = xs.p ; pron = xs.pron ; anim = xs.anim ; 
        g = xs.g } ;
-
-
-    ConjAP c xs = conjunctDistrTable AdjForm c xs ** {p = xs.p} ;
+        
+    ConjAP or xs = 
+      {s = \\af => case af of  {
+        AF c a gn => or.s1++ xs.s1 ! AF c a gn ++ or.s2 ++ xs.s2 ! AF c a gn ;
+        AFShort gn => case xs.preferShort of {
+          PrefShort => or.s1++ xs.s1 ! AFShort gn ++ or.s2 ++ xs.s2 ! AFShort gn ;
+          _ => or.s1++ xs.s1 ! AF Nom Inanimate gn ++ or.s2 ++ xs.s2 ! AF Nom Inanimate gn} ;
+        AdvF => or.s1++ xs.s1 ! AdvF ++ or.s2 ++ xs.s2 ! AdvF 
+        } ;
+     p = xs.p ;
+     preferShort = xs.preferShort 
+      } ;
 
   ---- AR 17/12/2008
     ConjRS c xs = conjunctDistrTable3 GenNum Case Animacy c xs ** {p = xs.p} ;
@@ -36,10 +45,9 @@ concrete ConjunctionRus of Conjunction =
           anim = conjAnim x.anim xs.anim ;
           p = conjPerson xs.p x.p; pron = conjPron xs.pron x.pron} ;
       
-    ConsAP x xs = consTable AdjForm comma xs x ** {p = andB xs.p x.p} ;
+    ConsAP x xs = consTable AdjForm comma xs x ** {p = andB xs.p x.p ; preferShort = selectAPForm x.preferShort xs.preferShort} ;
 
-
-    BaseAP x y = twoTable AdjForm x y ** {p = andB x.p y.p} ;
+    BaseAP x y = twoTable AdjForm x y ** {p = andB x.p y.p ; preferShort = selectAPForm x.preferShort y.preferShort} ;
 
     BaseNP x y = twoTable PronForm x y ** {n = conjNumber x.n y.n ; 
        g = conjPGender x.g y.g ; p = conjPerson x.p y.p ;
@@ -49,8 +57,13 @@ concrete ConjunctionRus of Conjunction =
     BaseRS x y = twoTable3 GenNum Case Animacy x y ** {c = y.c} ;
     ConsRS xs x = consrTable3 GenNum Case Animacy comma xs x ** {c = xs.c} ;
 
-
-
+  oper
+    selectAPForm : ShortFormPreference -> ShortFormPreference -> ShortFormPreference = \sfp1,sfp2 -> 
+      case <sfp1,sfp2> of 
+        {<PrefShort, PrefShort> => PrefShort ; 
+         _ => PrefFull
+        } ;
+  
   lincat
     [S] = {s1,s2 : Str} ;
     [Adv] = {s1,s2 : Str} ;
@@ -60,7 +73,7 @@ concrete ConjunctionRus of Conjunction =
              anim : Animacy ; n : Number ; p : Person ;  pron : Bool } ;
  -- The structure is the same as for sentences. The result is a prefix adjective
  -- if and only if all elements are prefix.
-    [AP] =  {s1,s2 : AdjForm => Str ; p : Bool} ;
+    [AP] =  {s1,s2 : AdjForm => Str ; p : Bool ; preferShort : ShortFormPreference} ;
 
   ---- AR 17/12/2008
    [RS] = {s1,s2 : GenNum => Case => Animacy => Str} ;

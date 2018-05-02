@@ -15,27 +15,6 @@ lincat Sub1000000 = {s : Gender => Animacy => Case => Str ; size : Size} ;
 
 lin num x = {s = \\ g,a,c => x.s ! g ! a ! c; n = Pl ; size = x.size};
 
-lin n2  =
-  {s = table {unit => \\ g, a, c =>
-		case <c, g, a> of {
-		  <(Nom|Acc), Fem, Inanimate > => "две";
-		  <(Nom|Acc), _, Inanimate   > => "два";
-		  <Nom      , _, Animate     > => "два";
-		  <Acc      , _, Animate     > => "двух";
-		  <(Gen|Prepos _), _, _      > => "двух";
-		  <Dat, _, _                 > => "двум";
-		  <Inst, _, _                > => "двумя"
-		};
-              teen => nadsat "две" ;
-              ten  => n2030 "два" ;
-              hund => \\ g, a, c =>
-		case <c, g> of {
-		  <(Nom|Acc), _  >     => "двести";
-		  <Gen, _        >     => "двухсот";
-		  <Dat, _        >     => "двумстам";
-		  <Inst, _       >     => "двумяюстами";
-		  <Prepos _, _   >     => "двухстах"} } ;
-   size = sgg} ;
 lin n3  =
   {s = table {unit => tri ; 
               teen => nadsat "три" ;
@@ -195,6 +174,29 @@ lin pot01  =
 				 <Neut, _, Inst      > => "одним";
 				 <Neut, _, Prepos _  > => "одном"}}} ;
    size = nom} ;
+
+lin n2  =
+  {s = table {unit => \\ g, a, c =>
+		case <c, g, a> of {
+		  <(Nom|Acc), Fem, _ > => "две";
+		  <(Nom|Acc), (Masc|Neut), Inanimate   > => "два";
+		  <Nom, (Masc|Neut), Animate     > => "два";
+		  <Acc      , _, Animate     > => "двух";
+		  <(Gen|Prepos _), _, _      > => "двух";
+		  <Dat, _, _                 > => "двум";
+		  <Inst, _, _                > => "двумя"
+		};
+              teen => nadsat "две" ;
+              ten  => n2030 "два" ;
+              hund => \\ g, a, c =>
+		case <c, g> of {
+		  <(Nom|Acc), _  >     => "двести";
+		  <Gen, _        >     => "двухсот";
+		  <Dat, _        >     => "двумстам";
+		  <Inst, _       >     => "двумяюстами";
+		  <Prepos _, _   >     => "двухстах"} } ;
+   size = sgg} ;
+   
 lin pot0 d =
   {s = table {_ => d.s} ; size = d.size} ;
 lin pot110  =
