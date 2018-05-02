@@ -178,10 +178,9 @@ lin pot01  =
 lin n2  =
   {s = table {unit => \\ g, a, c =>
 		case <c, g, a> of {
-		  <(Nom|Acc), Fem, Inanimate > => "две";
-		  <(Nom|Acc), Masc, Inanimate   > => "два";
-      <(Nom|Acc), Neut, Inanimate   > => "два";
-		  <Nom      , _, Animate     > => "два";
+		  <(Nom|Acc), Fem, _ > => "две";
+		  <(Nom|Acc), (Masc|Neut), Inanimate   > => "два";
+		  <Nom, (Masc|Neut), Animate     > => "два";
 		  <Acc      , _, Animate     > => "двух";
 		  <(Gen|Prepos _), _, _      > => "двух";
 		  <Dat, _, _                 > => "двум";
