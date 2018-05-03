@@ -1,34 +1,35 @@
-DESCRIPTION
+![GF Logo](doc/Logos/gf1.svg)
 
-The Grammatical Framework (=GF) is a grammar formalism based on type theory. 
-It consists of
+# Grammatical Framework (GF)
 
-    * a special-purpose programming language
-    * a compiler of the language
-    * a generic grammar processor 
+[![Build Status](https://travis-ci.org/GrammaticalFramework/GF.svg?branch=master)](https://travis-ci.org/GrammaticalFramework/GF)
 
-The compiler reads GF grammars from user-provided files, and the 
+The Grammatical Framework is a grammar formalism based on type theory.
+It consists of:
+
+- a special-purpose programming language
+- a compiler of the language
+- a generic grammar processor
+
+The compiler reads GF grammars from user-provided files, and the
 generic grammar processor performs various tasks with the grammars:
 
-    * generation
-    * parsing
-    * translation
-    * type checking
-    * computation
-    * paraphrasing
-    * random generation
-    * syntax editing 
+- generation
+- parsing
+- translation
+- type checking
+- computation
+- paraphrasing
+- random generation
+- syntax editing
 
 GF particularly addresses four aspects of grammars:
 
-    * multilinguality (parallel grammars for different languages)
-    * semantics (semantic conditions of well-formedness, semantic 
-      properties of expressions) 
-    * grammar engineering (modularity, abstractions, libraries)
-    * embeddability in programs written in other languages (C,C++,
-      Haskell, Java, JavaScript)
-
+- multilinguality (parallel grammars for different languages)
+- semantics (semantic conditions of well-formedness, semantic properties of expressions)
+- grammar engineering (modularity, abstractions, libraries)
+- embeddability in programs written in other languages (C, C++, Haskell, Java, JavaScript)
 
 COMPILATION and INSTALLATION of source distribution:
-See download/index.html for installation instructions.
-(More details can be found in doc/gf-developers.html.)
+See [download/index.html](download/index.html) for installation instructions.
+More details can be found in [doc/gf-developers.html](doc/gf-developers.html).
