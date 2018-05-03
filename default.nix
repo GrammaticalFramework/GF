@@ -1,8 +1,8 @@
 { mkDerivation, alex, array, base, bytestring, Cabal, cgi
 , containers, directory, exceptions, filepath, happy, haskeline
-, HTF, httpd-shed, HUnit, json, lifted-base, mtl, network
-, network-uri, old-locale, parallel, pretty, process, random
-, stdenv, terminfo, time, time-compat, unix, utf8-string
+, HTF, httpd-shed, HUnit, json, mtl, network, network-uri
+, old-locale, parallel, pretty, process, random, stdenv, terminfo
+, time, time-compat, unix, utf8-string
 }:
 mkDerivation {
   pname = "gf";
@@ -18,7 +18,7 @@ mkDerivation {
     utf8-string
   ];
   libraryToolDepends = [ alex happy ];
-  executableHaskellDepends = [ base containers lifted-base mtl ];
+  executableHaskellDepends = [ base ];
   testHaskellDepends = [
     base Cabal directory filepath HTF HUnit process
   ];
