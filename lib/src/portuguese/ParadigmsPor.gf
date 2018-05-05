@@ -225,10 +225,12 @@ oper
 -- For regular adjectives, all forms are derived from the masculine
 -- singular. The types of adjectives that are recognized are "alto",
 -- "fuerte", "util". Comparison is formed by "mas".
-    mkA : (bobo : Str) -> A  = regA ; -- predictable adjective
+    mkA : (bobo : Str) -> A
+      = regA ; -- predictable adjective
 
 -- Some adjectives need the feminine form separately.
-    mkA : (espanhol,espanhola : Str) -> A  = mk2A ;
+    mkA : (espanhol,espanhola : Str) -> A
+      = mk2A ;
 
 -- One-place adjectives compared with "mais" need five forms in the
 -- worst case (masc and fem singular, masc plural, adverbial).
@@ -237,7 +239,11 @@ oper
 -- In the worst case, two separate adjectives are given: the positive
 -- ("bueno"), and the comparative ("mejor").
     -- special comparison with "mais" as default
-    mkA : (bom : A) -> (melhor : A) -> A = mkADeg ;
+    mkA : (bom : A) -> (melhor : A) -> A
+      = mkADeg ;
+
+    mkA : (blanco : A) -> (hueso : Str) -> A  -- noninflecting component after the adjective
+    = \blanco,hueso -> blanco ** {s = \\x,y => blanco.s ! x ! y ++ hueso } ;
     } ;
 
 -- The functions above create postfix adjectives. To switch them to
