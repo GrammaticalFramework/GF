@@ -168,6 +168,7 @@ fun weven_V : V ; -- to weave
 fun wijken_V : V ; -- to give way, to disappear
 fun wijten_V : V ; -- to blame (something) on
 fun wijzen_V : V ; -- to point
+fun willen_V : V ; -- to want
 fun winden_V : V ; -- to wind
 fun winnen_V : V ; -- to win
 fun worden_V : V ; -- to become

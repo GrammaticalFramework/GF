@@ -1,6 +1,6 @@
 concrete StructuralDut of Structural = CatDut, Prelude ** 
 
-  open ParadigmsDut, ResDut, (X = ConstructX) in
+  open ParadigmsDut, ResDut, (X = ConstructX), IrregDut in
 {
 
 
@@ -87,7 +87,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   to_Prep = mkPrep "naar" ;
   under_Prep = mkPrep "onder" ;
   very_AdA = ss "erg" ;
-  want_VV = auxVV (mkV "wil" "wilt" "wil" "willen" "wou" "wou" "wouden" "gewild") ;
+  want_VV = auxVV IrregDut.willen_V ;
 
   we_Pron = mkPronoun "we" "ons" "ons" "wij" "ons" "onze" "onze" Utr Pl P1 ;
 
