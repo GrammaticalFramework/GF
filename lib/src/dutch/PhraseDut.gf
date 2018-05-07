@@ -29,6 +29,6 @@ concrete PhraseDut of Phrase = CatDut ** open Prelude, ResDut in
     PConjConj conj = ss (conj.s2) ;
 
     NoVoc = {s = []} ;
-    VocNP np = {s = "," ++ np.s ! NPNom} ;
+    VocNP np = {s = bindComma ++ np.s ! NPNom} ;
 
 }

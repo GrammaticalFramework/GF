@@ -178,7 +178,7 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       } ;
 
     RelNP np rs = heavyNP {
-      s = \\c => np.s ! c ++ "," ++ rs.s ! np.a.g ! np.a.n ;
+      s = \\c => np.s ! c ++ embedInCommas (rs.s ! np.a.g ! np.a.n) ;
       a = np.a
       } ;
 

@@ -41,7 +41,7 @@ lin
   MkSymb s = s ;
 
   BaseSymb = infixSS "en" ;
-  ConsSymb = infixSS "," ;
+  ConsSymb = infixSS bindComma ;
 
 oper
   artDef : Number -> Gender -> Str = \n,g -> case <n,g> of {<Sg,Neutr> => "het" ; _ => "de"} ;

@@ -68,10 +68,10 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
       } ;
 
     AdvS a s = {s = \\o => a.s ++ s.s ! Inv} ;
-    ExtAdvS a s = {s = \\o => a.s ++ "," ++ s.s ! Inv} ;
+    ExtAdvS a s = {s = \\o => a.s ++ bindComma ++ s.s ! Inv} ;
 
-    RelS s r = {s = \\o => s.s ! o ++ "," ++ r.s ! Neutr ! Sg} ;
+    RelS s r = {s = \\o => s.s ! o ++ bindComma ++ r.s ! Neutr ! Sg} ;
 
-    SSubjS a s b = {s = \\o => a.s ! o ++ "," ++ s.s ++ b.s ! Sub} ;
+    SSubjS a s b = {s = \\o => a.s ! o ++ bindComma ++ s.s ++ b.s ! Sub} ;
 
 }
