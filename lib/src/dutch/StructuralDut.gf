@@ -92,7 +92,7 @@ concrete StructuralDut of Structural = CatDut, Prelude **
   we_Pron = mkPronoun "we" "ons" "ons" "wij" "ons" "onze" "onze" Utr Pl P1 ;
 
   whatSg_IP = {s = \\_ => "wat" ; n = Sg ; mergesWithPrep = True ; mergeForm = "waar"} ;
-  whatPl_IP = {s = \\_ => "wat" ; n = Pl ; mergesWithPrep = True ; mergeForm = "waar"} ;
+  whatPl_IP = {s = \\_ => "welke" ; n = Pl ; mergesWithPrep = True ; mergeForm = "waar"} ;
 
   when_IAdv = ss "wanneer" ;
   when_Subj = ss "als" ;

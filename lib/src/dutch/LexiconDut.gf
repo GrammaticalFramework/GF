@@ -16,7 +16,7 @@ lin
   ask_V2Q = mkV2Q vragen_V noPrep ;
   bad_A = mkA "slecht" ;
   beautiful_A = mkA "mooi" ;
-  become_VA = mkVA worden_V ;
+  become_VA = mkVA (zijnV worden_V) ;
   beer_N = mkN "bier" "bieren" neuter ;
   beg_V2V = mkV2V (mkV "smeken") noPrep ; ---- om te
   big_A = mkA "groot" ;

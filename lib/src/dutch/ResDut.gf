@@ -610,7 +610,7 @@ param
   -- To be used for ExtendDut.PastPartAP
   -- If we need more variants, extend mkClause'
   infClause : Str -> Agr -> VP -> AForm -> Clause = \subj,agr,vp,af ->
-    mkClause' subj agr vp af  Inf ;
+    mkClause' subj agr vp af Inf ;
 
   -- Added a possibility to choose a participle verb form.
   -- This is so far only used in ExtendDut.PastPartAP. /IL2018

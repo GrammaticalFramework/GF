@@ -49,10 +49,15 @@ concrete VerbDut of Verb = CatDut ** open Prelude, ResDut in {
           -- and choose its agreement based on the new object.
 	  -- Otherwise, keep the old VP.
 	  newVP : VP = case hasInf of {
-                         True  => let emptyObjVP : VP = vp ** {n0, n2 = \\_ => [] } ;
-                                      infCompl = vp.n0 ! np.a ++ vp.n2 ! np.a ;
-                                   in insertInf infCompl emptyObjVP ;
-                         _     => vp } ;
+                         True => let emptyObjVP : VP = vp ** {n0, n2 = \\_ => [] } ;
+                                     infCompl = vp.n0 ! np.a ++ vp.n2 ! np.a ;
+                                  in insertInf infCompl emptyObjVP ;
+                         _    => case hasPrep of {
+                                   True  => vp ;
+                                   False => vp ** { n0 = \\_ => vp.n0 ! np.a ;
+                                                    n2 = \\_ => vp.n2 ! np.a }
+                                   }
+                       } ;
 
        in insertArg newVP ;
 
