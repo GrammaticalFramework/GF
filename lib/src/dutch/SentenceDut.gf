@@ -12,11 +12,11 @@ concrete SentenceDut of Sentence = CatDut ** open ResDut, Prelude in {
       s = \\pol,im => 
         let 
           ps = case im of {
-            ImpF Pl _     => <VImpPl,[],Pl> ;
-            ImpF Sg True  => <VImp3,"u",Sg> ;
-            ImpF Sg False => <VImp2,[],Sg>
+            ImpF Pl _     => <VImp2,[],Pl,P2> ;
+            ImpF Sg True  => <VImp3,"u",Sg,P3> ;
+            ImpF Sg False => <VImp2,[],Sg,P2>
             } ;
-          agr  = {g = Utr ; n = ps.p3 ; p = P2} ; ---- P2? -- g does not matter
+          agr  = {g = Utr ; n = ps.p3 ; p = ps.p4 } ; -- g does not matter
           verb = vp.s.s ! ps.p1 ;
 	  part = vp.s.particle ++ vp.a2 ++ vp.s.prefix ; -- as in mkClause
           inf  = vp.inf.p1 ;
