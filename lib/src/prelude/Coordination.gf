@@ -132,7 +132,7 @@ oper
     {s = \\p,q,r,t => or.s1++ xs.s1 ! p ! q ! r ! t ++ or.s2 ++ xs.s2 ! p ! q ! r ! t} ;
 	--------------
 
-  comma = "," ;
+  comma = bindComma ;
 
 -- you can also do this to right-associative lists:
 
