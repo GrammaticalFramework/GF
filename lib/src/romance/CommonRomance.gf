@@ -24,8 +24,8 @@ param
 
   Direct = DDir | DInv ;
 
--- Adjectives are inflected in gender and number, and there is also an 
--- adverbial form (e.g. "infiniment"), which has different paradigms and 
+-- Adjectives are inflected in gender and number, and there is also an
+-- adverbial form (e.g. "infiniment"), which has different paradigms and
 -- can even be irregular ("bien").
 -- Comparative adjectives are moreover inflected in degree
 -- (which in Romance is usually syntactic, though).
@@ -61,18 +61,18 @@ oper
     AF g n => aagr g n ;
     _      => aagr Masc Sg -- "le plus lentement"
     } ;
-  
-  conjGender : Gender -> Gender -> Gender = \m,n -> 
+
+  conjGender : Gender -> Gender -> Gender = \m,n ->
     case m of {
       Fem => n ;
-      _ => Masc 
+      _ => Masc
       } ;
 
 
---3 Verbs 
+--3 Verbs
 --
--- In the current syntax, we use 
--- a reduced conjugation with only the present tense infinitive, 
+-- In the current syntax, we use
+-- a reduced conjugation with only the present tense infinitive,
 -- indicative, subjunctive, and imperative forms.
 -- But our morphology has full Bescherelle conjunctions:
 -- so we use a coercion between full and reduced verbs.
@@ -84,17 +84,17 @@ oper
 -- For Italian contracted forms, $VInfin$ should have
 -- an alternative form, whose proper place is $Diff$.
 
-param 
+param
   VF =
      VInfin Bool
-   | VFin   TMood Number Person 
-   | VImper NumPersI 
-   | VPart  Gender Number 
+   | VFin   TMood Number Person
+   | VImper NumPersI
+   | VPart  Gender Number
    | VGer
    | VPresPart  --- = VGer except in Italian
    ;
 
-  TMood = 
+  TMood =
      VPres  Mood
    | VImperf Mood   --# notpresent
    | VPasse  --# notpresent
@@ -111,7 +111,7 @@ param
    | VPInfinit Anteriority Bool ;
 
   RTense =
-     RPres 
+     RPres
    | RPast   --# notpresent
    | RPasse  --# notpresent
    | RFut    --# notpresent
@@ -129,7 +129,7 @@ oper
 
   verbAgr : Agr -> {g : Gender ; n : Number ; p : Person} = \a -> a ;
 
-  conjAgr : Agr -> Agr -> Agr = \a,b -> 
+  conjAgr : Agr -> Agr -> Agr = \a,b ->
     {g = conjGender a.g b.g ; n = conjNumber a.n b.n ; p = conjPerson a.p b.p} ;
 
   Ag : Gender -> Number -> Person -> Agr = \g,n,p -> {g = g ; n = n ; p = p} ;
@@ -137,11 +137,11 @@ oper
 -- The imperative forms depend on number and person.
 
   vImper : Number -> Person -> VF = \n,p -> case <n,p> of {
-    <Sg,P2> => VImper SgP2 ; 
-    <Pl,P1> => VImper PlP1 ; 
+    <Sg,P2> => VImper SgP2 ;
+    <Pl,P1> => VImper PlP1 ;
     <Pl,P2> => VImper PlP2 ;
     _       => VFin (VPres Conjunct) n p
-    } ; 
+    } ;
 
 {-
 param
@@ -201,9 +201,14 @@ oper
   oper
     genForms : Str -> Str -> Gender => Str = \bon,bonne ->
       table {
-        Masc => bon ; 
+        Masc => bon ;
         Fem => bonne
-        } ; 
+      } ;
+
+    -- The following macro is useful for creating the forms of
+    -- number-dependent tables, such as common nouns.
+    numForms : (_,_ : Str) -> Number => Str = \campus, campi ->
+      table {Sg => campus ; Pl => campi} ;
 
     aagrForms : (x1,_,_,x4 : Str) -> (AAgr => Str) = \tout,toute,tous,toutes ->
       table {
@@ -215,7 +220,7 @@ oper
 
     Adj = {s : AForm => Str} ;
 
-    appVPAgr : VPAgr -> AAgr -> AAgr = \vp,agr -> 
+    appVPAgr : VPAgr -> AAgr -> AAgr = \vp,agr ->
       case vp of {
         VPAgrSubj     => agr ;
         VPAgrClit g n => {g = g ; n = n}
@@ -232,13 +237,12 @@ oper
     bindIf : Bool -> Str = \b -> if_then_Str b BIND [] ;
 
   param
-    VPAgr = 
+    VPAgr =
        VPAgrSubj                    -- elle est partie, elle s'est vue
      | VPAgrClit Gender Number ;    -- elle a dormi; elle les a vues
 
 -- Polarity: three values (Fre positive,ne-pas,ne), presence of polarity element line "aucun"
 
-  param RPolarity = RPos | RNeg Bool ; -- RNeg True = "ne", RNeg False = "ne - pas" 
+  param RPolarity = RPos | RNeg Bool ; -- RNeg True = "ne", RNeg False = "ne - pas"
 
 }
-

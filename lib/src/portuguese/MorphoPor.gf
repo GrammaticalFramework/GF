@@ -19,9 +19,6 @@ resource MorphoPor = CommonRomance, ResPor **
 -- number-dependent tables, such as common nouns.
 
 oper
-  numForms : (_,_ : Str) -> Number => Str = \campus, campi ->
-    table {Sg => campus ; Pl => campi} ;
-
 -- For example:
   nomVinho : Str -> Number => Str = \vinho ->
     numForms vinho (vinho + "s") ;

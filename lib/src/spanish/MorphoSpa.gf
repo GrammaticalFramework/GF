@@ -8,7 +8,7 @@
 -- syntax. To build a lexicon, it is better to use $ParadigmsSpa$, which
 -- gives a higher-level access to this module.
 
-resource MorphoSpa = CommonRomance, ResSpa ** 
+resource MorphoSpa = CommonRomance, ResSpa **
   open PhonoSpa, Prelude, Predef,
   CatSpa in {
 
@@ -17,20 +17,12 @@ resource MorphoSpa = CommonRomance, ResSpa **
 
 
 --2 Nouns
---
--- The following macro is useful for creating the forms of number-dependent
--- tables, such as common nouns.
 
 oper
-  numForms : (_,_ : Str) -> Number => Str = \vino, vini ->
-    table {Sg => vino ; Pl => vini} ; 
-
--- For example:
-
-  nomVino : Str -> Number => Str = \vino -> 
+  nomVino : Str -> Number => Str = \vino ->
     numForms vino (vino + "s") ;
 
-  nomPilar : Str -> Number => Str = \pilar -> 
+  nomPilar : Str -> Number => Str = \pilar ->
     numForms pilar (pilar + "es") ;
 
   nomTram : Str -> Number => Str = \tram ->
@@ -38,10 +30,10 @@ oper
 
 -- Common nouns are inflected in number and have an inherent gender.
 
-  mkNoun : (Number => Str) -> Gender -> Noun = \mecmecs,gen -> 
+  mkNoun : (Number => Str) -> Gender -> Noun = \mecmecs,gen ->
     {s = mecmecs ; g = gen} ;
 
-  mkNounIrreg : Str -> Str -> Gender -> Noun = \mec,mecs -> 
+  mkNounIrreg : Str -> Str -> Gender -> Noun = \mec,mecs ->
     mkNoun (numForms mec mecs) ;
 
   mkNomReg : Str -> Noun = \mec ->
@@ -75,15 +67,15 @@ oper
 
 -- Then the regular and invariant patterns.
 
-  adjSolo : Str -> Adj = \solo -> 
-    let 
+  adjSolo : Str -> Adj = \solo ->
+    let
       sol = Predef.tk 1 solo
     in
     mkAdj solo (sol + "a") (sol + "os") (sol + "as") (sol + "amente") ;
 
-  -- masculine and feminine are identical: 
+  -- masculine and feminine are identical:
   -- adjectives ending with -e, -a and many but not all that end in a consonant
-  adjUtil : Str -> Str -> Adj = \util,utiles -> 
+  adjUtil : Str -> Str -> Adj = \util,utiles ->
     mkAdj util util utiles utiles (util + "mente") ;
 
   -- adjectives that end in consonant but have different masc and fem forms
@@ -91,15 +83,15 @@ oper
   adjEspanol : Str -> Str -> Adj = \espanol,espanola ->
     mkAdj espanol espanola (espanol + "es") (espanol + "as") (espanola + "mente") ;
 
-  adjBlu : Str -> Adj = \blu -> 
-    mkAdj blu blu blu blu blu ; --- 
+  adjBlu : Str -> Adj = \blu ->
+    mkAdj blu blu blu blu blu ; ---
 
  -- francés francesa franceses francesas
   adjEs : Str -> Adj = \francEs ->
     let franc  : Str = Predef.tk 2 francEs ;
         frances : Str = franc + "es" ;
     in mkAdj francEs (frances + "a") (frances + "es") (frances + "as") (frances + "amente") ;
- 
+
 
    -- alemán alemana alemanes alemanas
   adjVn : Str -> Adj = \alemAn ->
@@ -117,7 +109,7 @@ oper
     in mkAdj alemAn (alemVn + "a") (alemVn + "es")
             (alemVn + "as") (alemVn + "amente") ;
 
-  mkAdjReg : Str -> Adj = \solo -> 
+  mkAdjReg : Str -> Adj = \solo ->
     case solo of {
       _ + "o" => adjSolo solo ;
       _ + ("e" | "a") => adjUtil solo (solo + "s") ;
@@ -132,7 +124,7 @@ oper
 -- The use of "ne" as atonic genitive is debatable.
 -- We follow the rule that the atonic nominative is empty.
 
-  mkPronoun : (_,_,_,_,_,_,_,_ : Str) -> 
+  mkPronoun : (_,_,_,_,_,_,_,_ : Str) ->
               Gender -> Number -> Person -> Pronoun =
     \il,le,lui,Lui,son,sa,ses,see,g,n,p ->
     let
@@ -148,7 +140,7 @@ oper
        <Sg,Masc> => son ;
        <Sg,Fem>  => sa ;
        <Pl,Masc> => ses ;
-       <Pl,Fem>  => see 
+       <Pl,Fem>  => see
        } ;
 
     a = Ag g n p ;
@@ -169,7 +161,7 @@ oper
     } ;
 
   mkQuantifier : (ese,esa,esos,esas : Str) -> Quant = \ese,esa,esos,esas->
-    let 
+    let
       se  : Str = Predef.drop 1 ese ;
       sa  : Str = Predef.drop 1 esa ;
       sos : Str = Predef.drop 1 esos ;
@@ -177,7 +169,7 @@ oper
       E   : Str = "é" ;
       attrforms : Number => Gender => Case => Str = table {
         Sg => \\g,c => prepCase c ++ genForms ese esa ! g ;
-        Pl => \\g,c => prepCase c ++ genForms esos esas ! g ---- 
+        Pl => \\g,c => prepCase c ++ genForms esos esas ! g ----
         } ;
       npforms : Number => Gender => Case => Str = table {
         Sg => \\g,c => prepCase c ++ genForms (E + se)  (E + sa)  ! g ;
@@ -195,7 +187,7 @@ oper
       s2 = [] ;
       isNeg = neg
       } ;
-      
+
    mkIDet : (cuantos, cuantas : Str) -> Number -> IDet = \cuantos,cuantas,number ->
      lin IDet {
        s = \\g,c => prepCase c ++ genForms cuantos cuantas ! g ;
