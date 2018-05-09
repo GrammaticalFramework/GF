@@ -18,15 +18,7 @@ resource MorphoIta = CommonRomance, ResIta **
 
 --2 Nouns
 --
--- The following macro is useful for creating the forms of number-dependent
--- tables, such as common nouns.
-
 oper
-  numForms : (_,_ : Str) -> Number => Str = \vino, vini ->
-    table {Sg => vino ; Pl => vini} ;
-
--- For example:
-
   nomVino : Str -> Number => Str = \vino -> let {vin = Predef.tk 1 vino} in
     numForms vino (vin + "i") ;
 
