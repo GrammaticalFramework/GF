@@ -8,7 +8,7 @@
 -- syntax. To build a lexicon, it is better to use $ParadigmsFre$, which
 -- gives a higher-level access to this module.
 
-resource MorphoFre = CommonRomance, ResFre ** 
+resource MorphoFre = CommonRomance, ResFre **
   open PhonoFre, Prelude, Predef in {
 
 flags optimize=noexpand ;
@@ -24,41 +24,34 @@ oper
 
 
 --2 Nouns
---
--- The following macro is useful for creating the forms of number-dependent
--- tables, such as common nouns.
 
-  numForms : Str -> Str -> Number => Str = \bon,bons ->
-    table {Sg => bon ; Pl => bons} ; 
-
--- For example, the regular noun forms are defined as follows:
-
+-- regular noun forms are defined as follows:
   nomReg : Str -> Number => Str = \bu -> numForms bu (bu + "s") ;
 
 -- Common nouns are inflected in number and have an inherent gender.
 
   CNom = {s : Number => Str ; g : Gender} ;
 
-  mkCNom : (Number => Str) -> Gender -> CNom = \mecmecs,gen -> 
+  mkCNom : (Number => Str) -> Gender -> CNom = \mecmecs,gen ->
     {s = mecmecs ; g = gen} ;
 
-  mkCNomIrreg : Str -> Str -> Gender -> CNom = \mec,mecs -> 
+  mkCNomIrreg : Str -> Str -> Gender -> CNom = \mec,mecs ->
     mkCNom (numForms mec mecs) ;
 
-  mkCNomReg : Str -> Gender -> CNom = \mec -> 
+  mkCNomReg : Str -> Gender -> CNom = \mec ->
     mkCNom (nomReg mec) ;
 
-  mkCNomNiveau : Str -> Gender -> CNom = \niveau -> 
+  mkCNomNiveau : Str -> Gender -> CNom = \niveau ->
     mkCNomIrreg niveau (niveau + "x") ;
 
-  mkCNomCheval : Str -> Gender -> CNom = \cheval -> 
-    let {cheva = Predef.tk 1 cheval} in 
+  mkCNomCheval : Str -> Gender -> CNom = \cheval ->
+    let {cheva = Predef.tk 1 cheval} in
     mkCNomIrreg cheval (cheva + "ux") ;
 
-  mkCNomInvar : Str -> Gender -> CNom = \cas -> 
+  mkCNomInvar : Str -> Gender -> CNom = \cas ->
     mkCNomIrreg cas cas ;
 
-  mkNomReg : Str -> Gender -> CNom = \cas -> 
+  mkNomReg : Str -> Gender -> CNom = \cas ->
     let cass = case Predef.dp 2 cas of {
       "al" => init cas + "ux" ;
       "au" => cas + "x" ;
@@ -72,7 +65,7 @@ oper
       }
     }
     in mkCNomIrreg cas cass ;
-      
+
 
 --2 Adjectives
 --
@@ -97,12 +90,12 @@ oper
       })
     } ;
 
-  adjInvar : Str -> Gender => Number => Str = \bien -> 
+  adjInvar : Str -> Gender => Number => Str = \bien ->
     \\_,_ => bien ;
 
 -- Adjectives themselves are records. Here the most common cases:
 
-  adjGrand : Str -> Adj = \grand -> 
+  adjGrand : Str -> Adj = \grand ->
     let grande = case last grand of {
       "e" => grand ;
       _ => grand + "e"
@@ -112,32 +105,32 @@ oper
 
 -- Masculine form used for adverbial; also covers "carré".
 
-  adjJoli : Str -> Adj = \joli -> 
+  adjJoli : Str -> Adj = \joli ->
     mkAdj joli (joli + "s") (joli + "e") (joli + "ment") ;
 
   adjHeureux : Str -> Adj = \heureux ->
-    let {heureu = Predef.tk 1 heureux} in 
+    let {heureu = Predef.tk 1 heureux} in
     mkAdj heureux heureux (heureu+"se") (heureu+"sement") ;
 
   adjBanal : Str -> Adj = \banal ->
-    let {bana = Predef.tk 1 banal} in 
+    let {bana = Predef.tk 1 banal} in
     mkAdj banal (bana + "ux") (banal+"e") (banal+"ement") ;
 
-  adjJeune : Str -> Adj = \jeune -> 
+  adjJeune : Str -> Adj = \jeune ->
     mkAdj jeune (jeune+"s") jeune (jeune+"ment") ;
 
-  adjIndien : Str -> Adj = \indien -> 
+  adjIndien : Str -> Adj = \indien ->
     mkAdj indien (indien+"s") (indien+"ne") (indien+"nement") ;
-    
-  adjTel : Str -> Adj = \tel -> 
+
+  adjTel : Str -> Adj = \tel ->
     mkAdj tel (tel+"s") (tel+"le") (tel+"lement") ;
 
-  adjFrancais : Str -> Adj = \francais -> 
+  adjFrancais : Str -> Adj = \francais ->
     mkAdj francais francais (francais+"e") (francais+"ement") ;
 
   adjCher : Str -> Adj = \cher ->
     let {ch = Predef.tk 2 cher} in
-    mkAdj cher (cher + "s") (ch + "ère") (ch + "èrement") ; 
+    mkAdj cher (cher + "s") (ch + "ère") (ch + "èrement") ;
 
   adjPublic : Str -> Adj = \public ->
     let publique = init public + "que" in
@@ -175,7 +168,7 @@ oper
 -- All the eight personal pronouns can be built by the following macro.
 -- The use of "en" as atonic genitive is debatable.
 
-  mkPronoun : (_,_,_,_,_,_,_ : Str) -> 
+  mkPronoun : (_,_,_,_,_,_,_ : Str) ->
               Gender -> Number -> Person -> Pronoun =
     \il,le,lui,Lui,son,sa,ses,g,n,p ->
     let
@@ -238,8 +231,8 @@ param
   TSubj    = SPres | SImparf ;
   TPart    = PPres | PPasse Gender Number ;
   VForm    = Inf
-           | Indi Temps Number Person 
-           | Condi Number Person 
+           | Indi Temps Number Person
+           | Condi Number Person
            | Subjo TSubj Number Person
            | Imper NumPersI
            | Part TPart ;
@@ -247,13 +240,13 @@ param
 -- This is a conversion to the type in $CommonRomance$.
 
 oper
-  vvf : (VForm => Str) -> (VF => Str) = \aller -> table { 
+  vvf : (VForm => Str) -> (VF => Str) = \aller -> table {
     VInfin True => case last (aller ! Indi Presn Sg P3) of {  --- terrible hack to store the binding here... 30/11/2014
       "a" | "e" => bindHyphensT ; -- parle-t-il, va-t-il
       _ => bindHyphen  -- prend-il
       } ;
     VInfin False => aller ! Inf ;
-    VFin (VPres   Indic) n p => aller ! Indi Presn n p ; 
+    VFin (VPres   Indic) n p => aller ! Indi Presn n p ;
     VFin (VPres   Subjunct) n p => aller ! Subjo SPres n p ;
     VFin (VImperf Indic) n p => aller ! Indi Imparf n p ;     --# notpresent
     VFin (VImperf Subjunct) n p => aller ! Subjo SImparf n p ;  --# notpresent
@@ -269,10 +262,10 @@ oper
 
 -- the worst case
 
-  mkVerb12 : 
+  mkVerb12 :
     (tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu : Str) -> Verbe =
-    \tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu -> 
-    let 
+    \tenir,tiens,tient,tenons,tenez,tiennent,tienne,tenions,tiensI,tint,tiendra,tenu ->
+    let
       tiens2 : Str = case tiens of {
         _ + "e" => tiens + "s" ;
         _       => tiens
@@ -317,7 +310,7 @@ oper
       } ;
 
   mkVerb7 : (tenir,tiens,tenons,tiennent,tint,tiendra,tenu : Str) -> Verbe =
-    \tenir,tiens,tenons,tiennent,tint,tiendra,tenu -> 
+    \tenir,tiens,tenons,tiennent,tint,tiendra,tenu ->
     let
       tient : Str = case tiens of {
         _ + "e"                  => tiens ;
@@ -389,12 +382,12 @@ oper
         }
       } ;
 
-  affixPlMes : (_,_ : Str) -> Affixe = 
+  affixPlMes : (_,_ : Str) -> Affixe =
      \è, â -> lesAffixes (â + "mes") (â + "tes") (è + "rent") ;
 
   affixPasseAi : Number => Affixe = table {
       Sg => affixSgAi ;
-      Pl => affixPlMes "è" "â" 
+      Pl => affixPlMes "è" "â"
       } ;
 
   affixPasseS : (i,î : Str) -> Number => Affixe = \i,î -> table {
@@ -421,13 +414,13 @@ oper
 
   affixPasseU : AffixPasse = affixPasse "u" "û" ;
 
-  affixPasseNonExist : AffixPasse = 
-    let {aff : Number => Affixe = 
+  affixPasseNonExist : AffixPasse =
+    let {aff : Number => Affixe =
                  table {_ => lesAffixes nonExist nonExist nonExist}} in
       {ps = aff ; si = aff} ;
 
   affixImper : NumPersI => Str = table {
-     SgP2 => "e" ; 
+     SgP2 => "e" ;
      PlP1 => "ons" ;
      PlP2 => "ez"
      } ;
@@ -437,7 +430,7 @@ oper
        Pl => table {
          P3 => v + "ont" ;
          p  => all + affixPlOns ! p
-         } 
+         }
        } ;
 
 }
