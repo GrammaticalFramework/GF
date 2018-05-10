@@ -3,28 +3,22 @@
 --1 A Simple Catalan Resource Morphology
 --
 -- Aarne Ranta 2002 -- 2005
--- Jordi Saludes 2008: Derived from MorphoSpa. 
+-- Jordi Saludes 2008: Derived from MorphoSpa.
 -- Inari Listenmaa 2012: Added smart paradigms for adjectives.
 --
 -- This resource morphology contains definitions needed in the resource
 -- syntax. To build a lexicon, it is better to use $ParadigmsCat$, which
 -- gives a higher-level access to this module.
 
-resource MorphoCat = CommonRomance, ResCat ** 
+resource MorphoCat = CommonRomance, ResCat **
   open PhonoCat, Prelude, Predef in {
 
   flags optimize=all ; coding=utf8 ;
 
 --2 Nouns
 --
--- The following macro is useful for creating the forms of number-dependent
--- tables, such as common nouns.
--- gcc M2.3
 oper
-  numForms : (_,_ : Str) -> Number => Str = \vi, vins ->
-    table {Sg => vi ; Pl => vins} ; 
-
-  nomCep : Str -> Number => Str = \cep -> 
+  nomCep : Str -> Number => Str = \cep ->
     numForms cep (cep + "s") ;
 
   nomVaca : Str -> Number => Str = \vaca ->
@@ -41,12 +35,12 @@ oper
 
   nomFre : Str -> Number => Str = \fre ->
           numForms fre (fre + "ns") ;
-        
+
   nomCas : Str -> Number => Str = \cas ->
         numForms cas (cas + "os") ;
-        
+
   nomTest : Str -> Number => Str = \test ->
-          numForms test (variants {test + "s"; test + "os"}) ; 
+          numForms test (variants {test + "s"; test + "os"}) ;
 
   nomLlengua: Str -> Number => Str = \llengua ->
         let
@@ -59,22 +53,22 @@ oper
                 fa = Predef.tk 2 faig
         in
         numForms faig (variants {fa + "jos" ; faig + "s"}) ;
-        
+
   nomDesig : Str -> Number => Str = \desig ->
-        let 
+        let
                 desi = Predef.tk 1 desig
         in
         numForms desig (variants {desi + "tjos" ; desi + "gs"}) ;
-        
+
   nomTemps : Str -> Number => Str = \temps ->
         numForms temps temps ;
 
 -- Common nouns are inflected in number and have an inherent gender.
 
-  mkNoun : (Number => Str) -> Gender -> Noun = \noinois,gen -> 
+  mkNoun : (Number => Str) -> Gender -> Noun = \noinois,gen ->
     {s = noinois ; g = gen} ;
 
-  mkNounIrreg : Str -> Str -> Gender -> Noun = \vi,vins -> 
+  mkNounIrreg : Str -> Str -> Gender -> Noun = \vi,vins ->
     mkNoun (numForms vi vins) ;
 
   mkNomReg : Str -> Noun = \noi ->
@@ -110,18 +104,18 @@ oper
 
 --- Then the regular and invariant patterns.
 
-  adjPrim : Str -> Adj = \prim -> 
+  adjPrim : Str -> Adj = \prim ->
     mkAdj prim (prim + "a") (prim + "s") (prim + "es") (prim + "ament") ;
 
   adjBlau : Str -> Str -> Adj = \blau,blava ->
     let blav = Predef.tk 1 blava
     in  mkAdj blau blava (blau + "s") (blav + "es")
              (blava + "ment") ;
-        
+
   adjFondo : Str -> Adj = \fondo ->
     let fond = Predef.tk 1 fondo
     in  adjBlau fondo (fond + "a") ;
-        
+
   adjBo : Str -> Adj = \bo ->
     mkAdj bo (bo + "na") (bo + "ns") (bo + "nes") (bo + "nament") ;
 
@@ -129,10 +123,10 @@ oper
     let fidels : Str = case (last fidel) of {
       _ + ("s"|"ç"|"x") => fidel + "os" ; --feliç; capaç
       _ => fidel + "s"
-    } ; 
-    in  mkAdj fidel fidel fidels fidels 
+    } ;
+    in  mkAdj fidel fidel fidels fidels
              (fidel + "ment") ;
-          
+
   --boig, boja, bojos, boges
   --lleig, lletja, lletjos, lletges
   adjIg : Str -> Str -> Adj = \boig,boja ->
@@ -140,7 +134,7 @@ oper
         llet : Str = tk 1 boj
     in  mkAdj boig (boj + "a") (boj + "os") (llet + "ges")
              (boj + "ament") ;
-            
+
   --públic pública públics públiques
   --llarg llarga llargs llargues
   adjXc : Str -> Adj = \blanc ->
@@ -156,19 +150,19 @@ oper
   --sibilant endings
   adjXs : Str -> Str -> Adj = \famos,famosa ->
     let russ : Str = tk 1 famosa ;
-    in  mkAdj famos famosa (russ + "os") (russ + "es") 
+    in  mkAdj famos famosa (russ + "os") (russ + "es")
              (russ + "ament") ;
 
   -- català catalana catalans catalanes
   adjVn : Str -> Adj = \catalA ->
     let catal : Str = init catalA ;
-        v : Str = unaccent (last catalA) ; 
+        v : Str = unaccent (last catalA) ;
         catalVn : Str = catal + v + "n" ;
-    in mkAdj catalA (catalVn + "a") 
+    in mkAdj catalA (catalVn + "a")
             (catalVn + "s") (catalVn + "es")
             (catalVn + "ament") ;
-            
-  --casat casada ; groc groga  
+
+  --casat casada ; groc groga
   adjCasat : Str -> Adj = \casat ->
     let casa : Str = init casat ;
         casad : Str = case last casat of {
@@ -178,9 +172,9 @@ oper
         grogu : Str = case last casad of {
           "g" => casa + "gu" ;
           _   => casad
-        } ; 
+        } ;
     in mkAdj casat (casad + "a")
-             (casat + "s") (grogu + "es") 
+             (casat + "s") (grogu + "es")
              (casad + "ament") ;
 
   -- francès francesa francesos franceses
@@ -188,18 +182,18 @@ oper
     let franc  : Str = tk 2 francEs ;
         e : Str = last (tk 1 francEs) ;
         v : Str = unaccent e ;
-        francVs : Str = franc + v + "s" 
-    in mkAdj francEs (francVs + "a") 
+        francVs : Str = franc + v + "s"
+    in mkAdj francEs (francVs + "a")
             (francVs + "os") (francVs + "es")
             (francVs + "ament") ;
-            
+
   --europeu europea europeus europees
   adjEuropeu : Str -> Adj = \europeu ->
     let europe : Str = tk 1 europeu ;
     in  mkAdj europeu (europe + "a")
              (europeu + "s") (europe + "es")
              (europe + "ament") ;
-             
+
   --belga belga belgues belgues
   adjBelga : Str -> Adj = \belga ->
     let belg : Str = init belga ;
@@ -207,10 +201,10 @@ oper
           ("g"|"c") => belg + "u" ;
            _        => belg
         } ;
-        belgues : Str = belgu + "es" 
+        belgues : Str = belgu + "es"
     in  mkAdj belga belga belgues belgues (belga + "ment") ;
-  
-  
+
+
   mkAdjReg : Str -> Adj = \prim ->
     case prim of {
         _ + "ll"             => adjPrim prim ; --vell~vella
@@ -219,20 +213,20 @@ oper
         _ + "a"              => adjBelga prim ; --invariable, -es in plural
         _ + ("eu")           => adjFidel prim ; --greu; breu. most "eu" are invariable, europeu and jueu with mk2A.
         _ + ("au"|"ou"|"iu") => adjBlau prim (tk 1 prim + "va"); --blau; nou; viu
-        _ + ("e"|"o")        => adjFondo prim ; 
+        _ + ("e"|"o")        => adjFondo prim ;
         _ + "ig"             => adjIg prim (tk 2 prim + "ja") ; --boig~boja. lleig~lletja with mk2A.
         _ + ("c"|"g")        => adjXc prim ; --públic; llarg. cec~cega with mk2A
         _ + ("n"|"l"|"r"|"s") + "t" => adjPrim prim ; --mort,llest,distint
-        _ + "t"              => adjCasat prim ; --tancat~tancada. petit~petita with mk2A. 
+        _ + "t"              => adjCasat prim ; --tancat~tancada. petit~petita with mk2A.
         _ + ("à"|"é"|"è"|"í"|"ó"|"ò"|"ú") => adjVn prim ; --comú~comuna
         _ + ("à"|"é"|"è"|"í"|"ó"|"ò"|"ú") + "s" => adjFrances prim ;
         _ + ("s"|"x")        => adjXs prim (prim + "a") ; --divers~diversa
-        _                    => adjPrim prim  
+        _                    => adjPrim prim
         } ;
 
   --Used for the following:
   --diferent diferent : doesn't end in l/n/ç/eu but has invariant feminine
-  --petit petita petits petites : voiceless plosive in the stem. 
+  --petit petita petits petites : voiceless plosive in the stem.
   --ridícul ridícula : ends in l/n/ç but is not invariant.
   --lleig lletja : the geminated variant of boig boja
   --bo bona ; pla plana : like adjVn, but for one syllable words
@@ -251,7 +245,7 @@ oper
         <_ + "eu", _ + "ea"> => adjEuropeu petit ; --europeu~europea
         <_ + "s" , _> => adjXs petit petita ; --rus~russa
         <_ + "c" , _ + "ga"> => adjCasat petit ; --groc~groga
-        _       => mkAdjReg petit 
+        _       => mkAdjReg petit
     } ;
 
 oper unaccent : Str -> Str = \vocal ->
@@ -270,7 +264,7 @@ oper unaccent : Str -> Str = \vocal ->
 -- All the eight personal pronouns can be built by the following macro.
 -- The use of "en" as atonic genitive is debatable.
 
-  mkPronoun : (_,_,_,_,_,_,_,_ : Str) -> 
+  mkPronoun : (_,_,_,_,_,_,_,_ : Str) ->
               Gender -> Number -> Person -> Pronoun =
     \ell,el,li,Ell,son,sa,elsSeus,lesSeves,g,n,p ->
     let
