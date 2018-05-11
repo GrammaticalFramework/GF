@@ -1,11 +1,11 @@
 --# -path=.:../romance:../common:../abstract:../prelude
 
-resource BeschPor = open Prelude, CommonRomance in {
+resource BeschPor = open Prelude, Predef, CommonRomance in {
 
 flags optimize=noexpand ; -- faster than values
       coding=utf8 ;
 
--- machine-generated file
+-- machine-generated file: do not edit directly!
 
 oper
   Verbum = {s : VFB => Str} ;
@@ -36,7 +36,8 @@ oper
       ;
 
 oper
-  -- hack to get the same behaviour as from variants. parses both, linearizes the first.
+  -- hack to get the same behaviour as from variants. parses both,
+  -- linearizes the first.
   vars : Str -> Str -> Str = \x,y -> pre { "" => x ; _ => y } ;
 
   verbBesch : {s : VFB => Str} -> {s : CommonRomance.VF => Str} = \amar ->
@@ -53,9 +54,23 @@ oper
        VImper SgP2            => amar.s ! VPB (Imper  Sg P2) ;
        VImper PlP1            => amar.s ! VPB (Imper  Pl P1) ;
        VImper PlP2            => amar.s ! VPB (Imper  Pl P2) ;
-       VPart g n              => amar.s ! VI Part ;
+       VPart g n              => mkPass (amar.s ! VI Part) ! g ! n ;
        VGer | VPresPart       => amar.s ! VI Ger
        }
+    } ;
+
+  genNumForms : Str -> Str -> Str -> Str -> Gender => Number => Str ;
+  genNumForms ms fs mp fp = table {
+    Masc => \\n => numForms ms mp ! n ;
+    Fem => \\n => numForms fs fp ! n
+    } ;
+
+  mkPass : Str -> Gender => Number => Str ;
+  -- passive form is highly predictable from singular masculine
+  mkPass p = case p of {
+    amad + "o" => genNumForms p (amad + "a") (amad + "os") (amad + "as") ;
+    entregu + "e" => \\g => numForms p (p + "s") ;
+    _ => error "unknown ending" -- nothing should reach here
     } ;
 
 
