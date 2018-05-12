@@ -64,7 +64,7 @@ concrete StructuralPor of Structural = CatPor **
     can8know_VV = mkVV (mkV (saber_35 "saber")) ;
     can_VV = mkVV (mkV (poder_36 "poder")) ;
     during_Prep = mkPrep "durante" ;
-    either7or_DConj = {s1,s2 = "o" ; n = Sg} ;
+    either7or_DConj = {s1,s2 = "ou" ; n = Sg} ;
     everybody_NP = makeNP ["todos"] Masc Pl ;
     every_Det = mkDeterminer "cada" "cada" Sg False ;
     everything_NP = pn2np (mkPN ["todo"] Masc) ;
