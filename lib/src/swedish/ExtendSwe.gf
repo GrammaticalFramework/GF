@@ -8,7 +8,8 @@ concrete ExtendSwe of Extend = CatSwe **
     MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
     ICompAP,
     RNP, RNPList, ReflRNP, ReflPron, ReflPoss, PredetRNP, ConjRNP,
-    Base_rr_RNP, Base_nr_RNP, Base_rn_RNP, Cons_rr_RNP, Cons_nr_RNP
+    Base_rr_RNP, Base_nr_RNP, Base_rn_RNP, Cons_rr_RNP, Cons_nr_RNP,
+    CompoundN
   ]
   with (Grammar = GrammarSwe)
     **
@@ -143,6 +144,10 @@ concrete ExtendSwe of Extend = CatSwe **
     Cons_rr_RNP x xs = consrTable Agr comma x xs ;
     Cons_nr_RNP x xs = consrTable Agr comma {s = \\a => x.s ! NPAcc} xs ;
 
-
+    CompoundN n1 n2 = {
+      s  = \\n,s,c => n1.co ++ BIND ++ n2.s ! n ! s ! c ;
+      co = n1.co ++ BIND ++ n2.co ;
+      g  = n2.g
+    } ;
 }
 
