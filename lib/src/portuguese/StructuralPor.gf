@@ -24,7 +24,9 @@ concrete StructuralPor of Structural = CatPor **
       "ela" "a" "lhe" "ela"
       Fem Sg P3 ;
     youSg_Pron = he_Pron ** pronLin "você" "te" "lhe" "você" ;
-    youPol_Pron =  youPlPol_Pron | youSgPol_Pron ;
+    youPol_Pron = mkPronoun "tu" "te" "te" "ti"
+      "teu" "tua" "teus" "tuas"
+      Masc Sg P2 ;
     we_Pron =
       mkPronoun
       "nós" "nos" "nos" "nós" "nosso" "nossa" "nossos" "nossas"
@@ -158,13 +160,6 @@ concrete StructuralPor of Structural = CatPor **
     -- is it still necessary after deleting the Spa confusion? y/e
     etConj : {s : Str ; n : MorphoPor.Number} = {s = "e"} ** {n = Pl} ;
 
-    youSgPol_Pron : Pronoun =
-      mkPronoun "tu" "te" "te" "ti" "teu" "tua" "teus" "tuas"
-      Masc Sg P2 ;
-    youPlPol_Pron : Pronoun =
-      mkPronoun "vós" "vos" "vos" "vós"
-      "vosso" "vossa" "vossos" "vossas"
-      Masc Pl P2 ;
   lin
     as_CAdv = X.mkCAdv "tão" conjThan ; ----
     have_V2 = dirV2 (mkV (ter_1 "ter")) ;
