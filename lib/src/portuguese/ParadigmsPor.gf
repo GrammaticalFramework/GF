@@ -219,6 +219,8 @@ oper
                   } ;
                 isPre = a.isPre ; lock_A = <>} ;
 
+  mkNonInflectA : A -> Str -> A ;
+  mkNonInflectA = \blanco,hueso -> blanco ** {s = \\x,y => blanco.s ! x ! y ++ hueso } ;
 
   mkA = overload {
 
@@ -243,7 +245,7 @@ oper
       = mkADeg ;
 
     mkA : (blanco : A) -> (hueso : Str) -> A  -- noninflecting component after the adjective
-    = \blanco,hueso -> blanco ** {s = \\x,y => blanco.s ! x ! y ++ hueso } ;
+    = mkNonInflectA ;
     } ;
 
 -- The functions above create postfix adjectives. To switch them to
@@ -287,32 +289,38 @@ oper
 --2 Verbs
 
   regV : Str -> V ;
-  regV v = -- cortar actuar cazar guiar pagar sacar
+  regV v =
     let
       xr = Predef.dp 2 v ; -- -ar
       z  = Predef.dp 1 (Predef.tk 2 v) ; -- i in -iar
-      verb = case xr of {
+      paradigm = case xr of {
         "ir" => case z of {
-          "g" => redigir_52 v ;
-          "a" => sair_68 v ;
-          "u" => distribuir_73 v ;
-          _ => garantir_6 v
+          "g" => redigir_52 ;
+          "a" => sair_68 ;
+          "u" => distribuir_73 ;
+          _ => garantir_6
           } ;
         "er" => case z of {
-          "c" => aquecer_25 v ;
-          _ => vender_5 v
+          "c" => aquecer_25 ;
+          "g" => proteger_26 ;
+          "o" => moer_28 ;
+          _ => vender_5
             } ;
         "ar" => case z of {
-          "e" => recear_15 v ;
-          "i" => anunciar_16 v ;
-          "o" => perdoar_20 v ;
-          "u" => averiguar_21 v ;
-          _ => comprar_4 v
+          "c" => ficar_12 ;
+          "ç" => começar_13 ;
+          "e" => recear_15 ;
+          "g" => chegar_14 ;
+          "i" => anunciar_16 ;
+          "j" => viajar_r22 ;
+          "o" => perdoar_20 ;
+          "u" => suar_r37 ;
+          _ => comprar_4
           } ;
-        "or" => pôr_45 v ;
-        _ => comprar_4 v -- hole
+        "or" | "ôr" => pôr_45 ;
+        _ => comprar_4 -- hole
         }
-    in verboV verb ;
+    in verboV (paradigm v) ;
 
 {-  regAltV : (mostrar,muestro : Str) -> V ;
   regAltV x y = case x of {
