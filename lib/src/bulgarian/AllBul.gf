@@ -1,9 +1,8 @@
 --# -path=.:../abstract:../common:../prelude:../api
---# -coding=cp1251
 
-concrete AllBul of AllBulAbs = 
+concrete AllBul of AllBulAbs =
   LangBul,
-  ExtraBul
+  ExtendBul
   ** {
-  flags coding=cp1251 ;
+
 } ;
