@@ -210,8 +210,11 @@ oper
      hasClit = True ; isPol = False
     } ** pronLin ele o lhe Ele ;
 
-  pronLin : (_,_,_,_ : Str) -> {s : Case =>  {c1,c2,comp,ton : Str}}
-    = \você, o, lhe, Você ->
+  pronLin : (_,_,_,_ : Str) -> {s : Case =>  {c1,c2,comp,ton : Str}} ;
+  -- change pronoun's linearizations without changing its agreement
+  -- features (doesn't change possessive linearizations either). e.g.,
+  -- he_Pron -> you_Pron
+  pronLin = \você, o, lhe, Você ->
     let
       aVocê : Case -> Str = \x -> prepCase x ++ Você ;
     in
@@ -223,11 +226,15 @@ oper
        }
     } ;
 
-  pronAgr : Pronoun -> Gender -> Number -> Person -> Pronoun
-    = \pron, g, n, p -> pron ** {a = Ag g n p} ;
+  pronAgr : Pronoun -> Gender -> Number -> Person -> Pronoun ;
+  -- change a pronoun's agreement features without changing its
+  -- linearization field (e.g., You_Pron -> YouFem_Pron)
+  pronAgr = \pron, g, n, p -> pron ** {a = Ag g n p} ;
 
   mkPronFrom : Pronoun -> (_,_,_,_ : Str) -> Gender -> Number -> Person
-    -> Pronoun = \pron, você, o, lhe, Você, g, n, p ->
+    -> Pronoun ;
+  -- change everything in a pronoun but its possessive linearizations
+  mkPronFrom = \pron, você, o, lhe, Você, g, n, p ->
     (pronAgr pron g n p) ** pronLin você o lhe Você ;
 
 
