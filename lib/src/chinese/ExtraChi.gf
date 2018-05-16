@@ -27,7 +27,7 @@ concrete ExtraChi of ExtraChiAbs = CatChi **
 
     GenNP np =  {s,pl = np.s ++ possessive_s ; detType = DTPoss} ;
 
-    GenRP nu cn = {s = cn.s ++ relative_s} ; ---- ??
+    GenRP nu cn = {s = \\_ => cn.s ++ relative_s} ; ---- ??
 
 
 -----------------------
