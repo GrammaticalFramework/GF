@@ -9,9 +9,9 @@ concrete ExtraPor of ExtraPorAbs = ExtraRomancePor **
     youSg8fem_Pron = pronAgr S.youSg_Pron Fem Sg P3 ;
     we8fem_Pron = pronAgr S.we_Pron Fem Pl P1 ;
     youPl8fem_Pron = pronAgr S.youPl_Pron Fem Pl P3 ;
-    youPolPl_Pron = S.youPlPol_Pron ;
-    youPol8fem_Pron = pronAgr S.youSgPol_Pron Fem Sg P2 ;
-    youPolPl8fem_Pron = pronAgr S.youPlPol_Pron Fem Pl P2 ;
+    youPolPl_Pron = S.youPol_Pron ** pronLin "vós" "vos" "vos" "vós" ;
+    youPol8fem_Pron = pronAgr S.youPol_Pron Fem Sg P2 ;
+    youPolPl8fem_Pron = pronAgr youPolPl_Pron Fem Pl P2 ;
     they8fem_Pron = mkPronFrom S.they_Pron "elas" "as" "lhes" "elas" Fem Pl P3 ;
 
 
