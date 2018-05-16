@@ -1,7 +1,7 @@
 --# -path=.:../abstract
 
-concrete ConstructionEng of Construction = CatEng ** 
-  open SyntaxEng, SymbolicEng, ParadigmsEng, (L = LexiconEng), (E = ExtraEng), (G = GrammarEng), (R = ResEng), (S = StructuralEng), Prelude in {
+concrete ConstructionEng of Construction = CatEng **
+  open SyntaxEng, SymbolicEng, ParadigmsEng, (L = LexiconEng), (E = ExtendEng), (G = GrammarEng), (R = ResEng), (S = StructuralEng), Prelude in {
 
 
 lin
@@ -23,7 +23,7 @@ lin
 
 -- some more things
   weather_adjCl ap = mkCl (mkVP (lin AP ap)) ;
-   
+
   is_right_VP = mkVP (ParadigmsEng.mkA "right") ;
   is_wrong_VP = mkVP (ParadigmsEng.mkA "wrong") ;
 
@@ -34,18 +34,18 @@ lin
   cup_of_CN    np = mkCN (lin N2 (mkN2 "cup"))    (lin NP np) ;
   glass_of_CN  np = mkCN (lin N2 (mkN2 "glass"))  (lin NP np) ;
 
-  few_X_short_of_Y np x y = 
-    let 
+  few_X_short_of_Y np x y =
+    let
       xs : Str = x.s ! R.Pl ! R.Nom ;
       a_y : Str = (mkNP a_Det y).s ! R.NCase R.Nom ;
     in
-      mkS (mkCl np (mkAdv ("a few" ++ xs ++ "short of" ++ a_y))) ; 
+      mkS (mkCl np (mkAdv ("a few" ++ xs ++ "short of" ++ a_y))) ;
 {-
 -- spatial deixis and motion verbs
 
   where_go_QCl np = mkQCl where_IAdv (mkCl np (mkVP L.go_V)) ;
   where_come_from_QCl np =  mkQCl from_where_IAdv (mkCl np (mkVP L.go_V)) ;
-  
+
   go_here_VP = mkVP (mkVP L.go_V) S.here_Adv ;
   come_here_VP = mkVP (mkVP L.come_V) S.here_Adv ;
   come_from_here_VP = mkVP (mkVP L.come_V) (mkAdv "from here") ;
@@ -67,7 +67,7 @@ lincat
   Month = N ;
   Year = NP ;
 lin
-  timeunitAdv n time = 
+  timeunitAdv n time =
   let n_card : Card   = n ;
       n_hours_NP : NP = mkNP n_card time ;
   in  SyntaxEng.mkAdv for_Prep n_hours_NP | mkAdv (n_hours_NP.s ! R.npNom) ;
@@ -122,9 +122,9 @@ lin friday_Weekday = mkN "Friday" ;
 lin saturday_Weekday = mkN "Saturday" ;
 lin sunday_Weekday = mkN "Sunday" ;
 
-lin january_Month = mkN "January" ; 
-lin february_Month = mkN "February" ; 
-lin march_Month = mkN "March" ; 
+lin january_Month = mkN "January" ;
+lin february_Month = mkN "February" ;
+lin march_Month = mkN "March" ;
 lin april_Month = mkN "April" ;
 lin may_Month = mkN "May" ;
 lin june_Month = mkN "June" ;
