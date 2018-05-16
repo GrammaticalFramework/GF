@@ -1,5 +1,5 @@
-abstract AllPorAbs = 
+abstract AllPorAbs =
   Lang,
   IrregPorAbs,
-  ExtraPorAbs
+  Extend
   ** {} ;

@@ -1,10 +1,10 @@
 --1 Structural: Structural Words
--- 
+--
 -- Here we have some words belonging to closed classes and appearing
 -- in all languages we have considered.
 -- Sometimes more distinctions are needed, e.g. $we_Pron$ in Spanish
 -- should be replaced by masculine and feminine variants, found in
--- [``ExtraSpa`` ../spanish/ExtraSpa.gf].
+-- [``ExtendSpa`` ../spanish/ExtendSpa.gf].
 
 abstract Structural = Cat ** {
 
@@ -12,11 +12,11 @@ abstract Structural = Cat ** {
 
 -- This is an alphabetical list of structural words
 
-  above_Prep : Prep ;  
+  above_Prep : Prep ;
   after_Prep : Prep ;
   all_Predet : Predet ;
-  almost_AdA : AdA ;   
-  almost_AdN : AdN ;   
+  almost_AdA : AdA ;
+  almost_AdN : AdN ;
   although_Subj : Subj ;
   always_AdV : AdV ;
   and_Conj : Conj ;
@@ -84,7 +84,7 @@ abstract Structural = Cat ** {
   there7to_Adv : Adv ; -- to there
   there7from_Adv : Adv ; -- from there
   therefore_PConj : PConj ;
-  they_Pron : Pron ; 
+  they_Pron : Pron ;
   this_Quant : Quant ;
   through_Prep : Prep ;
   to_Prep : Prep ;
@@ -110,7 +110,7 @@ abstract Structural = Cat ** {
   youPl_Pron : Pron ; -- you (plural)
   youPol_Pron : Pron ; -- you (polite)
 
-  no_Quant : Quant ; 
+  no_Quant : Quant ;
   not_Predet : Predet ;
   if_then_Conj : Conj ;
   at_least_AdN : AdN ;

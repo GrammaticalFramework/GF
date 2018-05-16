@@ -281,8 +281,8 @@ lin
    kill_V2       = dirV2 (mkV "matar") ;
    know_V2       = mkV2 (mkV "conhecer") ;
    learn_V2      = dirV2 (mkV "aprender") ;
-   leave_V2      = dirV2 (mkV "partir") ;	-- irse, dejar
-   like_V2       = dirV2 (mkV "gostar") ;
+   leave_V2      = dirV2 (mkV "partir") ;
+   like_V2       = mkV2 (mkV "gostar") genitive ;
    listen_V2     = dirV2 (mkV "escutar") ;
    lose_V2       = dirV2 (mkV (perder_44 "perder")) ;
    love_V2       = dirV2 (mkV "amar") ;
