@@ -1,6 +1,7 @@
 concrete StructuralPor of Structural = CatPor **
   open PhonoPor, MorphoPor, ParadigmsPor, BeschPor,
-       MakeStructuralPor, (X = ConstructX), Prelude in {
+  MakeStructuralPor, (X = ConstructX), (B=IrregBeschPor)
+  , Prelude in {
 
   flags optimize=all ;
         coding=utf8 ;
@@ -63,8 +64,8 @@ concrete StructuralPor of Structural = CatPor **
     but_PConj = ss "mas" ;
     by8agent_Prep = mkPrep "por" ;
     by8means_Prep = mkPrep "por" ;
-    can8know_VV = mkVV (mkV (saber_35 "saber")) ;
-    can_VV = mkVV (mkV (poder_36 "poder")) ;
+    can8know_VV = mkVV B.saber_V ;
+    can_VV = mkVV B.poder_V ;
     during_Prep = mkPrep "durante" ;
     either7or_DConj = {s1,s2 = "ou" ; n = Sg} ;
     everybody_NP = makeNP ["todos"] Masc Pl ;
@@ -138,7 +139,7 @@ concrete StructuralPor of Structural = CatPor **
     to_Prep = complDat ;
     under_Prep = mkPrep "embaixo" ;
     very_AdA = ss "muito" ;
-    want_VV = mkVV (mkV (querer_38 "querer")) ;
+    want_VV = mkVV B.querer_V ;
     whatSg_IP = {s = \\c => prepCase c ++ ["que"] ; a = aagr Masc Sg} ;
     whatPl_IP = {s = \\c => prepCase c ++ ["que"] ; a = aagr Masc Pl} ; ---
     when_IAdv = ss "quando" ;
@@ -162,7 +163,7 @@ concrete StructuralPor of Structural = CatPor **
 
   lin
     as_CAdv = X.mkCAdv "tão" conjThan ; ----
-    have_V2 = dirV2 (mkV (ter_1 "ter")) ;
+    have_V2 = dirV2 B.ter_V ;
     that_Subj = {s = "que" ; m = Conjunct} ;
 
   lin language_title_Utt = ss "português" ;

@@ -143,7 +143,7 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
       RNeg _ => <"não",[]>
       } ;
 
-    copula : Verb = verbBeschH (ser_3 "ser") ;
+    copula : Verb = verboV (ser_Besch "ser") ;
 
   oper
     conjThan = "que" ;
@@ -223,14 +223,14 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
         <_,  Pl,P3> => cases3 "os" "seus" "eles"
       } ;
 
-    estar_V : Verb = verbBeschH (estar_10 "estar") ;
+    estar_V : Verb = verboV (estar_Besch "estar") ;
 
-    haver_V : Verb = verbBeschH (haver_2 "haver") ;
+    haver_V : Verb = verboV (haver_Besch "haver") ;
 
-    ficar_V : Verb = verbBeschH (ficar_12 "ficar") ;
+    ficar_V : Verb = verboV (ficar_Besch "ficar") ;
 
-    verbBeschH : Verbum -> Verb ;
+    verboV : Verbum -> Verb ;
     -- make a verb of type haver
-    verbBeschH v = verbBesch v ** {vtyp = VHabere ; p = []} ;
+    verboV v = verbBesch v ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
 }

@@ -1,5 +1,5 @@
 concrete ExtraPor of ExtraPorAbs = ExtraRomancePor **
-  open CommonRomance, PhonoPor, MorphoPor, ParadigmsPor, ParamX, ResPor, BeschPor, (I = IrregPor), (S = StructuralPor),
+  open CommonRomance, PhonoPor, MorphoPor, ParadigmsPor, ParamX, ResPor, BeschPor, (B = IrregBeschPor), (S = StructuralPor),
   Prelude in {
   flags coding=utf8 ;
 
@@ -55,6 +55,6 @@ concrete ExtraPor of ExtraPorAbs = ExtraRomancePor **
     ExistsNP np =
       mkClause [] True False np.a (insertComplement (\\_ => (np.s ! Nom).ton) (predV (mkV "existir"))) ;
 
-    UseComp_estar comp = insertComplement comp.s (predV I.estar_V) ;
+    UseComp_estar comp = insertComplement comp.s (predV B.estar_V) ;
 
 }

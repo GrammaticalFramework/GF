@@ -295,42 +295,32 @@ oper
       z  = Predef.dp 1 (Predef.tk 2 v) ; -- i in -iar
       paradigm = case xr of {
         "ir" => case z of {
-          "g" => redigir_52 ;
-          "a" => sair_68 ;
-          "u" => distribuir_73 ;
-          _ => garantir_6
+          "g" => redigir_Besch ;
+          "a" => sair_Besch ;
+          "u" => distribuir_Besch ;
+          _ => garantir_Besch
           } ;
         "er" => case z of {
-          "c" => aquecer_25 ;
-          "g" => proteger_26 ;
-          "o" => moer_28 ;
-          _ => vender_5
+          "c" => aquecer_Besch ;
+          "g" => proteger_Besch ;
+          "o" => moer_Besch ;
+          _ => vender_Besch
             } ;
         "ar" => case z of {
-          "c" => ficar_12 ;
-          "ç" => começar_13 ;
-          "e" => recear_15 ;
-          "g" => chegar_14 ;
-          "i" => anunciar_16 ;
-          "j" => viajar_r22 ;
-          "o" => perdoar_20 ;
-          "u" => suar_r37 ;
-          _ => comprar_4
+          "c" => ficar_Besch ;
+          "ç" => começar_Besch ;
+          "e" => recear_Besch ;
+          "g" => chegar_Besch ;
+          "i" => anunciar_Besch ;
+          "j" => viajar_Besch ;
+          "o" => perdoar_Besch ;
+          "u" => suar_Besch ;
+          _ => comprar_Besch
           } ;
-        "or" | "ôr" => pôr_45 ;
-        _ => comprar_4 -- hole
+        "or" | "ôr" => pôr_Besch ;
+        _ => comprar_Besch -- hole
         }
     in verboV (paradigm v) ;
-
-{-  regAltV : (mostrar,muestro : Str) -> V ;
-  regAltV x y = case x of {
-    _ + "ar" => verboV (regAlternV x y) ;
-    _  => verboV (regAlternVEr x y)
-    } ;
--}
-  verboV : Verbum -> V ;
-  verboV ve = verbBesch ve ** {vtyp = VHabere ; p = [] ;
-                               lock_V = <>} ;
 
   mkV = overload {
 --- [ ] update
