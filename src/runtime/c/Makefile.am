@@ -87,13 +87,14 @@ libpgf_la_SOURCES = \
 	pgf/graphviz.c \
 	pgf/aligner.c \
 	pgf/pgf.c \
-	pgf/pgf.h \
-libpgf_la_LDFLAGS = "-no-undefined"
+	pgf/pgf.h
+libpgf_la_LDFLAGS = -no-undefined
 libpgf_la_LIBADD = libgu.la
 
 libsg_la_SOURCES = \
 	sg/sqlite3Btree.c \
 	sg/sg.c
+libsg_la_LDFLAGS = -no-undefined
 libsg_la_LIBADD = libgu.la libpgf.la
 
 bin_PROGRAMS =
