@@ -209,7 +209,7 @@ oper
   mkPConj : Str -> PConj 
     = \s -> lin PConj {s = word s} ;
   mkRP : Str -> RP 
-    = \s -> lin RP {s = word s} ;
+    = \s -> lin RP {s = table {True => [] ; False => word s}} ;
 
 
 --. auxiliary

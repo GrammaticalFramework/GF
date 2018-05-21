@@ -19,7 +19,8 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
     ComplVV v vp = {
       verb = v ;
       compl = vp.prePart ++ vp.verb.s ++ vp.compl ;
-      prePart, topic = []
+      prePart, topic = [] ;
+      isAdj = False ;
       } ;
 
     ComplVS v s  = insertObj s  (predV v []) ; 
@@ -61,7 +62,7 @@ concrete VerbChi of Verb = CatChi ** open ResChi, Prelude in {
 
     PassV2 v = insertAdv (mkNP passive_s) (predV v v.part) ; ----
 
-    CompAP ap = insertObj (mkNP (ap.s ++ de_s)) (predV copula []) ;
+    CompAP ap = insertObj (mkNP (ap.s ++ de_s)) (predV copula []) ** {isAdj = True} ;
 
 {-
     CompAP ap = case ap.hasAdA of {
