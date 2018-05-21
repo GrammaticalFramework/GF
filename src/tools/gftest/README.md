@@ -69,6 +69,7 @@ Common flags:
   -s --start-cat=Utt       Use the given category as start category
      --show-cats           Show all available categories
      --show-funs           Show all available functions
+     --funs-of-arity=2     Show all functions of arity 2
      --show-coercions      Show coercions in the grammar
      --concr-string=the    Show all functions that include given string
   -q --equal-fields        Show fields whose strings are always identical
@@ -427,4 +428,19 @@ There are 2409 trees up to size 4, and 2163 of exactly size 4.
 For example: 
 * AdAdv very_AdA (PositAdvAdj young_A)
 * PrepNP above_Prep (UsePron they_Pron)
+```
+
+### --funs-of-arity
+
+Show all functions of given arity (not up to).
+
+Example:
+
+```
+> gftest -g Phrasebook --funs-of-arity 3
+* Functions in the grammar of arity 3:
+ADoVerbPhrasePlace
+AModVerbPhrase
+HowFarFromBy
+QWhereModVerbPhrase
 ```
