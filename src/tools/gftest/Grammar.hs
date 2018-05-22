@@ -990,10 +990,7 @@ testFun debug gr trans startcat funname =
           if debug then tp { ctyp = (fst $ ctyp tp, coe)} else tp
    ]
 
-  -- Usually start category is a single {s:Str}, i.e. only one concrete category.
-  -- If you try this out for start categories with more parameters and fields,
-  -- you probably get wrong or missing results.
-  (start:_) = ccats gr startcat
+  starts = ccats gr startcat
 
   hl f c1 c2 = f (c1 dummyHole) == f (c2 dummyHole)
 --  applyHole = hl id -- TODO why doesn't this work for equality of contexts?
@@ -1007,16 +1004,18 @@ testFun debug gr trans startcat funname =
     [ (goalcat,(testcase,ctxs))
     | testcase <- treesUsingFun gr funs
     , let goalcat = ccatOf testcase -- never a coercion (coercions can't be goals)
-    , let ctxs = contextsFor gr start goalcat ] :: M.Map ConcrCat (Tree,[Tree->Tree])
+    , let ctxs = [ ctx | st <- starts
+                 , ctx <- contextsFor gr st goalcat ]
+    ] :: M.Map ConcrCat (Tree,[Tree->Tree])
   goalcats = M.keys cat_testcase_ctxs
 
   coercion_goalcats_commonCtxs =
     [ (coe,coveredGoalcats,ctxs)
     | coe@(CC Nothing _) <- S.toList $ nonEmptyCats gr -- only coercions
     , let coveredGoalcats = filter (coerces gr coe) goalcats
-    , let ctxs = [ ctx                             -- Contexts that have
-                 | ctx <- contextsFor gr start coe -- a) hole of coercion, and are
-                 , any (applyHole ctx) allCtxs ]   -- b) relevant for the function we test
+    , let ctxs = [ ctx | st <- starts            -- Contexts that have
+                 , ctx <- contextsFor gr st coe  -- a) hole of coercion, and are
+                 , any (applyHole ctx) allCtxs ] -- b) relevant for the function we test
     , length coveredGoalcats >= 2 -- no use if the coercion covers 0 or 1 categories
     , not $ null ctxs ]
 
