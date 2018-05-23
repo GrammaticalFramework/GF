@@ -3,7 +3,7 @@ JAVA_SOURCES = $(wildcard org/grammaticalframework/pgf/*.java) \
                $(wildcard org/grammaticalframework/sg/*.java)
 
 JNI_INCLUDES = $(if $(wildcard /usr/lib/jvm/default-java/include/.*), -I/usr/lib/jvm/default-java/include -I/usr/lib/jvm/default-java/include/linux, \
-           $(if $(wildcard /System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/.*), /System/Library/Frameworks/JavaVM.framework/Versions/A/Headers, \
+           $(if $(wildcard /System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/.*), -I/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers, \
            $(if $(wildcard /Library/Java/Home/include/.*), -I/Library/Java/Home/include/ -I/Library/Java/Home/include/darwin, \
            $(error No JNI headers found))))
 

@@ -931,7 +931,8 @@ data Comparison = Comparison { funTree :: String, linTree :: [LinTree] }
 instance Show Comparison where
   show c = unlines $ funTree c : map showLinTree (linTree c)
 
-dummyHole = App (Symbol "∅" [] ([], "") ([], CC Nothing 99999999)) []
+dummyCCat = CC Nothing 99999999
+dummyHole = App (Symbol "∅" [] ([], "") ([], dummyCCat)) []
 
 showLinTree :: LinTree -> String
 showLinTree ((an,hl),(l1,t1),(l2,t2),(_l,[])) = unlines ["", an++hl, l1++t1, l2++t2]
@@ -967,42 +968,64 @@ testFun :: Bool -> Grammar -> [Grammar] -> Cat -> Name -> Result
 testFun debug gr trans startcat funname =
  let test = testTree debug gr trans
   in unlines [ test t n cs
-             | (n,(t,cs)) <- zip [1..] trees_Ctxs ] 
+             | (n,(t,cs)) <- zip [1..] testcase_ctxs ]
 
  where
-  trees_Ctxs = [ (t,commonCtxs) | t <- reducedTrees
-               , not $ null commonCtxs ] ++
-               [ (t,uniqueCtxs) | t <- allTrees
-               , not $ null uniqueCtxs ]
+  testcase_ctxs = M.toList $ M.fromListWith (++) $ uniqueTCs++commonTCs
 
-  (start:_) = ccats gr startcat
+  uniqueTCs = [ (testcase,uniqueCtxs)
+   | (testcase,ctxs) <- M.elems cat_testcase_ctxs
+   , let uniqueCtxs = deleteFirstsBy applyHole ctxs commonCtxs
+   , not $ null uniqueCtxs
+   ]
+  commonTCs = [ (App newTop subtrees,ctxs)
+   | (coe,cats,ctxs) <- coercion_goalcats_commonCtxs
+   , let testcases_ctxs = catMaybes [ M.lookup cat cat_testcase_ctxs
+                                    | cat <- cats ]
+   , not $ null testcases_ctxs
+   , let fstLen = \(a,_) (b,_) -> length (flatten a) `compare` length (flatten b)
+   , let (App tp subtrees,_) = -- pick smallest test case to be the representative
+          head $ sortBy fstLen testcases_ctxs
+   , let newTop = -- debug: put coerced contexts under a separate test case
+          if debug then tp { ctyp = (fst $ ctyp tp, coe)} else tp
+   ]
+
+  starts = ccats gr startcat
+
   hl f c1 c2 = f (c1 dummyHole) == f (c2 dummyHole)
 --  applyHole = hl id -- TODO why doesn't this work for equality of contexts?
   applyHole = hl show -- :: (Tree -> Tree) -> (Tree -> Tree) -> Bool
 
-  goalcats = map ccatOf allTrees :: [ConcrCat] -- these are not coercions (coercions can't be goals)
-
-  coercionsThatCoverAllGoalcats = [ (c,fs)
-                                  | (c,fs) <- contexts gr start
-                                  , all (coerces gr c) goalcats ]
   funs = case lookupSymbol gr funname of
            [] -> error $ "Function "++funname++" not found"
            fs -> fs
-  allTrees = treesUsingFun gr funs
-  ctxs = nubBy applyHole $ concatMap (contextsFor gr start) goalcats :: [Tree->Tree]
 
-  (commonCtxs,reducedTrees) = case coercionsThatCoverAllGoalcats of
-    [] -> ([],[])        -- no coercion covers all goal cats -> all contexts are relevant
-    cs -> (cCtxs,rTrees) -- all goal cats coerce into same -> find redundant contexts
-   where
-    (coe,coercedCtxs) = head coercionsThatCoverAllGoalcats
-    cCtxs = intersectBy applyHole ctxs coercedCtxs
-    rTrees = concat $ bestExamples (head funs) gr
-              [ [ App newTop subtrees ]
-              | (App tp subtrees) <- allTrees
-             , let newTop = tp { ctyp = (fst $ ctyp tp, coe)} ]
-  uniqueCtxs = deleteFirstsBy applyHole ctxs commonCtxs
-  showCtx f = let t = f dummyHole in show t ++ "\t\t\t" ++ showConcrFun gr (top t)
+  cat_testcase_ctxs = M.fromList
+    [ (goalcat,(testcase,ctxs))
+    | testcase <- treesUsingFun gr funs
+    , let goalcat = ccatOf testcase -- never a coercion (coercions can't be goals)
+    , let ctxs = [ ctx | st <- starts
+                 , ctx <- contextsFor gr st goalcat ]
+    ] :: M.Map ConcrCat (Tree,[Tree->Tree])
+  goalcats = M.keys cat_testcase_ctxs
+
+  coercion_goalcats_commonCtxs =
+    [ (coe,coveredGoalcats,ctxs)
+    | coe@(CC Nothing _) <- S.toList $ nonEmptyCats gr -- only coercions
+    , let coveredGoalcats = filter (coerces gr coe) goalcats
+    , let ctxs = [ ctx | st <- starts            -- Contexts that have
+                 , ctx <- contextsFor gr st coe  -- a) hole of coercion, and are
+                 , any (applyHole ctx) allCtxs ] -- b) relevant for the function we test
+    , length coveredGoalcats >= 2 -- no use if the coercion covers 0 or 1 categories
+    , not $ null ctxs ]
+
+
+  allCtxs = [ ctx | (_,ctxs) <- M.elems cat_testcase_ctxs
+                  , ctx <- ctxs ] :: [Tree->Tree]
+
+  commonCtxs = nubBy applyHole [ ctx | (_,_,ctxs) <- coercion_goalcats_commonCtxs
+                               , ctx <- ctxs ] :: [Tree->Tree]
+
 
 testTree :: Bool -> Grammar -> [Grammar] -> Tree -> Int -> [Tree -> Tree] -> Result
 testTree debug gr tgrs t n ctxs = unlines

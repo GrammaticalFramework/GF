@@ -30,6 +30,7 @@ data GfTest
   , start_cat     :: Maybe Cat
   , show_cats     :: Bool
   , show_funs     :: Bool
+  , funs_of_arity :: Maybe Int
   , show_coercions:: Bool
   , concr_string  :: String
 
@@ -57,7 +58,8 @@ gftest = GfTest
                                         &= help "Concrete syntax + optional translations"
   , tree          = def &= A.typ "\"UseN tree_N\"" 
                         &= A.name "t"   &= help "Test the given tree"
-  , function      = def &= A.typ "UseN" &= help "Test the given function(s)"
+  , function      = def &= A.typ "UseN"
+                        &= A.name "f"   &= help "Test the given function(s)"
   , category      = def &= A.typ "NP"
                         &= A.name "c"   &= help "Test all functions with given goal category"
   , start_cat     = def &= A.typ "Utt"
@@ -65,6 +67,7 @@ gftest = GfTest
   , concr_string  = def &= A.typ "the"  &= help "Show all functions that include given string"
   , show_cats     = def                 &= help "Show all available categories"
   , show_funs     = def                 &= help "Show all available functions"
+  , funs_of_arity = def &= A.typ "2"    &= help "Show all functions of arity 2"
   , show_coercions= def                 &= help "Show coercions in the grammar"
   , debug         = def                 &= help "Show debug output"
   , equal_fields  = def &= A.name "q"   &= help "Show fields whose strings are always identical"
@@ -183,6 +186,12 @@ main = do
     when (show_coercions args) $ do
       putStrLn "* Coercions in the grammar:"
       putStrLn $ unlines [ show cat++"--->"++show coe | (cat,coe) <- coercions gr ]
+
+    case funs_of_arity args of
+      Nothing -> return ()
+      Just n -> do
+        putStrLn $ "* Functions in the grammar of arity " ++ show n ++ ":"
+        putStrLn $ unlines $ nub [ show s | s <- symbols gr, arity s == n ]
 
     -- Show all functions that contain the given string 
     -- (e.g. English "it" appears in DefArt, ImpersCl, it_Pron, …)
