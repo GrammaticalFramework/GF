@@ -255,7 +255,7 @@ lin
    john_PN = mkPN "João" masculine ;
    paris_PN = mkPN "Paris" feminine ;
    -- V
-   rain_V0 = mkV0 (mkV (chover_47 "chover")) ;
+   rain_V0 = mkV0 (mkV (chover_Besch "chover")) ;
    paint_V2A = mkV2A (mkV "pintar") accusative (mkPrep "em") ;
    ask_V2Q = mkV2Q (mkV "perguntar") dative ;
    answer_V2S = mkV2S (mkV "responder") dative ;
@@ -266,17 +266,17 @@ lin
    close_V2      = dirV2 (mkV "fechar") ;
    count_V2      = dirV2 (mkV "contar") ;
    cut_V2        = dirV2 (mkV "cortar") ;
-   do_V2         =  dirV2 (mkV (fazer_31 "fazer")) ;
+   do_V2         =  dirV2 (mkV (fazer_Besch "fazer")) ;
    drink_V2      = dirV2 (mkV "beber") ;
    eat_V2        = dirV2 (mkV "comer") ;
    fear_V2       = dirV2 (mkV "temer") ;
    fight_V2      = dirV2 (mkV "lutar") ;
    find_V2       = dirV2 (mkV "encontrar") ;
    forget_V2     = dirV2 (mkV "esquecer") ;
-   hate_V2       = dirV2 (mkV (odiar_17 "odiar")) ;
+   hate_V2       = dirV2 (mkV (odiar_Besch "odiar")) ;
    hear_V2       = dirV2 (mkV "ouvir") ;
    hit_V2        = dirV2 (mkV "bater") ;
-   hold_V2       = dirV2 (mkV (ter_1 "ter")) ;
+   hold_V2       = dirV2 (mkV (ter_Besch "ter")) ;
    hunt_V2       = dirV2 (mkV "caçar") ;
    kill_V2       = dirV2 (mkV "matar") ;
    know_V2       = mkV2 (mkV "conhecer") ;
@@ -284,17 +284,17 @@ lin
    leave_V2      = dirV2 (mkV "partir") ;
    like_V2       = mkV2 (mkV "gostar") genitive ;
    listen_V2     = dirV2 (mkV "escutar") ;
-   lose_V2       = dirV2 (mkV (perder_44 "perder")) ;
+   lose_V2       = dirV2 (mkV (perder_Besch "perder")) ;
    love_V2       = dirV2 (mkV "amar") ;
    open_V2       = dirV2 (special_ppV (mkV "abrir") "aberto") ;
    play_V2       = dirV2 (mkV "jogar") ;
    pull_V2       = dirV2 (mkV "tirar") ;
    push_V2       = dirV2 (mkV "empurrar") ;
-   put_V2        = dirV2 (mkV (pôr_45 "pôr")) ;
-   read_V2       = dirV2 (mkV (ler_42 "ler")) ;
+   put_V2        = dirV2 (mkV (pôr_Besch "pôr")) ;
+   read_V2       = dirV2 (mkV (ler_Besch "ler")) ;
    rub_V2        = dirV2 (mkV "esfregar") ;
    scratch_V2    = dirV2 (mkV "coçar") ;
-   see_V2        = dirV2 (mkV (ver_40 "ver")) ;
+   see_V2        = dirV2 (mkV (ver_Besch "ver")) ;
    seek_V2       = dirV2 (mkV "buscar") ;
    speak_V2      = dirV2 (mkV "falar") ;
    split_V2      = dirV2 (mkV "separar") ; -- dividir,) ;
@@ -314,7 +314,7 @@ lin
    wipe_V2       = dirV2 (mkV "remover") ;
    write_V2      = dirV2 (special_ppV (mkV "escrever") "escrito") ;
    add_V3 = dirV3 (mkV "somar") dative ;
-   give_V3 = dirdirV3 (mkV (dar_11 "dar")) ;
+   give_V3 = dirdirV3 (mkV (dar_Besch "dar")) ;
    sell_V3 = dirV3 (mkV "vender") dative ;
    send_V3 = dirV3 (mkV "enviar") dative ; -- mandar
    talk_V3 = mkV3 (mkV "falar") dative genitive ;
@@ -329,7 +329,7 @@ lin
    blow_V    = mkV "assoprar" ;
    breathe_V = mkV "respirar" ;
    burn_V    = mkV "queimar" ;
-   come_V    = mkV (vir_67 "vir") ;
+   come_V    = mkV (vir_Besch "vir") ;
    die_V     = mkV "morrer" ;
    dig_V     = mkV "escavar" ;
    fall_V    = mkV "cair" ;
@@ -339,7 +339,7 @@ lin
    freeze_V  = mkV "congelar" ;
    go_V      = (mkV "ir") ;
    jump_V    = mkV "saltar" ;
-   laugh_V   = mkV (rir_69 "rir") ;
+   laugh_V   = mkV (rir_Besch "rir") ;
    lie_V     = reflV (mkV "mentir") ;
    live_V    = mkV "viver" ;
    play_V    = mkV "jogar" ;
@@ -350,7 +350,7 @@ lin
    sleep_V   = mkV "dormir" ;
    smell_V   = mkV "cheirar" ;
    spit_V    = mkV "cuspir" ;
-   stand_V   = mkV (estar_10 "estar") ; ---- "estar de pé" ;
+   stand_V   = mkV (estar_Besch "estar") ; ---- "estar de pé" ;
    stop_V    = mkV "parar" ;
    swell_V   = mkV "tragar" ;
    swim_V    = mkV "nadar" ;
