@@ -67,17 +67,17 @@ oper
 
   mkPass : Str -> Gender => Number => Str ;
   -- passive form is highly predictable from singular masculine
-  mkPass p = case p of {
+  mkPass p' = let p = p' + [] in case p of {
     amad + "o" => genNumForms p (amad + "a") (amad + "os") (amad + "as") ;
     entregu + "e" => \\g => numForms p (p + "s") ;
     _ => error "unknown ending" -- nothing should reach here
     } ;
 
-    -- paradigm numbers follow Portuguese Bescherelle, unless they are
-    -- prefixed by 'r', in which case they follow =Ryan,
-    -- M. A. Conjugação dos Verbos em Português. ática, 1991.=
+    -- you can look up verb paradigms in the Portuguese Bescherelle,
+    -- or in =Ryan, M. A. Conjugação dos Verbos em Português. ática,
+    -- 1991.=
 
-oper ter_1 : Str -> Verbum = \ter ->
+oper ter_Besch : Str -> Verbum = \ter ->
   let x_ = Predef.tk 3 ter in
  {s = table {
     VI Infn => x_ + "ter" ;
@@ -146,7 +146,7 @@ oper ter_1 : Str -> Verbum = \ter ->
     }
   } ;
 
-oper haver_2 : Str -> Verbum = \haver ->
+oper haver_Besch : Str -> Verbum = \haver ->
   let x_ = Predef.tk 5 haver in
  {s = table {
     VI Infn => x_ + "haver" ;
@@ -215,7 +215,7 @@ oper haver_2 : Str -> Verbum = \haver ->
     }
   } ;
 
-oper ser_3 : Str -> Verbum = \ser ->
+oper ser_Besch : Str -> Verbum = \ser ->
   let x_ = Predef.tk 3 ser in
  {s = table {
     VI Infn => x_ + "ser" ;
@@ -284,7 +284,7 @@ oper ser_3 : Str -> Verbum = \ser ->
     }
   } ;
 
-oper comprar_4 : Str -> Verbum = \comprar ->
+oper comprar_Besch : Str -> Verbum = \comprar ->
   let compr_ = Predef.tk 2 comprar in
  {s = table {
     VI Infn => compr_ + "ar" ;
@@ -353,7 +353,7 @@ oper comprar_4 : Str -> Verbum = \comprar ->
     }
   } ;
 
-oper vender_5 : Str -> Verbum = \vender ->
+oper vender_Besch : Str -> Verbum = \vender ->
   let vend_ = Predef.tk 2 vender in
  {s = table {
     VI Infn => vend_ + "er" ;
@@ -422,7 +422,7 @@ oper vender_5 : Str -> Verbum = \vender ->
     }
   } ;
 
-oper garantir_6 : Str -> Verbum = \garantir ->
+oper garantir_Besch : Str -> Verbum = \garantir ->
   let garant_ = Predef.tk 2 garantir in
  {s = table {
     VI Infn => garant_ + "ir" ;
@@ -491,7 +491,7 @@ oper garantir_6 : Str -> Verbum = \garantir ->
     }
   } ;
 
-oper estar_10 : Str -> Verbum = \estar ->
+oper estar_Besch : Str -> Verbum = \estar ->
   let est_ = Predef.tk 2 estar in
  {s = table {
     VI Infn => est_ + "ar" ;
@@ -560,7 +560,7 @@ oper estar_10 : Str -> Verbum = \estar ->
     }
   } ;
 
-oper dar_11 : Str -> Verbum = \dar ->
+oper dar_Besch : Str -> Verbum = \dar ->
   let x_ = Predef.tk 3 dar in
  {s = table {
     VI Infn => x_ + "dar" ;
@@ -629,7 +629,7 @@ oper dar_11 : Str -> Verbum = \dar ->
     }
   } ;
 
-oper ficar_12 : Str -> Verbum = \ficar ->
+oper ficar_Besch : Str -> Verbum = \ficar ->
   let x_ = Predef.tk 5 ficar in
  {s = table {
     VI Infn => x_ + "ficar" ;
@@ -698,7 +698,7 @@ oper ficar_12 : Str -> Verbum = \ficar ->
     }
   } ;
 
-oper começar_13 : Str -> Verbum = \começar ->
+oper começar_Besch : Str -> Verbum = \começar ->
   let x_ = Predef.tk 7 começar in
  {s = table {
     VI Infn => x_ + "começar" ;
@@ -767,7 +767,7 @@ oper começar_13 : Str -> Verbum = \começar ->
     }
   } ;
 
-oper chegar_14 : Str -> Verbum = \chegar ->
+oper chegar_Besch : Str -> Verbum = \chegar ->
   let cheg_ = Predef.tk 2 chegar in
  {s = table {
     VI Infn => cheg_ + "ar" ;
@@ -836,7 +836,7 @@ oper chegar_14 : Str -> Verbum = \chegar ->
     }
   } ;
 
-oper recear_15 : Str -> Verbum = \recear ->
+oper recear_Besch : Str -> Verbum = \recear ->
   let rec_ = Predef.tk 3 recear in
  {s = table {
     VI Infn => rec_ + "ear" ;
@@ -905,7 +905,7 @@ oper recear_15 : Str -> Verbum = \recear ->
     }
   } ;
 
-oper anunciar_16 : Str -> Verbum = \anunciar ->
+oper anunciar_Besch : Str -> Verbum = \anunciar ->
   let anunci_ = Predef.tk 2 anunciar in
  {s = table {
     VI Infn => anunci_ + "ar" ;
@@ -974,7 +974,7 @@ oper anunciar_16 : Str -> Verbum = \anunciar ->
     }
   } ;
 
-oper odiar_17 : Str -> Verbum = \odiar ->
+oper odiar_Besch : Str -> Verbum = \odiar ->
   let od_ = Predef.tk 3 odiar in
  {s = table {
     VI Infn => od_ + "iar" ;
@@ -1043,7 +1043,7 @@ oper odiar_17 : Str -> Verbum = \odiar ->
     }
   } ;
 
-oper comerciar_18 : Str -> Verbum = \comerciar ->
+oper comerciar_Besch : Str -> Verbum = \comerciar ->
   let comerc_ = Predef.tk 3 comerciar in
  {s = table {
     VI Infn => comerc_ + "iar" ;
@@ -1112,7 +1112,7 @@ oper comerciar_18 : Str -> Verbum = \comerciar ->
     }
   } ;
 
-oper saudar_19 : Str -> Verbum = \saudar ->
+oper saudar_Besch : Str -> Verbum = \saudar ->
   let sa_ = Predef.tk 4 saudar in
  {s = table {
     VI Infn => sa_ + "udar" ;
@@ -1181,7 +1181,7 @@ oper saudar_19 : Str -> Verbum = \saudar ->
     }
   } ;
 
-oper perdoar_20 : Str -> Verbum = \perdoar ->
+oper perdoar_Besch : Str -> Verbum = \perdoar ->
   let perd_ = Predef.tk 3 perdoar in
  {s = table {
     VI Infn => perd_ + "oar" ;
@@ -1250,7 +1250,7 @@ oper perdoar_20 : Str -> Verbum = \perdoar ->
     }
   } ;
 
-oper averiguar_21 : Str -> Verbum = \averiguar ->
+oper averiguar_Besch : Str -> Verbum = \averiguar ->
   let averigu_ = Predef.tk 2 averiguar in
  {s = table {
     VI Infn => averigu_ + "ar" ;
@@ -1319,7 +1319,7 @@ oper averiguar_21 : Str -> Verbum = \averiguar ->
     }
   } ;
 
-oper neviscar_22 : Str -> Verbum = \neviscar ->
+oper neviscar_Besch : Str -> Verbum = \neviscar ->
   let n_ = Predef.tk 7 neviscar in
  {s = table {
     VI Infn => n_ + "eviscar" ;
@@ -1388,7 +1388,7 @@ oper neviscar_22 : Str -> Verbum = \neviscar ->
     }
   } ;
 
-oper adequar_23 : Str -> Verbum = \adequar ->
+oper adequar_Besch : Str -> Verbum = \adequar ->
   let adequ_ = Predef.tk 2 adequar in
  {s = table {
     VI Infn => adequ_ + "ar" ;
@@ -1457,7 +1457,7 @@ oper adequar_23 : Str -> Verbum = \adequar ->
     }
   } ;
 
-oper relampaguear_24 : Str -> Verbum = \relampaguear ->
+oper relampaguear_Besch : Str -> Verbum = \relampaguear ->
   let relamp_ = Predef.tk 6 relampaguear in
  {s = table {
     VI Infn => relamp_ + "aguear" ;
@@ -1526,7 +1526,7 @@ oper relampaguear_24 : Str -> Verbum = \relampaguear ->
     }
   } ;
 
-oper aquecer_25 : Str -> Verbum = \aquecer ->
+oper aquecer_Besch : Str -> Verbum = \aquecer ->
   let aque_ = Predef.tk 3 aquecer in
  {s = table {
     VI Infn => aque_ + "cer" ;
@@ -1595,7 +1595,7 @@ oper aquecer_25 : Str -> Verbum = \aquecer ->
     }
   } ;
 
-oper proteger_26 : Str -> Verbum = \proteger ->
+oper proteger_Besch : Str -> Verbum = \proteger ->
   let prote_ = Predef.tk 3 proteger in
  {s = table {
     VI Infn => prote_ + "ger" ;
@@ -1664,7 +1664,7 @@ oper proteger_26 : Str -> Verbum = \proteger ->
     }
   } ;
 
-oper erguer_27 : Str -> Verbum = \erguer ->
+oper erguer_Besch : Str -> Verbum = \erguer ->
   let erg_ = Predef.tk 3 erguer in
  {s = table {
     VI Infn => erg_ + "uer" ;
@@ -1733,7 +1733,7 @@ oper erguer_27 : Str -> Verbum = \erguer ->
     }
   } ;
 
-oper moer_28 : Str -> Verbum = \moer ->
+oper moer_Besch : Str -> Verbum = \moer ->
   let m_ = Predef.tk 3 moer in
  {s = table {
     VI Infn => m_ + "oer" ;
@@ -1802,7 +1802,7 @@ oper moer_28 : Str -> Verbum = \moer ->
     }
   } ;
 
-oper dizer_29 : Str -> Verbum = \dizer ->
+oper dizer_Besch : Str -> Verbum = \dizer ->
   let di_ = Predef.tk 3 dizer in
  {s = table {
     VI Infn => di_ + "zer" ;
@@ -1871,7 +1871,7 @@ oper dizer_29 : Str -> Verbum = \dizer ->
     }
   } ;
 
-oper trazer_30 : Str -> Verbum = \trazer ->
+oper trazer_Besch : Str -> Verbum = \trazer ->
   let tr_ = Predef.tk 4 trazer in
  {s = table {
     VI Infn => tr_ + "azer" ;
@@ -1940,7 +1940,7 @@ oper trazer_30 : Str -> Verbum = \trazer ->
     }
   } ;
 
-oper fazer_31 : Str -> Verbum = \fazer ->
+oper fazer_Besch : Str -> Verbum = \fazer ->
   let f_ = Predef.tk 4 fazer in
  {s = table {
     VI Infn => f_ + "azer" ;
@@ -2009,7 +2009,7 @@ oper fazer_31 : Str -> Verbum = \fazer ->
     }
   } ;
 
-oper aprazer_32 : Str -> Verbum = \aprazer ->
+oper aprazer_Besch : Str -> Verbum = \aprazer ->
   let apr_ = Predef.tk 4 aprazer in
  {s = table {
     VI Infn => apr_ + "azer" ;
@@ -2078,7 +2078,7 @@ oper aprazer_32 : Str -> Verbum = \aprazer ->
     }
   } ;
 
-oper jazer_33 : Str -> Verbum = \jazer ->
+oper jazer_Besch : Str -> Verbum = \jazer ->
   let jaz_ = Predef.tk 2 jazer in
  {s = table {
     VI Infn => jaz_ + "er" ;
@@ -2147,7 +2147,7 @@ oper jazer_33 : Str -> Verbum = \jazer ->
     }
   } ;
 
-oper caber_34 : Str -> Verbum = \caber ->
+oper caber_Besch : Str -> Verbum = \caber ->
   let c_ = Predef.tk 4 caber in
  {s = table {
     VI Infn => c_ + "aber" ;
@@ -2216,7 +2216,7 @@ oper caber_34 : Str -> Verbum = \caber ->
     }
   } ;
 
-oper saber_35 : Str -> Verbum = \saber ->
+oper saber_Besch : Str -> Verbum = \saber ->
   let s_ = Predef.tk 4 saber in
  {s = table {
     VI Infn => s_ + "aber" ;
@@ -2285,7 +2285,7 @@ oper saber_35 : Str -> Verbum = \saber ->
     }
   } ;
 
-oper poder_36 : Str -> Verbum = \poder ->
+oper poder_Besch : Str -> Verbum = \poder ->
   let p_ = Predef.tk 4 poder in
  {s = table {
     VI Infn => p_ + "oder" ;
@@ -2354,7 +2354,7 @@ oper poder_36 : Str -> Verbum = \poder ->
     }
   } ;
 
-oper crer_37 : Str -> Verbum = \crer ->
+oper crer_Besch : Str -> Verbum = \crer ->
   let cr_ = Predef.tk 2 crer in
  {s = table {
     VI Infn => cr_ + "er" ;
@@ -2423,7 +2423,7 @@ oper crer_37 : Str -> Verbum = \crer ->
     }
   } ;
 
-oper querer_38 : Str -> Verbum = \querer ->
+oper querer_Besch : Str -> Verbum = \querer ->
   let qu_ = Predef.tk 4 querer in
  {s = table {
     VI Infn => qu_ + "erer" ;
@@ -2492,7 +2492,7 @@ oper querer_38 : Str -> Verbum = \querer ->
     }
   } ;
 
-oper requerer_39 : Str -> Verbum = \requerer ->
+oper requerer_Besch : Str -> Verbum = \requerer ->
   let reque_ = Predef.tk 3 requerer in
  {s = table {
     VI Infn => reque_ + "rer" ;
@@ -2561,7 +2561,7 @@ oper requerer_39 : Str -> Verbum = \requerer ->
     }
   } ;
 
-oper ver_40 : Str -> Verbum = \ver ->
+oper ver_Besch : Str -> Verbum = \ver ->
   let v_ = Predef.tk 2 ver in
  {s = table {
     VI Infn => v_ + "er" ;
@@ -2630,7 +2630,7 @@ oper ver_40 : Str -> Verbum = \ver ->
     }
   } ;
 
-oper prover_41 : Str -> Verbum = \prover ->
+oper prover_Besch : Str -> Verbum = \prover ->
   let prov_ = Predef.tk 2 prover in
  {s = table {
     VI Infn => prov_ + "er" ;
@@ -2699,7 +2699,7 @@ oper prover_41 : Str -> Verbum = \prover ->
     }
   } ;
 
-oper ler_42 : Str -> Verbum = \ler ->
+oper ler_Besch : Str -> Verbum = \ler ->
   let l_ = Predef.tk 2 ler in
  {s = table {
     VI Infn => l_ + "er" ;
@@ -2768,7 +2768,7 @@ oper ler_42 : Str -> Verbum = \ler ->
     }
   } ;
 
-oper valer_43 : Str -> Verbum = \valer ->
+oper valer_Besch : Str -> Verbum = \valer ->
   let val_ = Predef.tk 2 valer in
  {s = table {
     VI Infn => val_ + "er" ;
@@ -2837,7 +2837,7 @@ oper valer_43 : Str -> Verbum = \valer ->
     }
   } ;
 
-oper perder_44 : Str -> Verbum = \perder ->
+oper perder_Besch : Str -> Verbum = \perder ->
   let per_ = Predef.tk 3 perder in
  {s = table {
     VI Infn => per_ + "der" ;
@@ -2906,7 +2906,7 @@ oper perder_44 : Str -> Verbum = \perder ->
     }
   } ;
 
-oper pôr_45 : Str -> Verbum = \pôr ->
+oper pôr_Besch : Str -> Verbum = \pôr ->
   let p_ = Predef.tk 2 pôr in
  {s = table {
     VI Infn => p_ + "ôr" ;
@@ -2975,7 +2975,7 @@ oper pôr_45 : Str -> Verbum = \pôr ->
     }
   } ;
 
-oper acontecer_46 : Str -> Verbum = \acontecer ->
+oper acontecer_Besch : Str -> Verbum = \acontecer ->
   let aconte_ = Predef.tk 3 acontecer in
  {s = table {
     VI Infn => aconte_ + "cer" ;
@@ -3044,7 +3044,7 @@ oper acontecer_46 : Str -> Verbum = \acontecer ->
     }
   } ;
 
-oper chover_47 : Str -> Verbum = \chover ->
+oper chover_Besch : Str -> Verbum = \chover ->
   let chov_ = Predef.tk 2 chover in
  {s = table {
     VI Infn => chov_ + "er" ;
@@ -3113,7 +3113,7 @@ oper chover_47 : Str -> Verbum = \chover ->
     }
   } ;
 
-oper doer_48 : Str -> Verbum = \doer ->
+oper doer_Besch : Str -> Verbum = \doer ->
   let d_ = Predef.tk 3 doer in
  {s = table {
     VI Infn => d_ + "oer" ;
@@ -3182,7 +3182,7 @@ oper doer_48 : Str -> Verbum = \doer ->
     }
   } ;
 
-oper prazer_49 : Str -> Verbum = \prazer ->
+oper prazer_Besch : Str -> Verbum = \prazer ->
   let pr_ = Predef.tk 4 prazer in
  {s = table {
     VI Infn => pr_ + "azer" ;
@@ -3251,7 +3251,7 @@ oper prazer_49 : Str -> Verbum = \prazer ->
     }
   } ;
 
-oper precaver_50 : Str -> Verbum = \precaver ->
+oper precaver_Besch : Str -> Verbum = \precaver ->
   let precav_ = Predef.tk 2 precaver in
  {s = table {
     VI Infn => precav_ + "er" ;
@@ -3320,7 +3320,7 @@ oper precaver_50 : Str -> Verbum = \precaver ->
     }
   } ;
 
-oper reaver_51 : Str -> Verbum = \reaver ->
+oper reaver_Besch : Str -> Verbum = \reaver ->
   let re_ = Predef.tk 4 reaver in
  {s = table {
     VI Infn => re_ + "aver" ;
@@ -3389,7 +3389,7 @@ oper reaver_51 : Str -> Verbum = \reaver ->
     }
   } ;
 
-oper redigir_52 : Str -> Verbum = \redigir ->
+oper redigir_Besch : Str -> Verbum = \redigir ->
   let red_ = Predef.tk 4 redigir in
  {s = table {
     VI Infn => red_ + "igir" ;
@@ -3458,7 +3458,7 @@ oper redigir_52 : Str -> Verbum = \redigir ->
     }
   } ;
 
-oper extinguir_53 : Str -> Verbum = \extinguir ->
+oper extinguir_Besch : Str -> Verbum = \extinguir ->
   let extin_ = Predef.tk 4 extinguir in
  {s = table {
     VI Infn => extin_ + "guir" ;
@@ -3527,7 +3527,7 @@ oper extinguir_53 : Str -> Verbum = \extinguir ->
     }
   } ;
 
-oper servir_54 : Str -> Verbum = \servir ->
+oper servir_Besch : Str -> Verbum = \servir ->
   let s_ = Predef.tk 5 servir in
  {s = table {
     VI Infn => s_ + "ervir" ;
@@ -3596,7 +3596,7 @@ oper servir_54 : Str -> Verbum = \servir ->
     }
   } ;
 
-oper seguir_55 : Str -> Verbum = \seguir ->
+oper seguir_Besch : Str -> Verbum = \seguir ->
   let s_ = Predef.tk 5 seguir in
  {s = table {
     VI Infn => s_ + "eguir" ;
@@ -3665,7 +3665,7 @@ oper seguir_55 : Str -> Verbum = \seguir ->
     }
   } ;
 
-oper sentir_56 : Str -> Verbum = \sentir ->
+oper sentir_Besch : Str -> Verbum = \sentir ->
   let s_ = Predef.tk 5 sentir in
  {s = table {
     VI Infn => s_ + "entir" ;
@@ -3734,7 +3734,7 @@ oper sentir_56 : Str -> Verbum = \sentir ->
     }
   } ;
 
-oper preferir_57 : Str -> Verbum = \preferir ->
+oper preferir_Besch : Str -> Verbum = \preferir ->
   let pref_ = Predef.tk 4 preferir in
  {s = table {
     VI Infn => pref_ + "erir" ;
@@ -3803,7 +3803,7 @@ oper preferir_57 : Str -> Verbum = \preferir ->
     }
   } ;
 
-oper agredir_58 : Str -> Verbum = \agredir ->
+oper agredir_Besch : Str -> Verbum = \agredir ->
   let agr_ = Predef.tk 4 agredir in
  {s = table {
     VI Infn => agr_ + "edir" ;
@@ -3872,7 +3872,7 @@ oper agredir_58 : Str -> Verbum = \agredir ->
     }
   } ;
 
-oper dormir_59 : Str -> Verbum = \dormir ->
+oper dormir_Besch : Str -> Verbum = \dormir ->
   let d_ = Predef.tk 5 dormir in
  {s = table {
     VI Infn => d_ + "ormir" ;
@@ -3941,7 +3941,7 @@ oper dormir_59 : Str -> Verbum = \dormir ->
     }
   } ;
 
-oper polir_60 : Str -> Verbum = \polir ->
+oper polir_Besch : Str -> Verbum = \polir ->
   let p_ = Predef.tk 4 polir in
  {s = table {
     VI Infn => p_ + "olir" ;
@@ -4010,7 +4010,7 @@ oper polir_60 : Str -> Verbum = \polir ->
     }
   } ;
 
-oper acudir_61 : Str -> Verbum = \acudir ->
+oper acudir_Besch : Str -> Verbum = \acudir ->
   let ac_ = Predef.tk 4 acudir in
  {s = table {
     VI Infn => ac_ + "udir" ;
@@ -4079,7 +4079,7 @@ oper acudir_61 : Str -> Verbum = \acudir ->
     }
   } ;
 
-oper fugir_62 : Str -> Verbum = \fugir ->
+oper fugir_Besch : Str -> Verbum = \fugir ->
   let f_ = Predef.tk 4 fugir in
  {s = table {
     VI Infn => f_ + "ugir" ;
@@ -4148,7 +4148,7 @@ oper fugir_62 : Str -> Verbum = \fugir ->
     }
   } ;
 
-oper frigir_63 : Str -> Verbum = \frigir ->
+oper frigir_Besch : Str -> Verbum = \frigir ->
   let fr_ = Predef.tk 4 frigir in
  {s = table {
     VI Infn => fr_ + "igir" ;
@@ -4217,7 +4217,7 @@ oper frigir_63 : Str -> Verbum = \frigir ->
     }
   } ;
 
-oper divergir_64 : Str -> Verbum = \divergir ->
+oper divergir_Besch : Str -> Verbum = \divergir ->
   let div_ = Predef.tk 5 divergir in
  {s = table {
     VI Infn => div_ + "ergir" ;
@@ -4286,7 +4286,7 @@ oper divergir_64 : Str -> Verbum = \divergir ->
     }
   } ;
 
-oper refletir_65 : Str -> Verbum = \refletir ->
+oper refletir_Besch : Str -> Verbum = \refletir ->
   let refl_ = Predef.tk 4 refletir in
  {s = table {
     VI Infn => refl_ + vars "etir" "ectir" ;
@@ -4355,7 +4355,7 @@ oper refletir_65 : Str -> Verbum = \refletir ->
     }
   } ;
 
-oper ir_66 : Str -> Verbum = \ir ->
+oper ir_Besch : Str -> Verbum = \ir ->
   let x_ = Predef.tk 2 ir in
  {s = table {
     VI Infn => x_ + "ir" ;
@@ -4424,7 +4424,7 @@ oper ir_66 : Str -> Verbum = \ir ->
     }
   } ;
 
-oper vir_67 : Str -> Verbum = \vir ->
+oper vir_Besch : Str -> Verbum = \vir ->
   let v_ = Predef.tk 2 vir in
  {s = table {
     VI Infn => v_ + "ir" ;
@@ -4493,7 +4493,7 @@ oper vir_67 : Str -> Verbum = \vir ->
     }
   } ;
 
-oper sair_68 : Str -> Verbum = \sair ->
+oper sair_Besch : Str -> Verbum = \sair ->
   let sa_ = Predef.tk 2 sair in
  {s = table {
     VI Infn => sa_ + "ir" ;
@@ -4562,7 +4562,7 @@ oper sair_68 : Str -> Verbum = \sair ->
     }
   } ;
 
-oper rir_69 : Str -> Verbum = \rir ->
+oper rir_Besch : Str -> Verbum = \rir ->
   let r_ = Predef.tk 2 rir in
  {s = table {
     VI Infn => r_ + "ir" ;
@@ -4631,7 +4631,7 @@ oper rir_69 : Str -> Verbum = \rir ->
     }
   } ;
 
-oper pedir_70 : Str -> Verbum = \pedir ->
+oper pedir_Besch : Str -> Verbum = \pedir ->
   let pe_ = Predef.tk 3 pedir in
  {s = table {
     VI Infn => pe_ + "dir" ;
@@ -4700,7 +4700,7 @@ oper pedir_70 : Str -> Verbum = \pedir ->
     }
   } ;
 
-oper ouvir_71 : Str -> Verbum = \ouvir ->
+oper ouvir_Besch : Str -> Verbum = \ouvir ->
   let ou_ = Predef.tk 3 ouvir in
  {s = table {
     VI Infn => ou_ + "vir" ;
@@ -4769,7 +4769,7 @@ oper ouvir_71 : Str -> Verbum = \ouvir ->
     }
   } ;
 
-oper traduzir_72 : Str -> Verbum = \traduzir ->
+oper traduzir_Besch : Str -> Verbum = \traduzir ->
   let traduz_ = Predef.tk 2 traduzir in
  {s = table {
     VI Infn => traduz_ + "ir" ;
@@ -4838,7 +4838,7 @@ oper traduzir_72 : Str -> Verbum = \traduzir ->
     }
   } ;
 
-oper distribuir_73 : Str -> Verbum = \distribuir ->
+oper distribuir_Besch : Str -> Verbum = \distribuir ->
   let distribu_ = Predef.tk 2 distribuir in
  {s = table {
     VI Infn => distribu_ + "ir" ;
@@ -4907,7 +4907,7 @@ oper distribuir_73 : Str -> Verbum = \distribuir ->
     }
   } ;
 
-oper destruir_74 : Str -> Verbum = \destruir ->
+oper destruir_Besch : Str -> Verbum = \destruir ->
   let destr_ = Predef.tk 3 destruir in
  {s = table {
     VI Infn => destr_ + "uir" ;
@@ -4976,7 +4976,7 @@ oper destruir_74 : Str -> Verbum = \destruir ->
     }
   } ;
 
-oper arguir_75 : Str -> Verbum = \arguir ->
+oper arguir_Besch : Str -> Verbum = \arguir ->
   let arg_ = Predef.tk 3 arguir in
  {s = table {
     VI Infn => arg_ + "uir" ;
@@ -5045,7 +5045,7 @@ oper arguir_75 : Str -> Verbum = \arguir ->
     }
   } ;
 
-oper reunir_76 : Str -> Verbum = \reunir ->
+oper reunir_Besch : Str -> Verbum = \reunir ->
   let re_ = Predef.tk 4 reunir in
  {s = table {
     VI Infn => re_ + "unir" ;
@@ -5114,7 +5114,7 @@ oper reunir_76 : Str -> Verbum = \reunir ->
     }
   } ;
 
-oper proibir_77 : Str -> Verbum = \proibir ->
+oper proibir_Besch : Str -> Verbum = \proibir ->
   let pro_ = Predef.tk 4 proibir in
  {s = table {
     VI Infn => pro_ + "ibir" ;
@@ -5183,7 +5183,7 @@ oper proibir_77 : Str -> Verbum = \proibir ->
     }
   } ;
 
-oper imergir_78 : Str -> Verbum = \imergir ->
+oper imergir_Besch : Str -> Verbum = \imergir ->
   let imerg_ = Predef.tk 2 imergir in
  {s = table {
     VI Infn => imerg_ + "ir" ;
@@ -5252,7 +5252,7 @@ oper imergir_78 : Str -> Verbum = \imergir ->
     }
   } ;
 
-oper falir_79 : Str -> Verbum = \falir ->
+oper falir_Besch : Str -> Verbum = \falir ->
   let fal_ = Predef.tk 2 falir in
  {s = table {
     VI Infn => fal_ + "ir" ;
@@ -5321,7 +5321,7 @@ oper falir_79 : Str -> Verbum = \falir ->
     }
   } ;
 
-oper remir_80 : Str -> Verbum = \remir ->
+oper remir_Besch : Str -> Verbum = \remir ->
   let rem_ = Predef.tk 2 remir in
  {s = table {
     VI Infn => rem_ + "ir" ;
@@ -5390,7 +5390,7 @@ oper remir_80 : Str -> Verbum = \remir ->
     }
   } ;
 
-oper viajar_r22 : Str -> Verbum = \viajar ->
+oper viajar_Besch : Str -> Verbum = \viajar ->
   let viaj_ = Predef.tk 2 viajar in
  {s = table {
     VI Infn => viaj_ + "ar" ;
@@ -5459,7 +5459,7 @@ oper viajar_r22 : Str -> Verbum = \viajar ->
     }
   } ;
 
-oper suar_r37 : Str -> Verbum = \suar ->
+oper suar_Besch : Str -> Verbum = \suar ->
   let su_ = Predef.tk 2 suar in
  {s = table {
     VI Infn => su_ + "ar" ;
