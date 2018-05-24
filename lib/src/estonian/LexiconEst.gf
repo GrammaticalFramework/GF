@@ -119,7 +119,7 @@ lin
   love_N = mkN "armastus" ;
   love_V2 = mkV2 (mkV "armastama") partitive ;
   man_N = mkN "mees" "mehe" "meest" "mehesse" "meeste" "mehi" ;
-  married_A2 = mkA2 (mkA "abielus") (casePrep comitative) ;
+  married_A2 = mkA2 (invA "abielus") (casePrep comitative) ;
   meat_N = mkN "liha" ;
   milk_N = mkN "piim" "piima" "piima" ;
   moon_N = mkN "kuu" ;
