@@ -1834,7 +1834,7 @@ Some expressions are moreover left- or right-associative.
 </TR>
 <TR>
 <TD>5</TD>
-<TD><CODE>pre {"a" ; "an"/vowel}</CODE></TD>
+<TD><CODE>pre {vowel => "an" ; _ => "a"}</CODE></TD>
 <TD>prefix-dependent choice</TD>
 </TR>
 <TR>
@@ -2264,7 +2264,7 @@ Expressions of type <CODE>Str</CODE> have the following canonical forms:
 <LI><B>the empty token list</B>, <CODE>[]</CODE>
 <LI><B>concatenation</B>, <I>s</I> <CODE>++</CODE> <I>t</I>, where <I>s,t</I> : <CODE>Str</CODE>
 <LI><B>prefix-dependent choice</B>,
-  <CODE>pre {</CODE> <I>s</I> ; <i>s</i><sub>1</sub> <CODE>/</CODE> <i>p</i><sub>1</sub> ; ... ; <i>s</i><sub>n</sub> <CODE>/</CODE> <i>p</i><sub>n</sub>}, where
+  <CODE>pre {p<sub>1</sub> => s<sub>1</sub> ; ... ; p<sub>n</sub> => s<sub>n</sub> ; _ => s }, where
   <UL>
   <LI><I>s</I>, <i>s</i><sub>1</sub>,...,<i>s</i><sub>n</sub>, <i>p</i><sub>1</sub>,...,<i>p</i><sub>n</sub> : <CODE>Str</CODE>
   </UL>
@@ -2344,13 +2344,16 @@ A prime example of prefix-dependent choice operation is the following
 approximative expression for the English indefinite article:
 </P>
 <PRE>
-    pre {"a" ; "an" / variants {"a" ; "e" ; "i" ; "o"}}
+  pre {
+    ("a" | "e" | "i" | "o") => "an" ;
+    _ => "a"
+  } ;
 </PRE>
 <P>
 This expression can be computed in the context of a subsequent token:
 </P>
 <UL>
-<LI><CODE>pre {</CODE> <I>s</I> ; <i>s</i><sub>1</sub> <CODE>/</CODE> <i>p</i><sub>1</sub> ; ... ; <i>s</i><sub>n</sub> <CODE>/</CODE> <i>p</i><sub>n</sub><CODE>} ++</CODE> <I>t</I>
+<LI><CODE>pre {p<sub>1</sub> => s<sub>1</sub> ; ... ; p<sub>n</sub> => s<sub>n</sub> ; _ => s } ++ t</CODE>
   ==>
   <UL>
   <LI><i>s</i><sub>i</sub> for the first <I>i</I> such that the prefix <i>p</i><sub>i</sub>
@@ -2373,6 +2376,11 @@ subsequent token depends on a run-time variable.
 <P>
 The prefix-dependent choice expression itself may not depend on run-time
 variables.
+</P>
+<P>
+  <I>There is an older syntax for prefix-dependent choice,
+  namely: <code>pre { s ; s1 / p1 ; ... ; sn / pn}</code>. This syntax
+  will not accept strings as patterns.</I>
 </P>
 <P>
 <I>In GF prior to 3.0, a specific type</I> <CODE>Strs</CODE>
