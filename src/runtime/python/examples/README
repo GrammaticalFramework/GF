@@ -9,7 +9,7 @@ TRANSLATION PIPELINE
 The module translation_pipeline.py is a Python replica of the 
 translation pipeline used in Wide-coverage Translation demo. 
 The pipeline allows for 
-  1. simulataneous batch translation from one language into multiple languages
+  1. simultaneous batch translation from one language into multiple languages
   2. K-best translations
   3. translate both text files and sgm files. 
 
