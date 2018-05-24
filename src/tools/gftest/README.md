@@ -27,9 +27,14 @@ document, as well as the full list of options to give to `gftest`.
   - [Empty or always identical fields: `-e`, `-q`](#empty-or-always-identical-fields--e--q)
   - [Unused fields: `-u`](#unused-fields--u)
   - [Erased trees: `-r`](#erased-trees--r)
+  - [Debug information: `-d`](#debug-intormation--d)
+- [Detailed information about the grammar](#detailed-information-about-the-grammar)
+  - [--show-cats](#--show-cats)
+  - [--show-funs](#--show-funs)
   - [--show-coercions](#--show-coercions)
+  - [--show-contexts](#--show-contexts)
   - [--count-trees](#--count-trees)
-
+  - [--funs-of-arity](#--funs-of-arity)
 
 ## Installation
 
@@ -71,6 +76,7 @@ Common flags:
      --show-funs           Show all available functions
      --funs-of-arity=2     Show all functions of arity 2
      --show-coercions      Show coercions in the grammar
+     --show-contexts=8410  Show contexts for a given concrete type (given as FId)
      --concr-string=the    Show all functions that include given string
   -q --equal-fields        Show fields whose strings are always identical
   -e --empty-fields        Show fields whose strings are always empty
@@ -188,8 +194,9 @@ then you can call the following:
 
 Give a grammar, a concrete syntax, and an old version of the same
 grammar as a separate PGF file. The program generates test sentences
-for all functions, linearises with both grammars, and outputs those
-that differ between the versions. It writes the differences into files.
+for all functions (if no other arguments), linearises with both
+grammars, and outputs those that differ between the versions. It
+writes the differences into files.
 
 Example:
 
@@ -206,20 +213,20 @@ Created files TestLangEng-(old|new)-funs.org
   changed. Shows e.g. if you added or removed a parameter or a
   field.
 
-* TestLangEng-lin-diff.org: All trees that have different
-linearisations in the following format. **This is usually the most
-relevant file.**
+* **TestLangEng-lin-diff.org** (usually the most relevant file): All
+trees that have different linearisations in the following format.
+
 ```
-* send_V3
+    * send_V3
 
-** UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron we_Pron) (ReflVP (Slash3V3 ∅ (UsePron it_Pron))))
-TestLangDut> we sturen onszelf ernaar
-TestLangDut-OLD> we sturen zichzelf ernaar
+    ** UseCl (TTAnt TPres ASimul) PPos (PredVP (UsePron we_Pron) (ReflVP (Slash3V3 ∅ (UsePron it_Pron))))
+    TestLangDut> we sturen onszelf ernaar
+    TestLangDut-OLD> we sturen zichzelf ernaar
 
 
-** UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron we_Pron) (ReflVP (Slash3V3 ∅ (UsePron it_Pron))))
-TestLangDut> we stuurden onszelf ernaar
-TestLangDut-OLD> we stuurden zichzelf ernaar
+    ** UseCl (TTAnt TPast ASimul) PPos (PredVP (UsePron we_Pron) (ReflVP (Slash3V3 ∅ (UsePron it_Pron))))
+    TestLangDut> we stuurden onszelf ernaar
+    TestLangDut-OLD> we stuurden zichzelf ernaar
 ```
 
 * TestLangEng-old-funs.org and TestLangEng-new-funs.org: groups the
@@ -227,23 +234,42 @@ TestLangDut-OLD> we stuurden zichzelf ernaar
   e.g. added or removed parameters, and that has created new versions of
   some functions: say you didn't have gender in nouns, but now you
   have, then all functions taking nouns have suddenly a gendered
-  version. **This is kind of hard to read, don't worry too much if the
-  output doesn't make any sense.** 
+  version. (This is kind of hard to read, don't worry too much if the
+  output doesn't make any sense.)
 
-You can give an additional parameter, `--only-changed-cats`, if you
-only want to test functions in those categories that you have changed,
-like this: `gftest -g TestLang -l Eng -o TestLangOld
---only-changed-cats`. This makes it run faster.
+#### Additional arguments to `-o`
+
+The default mode is to test all functions, but you can also give any
+combination of `-s`, `-f`, `-c`, `--treebank`/`-b` and `--only-changed-cats`.
+
+With `-s`, you can change the start category in which contexts are
+generated.
+
+With `-f` and `-c`, it tests only the specified functions and
+categories.
+With `-b FILEPATH` (`-b`=`--treebank`), it tests only the trees in the file.
+
+With `--only-changed-cats`, it only test functions in those categories
+that have changed between the two versions.
+
+Examples:
+
+* `gftest -g TestLang -l Eng -o TestLangOld` tests all functions
+* `gftest -g TestLang -l Eng -o TestLangOld -s S` tests all functions in start category S
+* `gftest -g TestLang -l Eng -o TestLangOld --only-changed-cats` tests only changed categories. If no categories have changed (and no other arguments specified), tests everything.
+* `gftest -g TestLang -l Eng -o TestLangOld -f "AdjCN AdvCN" -c Adv -b trees.txt` tests functions, `AdjCN` and `AdvCN`; same for all functions that produce an `Adv`, and all trees in trees.txt.
 
 ### Information about a particular string: `--concr-string`
 
-Show all functions where the given concrete string appears as syncategorematic string (i.e. not from the arguments).
+Show all functions that introduce the string given as an argument.
 
 Example:
 
-* `gftest -l Eng --concr-string it`
+* `gftest -g Lang -l Eng --concr-string it`
 
 which gives the answer `==> CleftAdv, CleftNP, DefArt, ImpersCl, it_Pron`
+
+(Note that you have the same feature in GF shell, command `morpho_analyse`/`ma`.)
 
 
 ### Write into a file: `-w`
@@ -353,10 +379,11 @@ Show trees that are erased in some function, i.e. a function `F : A -> B -> C` h
 
 Example:
 
-`gftest -g Lang -l "Dut Eng" -r`  
 
-output:
+
 ```
+> gftest -g Lang -l "Dut Eng" -r
+
 * Erased trees:
 
 ** RelCl (ExistNP something_NP) : RCl
@@ -372,15 +399,56 @@ output:
 
 In the first result, an argument of type `RCl` is missing in the tree constructed by `RelNP`, and in the second result, the argument `write_V2` is missing in the tree constructed by `PPartNP`. In both cases, the English linearisation contains all the arguments, but in the Dutch one they are missing. (This bug is already fixed, just showing it here to demonstrate the feature.)
 
+## Detailed information about the grammar
+
+### Debug information: `-d`
+
+When combined with `-f`, `-c` or `-t`, two things happen:
+
+1) The trees are linearised using `tabularLinearize`, which shows the
+inflection table of all forms.
+2) You can see traces of pruning that happens in testing functions:
+contexts that are common to several concrete categories are put under
+a separate test case.
+
+When combined with `--show-cats`, also the concrete categories are
+shown.
+
+### --show-cats
+
+Shows the categories in the grammar. With `--debug`/`-d`, shows also
+concrete categories.
+
+Example:
+
+```
+> gftest -g Foods -l Spa --show-cats -d
+
+* Categories in the grammar:
+Comment
+    Compiles to concrete category   0
+Item
+    Compiles to concrete categories 1—4
+Kind
+    Compiles to concrete categories 5—6
+Quality
+    Compiles to concrete categories 7—8
+Question
+    Compiles to concrete category   9
+```
+
+### --show-funs
+
+Shows the functions in the grammar. (Nothing fancy happens with other flags.)
+
 
 ### --show-coercions
 
 First I'll explain what *coercions* are, then why it may be
 interesting to show them. Let's take a Spanish Foods grammar, and
-consider the category `Quality`—those `Good Pizza` and `Vegan Pizza`
-that you saw in the previous section. `Good`
-"bueno/buena/buenos/buenas" goes before the noun it modifies, whereas
-`Vegan` "vegano/vegana/…" goes after, so these will become different
+consider the category `Quality`, e.g. `Good` and `Vegan`.
+`Good` "bueno/buena/buenos/buenas" goes before the noun it modifies,
+whereas `Vegan` "vegano/vegana/…" goes after, so these will become different
 *concrete categories* in the PGF: `Quality_before` and
 `Quality_after`. (In reality, they are something like `Quality_7` and
 `Quality_8` though.)
@@ -405,6 +473,55 @@ Quality_8--->_11
 ```
 
 (Just mentally replace 7 with `before`, 8 with `after` and 11 with `whatever`.)
+
+### --show-contexts
+
+Show contexts for a given concrete category, given as an FId
+(i.e. Int). The concrete category may be a coercion or a normal
+category. By combining with [`-s`](#start-category-for-context--s),
+you can change the start category of the context.
+
+(You can get a list of all concrete categories by pairing `--show-cats`
+with `--debug`: see [`--show-cats`](#--show-cats).)
+
+Examples:
+
+* First, find out some concrete categories:
+
+```
+    > gftest -g Foods -l Spa --show-cats -d
+    …
+    Quality
+        Compiles to concrete categories 7—8
+    …
+```
+
+* Then, list the contexts for some of them, say `Quality_7`:
+
+```
+    > gftest -g Foods -l Spa --show-contexts 7
+
+    Pred (That (Mod ∅ Wine)) Vegan
+    Pred (That Wine) ∅
+    Pred (These (Mod ∅ Wine)) Vegan
+    Pred (These Wine) ∅
+    Pred (That (Mod ∅ Pizza)) Vegan
+    Pred (That Pizza) ∅
+    Pred (These (Mod ∅ Pizza)) Vegan
+    Pred (These Pizza) ∅
+```
+
+* Check out from [`--show-coercions`](#--show-coercions) how to find
+coercions, and you can try `--show-contexts` with them:
+
+```
+    > gftest -g Foods -l Spa --show-contexts 11
+
+    Pred (That Wine) ∅
+    Pred (These Wine) ∅
+    Pred (That Pizza) ∅
+    Pred (These Pizza) ∅
+```
 
 ### --count-trees
 
