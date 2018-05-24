@@ -1,18 +1,20 @@
+-- the Extra* modules are to be deprecated in favour of the Extend*
+-- module.
 concrete ExtraPor of ExtraPorAbs = ExtraRomancePor **
-  open CommonRomance, PhonoPor, MorphoPor, ParadigmsPor, ParamX, ResPor, BeschPor, (I = IrregPor), (S = StructuralPor),
+  open CommonRomance, PhonoPor, MorphoPor, ParadigmsPor, ParamX, ResPor, BeschPor, (B = IrregBeschPor), (E = ExtendPor),
   Prelude in {
   flags coding=utf8 ;
 
   lin
     --- Prons
-    i8fem_Pron = pronAgr S.i_Pron Fem Sg P1 ;
-    youSg8fem_Pron = pronAgr S.youSg_Pron Fem Sg P3 ;
-    we8fem_Pron = pronAgr S.we_Pron Fem Pl P1 ;
-    youPl8fem_Pron = pronAgr S.youPl_Pron Fem Pl P3 ;
-    youPolPl_Pron = S.youPol_Pron ** pronLin "vós" "vos" "vos" "vós" ;
-    youPol8fem_Pron = pronAgr S.youPol_Pron Fem Sg P2 ;
-    youPolPl8fem_Pron = pronAgr youPolPl_Pron Fem Pl P2 ;
-    they8fem_Pron = mkPronFrom S.they_Pron "elas" "as" "lhes" "elas" Fem Pl P3 ;
+    i8fem_Pron = E.iFem_Pron ;
+    youSg8fem_Pron = E.youFem_Pron ;
+    we8fem_Pron = E.weFem_Pron ;
+    youPl8fem_Pron = E.youPlFem_Pron ;
+    youPolPl_Pron = E.youPolPl_Pron ;
+    youPol8fem_Pron = E.youPolFem_Pron ;
+    youPolPl8fem_Pron = E.youPolPlFem_Pron ;
+    they8fem_Pron = E.theyFem_Pron ;
 
 
     these8fem_NP = makeNP ["estas"] Fem Pl ;
@@ -37,24 +39,10 @@ concrete ExtraPor of ExtraPorAbs = ExtraRomancePor **
       } ;
 
     -- ExtraRomance.PassVPSlash uses estar
-    PassVPSlash_ser vps =
-      let auxvp = predV copula
-      in
-      insertComplement (\\a => let agr = complAgr a in vps.s.s ! VPart agr.g agr.n) {
-        s = auxvp.s ;
-        agr = auxvp.agr ;
-        neg = vps.neg ;
-        clit1 = vps.clit1 ;
-        clit2 = vps.clit2 ;
-        clit3 = vps.clit3 ;
-        isNeg = vps.isNeg ;
-        comp  = vps.comp ;
-        ext   = vps.ext
-        } ;
+    PassVPSlash_ser = E.PassVPSlash ;
 
-    ExistsNP np =
-      mkClause [] True False np.a (insertComplement (\\_ => (np.s ! Nom).ton) (predV (mkV "existir"))) ;
+    ExistsNP = E.ExistsNP ;
 
-    UseComp_estar comp = insertComplement comp.s (predV I.estar_V) ;
+    UseComp_estar comp = insertComplement comp.s (predV B.estar_V) ;
 
 }

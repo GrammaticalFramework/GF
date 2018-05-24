@@ -5,22 +5,91 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
   flags optimize=noexpand ;
         coding=utf8 ;
 
----- exceptions ----------------
-  oper
-    partAgr : VType -> Bool = \vtyp -> False ;
-    vpAgrSubj : Verb -> VPAgrType = \v -> <verbDefaultPart v, False> ;
-    vpAgrClits : Verb -> AAgr -> VPAgrType = \v,a -> <verbDefaultPart v, False> ;
-
---------------------------------
-
   param
     Prepos = P_de | P_a ;
+
     VType = VHabere | VRefl ;
+
+  oper
+    partAgr : VType -> Bool ;
+    -- exception
+    partAgr _ = False ;
+
+    vpAgrSubj : Verb -> VPAgrType ;
+    -- exception
+    vpAgrSubj v = <verbDefaultPart v, False> ;
+
+  oper
+    conjunctCase : Case -> Case = \c -> case c of {
+      Nom => Nom ;
+      _ => Acc
+      } ;
+
+  oper
+    clitInf b cli inf = inf ++ bindIf b ++ cli ;
+
+  oper
+    pronArg = \n,p,acc,dat ->
+      let
+        paccp = case acc of {
+          CRefl   => <reflPron n p Acc, p,True> ;
+          CPron ag an ap => <argPron ag an ap Acc, ap,True> ;
+          _ => <[],P2,False>
+          } ;
+        pdatp = case dat of {
+          CPron ag an ap => <argPron ag an ap dative, ap,True> ;
+          _ => <[],P2,False>
+          } ;
+        peither = case acc of {
+          CRefl | CPron _ _ _ => True ;
+          _ => case dat of {
+            CPron _ _ _ => True ;
+            _ => False
+            }
+          } ;
+        defaultPronArg = <pdatp.p1 ++ paccp.p1, [], peither>
+      in
+  ---- 8/6/2008 efficiency problem in pgf generation: replace the case
+  ---- expr with a constant produces an error in V3 predication with
+  ---- two pronouns
+      defaultPronArg ;
+
+  oper
+    mkImperative b p vp =
+      \\pol,g,n =>
+        let
+          pe    = case b of {True => P3 ; _ => p} ;
+          agr   = {g = g ; n = n ; p = pe} ;
+          refl  = case vp.s.vtyp of {
+            VRefl => <reflPron n pe Acc,True> ;
+            _ => <[],False>
+            } ;
+
+          clpr  =  <vp.clit1 ++ vp.clit2, [],vp.clit3.hasClit> ;
+          verb  = vp.s.s ! vImper n pe ;
+          neg   = vp.neg ! pol ;
+          compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
+      in
+      neg.p1 ++ verb ++ bindIf refl.p2 ++ refl.p1 ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
+
+  oper
+    CopulaType = Bool ;
+    selectCopula = \isEstar -> case isEstar of {True => estar_V ; False => copula} ;
+    serCopula = False ;
+    estarCopula = True ;
 
   oper
     dative   : Case = CPrep P_a ;
     genitive : Case = CPrep P_de ;
 
+  oper
+    vRefl _ = VRefl ;
+    isVRefl : VType -> Bool = \ty -> case ty of {
+      VRefl => True ;
+      _ => False
+      } ;
+
+  oper
     prepCase = \c -> case c of {
       Nom => [] ;
       Acc => [] ;
@@ -28,6 +97,10 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
       CPrep P_a  => "a"
       } ;
 
+  oper
+    partitive = \_,c -> prepCase c ;
+
+  oper
     artDef : Bool -> Gender -> Number -> Case -> Str = \isNP,g,n,c ->
       case isNP of {
        True => case <g,n,c> of {
@@ -59,121 +132,74 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
         }
       } ;
 
+  oper
     possCase = \_,_,c -> prepCase c ;
 
-    partitive = \_,c -> prepCase c ;
-
-{-
-    partitive = \g,c -> case c of {
-      CPrep P_de => "de" ;
-      _ => prepCase c ++ artDef g Sg (CPrep P_de)
-      } ;
--}
-
-    conjunctCase : Case -> Case = \c -> case c of {
-      Nom => Nom ;
-      _ => Acc
-      } ;
-
+  oper
     auxVerb : VType -> (VF => Str) = \_ -> haver_V.s ;
-
-    vpAgrClit : Agr -> VPAgr = \a ->
-      vpAgrNone ;
-
-    pronArg = \n,p,acc,dat ->
-      let
-        paccp = case acc of {
-          CRefl   => <reflPron n p Acc, p,True> ;
-          CPron ag an ap => <argPron ag an ap Acc, ap,True> ;
-          _ => <[],P2,False>
-          } ;
-        pdatp = case dat of {
-          CPron ag an ap => <argPron ag an ap dative, ap,True> ;
-          _ => <[],P2,False>
-          } ;
-        peither = case acc of {
-          CRefl | CPron _ _ _ => True ;
-          _ => case dat of {
-            CPron _ _ _ => True ;
-            _ => False
-            }
-          } ;
-        defaultPronArg = <pdatp.p1 ++ paccp.p1, [], peither>
-----        defaultPronArg = <pdatp.p1 ++ paccp.p1, [], orB paccp.p3 pdatp.p3>
-      in
-      ----  case <<paccp.p2, pdatp.p2> : Person * Person> of {
-      ----     <P3,P3> => <"se" ++ paccp.p1, [], True> ;
-      ----     _ => defaultPronArg
-      ---     } ;
-      ---- 8/6/2008 efficiency problem in pgf generation: replace the case expr with
-      ---- a constant produces an error in V3 predication with two pronouns
-         defaultPronArg ;
-
-    infForm _ _ _ _  = True ;
-
-    mkImperative b p vp =
-      \\pol,g,n =>
-        let
-          pe    = case b of {True => P3 ; _ => p} ;
-          agr   = {g = g ; n = n ; p = pe} ;
-          refl  = case vp.s.vtyp of {
-            VRefl => <reflPron n pe Acc,True> ;
-            _ => <[],False>
-            } ;
-
-          clpr  =  <vp.clit1 ++ vp.clit2, [],vp.clit3.hasClit> ;
-----          clpr  = <[],[],False> ; ----e pronArg agr.n agr.p vp.clAcc vp.clDat ;
-----e          verb  = case <aag.n, pol,pe> of {
-----e            <Sg,Neg,P2> => (vp.s ! VPInfinit Simul clpr.p3).inf ! aag ;
-----e            _ => (vp.s ! VPImperat).fin ! agr
-----e            } ;
-          verb  = vp.s.s ! vImper n pe ;
-          neg   = vp.neg ! pol ;
-          compl = neg.p2 ++ clpr.p2 ++ vp.comp ! agr ++ vp.ext ! pol
-        in
-        neg.p1 ++ verb ++ bindIf refl.p2 ++ refl.p1 ++ bindIf clpr.p3 ++ clpr.p1 ++ compl ;
-
-    CopulaType = Bool ;
-    selectCopula = \isEstar -> case isEstar of {True => estar_V ; False => copula} ;
-    serCopula = False ;
-    estarCopula = True ;
 
     negation : RPolarity => (Str * Str) = table {
       RPos => <[],[]> ;
       RNeg _ => <"não",[]>
       } ;
 
+    copula : Verb = verboV (ser_Besch "ser") ;
+
+  oper
     conjThan = "que" ;
     conjThat = "que" ;
+
+  oper
     subjIf = "se" ;
 
-
-    clitInf b cli inf = inf ++ bindIf b ++ cli ;
-
+  oper
     relPron : Bool => AAgr => Case => Str = \\b,a,c =>
       case c of {
         Nom | Acc => "que" ;
         CPrep P_a => "cujo" ;
         _ => prepCase c ++ "cujo"
-        } ;
+      } ;
 
     pronSuch : AAgr => Str = aagrForms "tal" "tal" "tais" "tais" ;
 
-    quelPron : AAgr => Str = aagrForms "qual" "qual" "quais" "quais" ;
+  oper
+    partQIndir = [] ;
 
-    partQIndir = [] ; ---- ?
-
+  oper
     reflPron : Number -> Person -> Case -> Str = \n,p,c ->
-        let pro = argPron Fem n p c
-        in
-        case p of {
+      let pro = argPron Fem n p c
+      in
+      case p of {
         P3 => case c of {
           Acc | CPrep P_a => "se" ;
           _ => "si"
           } ;
         _ => pro
-        } ;
+      } ;
 
+  oper
+    auxPassive : Verb = copula ;
+
+  oper
+    vpAgrClits : Verb -> AAgr -> VPAgrType ;
+    -- exception
+    vpAgrClits v a = <verbDefaultPart v, False> ;
+
+  oper
+    subjPron = \_ -> [] ;
+
+  oper
+    polNegDirSubj = RPos ;
+
+  oper
+    infForm _ _ _ _  = True ;
+
+  oper
+    vpAgrClit : Agr -> VPAgr = \a ->
+      vpAgrNone ;
+
+-- oper's opers
+  oper
     argPron : Gender -> Number -> Person -> Case -> Str =
       let
         cases : (x,y : Str) -> Case -> Str = \me,moi,c -> case c of {
@@ -195,28 +221,16 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
         <_,  Sg,P3> => cases3 "o" "seu" "ele" ;
         <Fem,Pl,P3> => cases3 "as" "suas" "elas" ;
         <_,  Pl,P3> => cases3 "os" "seus" "eles"
-        } ;
-
-    vRefl _ = VRefl ;
-    isVRefl : VType -> Bool = \ty -> case ty of {
-      VRefl => True ;
-      _ => False
       } ;
 
-    auxPassive : Verb = copula ;
+    estar_V : Verb = verboV (estar_Besch "estar") ;
 
-    copula : Verb = verbBeschH (ser_3 "ser") ;
+    haver_V : Verb = verboV (haver_Besch "haver") ;
 
-    estar_V : Verb = verbBeschH (estar_10 "estar") ;
+    ficar_V : Verb = verboV (ficar_Besch "ficar") ;
 
-    haver_V : Verb = verbBeschH (haver_2 "haver") ;
-
-    ficar_V : Verb = verbBeschH (ficar_12 "ficar") ;
-
-    verbBeschH : Verbum -> Verb = \v -> verbBesch v ** {vtyp = VHabere ; p = []} ;
-
-    subjPron = \_ -> [] ;
-
-    polNegDirSubj = RPos ;
+    verboV : Verbum -> Verb ;
+    -- make a verb of type haver
+    verboV v = verbBesch v ** {vtyp = VHabere ; p = [] ; lock_V = <>} ;
 
 }

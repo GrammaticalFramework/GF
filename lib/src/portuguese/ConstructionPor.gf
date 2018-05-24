@@ -2,7 +2,7 @@
 
 concrete ConstructionPor of Construction = CatPor **
   open SyntaxPor, SymbolicPor, ParadigmsPor, BeschPor,
-       (L = LexiconPor), (E = ExtraPor), (I = IrregPor), (R = ResPor), (C = CommonRomance),
+       (L = LexiconPor), (E = ExtraPor), (B = IrregBeschPor), (R = ResPor), (C = CommonRomance),
        Prelude in {
   flags coding=utf8 ;
 
@@ -20,13 +20,13 @@ lin
 
   what_name_QCl x = mkQCl how_IAdv (mkCl (lin NP x) (reflV (mkV "chamar"))) ;
   how_old_QCl x = mkQCl (mkIP how8many_IDet L.year_N) x have_V2 ;
-  how_far_QCl x = mkQCl (lin IAdv (ss "a que distância")) (mkCl x I.estar_V) ;
+  how_far_QCl x = mkQCl (lin IAdv (ss "a que distância")) (mkCl x B.estar_V) ;
 
 -- some more things
-  weather_adjCl ap = mkCl (mkVP (mkVA I.fazer_V) (lin AP ap)) ;
+  weather_adjCl ap = mkCl (mkVP (mkVA B.fazer_V) (lin AP ap)) ;
 
   is_right_VP = E.ComplCN have_V2 (mkCN (mkN "razão")) ;
-  is_wrong_VP = mkVP (mkVA I.estar_V) (mkAP (mkA "errado")) ;
+  is_wrong_VP = mkVP (mkVA B.estar_V) (mkAP (mkA "errado")) ;
 
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
 

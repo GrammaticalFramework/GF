@@ -14,19 +14,19 @@ abstract ExtraPorAbs = ExtraRomanceAbs ** {
     this8fem_NP : NP ;
     those8fem_NP : NP ;
 
-    we8fem_Pron : Pron ;  -- nosotras
+    we8fem_Pron : Pron ;
     whoPl8fem_IP : IP ;
     whoSg8fem_IP : IP ;
 
     youSg8fem_Pron : Pron ;
-    youPl8fem_Pron : Pron ; -- vosotras
-    youPol8fem_Pron : Pron ; -- usted
+    youPl8fem_Pron : Pron ;
+    youPol8fem_Pron : Pron ;
 
-    youPolPl_Pron : Pron ;  -- ustedes
+    youPolPl_Pron : Pron ;
     youPolPl8fem_Pron : Pron ;
 
 
-    ImpNeg : NP -> VP -> Utt ; --"no fumes"
+    ImpNeg : NP -> VP -> Utt ; --"não fume"
     InvQuestCl : Cl -> QCl ;
 
 
