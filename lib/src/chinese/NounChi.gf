@@ -20,8 +20,8 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
 
     PPartNP np v2 = mkNP ((predV v2 v2.part).verb.s ++ possessive_s ++ np.s) ; ---- ??
 
-    AdvNP np adv = mkNP (adv.s ++ possessiveIf adv.advType ++ np.s) ;
-    ExtAdvNP np adv = mkNP (adv.s ++ possessiveIf adv.advType ++ embedInCommas np.s) ; ---- commas?
+    AdvNP np adv = mkNP (adv.s ++ possessiveIf adv.hasDe ++ np.s) ;
+    ExtAdvNP np adv = mkNP (adv.s ++ possessiveIf adv.hasDe ++ embedInCommas np.s) ; ---- commas?
 
     DetQuant quant num = {
       s = case num.numType of {
@@ -85,7 +85,7 @@ concrete NounChi of Noun = CatChi ** open ResChi, Prelude in {
             } ;
 
     RelCN cn rs = {s = rs.s ++ cn.s ; c = cn.c} ;
-    AdvCN cn ad = {s = ad.s ++ possessiveIf ad.advType ++ cn.s ; c = cn.c} ;
+    AdvCN cn ad = {s = ad.s ++ possessiveIf ad.hasDe ++ cn.s ; c = cn.c} ;
     SentCN cn cs = {s = cs.s ++ cn.s ; c = cn.c} ;
     ApposCN cn np = {s = np.s ++ cn.s ; c = cn.c} ;
 

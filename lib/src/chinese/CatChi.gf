@@ -50,7 +50,7 @@ concrete CatChi of Cat = CommonX - [Tense, Temp, Ant, Adv] ** open ResChi, Prelu
     Ord = {s : Str} ;
     Num = {s : Str ; numType : NumType} ;
 
-    Adv = {s : Str ; advType : AdvType} ;
+    Adv = {s : Str ; advType : AdvType ; hasDe : Bool} ;
 
 -- Numeral
 
