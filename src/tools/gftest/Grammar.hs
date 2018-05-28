@@ -9,7 +9,7 @@ module Grammar
     -- Categories, coercions
     , ccats, ccatOf, arity
     , coerces, uncoerce
-    , uncoerceAbsCat
+    , uncoerceAbsCat, mkCC
 
     -- Testing and comparison
     , testTree, testFun
@@ -17,7 +17,7 @@ module Grammar
     , treesUsingFun
 
     -- Contexts
-    , contextsFor
+    , contextsFor, dummyHole
 
     -- FEAT
     , featIth, featCard
@@ -326,6 +326,13 @@ toGrammar pgf langName =
   cseq2Either (I.SymKS tok)  = Left tok
   cseq2Either (I.SymCat x y) = Right (x,y)
   cseq2Either x              = Left (show x)
+
+
+mkCC gr fid = CC ccat fid
+ where ccat = case [ cat | (cat,bg,end,_) <- concrCats gr
+                         , fid `elem` [bg..end] ] of
+                [] -> Nothing -- means it's coercion
+                xs -> Just $ the xs
 
 -- parsing and reading trees
 mkTree :: Grammar -> PGF2.Expr -> Tree
@@ -983,9 +990,9 @@ testFun debug gr trans startcat funname =
    , let testcases_ctxs = catMaybes [ M.lookup cat cat_testcase_ctxs
                                     | cat <- cats ]
    , not $ null testcases_ctxs
-   , let fstLen = \(a,_) (b,_) -> length (flatten a) `compare` length (flatten b)
+   , let fstLen (a,_) (b,_) = length (flatten a) `compare` length (flatten b)
    , let (App tp subtrees,_) = -- pick smallest test case to be the representative
-          head $ sortBy fstLen testcases_ctxs
+           minimumBy fstLen testcases_ctxs
    , let newTop = -- debug: put coerced contexts under a separate test case
           if debug then tp { ctyp = (fst $ ctyp tp, coe)} else tp
    ]

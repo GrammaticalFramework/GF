@@ -4,6 +4,7 @@ module PGF.Linearize
             , linearizeAll
             , linearizeAllLang
             , bracketedLinearize
+            , bracketedLinearizeAll
             , tabularLinearizes
             ) where
 
@@ -46,6 +47,12 @@ bracketedLinearize pgf lang = head . map (snd . untokn Nothing . firstLin cnc) .
 
     head []       = []
     head (bs:bss) = bs
+
+-- | Linearizes given expression as a bracketed string in the language
+bracketedLinearizeAll :: PGF -> Language -> Tree -> [[BracketedString]]
+bracketedLinearizeAll pgf lang = map (snd . untokn Nothing . firstLin cnc) . linTree pgf cnc
+  where
+    cnc = lookMap (error "no lang") lang (concretes pgf)
 
 firstLin cnc arg@(ct@(cat,n_fid),fid,fun,es,(xs,lin)) =
   case IntMap.lookup fid (linrefs cnc) of

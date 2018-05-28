@@ -36,16 +36,16 @@ lincat
   Month = N ;
   Year = NP ;
 lin
-  weekdayPunctualAdv w = lin Adv {s = w.s ; advType = timeAdvType} ;
-  weekdayHabitualAdv w = lin Adv {s = w.s ; advType = timeAdvType} ;
-  weekdayNextAdv w = lin Adv {s = "下" ++ w.s ; advType = timeAdvType} ;
-  weekdayLastAdv w = lin Adv {s = "上" ++ w.s ; advType = timeAdvType} ;
+  weekdayPunctualAdv w = lin Adv {s = w.s ; advType = timeAdvType ; hasDe = False} ;
+  weekdayHabitualAdv w = lin Adv {s = w.s ; advType = timeAdvType ; hasDe = False} ;
+  weekdayNextAdv w = lin Adv {s = "下" ++ w.s ; advType = timeAdvType ; hasDe = False} ;
+  weekdayLastAdv w = lin Adv {s = "上" ++ w.s ; advType = timeAdvType ; hasDe = False} ;
 
-  monthAdv m = lin Adv {s = m.s ; advType = timeAdvType} ;
-  yearAdv y = lin Adv {s = y.s ++ "年" ; advType = timeAdvType} ;
-  dayMonthAdv d m = lin Adv {s = m.s ++ d.s ++ "日" ; advType = timeAdvType} ;
-  monthYearAdv m y = lin Adv {s = y.s ++ "年" ++ m.s ; advType = timeAdvType} ;
-  dayMonthYearAdv d m y = lin Adv {s = y.s ++ "年"  ++ m.s ++ d.s ++ "日" ; advType = timeAdvType} ;
+  monthAdv m = lin Adv {s = m.s ; advType = timeAdvType ; hasDe = False} ;
+  yearAdv y = lin Adv {s = y.s ++ "年" ; advType = timeAdvType ; hasDe = False} ;
+  dayMonthAdv d m = lin Adv {s = m.s ++ d.s ++ "日" ; advType = timeAdvType ; hasDe = False} ;
+  monthYearAdv m y = lin Adv {s = y.s ++ "年" ++ m.s ; advType = timeAdvType ; hasDe = False} ;
+  dayMonthYearAdv d m y = lin Adv {s = y.s ++ "年"  ++ m.s ++ d.s ++ "日" ; advType = timeAdvType ; hasDe = False} ;
 
   intYear i = lin NP i ;
   intMonthday i = lin NP i ;

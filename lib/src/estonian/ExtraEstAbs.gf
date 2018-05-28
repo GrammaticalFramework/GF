@@ -7,9 +7,11 @@ abstract ExtraEstAbs = Extra [
 
   flags coding=utf8 ;
   fun
-    GenCN : NP -> CN -> CN ;              -- auton merkki
+    GenCN : NP -> CN -> CN ;              -- soome mees
     ComitCN : NP -> CN -> CN ;            -- põlenud puudega mets
     ElatCN : NP -> CN -> CN ;             -- puust laud
+    AbessCN : NP -> CN -> CN ;            -- autota pere
+    TerminCN : NP -> CN -> CN ;           -- maani kleit
 
     AdvExistNP : Adv -> NP -> Cl ;        -- kuvassa olemme me
     AdvPredNP  : Adv -> V  -> NP -> Cl ;  -- kuvassa hymyilee Veikko

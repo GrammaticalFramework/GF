@@ -487,10 +487,10 @@ These used to be here:
 -- for Structural
 -----------------------
 
-caseTable : Number -> CommonNoun -> Case => Str = \n,cn -> 
+caseTable : Number -> Noun -> Case => Str = \n,cn -> 
   \\c => cn.s ! NCase n c ;
 
-  mkDet : Number -> CommonNoun -> {
+  mkDet : Number -> Noun -> {
       s,sp : Case => Str ;       -- minun kolme
       n : Number ;             -- Pl   (agreement feature for verb)
       isNum : Bool ;           -- True (a numeral is present)
@@ -563,24 +563,18 @@ caseTable : Number -> CommonNoun -> Case => Str = \n,cn ->
          x          => shortMa.s ! x } } ;
    
 
--- The relative pronoun, "joka", is inflected in case and number, 
--- like common nouns, but it does not take possessive suffixes.
--- The inflextion shows a surprising similarity with "suo".
+
 
 oper
 
-  relPron : Number => Case => Str = 
-    let mis = nForms2N (nForms6 "mis" "mille" "mida" "millesse" "mille" "mida") in 
-    \\n,c => case <n,c> of {
-      <Pl,Nom> => "mis" ;
-      <> => mis.s ! NCase n c } ;
+  relPron : NForm => Str = 
+    let mis = nForms2N (nForms6 "mis" "mille" "mida" "millesse" "mille" "mida") 
+     in fixPlNom "mis" mis.s ; 
 
-  kesPron : Number => Case => Str =
-    let kes = nForms2N (nForms6 "kes" "kelle" "keda" "kellesse" "kelle" "keda") in
-    \\n,c => case <n,c> of {
-      <Pl,Nom> => "kes" ;
-      <> => kes.s ! NCase n c } ;
-  
+  kesPron : NForm => Str =
+    let kes = nForms2N (nForms6 "kes" "kelle" "keda" "kellesse" "kelle" "keda") 
+     in fixPlNom "kes" kes.s ;
+
   ProperName = {s : Case => Str} ;
 
   -- TODO: generate using mkPronoun

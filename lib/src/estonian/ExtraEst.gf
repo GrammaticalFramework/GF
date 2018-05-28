@@ -9,14 +9,16 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
       isNeg = False 
      } ;
 
-    GenCN = caseCN Gen ;     -- auton merkki
+    GenCN = caseCN Gen ;     -- soome mees
     ComitCN = caseCN Comit ; -- puudega mets
     ElatCN  = caseCN Elat ;  -- puust laud
+    AbessCN = caseCN Abess ; -- autota pere
+    TerminCN = caseCN Termin ; -- maani kleit
 
     GenIP ip = {s = \\_,_ => ip.s ! NPCase Gen} ;
 
     GenRP num cn = {
-      s = \\n,c => let k = npform2case num.n c in relPron ! n ! Gen ++ cn.s ! NCase num.n k ; 
+      s = \\n,c => let k = npform2case num.n c in relPron ! NCase n Gen ++ cn.s ! NCase num.n k ; 
       a = RNoAg 
 ---      a = RAg (agrP3 num.n)
       } ;
@@ -190,8 +192,9 @@ concrete ExtraEst of ExtraEstAbs = CatEst **
       a = p.a
       } ;
 
+    -- : Pron -> Quant ;  
     ProDropPoss p = {
-      s = \\_,_ => "oma" ; --???
+      s = \\_,_ => "oma" ;
       sp = \\_,_ => p.s ! NPCase Gen ;
       isNum = False ;
       isDef = True ; 

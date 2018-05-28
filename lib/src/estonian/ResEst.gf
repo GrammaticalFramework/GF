@@ -321,7 +321,7 @@ oper
         let 
           agrfin = case vp.sc of {
                     NPCase Nom => <agr,True> ;
-                    _ => <agrP3 Sg,False>      -- minun täytyy, minulla on
+                    _ => <agrP3 Sg,False>      -- minule meeldib, minul on
                     } ;
           verb  = vp.s ! VIFin t ! a ! b ! agrfin.p1 ;
         in {subj = sub b ; 
@@ -566,17 +566,14 @@ oper
     vforms2V (regVForms kinkima kinkida kingib kingitakse) ;
 
 
-  noun2adj : CommonNoun -> Adj = noun2adjComp True ;
---  noun2adj : Noun -> Adj = noun2adjComp True ;
+  noun2adj : Noun -> Adj = noun2adjComp True ;
 
-  -- TODO: remove the unused arguments and clean up the code
   -- TODO: AAdv is current just Sg Ablat, which seems OK in most cases, although
   -- ilus -> ilusti | ilusalt?
   -- hea -> hästi
   -- parem -> paremini
   -- parim -> kõige paremini | parimalt?
-  noun2adjComp : Bool -> CommonNoun -> Adj = \isPos,tuore ->
---  noun2adjComp : Bool -> Noun -> Adj = \isPos,tuore ->
+  noun2adjComp : Bool -> Noun -> Adj = \isPos,tuore ->
     let 
       tuoreesti  = Predef.tk 1 (tuore.s ! NCase Sg Gen) + "sti" ; 
       tuoreemmin = Predef.tk 2 (tuore.s ! NCase Sg Gen) + "in"
@@ -587,37 +584,55 @@ oper
          } ;
        } ;
 
-  CommonNoun = {s : NForm => Str} ;
+  Noun = {s : NForm => Str} ;
+
 
 -- To form an adjective, it is usually enough to give a noun declension: the
 -- adverbial form is regular.
 
   Adj : Type = {s : AForm => Str} ;
 
+-- Helper functions to form Comps.
+  compAP = icompAP [] ;
+
+  icompAP : Str -> {s : Bool => NForm => Str} -> {s : Agr => Str} = \kui,ap ->
+    { s = \\agr => 
+       let n = complNumAgr agr ; 
+        in kui ++ ap.s ! False ! NCase n Nom } ;
+      
+  compCN : Noun -> {s : Agr => Str} = \cn -> 
+    { s = \\agr => 
+       let n = complNumAgr agr ; 
+        in cn.s ! NCase n Nom } ;
+
 
 -- Reflexive pronoun. 
 --- Possessive could be shared with the more general $NounFin.DetCN$.
 
---oper
-  --Estonian version started
   reflPron : Agr -> NP = \agr -> 
     let 
-      ise = nForms2N (nForms6 "ise" "enda" "ennast" "endasse" "IGNORE" "IGNORE")
-    in {
+      ise = nForms2N (nForms6 "ise" "enda" "ennast" "endasse" "endi" "endid") ;
+      n = case agr of {
+        AgPol => Sg ;
+        Ag n _ => n } ;
+     in {
       s = table {
         NPAcc => "ennast" ;
-        NPCase c => ise.s ! NCase Sg c
+        NPCase c => fixPlNom "endid" ise.s ! NCase n c
         } ;
       a = agr ;
       isPron = False -- no special acc form
       } ;
 
+  -- Using nForms6 as a shortcut works pretty nicely, but plural nominative is often wrong.
+  -- This is used at least 3 times :-D
+  fixPlNom : Str -> (NForm => Str) -> (NForm => Str) = \mis,n ->
+    table { NCase Pl Nom => mis ;
+            x            => n ! x } ;
 
+  NForms : Type = Predef.Ints 5 => Str ;
 
-    Noun = CommonNoun ** {lock_N : {}} ;
-    NForms : Type = Predef.Ints 5 => Str ;
-
-    nForms6 : (x1,_,_,_,_,x6 : Str) -> NForms = 
+  nForms6 : (x1,_,_,_,_,x6 : Str) -> NForms = 
       \jogi,joe,joge,joesse, -- sg nom, gen, part, ill
        jogede,jogesid -> table { -- pl gen, part,
       0 => jogi ;
@@ -628,7 +643,7 @@ oper
       5 => jogesid 
       } ;
 
-  n2nforms : CommonNoun -> NForms = \ukko -> table {
+  n2nforms : Noun -> NForms = \ukko -> table {
     0 => ukko.s ! NCase Sg Nom ;
     1 => ukko.s ! NCase Sg Gen ;
     2 => ukko.s ! NCase Sg Part ;
@@ -639,7 +654,7 @@ oper
 
     -- Converts 6 given strings (Nom, Gen, Part, Illat, Gen, Part) into Noun
     -- http://www.eki.ee/books/ekk09/index.php?p=3&p1=5&id=226
-    nForms2N : NForms -> CommonNoun = \f -> 
+    nForms2N : NForms -> Noun = \f -> 
       let
         jogi = f ! 0 ;
         joe = f ! 1 ;

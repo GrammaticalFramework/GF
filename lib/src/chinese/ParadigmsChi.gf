@@ -145,13 +145,13 @@ oper
 
   mkAdv = overload {
     mkAdv : Str -> Adv 
-      = \s -> lin Adv {s = word s ; advType = getAdvType s} ;
+      = \s -> let at = getAdvType s in lin Adv {s = word s ; advType = at ; hasDe = advTypeHasDe at} ;
     mkAdv : Str -> Str -> Adv 
-      = \s,t -> lin Adv {s = word (s + t) ; advType = getAdvType s} ; ----
+      = \s,t -> let at = getAdvType s in lin Adv {s = word (s + t) ; advType = at ; hasDe = advTypeHasDe at} ; ----
     mkAdv : Str -> AdvType -> Adv 
-      = \s,at -> lin Adv {s = word s ; advType = at} ;
+      = \s,at -> lin Adv {s = word s ; advType = at ; hasDe = advTypeHasDe at} ;
     mkAdv : Adv -> AdvType -> Adv -- To fix the AdvType in an Adv produced by SyntaxChi.mkAdv 
-      = \adv,at -> adv ** {advType = at} ;
+      = \adv,at -> adv ** {advType = at ; hasDe = advTypeHasDe at} ;
 
     } ;
 

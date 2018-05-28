@@ -7,6 +7,11 @@ JNI_INCLUDES = $(if $(wildcard /usr/lib/jvm/default-java/include/.*), -I/usr/lib
            $(if $(wildcard /Library/Java/Home/include/.*), -I/Library/Java/Home/include/ -I/Library/Java/Home/include/darwin, \
            $(error No JNI headers found))))
 
+# For Windows replace the previous line with something like this:
+#
+# JNI_INCLUDES  = -I "C:/Program Files/Java/jdk1.8.0_171/include" -I "C:/Program Files/Java/jdk1.8.0_171/include/win32" -I "C:/MinGW/msys/1.0/local/include"
+# WINDOWS_FLAGS = -L"C:/MinGW/msys/1.0/local/lib" -no-undefined
+
 INSTALL_PATH = /usr/local/lib
 LIBTOOL = glibtool --tag=CC
 
@@ -15,7 +20,7 @@ LIBTOOL = $(if $(shell command -v glibtool 2>/dev/null), glibtool --tag=CC, libt
 all: libjpgf.la jpgf.jar
 
 libjpgf.la: $(patsubst %.c, %.lo, $(C_SOURCES))
-	$(LIBTOOL) --mode=link gcc $(CFLAGS) -g -O -o libjpgf.la -shared $^ -rpath $(INSTALL_PATH) -lgu -lpgf -lsg
+	$(LIBTOOL) --mode=link gcc $(CFLAGS) -g -O -o libjpgf.la -shared $^ -rpath $(INSTALL_PATH) -lgu -lpgf -lsg $(WINDOWS_FLAGS)
 
 %.lo : %.c
 	$(LIBTOOL) --mode=compile gcc $(CFLAGS) -g -O -c $(JNI_INCLUDES) -std=c99 -shared $< -o $@

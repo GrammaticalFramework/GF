@@ -250,13 +250,19 @@ oper
     s = word s
     } ;
 
-  Preposition = {prepPre : Str ; prepPost : Str ; advType : AdvType} ;  
+  Preposition = {prepPre : Str ; prepPost : Str ; advType : AdvType ; hasDe : Bool} ;  
     
   mkPreposition : Str -> Str -> AdvType -> Preposition = \s1,s2,at -> {
     prepPre  = word s1 ;
     prepPost = word s2 ;
-    advType = at
+    advType  = at ;
+    hasDe = advTypeHasDe at ;
     } ;
+
+  advTypeHasDe : AdvType -> Bool = \at -> case at of {
+      ATPoss => True ;
+      _ => False
+      } ; 
     
   getAdvType : Str -> AdvType = \s -> case s of {
     "的"     => ATPoss ;
@@ -264,8 +270,8 @@ oper
     _ => ATPlace False         -- uncertain whether ATPlace
     } ;
 
-  possessiveIf : AdvType -> Str = \at -> case at of {
-    ATPoss => [] ;   --- to avoid double "de" 
+  possessiveIf : Bool -> Str = \hasDe -> case hasDe of {
+    True => [] ;   --- to avoid double "de" 
     _ => possessive_s
     } ;
 

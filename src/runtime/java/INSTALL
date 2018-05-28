@@ -10,3 +10,6 @@ Once this is done type:
 
 $ make
 $ make install
+
+For Windows you might have to uncomment the lines around
+WINDOWS_FLAGS in the Makefile.
