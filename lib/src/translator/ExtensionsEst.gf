@@ -152,7 +152,7 @@ lin
     {s = \\agr => infVPAnt ant.a (NPCase Nom) pol.p agr vp InfDa } ;
 
   -- TODO: revisit pronouns? Looks a bit overly complicated. /IL
-  who_RP = { s = \\n,c => MorphoEst.kesPron ! n ! npform2case n c ; 
+  who_RP = { s = \\n,c => MorphoEst.kesPron ! NCase n (npform2case n c) ; 
              a = RNoAg } ;
 
   that_RP = which_RP ;

@@ -58,7 +58,7 @@ module PGF(
 
            -- * Operations
            -- ** Linearization
-           linearize, linearizeAllLang, linearizeAll, bracketedLinearize, tabularLinearizes,
+           linearize, linearizeAllLang, linearizeAll, bracketedLinearize, bracketedLinearizeAll, tabularLinearizes,
            groupResults, -- lins of trees by language, removing duplicates
            showPrintName,
            

@@ -30,7 +30,9 @@ data GfTest
   , start_cat     :: Maybe Cat
   , show_cats     :: Bool
   , show_funs     :: Bool
+  , funs_of_arity :: Maybe Int
   , show_coercions:: Bool
+  , show_contexts :: Maybe Int
   , concr_string  :: String
 
   -- Information about fields
@@ -57,7 +59,8 @@ gftest = GfTest
                                         &= help "Concrete syntax + optional translations"
   , tree          = def &= A.typ "\"UseN tree_N\"" 
                         &= A.name "t"   &= help "Test the given tree"
-  , function      = def &= A.typ "UseN" &= help "Test the given function(s)"
+  , function      = def &= A.typ "UseN"
+                        &= A.name "f"   &= help "Test the given function(s)"
   , category      = def &= A.typ "NP"
                         &= A.name "c"   &= help "Test all functions with given goal category"
   , start_cat     = def &= A.typ "Utt"
@@ -65,7 +68,9 @@ gftest = GfTest
   , concr_string  = def &= A.typ "the"  &= help "Show all functions that include given string"
   , show_cats     = def                 &= help "Show all available categories"
   , show_funs     = def                 &= help "Show all available functions"
+  , funs_of_arity = def &= A.typ "2"    &= help "Show all functions of arity 2"
   , show_coercions= def                 &= help "Show coercions in the grammar"
+  , show_contexts = def &= A.typ "8410" &= help "Show contexts for a given concrete type (given as FId)"
   , debug         = def                 &= help "Show debug output"
   , equal_fields  = def &= A.name "q"   &= help "Show fields whose strings are always identical"
   , empty_fields  = def &= A.name "e"   &= help "Show fields whose strings are always empty"
@@ -100,7 +105,7 @@ main = do
     gr      <- readGrammar langName grName
     grTrans <- sequence [ readGrammar lt grName | lt <- langTrans ]
 
-    -- in case the language given by the user was not valid, use some language that *is* in the grammar
+    -- if language given by the user was not valid, use default language from Grammar
     let langName = concrLang gr
 
     let startcat = startCat gr `fromMaybe` start_cat args
@@ -140,39 +145,66 @@ main = do
                     , xs@(_:_) <- [ S.toList vs ] ]
  -----------------------------------------------------------------------------
  -- Testing functions
- 
+
     -- Test a tree
-    case tree args of 
-      [] -> return ()
-      t  -> output $ testTree' (readTree gr t) 1
+    let trees = case tree args of
+         [] -> []
+         ts -> lines ts
+    output $
+      unlines [ testTree' (readTree gr tree) 1 | tree <- trees ]
 
     -- Test a function
-    case category args of
-      []  -> return ()
-      cat -> output $ unlines 
-              [ testTree' t n
-              | (t,n) <- treesUsingFun gr (functionsByCat gr cat) `zip` [1..]]
+    let substrs xs = filter (/="*") $ groupBy (\a b -> a/='*' && b/='*') xs
+    let cats = case category args of
+         [] -> []
+         cs -> if '*' `elem` cs
+                then let subs = substrs cs
+                      in nub [ cat | (cat,_,_,_) <- concrCats gr
+                             , all (`isInfixOf` cat) subs ]
+                else words cs
+    output $
+      unlines [ testTree' t n
+              | cat <- cats
+              , (t,n) <- treesUsingFun gr (functionsByCat gr cat) `zip` [1..]]
             
     -- Test all functions in a category
-    case function args of
-      [] -> return ()
-      fs -> let funs = if '*' `elem` fs
-                        then let subs = filter (/="*") $ groupBy (\a b -> a/='*' && b/='*') fs
-                              in nub [ f | s <- symbols gr, let f = show s
-                                     , all (`isInfixOf` f) subs
-                                     , arity s >= 1 ]
-                        else words fs
-             in output $ unlines
-                 [ testFun (debug args) gr grTrans startcat f
-                 | f <- funs ]
+    let funs = case function args of
+         [] -> []
+         fs -> if '*' `elem` fs
+                then let subs = substrs fs
+                     in nub [ f | s <- symbols gr, let f = show s
+                            , all (`isInfixOf` f) subs
+                            , arity s >= 1 ]
+                 else words fs
+    output $
+      unlines [ testFun (debug args) gr grTrans startcat f
+              | f <- funs ]
 
 -----------------------------------------------------------------------------
 -- Information about the grammar
 
+    -- Show contexts for a particular concrete category
+    case show_contexts args of
+      Nothing  -> return ()
+      Just fid -> mapM_ print
+                    [ ctx dummyHole
+                    | start <- ccats gr startcat
+                    , ctx <- contextsFor gr start (mkCC gr fid) ]
+
     -- Show available categories
     when (show_cats args) $ do
       putStrLn "* Categories in the grammar:"
-      putStrLn $ unlines [ cat | (cat,_,_,_) <- concrCats gr ]
+      let concrcats = sortBy (\(_,a,_,_) (_,b,_,_) -> a `compare` b) (concrCats gr)
+      sequence_ [ do putStrLn cat
+                     when (debug args) $
+                       putStrLn $ unwords $
+                         [ "    Compiles to concrete" ] ++
+                         [ "categories " ++ show bg++"—"++show end
+                         | bg/=end ] ++
+                         [ "category   " ++ show bg
+                         | bg==end ]
+                | (cat,bg,end,_) <- concrcats
+                , end >= 0]
 
     -- Show available functions
     when (show_funs args) $ do
@@ -183,6 +215,12 @@ main = do
     when (show_coercions args) $ do
       putStrLn "* Coercions in the grammar:"
       putStrLn $ unlines [ show cat++"--->"++show coe | (cat,coe) <- coercions gr ]
+
+    case funs_of_arity args of
+      Nothing -> return ()
+      Just n -> do
+        putStrLn $ "* Functions in the grammar of arity " ++ show n ++ ":"
+        putStrLn $ unlines $ nub [ show s | s <- symbols gr, arity s == n ]
 
     -- Show all functions that contain the given string 
     -- (e.g. English "it" appears in DefArt, ImpersCl, it_Pron, …)
@@ -270,6 +308,19 @@ main = do
                     putStrLn $ "* " ++ show (featIth gr start n 0)
                     putStrLn $ "* " ++ show (featIth gr start n (i-1))
 
+
+-------------------------------------------------------------------------------
+-- Read trees from treebank.
+
+    treebank' <-
+      case treebank args of
+        Nothing -> return []
+        Just fp -> do
+          tb <- readFile fp
+          return [ readTree gr s
+                 | s <- lines tb ]
+    mapM_ print treebank'
+
 -------------------------------------------------------------------------------
 -- Comparison with old grammar
 
@@ -299,36 +350,44 @@ main = do
             [ appendFile ccatChangeFile $ 
               unlines $
                 ("* All concrete cats in the "++age++" grammar:"):
-                [ show cats | cats <- concrCats g ]
+                [ show cts | cts <- concrCats g ]
             | (g,age) <- [(ogr,"old"),(gr,"new")] ]
 
         putStrLn $ "Created file " ++ ccatChangeFile
 
       --------------------------------------------------------------------------
-      -- print out tests for all functions in the changed cats
+      -- Print out tests for all functions in the changed cats.
+      -- If -f, -c or --treebank specified, use them.
 
-        let changedFuns =
-             if only_changed_cats args
-              then [ (cat,functionsByCat gr cat) | (cat,_,_,_) <- difcats ]
-              else
-                case category args of
-                  [] -> case function args of
-                          [] -> [ (cat,functionsByCat gr cat) 
-                                | (cat,_,_,_) <- concrCats gr ]
-                          fn -> [ (snd $ Grammar.typ f, [f]) 
-                                | f <- lookupSymbol gr fn ]
-                  ct -> [ (ct,functionsByCat gr ct) ]
+        let f cat = (cat, treesUsingFun gr $ functionsByCat gr cat)
+
+            byCat   = [ f cat | cat <- cats ] -- from command line arg -c
+            changed = [ f cat | (cat,_,_,_) <- difcats
+                      , only_changed_cats args ]
+            byFun   = [ (cat, treesUsingFun gr fs)
+                      | funName <- funs -- comes from command line arg -f
+                      , let fs@(s:_) = lookupSymbol gr funName
+                      , let cat = snd $ Grammar.typ s ]
+            fromTb  = [ (cat,[tree]) | tree <- treebank'
+                      , let (CC (Just cat) _) = ccatOf tree ]
+
+            treesToTest =
+              case concat [byFun, byCat, changed, fromTb] of
+                [] -> [ f cat  -- nothing else specified -> test all functions
+                      | (cat,_,_,_) <- concrCats gr ]
+                xs -> S.toList $ S.fromList xs
+
             writeLinFile file grammar otherGrammar = do
               writeFile file ""
               putStrLn "Testing functions in… "
               diff <- concat `fmap`
                 sequence [ do let cs = [ compareTree grammar otherGrammar grTrans t
-                                       | t <- treesUsingFun grammar funs ]
+                                       | t <- trees ]
                               putStr $ cat ++ "                \r"
                               -- prevent lazy evaluation; make printout accurate
                               appendFile ("/tmp/"++file) (unwords $ map show cs)
                               return cs
-                         | (cat,funs) <- changedFuns ]
+                         | (cat,trees) <- treesToTest ]
               let relevantDiff = go [] [] diff where
                     go res seen [] = res
                     go res seen (Comparison f ls:cs) = 
@@ -369,19 +428,6 @@ main = do
         writeFunFile (groupFuns gr)  (langName ++ "-new-funs.org") gr
 
         putStrLn $ "Created files " ++ langName ++ "-(old|new)-funs.org"
-
--------------------------------------------------------------------------------
--- Read trees from treebank. No fancier functionality yet.
-
-    case treebank args of
-      Nothing -> return ()
-      Just fp -> do
-        tb <- readFile fp
-        sequence_ [ do let tree = readTree gr str
-                           ccat = ccatOf tree
-                       putStrLn $ unlines [ "", showTree tree ++ " : " ++ show ccat]
-                       putStrLn $ linearize gr tree
-                  | str <- lines tb ]
 
 
  where

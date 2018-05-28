@@ -41,7 +41,7 @@ concrete RelativeEst of Relative = CatEst ** open Prelude, ResEst, MorphoEst in 
       } ;
 
     IdRP = {
-      s = \\n,c => relPron ! n ! npform2case n c ;
+      s = \\n,c => relPron ! NCase n (npform2case n c) ;
       a = RNoAg
       } ;
 

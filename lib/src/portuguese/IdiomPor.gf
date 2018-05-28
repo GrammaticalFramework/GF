@@ -1,5 +1,5 @@
 concrete IdiomPor of Idiom = CatPor **
-  open (P = ParamX), MorphoPor, ParadigmsPor, BeschPor, Prelude in {
+  open (P = ParamX), MorphoPor, ParadigmsPor, BeschPor, (B = IrregBeschPor), Prelude in {
 
   flags optimize=all_subs ;
 
@@ -20,11 +20,11 @@ concrete IdiomPor of Idiom = CatPor **
 
     ExistNP np =
       mkClause [] True False (agrP3 Masc Sg)
-        (insertComplement (\\_ => (np.s ! Acc).ton) (predV (mkV (haver_2 "haver")))) ;
+        (insertComplement (\\_ => (np.s ! Acc).ton) (predV B.haver_V)) ;
     ExistIP ip = {
       s = \\t,a,p,_ =>
         ip.s ! Nom ++
-        (mkClause [] True False (agrP3 Masc Sg) (predV (mkV (haver_2 "haver")))).s ! DDir ! t ! a ! p ! Indic
+        (mkClause [] True False (agrP3 Masc Sg) (predV B.haver_V)).s ! DDir ! t ! a ! p ! Indic
       } ;
 
     ProgrVP vp =
@@ -36,7 +36,7 @@ concrete IdiomPor of Idiom = CatPor **
            in
            vp.s.s ! VGer ++ clpr.p1 ++ obj
         )
-        (predV (mkV (estar_10 "estar"))) ;
+        (predV B.estar_V) ;
 
     ImpPl1 vp = {s =
       mkImperative False P1 vp ! RPos ! Masc ! Pl ; --- fem
