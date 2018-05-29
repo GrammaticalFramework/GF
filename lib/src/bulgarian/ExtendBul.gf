@@ -14,5 +14,7 @@ lin
          g   = n2.g
     } ;
 
+  PositAdVAdj a = {s = a.adv} ;
+
 }
 

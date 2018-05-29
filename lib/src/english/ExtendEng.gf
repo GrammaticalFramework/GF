@@ -292,6 +292,8 @@ concrete ExtendEng of Extend =
       a = agrgP3 Sg nonhuman
       } ;
 
+    PositAdVAdj a = {s = a.s ! AAdv} ;
+
   lincat
     RNP     = {s : Agr => Str} ;
     RNPList = {s1,s2 : Agr => Str} ;

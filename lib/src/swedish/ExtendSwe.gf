@@ -7,6 +7,7 @@ concrete ExtendSwe of Extend = CatSwe **
     MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
     MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
     ICompAP,
+    PositAdVAdj,
     RNP, RNPList, ReflRNP, ReflPron, ReflPoss, PredetRNP, ConjRNP,
     Base_rr_RNP, Base_nr_RNP, Base_rn_RNP, Cons_rr_RNP, Cons_nr_RNP,
     CompoundN
@@ -149,5 +150,8 @@ concrete ExtendSwe of Extend = CatSwe **
       co = n1.co ++ BIND ++ n2.co ;
       g  = n2.g
     } ;
+    
+  lin
+    PositAdVAdj a = {s = a.s ! AAdv} ;
 }
 
