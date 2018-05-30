@@ -180,9 +180,9 @@ oper
 
   compoundN = overload {
     compoundN : Str -> N -> N 
-      = \s,n -> {s = \\nform => s ++ n.s ! nform ; rel = \\aform => s ++ n.rel ! aform; g=n.g ; anim=n.anim ; lock_N = <>} ;
+      = \s,n -> {s = \\nform => s ++ n.s ! nform ; rel = \\aform => s ++ n.rel ! aform; relPost = True; g=n.g ; anim=n.anim ; lock_N = <>} ;
     compoundN : N -> Str -> N 
-      = \n,s -> {s = \\nform => n.s ! nform ++ s; rel = \\aform => n.rel ! aform ++ s; g=n.g ; anim=n.anim ; lock_N = <>} ;
+      = \n,s -> {s = \\nform => n.s ! nform ++ s; rel = \\aform => n.rel ! aform ++ s; relPost = True; g=n.g ; anim=n.anim ; lock_N = <>} ;
     compoundN : N -> N -> N 
       = \n1,n2 -> lin N
                 {s = table {
@@ -191,22 +191,30 @@ oper
                        NFPlCount   => n1.s ! NFPlCount     ++ n2.s ! (NF Pl Indef) ;
                        NFVocative  => n1.s ! NFVocative    ++ n2.s ! (NF Sg Indef)
                      } ;
-                 rel = \\aform => n1.rel ! aform;
+                 rel = \\aform => n1.rel ! aform; relPost = True;
                  g = n1.g
                 } ;
     compoundN : A -> N -> N 
       = \a,n -> lin N
               {s   = \\nf => (a.s ! nform2aform nf n.g) ++ (n.s ! (indefNForm nf)) ;
                rel = \\aform => a.s ! aform ++ n.rel ! indefAForm aform ;
+               relPost = False ;
                g   = n.g
               } ;
   } ;
   
-  dualN : N -> A -> N;
-  dualN n a = lin N {
-    s   = n.s;
-    rel = a.s;
-    g   = n.g
+  dualN = overload {
+    dualN : N -> A -> N
+      = \n,a -> lin N { s   = n.s;
+                        rel = a.s; relPost = False;
+                        g   = n.g
+                      } ;
+                      
+    dualN : N -> Prep -> N
+      = \n,p -> lin N { s   = n.s;
+                        rel = \\_ => p.s ++ n.s ! NF Sg Def ; relPost = True;
+                        g   = n.g
+                      }
   } ;
 
   relativeN : N -> A -> N = dualN ; -- deprecated
@@ -214,7 +222,7 @@ oper
   substantiveN : A -> AGender -> N;
   substantiveN a g = lin N {
     s   = \\nform => a.s ! nform2aform nform g;
-    rel = a.s;
+    rel = a.s; relPost = False;
     g   = g
   } ;
 

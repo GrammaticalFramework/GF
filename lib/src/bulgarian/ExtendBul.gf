@@ -16,8 +16,11 @@ lin
                        ANeut         => Neut
                     }) Indef
     in {
-         s   = \\nf => n1.rel ! nform2aform nf n2.g ++ n2.s ! (indefNForm nf) ;
-         rel = \\af => n1.rel ! aform ++ n2.s ! NF Sg Indef ;
+         s   = \\nf => case n1.relPost of {
+                         True  => n2.s ! (indefNForm nf) ++ n1.rel ! nform2aform nf n2.g ;
+                         False => n1.rel ! nform2aform nf n2.g ++ n2.s ! indefNForm nf
+                       } ;
+         rel = \\af => n1.rel ! aform ++ n2.s ! NF Sg Indef ;  relPost = n1.relPost ;
          g   = n2.g
     } ;
 
