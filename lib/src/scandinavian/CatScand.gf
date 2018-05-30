@@ -132,13 +132,12 @@ incomplete concrete CatScand of Cat =
     V2V = \v -> infVP (predV v) agrUSgP3 ++ v.c2.s ;
 
     Conj = \c -> c.s1 ++ c.s2 ;
-{-
-    A = \a -> a.s ! AAdj Posit Nom ;
-    A2 = \a -> a.s ! AAdj Posit Nom ++ a.c2 ;
 
-    N = \n -> n.s ! Sg ! Nom ;
-    N2 = \n -> n.s ! Sg ! Nom ++ n.c2 ;
-    N3 = \n -> n.s ! Sg ! Nom ++ n.c2 ++ n.c3 ;
--}
+    A = \a -> a.s ! AF (APosit (Strong (GSg Utr))) Nom ;
+    A2 = \a -> a.s ! AF (APosit (Strong (GSg Utr))) Nom ++ a.c2.s ;
+
+    N = \n -> n.s ! Sg ! Indef ! Nom ;
+    N2 = \n -> n.s ! Sg ! Indef ! Nom ++ n.c2.s ;
+    N3 = \n -> n.s ! Sg ! Indef ! Nom ++ n.c2.s ++ n.c3.s ;
 
 }
