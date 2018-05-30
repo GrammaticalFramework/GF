@@ -167,7 +167,7 @@ lin
   shirt_N = regGenN "skjorta" utrum ;
   shoe_N = mk2N "sko" "skor" ;
   shop_N = mk2N "affär" "affärer" ;
-  short_A = regA "kort" ;
+  short_A = mkA "kort" "kort" ;
   silver_N = mkN "silver" "silvret" "silver" "silvren" ;
   sister_N = mk2N "syster" "systrar" ;
   sleep_V = (irregV "sova" "sov" "sovit") ;
