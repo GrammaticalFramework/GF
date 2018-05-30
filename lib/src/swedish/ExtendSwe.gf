@@ -41,7 +41,7 @@ concrete ExtendSwe of Extend = CatSwe **
       } ;
     EmptyRelSlash slash = {
       s = \\t,a,p,ag,_ => 
-          slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
+          slash.s ! t ! a ! p ! Sub ++ slash.n3 ! ag ++ slash.c2.s ;
       c = NPAcc
       } ;
 
