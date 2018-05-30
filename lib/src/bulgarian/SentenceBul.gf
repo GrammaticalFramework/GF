@@ -11,7 +11,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
                                        VMedial  _ => RSubj ;
                                        VPhrasal c => RObj c})) np.a np.p vp ;
 
-    PredSCVP sc vp = mkClause sc.s {gn=GSg Masc; p=P3} Pos vp ;
+    PredSCVP sc vp = let agr = {gn=GSg Masc; p=P3} in mkClause (sc.s ! agr) agr Pos vp ;
 
     ImpVP vp = {
       s = \\p,gn => 
@@ -49,9 +49,9 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
       c2 = slash.c2
     } ;
 
-    EmbedS  s  = {s = comma ++ "че" ++ s.s} ;
-    EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = daComplex Simul Pos vp ! Perf ! {gn=GSg Masc; p=P1}} ;
+    EmbedS  s  = {s = \\_ => comma ++ "че" ++ s.s} ;
+    EmbedQS qs = {s = \\_ => qs.s ! QIndir} ;
+    EmbedVP vp = {s = \\agr => daComplex Simul Pos vp ! Perf ! agr} ;
 
     UseCl t p cl = {
       s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! Main

@@ -1,5 +1,5 @@
 --# -coding=utf8
-concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, (R = ParamX) in {
+concrete CatBul of Cat = CommonX - [IAdv,CAdv,SC] ** open ResBul, Prelude, Predef, (R = ParamX) in {
 
   lincat
 -- Tensed/Untensed
@@ -40,12 +40,13 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
 
 -- Adjective
 
-    AP = {s : AForm => Str; adv : Str; isPre : Bool} ;
+    AP = {s : AForm => Person => Str; adv : Str; isPre : Bool} ;
 
 -- Adjective
 
     CAdv = {s : Str; sn : Str} ;
     IAdv = {s : QForm => Str} ;
+    SC   = {s : Agr => Str} ;
 
 -- Noun
 
@@ -80,12 +81,12 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
 
     A = {s : AForm => Str; adv : Str} ;
     A2 = {s : AForm => Str; adv : Str; c2 : Str} ;
-    
+
     N = {s : NForm => Str; rel : AForm => Str; g : AGender} ;
     N2 = {s : NForm => Str; g : AGender} ** {c2 : Preposition} ;
     N3 = {s : NForm => Str; g : AGender} ** {c2,c3 : Preposition} ;
     PN = {s : Str; g : Gender} ;
-    
+
   lindef
     SSlash = \s -> {s = \\_ => s; c2 = {s=""; c=Acc}};
     ClSlash = \s -> {s = \\_,_,_,_,_ => s; c2 = {s=""; c=Acc}};

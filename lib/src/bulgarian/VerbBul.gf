@@ -27,11 +27,11 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     ComplVQ v q  = insertObj (\\_ => q.s ! QDir) Pos (predV v) ;
 
     ComplVA v ap = 
-      insertObj (\\agr => ap.s ! aform agr.gn Indef (RObj Acc)) Pos (predV v) ;
+      insertObj (\\agr => ap.s ! aform agr.gn Indef (RObj Acc) ! agr.p) Pos (predV v) ;
 
 
     SlashV2A v ap = 
-      insertSlashObj2 (\\a => ap.s ! aform a.gn Indef (RObj Acc)) Pos (slashV v v.c2) ;
+      insertSlashObj2 (\\a => ap.s ! aform a.gn Indef (RObj Acc) ! a.p) Pos (slashV v v.c2) ;
 
     -- test: I saw a boy to whom she said that they are here
     SlashV2S v s  = insertSlashObj2 (\\_ => comma ++ "че" ++ s.s) Pos (slashV v v.c2) ;
@@ -110,7 +110,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
     PassV2 v = insertObj (\\a => v.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc))) Pos (predV verbBe) ;
 
-    CompAP ap = {s = \\agr => ap.s ! aform agr.gn Indef (RObj Acc); p = Pos} ;
+    CompAP ap = {s = \\agr => ap.s ! aform agr.gn Indef (RObj Acc) ! agr.p; p = Pos} ;
     CompNP np = {s = \\_ => np.s ! RObj Acc; p = np.p} ;
     CompAdv a = {s = \\_ => a.s; p = Pos} ;
     CompCN cn = {s = \\agr => cn.s ! (NF (numGenNum agr.gn) Indef); p = Pos} ;

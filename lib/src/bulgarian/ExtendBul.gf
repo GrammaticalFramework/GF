@@ -17,32 +17,32 @@ lin
   PositAdVAdj a = {s = a.adv} ;
 
   PresPartAP vp =
-    let ap : AForm => Str
-           = \\aform => vp.ad.s ++
-                        vp.s ! Imperf ! VPresPart aform ++
-                        case vp.vtype of {
-                          VMedial c => reflClitics ! c;
-                          _         => []
-                        } ++
-                        vp.compl ! {gn=aform2gennum aform; p=P3} ;
-    in {s = ap; adv = ap ! (ASg Neut Indef); isPre = True} ;
+    let ap : AForm => Person => Str
+           = \\aform,p => vp.ad.s ++
+                          vp.s ! Imperf ! VPresPart aform ++
+                          case vp.vtype of {
+                            VMedial c => reflClitics ! c;
+                            _           => []
+                          } ++
+                          vp.compl ! {gn=aform2gennum aform; p=p} ;
+    in {s = ap; adv = ap ! (ASg Neut Indef) ! P3; isPre = True} ;
 
   PastPartAP vp =
-    let ap : AForm => Str
-           = \\aform => vp.ad.s ++
-                        vp.s ! Perf ! VPassive aform ++
-                        vp.compl1 ! {gn=aform2gennum aform; p=P3} ++
-                        vp.compl2 ! {gn=aform2gennum aform; p=P3}
-    in {s = ap; adv = ap ! ASg Neut Indef; isPre = True} ;
+    let ap : AForm => Person => Str
+           = \\aform,p => vp.ad.s ++
+                          vp.s ! Perf ! VPassive aform ++
+                          vp.compl1 ! {gn=aform2gennum aform; p=p} ++
+                          vp.compl2 ! {gn=aform2gennum aform; p=p}
+    in {s = ap; adv = ap ! ASg Neut Indef ! P3; isPre = True} ;
 
   PastPartAgentAP vp np =
-    let ap : AForm => Str
-           = \\aform => vp.ad.s ++
-                        vp.s ! Perf ! VPassive aform ++
-                        vp.compl1 ! {gn=aform2gennum aform; p=P3} ++
-                        vp.compl2 ! {gn=aform2gennum aform; p=P3} ++
-                        "от" ++ np.s ! RObj Acc
-    in {s = ap; adv = ap ! ASg Neut Indef; isPre = False} ;
+    let ap : AForm => Person => Str
+           = \\aform,p => vp.ad.s ++
+                          vp.s ! Perf ! VPassive aform ++
+                          vp.compl1 ! {gn=aform2gennum aform; p=p} ++
+                          vp.compl2 ! {gn=aform2gennum aform; p=p} ++
+                          "от" ++ np.s ! RObj Acc
+    in {s = ap; adv = ap ! ASg Neut Indef ! P3; isPre = False} ;
 
 }
 

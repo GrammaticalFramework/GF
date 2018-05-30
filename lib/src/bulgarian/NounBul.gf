@@ -169,13 +169,13 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
 
     AdjCN ap cn = {
       s = \\nf => case ap.isPre of {
-                    True  => (ap.s ! nform2aform nf cn.g) ++ (cn.s ! (indefNForm nf)) ;
-                    False => (cn.s ! nf) ++ (ap.s ! nform2aform (indefNForm nf) cn.g)
+                    True  => (ap.s ! nform2aform nf cn.g ! P3) ++ (cn.s ! (indefNForm nf)) ;
+                    False => (cn.s ! nf) ++ (ap.s ! nform2aform (indefNForm nf) cn.g ! P3)
                   } ;
       g = cn.g
       } ;
     RelCN cn rs = {
-      s = \\nf => cn.s ! nf ++ rs.s ! {gn=gennum cn.g (numNForm nf); p=P3} ;
+      s = \\nf => cn.s ! nf ++ rs.s ! agrP3 (gennum cn.g (numNForm nf)) ;
       g = cn.g
       } ;
     AdvCN cn ad = {
@@ -183,7 +183,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       g = cn.g
     } ;
 
-    SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s; g=ANeut} ;
+    SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s ! agrP3 (gennum cn.g (numNForm nf)); g=cn.g} ;
 
     ApposCN cn np = {s = \\nf => cn.s ! nf ++ np.s ! RSubj; g=cn.g} ;
 
