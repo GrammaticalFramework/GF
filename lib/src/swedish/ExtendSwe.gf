@@ -7,7 +7,7 @@ concrete ExtendSwe of Extend = CatSwe **
     MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
     MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
     ICompAP,
-    PositAdVAdj, PastPartAP, PastPartAgentAP,
+    PositAdVAdj, PresPartAP, PastPartAP, PastPartAgentAP,
     RNP, RNPList, ReflRNP, ReflPron, ReflPoss, PredetRNP, ConjRNP,
     Base_rr_RNP, Base_nr_RNP, Base_rn_RNP, Cons_rr_RNP, Cons_nr_RNP,
     CompoundN
@@ -154,6 +154,11 @@ concrete ExtendSwe of Extend = CatSwe **
   lin
     PositAdVAdj a = {s = a.s ! AAdv} ;
     
+    PresPartAP vp = {
+      s = \\af => partVPPlus vp (PartPres Sg Indef Nom) (aformpos2agr af) Pos ;
+      isPre = True
+    } ;
+
     PastPartAP vp = {
       s = \\af => partVPPlus vp (PartPret af Nom) (aformpos2agr af) Pos ;
       isPre = True

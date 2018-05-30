@@ -16,6 +16,17 @@ lin
 
   PositAdVAdj a = {s = a.adv} ;
 
+  PresPartAP vp =
+    let ap : AForm => Str
+           = \\aform => vp.ad.s ++
+                        vp.s ! Imperf ! VPresPart aform ++
+                        case vp.vtype of {
+                          VMedial c => reflClitics ! c;
+                          _         => []
+                        } ++
+                        vp.compl ! {gn=aform2gennum aform; p=P3} ;
+    in {s = ap; adv = ap ! (ASg Neut Indef); isPre = True} ;
+
   PastPartAP vp =
     let ap : AForm => Str
            = \\aform => vp.ad.s ++
