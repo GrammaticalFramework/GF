@@ -30,7 +30,7 @@ lin
                             _           => []
                           } ++
                           vp.compl ! {gn=aform2gennum aform; p=p} ;
-    in {s = ap; adv = ap ! (ASg Neut Indef) ! P3; isPre = True} ;
+    in {s = ap; adv = ap ! (ASg Neut Indef) ! P3; isPre = vp.isSimple} ;
 
   PastPartAP vp =
     let ap : AForm => Person => Str
@@ -38,7 +38,7 @@ lin
                           vp.s ! Perf ! VPassive aform ++
                           vp.compl1 ! {gn=aform2gennum aform; p=p} ++
                           vp.compl2 ! {gn=aform2gennum aform; p=p}
-    in {s = ap; adv = ap ! ASg Neut Indef ! P3; isPre = True} ;
+    in {s = ap; adv = ap ! ASg Neut Indef ! P3; isPre = vp.isSimple} ;
 
   PastPartAgentAP vp np =
     let ap : AForm => Person => Str

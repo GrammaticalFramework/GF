@@ -32,7 +32,8 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
                                                        ad     = slash.ad ;
                                                        compl  = \\_ => slash.compl1 ! np.a ++ slash.compl2 ! agr ;
                                                        vtype  = slash.vtype ;
-                                                       p      = Pos}).s ;
+                                                       p      = Pos ;
+                                                       isSimple = slash.isSimple}).s ;
       c2 = slash.c2
     } ;
 

@@ -227,9 +227,10 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       ad    : {isEmpty : Bool; s : Str} ;          -- sentential adverb
       compl : Agr => Str ;
       vtype : VType ;
-      p     : Polarity
+      p     : Polarity ;
+      isSimple : Bool    -- regulates the place of participle used as adjective
     } ;
-    
+
     VPSlash = {
       s      : Aspect => VTable ;
       ad     : {isEmpty : Bool; s : Str} ;         -- sentential adverb
@@ -237,7 +238,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       compl2 : Agr => Str ;
       vtype  : VType ;
       p      : Polarity ;
-      c2     : Preposition
+      c2     : Preposition ;
+      isSimple : Bool    -- regulates the place of participle used as adjective
     } ;
 
     predV : Verb -> VP = \verb -> {
@@ -245,7 +247,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       ad    = {isEmpty=True; s=[]} ;
       compl = \\_ => [] ;
       vtype = verb.vtype ;
-      p     = Pos
+      p     = Pos ;
+      isSimple = True
     } ;
 
     slashV : Verb -> Preposition -> VPSlash = \verb,prep -> {
@@ -256,6 +259,7 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       vtype  = verb.vtype ;
       p      = Pos ;
       c2     = prep ;
+      isSimple = True
     } ;
 
     insertObj : (Agr => Str) -> Polarity -> VP -> VP = \obj,p,vp -> {
@@ -266,7 +270,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       p     = case p of {
                 Neg => Neg;
                 _   => vp.p
-              }
+              } ;
+      isSimple = False
       } ;
 
     insertSlashObj1 : (Agr => Str) -> Polarity -> VPSlash -> VPSlash = \obj,p,slash -> {
@@ -279,7 +284,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
                  Neg => Neg ;
                  Pos => slash.p
                } ;
-      c2     = slash.c2
+      c2     = slash.c2 ;
+      isSimple = False
       } ;
 
     insertSlashObj2 : (Agr => Str) -> Polarity -> VPSlash -> VPSlash = \obj,p,slash -> {
@@ -292,7 +298,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
                  Neg => Neg ;
                  Pos => slash.p
                } ;
-      c2     = slash.c2
+      c2     = slash.c2 ;
+      isSimple = False
       } ;
 
     auxBe : VTable =

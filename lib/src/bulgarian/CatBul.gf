@@ -117,7 +117,8 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,SC] ** open ResBul, Prelude, Prede
                                 ad = vps.ad ;
                                 compl = \\a => vps.compl1 ! a ++ vps.c2.s ++ vps.compl2 ! a ;
                                 vtype = vps.vtype ;
-                                p     = Pos
+                                p     = Pos ;
+                                isSimple = vps.isSimple
                                }
                       in linrefVP vp;
 

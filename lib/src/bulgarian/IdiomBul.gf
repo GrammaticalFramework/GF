@@ -60,7 +60,8 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
       ad = vp.ad ;
       compl = vp.compl ;
       vtype = vp.vtype ;
-      p = vp.p
+      p = vp.p ;
+      isSimple = False
       } ;
 
     ImpPl1 vp = {s = "нека" ++ daComplex Simul Pos vp ! Perf ! {gn = GPl ; p = P1}} ;
