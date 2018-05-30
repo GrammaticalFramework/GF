@@ -128,9 +128,14 @@ oper
   mkV2V : V -> Prep -> Prep -> V2V ;
   mkV2V v p t = prepV2 v p ** {c3 = t ; lock_V2V = <>} ;
   
-  mkV2A : V -> Prep -> V2A ;
-  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
+  mkV2A = overload {
+    mkV2A : V -> Prep -> V2A
+      = \v, p -> prepV2 v p ** {c3 = noPrep ; lock_V2A = <>} ;
   
+    mkV2A : V -> Prep -> Prep -> V2A
+      = \v, p, t -> prepV2 v p ** {c3 = t ; lock_V2A = <>} ;
+  } ;
+
   mkV2Q : V -> Prep -> Prep -> V2Q ;
   mkV2Q v p t = prepV2 v p ** {c3 = t ; lock_V2Q = <>} ;
   

@@ -31,7 +31,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
 
     SlashV2A v ap = 
-      insertSlashObj2 (\\a => ap.s ! aform a.gn Indef (RObj Acc) ! a.p) Pos (slashV v v.c2) ;
+      insertSlashObj2 (\\a => v.c3.s ++ ap.s ! aform a.gn Indef (RObj Acc) ! a.p) Pos (slashV v v.c2) ;
 
     -- test: I saw a boy to whom she said that they are here
     SlashV2S v s  = insertSlashObj2 (\\_ => comma ++ "че" ++ s.s) Pos (slashV v v.c2) ;

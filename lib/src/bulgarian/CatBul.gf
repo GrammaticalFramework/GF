@@ -74,8 +74,8 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,SC] ** open ResBul, Prelude, Prede
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ;
-    V2, V2A = Verb ** {c2 : Preposition} ;
-    V2V, V2S, V2Q = Verb ** {c2, c3 : Preposition} ; --- AR
+    V2 = Verb ** {c2 : Preposition} ;
+    V2A, V2V, V2S, V2Q = Verb ** {c2, c3 : Preposition} ;
     V3 = Verb ** {c2, c3 : Preposition} ;
     VV = Verb ** {typ : VVType};
 
@@ -95,8 +95,8 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,SC] ** open ResBul, Prelude, Prede
     VPSlash = \s -> slashV {s = \\_,_ => s; vtype = VNormal} {s=""; c=Acc};
     
     V, VS, VQ, VA = \s -> {s = \\_,_ => s; vtype = VNormal};
-    V2, V2A = \s -> {s = \\_,_ => s; vtype = VNormal; c2 = {s=""; c=Acc}};
-    V2V, V2S, V2Q = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
+    V2 = \s -> {s = \\_,_ => s; vtype = VNormal; c2 = {s=""; c=Acc}};
+    V2A, V2V, V2S, V2Q = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
     V3 = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
     VV = \s -> {s = \\_,_ => s; vtype = VNormal; typ = VVInf};
 
@@ -128,9 +128,9 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,SC] ** open ResBul, Prelude, Prede
                        } ;
 
     V, VS, VQ, VA = \v -> linrefVP (predV v);
-    V2, V2A = \v -> linrefVP (predV v) ++ v.c2.s;
+    V2 = \v -> linrefVP (predV v) ++ v.c2.s;
     V2V = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s ++ "да";
-    V2S, V2Q = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s;
+    V2A, V2S, V2Q = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s;
     V3 = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s;
     VV = \v -> linrefVP (predV v);
 
