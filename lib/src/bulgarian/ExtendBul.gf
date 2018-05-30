@@ -2,6 +2,8 @@
 concrete ExtendBul of Extend = CatBul ** open Prelude, ResBul in {
 
 lin
+  AdAdV = cc2 ;
+
   EmptyRelSlash slash = {
       s = \\t,a,p,agr => slash.c2.s ++ whichRP ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main ;
       role = RObj Acc

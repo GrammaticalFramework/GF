@@ -282,6 +282,8 @@ concrete ExtendEng of Extend =
 
 
   lin
+    AdAdV = cc2 ;
+
     AdjAsCN ap = let cn = mkNoun "one" "one's" "ones" "ones'" ** {g = Neutr}
       in {
         s = \\n,c => preOrPost ap.isPre (ap.s ! agrgP3 n cn.g) (cn.s ! n ! c) ;
