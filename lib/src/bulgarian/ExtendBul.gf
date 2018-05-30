@@ -2,6 +2,11 @@
 concrete ExtendBul of Extend = CatBul ** open Prelude, ResBul in {
 
 lin
+  EmptyRelSlash slash = {
+      s = \\t,a,p,agr => slash.c2.s ++ whichRP ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main ;
+      role = RObj Acc
+      } ;
+
   CompoundN n1 n2 = 
     let aform = ASg (case n2.g of {
                        AMasc _       => Masc ;
