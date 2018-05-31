@@ -42,16 +42,17 @@ incomplete concrete CatScand of Cat =
       s : Voice => VPForm => {
         fin : Str ;          -- V1 har  ---s1
         inf : Str ;          -- V2 sagt ---s4
-        a1  : Polarity => Agr => Str * Str ; -- A1 inte ---s3 själv/själva/självt
+        a1  : Polarity => Agr => Str * Str  -- A1 inte ---s3 själv/själva/självt
 	                                     -- p1: with infinite    "jag har inte älskat dig",
-					     -- p2: without infinite "jag älskar dig inte"	                                     
+					                     -- p2: without infinite "jag älskar dig inte"
         } ;
       sp : PartForm => Str ;
       n1 : Agr => Str ;      -- N2 dig  ---s5  
       n2 : Agr => Str ;      -- N2 den där mannen  ---s5  
       a2 : Str ;             -- A2 idag ---s6
       ext : Str ;            -- S-Ext att hon går   ---s7
-      en2,ea2,eext : Bool    -- indicate if the field exists
+      en2,ea2,eext : Bool ;  -- indicate if the field exists
+      isSimple : Bool
       } ;
     VPSlash = CommonScand.VP ** {
       n3 : Agr => Str ;  -- object-control complement

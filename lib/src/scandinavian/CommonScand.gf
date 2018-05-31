@@ -297,7 +297,8 @@ oper
       a2 : Str ;             -- A2 idag ---s6
       ext : Str ;            -- S-Ext att hon går   ---s7
       --- ea1,ev2,           --- these depend on params of v and a1
-      en2,ea2,eext : Bool    -- indicate if the field exists
+      en2,ea2,eext : Bool ;  -- indicate if the field exists
+      isSimple : Bool
       } ;
 
 
@@ -305,6 +306,7 @@ oper
     n1 = \\a => vp.n1 ! a ++ if_then_Str isPron (obj ! a) [] ;
     n2 = \\a => vp.n2 ! a ++ if_then_Str isPron []        (obj ! a) ;
     en2 = notB isPron ;
+    isSimple = False
     } ;
     
   insertObj : (Agr => Str) -> VP -> VP = insertObjPron False ;
@@ -312,16 +314,19 @@ oper
   insertObjPost : (Agr => Str) -> VP -> VP = \obj,vp -> vp ** {
     n2 = \\a => vp.n2 ! a ++ obj ! a ;
     en2 = True ;
+    isSimple = False
     } ;
 
   insertAdv : Str -> VP -> VP = \adv,vp -> vp ** {
     a2 = vp.a2 ++ adv ;
     ea2 = True ;
+    isSimple = False
     } ;
 
   insertExt : Str -> VP -> VP = \ext,vp -> vp ** {
     ext = vp.ext ++ ext ;
     eext = True ;
+    isSimple = False
     } ;
 
   insertAdV : Str -> VP -> VP = \adv -> insertAdVAgr (\\_ => adv) ;
