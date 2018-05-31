@@ -1,5 +1,5 @@
 --# -path=.:../abstract:../common:prelude
-concrete ExtendBul of Extend = CatBul ** open Prelude, ResBul in {
+concrete ExtendBul of Extend = CatBul ** open Prelude, ResBul, StructuralBul in {
 
 lin
   AdAdV = cc2 ;
@@ -53,6 +53,15 @@ lin
                           vp.compl2 ! {gn=aform2gennum aform; p=p} ++
                           "от" ++ np.s ! RObj Acc
     in {s = ap; adv = ap ! ASg Neut Indef ! P3; isPre = False} ;
+
+  iFem_Pron      = mkPron "аз" "мен" "ме" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  P1 ;
+  youFem_Pron    = youSg_Pron ;
+  weFem_Pron     = we_Pron ;
+  youPlFem_Pron  = youPl_Pron ;
+  theyFem_Pron   = they_Pron ;
+  youPolFem_Pron = youPol_Pron ;
+  youPolPl_Pron  = youPol_Pron ;
+  youPolPlFem_Pron = youPol_Pron ;
 
 }
 
