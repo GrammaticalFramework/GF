@@ -176,6 +176,15 @@ concrete ExtendSwe of Extend = CatSwe **
       s = \\af => partVPPlusPost vp (PartPret af Nom) (aformpos2agr af) Pos ++ "av" ++ np.s ! accusative ;
       isPre = False
     } ;
+    
+    GerundNP vp = {  -- infinitive: att dricka öl, att vara glad
+      s = \\_ => "att" ++ infVP vp {g = Utr ; n = Sg ; p = P3} ; 
+      a = {g = Neutr ; n = Sg ; p = P3} ;
+      isPron = False
+    } ;
 
+    GerundAdv vp = {
+      s = partVPPlusPost vp (PartPres Sg Indef (Nom|Gen)) {g = Utr ; n = Sg ; p = P3} Pos -- sovande(s) i sängen
+    } ;
 }
 

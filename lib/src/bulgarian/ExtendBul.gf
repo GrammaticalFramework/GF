@@ -54,6 +54,17 @@ lin
                           "от" ++ np.s ! RObj Acc
     in {s = ap; adv = ap ! ASg Neut Indef ! P3; isPre = False} ;
 
+  GerundNP vp = {
+    s = \\_ => daComplex Simul Pos vp ! Imperf ! {gn=GSg Neut; p=P1};
+    a = {gn=GSg Neut; p=P3};
+    p = Pos
+  } ;
+
+  GerundAdv vp =
+    {s = vp.ad.s ++
+         vp.s ! Imperf ! VGerund ++
+         vp.compl ! {gn=GSg Neut; p=P3}} ;
+
   iFem_Pron      = mkPron "аз" "мен" "ме" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  P1 ;
   youFem_Pron    = youSg_Pron ;
   weFem_Pron     = we_Pron ;
