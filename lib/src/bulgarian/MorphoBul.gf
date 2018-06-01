@@ -24,8 +24,12 @@ oper
 
   mkDeterminerSg : Str -> Str -> Str -> {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species; p : Polarity} = \vseki,vsiaka,vsiako ->
     {s = \\_,g,_ => table AGender [vseki;vseki;vsiaka;vsiako] ! g; nn = NNum Sg; spec = Indef; p = Pos} ;
-  mkDeterminerPl : Str -> {s : Bool => AGender => Role => Str ; nn : NNumber ; spec : Species; p : Polarity} = \vsicki ->
-    {s = \\_,_,_ => vsicki; sp = \\_,_ => vsicki; nn = NNum Pl; spec = Indef; p = Pos} ;
+  mkDeterminerPl = overload {
+    mkDeterminerPl : Str -> {s : Bool => AGender => Role => Str ; nn : NNumber ; spec : Species; p : Polarity} = \vsicki ->
+      {s = \\_,_,_ => vsicki; nn = NNum Pl; spec = Indef; p = Pos} ;
+    mkDeterminerPl : Str -> Str -> Str -> Str -> {s : Bool => AGender => Role => Str ; nn : NNumber ; spec : Species; p : Polarity} = \i_dvamata,i_dvata,i_dvete,i_dvete_neut ->
+      {s = \\_,g,_ => table AGender [i_dvamata;i_dvata;i_dvete;i_dvete_neut] ! g; nn = NNum Pl; spec = Indef; p = Pos} ;
+  } ;
 
   mkQuant : Str -> Str -> Str -> Str -> {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species; p : Polarity} = \tozi,tazi,towa,tezi -> 
     { s = \\_ => table {
