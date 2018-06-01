@@ -1,5 +1,5 @@
 --# -path=.:../abstract:../common:prelude
-concrete ExtendBul of Extend = CatBul ** open Prelude, ResBul, StructuralBul in {
+concrete ExtendBul of Extend = CatBul ** open Prelude, Predef, ResBul, StructuralBul in {
 
 lin
   AdAdV = cc2 ;
@@ -73,6 +73,27 @@ lin
   youPolFem_Pron = youPol_Pron ;
   youPolPl_Pron  = youPol_Pron ;
   youPolPlFem_Pron = youPol_Pron ;
+
+lincat
+  VPS   = {s : Agr => Str} ;
+  [VPS] = {s : Bool => Ints 2 => Agr => Str} ;
+
+lin
+  BaseVPS x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
+  ConsVPS x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep ResBul.comma)!d!t++xs.s!d!t!a} ;
+
+  PredVPS np vps = {s = np.s ! RSubj ++ vps.s ! np.a} ;
+
+  MkVPS t p vp = {
+    s = \\a => 
+          let verb  = vpTenses vp ! t.t ! t.a ! p.p ! a ! False ! Perf ;
+              compl = vp.compl ! a
+          in t.s ++ p.s ++ verb ++ compl
+    } ;
+      
+  ConjVPS conj vps = {
+    s = \\a => conj.s++(linCoordSep [])!conj.distr!conj.conj++vps.s!conj.distr!conj.conj!a;
+    } ;
 
 }
 
