@@ -7,7 +7,7 @@ concrete ExtendSwe of Extend = CatSwe **
     MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
     MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
     ICompAP,
-    AdAdV, PositAdVAdj, PresPartAP, PastPartAP, PastPartAgentAP,
+    AdAdV, PositAdVAdj, GerundNP, GerundAdv, PresPartAP, PastPartAP, PastPartAgentAP,
     RNP, RNPList, ReflRNP, ReflPron, ReflPoss, PredetRNP, ConjRNP,
     Base_rr_RNP, Base_nr_RNP, Base_rn_RNP, Cons_rr_RNP, Cons_nr_RNP,
     CompoundN
