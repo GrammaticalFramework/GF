@@ -1,7 +1,9 @@
 --# -path=.:../abstract:../common:prelude
-concrete ExtendBul of Extend = CatBul ** open Prelude, Predef, ResBul, StructuralBul in {
+concrete ExtendBul of Extend = CatBul ** open Prelude, Predef, ResBul, GrammarBul in {
 
 lin
+  GenModNP num np cn = DetCN (DetQuant DefArt num) (AdvCN cn (PrepNP possess_Prep np)) ;     -- this man's car(s) ; DEFAULT the car of this man
+
   AdAdV = cc2 ;
 
   EmptyRelSlash slash = {
@@ -54,6 +56,13 @@ lin
                           "от" ++ np.s ! RObj Acc
     in {s = ap; adv = ap ! ASg Neut Indef ! P3; isPre = False} ;
 
+  GerundCN vp = {
+    s   = \\nform => vp.ad.s ++
+                     vp.s ! Imperf ! VNoun nform ++
+                     vp.compl ! {gn=GSg Neut; p=P3} ;
+    g = ANeut
+  } ;
+
   GerundNP vp = {
     s = \\_ => daComplex Simul Pos vp ! Imperf ! {gn=GSg Neut; p=P1};
     a = {gn=GSg Neut; p=P3};
@@ -94,6 +103,53 @@ lin
   ConjVPS conj vps = {
     s = \\a => conj.s++(linCoordSep [])!conj.distr!conj.conj++vps.s!conj.distr!conj.conj!a;
     } ;
+
+lincat
+  RNP = {s : Agr => Role => Str; a : Agr; p : Polarity} ;
+
+lin
+  ReflRNP slash rnp = {
+    s   = slash.s ;
+    ad  = slash.ad ;
+    compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ rnp.s ! a ! RObj slash.c2.c ++ slash.compl2 ! rnp.a ;
+    vtype = slash.vtype ;
+    p   = orPol rnp.p slash.p ;
+    isSimple = False
+  } ;
+
+  ReflPron =
+      { s = \\agr,role => "себе си";
+        a = {gn = GSg Masc; p = P3} ;
+        p = Pos
+      } ;
+
+  ReflPoss num cn =
+      { s = \\agr,role => 
+                let nf = case num.nn of {
+                           NNum Sg => case role of {
+				                        RVoc  => NFVocative ;
+				                        _     => NF Sg Indef
+                                      } ;
+                           NNum Pl => NF Pl Indef;
+                           NCountable => case cn.g of {
+                                           AMasc Human => NF Pl Indef;
+                                           _           => NFPlCount
+                                         }
+                         } ;
+                    s = reflPron ! aform (gennum cn.g (numnnum num.nn)) Def (RObj Acc) ++ num.s ! dgenderSpecies cn.g Indef role ++ cn.s ! nf
+                in case role of {
+                     RObj Dat => "на" ++ s; 
+                     _        => s
+                   } ;
+        a = {gn = gennum cn.g (numnnum num.nn); p = P3} ;
+        p = Pos
+      } ;
+
+  PredetRNP pred rnp = {
+    s = \\a,c => pred.s ! rnp.a.gn ++ rnp.s ! a ! c ;
+    a = rnp.a ;
+    p = rnp.p
+  } ;
 
 }
 

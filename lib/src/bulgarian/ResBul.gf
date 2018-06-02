@@ -750,4 +750,17 @@ resource ResBul = ParamX ** open Prelude, Predef in {
     
     comma : Str = SOFT_BIND ++ "," ;
     hyphen : Str = SOFT_BIND ++ "-" ++ SOFT_BIND ;
+
+    reflPron : AForm => Str =
+      table {
+        ASg Masc Indef => "свой" ;
+        ASg Masc Def   => "своя" ;
+        ASgMascDefNom  => "своят" ;
+        ASg Fem  Indef => "своя" ;
+        ASg Fem  Def   => "своята" ;
+        ASg Neut Indef => "свое" ;
+        ASg Neut Def   => "своето" ;
+        APl Indef      => "свои" ;
+        APl Def        => "своите"
+      } ;
 }

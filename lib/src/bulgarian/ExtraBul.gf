@@ -56,20 +56,6 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     
     IAdvAdv adv = {s = \\qf => (mkIAdv "колко").s ! qf ++ adv.s} ;
 
-  oper
-    reflPron : AForm => Str =
-      table {
-        ASg Masc Indef => "свой" ;
-        ASg Masc Def   => "своя" ;
-        ASgMascDefNom  => "своят" ;
-        ASg Fem  Indef => "своя" ;
-        ASg Fem  Def   => "своята" ;
-        ASg Neut Indef => "свое" ;
-        ASg Neut Def   => "своето" ;
-        APl Indef      => "свои" ;
-        APl Def        => "своите"
-      } ;
-
   lincat
     VPI   = {s : Agr => Str} ;
     [VPI] = {s : Bool => Ints 2 => Agr => Str} ;

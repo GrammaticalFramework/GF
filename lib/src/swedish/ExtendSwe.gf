@@ -2,12 +2,12 @@
 concrete ExtendSwe of Extend = CatSwe **
   ExtendFunctor -
   [
-    GenNP, ComplBareVS, CompBareCN,
+    GenNP, GenModNP, ComplBareVS, CompBareCN,
     StrandRelSlash, EmptyRelSlash, StrandQuestSlash,
     MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
     MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
     ICompAP,
-    AdAdV, PositAdVAdj, GerundNP, GerundAdv, PresPartAP, PastPartAP, PastPartAgentAP,
+    AdAdV, PositAdVAdj, GerundCN, GerundNP, GerundAdv, PresPartAP, PastPartAP, PastPartAgentAP,
     RNP, RNPList, ReflRNP, ReflPron, ReflPoss, PredetRNP, ConjRNP,
     Base_rr_RNP, Base_nr_RNP, Base_rn_RNP, Cons_rr_RNP, Cons_nr_RNP,
     CompoundN
@@ -25,6 +25,7 @@ concrete ExtendSwe of Extend = CatSwe **
       det = DDef Indef
       } ;
 
+    GenModNP num np cn = DetCN (DetQuant (GenNP (lin NP np)) num) cn ;
 
     ComplBareVS v s  = insertObj (\\_ => s.s ! Sub) (predV v) ;
 
@@ -176,7 +177,13 @@ concrete ExtendSwe of Extend = CatSwe **
       s = \\af => partVPPlusPost vp (PartPret af Nom) (aformpos2agr af) Pos ++ "av" ++ np.s ! accusative ;
       isPre = False
     } ;
-    
+
+    GerundCN vp = {  -- infinitive: att dricka öl, att vara glad
+      s = \\_,_,_ => "att" ++ infVP vp {g = Utr ; n = Sg ; p = P3} ; 
+      g = Neutr ;
+      isMod = False
+    } ;
+
     GerundNP vp = {  -- infinitive: att dricka öl, att vara glad
       s = \\_ => "att" ++ infVP vp {g = Utr ; n = Sg ; p = P3} ; 
       a = {g = Neutr ; n = Sg ; p = P3} ;
