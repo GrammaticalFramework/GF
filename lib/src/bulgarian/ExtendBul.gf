@@ -105,26 +105,26 @@ lin
     } ;
 
 lincat
-  RNP = {s : Agr => Role => Str; a : Agr; p : Polarity} ;
+  RNP = {s : Role => Str; a : Agr; p : Polarity} ;
 
 lin
   ReflRNP slash rnp = {
     s   = slash.s ;
     ad  = slash.ad ;
-    compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ rnp.s ! a ! RObj slash.c2.c ++ slash.compl2 ! rnp.a ;
+    compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ rnp.s ! RObj slash.c2.c ++ slash.compl2 ! rnp.a ;
     vtype = slash.vtype ;
     p   = orPol rnp.p slash.p ;
     isSimple = False
   } ;
 
   ReflPron =
-      { s = \\agr,role => "себе си";
+      { s = \\role => "себе си";
         a = {gn = GSg Masc; p = P3} ;
         p = Pos
       } ;
 
   ReflPoss num cn =
-      { s = \\agr,role => 
+      { s = \\role => 
                 let nf = case num.nn of {
                            NNum Sg => case role of {
 				                        RVoc  => NFVocative ;
@@ -146,7 +146,7 @@ lin
       } ;
 
   PredetRNP pred rnp = {
-    s = \\a,c => pred.s ! rnp.a.gn ++ rnp.s ! a ! c ;
+    s = \\c => pred.s ! rnp.a.gn ++ rnp.s ! c ;
     a = rnp.a ;
     p = rnp.p
   } ;
