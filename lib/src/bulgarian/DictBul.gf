@@ -40670,7 +40670,7 @@ lin
   razpakovane_N = mkN071 "разпаковане" ;
   razpalvam_V = actionV (mkV186 "разпалвам") (mkV173 "разпаля") ;
   razpalvane_N = mkN071 "разпалване" ;
-  razpalen_A = mkA079 "разпален" ;
+  razpalen_A = mkA076 "разпален" ;
   razpalenost_N = mkN049 "разпаленост" ;
   razpal_ja_m_V = actionV (mkV187 "разпалям") (mkV173 "разпаля") ;
   razpal_ja_ne_N = mkN071 "разпаляне" ;
