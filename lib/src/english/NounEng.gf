@@ -141,7 +141,7 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       } ;
     AdvCN cn ad = {s = \\n,c => cn.s ! n ! c ++ ad.s ; g = cn.g} ;
 
-    SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s ; g = cn.g} ;
+    SentCN cn sc = {s = \\n,c => cn.s ! n ! c ++ sc.s ! agrgP3 n cn.g ; g = cn.g} ;
 
     ApposCN cn np = {s = \\n,c => cn.s ! n ! Nom ++ np.s ! NCase c ; g = cn.g} ;
 

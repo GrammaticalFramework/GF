@@ -141,7 +141,7 @@ concrete ExtendEng of Extend =
       isPre = vp.isSimple                 -- depends on whether there are complements
       } ;
 
-    EmbedPresPart vp = {s = infVP VVPresPart vp Simul CPos (agrP3 Sg)} ; --- agr
+    EmbedPresPart vp = {s = \\a => infVP VVPresPart vp Simul CPos a} ;
 
    PastPartAP vp = { 
       s = \\a => vp.ad ! a ++ vp.ptp ++ vp.p ++ vp.c2 ++ vp.s2 ! a ++ vp.ext ;

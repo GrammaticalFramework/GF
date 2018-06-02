@@ -36,7 +36,7 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
       } ;
 
     SentAP ap sc = {
-      s = \\a => ap.s ! a ++ sc.s ; 
+      s = \\a => ap.s ! a ++ sc.s ! a ; 
       isPre = False
       } ;
 
