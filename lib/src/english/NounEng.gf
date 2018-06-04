@@ -3,7 +3,7 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
   flags optimize=all_subs ;
 
   lin
-    DetCN det cn = {
+    DetCN det cn = { 
       s = \\c => det.s ++ cn.s ! det.n ! npcase2case c ; 
       a = agrgP3 det.n cn.g
       } ;

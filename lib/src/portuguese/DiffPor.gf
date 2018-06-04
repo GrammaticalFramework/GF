@@ -6,7 +6,7 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
         coding=utf8 ;
 
   param
-    Prepos = P_de | P_a ;
+    Prepos = P_de | P_a | P_em | P_por ;
 
     VType = VHabere | VRefl ;
 
@@ -79,8 +79,11 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
     estarCopula = True ;
 
   oper
+    -- the other Cases are defined in ResRomance
     dative   : Case = CPrep P_a ;
     genitive : Case = CPrep P_de ;
+    locative : Case = CPrep P_em ;
+    ablative : Case = CPrep P_por ;
 
   oper
     vRefl _ = VRefl ;
@@ -94,40 +97,32 @@ instance DiffPor of DiffRomance - [partAgr,vpAgrSubj,vpAgrClits] = open CommonRo
       Nom => [] ;
       Acc => [] ;
       CPrep P_de => "de" ;
-      CPrep P_a  => "a"
+      CPrep P_a  => "a" ;
+      CPrep P_em => "em" ;
+      CPrep P_por => "por"
       } ;
 
   oper
     partitive = \_,c -> prepCase c ;
 
   oper
-    artDef : Bool -> Gender -> Number -> Case -> Str = \isNP,g,n,c ->
-      case isNP of {
-       True => case <g,n,c> of {
-        <Masc,Sg, _>          => prepCase c ++ "o" ;
-	<Fem, Sg, _> => prepCase c ++ "a" ; ----- ??
-        <Masc,Pl, _> => prepCase c ++ "os" ;
-        <Fem ,Pl, _> => prepCase c ++ "as"
-        } ;
-       False => case <g,n,c> of {
-        <Masc,Sg, CPrep P_de> => "do" ;
-        <Masc,Sg, CPrep P_a>  => "ao" ;
-        <Masc,Sg, _>          => prepCase c ++ "o" ;
-        <Fem ,Sg, CPrep P_de> => "da" ;
-        <Fem ,Sg, CPrep P_a>  => "à" ;
-	<Fem, Sg, _> => prepCase c ++ "a" ;
-        <Masc,Pl, _> => prepCase c ++ "os" ;
-        <Fem ,Pl, _> => prepCase c ++ "as"
-        }
-      } ;
+    artDef : Bool -> Gender -> Number -> Case -> Str ;
+    -- not sure if isNP is relevant
+    artDef _isNP g n c = case c of {
+      Nom | Acc => genNumForms "o" "a" "os" "as" ;
+      CPrep P_de => genNumForms "do" "da" "dos" "das" ;
+      CPrep P_a => genNumForms "ao" "à" "aos" "às" ;
+      CPrep P_em => genNumForms "no" "na" "nos" "nas" ;
+      CPrep P_por => genNumForms "pelo" "pela" "pelos" "pelas"
+      } ! g ! n ;
 
     artIndef = \isNP,g,n,c -> case isNP of {
       True => case n of {
-        Sg  => prepCase c ++ genForms "um"  "uma" ! g ;
+        Sg  => prepCase c ++ genForms "um" "uma" ! g ;
         _   => prepCase c ++ genForms "uns" "umas" ! g
         } ;
       _ => case n of {
-        Sg  => prepCase c ++ genForms "um"   "uma" ! g ;
+        Sg  => prepCase c ++ genForms "um" "uma" ! g ;
         _   => prepCase c
         }
       } ;

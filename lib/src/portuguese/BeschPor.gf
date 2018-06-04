@@ -59,12 +59,6 @@ oper
        }
     } ;
 
-  genNumForms : Str -> Str -> Str -> Str -> Gender => Number => Str ;
-  genNumForms ms fs mp fp = table {
-    Masc => \\n => numForms ms mp ! n ;
-    Fem => \\n => numForms fs fp ! n
-    } ;
-
   mkPass : Str -> Gender => Number => Str ;
   -- passive form is highly predictable from singular masculine
   mkPass p' = let p = p' + [] in case p of {
