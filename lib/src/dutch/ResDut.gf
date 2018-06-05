@@ -19,7 +19,14 @@ resource ResDut = ParamX ** open Prelude, Predef in {
 
     NPCase = NPNom | NPAcc ;
 
-  oper     
+  oper
+    consonant : pattern Str = #("b"|"c"|"d"|"f"|"g"|"h"|"j"|"k"|"l"|"m"|"n"|"p"|"q"|"r"|"s"|"t"|"v"|"w"|"x"|"y"|"z") ;
+    vowel : pattern Str = #("a"|"e"|"i"|"o"|"u") ;
+
+    dupCons : pattern Str = #("b"|"d"|"f"|"g"|"k"|"l"|"m"|"n"|"p"|"r"|"s"|"t") ; -- duplicable consonant
+    dupVow  : pattern Str = #("aa"|"ee"|"oo"|"uu") ; -- actually duplicated vowel
+    diphthong : pattern Str = #("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") ;
+
     Noun = {s : NForm => Str ; g : Gender} ;
 
     mkNoun : (_,_ : Str) -> Gender -> Noun = \sg,pl,g -> {
@@ -33,17 +40,16 @@ resource ResDut = ParamX ** open Prelude, Predef in {
      } ;
 
     regNoun : Str -> Noun = \s -> case s of {
-      _ + ("a" | "o" | "y" | "u" | "oe" | "é") => mkNoun s (s + "'s") Utr ;
-      _ + ("oir" | "ion" | "je" | "c") => mkNoun s (s + "s") Neutr ;
-      ? + ? + ? + _ + 
-        ("el" | "em" | "en" | "er" | "erd" | "aar" | "aard" | "ie") => -- unstressed
-                                            mkNoun s (s + "s") Utr ;
-      _ +                     ("i"|"u")  => mkNoun s (endCons s + "en") Utr ;
-      b + v@("aa"|"ee"|"oo"|"uu") + c@?  => mkNoun s (b + shortVoc v c + "en") Utr ; 
-      b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ? => mkNoun s (endCons s + "en") Utr ;
+      _ + ("a"|"o"|"y"|"u"|"oe"|"é") => mkNoun s (s + "'s") Utr ;
+      _ + ("oir"|"ion"|"je"|"c")     => mkNoun s (s + "s") Neutr ;
+      ? + ? + ? + _ + ("el" | "em" | "en" | "er" | "erd" | "aar" | "aard" | "ie")  -- unstressed
+                                     => mkNoun s (s + "s") Utr ;
       _ + ("ie"|"ee") => mkNoun s (s + "ën") Utr ; -- zee→zeeën, knie→knieën. 
                                                    -- olie→oliën, industrie→industrieën with 2-arg constructor.
-      b + v@("a"|"e"|"i"|"o"|"u") + c@? => mkNoun s (b + v + c + c + "en") Utr ;
+      _ + ("i"|"u")   => mkNoun s (endCons s + "en") Utr ;
+      b + v@#vowel + c@#dupCons  => mkNoun s (b + v + c + c + "en") Utr ;
+      b + v@#dupVow + c@? => mkNoun s (b + shortVoc v c + "en") Utr ; 
+      b + #diphthong + ?  => mkNoun s (endCons s + "en") Utr ;
       _ + "e" => mkNoun s (s + "s") Utr ; -- vrede→vredes. Might not be a good generalisation though. /IL2018
       _       => mkNoun s (endCons s + "en") Utr
       } ;
@@ -62,7 +68,6 @@ resource ResDut = ParamX ** open Prelude, Predef in {
       _ => s
       } ;
 
-    dupCons : pattern Str = #("b"|"d"|"f"|"g"|"k"|"l"|"m"|"n"|"p"|"r"|"s"|"t") ;
 
     add_s : Str -> Str = \s -> case s of {
       _ + "s" => s ;
@@ -99,12 +104,13 @@ resource ResDut = ParamX ** open Prelude, Predef in {
     regAdjective : Str -> Adjective = \s ->
       let 
         se : Str = case s of {
-          _ + ("er"|"en"|"ig")  => s + "e" ; --- for unstressed adjective suffixes 
-          _ + ("i"|"u"|"ij") => endCons s + "e" ;
-          b + v@("aa"|"ee"|"oo"|"uu") + c@?             => b + shortVoc v c + "e" ;
-          b + ("ei"|"eu"|"oe"|"ou"|"ie"|"ij"|"ui") + ?  => endCons s + "e" ;
-          b + v@("a"|"e"|"i"|"o"|"u" )            + "w" => s + "e" ; -- to prevent *blauwwe -- does this happen to other end consonants?
-          b + v@("a"|"e"|"i"|"o"|"u" )            + c@? => b + v + c + c + "e" ;
+          _ + ("er"|"en"|"ig") => s + "e" ; --- for unstressed adjective suffixes 
+          _ + ("i"|"u"|"ij")   => endCons s + "e" ; -- ambigu-ambigue
+          _ + ("a"|"e"|"o")    => s ; -- no e: lila-lila ; beige-beige ; indigo-indigo
+
+          b + v@#dupVow + c@?  => b + shortVoc v c + "e" ;
+          b + #diphthong + ?   => endCons s + "e" ;
+          b + v@#vowel + c@dupCons  => b + v + c + c + "e" ;
           _ => endCons s + "e"
           } ;
       in reg2Adjective s se ;
@@ -215,8 +221,6 @@ param
          _ => d_regVerb vergeten vergeet
         };
 
-    consonant : pattern Str = #("b"|"c"|"d"|"f"|"g"|"h"|"j"|"k"|"l"|"m"|"n"|"p"|"q"|"r"|"s"|"t"|"v"|"w"|"x"|"y"|"z") ;
-    vowel : pattern Str = #("a"|"e"|"i"|"o"|"u") ;
     -- To make a stem out of a verb
     -- If a stem ends in a 'v' then the 'v' changes into a 'f'
     -- If a stem ends in a 'z' then the 'z' changes into an 's'
@@ -243,7 +247,7 @@ param
                                                     -- Penultimate is vowel, but it doesn't double: either because
       _+ #vowel + _ + #vowel + #consonant => kerf ; -- a) ≥2 syllables, e.g. ademen, rekenen, schakelen
                                                     -- b) diphthong, e.g. vriezen  (ij + #consonant falls into the default case!)
-                                                    -- OBS. will do the wrong thing, if you use it on prefix verbs
+                                                    -- NB. this will do the wrong thing, if you use it on prefix verbs
 
       _ + #vowel + ("w"|"j")  => werk ; -- Don't double a vowel before a w or j (are there other consonants?)
 

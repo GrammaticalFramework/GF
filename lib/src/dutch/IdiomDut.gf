@@ -1,5 +1,5 @@
 concrete IdiomDut of Idiom = CatDut ** 
-  open MorphoDut, (P = ParadigmsDut), IrregDut, Prelude in {
+  open ResDut, (P = ParadigmsDut), IrregDut, Prelude in {
 
   flags optimize=all_subs ;
 
