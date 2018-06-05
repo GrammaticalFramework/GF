@@ -1,7 +1,7 @@
 --# -path=.:../abstract
 
 concrete ExtensionsDut of Extensions = 
-  CatDut ** open MorphoDut, ResDut, ParadigmsDut, SyntaxDut, (E = ExtraDut), (G = GrammarDut), Prelude in {
+  CatDut ** open ResDut, ParadigmsDut, SyntaxDut, (E = ExtraDut), (G = GrammarDut), Prelude in {
 
 flags literal=Symb ; coding = utf8 ;
 
