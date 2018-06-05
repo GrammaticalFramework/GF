@@ -199,9 +199,9 @@ concrete NounGer of Noun = CatGer ** open ResGer, MorphoGer, Prelude in {
       rc = (np.rc ++ embedInCommas (rs.s ! RGenNum (gennum (genderAgr np.a) (numberAgr np.a)))) ;
       isPron = False } ;
 
-    SentCN cn s = cn ** {ext = embedInCommas s.s} ;
+    SentCN cn s = cn ** {ext = cn.ext ++ embedInCommas s.s} ;
 
-    AdvCN cn a = cn ** {adv = a.s} ;
+    AdvCN cn a = cn ** {adv = cn.adv ++ a.s} ;
 
     ApposCN  cn np = let g = cn.g in cn ** {
       s = \\a,n,c => cn.s ! a ! n ! c ++ np.s ! NPC c ++ bigNP np } ;
