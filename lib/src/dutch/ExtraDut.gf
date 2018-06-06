@@ -1,5 +1,5 @@
 concrete ExtraDut of ExtraDutAbs = CatDut ** 
-  open ResDut, MorphoDut, Coordination, Prelude, IrregDut, (P = ParadigmsDut), NounDut in 
+  open ResDut, Coordination, Prelude, IrregDut, (P = ParadigmsDut), NounDut in 
 {
 
   flags coding=utf8 ;
@@ -109,7 +109,7 @@ lin
                 inf : Str = vp.inf.p1 ;
                 extra : Str = vp.ext
             in       
-            lin NP (MorphoDut.mkNP (vp.s.s ! VInf ++ "van" ++ compl ++ inf ++ extra ) Utr Sg) ;  
+            lin NP (mkNP (vp.s.s ! VInf ++ "van" ++ compl ++ inf ++ extra ) Utr Sg) ;  
 
 
 lin

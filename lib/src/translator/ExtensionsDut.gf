@@ -1,7 +1,7 @@
 --# -path=.:../abstract
 
 concrete ExtensionsDut of Extensions = 
-  CatDut ** open MorphoDut, ResDut, ParadigmsDut, SyntaxDut, (E = ExtraDut), (G = GrammarDut), Prelude in {
+  CatDut ** open ResDut, ParadigmsDut, SyntaxDut, (E = ExtraDut), ExtendDut, (G = GrammarDut), Prelude in {
 
 flags literal=Symb ; coding = utf8 ;
 
@@ -70,14 +70,13 @@ lin
     } ;
 
   CompoundAP noun adj = {
-      s = \\af => glue (noun.s ! NF Sg Nom) (adj.s ! Posit ! af) ;
+      s = \\agr,af => glue (noun.s ! NF Sg Nom) (adj.s ! Posit ! af) ;
       isPre = True
       } ;
 
-  GerundNP vp = {  -- infinitive: Bier zu trinken
-    s = \\c => useInfVP False vp  ; 
-    a = agrP3 Sg ;
-    isPron = False
+  GerundNP vp = heavyNP {  -- infinitive: Bier zu trinken
+    s = \\c => useInfVP False vp ! agrP3 Sg ; 
+    a = agrP3 Sg
     } ;
 
   GerundAdv vp = {  -- Bier trinkend
@@ -85,33 +84,31 @@ lin
     } ;
 
   WithoutVP vp = {  -- ohne Bier zu trinken
-    s = "zonder" ++ useInfVP False vp 
+    s = "zonder" ++ useInfVP False vp ! agrP3 Sg
     } ;
 
   InOrderToVP vp = {  -- um Bier zu trinken
-    s = "om" ++ useInfVP False vp 
+    s = "om" ++ useInfVP False vp ! agrP3 Sg
     } ;
 
   ByVP vp = {  ---- durch Bier zu drinken
-    s = "door" ++ useInfVP False vp ----
+    s = "door" ++ useInfVP False vp ! agrP3 Sg ----
     } ;
 
-  PresPartAP vp = {
-    s = \\af => vp.n0 ! agrP3 Sg ++ vp.n2 ! agrP3 Sg ++ vp.a2 ++ vp.a1 ! Pos ++ vp.inf.p1 ++ vp.ext ++ vp.s.s ! VPresPart ;
-    isPre = True
-    } ;
-
-  PastPartAP vp = {
-    s = \\af => vp.n0 ! agrP3 Sg ++ vp.n2 ! agrP3 Sg ++ vp.a2 ++ vp.a1 ! Pos ++ vp.inf.p1 ++ vp.ext ++ vp.s.s ! VPerf ; ---- agr inflection?
-    isPre = True
-    } ;
+  PastPartAP = ExtendDut.PastPartAP ;
+  
+  PresPartAP vp = { --# notpresent
+    s = \\agr,af => let aForm = case vp.isHeavy of { --# notpresent
+                          True  => APred ; --# notpresent
+                          False => af } ; --# notpresent
+                     in (infClause [] agr vp aForm).s ! Pres ! Simul ! Pos ! Sub ; --# notpresent
+    isPre = notB vp.isHeavy ; --# notpresent
+   } ; --# notpresent
 
   PastPartAgentAP vp np = 
-    let agent = (SyntaxDut.mkAdv (mkPrep "door") (lin NP np)).s
-    in {
-      s = \\af => vp.n0 ! agrP3 Sg ++ vp.n2 ! agrP3 Sg ++ vp.a2 ++ vp.a1 ! Pos ++ vp.inf.p1 ++ vp.ext ++ vp.s.s ! VPerf ; ---- agr inflection?
-      isPre = True
-      } ;
+    let agent = (SyntaxDut.mkAdv (mkPrep "door") (lin NP np)).s ;
+        ap = ExtendDut.PastPartAP vp ;
+    in ap ** { s = \\agr,af => ap.s ! agr ! af ++ agent } ;
 
 {-  
 
@@ -139,16 +136,15 @@ lin
     } ;
 -}
   CompS s = {s = \\_ => "dat" ++ s.s ! Main} ;  -- S -> Comp
-  CompVP ant p vp = {s = \\_ => useInfVP True vp} ; -- VP -> Comp
+  CompVP ant p vp = {s = useInfVP True vp} ; -- VP -> Comp
 
 lin
   that_RP = which_RP ;
 
   UttAdV adv = adv ;
 
-  ApposNP np1 np2 = {
+  ApposNP np1 np2 = np1 ** {
     s = \\c => np1.s ! c ++ SOFT_BIND ++ "," ++ np2.s ! NPNom ;
-    a = np1.a ;
     isPron = False
   } ;
   
