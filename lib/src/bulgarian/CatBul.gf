@@ -130,11 +130,13 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
                        } ;
 
     V, VS, VQ, VA = \v -> linrefVP (predV v);
-    V2 = \v -> linrefVP (predV v) ++ v.c2.s;
-    V2V = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s ++ "да";
-    V2A, V2S, V2Q = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s;
-    V3 = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s;
+    V2 = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ;
+    V2V = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ++ linrefPrep v.c3 ++ "да";
+    V2A, V2S, V2Q = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ++ linrefPrep v.c3;
+    V3 = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ++ linrefPrep v.c3;
     VV = \v -> linrefVP (predV v);
+
+    Prep = linrefPrep ;
 
 	A = \a -> a.s ! ASg Masc Indef;
     A2 = \a -> a.s ! ASg Masc Indef ++ a.c2;
@@ -142,4 +144,5 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
     N  = \n -> n.s ! NF Sg Indef;
     N2 = \n -> n.s ! NF Sg Indef ++ n.c2.s;
     N3 = \n -> n.s ! NF Sg Indef ++ n.c2.s ++ n.c3.s;
+
 }

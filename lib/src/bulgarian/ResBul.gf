@@ -565,6 +565,9 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       in vp.ad.s ++
          vp.s ! Imperf ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ++ clitic.s ++
          vp.compl ! agr ;
+         
+  linrefPrep : {s:Str; c:Case} -> Str =
+    \p -> case p.c of {Acc=>""; Dat=>"на"; WithPrep=>with_Word} ++ p.s ;
 
   gerund : VP -> Aspect => Agr => Str =
     \vp -> \\asp,agr =>
