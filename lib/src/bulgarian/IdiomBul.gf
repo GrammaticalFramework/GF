@@ -15,7 +15,10 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
         
     CleftAdv ad s = {s = \\t,a,p,o => case p of {Pos=>[]; Neg=>"не"} ++ ad.s ++ s.s } ;
 
-    ExistNP np = 
+    ExistNP np = ExistNPAdv np (lin Adv {s = ""}) ;
+    ExistIP ip = ExistIPAdv ip (lin Adv {s = ""}) ;
+
+    ExistNPAdv np adv = 
       { s = \\t,a,p,o => 
 	          let verb = case orPol p np.p of {
 	                       Pos => mkV186 "имам" ;
@@ -45,15 +48,15 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
                           } ;
 
 	          in case o of {
-	               Main  => v.aux1 ++ v.main ++ v.aux2 ++ np.s ! RObj Acc ;
-	               Inv   => np.s ! RObj Acc ++ v.aux1 ++ v.main ++ v.aux2 ;
-	               Quest => v.aux1 ++ v.main ++ "ли" ++ v.aux2 ++ np.s ! RObj Acc
+	               Main  => v.aux1 ++ v.main ++ v.aux2 ++ np.s ! RObj Acc ++ adv.s ;
+	               Inv   => np.s ! RObj Acc ++ v.aux1 ++ v.main ++ v.aux2 ++ adv.s  ;
+	               Quest => v.aux1 ++ v.main ++ "ли" ++ v.aux2 ++ np.s ! RObj Acc ++ adv.s 
 	             }
       } ;
 
-    ExistIP ip = 
+    ExistIPAdv ip adv = 
       mkQuestion {s = ip.s ! RSubj}
-                 (mkClause "тук" (agrP3 ip.gn) Pos (predV verbBe)) ;
+                 (mkClause "тук" (agrP3 ip.gn) Pos (insertObj (\\_ => adv.s) Pos (predV verbBe))) ;
 
     ProgrVP vp = {
       s   = \\_ => vp.s ! Imperf ;
