@@ -116,9 +116,7 @@ concrete StructuralBul of Structural = CatBul **
   whoPl_IP = mkIP "кои" "кои" GPl ;
   why_IAdv = mkIAdv "защо" ;
   without_Prep = mkPrep "без" Acc ;
-  with_Prep = mkPrep (pre { "с" ; 
-                            "със" / strs {"с" ; "з" ; "С" ; "З"}
-                          }) Acc ;
+  with_Prep = mkPrep "" WithPrep ;
   yes_Utt = ss "да" ;
   youSg_Pron = mkPron "ти" "теб" "те" "ти" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Masc) P2 ;
   youPl_Pron = mkPron "вие" "вас" "ви" "ви" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl P2 ;

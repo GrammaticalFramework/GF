@@ -24,8 +24,12 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                                } ;
                           s = det.s ! True ! cn.g ! role ++ cn.s ! nf
                       in case role of {
-                           RObj Dat => "на" ++ s; 
-                           _        => s
+                           RObj Dat      => "на" ++ s;
+                           RObj WithPrep => case det.p of {
+                                              Pos => with_Word ++ s ;
+                                              Neg => "без" ++ s
+                                            } ;
+                           _             => s
                          } ;
         a = {gn = gennum cn.g (numnnum det.nn); p = P3} ;
         p = det.p

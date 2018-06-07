@@ -22,7 +22,7 @@ resource ResBul = ParamX ** open Prelude, Predef in {
 
   param
     Role = RSubj | RObj Case | RVoc ;
-    Case = Acc | Dat;
+    Case = Acc | Dat | WithPrep ;
 
     NForm = 
         NF Number Species
@@ -361,42 +361,58 @@ resource ResBul = ParamX ** open Prelude, Predef in {
     verbBe    : Verb = {s=\\_=>auxBe ;    vtype=VNormal} ;
     verbWould : Verb = {s=\\_=>auxWould ; vtype=VNormal} ;
 
-    reflClitics : Case => Str = table {Acc => "се"; Dat => "си"} ;
+    reflClitics : Case => Str = table {Acc => "се"; Dat => "си"; WithPrep => with_Word ++ "себе си"} ;
 
     personalClitics : Case => GenNum => Person => Str =
       table {
-        Acc => table {
-                 GSg g => table {
-                            P1 => "ме" ;
-                            P2 => "те" ;
-                            P3 => case g of {
-                                    Masc => "го" ;
-                                    Fem  => "я" ;
-                                    Neut => "го"
-                                  }
-                          } ;
-                 GPl   => table {
-                            P1 => "ни" ;
-                            P2 => "ви" ;
-                            P3 => "ги"
-                          }
-               } ;
-        Dat => table {
-                 GSg g => table {
-                            P1 => "ми" ;
-                            P2 => "ти" ;
-                            P3 => case g of {
-                                    Masc => "му" ;
-                                    Fem  => "й" ;
-                                    Neut => "му"
-                                  }
-                          } ;
-                 GPl   => table {
-                            P1     => "ни" ;
-                            P2     => "ви" ;
-                            P3     => "им"
-                          }
-               }
+        Acc      => table {
+                      GSg g => table {
+                                 P1 => "ме" ;
+                                 P2 => "те" ;
+                                 P3 => case g of {
+                                         Masc => "го" ;
+                                         Fem  => "я" ;
+                                         Neut => "го"
+                                       }
+                               } ;
+                      GPl   => table {
+                                 P1 => "ни" ;
+                                 P2 => "ви" ;
+                                 P3 => "ги"
+                               }
+                    } ;
+        Dat      => table {
+                      GSg g => table {
+                                 P1 => "ми" ;
+                                 P2 => "ти" ;
+                                 P3 => case g of {
+                                         Masc => "му" ;
+                                         Fem  => "й" ;
+                                         Neut => "му"
+                                       }
+                               } ;
+                      GPl   => table {
+                                 P1     => "ни" ;
+                                 P2     => "ви" ;
+                                 P3     => "им"
+                               }
+                    } ;
+        WithPrep => table {
+                      GSg g => table {
+                                 P1 => with_Word ++ "мен" ;
+                                 P2 => with_Word ++ "теб" ;
+                                 P3 => case g of {
+                                         Masc => with_Word ++ "него" ;
+                                         Fem  => with_Word ++ "нея" ;
+                                         Neut => with_Word ++ "него"
+                                       }
+                               } ;
+                      GPl   => table {
+                                 P1     => with_Word ++ "нас" ;
+                                 P2     => with_Word ++ "вас" ;
+                                 P3     => with_Word ++ "тях"
+                               }
+                    }
       } ;
 
     ia2e : Str -> Str =           -- to be used when the next syllable has vowel different from "а","ъ","о" or "у"
@@ -647,13 +663,19 @@ resource ResBul = ParamX ** open Prelude, Predef in {
     mkIP : Str -> Str -> GenNum -> {s : Role => QForm => Str ; gn : GenNum} =
       \koi,kogo,gn -> {
       s = table {
-            RSubj    => table QForm [koi;  koi+"то"] ;
-            RObj Acc => table QForm [kogo; kogo+"то"] ;
-            RObj Dat => table QForm ["на" ++ kogo; kogo+"то"] ;
-            RVoc     => table QForm [koi;  koi+"то"]
+            RSubj         => table QForm [koi;  koi+"то"] ;
+            RObj Acc      => table QForm [kogo; kogo+"то"] ;
+            RObj Dat      => table QForm ["на" ++ kogo; "на" ++ kogo+"то"] ;
+            RObj WithPrep => table QForm [with_Word ++ kogo; with_Word ++ kogo+"то"] ;
+            RVoc          => table QForm [koi;  koi+"то"]
           } ;
       gn = gn
       } ;
+
+    with_Word : Str
+      = pre { "с" ; 
+              "със" / strs {"с" ; "з" ; "С" ; "З"}
+            } ;
 
     mkPron : (az,men,me,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite : Str) -> 
              GenNum -> Person -> {s    : Role => Str; 
@@ -663,14 +685,16 @@ resource ResBul = ParamX ** open Prelude, Predef in {
                                  } =
       \az,men,me,mi,moj,moia,moiat,moia_,moiata,moe,moeto,moi,moite,gn,p -> {
       s = table {
-            RSubj    => az ;
-            RObj Acc => men ;
-            RObj Dat => "на" ++ men ;
-            RVoc     => az
+            RSubj         => az ;
+            RObj Acc      => men ;
+            RObj Dat      => "на" ++ men ;
+            RObj WithPrep => with_Word ++ men ;
+            RVoc          => az
           } ;
       clit = table {
-               Acc => me;
-               Dat => mi
+               Acc      => me;
+               Dat      => mi;
+               WithPrep => with_Word ++ men
              } ;
       gen = table {
               ASg Masc Indef => moj ;
@@ -692,10 +716,11 @@ resource ResBul = ParamX ** open Prelude, Predef in {
     mkNP : Str -> GenNum -> Person -> Polarity -> {s : Role => Str; a : Agr; p : Polarity} =
       \s,gn,p,pol -> {
       s = table {
-            RSubj    => s ;
-            RObj Acc => s ;
-            RObj Dat => "на" ++ s ;
-            RVoc     => s
+            RSubj         => s ;
+            RObj Acc      => s ;
+            RObj Dat      => "на" ++ s ;
+            RObj WithPrep => with_Word ++ s ;
+            RVoc          => s
           } ;
       a = {
            gn = gn ;
