@@ -104,6 +104,9 @@ lin
     s = \\a => conj.s++(linCoordSep [])!conj.distr!conj.conj++vps.s!conj.distr!conj.conj!a;
     } ;
 
+lin
+  ComplBareVS = ComplVS ;
+
 lincat
   RNP = {s : Role => Str; a : Agr; p : Polarity} ;
 
