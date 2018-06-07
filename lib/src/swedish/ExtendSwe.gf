@@ -4,6 +4,7 @@ concrete ExtendSwe of Extend = CatSwe **
   [
     GenNP, GenModNP, ComplBareVS, CompBareCN,
     StrandRelSlash, EmptyRelSlash, StrandQuestSlash,
+    PassVPSlash, PassAgentVPSlash,
     MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
     MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
     ICompAP,
@@ -58,6 +59,11 @@ concrete ExtendSwe of Extend = CatSwe **
               }
       } ;
 
+  lin
+    PassVPSlash vps = 
+      insertObj (\\a => vps.c2.s ++ vps.n3 ! a) (passiveVP vps) ;
+    PassAgentVPSlash vps np = 
+      insertObjPost (\\a => vps.c2.s ++ vps.n3 ! a) (insertObj (\\_ => (PrepNP by8agent_Prep np).s) (passiveVP vps)) ;
 
   lincat
     VPI   = {s : VPIForm => Agr => Str} ;
