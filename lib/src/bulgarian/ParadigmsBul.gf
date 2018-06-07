@@ -109,7 +109,7 @@ oper
                        NFPlCount   => base+"а" ;
                        NFVocative  => base+"е"
                      } ;
-                 rel = (mkA079 (base+"ен")).s; relPost = False;
+                 rel = \\_ => base; relPost = False;
                  g   = AMasc NonHuman;
                  lock_N = <>
                 } ;
@@ -686,7 +686,8 @@ oper
                                (v0+"и")
                                (v0+"а")
                                g ;
-                    rel = \\_ => base ; relPost = False ;
+                    rel = (mkAdjective base (base+"та") (base+"та") base (base+"та") base (base+"та") (v0+"и") (v0+"ите")).s ;
+                    relPost = False ;
                     g   = g ;
                     lock_N = <>
                    };
