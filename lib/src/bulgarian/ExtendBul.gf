@@ -4,7 +4,7 @@ concrete ExtendBul of Extend = CatBul ** open Prelude, Predef, ResBul, GrammarBu
 lin
   GenModNP num np cn = DetCN (DetQuant DefArt num) (AdvCN cn (PrepNP possess_Prep np)) ;     -- this man's car(s) ; DEFAULT the car of this man
 
-  AdAdV = cc2 ;
+  AdAdV a adv = {s = a.s ++ adv.s; p = adv.p} ;
 
   EmptyRelSlash slash = {
       s = \\t,a,p,agr => slash.c2.s ++ whichRP ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main ;
@@ -26,7 +26,7 @@ lin
          g   = n2.g
     } ;
 
-  PositAdVAdj a = {s = a.adv} ;
+  PositAdVAdj a = {s = a.adv; p = Pos} ;
 
   PresPartAP vp =
     let ap : AForm => Person => Str

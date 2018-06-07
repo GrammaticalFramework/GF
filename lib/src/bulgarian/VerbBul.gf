@@ -91,7 +91,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       ad  = {isEmpty=False; s=vp.ad.s ++ adv.s} ;
       compl = vp.compl ;
       vtype = vp.vtype ;
-      p = vp.p ;
+      p = orPol adv.p vp.p ;
       isSimple = vp.isSimple
       } ;
     AdVVPSlash adv vp = {

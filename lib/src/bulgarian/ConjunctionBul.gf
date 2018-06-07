@@ -17,6 +17,7 @@ concrete ConjunctionBul of Conjunction =
 
     ConjAdV conj ss = {
       s = conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
+      p = Pos
       } ;
 
     ConjIAdv conj ss = {

@@ -16,7 +16,8 @@ oper
 -- after the verb. Some can be preverbal (e.g. "always").
 
   mkAdv : Str -> Adv = \x -> ss x ** {lock_Adv = <>} ;
-  mkAdV : Str -> AdV = \x -> ss x ** {lock_AdV = <>} ;
+  mkAdV : Str -> AdV = \x -> {s = x; p = Pos; lock_AdV = <>} ;
+  mkAdVNegative : Str -> AdV = \x -> {s = x; p = Neg; lock_AdV = <>} ;
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 

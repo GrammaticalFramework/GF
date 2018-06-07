@@ -13,7 +13,7 @@ concrete StructuralBul of Structural = CatBul **
   almost_AdA, almost_AdN = ss "почти" ;
   at_least_AdN, at_most_AdN =  ss "почти" ; ---- AR
   although_Subj = ss ["въпреки че"] ;
-  always_AdV = ss "винаги" ;
+  always_AdV = mkAdV "винаги" ;
   and_Conj = {s=[]; conj=0; distr=False; n = Pl} ;
   because_Subj = ss "защото" ;
   before_Prep = mkPrep "преди" Acc ;
