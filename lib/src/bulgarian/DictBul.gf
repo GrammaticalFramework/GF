@@ -5924,7 +5924,7 @@ lin
   gadost_N = mkN049 "гадост" ;
   gad_ja__V = stateV (mkV173 "гадя") ;
   gae_ch_en_A = mkA079 "гаечен" ;
-  gaz_N = mkN049 "газ" ;
+  gaz_N = mkN001 "газ" ;
   gazgenerator_N = mkN007 "газгенератор" ;
   gazgeneratoren_A = mkA079 "газгенераторен" ;
   gazela_N = mkN041 "газела" ;
