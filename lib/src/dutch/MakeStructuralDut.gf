@@ -1,6 +1,6 @@
 --# -path=.:../common:../abstract
 
-resource MakeStructuralDut = open CatDut, ParadigmsDut, MorphoDut, Prelude in 
+resource MakeStructuralDut = open CatDut, ParadigmsDut, Prelude in 
 {
 --{
 --
