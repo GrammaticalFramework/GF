@@ -49,7 +49,7 @@ do
         $FIND | while read -r file
         do
             echo "    \""`echo $file | sed 's|./||;s|.gf||'`"\"," >> $index
-            filemtime=`$STAT "${tagsdir}/${file}-tags"` 2>/dev/null
+            filemtime=`$STAT "${tagsdir}/${file}-tags" 2>/dev/null`
             if [ -z "$filemtime" ] || [ "$filemtime" -lt "$start" ]
             then
                 gf --batch --quiet --tags --output-dir=${tagsdir} $file 2>/dev/null
