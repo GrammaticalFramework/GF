@@ -153,9 +153,10 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
 
     MassNP cn = {
       s = table {
-            RVoc     => cn.s ! NFVocative ;
-            RObj Dat => "на" ++ cn.s ! (NF Sg Indef); 
-            _        => cn.s ! (NF Sg Indef)
+            RVoc          => cn.s ! NFVocative ;
+            RObj Dat      => "на" ++ cn.s ! (NF Sg Indef) ;
+            RObj WithPrep => with_Word ++ cn.s ! (NF Sg Indef); 
+            _             => cn.s ! (NF Sg Indef)
           } ;
       a = {gn = gennum cn.g Sg; p = P3} ;
       p = Pos
