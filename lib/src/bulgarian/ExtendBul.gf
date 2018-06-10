@@ -150,8 +150,9 @@ lin
                          } ;
                     s = reflPron ! aform (gennum cn.g (numnnum num.nn)) Def (RObj Acc) ++ num.s ! dgenderSpecies cn.g Indef role ++ cn.s ! nf
                 in case role of {
-                     RObj Dat => "на" ++ s; 
-                     _        => s
+                     RObj Dat      => "на" ++ s;
+                     RObj WithPrep => with_Word ++ s;
+                     _             => s
                    } ;
         a = {gn = gennum cn.g (numnnum num.nn); p = P3} ;
         p = Pos

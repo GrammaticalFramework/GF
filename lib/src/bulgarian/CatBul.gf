@@ -84,9 +84,9 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
     A = {s : AForm => Str; adv : Str} ;
     A2 = {s : AForm => Str; adv : Str; c2 : Str} ;
 
-    N = {s : NForm => Str; rel : AForm => Str; relPost : Bool; g : AGender} ;
-    N2 = {s : NForm => Str; g : AGender} ** {c2 : Preposition} ;
-    N3 = {s : NForm => Str; g : AGender} ** {c2,c3 : Preposition} ;
+    N  = {s : NForm => Str; rel : AForm => Str; relPost : Bool; g : AGender} ;
+    N2 = {s : NForm => Str; rel : AForm => Str; relPost : Bool; g : AGender} ** {c2 : Preposition} ;
+    N3 = {s : NForm => Str; rel : AForm => Str; relPost : Bool; g : AGender} ** {c2,c3 : Preposition} ;
     PN = {s : Str; g : Gender} ;
 
   lindef
@@ -107,8 +107,8 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
     A2 = \s -> {s = \\_ => s; adv = s; c2 = ""};
     
     N  = \s -> {s = \\_ => s; rel = \\_ => s; relPost = False; g = AMasc NonHuman};
-    N2 = \s -> {s = \\_ => s; g = AMasc NonHuman; c2 = {s=""; c=Acc}};
-    N3 = \s -> {s = \\_ => s; g = AMasc NonHuman; c2,c3 = {s=""; c=Acc}};
+    N2 = \s -> {s = \\_ => s; rel = \\_ => s; relPost = False; g = AMasc NonHuman; c2 = {s=""; c=Acc}};
+    N3 = \s -> {s = \\_ => s; rel = \\_ => s; relPost = False; g = AMasc NonHuman; c2,c3 = {s=""; c=Acc}};
     
   linref
     SSlash = \ss -> ss.s ! agrP3 (GSg Masc) ++ ss.c2.s;
