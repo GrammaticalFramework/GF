@@ -33,7 +33,7 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
                                  
                   auxPres    = auxBe ! VPres (numGenNum agr.gn) agr.p ;
                   auxAorist  = auxBe ! VAorist (numGenNum agr.gn) agr.p ;
-                  auxCondS   = auxWould ! VAorist (numGenNum agr.gn) agr.p ;
+                  auxCondS   = auxCond ! numGenNum agr.gn ! agr.p ;
 
                   v : {aux1:Str; aux2:Str; main:Str}
                         = case <t,a> of {

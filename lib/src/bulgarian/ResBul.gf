@@ -338,11 +338,11 @@ resource ResBul = ParamX ** open Prelude, Predef in {
         VPres      Pl P1  => "бъдем" ; 
         VPres      Pl P2  => "бъдете" ;
         VPres      Pl P3  => "бъдат" ;
-        VAorist    Sg P1  => "бих" ; 
-        VAorist    Sg _   => "би" ;
-        VAorist    Pl P1  => "бихме" ; 
-        VAorist    Pl P2  => "бихте" ;
-        VAorist    Pl P3  => "биха" ;
+        VAorist    Sg P1  => "бях" ; 
+        VAorist    Sg _   => "беше" ;
+        VAorist    Pl P1  => "бяхме" ; 
+        VAorist    Pl P2  => "бяхте" ;
+        VAorist    Pl P3  => "бяха" ;
         VImperfect Sg P1  => "бъдех" ; 
         VImperfect Sg _   => "бъдеше" ;
         VImperfect Pl P1  => "бъдехме" ; 
@@ -358,8 +358,20 @@ resource ResBul = ParamX ** open Prelude, Predef in {
         VGerund           => "бъдейки"
       } ;
 
-    verbBe    : Verb = {s=\\_=>auxBe ;    vtype=VNormal} ;
-    verbWould : Verb = {s=\\_=>auxWould ; vtype=VNormal} ;
+    auxCond : Number => Person => Str =
+      table {
+        Sg => table {
+                P1 => "бих" ;
+                _  => "би"
+              } ;
+        Pl => table {
+                P1 => "бихме" ;
+                P2 => "бихте" ;
+                P3 => "биха"
+              }
+      } ;
+
+    verbBe    : Verb = {s=table Aspect [auxBe; auxWould] ; vtype=VNormal} ;
 
     reflClitics : Case => Str = table {Acc => "се"; Dat => "си"; WithPrep => with_Word ++ "себе си"} ;
 
@@ -483,7 +495,7 @@ resource ResBul = ParamX ** open Prelude, Predef in {
 
           auxPres   = auxBe ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ;
           auxAorist = auxBe ! VAorist (numGenNum clitic.agr.gn) clitic.agr.p ;
-          auxCond   = auxWould ! VAorist (numGenNum clitic.agr.gn) clitic.agr.p ;
+          auxCondS  = auxCond ! numGenNum clitic.agr.gn ! clitic.agr.p ;
 
           apc : Str -> Str = \s ->
             case <numGenNum clitic.agr.gn, clitic.agr.p> of {
@@ -533,7 +545,7 @@ resource ResBul = ParamX ** open Prelude, Predef in {
               <Past,Anter> => {aux=vf4 auxAorist; main=perfect} ; --# notpresent
               <Fut, Simul> => {aux=vf3 clitic.s;  main=present} ; --# notpresent
               <Fut, Anter> => {aux=vf3 (apc []);  main=perfect} ; --# notpresent
-              <Cond,_    > => {aux=vf4 auxCond ;  main=perfect} --# notpresent
+              <Cond,_    > => {aux=vf4 auxCondS;  main=perfect} --# notpresent
             }
 
       in verb.ad.s ++ li0 ++ verbs.aux.s1 ++ verbs.main ++ verbs.aux.s2 ;
