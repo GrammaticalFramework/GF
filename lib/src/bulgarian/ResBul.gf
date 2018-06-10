@@ -239,7 +239,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       vtype  : VType ;
       p      : Polarity ;
       c2     : Preposition ;
-      isSimple : Bool    -- regulates the place of participle used as adjective
+      isSimple : Bool ;    -- regulates the place of participle used as adjective
+      subjCtrl : Bool      -- the second complement agrees with the subject or with the first complement
     } ;
 
     predV : Verb -> VP = \verb -> {
@@ -251,7 +252,7 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       isSimple = True
     } ;
 
-    slashV : Verb -> Preposition -> VPSlash = \verb,prep -> {
+    slashV : Verb -> Preposition -> Bool -> VPSlash = \verb,prep,subjCtrl -> {
       s      = verb.s ;
       ad     = {isEmpty=True; s=[]} ;
       compl1 = \\_ => [] ;
@@ -259,7 +260,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
       vtype  = verb.vtype ;
       p      = Pos ;
       c2     = prep ;
-      isSimple = True
+      isSimple = True ;
+      subjCtrl = subjCtrl
     } ;
 
     insertObj : (Agr => Str) -> Polarity -> VP -> VP = \obj,p,vp -> {
@@ -285,7 +287,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
                  Pos => slash.p
                } ;
       c2     = slash.c2 ;
-      isSimple = False
+      isSimple = False ;
+      subjCtrl = slash.subjCtrl
       } ;
 
     insertSlashObj2 : (Agr => Str) -> Polarity -> VPSlash -> VPSlash = \obj,p,slash -> {
@@ -299,7 +302,8 @@ resource ResBul = ParamX ** open Prelude, Predef in {
                  Pos => slash.p
                } ;
       c2     = slash.c2 ;
-      isSimple = False
+      isSimple = False ;
+      subjCtrl = slash.subjCtrl
       } ;
 
     auxBe : VTable =

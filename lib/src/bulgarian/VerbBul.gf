@@ -8,13 +8,13 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
   lin
     UseV = predV ;
 
-    SlashV2a v = slashV v v.c2 ;
+    SlashV2a v = slashV v v.c2 False ;
 
     Slash2V3 v np = 
-      insertSlashObj1 (\\_ => v.c2.s ++ np.s ! RObj v.c2.c) np.p (slashV v v.c3) ;
+      insertSlashObj1 (\\_ => v.c2.s ++ np.s ! RObj v.c2.c) np.p (slashV v v.c3 False) ;
 
     Slash3V3 v np = 
-      insertSlashObj2 (\\_ => v.c3.s ++ np.s ! RObj v.c3.c) np.p (slashV v v.c2) ;
+      insertSlashObj2 (\\_ => v.c3.s ++ np.s ! RObj v.c3.c) np.p (slashV v v.c2 False) ;
 
     ComplVV vv vp =
       insertObj (case vv.typ of {
@@ -31,17 +31,17 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
 
     SlashV2A v ap = 
-      insertSlashObj2 (\\a => v.c3.s ++ ap.s ! aform a.gn Indef (RObj Acc) ! a.p) Pos (slashV v v.c2) ;
+      insertSlashObj2 (\\a => v.c3.s ++ ap.s ! aform a.gn Indef (RObj Acc) ! a.p) Pos (slashV v v.c2 v.subjCtrl) ;
 
     -- test: I saw a boy to whom she said that they are here
-    SlashV2S v s  = insertSlashObj2 (\\_ => comma ++ "че" ++ s.s) Pos (slashV v v.c2) ;
+    SlashV2S v s  = insertSlashObj2 (\\_ => comma ++ "че" ++ s.s) Pos (slashV v v.c2 False) ;
 
     -- test: I saw a boy whom she asked who is here
-    SlashV2Q v q  = insertSlashObj2 (\\_ => q.s ! QDir) Pos (slashV v v.c2) ;
+    SlashV2Q v q  = insertSlashObj2 (\\_ => q.s ! QDir) Pos (slashV v v.c2 False) ;
 
     -- test: I saw a boy whom she begged to walk 
     SlashV2V vv vp =
-      insertSlashObj2 (\\agr => vv.c3.s ++ daComplex Simul vp.p vp ! Perf ! agr) Pos (slashV vv vv.c2) ;
+      insertSlashObj2 (\\agr => vv.c3.s ++ daComplex Simul vp.p vp ! Perf ! agr) Pos (slashV vv vv.c2 vv.subjCtrl) ;
 
     -- test: I saw a car whom she wanted to buy
     SlashVV vv slash = {
@@ -52,7 +52,8 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       vtype  = vv.vtype ;
       p  = slash.p ;
       c2 = slash.c2 ;
-      isSimple = False
+      isSimple = False ;
+      subjCtrl = slash.subjCtrl
       } ;
 
     -- test: I saw a car whom she begged me to buy
@@ -65,13 +66,15 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       vtype = vv.vtype ;
       p  = Pos ;
       c2 = slash.c2 ;
-      isSimple = False
+      isSimple = False ;
+      subjCtrl = slash.subjCtrl
       } ;
 
     ComplSlash slash np = {
       s   = slash.s ;
       ad  = slash.ad ;
-      compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.compl2 ! np.a ;
+      compl = \\a => let a2 = case slash.subjCtrl of {True => a; False => np.a}
+                     in slash.compl1 ! a ++ slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.compl2 ! a2 ;
       vtype = slash.vtype ;
       p   = orPol np.p slash.p ;
       isSimple = False
@@ -102,7 +105,8 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       vtype = vp.vtype ;
       p = vp.p ;
       c2 = vp.c2 ;
-      isSimple = vp.isSimple
+      isSimple = vp.isSimple ;
+      subjCtrl = vp.subjCtrl
       } ;
 
     ReflVP slash = {
@@ -121,6 +125,6 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     CompAdv a = {s = \\_ => a.s; p = Pos} ;
     CompCN cn = {s = \\agr => cn.s ! (NF (numGenNum agr.gn) Indef); p = Pos} ;
 
-    VPSlashPrep vp prep = vp ** {c2 = prep ; compl1 = vp.compl ; compl2 = \\_ => []} ; ---- AR
+    VPSlashPrep vp prep = vp ** {c2 = prep ; compl1 = vp.compl ; compl2 = \\_ => []; subjCtrl = False} ;
 
 }

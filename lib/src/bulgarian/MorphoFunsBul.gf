@@ -125,17 +125,23 @@ oper
 
   mkV2S : V -> Prep -> Prep -> V2S ;
   mkV2S v p t = prepV2 v p ** {c3 = t ; lock_V2S = <>} ;
-  
+
   mkV2V : V -> Prep -> Prep -> V2V ;
-  mkV2V v p t = prepV2 v p ** {c3 = t ; lock_V2V = <>} ;
+  mkV2V v p t = prepV2 v p ** {c3 = t ; subjCtrl = False ; lock_V2V = <>} ;
   
+  subjCtrlV2V : V -> Prep -> Prep -> V2V ;
+  subjCtrlV2V v p t = prepV2 v p ** {c3 = t ; subjCtrl = True ; lock_V2V = <>} ;
+
   mkV2A = overload {
     mkV2A : V -> Prep -> V2A
-      = \v, p -> prepV2 v p ** {c3 = noPrep ; lock_V2A = <>} ;
+      = \v, p -> prepV2 v p ** {c3 = noPrep ; subjCtrl = False ; lock_V2A = <>} ;
   
     mkV2A : V -> Prep -> Prep -> V2A
-      = \v, p, t -> prepV2 v p ** {c3 = t ; lock_V2A = <>} ;
+      = \v, p, t -> prepV2 v p ** {c3 = t ; subjCtrl = False ; lock_V2A = <>} ;
   } ;
+  
+  subjCtrlV2A : V -> Prep -> Prep -> V2A
+    = \v, p, t -> prepV2 v p ** {c3 = t ; subjCtrl = True ; lock_V2A = <>} ;
 
   mkV2Q : V -> Prep -> Prep -> V2Q ;
   mkV2Q v p t = prepV2 v p ** {c3 = t ; lock_V2Q = <>} ;

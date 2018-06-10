@@ -76,7 +76,8 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
 
     V, VS, VQ, VA = Verb ;
     V2 = Verb ** {c2 : Preposition} ;
-    V2A, V2V, V2S, V2Q = Verb ** {c2, c3 : Preposition} ;
+    V2A, V2V = Verb ** {c2, c3 : Preposition; subjCtrl : Bool} ;
+    V2S, V2Q = Verb ** {c2, c3 : Preposition} ;
     V3 = Verb ** {c2, c3 : Preposition} ;
     VV = Verb ** {typ : VVType};
 
@@ -93,11 +94,12 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
     ClSlash = \s -> {s = \\_,_,_,_,_ => s; c2 = {s=""; c=Acc}};
     
     VP = \s -> predV {s = \\_,_ => s; vtype = VNormal};
-    VPSlash = \s -> slashV {s = \\_,_ => s; vtype = VNormal} {s=""; c=Acc};
+    VPSlash = \s -> slashV {s = \\_,_ => s; vtype = VNormal} {s=""; c=Acc} False ;
     
     V, VS, VQ, VA = \s -> {s = \\_,_ => s; vtype = VNormal};
     V2 = \s -> {s = \\_,_ => s; vtype = VNormal; c2 = {s=""; c=Acc}};
-    V2A, V2V, V2S, V2Q = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
+    V2A, V2V = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}; subjCtrl = False};
+    V2S, V2Q = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
     V3 = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
     VV = \s -> {s = \\_,_ => s; vtype = VNormal; typ = VVInf Perf};
 
