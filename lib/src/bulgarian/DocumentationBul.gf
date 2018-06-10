@@ -237,8 +237,9 @@ lin
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         case v.typ of {
-          VVInf => "да" ++ pp "глагол";
-          VVGerund => pp "деепричастие"
+          VVInf Perf   => "да" ++ pp "свършен глагол";
+          VVInf Imperf => "да" ++ pp "несвършен глагол";
+          VVGerund     => pp "деепричастие"
         };
     s2= inflVerb v ;
     s3= ""

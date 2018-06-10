@@ -144,7 +144,10 @@ oper
   mkVS  v = v ** {lock_VS = <>} ;
 
   mkVV : V -> VV ;
-  mkVV  v = v ** {typ = VVInf; lock_VV = <>} ;
+  mkVV  v = v ** {typ = VVInf Perf; lock_VV = <>} ;
+  
+  imperfVV : V -> VV ;
+  imperfVV  v = v ** {typ = VVInf Imperf; lock_VV = <>} ;
 
   gerundVV : V -> VV ;
   gerundVV  v = v ** {typ = VVGerund; lock_VV = <>} ;

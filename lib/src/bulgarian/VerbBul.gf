@@ -18,8 +18,8 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
     ComplVV vv vp =
       insertObj (case vv.typ of {
-                   VVInf => daComplex Simul Pos vp ! Perf;
-                   VVGerund => gerund vp ! Imperf
+                   VVInf asp => daComplex Simul Pos vp ! asp;
+                   VVGerund  => gerund vp ! Imperf
                  }) vp.p
                 (predV vv) ;
 

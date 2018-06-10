@@ -99,7 +99,7 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
     V2 = \s -> {s = \\_,_ => s; vtype = VNormal; c2 = {s=""; c=Acc}};
     V2A, V2V, V2S, V2Q = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
     V3 = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
-    VV = \s -> {s = \\_,_ => s; vtype = VNormal; typ = VVInf};
+    VV = \s -> {s = \\_,_ => s; vtype = VNormal; typ = VVInf Perf};
 
 	A = \s -> {s = \\_ => s; adv = s};
     A2 = \s -> {s = \\_ => s; adv = s; c2 = ""};

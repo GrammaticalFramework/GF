@@ -73,7 +73,7 @@ resource ResBul = ParamX ** open Prelude, Predef in {
      | VPhrasal Case
      ;
 
-    VVType = VVInf | VVGerund ;
+    VVType = VVInf Aspect | VVGerund ;
 
 -- The order of sentence is needed already in $VP$.
 
