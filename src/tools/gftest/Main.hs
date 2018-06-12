@@ -114,8 +114,12 @@ main = do
          where
           s    = top t
           c    = snd (ctyp s)
-          ctxs = concat [ contextsFor gr sc c
-                      | sc <- ccats gr startcat ]
+          cs   = c:[ coe
+                   | (cat,coe) <- coercions gr
+                   , c == cat ]
+          ctxs = concat [ contextsFor gr sc cat
+                        | sc <- ccats gr startcat
+                        , cat <- cs ]
 
         output = -- Print to stdout or write to a file
          if write_to_file args 
@@ -149,9 +153,9 @@ main = do
     -- Test a tree
     let trees = case tree args of
          [] -> []
-         ts -> lines ts
+         ts -> [ readTree gr t | t <- lines ts ]
     output $
-      unlines [ testTree' (readTree gr tree) 1 | tree <- trees ]
+      unlines [ testTree' tree 1 | tree <- trees ]
 
     -- Test a function
     let substrs xs = filter (/="*") $ groupBy (\a b -> a/='*' && b/='*') xs
@@ -368,7 +372,7 @@ main = do
                       | funName <- funs -- comes from command line arg -f
                       , let fs@(s:_) = lookupSymbol gr funName
                       , let cat = snd $ Grammar.typ s ]
-            fromTb  = [ (cat,[tree]) | tree <- treebank'
+            fromTb  = [ (cat,[tree]) | tree <- treebank'++trees
                       , let (CC (Just cat) _) = ccatOf tree ]
 
             treesToTest =
@@ -381,25 +385,18 @@ main = do
               writeFile file ""
               putStrLn "Testing functions in… "
               diff <- concat `fmap`
-                sequence [ do let cs = [ compareTree grammar otherGrammar grTrans t
-                                       | t <- trees ]
+                sequence [ do let cs = [ compareTree grammar otherGrammar grTrans startcat t
+                                       | t <- ttrees ]
                               putStr $ cat ++ "                \r"
                               -- prevent lazy evaluation; make printout accurate
                               appendFile ("/tmp/"++file) (unwords $ map show cs)
-                              return cs
-                         | (cat,trees) <- treesToTest ]
-              let relevantDiff = go [] [] diff where
-                    go res seen [] = res
-                    go res seen (Comparison f ls:cs) = 
-                      if null uniqLs then go res seen cs
-                        else go (Comparison f uniqLs:res) (uniqLs++seen) cs
-                       where uniqLs = deleteFirstsBy ctxEq ls seen
-                             ctxEq (a,_,_,_) (b,_,_,_) = a==b
-                  shorterTree c1 c2 = length (funTree c1) `compare` length (funTree c2)
+                              return [ c | c@(Comparison f (x:xs)) <- cs ]
+                         | (cat,ttrees) <- treesToTest ]
+
+              let shorterTree c1 c2 = length (funTree c1) `compare` length (funTree c2)
               writeFile file $ unlines
                 [ show comp 
-                | comp <- sortBy shorterTree relevantDiff ]
-
+                | comp <- sortBy shorterTree diff ]
             
         writeLinFile (langName ++ "-lin-diff.org") gr ogr
         putStrLn $ "Created file " ++ (langName ++ "-lin-diff.org")

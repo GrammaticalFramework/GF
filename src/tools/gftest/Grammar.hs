@@ -935,6 +935,7 @@ hasConcrString gr str =
 type Context = String
 type LinTree = ((Lang,Context),(Lang,String),(Lang,String),(Lang,String))
 data Comparison = Comparison { funTree :: String, linTree :: [LinTree] }
+
 instance Show Comparison where
   show c = unlines $ funTree c : map showLinTree (linTree c)
 
@@ -945,27 +946,28 @@ showLinTree :: LinTree -> String
 showLinTree ((an,hl),(l1,t1),(l2,t2),(_l,[])) = unlines ["", an++hl, l1++t1, l2++t2]
 showLinTree ((an,hl),(l1,t1),(l2,t2),(l3,t3)) = unlines ["", an++hl, l1++t1, l2++t2, l3++t3]
 
-compareTree :: Grammar -> Grammar -> [Grammar] -> Tree -> Comparison
-compareTree gr oldgr transgr t = Comparison {
+compareTree :: Grammar -> Grammar -> [Grammar] -> Cat -> Tree -> Comparison
+compareTree gr oldgr transgr startcat t = Comparison {
   funTree = "* " ++ show t
 , linTree = [ ( ("** ",hl), (langName gr,newLin), (langName oldgr, oldLin), transLin )
             | ctx <- ctxs
             , let hl = show (ctx dummyHole)
+            , let newLin = linearize gr (ctx t)
+            , let oldLin = linearize oldgr (ctx t)
             , let transLin = case transgr of
                               []  -> ("","")
                               g:_ -> (langName g, linearize g (ctx t))
-            , let newLin = linearize gr (ctx t)
-            , let oldLin = linearize oldgr (ctx t)
-            , newLin /= oldLin ] }
+            , newLin /= oldLin
+            ] }
  where
   w    = top t
   c    = snd (ctyp w)
-  cs   = [ coe 
+  cs   = c:[ coe
            | (cat,coe) <- coercions gr
            , c == cat ]
   ctxs = concat
          [ contextsFor gr sc cat
-         | sc <- ccats gr (startCat gr)
+         | sc <- ccats gr startcat
          , cat <- cs ] 
   langName gr = concrLang gr ++ "> "
 
@@ -1081,7 +1083,7 @@ bestTrees fun gr cats =
   bestExamples fun gr $ take 200 -- change this to something else if too slow
   [ featIthVec gr cats size i
   | all (`S.member` nonEmptyCats gr) cats
-  , size <- [0..10]
+  , size <- [0..20]
   , let card = featCardVec gr cats size 
   , i <- [0..card-1]
   ]
