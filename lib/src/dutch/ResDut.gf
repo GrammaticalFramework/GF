@@ -111,7 +111,7 @@ resource ResDut = ParamX ** open Prelude, Predef in {
 
           b + v@#dupVow + c@?  => b + shortVoc v c + "e" ;
           b + #diphthong + ?   => endCons s + "e" ;
-          b + v@#vowel + c@dupCons  => b + v + c + c + "e" ;
+          b + v@#vowel + c@#dupCons  => b + v + c + c + "e" ;
           _ => endCons s + "e"
           } ;
       in reg2Adjective s se ;
