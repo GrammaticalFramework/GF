@@ -44,12 +44,18 @@ resource ParadigmsAra = open
 -- Overloaded operator for main cases
 
  mkN = overload {
+   mkN : (sg : Str) -> N                                     -- non-human regular nouns
+     = smartN ;
+   mkN : Species -> N -> N
+     = \p,n -> n ** {h = p} ;
+   mkN : (sg,pl : Str) -> Gender -> Species -> N
+     = \sg,pl -> mkFullN (reg sg pl) ;  
    mkN : NTable -> Gender -> Species -> N                             -- loan words, irregular
-    = mkFullN ;
+     = mkFullN ;
    mkN : (root,sgPatt,brokenPlPatt : Str) -> Gender -> Species -> N   -- broken plural
     = brkN ;
-   mkN : (root,sgPatt : Str) -> Gender -> Species -> N                -- sound feminine plural
-    = sdfN ;
+---   mkN : (root,sgPatt : Str) -> Gender -> Species -> N                -- sound feminine plural
+---    = sdfN ;
    } ;
 
 --This is used for loan words or anything that has untreated irregularities
@@ -500,6 +506,11 @@ resource ParadigmsAra = open
   mkAV  v = v ** {lock_A = <>} ;
   mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
 
+
+smartN : Str -> N = \s -> case last s of {
+  "ة" => mkFullN (sndf s) Fem NoHum ;
+  _ => mkFullN (sndm s) Masc NoHum
+  } ;
 
 smartPN : Str -> PN = \s -> case last s of {
   "ة" => mkFullPN s Fem Hum ;
