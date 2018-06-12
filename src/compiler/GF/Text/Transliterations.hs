@@ -39,6 +39,7 @@ allTransliterations = Map.fromList [
   ("amharic",transAmharic),
   ("ancientgreek", transAncientGreek),
   ("arabic", transArabic),
+  ("arabic_unvocalized", transArabicUnvoc),
   ("devanagari", transDevanagari),
   ("greek", transGreek),
   ("hebrew", transHebrew),
@@ -177,6 +178,13 @@ transArabic = mkTransliteration "Arabic" allTrans allCodes where
     "A*  q?"                                              -- 0671 (used by AED) 
   allCodes = [0x0621..0x062f] ++ [0x0630..0x063a] ++ 
              [0x0641..0x064f] ++ [0x0650..0x0657] ++ [0x0671,0x061f]
+
+
+transArabicUnvoc :: Transliteration
+transArabicUnvoc = transArabic{
+  invisible_chars = ["a","u","i","v2","o","V+","V-","a:"],
+  printname = "unvocalized Arabic"
+  }
 
 transPersian :: Transliteration
 transPersian = (mkTransliteration "Persian/Farsi" allTrans allCodes)
