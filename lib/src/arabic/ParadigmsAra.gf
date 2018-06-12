@@ -40,10 +40,21 @@ resource ParadigmsAra = open
   Preposition : Type ;
 
 --2 Nouns
-  
+
+-- Overloaded operator for main cases
+
+ mkN = overload {
+   mkN : NTable -> Gender -> Species -> N                             -- loan words, irregular
+    = mkFullN ;
+   mkN : (root,sgPatt,brokenPlPatt : Str) -> Gender -> Species -> N   -- broken plural
+    = brkN ;
+   mkN : (root,sgPatt : Str) -> Gender -> Species -> N                -- sound feminine plural
+    = sdfN ;
+   } ;
+
 --This is used for loan words or anything that has untreated irregularities
 --in the interdigitization process of its words
-  mkN : NTable -> Gender -> Species -> N ;
+  mkFullN : NTable -> Gender -> Species -> N ;
   
 --Takes a root string, a singular pattern string, a broken plural 
 --pattern string, a gender, and species. Gives a noun.
@@ -57,16 +68,39 @@ resource ParadigmsAra = open
 --and species. Gives a noun whose plural is sound masculine
   sdmN : Str -> Str -> Gender -> Species -> N ; 
 
-  mkPN : Str -> Gender -> Species -> PN ;
-  
+
+--3 Proper names
+
+  mkPN = overload {
+    mkPN : Str -> PN        -- Fem Hum if ends with ة, otherwise Masc Hum
+     = smartPN ;
+    mkPN : Str -> Gender -> Species -> PN
+     = mkFullPN ;
+    } ;
+
+  mkFullPN : Str -> Gender -> Species -> PN ;
+
+
+
 --3 Relational nouns 
 
   mkN2 : N -> Preposition -> N2 ;
 
   mkN3 : N -> Preposition -> Preposition -> N3 ;
 
+
 --2 Adjectives
- 
+
+-- Overloaded operator for main cases
+
+ mkA = overload {
+   mkA : (root,patt : Str) -> A
+    = sndA ;
+   mkA : (root : Str) -> A
+    = clrA ;
+   } ;
+
+
 --Takes a root string and a pattern string
   sndA : Str -> Str -> A ;
     
@@ -296,7 +330,7 @@ resource ParadigmsAra = open
   
   Preposition = Str ;
   
-  mkN nsc gen spec =
+  mkFullN nsc gen spec =
     { s = nsc; --NTable
       g = gen; 
       h = spec;
@@ -307,7 +341,7 @@ resource ParadigmsAra = open
     \root,sg,pl,gen,spec ->
     let { kitAb = mkWord sg root;
           kutub = mkWord pl root
-    } in mkN (reg kitAb kutub) gen spec;
+    } in mkFullN (reg kitAb kutub) gen spec;
   
   brkN root sg pl gen spec =
     let { raw = brkN' root sg pl gen spec} in
@@ -323,14 +357,14 @@ resource ParadigmsAra = open
   sdfN =
     \root,sg,gen,spec ->
     let { kalima = mkWord sg root;
-    } in mkN (sndf kalima) gen spec;
+    } in mkFullN (sndf kalima) gen spec;
   
   sdmN =
     \root,sg,gen,spec ->
     let { mucallim = mkWord sg root;
-    } in mkN (sndm mucallim) gen spec;
+    } in mkFullN (sndm mucallim) gen spec;
 
-  mkPN = \str,gen,species -> 
+  mkFullPN = \str,gen,species -> 
     { s = \\c => str + indecl!c ;
       g = gen;
       h = species;
@@ -466,5 +500,10 @@ resource ParadigmsAra = open
   mkAV  v = v ** {lock_A = <>} ;
   mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
 
+
+smartPN : Str -> PN = \s -> case last s of {
+  "ة" => mkFullPN s Fem Hum ;
+  _ => mkFullPN s Masc Hum
+  } ;
 
 } ;
