@@ -102,16 +102,18 @@ resource ParadigmsAra = open
  mkA = overload {
    mkA : (root,patt : Str) -> A
     = sndA ;
-   mkA : (root : Str) -> A
+   mkA : (root : Str) -> A                -- forms adjectives with positive form aFCal
     = clrA ;
+   mkA : (posit,compar,plur : Str) -> A
+    = degrA ;
    } ;
 
 
 --Takes a root string and a pattern string
-  sndA : Str -> Str -> A ;
+  sndA : (root,patt : Str) -> A ;
     
 --Takes a root string only
-  clrA : Str -> A ;
+  clrA : (root : Str) -> A ;  -- forms adjectives of type aFCal
 
 --3 Two-place adjectives
 --
@@ -136,13 +138,26 @@ resource ParadigmsAra = open
 -- A preposition as used for rection in the lexicon, as well as to
 -- build $PP$s in the resource API, just requires a string.
 
-  mkPreposition : Str -> Preposition ;
+  mkPrep : Str -> Prep
+    = \s -> lin Prep {s = mkPreposition s} ; -- preposition in the sense of RGL abstract syntax
+    
+  mkPreposition : Str -> Preposition ;  -- just a string, for internal use
 
--- (These two functions are synonyms.)
 
 --2 Verbs
 
---The verb in the imperfect tense gives the most information
+-- Overloaded operations
+
+  mkV = overload {
+    mkV : (imperfect : Str) -> V
+      = regV ;
+    mkV : (root : Str) -> (perf,impf : Vowel) -> V  -- verb form I ; vowel = a|i|u
+      = v1 ;
+    mkV : (root : Str) -> VerbForm -> V             -- FormI .. FormVIII (no VII) ; default vowels a u for I
+      = formV ;
+    } ;
+
+-- The verb in the imperfect tense gives the most information
 
   regV : Str -> V ;
 
@@ -440,6 +455,9 @@ resource ParadigmsAra = open
       isNum = False;
       lock_Quant = <>
     };
+
+  degrA : (posit,compar,plur : Str) -> A
+    = \posit,compar,plur -> lin A {s = clr posit compar plur} ;
   
   sndA root pat =
     let  raw = sndA' root pat in { 
@@ -516,5 +534,19 @@ smartPN : Str -> PN = \s -> case last s of {
   "ة" => mkFullPN s Fem Hum ;
   _ => mkFullPN s Masc Hum
   } ;
+
+formV : (root : Str) -> VerbForm -> V = \s,f -> case f of {
+   FormI   => v1 s a u ;
+   FormII  => v2 s ;
+   FormIII => v3 s ;
+   FormIV  => v4 s ;
+   FormV   => v5 s ;
+   FormVI  => v6 s ;
+---   FormVII  => v7 s ;
+   FormVIII => v8 s
+   } ;
+
+param VerbForm =
+  FormI |  FormIII |  FormIII |  FormIV |  FormV |  FormVI | FormVIII  ;
 
 } ;
