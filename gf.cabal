@@ -14,33 +14,30 @@ maintainer: Thomas Hallgren
 tested-with: GHC==7.6.3, GHC==7.8.3, GHC==7.10.3, GHC==8.0.2
 
 data-dir: src
-data-files: tools/gf.el
-	    tools/gf.lang
-	    tools/dark-filetypes.GF.conf
-	    tools/light-filetypes.GF.conf
-	    www/*.html
-	    www/*.css
-	    www/P/*.png
-	    www/gfse/*.html
-	    www/gfse/*.css
-	    www/gfse/*.js
-	    www/gfse/P/*.png
-	    www/gfse/P/*.jpg
-            www/js/*.js
-	    www/minibar/*.html
-	    www/minibar/*.css
-	    www/minibar/*.js
-	    www/minibar/*.png
-	    www/syntax-editor/*.html
-	    www/syntax-editor/*.css
-	    www/syntax-editor/*.js
-	    www/TransQuiz/*.html
-	    www/TransQuiz/*.css
-	    www/TransQuiz/*.js
-	    www/TransQuiz/*.png
-	    www/translator/*.html
-	    www/translator/*.css
-	    www/translator/*.js
+data-files:
+  www/*.html
+  www/*.css
+  www/P/*.png
+  www/gfse/*.html
+  www/gfse/*.css
+  www/gfse/*.js
+  www/gfse/P/*.png
+  www/gfse/P/*.jpg
+  www/js/*.js
+  www/minibar/*.html
+  www/minibar/*.css
+  www/minibar/*.js
+  www/minibar/*.png
+  www/syntax-editor/*.html
+  www/syntax-editor/*.css
+  www/syntax-editor/*.js
+  www/TransQuiz/*.html
+  www/TransQuiz/*.css
+  www/TransQuiz/*.js
+  www/TransQuiz/*.png
+  www/translator/*.html
+  www/translator/*.css
+  www/translator/*.js
 
 --source-repository head
 --  type:     darcs
@@ -104,9 +101,9 @@ Library
 --if impl(ghc>=7.8)
 --  ghc-options: +RTS -A20M -RTS
   ghc-prof-options: -fprof-auto
-  extensions: 
+  extensions:
 
-  exposed-modules: 
+  exposed-modules:
     PGF
     PGF.Internal
     PGF.Haskell
