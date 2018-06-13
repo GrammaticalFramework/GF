@@ -83,9 +83,9 @@ echo "Pruning..."
 cd $REP_RGL
 git filter-branch --prune-empty --subdirectory-filter lib master
 
-echo "Cleaning..."
-git rm -r --quiet doc/browse
-git commit -m "${COMMIT_PREFIX}Remove RGL browser (separate repo)" --quiet
+# echo "Cleaning..."
+# git rm -r --quiet doc/browse
+# git commit -m "${COMMIT_PREFIX}Remove RGL browser (separate repo)" --quiet
 
 git remote set-url origin git@github.com:GrammaticalFramework/${REP_RGL}.git
 if [ $PUSH = true ]; then

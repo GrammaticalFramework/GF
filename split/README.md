@@ -7,11 +7,30 @@ This is a work-in-progress; once finalised, the split will be run on the latest 
 
 Contributions and comments welcome.
 
-## Relevant questions
+## Decisions
 
-- Storing markup (e.g. txt2tags) together with HTML
+- When HTML is generated from some other format, e.g. txt2tags, the HTML should not be under version control.
+
+## Questions
+
 - Active RGL documentation and web availability
+- Should current `GF` become an archive OR should it live on as main repo?
+  Related names: `gf-core`, `gf-archive`
 
 ## To check
 
-- gf-rgl/doc contains lots of stuff which is probably outdated
+- `gf-rgl:doc` contains lots of stuff which is probably outdated
+
+## Things which should live separately
+
+- RGL Source Browser `GF:lib/doc/browse`
+- gftest `GF:src/tools/gftest`
+- Android app `GF:src/ui/android`
+- iOS app `GF:src/ui/ios`
+
+
+## Things which should definitely be archived
+
+- `GF:src/ui/gwt`
+- `GF:src/tools/c`
+- `GF:src/tools/c++`
