@@ -757,7 +757,7 @@ oper
     mkV2V : V -> V2V =
      \v -> mmkV2 v (mkPrep []) ** {c3 = mkComplement "att" ; lock_V2V = <>} ;
     mkV2V : V -> Prep -> Prep -> V2V =
-     \v, p, t -> mmkV2 v p ** {c3 = mkComplement p.s ; lock_V2V = <>} ;
+     \v, p, t -> mmkV2 v p ** {c3 = mkComplement t.s ; lock_V2V = <>} ;
     mkV2V : (x,y,z : Str) -> V2V = \x,y,z -> mmkV2 (irregV x y z) (mkPrep []) ** {c3 = mkComplement "att" ; lock_V2V = <>} ;
     mkV2V : (x,y,z,u,v,w : Str) -> V2V = \x,y,z,u,v,w -> mmkV2 (mkV x y z u v w) (mkPrep []) ** {c3 = mkComplement "att" ; lock_V2V = <>} ;
     } ;
