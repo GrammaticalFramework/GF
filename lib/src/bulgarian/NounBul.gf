@@ -219,4 +219,25 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       a = np.a ;
       p = np.p
       } ;
+
+    AdjDAP dap ap = {s = \\sp,g,role => let g' = case g of {
+                                                AMasc _       => Masc ;
+                                                AFem          => Fem ;
+                                                ANeut         => Neut
+                                              } ;
+                                         aform = case <numnnum dap.nn,dap.spec,role> of {
+                                                   <Sg,Def,RSubj> => ASgMascDefNom ;
+                                                   <Sg,_  ,_    > => ASg g' dap.spec ;
+                                                   <Pl,_  ,_    > => APl dap.spec
+                                                 } ;
+                                     in dap.s ! True ! g ! role ++ ap.s ! aform ! P3 ;
+                     nn = dap.nn;
+                     spec = dap.spec;
+                     p = dap.p
+                    } ;
+    DetDAP det = {s = \\sp,g,role => det.s ! sp ! g ! role;
+                  nn = det.nn;
+                  spec = det.spec;
+                  p = det.p
+                 } ;
 }
