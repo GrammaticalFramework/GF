@@ -46,8 +46,9 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
     
     UsePN pn = { s = table {
-                       RObj Dat => "на" ++ pn.s; 
-                       _        => pn.s
+                       RObj Dat      => "на" ++ pn.s; 
+                       RObj WithPron => with_Word ++ pn.s; 
+                       _             => pn.s
                      } ;
                  a = {gn = GSg pn.g; p = P3} ;
                  p = Pos
@@ -55,7 +56,12 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     UsePron p = {s = p.s; a=p.a; p=Pos} ;
 
     PredetNP pred np = {
-      s = \\c => pred.s ! np.a.gn ++ np.s ! c ;
+      s = \\c => case c of {
+                   RObj Dat      => "на";
+                   RObj WithPrep => with_Word; 
+                   _             => ""
+                 } ++
+                 pred.s ! np.a.gn ++ np.s ! RObj Acc ;
       a = np.a ;
       p = np.p
       } ;

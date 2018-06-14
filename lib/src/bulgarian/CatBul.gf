@@ -68,7 +68,7 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
 
 -- Structural
 
-    Conj = {s : Str; distr : Bool; conj : Ints 2; n : Number} ;
+    Conj = {s : Str; distr : Bool; conj : Ints 3; n : Number} ;
     Subj = {s : Str} ;
     Prep = {s : Str; c : Case} ;
 

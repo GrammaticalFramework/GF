@@ -330,7 +330,7 @@ resource ResBul = ParamX ** open Prelude, Predef in {
         VPresPart   aform => regAdjective "бъдещ" ! aform ;
         VImperative Sg    => "бъди" ;
         VImperative Pl    => "бъдете" ;
-        VNoun _           => "";
+        VNoun _           => "бъдене";
         VGerund           => "бидейки"
       } ;
 
@@ -358,7 +358,7 @@ resource ResBul = ParamX ** open Prelude, Predef in {
         VPresPart   aform => regAdjective "бъдещ" ! aform ;
         VImperative Sg    => "бъди" ;
         VImperative Pl    => "бъдете" ;
-        VNoun _           => "";
+        VNoun _           => "бъдене";
         VGerund           => "бъдейки"
       } ;
 
@@ -786,12 +786,12 @@ resource ResBul = ParamX ** open Prelude, Predef in {
                GPl      => "тези"
              } ;
 
-    linCoord : Ints 2 => Str ;
-    linCoord = table {0 => "и"; 1=>"или"; 2=>"нито"} ;
-    
-    linCoordSep : Str -> Bool => Ints 2 => Str ;
+    linCoord : Ints 3 => Str ;
+    linCoord = table {0 => "и"; 1=>"или"; 2=>"нито"; 3=>"но"} ;
+
+    linCoordSep : Str -> Bool => Ints 3 => Str ;
     linCoordSep s = table {True => linCoord; False=> \\_ => s} ;
-    
+
     comma : Str = SOFT_BIND ++ "," ;
     hyphen : Str = SOFT_BIND ++ "-" ++ SOFT_BIND ;
 

@@ -19,7 +19,7 @@ lin
                     }) Indef
     in {
          s   = \\nf => case n1.relPost of {
-                         True  => n2.s ! (indefNForm nf) ++ n1.rel ! nform2aform nf n2.g ;
+                         True  => n2.s ! nf ++ n1.rel ! nform2aform nf n2.g ;
                          False => n1.rel ! nform2aform nf n2.g ++ n2.s ! indefNForm nf
                        } ;
          rel = \\af => n1.rel ! aform ++ n2.s ! NF Sg Indef ;  relPost = n1.relPost ;
@@ -94,7 +94,7 @@ lin
 
 lincat
   VPS   = {s : Agr => Str} ;
-  [VPS] = {s : Bool => Ints 2 => Agr => Str} ;
+  [VPS] = {s : Bool => Ints 3 => Agr => Str} ;
 
 lin
   BaseVPS x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;

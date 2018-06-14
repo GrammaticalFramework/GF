@@ -222,7 +222,14 @@ oper
                       
     dualN : N -> Prep -> N
       = \n,p -> lin N { s   = n.s;
-                        rel = \\_ => p.s ++ n.s ! NF Sg Def ; relPost = True;
+                        rel = \\_ => p.s ++ 
+                                     case p.c of {
+                                       Acc      => "" ;
+                                       Dat      => "на" ;
+                                       WithPrep => with_Word
+                                     } ++
+                                     n.s ! NF Sg Def ;
+                        relPost = True;
                         g   = n.g
                       }
   } ;

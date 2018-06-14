@@ -58,7 +58,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
 
   lincat
     VPI   = {s : Agr => Str} ;
-    [VPI] = {s : Bool => Ints 2 => Agr => Str} ;
+    [VPI] = {s : Bool => Ints 3 => Agr => Str} ;
 
   lin
     BaseVPI x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
@@ -73,7 +73,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
 
   lincat
     VPS   = {s : Agr => Str} ;
-    [VPS] = {s : Bool => Ints 2 => Agr => Str} ;
+    [VPS] = {s : Bool => Ints 3 => Agr => Str} ;
 
   lin
     BaseVPS x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
