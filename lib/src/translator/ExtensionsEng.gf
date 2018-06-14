@@ -129,7 +129,7 @@ lin
 
   VPSlashVS vs vp = 
     insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs) **
-    {c2 = ""; gapInMiddle = False} ;
+    {c2 = ""; gapInMiddle = False ; missingAdv = True} ; ---- missingAdv?
 
   PastPartRS ant pol vps = {
     s = \\agr => vps.ad ! agr ++ vps.ptp ++ vps.p ++ vps.s2 ! agr ;
