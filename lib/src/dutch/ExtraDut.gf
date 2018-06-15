@@ -1,5 +1,5 @@
 concrete ExtraDut of ExtraDutAbs = CatDut ** 
-  open ResDut, Coordination, Prelude, IrregDut, (P = ParadigmsDut), NounDut in 
+  open ResDut, Coordination, Prelude, IrregDut, (P = ParadigmsDut), (E=ExtendDut), NounDut in 
 {
 
   flags coding=utf8 ;
@@ -19,9 +19,9 @@ concrete ExtraDut of ExtraDutAbs = CatDut **
            predVGen v.isAux BeforeObjs v) ; ----
 
 lin
-    ICompAP ap = {s = \\agr => "hoe" ++ ap.s ! agr ! APred} ; 
+    ICompAP = E.ICompAP ;
 
-    IAdvAdv adv = {s = "hoe" ++ adv.s} ;
+    IAdvAdv = E.IAdvAdv ;
 
   lincat
     VPS   = {s : Order => Agr => Str} ;
