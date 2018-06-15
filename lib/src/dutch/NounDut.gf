@@ -9,22 +9,17 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
       isPron = False ;
       } ;
 
-    DetNP det = {
+    DetNP det = det ** {
       s = \\_ => det.sp ! Neutr ;
       a = agrP3 det.n ;
-      isPron = False ;
-      mergesWithPrep = det.mergesWithPrep ;
-      mergeForm = det.mergeForm
+      isPron = False
       } ;
 
     UsePN pn = noMerge ** {s = pn.s ; a = agrP3 Sg ; isPron = False} ;
 
-    UsePron pron = {
+    UsePron pron = pron ** {
       s = table {NPNom => pron.stressed.nom ; NPAcc => pron.stressed.acc} ;
-      a = pron.a ;
       isPron = True ;
-      mergesWithPrep = pron.mergesWithPrep ;
-      mergeForm = pron.mergeForm
       } ;
 
     PredetNP pred np = heavyNP {
@@ -50,33 +45,30 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
 
     DetQuantOrd quant num ord = 
       let 
-        n = num.n ;
-        a = quant.a
-      in {
-        s  = \\g => quant.s ! num.isNum ! n ! g ++ 
-                      num.s ++ ord.s ! agrAdj g quant.a (NF n Nom) ;
-        sp = \\g => quant.sp ! n ! g ++ 
-                      num.s ++ ord.s ! agrAdj g quant.a (NF n Nom) ;
-        n = n ;
-        a = a ;
-        mergesWithPrep = quant.mergesWithPrep ;
-        mergeForm = quant.mergeForm
+        detQuant = DetQuant quant num ;
+        af : Gender -> AForm = \g -> agrAdj g quant.a (NF num.n Nom) ;
+      in detQuant ** {
+        -- When combined with an ord, don't use the sp form of the quant.
+        -- Works the same way in English:
+        -- e.g. s="your", sp="yours" -> s,sp="your youngest", not sp="*yours youngest"
+        s,sp  = \\g => detQuant.s ! g ++ ord.s ! af g ;
+
+        -- Even if the original quant merges; when you add an ord, it doesn't.
+        mergesWithPrep = False
         } ;
 
     DetQuant quant num = 
       let 
         n = num.n ;
         a = quant.a
-      in {
+      in quant ** {
         s = \\g => quant.s ! num.isNum ! n ! g ++ num.s ;
         sp = \\g => case num.isNum of {
 	  False => quant.sp ! n ! g ++ num.s ;
-	  True  => quant.s ! True ! n ! g ++ num.s
+	  True  => quant.s ! True ! n ! g ++ num.s -- to prevent "een 5 …"
 	  } ;
         n = n ;
         a = a ;
-        mergesWithPrep = quant.mergesWithPrep ;
-        mergeForm = quant.mergeForm
         } ;
 
     PossPron p = noMerge ** {
