@@ -2,7 +2,7 @@
 
 concrete ConstructionDut of Construction = CatDut ** 
   open SyntaxDut, SymbolicDut, ParadigmsDut, 
-       (L = LexiconDut), (E = ExtraDut), (G = GrammarDut), (I = IrregDut), (R = ResDut), (N = NounDut), Prelude in {
+       (L = LexiconDut), (E = ExtendDut), (G = GrammarDut), (I = IrregDut), (R = ResDut), (N = NounDut), (P=ParamX), Prelude in {
 
 
 lin
@@ -49,9 +49,9 @@ lin
 
   monthAdv m = SyntaxDut.mkAdv in_Prep (mkNP the_Det m) ;
   yearAdv y = SyntaxDut.mkAdv (mkPrep "in jaar") y ; ----
-  dayMonthAdv d m = ParadigmsDut.mkAdv ("op" ++ d.s ! R.NPNom ++ BIND ++ "." ++ m.s ! R.NF R.Sg R.Nom) ; -- op 17 Mai
-  monthYearAdv m y = SyntaxDut.mkAdv in_Prep (mkNP the_Det (mkCN m y)) ; -- im Mai 2012
-  dayMonthYearAdv d m y = ParadigmsDut.mkAdv ("op" ++ d.s ! R.NPNom ++ BIND ++ "." ++ m.s ! R.NF R.Sg R.Nom ++ y.s ! R.NPNom) ; -- am 17 Mai 2013
+  dayMonthAdv d m = ParadigmsDut.mkAdv ("op" ++ d.s ! R.NPNom ++ m.s ! R.NF R.Sg R.Nom) ; -- op 17 mei
+  monthYearAdv m y = SyntaxDut.mkAdv in_Prep (mkNP the_Det (mkCN m y)) ; -- in mei 2012
+  dayMonthYearAdv d m y = ParadigmsDut.mkAdv ("op" ++ d.s ! R.NPNom ++ m.s ! R.NF R.Sg R.Nom ++ y.s ! R.NPNom ) ; -- op 17 mei 2013
 
   intYear = symb ;
   intMonthday = symb ;
