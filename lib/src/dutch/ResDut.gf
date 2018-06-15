@@ -358,7 +358,7 @@ param
        VInf        => "zullen" ;
        VInfFull    => "zullen" ;
        VPresSg1    => "zal" ;
-       VPresSg2    => "zult" ;
+       VPresSg2    => "zal" ;
        VPresSg3    => "zal" ;
        VPresPl     => "zullen" ;
        VPastSg     => "zou" ; --# notpresent
@@ -383,7 +383,7 @@ param
        VInf        => "kunnen" ;
        VInfFull    => "kunnen" ;
        VPresSg1    => "kan" ;
-       VPresSg2    => "kunt" ;
+       VPresSg2    => "kan" ;
        VPresSg3    => "kan" ; ---- kun je
        VPresPl     => "kunnen" ;
        VPastSg     => "kon" ; --# notpresent
