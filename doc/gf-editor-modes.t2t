@@ -13,16 +13,17 @@ welcome!
 
 ==Emacs==
 
-[gf.el ../src/tools/gf.el] by Johan Bockgård provides syntax highlighting and
-automatic indentation and lets you run the GF Shell in an emacs buffer.
-See installation instructions inside.
+[gf.el https://github.com/GrammaticalFramework/gf-emacs-mode] by Johan
+Bockgård provides syntax highlighting and automatic indentation and
+lets you run the GF Shell in an emacs buffer.  See installation
+instructions inside.
 
 ==Atom==
 [language-gf https://atom.io/packages/language-gf], by John J. Camilleri
 
 ==Eclipse==
 
-[GF Eclipse Plugin http://www.grammaticalframework.org/eclipse/index.html], by John J. Camilleri
+[GF Eclipse Plugin https://github.com/GrammaticalFramework/gf-eclipse-plugin/], by John J. Camilleri
 
 ==Gedit==
 

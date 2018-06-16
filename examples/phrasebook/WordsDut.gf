@@ -3,7 +3,7 @@
 
 
 concrete WordsDut of Words = SentencesDut ** 
-    open SyntaxDut, (P = ParadigmsDut), (I = IrregDut), (L = LexiconDut), (R=ResDut), ExtraDut, Prelude in {
+    open SyntaxDut, (P = ParadigmsDut), (I = IrregDut), (L = LexiconDut), (R=ResDut), (E=ExtendDut), Prelude in {
 
   lin
 
@@ -173,7 +173,7 @@ ik ga te voet/ ik ga lopend
 -- miscellaneous
 
     QWhatName p = mkQS (mkQCl how_IAdv (mkCl p.name  I.heten_V)) ; --hoe heet je
-    QWhatAge p =  mkQS (mkQCl (ICompAP (mkAP L.old_A)) p.name) ;
+    QWhatAge p =  mkQS (mkQCl (E.ICompAP (mkAP L.old_A)) p.name) ;
     HowMuchCost item = mkQS (mkQCl how8much_IAdv (mkCl item (P.mkV "kosten"))) ; --hoeveel kost...
     ItCost item price = prop (mkCl item (P.mkV2 (P.mkV "kosten")) price) ; --..item.. kost ..price..
 

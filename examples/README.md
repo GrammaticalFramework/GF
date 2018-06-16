@@ -1,3 +1,5 @@
+# `/examples`
+
 All contributions (`contrib` and `examples` folders) have now been
 moved to a separate git repository at:
 
@@ -10,5 +12,5 @@ have some toy grammars to play with.
 Any updates to these grammars should be made at the gf-contrib repository
 above; changes will be copied from there to here manually.
 
-John J. Camilleri
+John J. Camilleri,
 2013-09-16

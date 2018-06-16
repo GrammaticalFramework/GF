@@ -1,5 +1,0 @@
-# Images in this folder have moved, now hosted at GitHub
-# John 2013-01-10
-
-RewriteEngine On
-RewriteRule ^(.*)$ https://raw.github.com/GrammaticalFramework/gf-eclipse-plugin/master/doc/images/$1 [L,R=301]

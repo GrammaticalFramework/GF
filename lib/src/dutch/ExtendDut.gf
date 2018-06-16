@@ -2,7 +2,7 @@
 
 concrete ExtendDut of Extend =
   CatDut ** ExtendFunctor
-   - [PastPartAP]
+   - [PastPartAP,ICompAP,IAdvAdv]
   with
     (Grammar = GrammarDut) **
   open
@@ -12,7 +12,7 @@ concrete ExtendDut of Extend =
     Prelude,
     ParadigmsDut in {
 
-lin --# notpresent
+lin
 
   PastPartAP vp = { --# notpresent
     s = \\agr,af => let aForm = case vp.isHeavy of { --# notpresent
@@ -22,4 +22,7 @@ lin --# notpresent
     isPre = notB vp.isHeavy ; --# notpresent
    } ; --# notpresent
     
- }
+  ICompAP ap = {s = \\agr => "hoe" ++ ap.s ! agr ! APred} ; 
+
+  IAdvAdv adv = {s = "hoe" ++ adv.s} ;
+}

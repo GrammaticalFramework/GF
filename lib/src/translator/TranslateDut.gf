@@ -30,7 +30,7 @@ concrete TranslateDut of Translate =
     , WithoutVP, InOrderToVP, ByVP
   ],
   DictionaryDut ** 
-open MorphoDut, ResDut, ParadigmsDut, SyntaxDut, (E = ExtraDut), Prelude in {
+open ResDut, ParadigmsDut, SyntaxDut, (E = ExtendDut), Prelude in {
 
 flags
   literal=Symb ;
