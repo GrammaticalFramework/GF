@@ -50,6 +50,7 @@ rm -rf "$REP_RGL"
 
 # === core ===
 # - remove non-core stuff, preserving general structure
+# - TODO shrinking
 # - TODO changes to build scripts
 echo
 echo "# ${REP_CORE}"
@@ -59,19 +60,20 @@ cp -R -- "$REP_PRISTINE" "$REP_CORE"
 
 echo "Cleaning..."
 cd "$REP_CORE"
-git rm -r --quiet css demos doc download eclipse examples framenet gf-book treebanks *.html
+git rm -r --quiet css demos doc download eclipse examples framenet gf-book lib split treebanks *.html
 git commit -m "${COMMIT_PREFIX}Remove everything non-core" --quiet
 
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_CORE}.git"
 if [ "$PUSH" = true ]; then
   echo "Pushing..."
-  git push -u origin master
+  git push --set-upstream origin master
 fi
 cd ..
 
 # === RGL ===
 # - filter `lib` directory
 # - minor clean up
+# - TODO shrinking
 # - TODO build scripts
 echo
 echo "# ${REP_RGL}"
@@ -90,7 +92,7 @@ git filter-branch --prune-empty --subdirectory-filter lib master
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_RGL}.git"
 if [ "$PUSH" = true ]; then
   echo "Pushing..."
-  git push -u origin master
+  git push --set-upstream origin master
 fi
 cd ..
 

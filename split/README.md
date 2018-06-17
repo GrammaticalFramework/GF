@@ -23,10 +23,12 @@ Contributions and comments welcome.
 
 ## Things which should live separately
 
-- RGL Source Browser `GF:lib/doc/browse`
-- gftest `GF:src/tools/gftest`
 - Android app `GF:src/ui/android`
 - iOS app `GF:src/ui/ios`
+
+**Done**
+- RGL Source Browser `GF:lib/doc/browse`
+- gftest `GF:src/tools/gftest`
 
 
 ## Things which should definitely be archived
@@ -34,3 +36,18 @@ Contributions and comments welcome.
 - `GF:src/ui/gwt`
 - `GF:src/tools/c`
 - `GF:src/tools/c++`
+
+---
+
+## Filtering and shrinking a repository
+
+```
+cp -R GF-pristine rgl-source-browser
+cd rgl-source-browser
+git filter-branch --prune-empty --subdirectory-filter lib/doc/browse --tag-name-filter cat -- --all master
+git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+git reflog expire --expire=now --all
+git gc --prune=now
+git remote set-url origin "git@github.com:GrammaticalFramework/rgl-source-browser.git"
+git push --set-upstream origin master
+```
