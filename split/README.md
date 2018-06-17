@@ -39,15 +39,31 @@ Contributions and comments welcome.
 
 ---
 
-## Filtering and shrinking a repository
+## Git commands
 
+### Filtering and shrinking
+Source: https://git-scm.com/docs/git-filter-branch#_checklist_for_shrinking_a_repository
 ```
-cp -R GF-pristine rgl-source-browser
-cd rgl-source-browser
-git filter-branch --prune-empty --subdirectory-filter lib/doc/browse --tag-name-filter cat -- --all master
+git filter-branch --prune-empty --subdirectory-filter <DIR> --tag-name-filter cat -- --all
+```
+
+*Shrink via clone (safer)*
+```
+cd ..
+git clone file://`pwd`/<REPO> <REPO_CLONED>
+rm -rf <REPO>
+mv <REPO_CLONED> <REPO>
+cd <REPO>
+```
+
+*Shrink manually (more desctructive)*
+```
 git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
 git reflog expire --expire=now --all
 git gc --prune=now
-git remote set-url origin "git@github.com:GrammaticalFramework/rgl-source-browser.git"
-git push --set-upstream origin master
+```
+
+## Check repository size
+```
+git gc && git count-objects -vH
 ```

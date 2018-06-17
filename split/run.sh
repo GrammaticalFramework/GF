@@ -21,10 +21,9 @@ DIR="${THISDIR}/../../GF-SPLIT/"
 mkdir -p "$DIR"
 
 # Repository names
-REP_PRISTINE="GF-pristine"
+REP_PRISTINE="pristine"
 REP_CORE="gf-core"
 REP_RGL="gf-rgl"
-REP_ARCHIVE="gf-archive"
 
 # --- Setting up --------------------------------------------------------------
 
@@ -72,8 +71,8 @@ cd ..
 
 # === RGL ===
 # - filter `lib` directory
+# - shrink
 # - minor clean up
-# - TODO shrinking
 # - TODO build scripts
 echo
 echo "# ${REP_RGL}"
@@ -81,13 +80,25 @@ echo "# ${REP_RGL}"
 echo "Copying..."
 cp -R -- "$REP_PRISTINE" "$REP_RGL"
 
-echo "Pruning..."
+echo "Filtering..."
 cd "$REP_RGL"
-git filter-branch --prune-empty --subdirectory-filter lib master
+git filter-branch --prune-empty --subdirectory-filter lib --tag-name-filter cat -- --all
 
-# echo "Cleaning..."
-# git rm -r --quiet doc/browse
-# git commit -m "${COMMIT_PREFIX}Remove RGL browser (separate repo)" --quiet
+echo "Shrinking (via clone)..."
+cd ..
+git clone "file://`pwd`/$REP_RGL" "${REP_RGL}_cloned"
+rm -rf "$REP_RGL"
+mv "${REP_RGL}_cloned" "$REP_RGL"
+cd "$REP_RGL"
+
+# echo "Shrinking (manual)..."
+# git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+# git reflog expire --expire=now --all
+# git gc --prune=now
+
+echo "Cleaning..."
+git rm -r --quiet doc/browse
+git commit -m "${COMMIT_PREFIX}Remove RGL browser (separate repo)" --quiet
 
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_RGL}.git"
 if [ "$PUSH" = true ]; then
@@ -97,5 +108,3 @@ fi
 cd ..
 
 # --- Finally -----------------------------------------------------------------
-
-# TODO rename/change remote for GF-archive?
