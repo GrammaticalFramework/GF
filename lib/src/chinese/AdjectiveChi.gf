@@ -14,7 +14,7 @@ concrete AdjectiveChi of Adjective = CatChi ** open ResChi, Prelude in {
     -- CAdvAP ad ap np = complexAP (ap.s ++ ad.s ++ ad.p ++ np.s) ;
     CAdvAP ad ap np = complexAP (ad.s++ np.s++ad.p++ap.s ) ; --modified by ChenPeng 11.24
 
-    ComplA2 a np = complexAP (a.s ++ appPrep a.c2 np.s) ;
+    ComplA2 a np = complexAP (appPrep a.c2 np.s ++ a.s) ;
 
     ReflA2 a = complexAP (a.s ++ appPrep a.c2 reflPron) ;
 
