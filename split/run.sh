@@ -49,7 +49,8 @@ rm -rf "$REP_RGL"
 
 # === core ===
 # - remove non-core stuff, preserving general structure
-# - TODO shrinking
+# - shrink
+# - TODO use BFG (a lot faster)
 # - TODO changes to build scripts
 echo
 echo "# ${REP_CORE}"
