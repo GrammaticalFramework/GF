@@ -161,6 +161,9 @@ concrete ExtraFin of ExtraFinAbs = CatFin **
     CompPartAP ap = {
       s = \\agr => ap.s ! False ! NCase (complNumAgr agr) ResFin.Part
       } ;
+    CompNomAP ap = {
+      s = \\agr => ap.s ! False ! NCase (complNumAgr agr) ResFin.Nom
+      } ;
 
 ---- copied from VerbFin.CompAP, should be shared
     ICompAP ap = {
