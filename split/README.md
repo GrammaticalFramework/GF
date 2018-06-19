@@ -20,6 +20,9 @@ Contributions and comments welcome.
 ## To check
 
 - `gf-rgl:doc` contains lots of stuff which is probably outdated
+- `GF:demos`
+- `GF:examples`
+- `GF:treebanks`
 
 ## Things which should live separately
 
@@ -63,7 +66,23 @@ git reflog expire --expire=now --all
 git gc --prune=now
 ```
 
-## Check repository size
+### Remove contents from history
+Source: https://stackoverflow.com/questions/10067848/remove-folder-and-its-contents-from-git-githubs-history/
+```
+git filter-branch --tree-filter 'rm -rf <DIR>' --prune-empty HEAD
+git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+```
+This works but is very slow.
+[BFG](https://rtyley.github.io/bfg-repo-cleaner/) could be a faster alternative.
+
+### Check repository size
 ```
 git gc && git count-objects -vH
+```
+
+### Aggressive cleaning
+Source: https://rtyley.github.io/bfg-repo-cleaner/
+```
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
 ```

@@ -59,9 +59,19 @@ cp -R -- "$REP_PRISTINE" "$REP_CORE"
 
 echo "Cleaning..."
 cd "$REP_CORE"
-git rm -r --quiet css demos doc download eclipse examples framenet gf-book lib split treebanks *.html
-git commit -m "${COMMIT_PREFIX}Remove everything non-core" --quiet
+RM_DIRS="lib split"
+# git rm -r --quiet "$RM_DIRS"
+# git commit -m "${COMMIT_PREFIX}Remove everything non-core" --quiet
 
+echo "This will take hours. Go for a nice long walk."
+git filter-branch --tree-filter "'rm -rf ${RM_DIRS}'" --prune-empty HEAD
+git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+
+echo "Shrinking..."
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+
+echo "Set origin to git@github.com:GrammaticalFramework/${REP_CORE}.git"
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_CORE}.git"
 if [ "$PUSH" = true ]; then
   echo "Pushing..."
@@ -84,22 +94,23 @@ echo "Filtering..."
 cd "$REP_RGL"
 git filter-branch --prune-empty --subdirectory-filter lib --tag-name-filter cat -- --all
 
-echo "Shrinking (via clone)..."
-cd ..
-git clone "file://`pwd`/$REP_RGL" "${REP_RGL}_cloned"
-rm -rf "$REP_RGL"
-mv "${REP_RGL}_cloned" "$REP_RGL"
-cd "$REP_RGL"
+# echo "Cloning..."
+# cd ..
+# git clone "file://`pwd`/$REP_RGL" "${REP_RGL}_cloned"
+# rm -rf "$REP_RGL"
+# mv "${REP_RGL}_cloned" "$REP_RGL"
+# cd "$REP_RGL"
 
-# echo "Shrinking (manual)..."
-# git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
-# git reflog expire --expire=now --all
-# git gc --prune=now
+echo "Shrinking..."
+git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+git reflog expire --expire=now --all
+git gc --prune=now
 
 echo "Cleaning..."
 git rm -r --quiet doc/browse
 git commit -m "${COMMIT_PREFIX}Remove RGL browser (separate repo)" --quiet
 
+echo "Set origin to git@github.com:GrammaticalFramework/${REP_RGL}.git"
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_RGL}.git"
 if [ "$PUSH" = true ]; then
   echo "Pushing..."
