@@ -144,7 +144,7 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
     A2 = \a -> a.s ! ASg Masc Indef ++ a.c2;
 
     N  = \n -> n.s ! NF Sg Indef;
-    N2 = \n -> n.s ! NF Sg Indef ++ n.c2.s;
-    N3 = \n -> n.s ! NF Sg Indef ++ n.c2.s ++ n.c3.s;
+    N2 = \n -> n.s ! NF Sg Indef ++ linrefPrep n.c2;
+    N3 = \n -> n.s ! NF Sg Indef ++ linrefPrep n.c2 ++ linrefPrep n.c3;
 
 }
