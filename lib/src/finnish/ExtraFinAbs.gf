@@ -28,7 +28,8 @@ abstract ExtraFinAbs = Extra [
 
     vai_Conj : Conj ;                     -- minä vai sinä? ("or" in question)
 
-    CompPartAP : AP -> Comp ;             -- kahvi on valmista
+    CompPartAP : AP -> Comp ;             -- kahvi on valmista: partitive complement also in singular
+    CompNomAP  : AP -> Comp ;             -- kengät ovat mustat: nominative complement also in plural
 
     ProDropPoss : Pron -> Quant ;         -- vaimoni
 
