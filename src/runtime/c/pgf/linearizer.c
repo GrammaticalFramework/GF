@@ -13,7 +13,7 @@
 #include <pgf/literals.h>
 #include <stdio.h>
 
-#define PGF_LINEARIZER_DEBUG
+//#define PGF_LINEARIZER_DEBUG
 
 static void
 pgf_lzr_add_overl_entry(PgfCncOverloadMap* overl_table,
@@ -130,13 +130,6 @@ pgf_print_cnc_tree(PgfCncTree ctree, GuOut* out, GuExn* err)
 		if (clit->n_vars > 0) gu_putc(')', out, err);
 		break;
 	}
-	case PGF_CNC_TREE_LINDEF: {
-		PgfCncTreeLinDef* clindef = ti.data;
-		gu_putc('(', out, err);
-		pgf_print_cnc_tree_vars(clindef->n_vars, clindef->context, out, err);
-		gu_printf(out, err, "F%d[%s] %s)", clindef->fun->funid, clindef->str);
-		break;
-	}
 	case GU_VARIANT_NULL:
 		gu_puts("null", out, err);
 		break;
@@ -229,32 +222,44 @@ redo:;
 static PgfCncTree
 pgf_cnc_resolve_def(PgfCnc* cnc,
                     size_t n_vars, PgfPrintContext* context,
-                    PgfCId abs_id, PgfCCat* ccat, GuString s, GuPool* pool)
+                    PgfCCat* ccat, GuString s, GuPool* pool)
 {
+	PgfCncTree lit = gu_null_variant;
 	PgfCncTree ret = gu_null_variant;
-	PgfCncFun* fun = NULL;
 
-	if (ccat->lindefs != NULL) {
-		int index =
-			gu_choice_next(cnc->ch, gu_seq_length(ccat->lindefs));
-		if (index < 0) {
-			return ret;
-		}
+	PgfCncTreeLit* clit =
+		gu_new_variant(PGF_CNC_TREE_LIT,
+					   PgfCncTreeLit,
+					   &lit, pool);
+	clit->n_vars  = 0;
+	clit->context = context;
+	clit->fid = cnc->fid++;
+	PgfLiteralStr* lit_str =
+		gu_new_flex_variant(PGF_LITERAL_STR,
+					        PgfLiteralStr,
+					        val, strlen(s)+1,
+					        &clit->lit, pool);
+	strcpy((char*) lit_str->val, (char*) s);
 
-		fun = gu_seq_get(ccat->lindefs, PgfCncFun*, index);
+	if (ccat->lindefs == NULL)
+		return lit;
+
+	int index =
+		gu_choice_next(cnc->ch, gu_seq_length(ccat->lindefs));
+	if (index < 0) {
+		return ret;
 	}
-
-	PgfCncTreeLinDef* clindef =
-		gu_new_variant(PGF_CNC_TREE_LINDEF,
-		               PgfCncTreeLinDef,
-		               &ret, pool);
-	clindef->abs_id  = abs_id;
-	clindef->ccat    = ccat;
-	clindef->fun     = fun;
-	clindef->fid     = cnc->fid++;
-	clindef->n_vars  = n_vars;
-	clindef->context = context;
-	clindef->str     = s;
+	PgfCncTreeApp* capp =
+		gu_new_flex_variant(PGF_CNC_TREE_APP,
+							PgfCncTreeApp,
+							args, 1, &ret, pool);
+	capp->ccat = ccat;
+	capp->fun = gu_seq_get(ccat->lindefs, PgfCncFun*, index);
+	capp->fid = cnc->fid++;
+	capp->n_vars  = n_vars;
+	capp->context = context;
+	capp->n_args  = 1;
+	capp->args[0] = lit;
 
 	return ret;
 }
@@ -428,10 +433,10 @@ pgf_cnc_resolve(PgfCnc* cnc,
 				gu_putc('[', out, err);
 				gu_string_write(efun->fun, out, err);
 				gu_putc(']', out, err);
-				GuString s = gu_string_buf_freeze(sbuf, pool);
+				GuString s = gu_string_buf_freeze(sbuf, tmp_pool);
 
 				if (ccat != NULL) {
-					ret = pgf_cnc_resolve_def(cnc, n_vars, context, efun->fun, ccat, s, pool);
+					ret = pgf_cnc_resolve_def(cnc, n_vars, context, ccat, s, pool);
 				} else {
 					PgfCncTreeLit* clit = 
 						gu_new_variant(PGF_CNC_TREE_LIT,
@@ -499,7 +504,7 @@ redo:;
 			}
 
 			if (ccat != NULL) {
-				ret = pgf_cnc_resolve_def(cnc, n_vars, context, ctxt->name, ccat, ctxt->name, pool);
+				ret = pgf_cnc_resolve_def(cnc, n_vars, context, ccat, ctxt->name, pool);
 			} else {
 				PgfCncTreeLit* clit = 
 					gu_new_variant(PGF_CNC_TREE_LIT,
@@ -629,7 +634,7 @@ typedef struct {
 
 typedef struct {
 	PgfLinFuncs*   funcs;
-	PgfCncTree ctree;
+	PgfCncTreeApp* app;
 	PgfSymbolKP*   kp;
 	GuBuf* events;
 	PgfLzr* lzr;
@@ -637,7 +642,7 @@ typedef struct {
 } PgfLzrCache;
 
 static void
-pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTree ctree,
+pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTreeApp* fapp,
                           PgfSymbols* syms, uint16_t sym_idx);
                           
 static void
@@ -647,7 +652,7 @@ static void
 pgf_lzr_cache_flush(PgfLzrCache* cache, PgfSymbols* form)
 {
 	cache->lzr->funcs = cache->prev;
-	pgf_lzr_linearize_symbols(cache->lzr, cache->ctree, form, 0);
+	pgf_lzr_linearize_symbols(cache->lzr, cache->app, form, 0);
 
 	size_t n_cached = gu_buf_length(cache->events);
 	for (size_t i = 0; i < n_cached; i++) {
@@ -821,12 +826,6 @@ pgf_lzr_linearize_var(PgfLzr* lzr, PgfCncTree ctree, size_t var_idx)
 		context = flit->context;
 		break;
 	}
-	case PGF_CNC_TREE_LINDEF: {
-		PgfCncTreeLinDef* flindef = cti.data;
-		n_vars  = flindef->n_vars;
-		context = flindef->context;
-		break;
-	}
 	default:
 		gu_impossible();
 	}
@@ -843,7 +842,7 @@ pgf_lzr_linearize_var(PgfLzr* lzr, PgfCncTree ctree, size_t var_idx)
 }
 
 static void
-pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTree ctree,
+pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTreeApp* fapp,
                           PgfSymbols* syms, uint16_t sym_idx)
 {
 	size_t nsyms = gu_seq_length(syms);
@@ -852,40 +851,26 @@ pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTree ctree,
 		GuVariantInfo sym_i = gu_variant_open(sym);
 		switch (sym_i.tag) {
 		case PGF_SYMBOL_CAT:
-		case PGF_SYMBOL_LIT:
-		case PGF_SYMBOL_VAR: {
-			if (gu_variant_is_null(ctree))
+		case PGF_SYMBOL_LIT: {
+			if (fapp == NULL)
 				return;
 
 			PgfSymbolIdx* sidx = sym_i.data;
+			gu_assert((unsigned) sidx->d < fapp->n_args);
 
-			GuVariantInfo tree_i = gu_variant_open(ctree);
-			switch (tree_i.tag) {
-			case PGF_CNC_TREE_APP: {
-				PgfCncTreeApp* papp = tree_i.data;
+			PgfCncTree argf = fapp->args[sidx->d];
+			pgf_lzr_linearize_tree(lzr, argf, sidx->r);
+			break;
+		}
+		case PGF_SYMBOL_VAR: {
+			if (fapp == NULL)
+				return;
 
-				gu_assert((unsigned) sidx->d < papp->n_args);
+			PgfSymbolIdx* sidx = sym_i.data;
+			gu_assert((unsigned) sidx->d < fapp->n_args);
 
-				PgfCncTree argf = papp->args[sidx->d];
-				if (sym_i.tag == PGF_SYMBOL_VAR)
-					pgf_lzr_linearize_var(lzr, argf, sidx->r);
-				else
-					pgf_lzr_linearize_tree(lzr, argf, sidx->r);
-				break;
-			}
-			case PGF_CNC_TREE_LINDEF: {
-				PgfCncTreeLinDef* plindef = tree_i.data;
-
-				gu_assert(sidx->d == 0);
-
-				if ((*lzr->funcs)->symbol_token) {
-					(*lzr->funcs)->symbol_token(lzr->funcs, plindef->str);
-				}
-				break;
-			}
-			default:
-				gu_impossible(); 
-			}
+			PgfCncTree argf = fapp->args[sidx->d];
+			pgf_lzr_linearize_var(lzr, argf, sidx->r);
 			break;
 		}
 		case PGF_SYMBOL_KS: {
@@ -900,12 +885,12 @@ pgf_lzr_linearize_symbols(PgfLzr* lzr, PgfCncTree ctree,
 			PgfSymbolKP* kp = sym_i.data;
 			//gu_buf_push(pres, PgfSymbolKP*, kp);
 			PgfLzrCache* cache = gu_new(PgfLzrCache, lzr->tmp_pool);
-			cache->funcs  = &pgf_lzr_cache_funcs;
-			cache->ctree  = ctree;
-			cache->kp     = kp;
-			cache->events = gu_new_buf(PgfLzrCached, lzr->tmp_pool);
-			cache->lzr    = lzr;
-			cache->prev   = lzr->funcs;
+			cache->funcs = &pgf_lzr_cache_funcs;
+			cache->app   = fapp;
+			cache->kp    = kp;
+			cache->events= gu_new_buf(PgfLzrCached, lzr->tmp_pool);
+			cache->lzr   = lzr;
+			cache->prev  = lzr->funcs;
 			lzr->funcs = &cache->funcs;
 			break;
 		}
@@ -960,8 +945,8 @@ pgf_lzr_linearize_tree(PgfLzr* lzr, PgfCncTree ctree, size_t lin_idx)
 		}
 
 		gu_require(lin_idx < fun->n_lins);
-		pgf_lzr_linearize_symbols(lzr, ctree, fun->lins[lin_idx]->syms, 0);
-
+		pgf_lzr_linearize_symbols(lzr, fapp, fun->lins[lin_idx]->syms, 0);
+		
 		if ((*lzr->funcs)->end_phrase && fapp->ccat != NULL) {
 			(*lzr->funcs)->end_phrase(lzr->funcs,
 			                          fun->absfun->type->cid,
@@ -1028,29 +1013,6 @@ pgf_lzr_linearize_tree(PgfLzr* lzr, PgfCncTree ctree, size_t lin_idx)
 			(*lzr->funcs)->end_phrase(lzr->funcs,
 							          cat, flit->fid, 0,
 							          "");
-		}
-
-		break;
-	}
-	case PGF_CNC_TREE_LINDEF: {
-		PgfCncTreeLinDef* flindef = cti.data;
-		PgfCncFun* fun = flindef->fun;
-
-		if ((*lzr->funcs)->begin_phrase) {
-			(*lzr->funcs)->begin_phrase(lzr->funcs,
-			                            "",
-			                            flindef->fid, lin_idx,
-			                            flindef->abs_id);
-		}
-
-		gu_require(lin_idx < fun->n_lins);
-		pgf_lzr_linearize_symbols(lzr, ctree, fun->lins[lin_idx]->syms, 0);
-
-		if ((*lzr->funcs)->end_phrase) {
-			(*lzr->funcs)->end_phrase(lzr->funcs,
-			                          "",
-			                          flindef->fid, lin_idx,
-			                          flindef->abs_id);
 		}
 
 		break;
@@ -1224,16 +1186,10 @@ pgf_lzr_get_table(PgfConcr* concr, PgfCncTree ctree,
 		*labels = &s_label;
 		break;
 	}
-	case PGF_CNC_TREE_LINDEF: {
-		static GuString s = "s";
-
-		*n_lins = 1;
-		*labels = &s;
-		break;
-	}
 	default:
 		gu_impossible();
 	}
+
 }
 
 PGF_API void
@@ -1274,7 +1230,7 @@ pgf_get_tokens(PgfSymbols* syms, uint16_t sym_idx, GuPool* pool)
 	};
 
 	PgfLzr* lzr = pgf_new_lzr(NULL, &flin.funcs, tmp_pool);
-	pgf_lzr_linearize_symbols(lzr, gu_null_variant, syms, sym_idx);
+	pgf_lzr_linearize_symbols(lzr, NULL, syms, sym_idx);
 	
 	while (lzr->funcs != &flin.funcs) {
 		PgfLzrCache* cache = gu_container(lzr->funcs, PgfLzrCache, funcs);

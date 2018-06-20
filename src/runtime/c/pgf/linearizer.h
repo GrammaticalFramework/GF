@@ -18,7 +18,6 @@ typedef enum {
 	PGF_CNC_TREE_APP,
 	PGF_CNC_TREE_CHUNKS,
 	PGF_CNC_TREE_LIT,
-	PGF_CNC_TREE_LINDEF
 } PgfCncTreeTag;
 
 typedef struct {
@@ -50,19 +49,6 @@ typedef struct {
 	int fid;
 	PgfLiteral lit;
 } PgfCncTreeLit;
-
-typedef struct {
-	PgfCId abs_id;
-
-	PgfCCat* ccat;
-	PgfCncFun* fun;
-	int fid;
-
-	size_t n_vars;
-	PgfPrintContext* context;
-
-	GuString str;
-} PgfCncTreeLinDef;
 
 #endif
 
