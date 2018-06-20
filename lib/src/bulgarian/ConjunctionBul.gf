@@ -17,6 +17,7 @@ concrete ConjunctionBul of Conjunction =
 
     ConjAdV conj ss = {
       s = conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj;
+      p = Pos
       } ;
 
     ConjIAdv conj ss = {
@@ -30,8 +31,8 @@ concrete ConjunctionBul of Conjunction =
       } ;
 
     ConjAP conj ss = {
-      s     = \\aform => conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!aform;
-      adv   =            conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.adv!conj.distr!conj.conj;
+      s     = \\aform,p => conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!aform!p;
+      adv   =              conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.adv!conj.distr!conj.conj;
       isPre = ss.isPre
       } ;
 
@@ -65,12 +66,12 @@ concrete ConjunctionBul of Conjunction =
        a = conjAgr xs.a x.a} ;
 
     BaseAP x y =
-      {s  = \\d,t,aform=>x.s!aform++linCoord!t++y.s!aform; 
-       adv= \\d,t      =>x.adv    ++linCoord!t++y.adv;
+      {s  = \\d,t,aform,p => x.s!aform!p++linCoord!t++y.s!aform!p; 
+       adv= \\d,t         => x.adv      ++linCoord!t++y.adv;
        isPre = andB x.isPre y.isPre} ; 
     ConsAP x xs =
-      {s  = \\d,t,aform=>x.s!aform++(linCoordSep comma)!d!t++xs.s!d!t!aform; 
-       adv= \\d,t      =>x.adv    ++(linCoordSep comma)!d!t++xs.adv!d!t;
+      {s  = \\d,t,aform,p =>x.s!aform!p++(linCoordSep comma)!d!t++xs.s!d!t!aform!p;
+       adv= \\d,t         =>x.adv      ++(linCoordSep comma)!d!t++xs.adv!d!t;
        isPre = andB x.isPre xs.isPre} ; 
 
     BaseRS x y =
@@ -86,13 +87,13 @@ concrete ConjunctionBul of Conjunction =
        g = x.g} ;
 
   lincat
-    [S] = {s : Bool => Ints 2 => Str} ;
-    [Adv] = {s : Bool => Ints 2 => Str} ;
-    [AdV] = {s : Bool => Ints 2 => Str} ;
-    [IAdv] = {s : Bool => Ints 2 => QForm => Str} ;
-    [NP] = {s : Bool => Ints 2 => Role  => Str; a : Agr} ;
-    [AP] = {s : Bool => Ints 2 => AForm => Str; adv : Bool => Ints 2 => Str; isPre : Bool} ;
-    [RS] = {s : Bool => Ints 2 => Agr   => Str} ;
-    [CN] = {s : Bool => Ints 2 => NForm => Str; g : AGender} ;
+    [S] = {s : Bool => Ints 3 => Str} ;
+    [Adv] = {s : Bool => Ints 3 => Str} ;
+    [AdV] = {s : Bool => Ints 3 => Str} ;
+    [IAdv] = {s : Bool => Ints 3 => QForm => Str} ;
+    [NP] = {s : Bool => Ints 3 => Role  => Str; a : Agr} ;
+    [AP] = {s : Bool => Ints 3 => AForm => Person => Str; adv : Bool => Ints 3 => Str; isPre : Bool} ;
+    [RS] = {s : Bool => Ints 3 => Agr   => Str} ;
+    [CN] = {s : Bool => Ints 3 => NForm => Str; g : AGender} ;
 
 }

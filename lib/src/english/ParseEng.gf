@@ -1,7 +1,7 @@
 --# -path=.:../abstract:../translator
 
 concrete ParseEng of ParseEngAbs = 
-  TenseX - [Pol, PNeg, PPos],
+  TenseX - [Pol, PNeg, PPos, SC],
   CatEng,
   NounEng - [PPartNP],
   AdjectiveEng,
@@ -142,7 +142,7 @@ lin
 
   VPSlashVS vs vp = 
     insertObj (\\a => infVP VVInf vp Simul CPos a) (predV vs) **
-    {c2 = ""; gapInMiddle = False} ;
+    {c2 = ""; missingAdv = False; gapInMiddle = False} ;
 
   PastPartRS ant pol vps = {
     s = \\agr => vps.ad ! agr ++ vps.ptp ++ vps.s2 ! agr ;

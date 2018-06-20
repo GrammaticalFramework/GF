@@ -58,7 +58,7 @@ module PGF2 (-- * PGF
              ConcName,Concr,languages,concreteName,languageCode,
 
              -- ** Linearization
-             linearize,linearizeAll,tabularLinearize,tabularLinearizeAll,bracketedLinearize,
+             linearize,linearizeAll,tabularLinearize,tabularLinearizeAll,bracketedLinearize,bracketedLinearizeAll,
              FId, LIndex, BracketedString(..), showBracketedString, flattenBracketedString,
              printName,
 
@@ -862,6 +862,7 @@ type LIndex = Int
 -- mark the beginning and the end of each constituent.
 data BracketedString
   = Leaf String                                                                -- ^ this is the leaf i.e. a single token
+  | BIND                                                                       -- ^ the surrounding tokens must be bound together
   | Bracket CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex CId [BracketedString]
                                                                                -- ^ this is a bracket. The 'CId' is the category of
                                                                                -- the phrase. The 'FId' is an unique identifier for
@@ -884,11 +885,13 @@ showBracketedString :: BracketedString -> String
 showBracketedString = render . ppBracketedString
 
 ppBracketedString (Leaf t) = text t
+ppBracketedString BIND     = text "&+"
 ppBracketedString (Bracket cat fid index _ bss) = parens (text cat <> colon <> int fid <+> hsep (map ppBracketedString bss))
 
 -- | Extracts the sequence of tokens from the bracketed string
 flattenBracketedString :: BracketedString -> [String]
 flattenBracketedString (Leaf w)              = [w]
+flattenBracketedString BIND                  = []
 flattenBracketedString (Bracket _ _ _ _ bss) = concatMap flattenBracketedString bss
 
 bracketedLinearize :: Concr -> Expr -> [BracketedString]
@@ -906,27 +909,8 @@ bracketedLinearize lang e = unsafePerformIO $
                            return []
                    else do ctree <- pgf_lzr_wrap_linref ctree pl
                            ref <- newIORef ([],[])
-                           allocaBytes (#size PgfLinFuncs) $ \pLinFuncs  ->
-                            alloca $ \ppLinFuncs -> do
-                              fptr_symbol_token <- wrapSymbolTokenCallback (symbol_token ref)
-                              fptr_begin_phrase <- wrapPhraseCallback (begin_phrase ref)
-                              fptr_end_phrase   <- wrapPhraseCallback (end_phrase ref)
-                              fptr_symbol_ne    <- wrapSymbolNonExistCallback (symbol_ne exn)
-                              fptr_symbol_meta  <- wrapSymbolMetaCallback (symbol_meta ref)
-                              (#poke PgfLinFuncs, symbol_token) pLinFuncs fptr_symbol_token
-                              (#poke PgfLinFuncs, begin_phrase) pLinFuncs fptr_begin_phrase
-                              (#poke PgfLinFuncs, end_phrase)   pLinFuncs fptr_end_phrase
-                              (#poke PgfLinFuncs, symbol_ne)    pLinFuncs fptr_symbol_ne
-                              (#poke PgfLinFuncs, symbol_bind)  pLinFuncs nullPtr
-                              (#poke PgfLinFuncs, symbol_capit) pLinFuncs nullPtr
-                              (#poke PgfLinFuncs, symbol_meta)  pLinFuncs fptr_symbol_meta
-                              poke ppLinFuncs pLinFuncs
-                              pgf_lzr_linearize (concr lang) ctree 0 ppLinFuncs pl
-                              freeHaskellFunPtr fptr_symbol_token
-                              freeHaskellFunPtr fptr_begin_phrase
-                              freeHaskellFunPtr fptr_end_phrase
-                              freeHaskellFunPtr fptr_symbol_ne
-                              freeHaskellFunPtr fptr_symbol_meta
+                           withBracketLinFuncs ref exn $ \ppLinFuncs ->
+                             pgf_lzr_linearize (concr lang) ctree 0 ppLinFuncs pl
                            failed <- gu_exn_is_raised exn
                            if failed
                              then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
@@ -935,6 +919,65 @@ bracketedLinearize lang e = unsafePerformIO $
                                        else throwExn exn
                              else do (_,bs) <- readIORef ref
                                      return (reverse bs)
+
+bracketedLinearizeAll :: Concr -> Expr -> [[BracketedString]]
+bracketedLinearizeAll lang e = unsafePerformIO $
+  withGuPool $ \pl -> 
+    do exn <- gu_new_exn pl
+       cts <- pgf_lzr_concretize (concr lang) (expr e) exn pl
+       failed <- gu_exn_is_raised exn
+       if failed
+         then do touchExpr e
+                 throwExn exn
+         else do ref <- newIORef ([],[])
+                 bss <- withBracketLinFuncs ref exn $ \ppLinFuncs ->
+                          collect ref cts ppLinFuncs exn pl
+                 touchExpr e
+                 return bss
+  where
+    collect ref cts ppLinFuncs exn pl = withGuPool $ \tmpPl -> do
+      ctree <- alloca $ \ptr -> do gu_enum_next cts ptr tmpPl
+                                   peek ptr
+      if ctree == nullPtr
+        then return []
+        else do ctree <- pgf_lzr_wrap_linref ctree pl
+                pgf_lzr_linearize (concr lang) ctree 0 ppLinFuncs pl
+                failed <- gu_exn_is_raised exn
+                if failed
+                  then do is_nonexist <- gu_exn_caught exn gu_exn_type_PgfLinNonExist
+                          if is_nonexist
+                            then collect ref cts ppLinFuncs exn pl
+                            else throwExn exn
+                   else do (_,bs) <- readIORef ref
+                           writeIORef ref ([],[])
+                           bss <- collect ref cts ppLinFuncs exn pl
+                           return (reverse bs : bss)
+
+withBracketLinFuncs ref exn f =
+  allocaBytes (#size PgfLinFuncs) $ \pLinFuncs  ->
+    alloca $ \ppLinFuncs -> do
+      fptr_symbol_token <- wrapSymbolTokenCallback (symbol_token ref)
+      fptr_begin_phrase <- wrapPhraseCallback (begin_phrase ref)
+      fptr_end_phrase   <- wrapPhraseCallback (end_phrase ref)
+      fptr_symbol_ne    <- wrapSymbolNonExistCallback (symbol_ne exn)
+      fptr_symbol_bind  <- wrapSymbolBindCallback (symbol_bind ref)
+      fptr_symbol_meta  <- wrapSymbolMetaCallback (symbol_meta ref)
+      (#poke PgfLinFuncs, symbol_token) pLinFuncs fptr_symbol_token
+      (#poke PgfLinFuncs, begin_phrase) pLinFuncs fptr_begin_phrase
+      (#poke PgfLinFuncs, end_phrase)   pLinFuncs fptr_end_phrase
+      (#poke PgfLinFuncs, symbol_ne)    pLinFuncs fptr_symbol_ne
+      (#poke PgfLinFuncs, symbol_bind)  pLinFuncs fptr_symbol_bind
+      (#poke PgfLinFuncs, symbol_capit) pLinFuncs nullPtr
+      (#poke PgfLinFuncs, symbol_meta)  pLinFuncs fptr_symbol_meta
+      poke ppLinFuncs pLinFuncs
+      res <- f ppLinFuncs
+      freeHaskellFunPtr fptr_symbol_token
+      freeHaskellFunPtr fptr_begin_phrase
+      freeHaskellFunPtr fptr_end_phrase
+      freeHaskellFunPtr fptr_symbol_ne
+      freeHaskellFunPtr fptr_symbol_bind
+      freeHaskellFunPtr fptr_symbol_meta
+      return res
   where
     symbol_token ref _ c_token = do
       (stack,bs) <- readIORef ref
@@ -957,17 +1000,22 @@ bracketedLinearize lang e = unsafePerformIO $
       gu_exn_raise exn gu_exn_type_PgfLinNonExist
       return ()
 
+    symbol_bind ref _ = do
+      (stack,bs) <- readIORef ref
+      writeIORef ref (stack,BIND : bs)
+      return ()
+
     symbol_meta ref _ meta_id = do
       (stack,bs) <- readIORef ref
       writeIORef ref (stack,Leaf "?" : bs)
 
-    throwExn exn = do
-      is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
-      if is_exn
-        then do c_msg <- (#peek GuExn, data.data) exn
-                msg <- peekUtf8CString c_msg
-                throwIO (PGFError msg)
-        else do throwIO (PGFError "The abstract tree cannot be linearized")
+throwExn exn = do
+  is_exn <- gu_exn_caught exn gu_exn_type_PgfExn
+  if is_exn
+    then do c_msg <- (#peek GuExn, data.data) exn
+            msg <- peekUtf8CString c_msg
+            throwIO (PGFError msg)
+    else do throwIO (PGFError "The abstract tree cannot be linearized")
 
 alignWords :: Concr -> Expr -> [(String, [Int])]
 alignWords lang e = unsafePerformIO $

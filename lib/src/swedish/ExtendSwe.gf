@@ -2,11 +2,13 @@
 concrete ExtendSwe of Extend = CatSwe **
   ExtendFunctor -
   [
-    GenNP, ComplBareVS, CompBareCN,
+    GenNP, GenModNP, ComplBareVS, CompBareCN,
     StrandRelSlash, EmptyRelSlash, StrandQuestSlash,
+    PassVPSlash, PassAgentVPSlash,
     MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
     MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
     ICompAP,
+    AdAdV, PositAdVAdj, GerundCN, GerundNP, GerundAdv, PresPartAP, PastPartAP, PastPartAgentAP,
     RNP, RNPList, ReflRNP, ReflPron, ReflPoss, PredetRNP, ConjRNP,
     Base_rr_RNP, Base_nr_RNP, Base_rn_RNP, Cons_rr_RNP, Cons_nr_RNP,
     CompoundN
@@ -24,6 +26,7 @@ concrete ExtendSwe of Extend = CatSwe **
       det = DDef Indef
       } ;
 
+    GenModNP num np cn = DetCN (DetQuant (GenNP (lin NP np)) num) cn ;
 
     ComplBareVS v s  = insertObj (\\_ => s.s ! Sub) (predV v) ;
 
@@ -40,7 +43,7 @@ concrete ExtendSwe of Extend = CatSwe **
       } ;
     EmptyRelSlash slash = {
       s = \\t,a,p,ag,_ => 
-          slash.s ! t ! a ! p ! Sub ++ slash.c2.s ;
+          slash.s ! t ! a ! p ! Sub ++ slash.n3 ! ag ++ slash.c2.s ;
       c = NPAcc
       } ;
 
@@ -56,6 +59,11 @@ concrete ExtendSwe of Extend = CatSwe **
               }
       } ;
 
+  lin
+    PassVPSlash vps = 
+      insertObj (\\a => vps.c2.s ++ vps.n3 ! a) (passiveVP vps) ;
+    PassAgentVPSlash vps np = 
+      insertObjPost (\\a => vps.c2.s ++ vps.n3 ! a) (insertObj (\\_ => (PrepNP by8agent_Prep np).s) (passiveVP vps)) ;
 
   lincat
     VPI   = {s : VPIForm => Agr => Str} ;
@@ -148,6 +156,48 @@ concrete ExtendSwe of Extend = CatSwe **
       s  = \\n,s,c => n1.co ++ BIND ++ n2.s ! n ! s ! c ;
       co = n1.co ++ BIND ++ n2.co ;
       g  = n2.g
+    } ;
+    
+  lin
+    AdAdV = cc2 ;
+
+    PositAdVAdj a = {s = a.s ! AAdv} ;
+    
+    PresPartAP vp = {
+      s = \\af => case vp.isSimple of {
+                    True  => partVPPlus     vp (PartPres Sg Indef Nom) (aformpos2agr af) Pos ;
+                    False => partVPPlusPost vp (PartPres Sg Indef Nom) (aformpos2agr af) Pos
+                  } ;
+      isPre = vp.isSimple
+    } ;
+
+    PastPartAP vp = {
+      s = \\af => case vp.isSimple of {
+                    True  => partVPPlus     vp (PartPret af Nom) (aformpos2agr af) Pos ;
+                    False => partVPPlusPost vp (PartPret af Nom) (aformpos2agr af) Pos
+                  } ;
+      isPre = vp.isSimple
+    } ;
+
+    PastPartAgentAP vp np = {
+      s = \\af => partVPPlusPost vp (PartPret af Nom) (aformpos2agr af) Pos ++ "av" ++ np.s ! accusative ;
+      isPre = False
+    } ;
+
+    GerundCN vp = {  -- infinitive: att dricka öl, att vara glad
+      s = \\_,_,_ => "att" ++ infVP vp {g = Utr ; n = Sg ; p = P3} ; 
+      g = Neutr ;
+      isMod = False
+    } ;
+
+    GerundNP vp = {  -- infinitive: att dricka öl, att vara glad
+      s = \\_ => "att" ++ infVP vp {g = Utr ; n = Sg ; p = P3} ; 
+      a = {g = Neutr ; n = Sg ; p = P3} ;
+      isPron = False
+    } ;
+
+    GerundAdv vp = {
+      s = partVPPlusPost vp (PartPres Sg Indef (Nom|Gen)) {g = Utr ; n = Sg ; p = P3} Pos -- sovande(s) i sängen
     } ;
 }
 

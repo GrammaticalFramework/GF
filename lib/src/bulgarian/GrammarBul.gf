@@ -15,7 +15,7 @@ concrete GrammarBul of Grammar =
   TextBul,
   StructuralBul,
   IdiomBul,
-  TenseX - [CAdv,IAdv]
+  TenseX - [CAdv,IAdv,AdV,SC]
   ** {
   flags coding=cp1251 ;
 

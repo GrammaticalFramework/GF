@@ -42,16 +42,17 @@ incomplete concrete CatScand of Cat =
       s : Voice => VPForm => {
         fin : Str ;          -- V1 har  ---s1
         inf : Str ;          -- V2 sagt ---s4
-        a1  : Polarity => Agr => Str * Str ; -- A1 inte ---s3 själv/själva/självt
+        a1  : Polarity => Agr => Str * Str  -- A1 inte ---s3 själv/själva/självt
 	                                     -- p1: with infinite    "jag har inte älskat dig",
-					     -- p2: without infinite "jag älskar dig inte"	                                     
+					                     -- p2: without infinite "jag älskar dig inte"
         } ;
       sp : PartForm => Str ;
       n1 : Agr => Str ;      -- N2 dig  ---s5  
       n2 : Agr => Str ;      -- N2 den där mannen  ---s5  
       a2 : Str ;             -- A2 idag ---s6
       ext : Str ;            -- S-Ext att hon går   ---s7
-      en2,ea2,eext : Bool    -- indicate if the field exists
+      en2,ea2,eext : Bool ;  -- indicate if the field exists
+      isSimple : Bool
       } ;
     VPSlash = CommonScand.VP ** {
       n3 : Agr => Str ;  -- object-control complement
@@ -132,13 +133,12 @@ incomplete concrete CatScand of Cat =
     V2V = \v -> infVP (predV v) agrUSgP3 ++ v.c2.s ;
 
     Conj = \c -> c.s1 ++ c.s2 ;
-{-
-    A = \a -> a.s ! AAdj Posit Nom ;
-    A2 = \a -> a.s ! AAdj Posit Nom ++ a.c2 ;
 
-    N = \n -> n.s ! Sg ! Nom ;
-    N2 = \n -> n.s ! Sg ! Nom ++ n.c2 ;
-    N3 = \n -> n.s ! Sg ! Nom ++ n.c2 ++ n.c3 ;
--}
+    A = \a -> a.s ! AF (APosit (Strong (GSg Utr))) Nom ;
+    A2 = \a -> a.s ! AF (APosit (Strong (GSg Utr))) Nom ++ a.c2.s ;
+
+    N = \n -> n.s ! Sg ! Indef ! Nom ;
+    N2 = \n -> n.s ! Sg ! Indef ! Nom ++ n.c2.s ;
+    N3 = \n -> n.s ! Sg ! Indef ! Nom ++ n.c2.s ++ n.c3.s ;
 
 }

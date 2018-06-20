@@ -24,8 +24,12 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                                } ;
                           s = det.s ! True ! cn.g ! role ++ cn.s ! nf
                       in case role of {
-                           RObj Dat => "на" ++ s; 
-                           _        => s
+                           RObj Dat      => "на" ++ s;
+                           RObj WithPrep => case det.p of {
+                                              Pos => with_Word ++ s ;
+                                              Neg => "без" ++ s
+                                            } ;
+                           _             => s
                          } ;
         a = {gn = gennum cn.g (numnnum det.nn); p = P3} ;
         p = det.p
@@ -42,8 +46,9 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       } ;
     
     UsePN pn = { s = table {
-                       RObj Dat => "на" ++ pn.s; 
-                       _        => pn.s
+                       RObj Dat      => "на" ++ pn.s; 
+                       RObj WithPron => with_Word ++ pn.s; 
+                       _             => pn.s
                      } ;
                  a = {gn = GSg pn.g; p = P3} ;
                  p = Pos
@@ -51,7 +56,12 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     UsePron p = {s = p.s; a=p.a; p=Pos} ;
 
     PredetNP pred np = {
-      s = \\c => pred.s ! np.a.gn ++ np.s ! c ;
+      s = \\c => case c of {
+                   RObj Dat      => "на";
+                   RObj WithPrep => with_Word; 
+                   _             => ""
+                 } ++
+                 pred.s ! np.a.gn ++ np.s ! RObj Acc ;
       a = np.a ;
       p = np.p
       } ;
@@ -149,9 +159,10 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
 
     MassNP cn = {
       s = table {
-            RVoc     => cn.s ! NFVocative ;
-            RObj Dat => "на" ++ cn.s ! (NF Sg Indef); 
-            _        => cn.s ! (NF Sg Indef)
+            RVoc          => cn.s ! NFVocative ;
+            RObj Dat      => "на" ++ cn.s ! (NF Sg Indef) ;
+            RObj WithPrep => with_Word ++ cn.s ! (NF Sg Indef); 
+            _             => cn.s ! (NF Sg Indef)
           } ;
       a = {gn = gennum cn.g Sg; p = P3} ;
       p = Pos
@@ -161,21 +172,21 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     UseN2 noun = noun ;
 
     ComplN2 f x = {s = \\nf => f.s ! nf ++ f.c2.s ++ x.s ! RObj f.c2.c; g=f.g} ;
-    ComplN3 f x = {s = \\nf => f.s ! nf ++ f.c2.s ++ x.s ! RObj f.c2.c; c2 = f.c3; g=f.g} ;
+    ComplN3 f x = {s = \\nf => f.s ! nf ++ f.c2.s ++ x.s ! RObj f.c2.c; rel = \\af => f.rel ! af ++ f.c2.s ++ x.s ! RObj f.c2.c; relPost = True; c2 = f.c3; g=f.g} ;
 
-    Use2N3 f = {s = f.s ; g=f.g ; c2 = f.c2} ;
-    Use3N3 f = {s = f.s ; g=f.g ; c2 = f.c3} ;
+    Use2N3 f = {s = f.s ; rel = f.rel ; relPost = f.relPost ; g=f.g ; c2 = f.c2} ;
+    Use3N3 f = {s = f.s ; rel = f.rel ; relPost = f.relPost ; g=f.g ; c2 = f.c3} ;
 
 
     AdjCN ap cn = {
       s = \\nf => case ap.isPre of {
-                    True  => (ap.s ! nform2aform nf cn.g) ++ (cn.s ! (indefNForm nf)) ;
-                    False => (cn.s ! nf) ++ (ap.s ! nform2aform (indefNForm nf) cn.g)
+                    True  => (ap.s ! nform2aform nf cn.g ! P3) ++ (cn.s ! (indefNForm nf)) ;
+                    False => (cn.s ! nf) ++ (ap.s ! nform2aform (indefNForm nf) cn.g ! P3)
                   } ;
       g = cn.g
       } ;
     RelCN cn rs = {
-      s = \\nf => cn.s ! nf ++ rs.s ! {gn=gennum cn.g (numNForm nf); p=P3} ;
+      s = \\nf => cn.s ! nf ++ rs.s ! agrP3 (gennum cn.g (numNForm nf)) ;
       g = cn.g
       } ;
     AdvCN cn ad = {
@@ -183,7 +194,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       g = cn.g
     } ;
 
-    SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s; g=ANeut} ;
+    SentCN cn sc = {s = \\nf => cn.s ! nf ++ sc.s ! agrP3 (gennum cn.g (numNForm nf)); g=cn.g} ;
 
     ApposCN cn np = {s = \\nf => cn.s ! nf ++ np.s ! RSubj; g=cn.g} ;
 
@@ -208,4 +219,25 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
       a = np.a ;
       p = np.p
       } ;
+
+    AdjDAP dap ap = {s = \\sp,g,role => let g' = case g of {
+                                                AMasc _       => Masc ;
+                                                AFem          => Fem ;
+                                                ANeut         => Neut
+                                              } ;
+                                         aform = case <numnnum dap.nn,dap.spec,role> of {
+                                                   <Sg,Def,RSubj> => ASgMascDefNom ;
+                                                   <Sg,_  ,_    > => ASg g' dap.spec ;
+                                                   <Pl,_  ,_    > => APl dap.spec
+                                                 } ;
+                                     in dap.s ! True ! g ! role ++ ap.s ! aform ! P3 ;
+                     nn = dap.nn;
+                     spec = dap.spec;
+                     p = dap.p
+                    } ;
+    DetDAP det = {s = \\sp,g,role => det.s ! sp ! g ! role;
+                  nn = det.nn;
+                  spec = det.spec;
+                  p = det.p
+                 } ;
 }

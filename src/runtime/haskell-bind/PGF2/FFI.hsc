@@ -340,6 +340,7 @@ foreign import ccall "pgf/pgf.h pgf_lzr_get_table"
 type SymbolTokenCallback = Ptr (Ptr PgfLinFuncs) -> CString -> IO ()
 type PhraseCallback = Ptr (Ptr PgfLinFuncs) -> CString -> CInt -> CSizeT -> CString -> IO ()
 type NonExistCallback = Ptr (Ptr PgfLinFuncs) -> IO ()
+type BindCallback = Ptr (Ptr PgfLinFuncs) -> IO ()
 type MetaCallback = Ptr (Ptr PgfLinFuncs) -> CInt -> IO ()
 
 foreign import ccall "wrapper"
@@ -350,6 +351,9 @@ foreign import ccall "wrapper"
 
 foreign import ccall "wrapper"
   wrapSymbolNonExistCallback :: NonExistCallback -> IO (FunPtr NonExistCallback)
+
+foreign import ccall "wrapper"
+  wrapSymbolBindCallback :: BindCallback -> IO (FunPtr BindCallback)
 
 foreign import ccall "wrapper"
   wrapSymbolMetaCallback :: MetaCallback -> IO (FunPtr MetaCallback)

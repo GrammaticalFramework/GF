@@ -47,9 +47,10 @@ resource ResDut = ParamX ** open Prelude, Predef in {
       _ + ("ie"|"ee") => mkNoun s (s + "ën") Utr ; -- zee→zeeën, knie→knieën. 
                                                    -- olie→oliën, industrie→industrieën with 2-arg constructor.
       _ + ("i"|"u")   => mkNoun s (endCons s + "en") Utr ;
+
+      b + #diphthong + ?         => mkNoun s (endCons s + "en") Utr ; -- boek→boeken
+      b + v@#dupVow + c@?        => mkNoun s (b + shortVoc v c + "en") Utr ;
       b + v@#vowel + c@#dupCons  => mkNoun s (b + v + c + c + "en") Utr ;
-      b + v@#dupVow + c@? => mkNoun s (b + shortVoc v c + "en") Utr ; 
-      b + #diphthong + ?  => mkNoun s (endCons s + "en") Utr ;
       _ + "e" => mkNoun s (s + "s") Utr ; -- vrede→vredes. Might not be a good generalisation though. /IL2018
       _       => mkNoun s (endCons s + "en") Utr
       } ;
@@ -110,7 +111,7 @@ resource ResDut = ParamX ** open Prelude, Predef in {
 
           b + v@#dupVow + c@?  => b + shortVoc v c + "e" ;
           b + #diphthong + ?   => endCons s + "e" ;
-          b + v@#vowel + c@dupCons  => b + v + c + c + "e" ;
+          b + v@#vowel + c@#dupCons  => b + v + c + c + "e" ;
           _ => endCons s + "e"
           } ;
       in reg2Adjective s se ;
@@ -357,7 +358,7 @@ param
        VInf        => "zullen" ;
        VInfFull    => "zullen" ;
        VPresSg1    => "zal" ;
-       VPresSg2    => "zult" ;
+       VPresSg2    => "zal" ;
        VPresSg3    => "zal" ;
        VPresPl     => "zullen" ;
        VPastSg     => "zou" ; --# notpresent
@@ -382,7 +383,7 @@ param
        VInf        => "kunnen" ;
        VInfFull    => "kunnen" ;
        VPresSg1    => "kan" ;
-       VPresSg2    => "kunt" ;
+       VPresSg2    => "kan" ;
        VPresSg3    => "kan" ; ---- kun je
        VPresPl     => "kunnen" ;
        VPastSg     => "kon" ; --# notpresent

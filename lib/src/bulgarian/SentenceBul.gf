@@ -11,20 +11,21 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
                                        VMedial  _ => RSubj ;
                                        VPhrasal c => RObj c})) np.a np.p vp ;
 
-    PredSCVP sc vp = mkClause sc.s {gn=GSg Masc; p=P3} Pos vp ;
+    PredSCVP sc vp = let agr = {gn=GSg Masc; p=P3} in mkClause (sc.s ! agr) agr Pos vp ;
 
     ImpVP vp = {
       s = \\p,gn => 
         let agr    = {gn = gn ; p = P2} ;
-            verb   = vp.s ! Perf ! VImperative (numGenNum gn) ;
+            verb   : Aspect -> Str
+                   = \asp -> vp.s ! asp ! VImperative (numGenNum gn) ;
             compl  = vp.compl ! agr ;
             clitic = case vp.vtype of {
-	               VNormal    => [] ;
-	               VMedial c  => reflClitics ! c ;
-	               VPhrasal c => personalClitics ! c ! agr.gn ! agr.p
-	             } ;
-        in case p of {Pos => vp.ad.s ++ verb ++ clitic ;
-                      Neg => "не" ++ vp.ad.s ++ clitic ++ verb} ++ compl ;
+	                   VNormal    => [] ;
+	                   VMedial c  => reflClitics ! c ;
+	                   VPhrasal c => personalClitics ! c ! agr.gn ! agr.p
+	                 } ;
+        in case p of {Pos => vp.ad.s ++ verb Perf ++ clitic ;
+                      Neg => "не" ++ vp.ad.s ++ clitic ++ verb Imperf} ++ compl ;
     } ;
 
     SlashVP np slash =  {
@@ -32,7 +33,8 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
                                                        ad     = slash.ad ;
                                                        compl  = \\_ => slash.compl1 ! np.a ++ slash.compl2 ! agr ;
                                                        vtype  = slash.vtype ;
-                                                       p      = Pos}).s ;
+                                                       p      = Pos ;
+                                                       isSimple = slash.isSimple}).s ;
       c2 = slash.c2
     } ;
 
@@ -49,9 +51,9 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
       c2 = slash.c2
     } ;
 
-    EmbedS  s  = {s = comma ++ "че" ++ s.s} ;
-    EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = daComplex Simul Pos vp ! Perf ! {gn=GSg Masc; p=P1}} ;
+    EmbedS  s  = {s = \\_ => "че" ++ s.s} ;
+    EmbedQS qs = {s = \\_ => qs.s ! QIndir} ;
+    EmbedVP vp = {s = \\agr => daComplex Simul Pos vp ! Perf ! agr} ;
 
     UseCl t p cl = {
       s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! Main

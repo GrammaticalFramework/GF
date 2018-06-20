@@ -6,7 +6,7 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
 
     PredVP np vp = mkClause (np.s ! npNom) np.a vp ;
 
-    PredSCVP sc vp = mkClause sc.s (agrP3 Sg) vp ;
+    PredSCVP sc vp = let a = agrP3 Sg in mkClause (sc.s ! a) a vp ;
 
     ImpVP vp = {
       s = \\pol,n => 
@@ -37,9 +37,9 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
         (insertObj (\\_ => conjThat ++ slash.s) (predV vs))  **
         {c2 = slash.c2} ;
 
-    EmbedS  s  = {s = conjThat ++ s.s} ;
-    EmbedQS qs = {s = qs.s ! QIndir} ;
-    EmbedVP vp = {s = infVP VVInf vp Simul CPos (agrP3 Sg)} ; --- agr
+    EmbedS  s  = {s = \\_ => conjThat ++ s.s} ;
+    EmbedQS qs = {s = \\_ => qs.s ! QIndir} ;
+    EmbedVP vp = {s = \\a => infVP VVInf vp Simul CPos a} ;
 
     UseCl  t p cl = {
       s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! oDir

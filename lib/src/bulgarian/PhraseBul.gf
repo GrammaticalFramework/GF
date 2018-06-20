@@ -19,7 +19,7 @@ concrete PhraseBul of Phrase = CatBul ** open Prelude, ResBul in {
     UttAdv adv = adv ;
     UttCN n = {s = n.s ! NF Sg Indef} ;
     UttCard n = {s = n.s ! CFNeut Indef} ;
-    UttAP ap = {s = ap.s ! ASg Masc Indef} ;
+    UttAP ap = {s = ap.s ! ASg Masc Indef ! P3} ;
     UttInterj i = i ;
 
     NoPConj = {s = []} ;

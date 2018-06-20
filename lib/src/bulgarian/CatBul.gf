@@ -1,5 +1,5 @@
 --# -coding=utf8
-concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, (R = ParamX) in {
+concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, Predef, (R = ParamX) in {
 
   lincat
 -- Tensed/Untensed
@@ -40,19 +40,21 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
 
 -- Adjective
 
-    AP = {s : AForm => Str; adv : Str; isPre : Bool} ;
+    AP = {s : AForm => Person => Str; adv : Str; isPre : Bool} ;
 
--- Adjective
+-- Adverb
 
     CAdv = {s : Str; sn : Str} ;
     IAdv = {s : QForm => Str} ;
+    AdV  = {s : Str; p : Polarity} ;
+    SC   = {s : Agr => Str} ;
 
 -- Noun
 
     CN = {s : NForm => Str; g : AGender} ;
     NP = {s : Role => Str; a : Agr; p : Polarity} ;
     Pron = {s : Role => Str; clit : Case => Str; gen : AForm => Str; a : Agr} ;
-    Det = {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species; p : Polarity} ;
+    Det,DAP = {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species; p : Polarity} ;
     Predet = {s : GenNum => Str} ;
     Ord = {s : AForm => Str} ;
     Num = {s : CardForm => Str; nn : NNumber; nonEmpty : Bool} ;
@@ -66,45 +68,47 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
 
 -- Structural
 
-    Conj = {s : Str; distr : Bool; conj : Ints 2; n : Number} ;
+    Conj = {s : Str; distr : Bool; conj : Ints 3; n : Number} ;
     Subj = {s : Str} ;
     Prep = {s : Str; c : Case} ;
 
 -- Open lexical classes, e.g. Lexicon
 
     V, VS, VQ, VA = Verb ;
-    V2, V2A = Verb ** {c2 : Preposition} ;
-    V2V, V2S, V2Q = Verb ** {c2, c3 : Preposition} ; --- AR
+    V2 = Verb ** {c2 : Preposition} ;
+    V2A, V2V = Verb ** {c2, c3 : Preposition; subjCtrl : Bool} ;
+    V2S, V2Q = Verb ** {c2, c3 : Preposition} ;
     V3 = Verb ** {c2, c3 : Preposition} ;
     VV = Verb ** {typ : VVType};
 
     A = {s : AForm => Str; adv : Str} ;
     A2 = {s : AForm => Str; adv : Str; c2 : Str} ;
-    
-    N = {s : NForm => Str; rel : AForm => Str; g : AGender} ;
-    N2 = {s : NForm => Str; g : AGender} ** {c2 : Preposition} ;
-    N3 = {s : NForm => Str; g : AGender} ** {c2,c3 : Preposition} ;
+
+    N  = {s : NForm => Str; rel : AForm => Str; relPost : Bool; g : AGender} ;
+    N2 = {s : NForm => Str; rel : AForm => Str; relPost : Bool; g : AGender} ** {c2 : Preposition} ;
+    N3 = {s : NForm => Str; rel : AForm => Str; relPost : Bool; g : AGender} ** {c2,c3 : Preposition} ;
     PN = {s : Str; g : Gender} ;
-    
+
   lindef
     SSlash = \s -> {s = \\_ => s; c2 = {s=""; c=Acc}};
     ClSlash = \s -> {s = \\_,_,_,_,_ => s; c2 = {s=""; c=Acc}};
     
     VP = \s -> predV {s = \\_,_ => s; vtype = VNormal};
-    VPSlash = \s -> slashV {s = \\_,_ => s; vtype = VNormal} {s=""; c=Acc};
+    VPSlash = \s -> slashV {s = \\_,_ => s; vtype = VNormal} {s=""; c=Acc} False ;
     
     V, VS, VQ, VA = \s -> {s = \\_,_ => s; vtype = VNormal};
-    V2, V2A = \s -> {s = \\_,_ => s; vtype = VNormal; c2 = {s=""; c=Acc}};
-    V2V, V2S, V2Q = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
+    V2 = \s -> {s = \\_,_ => s; vtype = VNormal; c2 = {s=""; c=Acc}};
+    V2A, V2V = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}; subjCtrl = False};
+    V2S, V2Q = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
     V3 = \s -> {s = \\_,_ => s; vtype = VNormal; c2,c3 = {s=""; c=Acc}};
-    VV = \s -> {s = \\_,_ => s; vtype = VNormal; typ = VVInf};
+    VV = \s -> {s = \\_,_ => s; vtype = VNormal; typ = VVInf Perf};
 
 	A = \s -> {s = \\_ => s; adv = s};
     A2 = \s -> {s = \\_ => s; adv = s; c2 = ""};
     
-    N  = \s -> {s = \\_ => s; rel = \\_ => s; g = AMasc NonHuman};
-    N2 = \s -> {s = \\_ => s; g = AMasc NonHuman; c2 = {s=""; c=Acc}};
-    N3 = \s -> {s = \\_ => s; g = AMasc NonHuman; c2,c3 = {s=""; c=Acc}};
+    N  = \s -> {s = \\_ => s; rel = \\_ => s; relPost = False; g = AMasc NonHuman};
+    N2 = \s -> {s = \\_ => s; rel = \\_ => s; relPost = False; g = AMasc NonHuman; c2 = {s=""; c=Acc}};
+    N3 = \s -> {s = \\_ => s; rel = \\_ => s; relPost = False; g = AMasc NonHuman; c2,c3 = {s=""; c=Acc}};
     
   linref
     SSlash = \ss -> ss.s ! agrP3 (GSg Masc) ++ ss.c2.s;
@@ -116,7 +120,8 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
                                 ad = vps.ad ;
                                 compl = \\a => vps.compl1 ! a ++ vps.c2.s ++ vps.compl2 ! a ;
                                 vtype = vps.vtype ;
-                                p     = Pos
+                                p     = Pos ;
+                                isSimple = vps.isSimple
                                }
                       in linrefVP vp;
 
@@ -127,16 +132,19 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv] ** open ResBul, Prelude, Predef, 
                        } ;
 
     V, VS, VQ, VA = \v -> linrefVP (predV v);
-    V2, V2A = \v -> linrefVP (predV v) ++ v.c2.s;
-    V2V = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s ++ "да";
-    V2S, V2Q = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s;
-    V3 = \v -> linrefVP (predV v) ++ v.c2.s ++ v.c3.s;
+    V2 = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ;
+    V2V = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ++ linrefPrep v.c3 ++ "да";
+    V2A, V2S, V2Q = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ++ linrefPrep v.c3;
+    V3 = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ++ linrefPrep v.c3;
     VV = \v -> linrefVP (predV v);
+
+    Prep = linrefPrep ;
 
 	A = \a -> a.s ! ASg Masc Indef;
     A2 = \a -> a.s ! ASg Masc Indef ++ a.c2;
 
     N  = \n -> n.s ! NF Sg Indef;
-    N2 = \n -> n.s ! NF Sg Indef ++ n.c2.s;
-    N3 = \n -> n.s ! NF Sg Indef ++ n.c2.s ++ n.c3.s;
+    N2 = \n -> n.s ! NF Sg Indef ++ linrefPrep n.c2;
+    N3 = \n -> n.s ! NF Sg Indef ++ linrefPrep n.c2 ++ linrefPrep n.c3;
+
 }

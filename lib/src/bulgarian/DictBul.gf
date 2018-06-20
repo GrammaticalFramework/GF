@@ -5924,7 +5924,7 @@ lin
   gadost_N = mkN049 "гадост" ;
   gad_ja__V = stateV (mkV173 "гадя") ;
   gae_ch_en_A = mkA079 "гаечен" ;
-  gaz_N = mkN049 "газ" ;
+  gaz_N = mkN001 "газ" ;
   gazgenerator_N = mkN007 "газгенератор" ;
   gazgeneratoren_A = mkA079 "газгенераторен" ;
   gazela_N = mkN041 "газела" ;
@@ -29808,7 +29808,7 @@ lin
   otb_ja_gvane_N = mkN071 "отбягване" ;
   otvara_N = mkN041 "отвара" ;
   otvara_ch_ka_N = mkN041 "отварачка" ;
-  otvar_ja_m_V = actionV (mkV187 "отварям") (mkV152 "отбегна") ;
+  otvar_ja_m_V = actionV (mkV187 "отварям") (mkV173 "отворя")) ;
   otvar_ja_ne_N = mkN071 "отваряне" ;
   otve_zj_dam_V = actionV (mkV186 "отвеждам") (mkV145 "отведа") ;
   otve_zj_dane_N = mkN071 "отвеждане" ;
@@ -40670,7 +40670,7 @@ lin
   razpakovane_N = mkN071 "разпаковане" ;
   razpalvam_V = actionV (mkV186 "разпалвам") (mkV173 "разпаля") ;
   razpalvane_N = mkN071 "разпалване" ;
-  razpalen_A = mkA079 "разпален" ;
+  razpalen_A = mkA076 "разпален" ;
   razpalenost_N = mkN049 "разпаленост" ;
   razpal_ja_m_V = actionV (mkV187 "разпалям") (mkV173 "разпаля") ;
   razpal_ja_ne_N = mkN071 "разпаляне" ;

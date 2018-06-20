@@ -82,7 +82,8 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
     n2  : Agr => Str = \\a => verb.part ; ---- check: hon ser (inte) vacker ut ; spotta (inte) ut snusen
     a2  : Str = [] ;
     ext : Str = [] ;
-    en2,ea2,eext : Bool = False   -- indicate if the field exists
+    en2,ea2,eext : Bool = False ;   -- indicate if the field exists
+    isSimple = True
     } ;
 
   comma : Str = SOFT_BIND ++ "," ;

@@ -32,7 +32,7 @@ lin
   is_right_VP = mkVP (mkA084 "верен") ;
   is_wrong_VP = mkVP (mkA079 "грешен") ;
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
-  weather_adjCl a = R.mkClause (a.s ! R.ASg R.Masc R.Indef) {gn=R.GSg R.Masc; p=R.P3} R.Pos (R.insertObj (\\_=>"") R.Pos (R.predV R.verbBe)) ;
+  weather_adjCl a = R.mkClause (a.s ! R.ASg R.Masc R.Indef ! R.P3) {gn=R.GSg R.Masc; p=R.P3} R.Pos (R.insertObj (\\_=>"") R.Pos (R.predV R.verbBe)) ;
 
 lin
   weekdayPunctualAdv w = SyntaxBul.mkAdv in_Prep (mkNP w) ;         -- on Sunday
@@ -133,7 +133,7 @@ lin
 oper 
   mkMonth : Str -> Str -> N = \n,a -> lin N {
     s = \\_ => n ;
-    rel = (mkA078 a).s ;
+    rel = (mkA078 a).s ; relPost = False ;
     g = R.AMasc R.NonHuman
   } ;
 }

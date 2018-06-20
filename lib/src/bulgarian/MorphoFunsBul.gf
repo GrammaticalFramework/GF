@@ -16,7 +16,8 @@ oper
 -- after the verb. Some can be preverbal (e.g. "always").
 
   mkAdv : Str -> Adv = \x -> ss x ** {lock_Adv = <>} ;
-  mkAdV : Str -> AdV = \x -> ss x ** {lock_AdV = <>} ;
+  mkAdV : Str -> AdV = \x -> {s = x; p = Pos; lock_AdV = <>} ;
+  mkAdVNegative : Str -> AdV = \x -> {s = x; p = Neg; lock_AdV = <>} ;
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
@@ -124,13 +125,24 @@ oper
 
   mkV2S : V -> Prep -> Prep -> V2S ;
   mkV2S v p t = prepV2 v p ** {c3 = t ; lock_V2S = <>} ;
-  
+
   mkV2V : V -> Prep -> Prep -> V2V ;
-  mkV2V v p t = prepV2 v p ** {c3 = t ; lock_V2V = <>} ;
+  mkV2V v p t = prepV2 v p ** {c3 = t ; subjCtrl = False ; lock_V2V = <>} ;
   
-  mkV2A : V -> Prep -> V2A ;
-  mkV2A v p = prepV2 v p ** {lock_V2A = <>} ;
+  subjCtrlV2V : V -> Prep -> Prep -> V2V ;
+  subjCtrlV2V v p t = prepV2 v p ** {c3 = t ; subjCtrl = True ; lock_V2V = <>} ;
+
+  mkV2A = overload {
+    mkV2A : V -> Prep -> V2A
+      = \v, p -> prepV2 v p ** {c3 = noPrep ; subjCtrl = False ; lock_V2A = <>} ;
   
+    mkV2A : V -> Prep -> Prep -> V2A
+      = \v, p, t -> prepV2 v p ** {c3 = t ; subjCtrl = False ; lock_V2A = <>} ;
+  } ;
+  
+  subjCtrlV2A : V -> Prep -> Prep -> V2A
+    = \v, p, t -> prepV2 v p ** {c3 = t ; subjCtrl = True ; lock_V2A = <>} ;
+
   mkV2Q : V -> Prep -> Prep -> V2Q ;
   mkV2Q v p t = prepV2 v p ** {c3 = t ; lock_V2Q = <>} ;
   
@@ -138,7 +150,10 @@ oper
   mkVS  v = v ** {lock_VS = <>} ;
 
   mkVV : V -> VV ;
-  mkVV  v = v ** {typ = VVInf; lock_VV = <>} ;
+  mkVV  v = v ** {typ = VVInf Perf; lock_VV = <>} ;
+  
+  imperfVV : V -> VV ;
+  imperfVV  v = v ** {typ = VVInf Imperf; lock_VV = <>} ;
 
   gerundVV : V -> VV ;
   gerundVV  v = v ** {typ = VVGerund; lock_VV = <>} ;
@@ -155,7 +170,7 @@ oper
 --
 
   prepN2 : N -> Prep -> N2 ;
-  prepN2 n p = {s = n.s; g = n.g; c2 = p; lock_N2 = <>} ;
+  prepN2 n p = n ** {c2 = p} ;
   
   dirN2 : N -> N2 ;
   dirN2 n = prepN2 n noPrep ;
@@ -165,7 +180,7 @@ oper
 --
 
   prepN3 : N -> Prep -> Prep -> N3 ;
-  prepN3 n p q = {s = n.s; g = n.g; c2 = p; c3 = q; lock_N3 = <>} ;
+  prepN3 n p q = n ** {c2 = p; c3 = q} ;
   
   dirN3 : N -> Prep -> N3 ;
   dirN3 n p = prepN3 n noPrep p ;
@@ -175,9 +190,9 @@ oper
 
   compoundN = overload {
     compoundN : Str -> N -> N 
-      = \s,n -> {s = \\nform => s ++ n.s ! nform ; rel = \\aform => s ++ n.rel ! aform; g=n.g ; anim=n.anim ; lock_N = <>} ;
+      = \s,n -> {s = \\nform => s ++ n.s ! nform ; rel = \\aform => s ++ n.rel ! aform; relPost = True; g=n.g ; anim=n.anim ; lock_N = <>} ;
     compoundN : N -> Str -> N 
-      = \n,s -> {s = \\nform => n.s ! nform ++ s; rel = \\aform => n.rel ! aform ++ s; g=n.g ; anim=n.anim ; lock_N = <>} ;
+      = \n,s -> {s = \\nform => n.s ! nform ++ s; rel = \\aform => n.rel ! aform ++ s; relPost = True; g=n.g ; anim=n.anim ; lock_N = <>} ;
     compoundN : N -> N -> N 
       = \n1,n2 -> lin N
                 {s = table {
@@ -186,22 +201,37 @@ oper
                        NFPlCount   => n1.s ! NFPlCount     ++ n2.s ! (NF Pl Indef) ;
                        NFVocative  => n1.s ! NFVocative    ++ n2.s ! (NF Sg Indef)
                      } ;
-                 rel = \\aform => n1.rel ! aform;
+                 rel = \\aform => n1.rel ! aform; relPost = True;
                  g = n1.g
                 } ;
     compoundN : A -> N -> N 
       = \a,n -> lin N
               {s   = \\nf => (a.s ! nform2aform nf n.g) ++ (n.s ! (indefNForm nf)) ;
                rel = \\aform => a.s ! aform ++ n.rel ! indefAForm aform ;
+               relPost = False ;
                g   = n.g
               } ;
   } ;
   
-  dualN : N -> A -> N;
-  dualN n a = lin N {
-    s   = n.s;
-    rel = a.s;
-    g   = n.g
+  dualN = overload {
+    dualN : N -> A -> N
+      = \n,a -> lin N { s   = n.s;
+                        rel = a.s; relPost = False;
+                        g   = n.g
+                      } ;
+                      
+    dualN : N -> Prep -> N
+      = \n,p -> lin N { s   = n.s;
+                        rel = \\_ => p.s ++ 
+                                     case p.c of {
+                                       Acc      => "" ;
+                                       Dat      => "на" ;
+                                       WithPrep => with_Word
+                                     } ++
+                                     n.s ! NF Sg Def ;
+                        relPost = True;
+                        g   = n.g
+                      }
   } ;
 
   relativeN : N -> A -> N = dualN ; -- deprecated
@@ -209,7 +239,7 @@ oper
   substantiveN : A -> AGender -> N;
   substantiveN a g = lin N {
     s   = \\nform => a.s ! nform2aform nform g;
-    rel = a.s;
+    rel = a.s; relPost = False;
     g   = g
   } ;
 

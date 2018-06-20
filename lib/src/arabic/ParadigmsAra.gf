@@ -40,10 +40,27 @@ resource ParadigmsAra = open
   Preposition : Type ;
 
 --2 Nouns
-  
+
+-- Overloaded operator for main cases
+
+ mkN = overload {
+   mkN : (sg : Str) -> N                                     -- non-human regular nouns
+     = smartN ;
+   mkN : Species -> N -> N
+     = \p,n -> n ** {h = p} ;
+   mkN : (sg,pl : Str) -> Gender -> Species -> N
+     = \sg,pl -> mkFullN (reg sg pl) ;  
+   mkN : NTable -> Gender -> Species -> N                             -- loan words, irregular
+     = mkFullN ;
+   mkN : (root,sgPatt,brokenPlPatt : Str) -> Gender -> Species -> N   -- broken plural
+    = brkN ;
+---   mkN : (root,sgPatt : Str) -> Gender -> Species -> N                -- sound feminine plural
+---    = sdfN ;
+   } ;
+
 --This is used for loan words or anything that has untreated irregularities
 --in the interdigitization process of its words
-  mkN : NTable -> Gender -> Species -> N ;
+  mkFullN : NTable -> Gender -> Species -> N ;
   
 --Takes a root string, a singular pattern string, a broken plural 
 --pattern string, a gender, and species. Gives a noun.
@@ -57,21 +74,46 @@ resource ParadigmsAra = open
 --and species. Gives a noun whose plural is sound masculine
   sdmN : Str -> Str -> Gender -> Species -> N ; 
 
-  mkPN : Str -> Gender -> Species -> PN ;
-  
+
+--3 Proper names
+
+  mkPN = overload {
+    mkPN : Str -> PN        -- Fem Hum if ends with ة, otherwise Masc Hum
+     = smartPN ;
+    mkPN : Str -> Gender -> Species -> PN
+     = mkFullPN ;
+    } ;
+
+  mkFullPN : Str -> Gender -> Species -> PN ;
+
+
+
 --3 Relational nouns 
 
   mkN2 : N -> Preposition -> N2 ;
 
   mkN3 : N -> Preposition -> Preposition -> N3 ;
 
+
 --2 Adjectives
- 
+
+-- Overloaded operator for main cases
+
+ mkA = overload {
+   mkA : (root,patt : Str) -> A
+    = sndA ;
+   mkA : (root : Str) -> A                -- forms adjectives with positive form aFCal
+    = clrA ;
+   mkA : (posit,compar,plur : Str) -> A
+    = degrA ;
+   } ;
+
+
 --Takes a root string and a pattern string
-  sndA : Str -> Str -> A ;
+  sndA : (root,patt : Str) -> A ;
     
 --Takes a root string only
-  clrA : Str -> A ;
+  clrA : (root : Str) -> A ;  -- forms adjectives of type aFCal
 
 --3 Two-place adjectives
 --
@@ -96,13 +138,26 @@ resource ParadigmsAra = open
 -- A preposition as used for rection in the lexicon, as well as to
 -- build $PP$s in the resource API, just requires a string.
 
-  mkPreposition : Str -> Preposition ;
+  mkPrep : Str -> Prep
+    = \s -> lin Prep {s = mkPreposition s} ; -- preposition in the sense of RGL abstract syntax
+    
+  mkPreposition : Str -> Preposition ;  -- just a string, for internal use
 
--- (These two functions are synonyms.)
 
 --2 Verbs
 
---The verb in the imperfect tense gives the most information
+-- Overloaded operations
+
+  mkV = overload {
+    mkV : (imperfect : Str) -> V
+      = regV ;
+    mkV : (root : Str) -> (perf,impf : Vowel) -> V  -- verb form I ; vowel = a|i|u
+      = v1 ;
+    mkV : (root : Str) -> VerbForm -> V             -- FormI .. FormVIII (no VII) ; default vowels a u for I
+      = formV ;
+    } ;
+
+-- The verb in the imperfect tense gives the most information
 
   regV : Str -> V ;
 
@@ -296,7 +351,7 @@ resource ParadigmsAra = open
   
   Preposition = Str ;
   
-  mkN nsc gen spec =
+  mkFullN nsc gen spec =
     { s = nsc; --NTable
       g = gen; 
       h = spec;
@@ -307,7 +362,7 @@ resource ParadigmsAra = open
     \root,sg,pl,gen,spec ->
     let { kitAb = mkWord sg root;
           kutub = mkWord pl root
-    } in mkN (reg kitAb kutub) gen spec;
+    } in mkFullN (reg kitAb kutub) gen spec;
   
   brkN root sg pl gen spec =
     let { raw = brkN' root sg pl gen spec} in
@@ -323,14 +378,14 @@ resource ParadigmsAra = open
   sdfN =
     \root,sg,gen,spec ->
     let { kalima = mkWord sg root;
-    } in mkN (sndf kalima) gen spec;
+    } in mkFullN (sndf kalima) gen spec;
   
   sdmN =
     \root,sg,gen,spec ->
     let { mucallim = mkWord sg root;
-    } in mkN (sndm mucallim) gen spec;
+    } in mkFullN (sndm mucallim) gen spec;
 
-  mkPN = \str,gen,species -> 
+  mkFullPN = \str,gen,species -> 
     { s = \\c => str + indecl!c ;
       g = gen;
       h = species;
@@ -400,6 +455,9 @@ resource ParadigmsAra = open
       isNum = False;
       lock_Quant = <>
     };
+
+  degrA : (posit,compar,plur : Str) -> A
+    = \posit,compar,plur -> lin A {s = clr posit compar plur} ;
   
   sndA root pat =
     let  raw = sndA' root pat in { 
@@ -466,5 +524,29 @@ resource ParadigmsAra = open
   mkAV  v = v ** {lock_A = <>} ;
   mkA2V v p = mkA2 v p ** {lock_A2 = <>} ;
 
+
+smartN : Str -> N = \s -> case last s of {
+  "ة" => mkFullN (sndf s) Fem NoHum ;
+  _ => mkFullN (sndm s) Masc NoHum
+  } ;
+
+smartPN : Str -> PN = \s -> case last s of {
+  "ة" => mkFullPN s Fem Hum ;
+  _ => mkFullPN s Masc Hum
+  } ;
+
+formV : (root : Str) -> VerbForm -> V = \s,f -> case f of {
+   FormI   => v1 s a u ;
+   FormII  => v2 s ;
+   FormIII => v3 s ;
+   FormIV  => v4 s ;
+   FormV   => v5 s ;
+   FormVI  => v6 s ;
+---   FormVII  => v7 s ;
+   FormVIII => v8 s
+   } ;
+
+param VerbForm =
+  FormI |  FormIII |  FormIII |  FormIV |  FormV |  FormVI | FormVIII  ;
 
 } ;

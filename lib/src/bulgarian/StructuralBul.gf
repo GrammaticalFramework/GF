@@ -13,7 +13,7 @@ concrete StructuralBul of Structural = CatBul **
   almost_AdA, almost_AdN = ss "почти" ;
   at_least_AdN, at_most_AdN =  ss "почти" ; ---- AR
   although_Subj = ss ["въпреки че"] ;
-  always_AdV = ss "винаги" ;
+  always_AdV = mkAdV "винаги" ;
   and_Conj = {s=[]; conj=0; distr=False; n = Pl} ;
   because_Subj = ss "защото" ;
   before_Prep = mkPrep "преди" Acc ;
@@ -116,9 +116,7 @@ concrete StructuralBul of Structural = CatBul **
   whoPl_IP = mkIP "кои" "кои" GPl ;
   why_IAdv = mkIAdv "защо" ;
   without_Prep = mkPrep "без" Acc ;
-  with_Prep = mkPrep (pre { "с" ; 
-                            "със" / strs {"с" ; "з" ; "С" ; "З"}
-                          }) Acc ;
+  with_Prep = mkPrep "" WithPrep ;
   yes_Utt = ss "да" ;
   youSg_Pron = mkPron "ти" "теб" "те" "ти" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Masc) P2 ;
   youPl_Pron = mkPron "вие" "вас" "ви" "ви" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl P2 ;

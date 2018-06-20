@@ -141,7 +141,7 @@ concrete ExtendEng of Extend =
       isPre = vp.isSimple                 -- depends on whether there are complements
       } ;
 
-    EmbedPresPart vp = {s = infVP VVPresPart vp Simul CPos (agrP3 Sg)} ; --- agr
+    EmbedPresPart vp = {s = \\a => infVP VVPresPart vp Simul CPos a} ;
 
    PastPartAP vp = { 
       s = \\a => vp.ad ! a ++ vp.ptp ++ vp.p ++ vp.c2 ++ vp.s2 ! a ++ vp.ext ;
@@ -282,6 +282,8 @@ concrete ExtendEng of Extend =
 
 
   lin
+    AdAdV = cc2 ;
+
     AdjAsCN ap = let cn = mkNoun "one" "one's" "ones" "ones'" ** {g = Neutr}
       in {
         s = \\n,c => preOrPost ap.isPre (ap.s ! agrgP3 n cn.g) (cn.s ! n ! c) ;
@@ -291,6 +293,8 @@ concrete ExtendEng of Extend =
       s = \\c => ap.s ! agrgP3 Sg nonhuman ; ---- genitive case?
       a = agrgP3 Sg nonhuman
       } ;
+
+    PositAdVAdj a = {s = a.s ! AAdv} ;
 
   lincat
     RNP     = {s : Agr => Str} ;
