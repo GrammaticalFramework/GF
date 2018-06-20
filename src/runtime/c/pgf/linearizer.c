@@ -13,7 +13,7 @@
 #include <pgf/literals.h>
 #include <stdio.h>
 
-//#define PGF_LINEARIZER_DEBUG
+#define PGF_LINEARIZER_DEBUG
 
 static void
 pgf_lzr_add_overl_entry(PgfCncOverloadMap* overl_table,
