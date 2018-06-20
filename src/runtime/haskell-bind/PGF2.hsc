@@ -862,6 +862,7 @@ type LIndex = Int
 -- mark the beginning and the end of each constituent.
 data BracketedString
   = Leaf String                                                                -- ^ this is the leaf i.e. a single token
+  | BIND                                                                       -- ^ the surrounding tokens must be bound together
   | Bracket CId {-# UNPACK #-} !FId {-# UNPACK #-} !LIndex CId [BracketedString]
                                                                                -- ^ this is a bracket. The 'CId' is the category of
                                                                                -- the phrase. The 'FId' is an unique identifier for
@@ -884,11 +885,13 @@ showBracketedString :: BracketedString -> String
 showBracketedString = render . ppBracketedString
 
 ppBracketedString (Leaf t) = text t
+ppBracketedString BIND     = text "&+"
 ppBracketedString (Bracket cat fid index _ bss) = parens (text cat <> colon <> int fid <+> hsep (map ppBracketedString bss))
 
 -- | Extracts the sequence of tokens from the bracketed string
 flattenBracketedString :: BracketedString -> [String]
 flattenBracketedString (Leaf w)              = [w]
+flattenBracketedString BIND                  = []
 flattenBracketedString (Bracket _ _ _ _ bss) = concatMap flattenBracketedString bss
 
 bracketedLinearize :: Concr -> Expr -> [BracketedString]
@@ -912,12 +915,13 @@ bracketedLinearize lang e = unsafePerformIO $
                               fptr_begin_phrase <- wrapPhraseCallback (begin_phrase ref)
                               fptr_end_phrase   <- wrapPhraseCallback (end_phrase ref)
                               fptr_symbol_ne    <- wrapSymbolNonExistCallback (symbol_ne exn)
+                              fptr_symbol_bind  <- wrapSymbolBindCallback (symbol_bind ref)
                               fptr_symbol_meta  <- wrapSymbolMetaCallback (symbol_meta ref)
                               (#poke PgfLinFuncs, symbol_token) pLinFuncs fptr_symbol_token
                               (#poke PgfLinFuncs, begin_phrase) pLinFuncs fptr_begin_phrase
                               (#poke PgfLinFuncs, end_phrase)   pLinFuncs fptr_end_phrase
                               (#poke PgfLinFuncs, symbol_ne)    pLinFuncs fptr_symbol_ne
-                              (#poke PgfLinFuncs, symbol_bind)  pLinFuncs nullPtr
+                              (#poke PgfLinFuncs, symbol_bind)  pLinFuncs fptr_symbol_bind
                               (#poke PgfLinFuncs, symbol_capit) pLinFuncs nullPtr
                               (#poke PgfLinFuncs, symbol_meta)  pLinFuncs fptr_symbol_meta
                               poke ppLinFuncs pLinFuncs
@@ -926,6 +930,7 @@ bracketedLinearize lang e = unsafePerformIO $
                               freeHaskellFunPtr fptr_begin_phrase
                               freeHaskellFunPtr fptr_end_phrase
                               freeHaskellFunPtr fptr_symbol_ne
+                              freeHaskellFunPtr fptr_symbol_bind
                               freeHaskellFunPtr fptr_symbol_meta
                            failed <- gu_exn_is_raised exn
                            if failed
@@ -955,6 +960,11 @@ bracketedLinearize lang e = unsafePerformIO $
 
     symbol_ne exn _ = do
       gu_exn_raise exn gu_exn_type_PgfLinNonExist
+      return ()
+
+    symbol_bind ref _ = do
+      (stack,bs) <- readIORef ref
+      writeIORef ref (stack,BIND : bs)
       return ()
 
     symbol_meta ref _ meta_id = do
