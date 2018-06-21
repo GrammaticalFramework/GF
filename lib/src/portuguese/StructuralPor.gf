@@ -1,5 +1,5 @@
 concrete StructuralPor of Structural = CatPor **
-  open PhonoPor, MorphoPor, ParadigmsPor, BeschPor,
+  open PhonoPor, MorphoPor, ParadigmsPor, BeschPor, DiffPor,
   MakeStructuralPor, (X = ConstructX), (B=IrregBeschPor)
   , Prelude in {
 
@@ -62,8 +62,8 @@ concrete StructuralPor of Structural = CatPor **
     between_Prep = mkPrep "entre" ;
     both7and_DConj = {s1,s2 = etConj.s ; n = Pl} ;
     but_PConj = ss "mas" ;
-    by8agent_Prep = mkPrep "por" ;
-    by8means_Prep = mkPrep "por" ;
+    by8agent_Prep = mkPrep [] ablative ; -- por
+    by8means_Prep = mkPrep [] ablative ; -- por
     can8know_VV = mkVV B.saber_V ;
     can_VV = mkVV B.poder_V ;
     during_Prep = mkPrep "durante" ;
@@ -87,7 +87,7 @@ concrete StructuralPor of Structural = CatPor **
     if_then_Conj = {s1 = "se" ; s2 = "então" ;
                     n = Sg ; lock_Conj = <>} ;
     in8front_Prep = {s = "à frente" ; c = MorphoPor.genitive ; isDir = False} ;
-    in_Prep = mkPrep "em" ;
+    in_Prep = mkPrep [] locative ;
 
     less_CAdv = X.mkCAdv "menos" conjThan ; ----
     many_Det = mkDeterminer "muitos" "muitas" Pl False ;
@@ -134,7 +134,7 @@ concrete StructuralPor of Structural = CatPor **
     therefore_PConj = ss ["por isso"] ;
 
     this_Quant = mkQuantifier "este" "esta" "estes" "estas" ;
-    through_Prep = mkPrep "por" ;
+    through_Prep = mkPrep [] ablative ; -- por
     too_AdA = ss "demasiado" ; -- o certo seria demais como postfix
     to_Prep = complDat ;
     under_Prep = mkPrep "embaixo" ;

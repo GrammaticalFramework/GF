@@ -75,10 +75,10 @@ oper
   mkPrep = overload {
     mkPrep : Str -> Prep = -- other preposition
       \p -> {s = p ; c = Acc ; isDir = False ; lock_Prep = <>} ;
-    mkPrep : Str -> Prep -> Prep =
+    mkPrep : Str -> Case -> Prep =
       -- compound prepositions, e.g. "antes de", made as mkPrep
       -- "antes" genitive
-      \p,c -> {s = p ; c = c.c ; isDir = False ; lock_Prep = <>}
+      \p,c -> {s = p ; c = c ; isDir = False ; lock_Prep = <>}
   } ;
 
 

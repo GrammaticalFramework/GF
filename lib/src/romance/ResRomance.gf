@@ -16,14 +16,15 @@ oper
   NounPhrase : Type = {
     s : Case => {c1,c2,comp,ton : Str} ;
     a : Agr ;
-    hasClit : Bool ; 
+    hasClit : Bool ;
     isPol : Bool ; --- only needed for French complement agr
     isNeg : Bool --- needed for negative NP's such as "personne"
     } ;
+
   Pronoun : Type = {
     s : Case => {c1,c2,comp,ton : Str} ;
     a : Agr ;
-    hasClit : Bool ; 
+    hasClit : Bool ;
     isPol : Bool ; --- only needed for French complement agr
     poss : Number => Gender => Str ---- also: substantival
     } ;
@@ -48,7 +49,7 @@ oper
   pn2npNeg : {s : Str ; g : Gender} -> NounPhrase = pn2npPol True ;
 
   pn2npPol : Bool -> {s : Str ; g : Gender} -> NounPhrase = \isNeg, pn -> heavyNPpol isNeg {
-    s = \\c => prepCase c ++ pn.s ; 
+    s = \\c => prepCase c ++ pn.s ;
     a = agrP3 pn.g Sg
     } ;
 
@@ -77,7 +78,7 @@ oper
   oper
 
 
-  predV : Verb -> VP = \verb -> 
+  predV : Verb -> VP = \verb ->
     let
       typ = verb.vtyp ;
     in {
@@ -87,12 +88,12 @@ oper
       clit1  = [] ;
       clit2  = [] ;
       clit3  = {s,imp = [] ; hasClit = False} ;  --- refl is treated elsewhere
-      isNeg  = False ; 
+      isNeg  = False ;
       comp   = \\a => [] ;
       ext    = \\p => []
       } ;
 
-  insertObject : Compl -> NounPhrase -> VP -> VP = \c,np,vp -> 
+  insertObject : Compl -> NounPhrase -> VP -> VP = \c,np,vp ->
     let
       obj = np.s ! c.c ;
     in {
@@ -110,12 +111,12 @@ oper
       ext   = vp.ext ;
     } ;
 
-  insertComplement : (Agr => Str) -> VP -> VP = \co,vp -> { 
+  insertComplement : (Agr => Str) -> VP -> VP = \co,vp -> {
     s     = vp.s ;
     agr   = vp.agr ;
-    clit1 = vp.clit1 ; 
-    clit2 = vp.clit2 ; 
-    clit3 = vp.clit3 ; 
+    clit1 = vp.clit1 ;
+    clit2 = vp.clit2 ;
+    clit3 = vp.clit3 ;
     isNeg = vp.isNeg ; --- can be in compl as well
     neg   = vp.neg ;
     comp  = \\a => vp.comp ! a ++ co ! a ;
@@ -123,54 +124,54 @@ oper
     } ;
 
 
--- Agreement with preceding relative or interrogative: 
+-- Agreement with preceding relative or interrogative:
 -- "les femmes que j'ai aimées"
 
-  insertAgr : AAgr -> VP -> VP = \ag,vp -> vp ** { 
+  insertAgr : AAgr -> VP -> VP = \ag,vp -> vp ** {
     agr   = vpAgrClits vp.s ag ;
     } ;
 
-  insertRefl : VP -> VP = \vp -> vp ** { 
+  insertRefl : VP -> VP = \vp -> vp ** {
     s     = vp.s ** {vtyp = vRefl vp.s.vtyp} ;
     agr   = vpAgrSubj vp.s ;
     } ;
 
-  insertAdv : Str -> VP -> VP = \co,vp -> vp ** { 
-    isNeg = vp.isNeg ; --- adv could be neg 
+  insertAdv : Str -> VP -> VP = \co,vp -> vp ** {
+    isNeg = vp.isNeg ; --- adv could be neg
     comp  = \\a => vp.comp ! a ++ co ;
     } ;
 
-  insertAdV : Str -> VP -> VP = \co,vp -> { 
+  insertAdV : Str -> VP -> VP = \co,vp -> {
     s     = vp.s ;
     agr   = vp.agr ;
-    clit1 = vp.clit1 ; 
-    clit2 = vp.clit2 ; 
+    clit1 = vp.clit1 ;
+    clit2 = vp.clit2 ;
     clit3 = vp.clit3 ;
-    isNeg = vp.isNeg ;  
+    isNeg = vp.isNeg ;
     neg   = \\b => let vpn = vp.neg ! b in {p1 = vpn.p1 ; p2 = vpn.p2 ++ co} ;
     comp  = vp.comp ;
     ext   = vp.ext ;
     } ;
 
-  insertClit3 : Str -> VP -> VP = \co,vp -> { 
+  insertClit3 : Str -> VP -> VP = \co,vp -> {
     s     = vp.s ;
     agr   = vp.agr ;
-    clit1 = vp.clit1 ; 
-    clit2 = vp.clit2 ; 
+    clit1 = vp.clit1 ;
+    clit2 = vp.clit2 ;
     clit3 = addClit3 True co vp.clit3.imp vp.clit3 ;
-    isNeg = vp.isNeg ;  
+    isNeg = vp.isNeg ;
     neg   = vp.neg ;
     comp  = vp.comp ;
     ext   = vp.ext ;
     } ;
 
-  insertExtrapos : (RPolarity => Str) -> VP -> VP = \co,vp -> { 
+  insertExtrapos : (RPolarity => Str) -> VP -> VP = \co,vp -> {
     s     = vp.s ;
     agr   = vp.agr ;
-    clit1 = vp.clit1 ; 
-    clit2 = vp.clit2 ; 
+    clit1 = vp.clit1 ;
+    clit2 = vp.clit2 ;
     clit3 = vp.clit3 ;
-    isNeg = vp.isNeg ;  
+    isNeg = vp.isNeg ;
     neg   = vp.neg ;
     comp  = vp.comp ;
     ext   = \\p => vp.ext ! p ++ co ! p ;
@@ -179,7 +180,7 @@ oper
   mkVPSlash : Compl -> VP -> VP ** {c2 : Compl} = \c,vp -> vp ** {c2 = c} ;
 
   Clause : Type = {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} ;
-  
+
 -- for pos/neg variation other than negation word, e.g. "il y a du vin" / "il n'y a pas de vin"
    posNegClause : Clause -> Clause -> RPolarity -> Clause = \pos,neg,pol -> {
      s = \\d,t,a,b,m => case b of {
@@ -188,20 +189,20 @@ oper
          }
      } ;
 
-  mkClause : Str -> Bool -> Bool -> Agr -> VP -> 
+  mkClause : Str -> Bool -> Bool -> Agr -> VP ->
       {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} =
     mkClausePol False ;
 
   -- isNeg = True if subject NP is a negative element, e.g. "personne"
-  mkClausePol : Bool -> Str -> Bool -> Bool -> Agr -> VP -> 
+  mkClausePol : Bool -> Str -> Bool -> Bool -> Agr -> VP ->
       {s : Direct => RTense => Anteriority => RPolarity => Mood => Str} =
     \isNeg, subj, hasClit, isPol, agr, vp -> {
-      s = \\d,te,a,b,m => 
+      s = \\d,te,a,b,m =>
         let
 
           pol : RPolarity = case <isNeg, vp.isNeg, b, d> of {
-            <_,True,RPos,_>    => RNeg True ; 
-            <True,_,RPos,DInv> => RNeg True ; 
+            <_,True,RPos,_>    => RNeg True ;
+            <True,_,RPos,DInv> => RNeg True ;
             <True,_,RPos,_>    => polNegDirSubj ;
             _ => b
             } ;
@@ -223,7 +224,7 @@ oper
           vtyp  = vp.s.vtyp ;
           refl  = case isVRefl vtyp of {
             True => reflPron num per Acc ; ---- case ?
-            _ => [] 
+            _ => []
             } ;
           clit = refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s ; ---- refl first?
 
@@ -237,7 +238,7 @@ oper
             } ;
 ----          part = case vp.agr of {
 ----            VPAgrSubj     => verb ! VPart agr.g agr.n ;
-----            VPAgrClit g n => verb ! VPart g n  
+----            VPAgrClit g n => verb ! VPart g n
 ----            } ;
 
 
@@ -251,7 +252,7 @@ oper
             <RPasse,Simul> => <verb ! VFin (VPasse) num per, []> ; --# notpresent
             <RPasse,Anter> => <vaux ! VFin (VPasse) num per, part> ; --# notpresent
             <RPres,Anter> => <vaux ! VFin (VPres m) num per, part> ; --# notpresent
-            <RPres,Simul> => <verb ! VFin (VPres m) num per, []> 
+            <RPres,Simul> => <verb ! VFin (VPres m) num per, []>
             } ;
 
           fin = vps.p1 ;
@@ -261,14 +262,14 @@ oper
 
         in
         case d of {
-          DDir => 
+          DDir =>
             subj ++ neg.p1 ++ clit ++ fin ++ neg.p2 ++ inf ++ compl ++ ext ;
-          DInv => 
+          DInv =>
             invertedClause vp.s.vtyp <te, a, num, per> hasClit neg hypt clit fin inf compl subj ext
           }
     } ;
 
--- in French, pronouns 
+-- in French, pronouns
 -- have a "-" with possibly a special verb form with "t":
 -- "comment fera-t-il" vs. "comment fera Pierre"
 
@@ -285,20 +286,20 @@ oper
         obj   = vp.s.p ++ vp.comp ! agr ++ vp.ext ! RPos ; ---- pol
         refl  = case isVRefl vp.s.vtyp of {
             True => reflPron agr.n agr.p Acc ; ---- case ?
-            _ => [] 
+            _ => []
             } ;
       in
       neg.p1 ++ neg.p2 ++ clitInf iform (refl ++ vp.clit1 ++ vp.clit2 ++ vp.clit3.s) inf ++ obj ; -- ne pas dormant
-      
+
 }
 
 -- insertObject:
 -- p -cat=Cl -tr "la femme te l' envoie"
--- PredVP (DetCN (DetSg DefSg NoOrd) (UseN woman_N)) 
+-- PredVP (DetCN (DetSg DefSg NoOrd) (UseN woman_N))
 --  (ComplV3 send_V3 (UsePron he_Pron) (UsePron thou_Pron))
 -- la femme te l' a envoyé
 --
 -- p -cat=Cl -tr "la femme te lui envoie"
--- PredVP (DetCN (DetSg DefSg NoOrd) (UseN woman_N)) 
+-- PredVP (DetCN (DetSg DefSg NoOrd) (UseN woman_N))
 --   (ComplV3 send_V3 (UsePron thou_Pron) (UsePron he_Pron))
 -- la femme te lui a envoyée

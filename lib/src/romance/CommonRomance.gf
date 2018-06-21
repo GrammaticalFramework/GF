@@ -199,16 +199,22 @@ oper
 ---
 
   oper
-    genForms : Str -> Str -> Gender => Str = \bon,bonne ->
-      table {
-        Masc => bon ;
-        Fem => bonne
+    genForms : Str -> Str -> Gender => Str ;
+    genForms bon bonne = table {
+      Masc => bon ;
+      Fem => bonne
       } ;
 
+    numForms : (_,_ : Str) -> Number => Str ;
     -- The following macro is useful for creating the forms of
     -- number-dependent tables, such as common nouns.
-    numForms : (_,_ : Str) -> Number => Str = \campus, campi ->
-      table {Sg => campus ; Pl => campi} ;
+    numForms campus campi = table {Sg => campus ; Pl => campi} ;
+
+    genNumForms : (_,_,_,_ : Str) -> Gender => Number => Str ;
+    genNumForms ms fs mp fp = table {
+      Masc => \\n => numForms ms mp ! n ;
+      Fem => \\n => numForms fs fp ! n
+      } ;
 
     aagrForms : (x1,_,_,x4 : Str) -> (AAgr => Str) = \tout,toute,tous,toutes ->
       table {
