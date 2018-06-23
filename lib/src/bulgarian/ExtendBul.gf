@@ -88,9 +88,21 @@ lin
                                      vp.compl1 ! a ++ vp.compl2 ! a) Pos (predV verbBe) ;
 
   PassAgentVPSlash vp np =
-    insertObj (\\_ => "чрез" ++ np.s ! RObj Acc) Pos
+    insertObj (\\_ => "от" ++ np.s ! RObj Acc) Pos
                    (insertObj (\\a => vp.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc)) ++
                                       vp.compl1 ! a ++ vp.compl2 ! a) Pos (predV verbBe)) ;
+
+  UttVPShort vp = {
+    s = let agr = agrP3 (GSg Neut) ;
+            clitic = case vp.vtype of {
+                       VNormal    => {s=[]; agr=agr} ;
+                       VMedial c  => {s=reflClitics ! c; agr=agr} ;
+                       VPhrasal c => {s=personalClitics ! c ! agr.gn ! agr.p; agr={gn=GSg Neut; p=P3}}
+                     } ;
+        in vp.ad.s ++ clitic.s ++
+           vp.s ! Imperf ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ++
+           vp.compl ! agr
+    } ;
 
 lincat
   VPS   = {s : Agr => Str} ;
@@ -163,6 +175,20 @@ lin
     a = rnp.a ;
     p = rnp.p
   } ;
+
+lin
+  ApposNP np1 np2 = {s = \\role => np1.s ! role ++ comma ++ np2.s ! role; a = np1.a; p = np1.p} ;
+
+  DetNPFem det = {
+    s = \\role => let s = det.s ! False ! AFem ! role
+                  in case role of {
+                       RObj Dat      => "на" ++ s;
+                       RObj WithPrep => with_Word ++ s;
+                       _             => s
+                     } ;
+    a = {gn = gennum AFem (numnnum det.nn); p = P3} ;
+    p = Pos
+    } ;
 
 }
 

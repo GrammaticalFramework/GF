@@ -57,7 +57,11 @@ concrete ExtendEng of Extend =
       s = \\t,a,p,_ => slash.s ! t ! a ! p ! oDir ++ slash.c2 ;
       c = NPAcc
       } ;
-
+      
+    DetNPFem det = {
+      s = det.sp ;
+      a = agrgP3 det.n Fem
+      } ;
 
   lincat
     VPS   = {s : Agr => Str} ;
@@ -314,9 +318,12 @@ concrete ExtendEng of Extend =
     Cons_rr_RNP x xs = consrTable Agr comma x xs ;
     Cons_nr_RNP x xs = consrTable Agr comma {s = \\a => x.s ! NPAcc} xs ;
 
-    
+  lin
+    ApposNP np1 np2 = {s = \\c => np1.s ! c ++ comma ++ np2.s ! c; a = np1.a} ;
+
 ---- TODO: RNPList construction
 
+  lin
     ComplGenVV v a p vp = insertObj (\\agr => a.s ++ p.s ++ 
                                          infVP v.typ vp a.a p.p agr)
                                (predVV v) ;

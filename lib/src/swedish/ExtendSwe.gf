@@ -3,8 +3,9 @@ concrete ExtendSwe of Extend = CatSwe **
   ExtendFunctor -
   [
     GenNP, GenModNP, ComplBareVS, CompBareCN,
+    ApposNP,
     StrandRelSlash, EmptyRelSlash, StrandQuestSlash,
-    PassVPSlash, PassAgentVPSlash,
+    PassVPSlash, PassAgentVPSlash, UttVPShort,
     MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
     MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
     ICompAP,
@@ -64,6 +65,8 @@ concrete ExtendSwe of Extend = CatSwe **
       insertObj (\\a => vps.c2.s ++ vps.n3 ! a) (passiveVP vps) ;
     PassAgentVPSlash vps np = 
       insertObjPost (\\a => vps.c2.s ++ vps.n3 ! a) (insertObj (\\_ => (PrepNP by8agent_Prep np).s) (passiveVP vps)) ;
+
+  lin UttVPShort vp = {s = infVP vp (agrP3 Utr Sg)} ;
 
   lincat
     VPI   = {s : VPIForm => Agr => Str} ;
@@ -151,6 +154,9 @@ concrete ExtendSwe of Extend = CatSwe **
     Base_rn_RNP x y = twoTable Agr x {s = \\a => y.s ! NPAcc} ;
     Cons_rr_RNP x xs = consrTable Agr comma x xs ;
     Cons_nr_RNP x xs = consrTable Agr comma {s = \\a => x.s ! NPAcc} xs ;
+
+  lin
+    ApposNP np1 np2 = {s = \\nform => np1.s ! nform ++ comma ++ np2.s ! nform; a = np1.a; isPron = False} ;
 
     CompoundN n1 n2 = {
       s  = \\n,s,c => n1.co ++ BIND ++ n2.s ! n ! s ! c ;
