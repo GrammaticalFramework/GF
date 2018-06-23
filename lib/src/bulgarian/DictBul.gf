@@ -29808,7 +29808,7 @@ lin
   otb_ja_gvane_N = mkN071 "отбягване" ;
   otvara_N = mkN041 "отвара" ;
   otvara_ch_ka_N = mkN041 "отварачка" ;
-  otvar_ja_m_V = actionV (mkV187 "отварям") (mkV173 "отворя")) ;
+  otvar_ja_m_V = actionV (mkV187 "отварям") (mkV173 "отворя") ;
   otvar_ja_ne_N = mkN071 "отваряне" ;
   otve_zj_dam_V = actionV (mkV186 "отвеждам") (mkV145 "отведа") ;
   otve_zj_dane_N = mkN071 "отвеждане" ;
