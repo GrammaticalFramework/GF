@@ -38,8 +38,9 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     DetNP det =
       { s = \\role => let s = det.s ! False ! ANeut ! role
                       in case role of {
-                           RObj Dat => "на" ++ s;
-                           _        => s
+                           RObj Dat      => "на" ++ s;
+                           RObj WithPrep => with_Word ++ s;
+                           _             => s
                          } ;
         a = {gn = gennum ANeut (numnnum det.nn); p = P3} ;
         p = Pos
@@ -47,7 +48,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     
     UsePN pn = { s = table {
                        RObj Dat      => "на" ++ pn.s; 
-                       RObj WithPron => with_Word ++ pn.s; 
+                       RObj WithPrep => with_Word ++ pn.s; 
                        _             => pn.s
                      } ;
                  a = {gn = GSg pn.g; p = P3} ;
