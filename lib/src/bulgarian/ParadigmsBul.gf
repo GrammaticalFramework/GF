@@ -28,11 +28,15 @@ oper
   mkN002 base = let v0 = tk 2 base;
                     v1 = last (base);
                     g  = AMasc NonHuman
-                in {s = mkNoun (v0+"я"+v1)
-                               (v0+"е"+v1+"ове")
-                               (v0+"я"+v1+"а")
-                               (v0+"я"+v1)
-                               g ;
+                in {s = table {
+                          NF Sg Indef => v0+"я"+v1 ;
+                          NF Sg Def   => v0+"е"+v1+"а" ;
+                          NF Pl Indef => v0+"е"+v1+"ове" ;
+                          NF Pl Def   => v0+"е"+v1+"овете" ;
+                          NFSgDefNom  => v0+"е"+v1+"а" ;
+                          NFPlCount   => v0+"я"+v1+"а" ;
+                          NFVocative  => v0+"я"+v1
+                        } ;
                     rel = \\_ => base ; relPost = False ;
                     g   = g ;
                     lock_N = <>
