@@ -5,9 +5,11 @@ incomplete concrete AdverbRomance of Adverb =
     PositAdvAdj a = {
       s = a.s ! Posit ! AA
       } ;
+    
     ComparAdvAdj cadv a np = {
       s = cadv.s ++ a.s ! Posit ! AA ++ cadv.p ++ (np.s ! Nom).ton 
       } ;
+    
     ComparAdvAdjS cadv a s = {
       s = cadv.s ++ a.s ! Posit ! AA ++ cadv.p ++ s.s ! Conjunct --- ne
       } ;
