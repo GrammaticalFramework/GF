@@ -179,6 +179,17 @@ lin
 lin
   ApposNP np1 np2 = {s = \\role => np1.s ! role ++ comma ++ np2.s ! role; a = np1.a; p = np1.p} ;
 
+  DetNPMasc det = {
+    s = \\role => let s = det.s ! False ! (AMasc Human) ! role
+                  in case role of {
+                       RObj Dat      => "на" ++ s;
+                       RObj WithPrep => with_Word ++ s;
+                       _             => s
+                     } ;
+    a = {gn = gennum (AMasc Human) (numnnum det.nn); p = P3} ;
+    p = det.p
+    } ;
+
   DetNPFem det = {
     s = \\role => let s = det.s ! False ! AFem ! role
                   in case role of {

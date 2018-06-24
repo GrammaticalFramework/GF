@@ -203,8 +203,9 @@ abstract Extend = Cat ** {
   ComplSlashPartLast : VPSlash -> NP -> VP ;
 
 -- Romance
-  DetNPFem : Det -> NP ;
-  
+  DetNPMasc : Det -> NP ;
+  DetNPFem  : Det -> NP ;
+
   iFem_Pron      : Pron ; -- I (Fem)
   youFem_Pron    : Pron ; -- you (Fem)
   weFem_Pron     : Pron ; -- we (Fem)

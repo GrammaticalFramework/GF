@@ -3,7 +3,7 @@ concrete ExtendSwe of Extend = CatSwe **
   ExtendFunctor -
   [
     GenNP, GenModNP, ComplBareVS, CompBareCN,
-    ApposNP,
+    ApposNP, DetNPMasc, DetNPFem,
     StrandRelSlash, EmptyRelSlash, StrandQuestSlash,
     PassVPSlash, PassAgentVPSlash, UttVPShort,
     MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
@@ -157,6 +157,16 @@ concrete ExtendSwe of Extend = CatSwe **
 
   lin
     ApposNP np1 np2 = {s = \\nform => np1.s ! nform ++ comma ++ np2.s ! nform; a = np1.a; isPron = False} ;
+
+    DetNPMasc, DetNPFem = \det ->
+      let 
+        g = utrum ; ----
+        m = True ;  ---- is this needed for other than Art?
+      in {
+        s = \\c => det.sp ! m ! g ;    ---- case of det!
+        a = agrP3 (ngen2gen g) det.n ;
+        isPron = False
+      } ;
 
     CompoundN n1 n2 = {
       s  = \\n,s,c => n1.co ++ BIND ++ n2.s ! n ! s ! c ;

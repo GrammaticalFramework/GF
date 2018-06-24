@@ -57,7 +57,12 @@ concrete ExtendEng of Extend =
       s = \\t,a,p,_ => slash.s ! t ! a ! p ! oDir ++ slash.c2 ;
       c = NPAcc
       } ;
-      
+
+    DetNPMasc det = {
+      s = det.sp ;
+      a = agrgP3 det.n Masc
+      } ;
+
     DetNPFem det = {
       s = det.sp ;
       a = agrgP3 det.n Fem
