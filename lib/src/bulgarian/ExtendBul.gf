@@ -187,7 +187,7 @@ lin
                        _             => s
                      } ;
     a = {gn = gennum AFem (numnnum det.nn); p = P3} ;
-    p = Pos
+    p = det.p
     } ;
 
 }

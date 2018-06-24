@@ -43,7 +43,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                            _             => s
                          } ;
         a = {gn = gennum ANeut (numnnum det.nn); p = P3} ;
-        p = Pos
+        p = det.p
       } ;
     
     UsePN pn = { s = table {
