@@ -22,27 +22,72 @@ resource MorphoBul = ResBul ** open
 oper
 --2 Determiners
 
-  mkDeterminerSg : Str -> Str -> Str -> {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species; p : Polarity} = \vseki,vsiaka,vsiako ->
-    {s = \\_,g,_ => table AGender [vseki;vseki;vsiaka;vsiako] ! g; nn = NNum Sg; spec = Indef; p = Pos} ;
+  mkDeterminerSg = overload {
+    mkDeterminerSg : Str -> Str -> Str -> {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species; p : Polarity} = \vseki,vsiaka,vsiako ->
+      {s = \\_,g,_  => table AGender [vseki;vseki;vsiaka;vsiako] ! g; nn = NNum Sg; spec = Indef; p = Pos} ;
+    mkDeterminerSg : Str -> Str -> Str -> Str -> Str -> Str -> {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species; p : Polarity} = \vseki,vsiaka,vsiako,vseki',vsiaka',vsiako' ->
+      {s = \\sp,g,_ => case sp of {
+                         True  => table AGender [vseki; vseki; vsiaka; vsiako ] ! g;
+                         False => table AGender [vseki';vseki';vsiaka';vsiako'] ! g
+                       };
+       nn = NNum Sg;
+       spec = Indef;
+       p = Pos
+      } ;
+  } ;
+
   mkDeterminerPl = overload {
     mkDeterminerPl : Str -> {s : Bool => AGender => Role => Str ; nn : NNumber ; spec : Species; p : Polarity} = \vsicki ->
       {s = \\_,_,_ => vsicki; nn = NNum Pl; spec = Indef; p = Pos} ;
     mkDeterminerPl : Str -> Str -> Str -> Str -> {s : Bool => AGender => Role => Str ; nn : NNumber ; spec : Species; p : Polarity} = \i_dvamata,i_dvata,i_dvete,i_dvete_neut ->
       {s = \\_,g,_ => table AGender [i_dvamata;i_dvata;i_dvete;i_dvete_neut] ! g; nn = NNum Pl; spec = Indef; p = Pos} ;
+    mkDeterminerPl : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> {s : Bool => AGender => Role => Str ; nn : NNumber ; spec : Species; p : Polarity} = \i_dvamata,i_dvata,i_dvete,i_dvete_neut,i_dvamata',i_dvata',i_dvete',i_dvete_neut' ->
+      {s  = \\sp,g,_ => case sp of {
+                          True  => table AGender [i_dvamata; i_dvata; i_dvete; i_dvete_neut ] ! g;
+                          False => table AGender [i_dvamata';i_dvata';i_dvete';i_dvete_neut'] ! g
+                        };
+       nn = NNum Pl;
+       spec = Indef;
+       p = Pos
+      } ;
   } ;
 
-  mkQuant : Str -> Str -> Str -> Str -> {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species; p : Polarity} = \tozi,tazi,towa,tezi -> 
-    { s = \\_ => table {
-                   ASg Masc _    => tozi ;
-                   ASgMascDefNom => tozi ;
-                   ASg Fem  _    => tazi ;
-                   ASg Neut _    => towa ;
-                   APl      _    => tezi
+  mkQuant = overload {
+    mkQuant : Str -> Str -> Str -> Str -> {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species; p : Polarity} = \tozi,tazi,towa,tezi -> 
+      { s = \\_ => table {
+                     ASg Masc _    => tozi ;
+                     ASgMascDefNom => tozi ;
+                     ASg Fem  _    => tazi ;
+                     ASg Neut _    => towa ;
+                     APl      _    => tezi
                    } ;
-      nonEmpty = True ;
-      spec = Indef ;
-      p = Pos
-    } ;
+        nonEmpty = True ;
+        spec = Indef ;
+        p = Pos
+      } ;
+      
+    mkQuant : Str -> Str -> Str -> Str -> Str -> Str -> Str -> Str -> {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species; p : Polarity} = \tozi,tazi,towa,tezi,tozi',tazi',towa',tezi' -> 
+      { s = table {
+              True  => table {
+                         ASg Masc _    => tozi ;
+                         ASgMascDefNom => tozi ;
+                         ASg Fem  _    => tazi ;
+                         ASg Neut _    => towa ;
+                         APl      _    => tezi
+                       } ;
+              False => table {
+                         ASg Masc _    => tozi' ;
+                         ASgMascDefNom => tozi' ;
+                         ASg Fem  _    => tazi' ;
+                         ASg Neut _    => towa' ;
+                         APl      _    => tezi'
+                       }
+            } ;
+        nonEmpty = True ;
+        spec = Indef ;
+        p = Pos
+      } ;
+  } ;
 
 --2 Verbs
 

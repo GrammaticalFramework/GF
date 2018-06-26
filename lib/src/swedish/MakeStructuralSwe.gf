@@ -29,6 +29,18 @@ oper
      det = DIndef
     } ; 
 
+  mkQuantSpec : Str -> Str -> Str -> Str -> Str -> Str -> Quant = \naagon,naagot,naagra,naagon',naagot',naagra' ->
+    lin Quant {s = table {
+                     Sg => \\_,_ => table {Utr => naagon ; Neutr => naagot} ;
+                     Pl => \\_,_,_ => naagra
+                   } ;
+               sp= table {
+                     Sg => \\_,_ => table {Utr => naagon' ; Neutr => naagot'} ;
+                     Pl => \\_,_,_ => naagra'
+                   } ;
+               det = DIndef
+              } ; 
+
   mkDet = overload {
     mkDet : Str -> Det 
       = \s -> lin Det {s,sp = \\_,_ => s ; n = P.singular ; det = DDef Indef} ;

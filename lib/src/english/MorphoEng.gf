@@ -17,12 +17,12 @@ resource MorphoEng = open Prelude, (Predef=Predef), ResEng in {
   oper 
 
   mkDeterminer : Number -> Str -> 
-    {s : Str ; sp : NPCase => Str; n : Number ; hasNum : Bool} = \n,s -> mkDeterminerSpec n s s False ; --- was True!?
+    {s : Str ; sp : Gender => Bool => NPCase => Str; n : Number ; hasNum : Bool} = \n,s -> mkDeterminerSpec n s s s False ; --- was True!?
 
-  mkDeterminerSpec : Number -> Str -> Str -> Bool ->
-    {s : Str ; sp : NPCase => Str; n : Number ; hasNum : Bool} = \n,s,sp,hasNum ->
-    {s = s; 
-     sp = \\c => regGenitiveS sp ! npcase2case c ;
+  mkDeterminerSpec : Number -> Str -> Str -> Str -> Bool ->
+    {s : Str ; sp : Gender => Bool => NPCase => Str; n : Number ; hasNum : Bool} = \n,s,sp1,sp2,hasNum ->
+    {s = s;
+     sp = \\g,hasAdj,c => regGenitiveS (case g of {Masc=>sp1; Fem=>sp1; Neutr=>sp2}) ! npcase2case c ;
      n = n ;
      hasNum = hasNum ; --- doesn't matter when s = sp
      } ;

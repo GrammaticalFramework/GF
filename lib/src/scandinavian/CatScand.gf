@@ -75,13 +75,12 @@ incomplete concrete CatScand of Cat =
     CN = {s : Number => DetSpecies => Case => Str ; g : NGender ; isMod : Bool} ;
     NP = {s : NPForm => Str ; a : Agr ; isPron : Bool} ;
     Pron = {s : NPForm => Str ; a : Agr} ;
-    Det = {s,sp : Bool => NGender => Str ; n : Number ; det : DetSpecies} ;
+    Det,DAP = {s,sp : Bool => NGender => Str ; n : Number ; det : DetSpecies} ;
     Quant = {s,sp : Number => Bool => Bool => NGender => Str ; det : DetSpecies} ;
     Predet = {s : Gender => Number => Str ; p : Str ; a : PredetAgr} ;
     Num = {s : NGender => Str ; isDet : Bool ; n : Number} ;
     Card = {s : NGender => Str ; n : Number} ;
     Ord = {s : Str} ;
-    DAP = {s : Bool => NGender => Str ; n : Number ; det : DetSpecies} ;
 
 -- Numeral
 

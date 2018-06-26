@@ -70,13 +70,12 @@ concrete CatEng of Cat = CommonX - [Pol,SC] ** open ResEng, Prelude in {
     --    sp Nom         | Poss. pron. (subj.) | mine
     --    sp Gen         | Poss. pron. (obj.)  | mine's
     Pron = {s : NPCase => Str ; sp : Case => Str ; a : Agr} ;
-    Det = {s : Str ; sp : NPCase => Str ; n : Number ; hasNum : Bool} ;
+    DAP, Det = {s : Str ; sp : Gender => Bool => NPCase => Str ; n : Number ; hasNum : Bool} ;
     Predet = {s : Str} ;
     Ord = { s : Case => Str } ;
     Num  = {s : Case => Str ; n : Number ; hasCard : Bool} ;
     Card = {s : Case => Str ; n : Number} ;
-    Quant = {s : Bool => Number => Str ; sp : Bool => Number => NPCase => Str} ;
-    DAP = {s : Str ; n : Number} ;
+    Quant = {s : Bool => Number => Str ; sp : Gender => Bool => Number => NPCase => Str} ;
 
 -- Numeral
 

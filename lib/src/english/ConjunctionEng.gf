@@ -26,7 +26,7 @@ concrete ConjunctionEng of Conjunction =
 
     ConjCN co ns = conjunctDistrTable2 Number Case co ns ** {g = Neutr} ; --- gender?
 
-    ConjDet c xs = let cxs = (conjunctDistrSS c xs).s in {s = cxs ; sp = \\_ => cxs ++ "one" ; hasNum = False ; n = xs.n} ;   
+    ConjDet c xs = let cxs = (conjunctDistrSS c xs).s in {s = cxs ; sp = \\_,_,_ => cxs ++ "one" ; hasNum = False ; n = xs.n} ;   
 
 -- These fun's are generated from the list cat's.
 

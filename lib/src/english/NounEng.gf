@@ -38,35 +38,37 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
 
     DetQuant quant num = {
       s  = quant.s ! num.hasCard ! num.n ++ num.s ! Nom;
-      sp = \\c => case num.hasCard of {
-                     False => quant.sp ! num.hasCard ! num.n ! c ++ num.s ! Nom ;
-                     True  => quant.s  ! num.hasCard ! num.n     ++ num.s ! npcase2case c
-                  } ;
+      sp = \\g,hasAdj,c => case num.hasCard of {
+                             False => quant.sp ! g ! (orB hasAdj num.hasCard) ! num.n ! c ++ num.s ! Nom ;
+                             True  => quant.s  !     num.hasCard              ! num.n     ++ num.s ! npcase2case c
+                           } ;
       n  = num.n ;
       hasNum = num.hasCard
       } ;
 
     DetQuantOrd quant num ord = {
-      s  =        quant.s  ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! Nom; 
-      sp = \\c => quant.s  ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! npcase2case c ; 
+      s  =            quant.s  ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! Nom; 
+      sp = \\g,_,c => quant.s  ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! npcase2case c ; 
       n  = num.n ;
       hasNum = True
       } ;
 
     DetNP det = {
       -- s = case det.hasNum of {True => \\_ => det.s ; _ => \\c => det.sp ! c} ;
-      s = det.sp ;
+      s = det.sp ! Neutr ! False ;
       a = agrP3 det.n
       } ;
 
     PossPron p = {
       s = \\_,_ => p.s ! NCase Gen ;
-      sp = \\_,_,c => p.sp ! npcase2case c
+      sp = \\_,hasAdj,_,c => case hasAdj of {
+                               True  => p.s ! NCase Gen ;
+                               False => p.sp ! npcase2case c
+                             }
       } ;
 
     NumSg = {s = \\c => []; n = Sg ; hasCard = False} ;
     NumPl = {s = \\c => []; n = Pl ; hasCard = False} ;
----b    NoOrd = {s = []} ;
 
     NumCard n = n ** {hasCard = True} ;
 
@@ -84,8 +86,8 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
 
     DefArt = {
       s  = \\hasCard,n => artDef ;
-      sp = \\hasCard,n => case <n,hasCard> of {
-        <Sg,False> => table { NCase Gen => "its"; _ => "it" } ;
+      sp = \\g,hasCard,n => case <n,hasCard> of {
+        <Sg,False> => table { NCase Gen => table Gender ["its"; "his"; "her"] ! g; _ => table Gender ["it"; "he"; "she"] ! g } ;
         <Pl,False> => table { NCase Nom => "they"; NPAcc => "them"; _ => "theirs" } ;
         _          => \\c => artDef
         }
@@ -96,7 +98,7 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
         <Sg,False> => artIndef ;
         _          => []
         } ;
-      sp = \\hasCard,n => case <n,hasCard> of {
+      sp = \\g,hasCard,n => case <n,hasCard> of {
         <Sg,False> => table {NCase Gen => "one's"; _ => "one" };
         <Pl,False> => table {NCase Gen => "ones'"; _ => "ones" } ;
         _          => \\c => []
@@ -150,15 +152,20 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
     PartNP cn np = {s = \\n,c => cn.s ! n ! c ++ "of" ++ np.s ! NPAcc ; g = cn.g} ;
 
     CountNP det np = {
-      s = \\c => det.sp ! c ++ "of" ++ np.s ! NPAcc ;
+      s = \\c => det.sp ! Neutr ! False ! c ++ "of" ++ np.s ! NPAcc ;
       a = agrP3 det.n
       } ;
 
-    AdjDAP det ap = {
-      s = det.s ++ ap.s ! agrgP3 det.n Masc ;       --- post-ap's ? "this larger than life (movie)"
-      n = det.n ;
+    AdjDAP dap ap = {
+      s = dap.s ++ ap.s ! agrgP3 dap.n Masc ;       --- post-ap's ? "this larger than life (movie)"
+      sp = \\g,_,c => case c of {
+                        NCase Gen => dap.sp ! g ! True ! NCase Nom ++ ap.s ! agrgP3 dap.n g ++ BIND ++ "'s" ;
+                        c         => dap.sp ! g ! True ! c         ++ ap.s ! agrgP3 dap.n g
+                      } ;
+      n = dap.n ;
+      hasNum = dap.hasNum
       } ;
 
-    DetDAP d = d ;  -- forgetting sp and hasNumber
+    DetDAP d = d ;
 
 }

@@ -10,7 +10,7 @@ concrete ExtendEng of Extend =
     MkVPS2, ConjVPS2, ComplVPS2, MkVPI2, ConjVPI2, ComplVPI2,
     Base_nr_RNP, Base_rn_RNP, Base_rr_RNP, ByVP, CompBareCN,
     CompIQuant, CompQS, CompS, CompVP, ComplBareVS, ComplGenVV, ComplSlashPartLast, ComplVPSVV, CompoundAP,
-    CompoundN, ConjRNP, ConjVPS, ConsVPS, Cons_nr_RNP, Cons_rr_RNP, DetNPFem, EmbedPresPart, EmptyRelSlash,
+    CompoundN, ConjRNP, ConjVPS, ConsVPS, Cons_nr_RNP, Cons_rr_RNP, DetNPMasc, DetNPFem, EmbedPresPart, EmptyRelSlash,
     ExistsNP, ExistCN, ExistMassCN, ExistPluralCN,
     FocusAP, FocusAdV, FocusAdv, FocusObj, GenIP, GenModIP, GenModNP, GenNP, GenRP,
     GerundAdv, GerundCN, GerundNP, IAdvAdv, ICompAP, InOrderToVP, MkVPS, NominalizeVPSlashNP,
@@ -30,7 +30,7 @@ concrete ExtendEng of Extend =
     ParadigmsEng in {
 
   lin
-    GenNP np = {s = \\_,_ => np.s ! npGen ; sp = \\_,_,_ => np.s ! npGen} ;
+    GenNP np = {s = \\_,_ => np.s ! npGen ; sp = \\_,_,_,_ => np.s ! npGen} ;
     GenIP ip = {s = \\_ => ip.s ! NCase Gen} ;
     GenRP nu cn = {
       s = \\c => "whose" ++ nu.s ! Nom ++ 
@@ -59,12 +59,12 @@ concrete ExtendEng of Extend =
       } ;
 
     DetNPMasc det = {
-      s = det.sp ;
+      s = det.sp ! Masc ! False ;
       a = agrgP3 det.n Masc
       } ;
 
     DetNPFem det = {
-      s = det.sp ;
+      s = det.sp ! Fem ! False ;
       a = agrgP3 det.n Fem
       } ;
 

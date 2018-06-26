@@ -236,9 +236,5 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                      spec = dap.spec;
                      p = dap.p
                     } ;
-    DetDAP det = {s = \\sp,g,role => det.s ! sp ! g ! role;
-                  nn = det.nn;
-                  spec = det.spec;
-                  p = det.p
-                 } ;
+    DetDAP det = det ;
 }

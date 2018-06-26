@@ -434,15 +434,16 @@ mkInterj : Str -> Interj
   nounPN n = lin PN {s = n.s ! singular ; g = n.g} ;
 
   mkQuant = overload {
-    mkQuant : (this, these : Str) -> Quant = \sg,pl -> mkQuantifier sg pl sg pl;
-    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant = mkQuantifier;
+    mkQuant : (this, these : Str) -> Quant = \sg,pl -> mkQuantifier sg pl sg pl sg pl;
+    mkQuant : (no_sg, no_pl, none_sg, non_pl : Str) -> Quant = \sg,pl,sg',pl' -> mkQuantifier sg pl sg' pl' sg' pl';
   } ;
 
-  mkQuantifier : Str -> Str -> Str -> Str -> Quant = 
-   \sg,pl,sg',pl' -> lin Quant {
-    s = \\_  => table { Sg => sg ; Pl => pl } ;
-    sp = \\_ => table { 
-      Sg => \\c => regGenitiveS sg' ! npcase2case c ; Pl => \\c => regGenitiveS pl' ! npcase2case c}
+  mkQuantifier : Str -> Str -> Str -> Str -> Str -> Str -> Quant = 
+   \sg,pl,sg1',pl1',sg2',pl2' -> lin Quant {
+    s = \\_    => table { Sg => sg ; Pl => pl } ;
+    sp = \\g,_ => table {
+      Sg => \\c => regGenitiveS (case g of {Masc=>sg1'; Fem=>sg1'; Neutr=>sg2'}) ! npcase2case c ; 
+      Pl => \\c => regGenitiveS (case g of {Masc=>pl1'; Fem=>pl1'; Neutr=>pl2'}) ! npcase2case c}
     } ;
 
   mkOrd : Str -> Ord = \x -> lin Ord { s = regGenitiveS x};

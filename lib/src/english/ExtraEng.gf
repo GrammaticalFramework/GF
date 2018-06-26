@@ -2,7 +2,7 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
   open ResEng, Coordination, Prelude, MorphoEng, ParadigmsEng in {
 
   lin
-    GenNP np = {s = \\_,_ => np.s ! npGen ; sp = \\_,_,_ => np.s ! npGen} ;
+    GenNP np = {s = \\_,_ => np.s ! npGen ; sp = \\_,_,_,_ => np.s ! npGen} ;
     GenIP ip = {s = \\_ => ip.s ! NCase Gen} ;
     GenRP nu cn = {
       s = \\c => "whose" ++ nu.s ! Nom ++ 
