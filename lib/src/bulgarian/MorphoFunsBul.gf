@@ -231,7 +231,15 @@ oper
                                      n.s ! NF Sg Def ;
                         relPost = True;
                         g   = n.g
-                      }
+                      } ;
+
+    dualN : N -> Str -> N
+      = \n,adv -> lin N { s   = n.s;
+                          rel = \\_ => adv ;
+                          relPost = True;
+                          g   = n.g
+                        }
+
   } ;
 
   relativeN : N -> A -> N = dualN ; -- deprecated
