@@ -251,12 +251,13 @@ concrete ExtendEng of Extend =
    SlashBareV2S v s = insertExtrac s.s (predVc v) ;
 
   CompoundN noun cn = {
-    s = (\\n,c => noun.s ! Sg ! Nom ++ cn.s ! n ! c) ;
+    s = \\n,c => noun.s ! Sg ! Nom ++ cn.s ! n ! c ;
     g = cn.g
   } ;
   
   CompoundAP noun adj = {
-    s = (\\_ => noun.s ! Sg ! Nom ++ adj.s ! AAdj Posit Nom) ;
+    s = variants {\\_ => noun.s ! Sg ! Nom ++                    adj.s ! AAdj Posit Nom ;
+                  \\_ => noun.s ! Sg ! Nom ++ BIND++"-"++BIND ++ adj.s ! AAdj Posit Nom} ;
     isPre = True
     } ;
 

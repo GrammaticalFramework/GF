@@ -1,5 +1,5 @@
 --# -path=.:../abstract:../common:prelude
-concrete ExtendBul of Extend = CatBul ** open Prelude, Predef, ResBul, GrammarBul in {
+concrete ExtendBul of Extend = CatBul ** open Prelude, Predef, ResBul, GrammarBul, MorphoFunsBul in {
 
 lin
   GenModNP num np cn = DetCN (DetQuant DefArt num) (AdvCN cn (PrepNP possess_Prep np)) ;     -- this man's car(s) ; DEFAULT the car of this man
@@ -25,6 +25,8 @@ lin
          rel = \\af => n1.rel ! aform ++ n2.s ! NF Sg Indef ;  relPost = n1.relPost ;
          g   = n2.g
     } ;
+
+  CompoundAP n a = AdvAP (PositA a) (PrepNP (mkPrep "от" Acc) (MassNP (UseN n))) ;
 
   PositAdVAdj a = {s = a.adv; p = Pos} ;
 
@@ -69,10 +71,13 @@ lin
     p = Pos
   } ;
 
-  GerundAdv vp =
+  GerundAdv, ByVP = \vp ->
     {s = vp.ad.s ++
          vp.s ! Imperf ! VGerund ++
          vp.compl ! {gn=GSg Neut; p=P3}} ;
+
+  InOrderToVP vp = 
+    {s = "за" ++ daComplex Simul Pos vp ! Perf ! {gn=GSg Neut; p=P3}};
 
   iFem_Pron      = mkPron "аз" "мен" "ме" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  P1 ;
   youFem_Pron    = youSg_Pron ;

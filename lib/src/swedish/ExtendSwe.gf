@@ -5,14 +5,14 @@ concrete ExtendSwe of Extend = CatSwe **
     GenNP, GenModNP, ComplBareVS, CompBareCN,
     ApposNP, DetNPMasc, DetNPFem,
     StrandRelSlash, EmptyRelSlash, StrandQuestSlash,
-    PassVPSlash, PassAgentVPSlash, UttVPShort,
+    PassVPSlash, PassAgentVPSlash, UttVPShort, ByVP, InOrderToVP,
     MkVPI, BaseVPI, ConsVPI, ConjVPI, ComplVPIVV,
     MkVPS, BaseVPS, ConsVPS, ConjVPS, PredVPS,
     ICompAP,
     AdAdV, PositAdVAdj, GerundCN, GerundNP, GerundAdv, PresPartAP, PastPartAP, PastPartAgentAP,
     RNP, RNPList, ReflRNP, ReflPron, ReflPoss, PredetRNP, ConjRNP,
     Base_rr_RNP, Base_nr_RNP, Base_rn_RNP, Cons_rr_RNP, Cons_nr_RNP,
-    CompoundN
+    CompoundN, CompoundAP
   ]
   with (Grammar = GrammarSwe)
     **
@@ -174,6 +174,11 @@ concrete ExtendSwe of Extend = CatSwe **
       g  = n2.g
     } ;
     
+    CompoundAP noun adj = {
+      s = \\ap => noun.co ++ BIND ++ adj.s ! AF (APosit ap) Nom ;
+      isPre = True
+    } ;
+
   lin
     AdAdV = cc2 ;
 
@@ -215,5 +220,12 @@ concrete ExtendSwe of Extend = CatSwe **
     GerundAdv vp = {
       s = partVPPlusPost vp (PartPres Sg Indef (Nom|Gen)) {g = Utr ; n = Sg ; p = P3} Pos -- sovande(s) i sängen
     } ;
+    
+    ByVP vp = {  -- infinitive: att dricka öl, att vara glad
+      s = "genom att" ++ infVP vp {g = Utr ; n = Sg ; p = P3}
+    } ;
+    
+    InOrderToVP vp = {  -- infinitive: att dricka öl, att vara glad
+      s = "för att" ++ infVP vp {g = Utr ; n = Sg ; p = P3}
+    } ;
 }
-
