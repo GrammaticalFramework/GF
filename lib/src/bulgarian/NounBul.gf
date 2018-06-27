@@ -17,10 +17,7 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
                                  <NNum Pl,Def>   => NF Pl Def ;
                                  <NNum Pl,Indef> => NF Pl Indef;
                                  <NCountable,Def>   => NF Pl det.spec ;
-                                 <NCountable,Indef> => case cn.g of {
-                                                         AMasc Human => NF Pl Indef;
-                                                         _           => NFPlCount
-                                                       }
+                                 <NCountable,Indef> => NFPlCount
                                } ;
                           s = det.s ! True ! cn.g ! role ++ cn.s ! nf
                       in case role of {
@@ -59,7 +56,10 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     PredetNP pred np = {
       s = \\c => case c of {
                    RObj Dat      => "на";
-                   RObj WithPrep => with_Word; 
+                   RObj WithPrep => case np.p of {
+                                      Pos => with_Word ;
+                                      Neg => "без"
+                                    } ;
                    _             => ""
                  } ++
                  pred.s ! np.a.gn ++ np.s ! RObj Acc ;
