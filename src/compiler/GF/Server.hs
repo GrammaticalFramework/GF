@@ -3,6 +3,7 @@
 module GF.Server(server) where
 import Data.List(partition,stripPrefix,isInfixOf)
 import qualified Data.Map as M
+import Control.Applicative -- for GHC<7.10
 import Control.Monad(when)
 import Control.Monad.State(StateT(..),get,gets,put)
 import Control.Monad.Error(ErrorT(..),Error(..))
