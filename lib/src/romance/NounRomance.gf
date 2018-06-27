@@ -180,8 +180,15 @@ incomplete concrete NounRomance of Noun =
       g = cn.g ;
       } ;
 
-    -- PartNP and CounNP missing: how to define 'of' in the functor?
+    PartNP cn np = {
+      s = \\n => cn.s ! n ++ appCompl {s = [] ; c = genitive ; isDir = False} np ;
+      g = cn.g ;
+      } ;
 
+    CountNP det np = heavyNPpol np.isNeg
+      {s = \\c => det.s ! np.a.g ! c ++ (np.s ! genitive).ton ;
+       a = np.a ** {n = det.n} } ;
+    
     AdjDAP det ap = {
       s = \\g => det.s ! g ++ ap.s ! AF g det.n ;
       n = det.n ;

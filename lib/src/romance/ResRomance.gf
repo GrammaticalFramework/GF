@@ -77,7 +77,6 @@ oper
 
   oper
 
-
   predV : Verb -> VP = \verb ->
     let
       typ = verb.vtyp ;
@@ -111,16 +110,9 @@ oper
       ext   = vp.ext ;
     } ;
 
-  insertComplement : (Agr => Str) -> VP -> VP = \co,vp -> {
-    s     = vp.s ;
-    agr   = vp.agr ;
-    clit1 = vp.clit1 ;
-    clit2 = vp.clit2 ;
-    clit3 = vp.clit3 ;
-    isNeg = vp.isNeg ; --- can be in compl as well
-    neg   = vp.neg ;
+  insertComplement : (Agr => Str) -> VP -> VP ;
+  insertComplement co vp = vp ** {
     comp  = \\a => vp.comp ! a ++ co ! a ;
-    ext   = vp.ext ;
     } ;
 
 
@@ -141,16 +133,10 @@ oper
     comp  = \\a => vp.comp ! a ++ co ;
     } ;
 
-  insertAdV : Str -> VP -> VP = \co,vp -> {
-    s     = vp.s ;
-    agr   = vp.agr ;
-    clit1 = vp.clit1 ;
-    clit2 = vp.clit2 ;
-    clit3 = vp.clit3 ;
-    isNeg = vp.isNeg ;
-    neg   = \\b => let vpn = vp.neg ! b in {p1 = vpn.p1 ; p2 = vpn.p2 ++ co} ;
-    comp  = vp.comp ;
-    ext   = vp.ext ;
+  insertAdV : Str -> VP -> VP ;
+  insertAdV co vp = vp ** {
+    neg = \\b => let vpn = vp.neg ! b
+      in {p1 = vpn.p1 ; p2 = vpn.p2 ++ co}
     } ;
 
   insertClit3 : Str -> VP -> VP = \co,vp -> {
