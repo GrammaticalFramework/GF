@@ -578,7 +578,7 @@ oper
                      g  = AMasc Human
                  in {s = mkNoun (v0)
                                 (v0+"и")
-                                (v0+"я")
+                                (v0+"и")
                                 (v0+"ю")
                                 g ;
                      rel = (mkA078 (base+"ски")).s ; relPost = False ;
