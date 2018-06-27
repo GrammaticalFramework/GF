@@ -1070,7 +1070,7 @@ pgf_symbols_cmp(GuString* psent, PgfSymbols* syms, size_t* sym_idx, bool case_se
 		if (*sym_idx > 0) {
 			if (!skip_space(psent)) {
 				if (**psent == 0)
-					return 0;
+					return -1;
 				return 1;
 			}
 
@@ -1086,13 +1086,13 @@ pgf_symbols_cmp(GuString* psent, PgfSymbols* syms, size_t* sym_idx, bool case_se
 		case PGF_SYMBOL_LIT:
 		case PGF_SYMBOL_VAR: {
 			if (**psent == 0)
-				return 0;
+				return -1;
 			return 1;
 		}
 		case PGF_SYMBOL_KS: {
 			PgfSymbolKS* pks = inf.data;
 			if (**psent == 0)
-				return 0;
+				return -1;
 
 			int cmp = cmp_string(psent, pks->token, case_sensitive);
 			if (cmp != 0)
