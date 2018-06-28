@@ -68,7 +68,7 @@ oper
     lock_V=<>
     } ;
 
-  actionV : VTable -> VTable -> V = dualV ;
+  actionV : VTable -> VTable -> V = dualV ;  -- deprecated
 
   singleV : VTable -> V ;
   singleV vtable = { 
@@ -83,7 +83,16 @@ oper
     lock_V=<>
     } ;
 
-  stateV : VTable -> V = singleV ;
+  stateV : VTable -> V = singleV ;  -- deprecated
+  
+  compoundV : V -> Str -> V ;
+  compoundV v adv = {
+    s = \\asp,vform => v.s ! asp ! vform ++ adv ;
+    n = \\nform => v.n ! nform ++ adv ;
+    vtype = VNormal;
+    lock_V=<>
+    } ;
+
 
 --3 Zero-place verbs
 --
