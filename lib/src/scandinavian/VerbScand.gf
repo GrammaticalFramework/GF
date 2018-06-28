@@ -79,6 +79,6 @@ incomplete concrete VerbScand of Verb = CatScand ** open CommonScand, ResScand, 
 
     AdvVPSlash vps adv = insertAdv adv.s vps ** {c2 = vps.c2 ; n3 = vps.n3} ;
     AdVVPSlash adv vps = insertAdV adv.s vps ** {c2 = vps.c2 ; n3 = vps.n3} ;
-    ExtAdvVP vp adv = insertExt (comma ++ adv.s) vp ;
+    ExtAdvVP vp adv = insertExt (bindComma ++ adv.s) vp ;
 
 }

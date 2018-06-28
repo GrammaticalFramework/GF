@@ -86,6 +86,4 @@ interface ResScand = DiffScand ** open CommonScand, Prelude in {
     isSimple = True
     } ;
 
-  comma : Str = SOFT_BIND ++ "," ;
-
 }
