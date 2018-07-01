@@ -270,7 +270,7 @@ lin
   hair_N = mk2N "hår" "hår" ;
   hand_N = mk2N "hand" "händer" ;
   head_N = mkN "huvud" "huvudet" "huvuden" "huvudena" ;
-  heart_N = mkN "hjärta" "hjärtat" "hjärtan" "hjärtana" ;
+  heart_N = changeCompoundN "hjärt" (mkN "hjärta" "hjärtat" "hjärtan" "hjärtana") ;
   horn_N = mk2N "horn" "horn" ;
   husband_N = (mk2N "make" "makar") ;
   ice_N = mk2N "is" "isar" ;
