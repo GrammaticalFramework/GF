@@ -4,4 +4,4 @@
 -- Original module by Malin Ahlberg has been moved to OldDictSwe (which this module inherits)
 -- This updated version with renamed identifiers is maintained by John J. Camilleri
 
-abstract DictSweAbs = Cat, OldDictSweAbs NewDictSweAbs ;
+abstract DictSweAbs = Cat, OldDictSweAbs, NewDictSweAbs ;
