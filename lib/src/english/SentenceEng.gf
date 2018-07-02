@@ -12,7 +12,7 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
       s = \\pol,n => 
         let 
           agr   = AgP2 (numImp n) ;
-          verb  = infVP VVAux vp Simul CPos agr ;
+          verb  = infVP VVAux vp False Simul CPos agr ;
           dont  = case pol of {
             CNeg True => "don't" ;
             CNeg False => "do" ++ "not" ;
@@ -39,7 +39,7 @@ concrete SentenceEng of Sentence = CatEng ** open Prelude, ResEng in {
 
     EmbedS  s  = {s = \\_ => conjThat ++ s.s} ;
     EmbedQS qs = {s = \\_ => qs.s ! QIndir} ;
-    EmbedVP vp = {s = \\a => infVP VVInf vp Simul CPos a} ;
+    EmbedVP vp = {s = \\a => infVP VVInf vp False Simul CPos a} ;
 
     UseCl  t p cl = {
       s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! ctr p.p ! oDir

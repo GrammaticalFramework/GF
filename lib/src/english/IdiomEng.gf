@@ -32,9 +32,9 @@ concrete IdiomEng of Idiom = CatEng ** open Prelude, ResEng in {
 
     ProgrVP vp = insertObj (\\a => vp.ad ! a ++ vp.prp ++ vp.p ++ vp.s2 ! a) (predAux auxBe) ;
 
-    ImpPl1 vp = {s = "let's" ++ infVP VVAux vp Simul CPos (AgP1 Pl)} ;
+    ImpPl1 vp = {s = "let's" ++ infVP VVAux vp False Simul CPos (AgP1 Pl)} ;
 
-    ImpP3 np vp = {s = "let" ++ np.s ! NPAcc ++ infVP VVAux vp Simul CPos np.a} ;
+    ImpP3 np vp = {s = "let" ++ np.s ! NPAcc ++ infVP VVAux vp False Simul CPos np.a} ;
 
     SelfAdvVP vp = insertObj reflPron vp ;
     SelfAdVVP vp = insertAdVAgr reflPron vp ;

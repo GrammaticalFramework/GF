@@ -464,17 +464,23 @@ param
   presVerb : {s : VForm => Str} -> Agr -> Str = \verb -> 
     agrVerb (verb.s ! VPres) (verb.s ! VInf) ;
 
-  infVP : VVType -> VP -> Anteriority -> CPolarity -> Agr -> Str = \typ,vp,ant,cb,a ->
+  infVP : VVType -> VP -> Bool -> Anteriority -> CPolarity -> Agr -> Str = \typ,vp,ad_pos,ant,cb,a ->
     case cb of {CPos => ""; _ => "not"} ++
     case ant of {
       Simul => case typ of {
                  VVAux => vp.ad ! a ++ vp.inf ; 
-                 VVInf => "to" ++ vp.ad ! a ++ vp.inf ; ---- this is the "split infinitive"
+                 VVInf => case ad_pos of {            ---- this is the "split infinitive"
+                            True  => vp.ad ! a ++ "to" ++ vp.inf ;
+                            False => "to" ++ vp.ad ! a ++ vp.inf
+                          } ;
                  _ => vp.ad ! a ++ vp.prp
                }
       ; Anter => case typ of {                                    --# notpresent
                  VVAux => "have" ++ vp.ad ! a ++ vp.ptp ;                --# notpresent
-                 VVInf => "to" ++ "have" ++ vp.ad ! a ++ vp.ptp ;        --# notpresent
+                 VVInf => case ad_pos of {                                   --# notpresent
+                             True  => vp.ad ! a ++ "to" ++ "have" ++ vp.ptp ;        --# notpresent
+                             False => "to" ++ "have" ++ vp.ad ! a ++ vp.ptp          --# notpresent
+                          } ;                                                --# notpresent
                  _     => "having" ++ vp.ad ! a ++ vp.ptp                 --# notpresent
                }                                                       --# notpresent
     } ++ vp.p ++

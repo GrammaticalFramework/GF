@@ -130,16 +130,16 @@ concrete CatEng of Cat = CommonX - [Pol,SC] ** open ResEng, Prelude in {
     SSlash = \ss -> ss.s ++ ss.c2 ;
     ClSlash = \cls -> cls.s ! Pres ! Simul ! CPos ! oDir ++ cls.c2 ;
 
-    VP = \vp -> infVP VVAux vp Simul CPos (agrP3 Sg) ;
-    VPSlash = \vps -> infVP VVAux vps Simul CPos (agrP3 Sg) ++ vps.c2;
+    VP = \vp -> infVP VVAux vp False Simul CPos (agrP3 Sg) ;
+    VPSlash = \vps -> infVP VVAux vps False Simul CPos (agrP3 Sg) ++ vps.c2;
 
     Conj = \conj -> conj.s1 ++ conj.s2 ;
 
-    V, VS, VQ, VA = \v -> infVP VVAux (predV v) Simul CPos (agrP3 Sg);
-    V2, V2A, V2Q, V2S = \v -> infVP VVAux (predV v) Simul CPos (agrP3 Sg) ++ v.c2;
-    V3 = \v -> infVP VVAux (predV v) Simul CPos (agrP3 Sg) ++ v.c2 ++ v.c3;
-    VV = \v -> infVP VVAux (predVV v) Simul CPos (agrP3 Sg) ;
-    V2V = \v -> infVP VVAux (predVc v) Simul CPos (agrP3 Sg) ;
+    V, VS, VQ, VA = \v -> infVP VVAux (predV v) False Simul CPos (agrP3 Sg);
+    V2, V2A, V2Q, V2S = \v -> infVP VVAux (predV v) False Simul CPos (agrP3 Sg) ++ v.c2;
+    V3 = \v -> infVP VVAux (predV v) False Simul CPos (agrP3 Sg) ++ v.c2 ++ v.c3;
+    VV = \v -> infVP VVAux (predVV v) False Simul CPos (agrP3 Sg) ;
+    V2V = \v -> infVP VVAux (predVc v) False Simul CPos (agrP3 Sg) ;
 
     A = \a -> a.s ! AAdj Posit Nom ;
     A2 = \a -> a.s ! AAdj Posit Nom ++ a.c2 ;

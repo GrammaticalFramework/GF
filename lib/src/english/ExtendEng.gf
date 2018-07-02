@@ -150,7 +150,7 @@ concrete ExtendEng of Extend =
       isPre = vp.isSimple                 -- depends on whether there are complements
       } ;
 
-    EmbedPresPart vp = {s = \\a => infVP VVPresPart vp Simul CPos a} ;
+    EmbedPresPart vp = {s = \\a => infVP VVPresPart vp False Simul CPos a} ;
 
    PastPartAP vp = { 
       s = \\a => vp.ad ! a ++ vp.ptp ++ vp.p ++ vp.c2 ++ vp.s2 ! a ++ vp.ext ;
@@ -185,9 +185,9 @@ concrete ExtendEng of Extend =
 
    WithoutVP vp = {s = "without" ++ (GerundAdv (lin VP vp)).s} ; 
 
-   InOrderToVP vp = {s = ("in order" | []) ++ infVP VVInf vp Simul CPos (AgP3Sg Neutr)} ;
+   InOrderToVP vp = {s = ("in order" | []) ++ infVP VVInf vp False Simul CPos (AgP3Sg Neutr)} ;
 
-   PurposeVP vp = {s = infVP VVInf vp Simul CPos (agrP3 Sg)} ; --- agr
+   PurposeVP vp = {s = infVP VVInf vp False Simul CPos (agrP3 Sg)} ; --- agr
 
    ByVP vp = {s = "by" ++ (GerundAdv (lin VP vp)).s} ; 
 
@@ -331,18 +331,18 @@ concrete ExtendEng of Extend =
 
   lin
     ComplGenVV v a p vp = insertObj (\\agr => a.s ++ p.s ++ 
-                                         infVP v.typ vp a.a p.p agr)
+                                         infVP v.typ vp False a.a p.p agr)
                                (predVV v) ;
 
     CompS s = {s = \\_ => "that" ++ s.s} ;
     CompQS qs = {s = \\_ => qs.s ! QIndir} ;
     CompVP ant p vp = {s = \\a => ant.s ++ p.s ++ 
-                                infVP VVInf vp ant.a p.p a} ;
+                                infVP VVInf vp False ant.a p.p a} ;
 
 -- quite specific for English anyway
 
     UncontractedNeg = {s = [] ; p = CNeg False} ; 
-    UttVPShort vp = {s = infVP VVAux vp Simul CPos (agrP3 Sg)} ;
+    UttVPShort vp = {s = infVP VVAux vp False Simul CPos (agrP3 Sg)} ;
 
 
 

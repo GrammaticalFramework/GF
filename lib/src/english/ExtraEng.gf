@@ -91,9 +91,9 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
       isPre = vp.isSimple                 -- depends on whether there are complements
       } ;
 
-    EmbedPresPart vp = {s = \\a => infVP VVPresPart vp Simul CPos a} ; --- agr
+    EmbedPresPart vp = {s = \\a => infVP VVPresPart vp False Simul CPos a} ; --- agr
 
-    UttVPShort vp = {s = infVP VVAux vp Simul CPos (agrP3 Sg)} ;
+    UttVPShort vp = {s = infVP VVAux vp False Simul CPos (agrP3 Sg)} ;
 
   do_VV = {
     s = table {
@@ -206,7 +206,7 @@ lin
       mkClause "there" (agrP3 (fromAgr np.a).n) 
         (insertObj (\\_ => np.s ! NPAcc) (predV (regV "exist"))) ;
 
-   PurposeVP vp = {s = infVP VVInf vp Simul CPos (agrP3 Sg)} ; --- agr
+   PurposeVP vp = {s = infVP VVInf vp False Simul CPos (agrP3 Sg)} ; --- agr
 
 
    ComplBareVS  v s = insertExtra s.s (predV v) ;

@@ -13,7 +13,7 @@ concrete BackwardEng of Backward = CatEng ** open ResEng in {
     ComplV3 v np np2 = 
       insertObj (\\_ => v.c2 ++ np.s ! Acc ++ v.c3 ++ np2.s ! Acc) (predV v) ;
     ComplV2V v np vp = 
-      insertObj (\\a => infVP v.isAux vp Simul CPos a)
+      insertObj (\\a => infVP v.isAux vp False Simul CPos a)
         (insertObj (\\_ => v.c2 ++ np.s ! Acc) (predV v)) ;
     ComplV2S v np s = 
       insertObj (\\_ => conjThat ++ s.s)
@@ -33,7 +33,7 @@ concrete BackwardEng of Backward = CatEng ** open ResEng in {
 
     SlashVVV2 np vv v2 = 
       mkClause (np.s ! Nom) np.a 
-        (insertObj (\\a => infVP vv.isAux (predV v2) Simul CPos a) (predVV vv))  **
+        (insertObj (\\a => infVP vv.isAux (predV v2) False Simul CPos a) (predVV vv))  **
         {c2 = v2.c2} ;
 
 -- from Noun 19/4/2008
