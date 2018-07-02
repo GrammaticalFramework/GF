@@ -62,7 +62,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
 
   lin
     BaseVPI x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
-    ConsVPI x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep ResBul.comma)!d!t++xs.s!d!t!a} ;
+    ConsVPI x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep bindComma)!d!t++xs.s!d!t!a} ;
 
     MkVPI vp = {s = daComplex Simul Pos vp ! Perf} ;
     ConjVPI conj vpi = {
@@ -77,7 +77,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
 
   lin
     BaseVPS x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
-    ConsVPS x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep ResBul.comma)!d!t++xs.s!d!t!a} ;
+    ConsVPS x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep bindComma)!d!t++xs.s!d!t!a} ;
 
     PredVPS np vps = {s = np.s ! RSubj ++ vps.s ! np.a} ;
 

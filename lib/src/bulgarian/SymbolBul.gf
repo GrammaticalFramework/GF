@@ -53,6 +53,6 @@ lin
   MkSymb s = s ;
 
   BaseSymb = infixSS "è" ;
-  ConsSymb = infixSS comma ;
+  ConsSymb = infixSS bindComma ;
 
 }

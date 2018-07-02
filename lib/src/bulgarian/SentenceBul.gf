@@ -70,10 +70,10 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
       c2 = cl.c2
     } ;
 
-    ExtAdvS a s = {s = a.s ++ comma ++ s.s} ;
+    ExtAdvS a s = {s = a.s ++ bindComma ++ s.s} ;
     AdvS a s = {s = a.s ++ s.s} ;
 
-    SSubjS a s b = {s = a.s ++ comma ++ s.s ++ b.s} ;
+    SSubjS a s b = {s = a.s ++ bindComma ++ s.s ++ b.s} ;
 
-    RelS s r = {s = s.s ++ comma ++ r.s ! {gn=gennum ANeut Sg; p=P3}} ;
+    RelS s r = {s = s.s ++ bindComma ++ r.s ! {gn=gennum ANeut Sg; p=P3}} ;
 }

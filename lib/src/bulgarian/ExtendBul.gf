@@ -115,7 +115,7 @@ lincat
 
 lin
   BaseVPS x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
-  ConsVPS x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep ResBul.comma)!d!t++xs.s!d!t!a} ;
+  ConsVPS x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep bindComma)!d!t++xs.s!d!t!a} ;
 
   PredVPS np vps = {s = np.s ! RSubj ++ vps.s ! np.a} ;
 
@@ -182,7 +182,7 @@ lin
   } ;
 
 lin
-  ApposNP np1 np2 = {s = \\role => np1.s ! role ++ comma ++ np2.s ! role; a = np1.a; p = np1.p} ;
+  ApposNP np1 np2 = {s = \\role => np1.s ! role ++ bindComma ++ np2.s ! role; a = np1.a; p = np1.p} ;
 
   DetNPMasc det = {
     s = \\role => let s = det.s ! False ! (AMasc Human) ! role
