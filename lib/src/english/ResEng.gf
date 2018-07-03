@@ -141,14 +141,15 @@ param
         }
       } ;
 
-    mkAdjective : (_,_,_,_ : Str) -> {s : AForm => Str; lock_A : {}} = 
+    mkAdjective : (_,_,_,_ : Str) -> {s : AForm => Str; isPre : Bool; lock_A : {}} = 
       \good,better,best,well -> lin A {
       s = table {
         AAdj Posit  c => (regGenitiveS good) ! c ;
         AAdj Compar c => (regGenitiveS better) ! c ;
         AAdj Superl c => (regGenitiveS best) ! c ;
         AAdv          => well
-        }
+        } ;
+      isPre = True
       } ;
 
     mkVerb : (_,_,_,_,_ : Str) -> Verb = 

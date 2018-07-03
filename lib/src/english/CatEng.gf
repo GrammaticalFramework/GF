@@ -98,8 +98,8 @@ concrete CatEng of Cat = CommonX - [Pol,SC] ** open ResEng, Prelude in {
     VV = {s : VVForm => Str ; p : Str ; typ : VVType} ;
     V2V = Verb ** {c2,c3 : Str ; typ : VVType} ;
 
-    A = {s : AForm => Str} ;
-    A2 = {s : AForm => Str ; c2 : Str} ;
+    A = {s : AForm => Str ; isPre : Bool} ;
+    A2 = {s : AForm => Str ; c2 : Str ; isPre : Bool} ;
 
     N = {s : Number => Case => Str ; g : Gender} ;
     N2 = {s : Number => Case => Str ; g : Gender} ** {c2 : Str} ;
@@ -119,8 +119,8 @@ concrete CatEng of Cat = CommonX - [Pol,SC] ** open ResEng, Prelude in {
     VV = \s -> {s = \\_ => s; p = ""; isRefl = False; typ = VVInf} ;
     V2V = \s -> {s = \\_ => s; p = ""; isRefl = False; c2,c3="" ; typ = VVInf} ;
 
-    A = \s -> {s = \\_ => s} ;
-    A2 = \s -> {s = \\_ => s; c2 = ""} ;
+    A = \s -> {s = \\_ => s; isPre = True} ;
+    A2 = \s -> {s = \\_ => s; c2 = ""; isPre = True} ;
 
     N = \s -> {s = \\_,_ => s; g = Neutr} ;
     N2 = \s -> {s = \\_,_ => s; c2 = ""; g = Neutr} ;

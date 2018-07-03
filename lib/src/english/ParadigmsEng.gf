@@ -647,7 +647,7 @@ mkInterj : Str -> Interj
     let ad = (a.s ! AAdj Posit Nom) 
     in regADeg ad ;
     
-  irregAdv a adv = lin A {s = table {AAdv => adv; aform => a.s ! aform}} ;
+  irregAdv a adv = lin A {s = table {AAdv => adv; aform => a.s ! aform}; isPre = a.isPre} ;
 
   prepA2 : A -> Prep -> A2 ;
 

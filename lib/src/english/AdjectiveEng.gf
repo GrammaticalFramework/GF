@@ -4,7 +4,7 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
 
     PositA  a = {
       s = \\_ => a.s ! AAdj Posit Nom ;
-      isPre = True
+      isPre = a.isPre
       } ;
     ComparA a np = {
       s = \\_ => a.s ! AAdj Compar Nom ++ "than" ++ np.s ! npNom ; 
@@ -12,7 +12,7 @@ concrete AdjectiveEng of Adjective = CatEng ** open ResEng, Prelude in {
       } ;
     UseComparA a = {
       s = \\_ => a.s ! AAdj Compar Nom ; 
-      isPre = True
+      isPre = a.isPre
       } ;
 
     AdjOrd ord = {
