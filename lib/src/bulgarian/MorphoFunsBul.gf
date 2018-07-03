@@ -265,9 +265,15 @@ oper
 -- A preposition as used for rection in the lexicon, as well as to
 -- build $PP$s in the resource API, just requires a string.
 
-  mkPrep : Str -> Case -> Prep = \p,c -> {s = p; c = c; lock_Prep = <>} ;
-  noPrep : Prep = mkPrep [] Acc ;
-  
+  mkPrep = overload {
+    mkPrep : Str -> Prep = 
+      \p   -> {s = p; c = Acc; lock_Prep = <>} ;
+    mkPrep : Str -> Case -> Prep = 
+      \p,c -> {s = p; c = c;   lock_Prep = <>}
+  } ;
+
+  noPrep   : Prep = mkPrep [] Acc ;
+  dat_Prep : Prep = mkPrep [] Dat ;
 
 --2 Proper Names
 --
