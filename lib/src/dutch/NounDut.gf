@@ -86,13 +86,15 @@ concrete NounDut of Noun = CatDut ** open ResDut, Prelude in {
     OrdDigits numeral = {s = \\af => numeral.s ! NOrd af} ;
 
     NumNumeral numeral = {s = \\g,c => numeral.s ! NCard g c; n = numeral.n } ;
-    OrdNumeral numeral = {s = \\af => numeral.s ! NOrd af} ;
+    OrdNumeral numeral = {s = let tiende : AForm => Str = \\af => numeral.s ! NOrd af
+                               in table {APred => tiende ! AAttr Utr ;
+                                         af    => tiende ! af} } ;
 
     AdNum adn num = {s = \\g,c => adn.s ++ num.s!g!c; n = num.n } ;
 
-    OrdSuperl a = {s = a.s ! Superl} ;
+    OrdSuperl a = {s = addHetPred (a.s ! Superl) } ; -- het warmst in APred, rest normal
 
-    OrdNumeralSuperl n a = {s = \\af => n.s ! NOrd af ++ a.s ! Superl ! af} ;
+    OrdNumeralSuperl n a = {s = addHetPred (\\af => n.s ! NOrd af ++ a.s ! Superl ! af) } ;
 
     DefArt = noMerge ** {
       s = \\_,n,g  => case <n,g> of {<Sg,Neutr> => "het" ; _ => "de"} ;

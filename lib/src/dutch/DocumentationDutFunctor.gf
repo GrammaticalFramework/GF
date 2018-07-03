@@ -50,7 +50,8 @@ lin
           tr (th []  ++ th (heading positive_Parameter) ++ th (heading comparative_Parameter) ++ 
                         th (heading superlative_Parameter)) ++
           tr (th (heading predicative_Parameter) ++ gforms APred) ++
-          tr (th (heading attributive_Parameter) ++ gforms AAttr) ++
+          tr (th (heading attributive_Parameter) ++ gforms (AAttr Utr)) ++
+          tr (th (heading attributive_Parameter) ++ gforms (AAttr Neutr)) ++
           tr (th (heading partitive_Parameter)   ++ gforms AGen)
           )
     in { t  = "a" ;
