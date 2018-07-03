@@ -211,7 +211,9 @@ oper
 
 --.
 
-  mkOrd : A -> Ord = \a -> lin Ord {s = a.s ! Posit} ;
+  mkOrd : A -> Ord = \a ->
+    lin Ord {s = table { APred => "de" ++ a.s ! Posit ! APred ;
+                         af    => a.s ! Posit ! af } } ;
 
   mkN = overload {
     mkN : (bank : Str) -> N 

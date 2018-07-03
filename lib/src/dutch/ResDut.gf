@@ -76,16 +76,16 @@ resource ResDut = ParamX ** open Prelude, Predef in {
       } ; 
 
   param 
-    AForm = APred | AAttr | AGen ;
+    AForm = APred | AAttr Gender | AGen ;
     
   oper
     Adjective = {s : Degree => AForm => Str} ;
 
     mkAdjective : (_,_,_,_,_ : Str) -> Adjective = \ap,aa,ag,ac,as -> {
       s = table {
-        Posit  => table {APred => ap ; AAttr => aa ; AGen => ag} ; 
-        Compar => table {APred => ac ; AAttr => ac + "e" ; AGen => ac + "s"} ; ----
-        Superl => table {APred => as ; AAttr => as + "e" ; AGen => as + "s"}   ----
+        Posit  => table {AAttr Utr => aa ; AGen => ag ; _ => ap } ;
+        Compar => table {AAttr Utr => ac + "e" ; AGen => ac + "s" ; _ => ac } ; ----
+        Superl => table {AAttr Utr => as + "e" ; AGen => as + "s" ; _ => as }   ----
         }
       } ;
       
@@ -115,7 +115,11 @@ resource ResDut = ParamX ** open Prelude, Predef in {
           _ => endCons s + "e"
           } ;
       in reg2Adjective s se ;
-      
+
+  addHetPred : (AForm => Str) -> (AForm => Str) = \tiend_warmst ->
+     table {APred => "het" ++ tiend_warmst ! APred ;
+            af    => tiend_warmst ! af } ;
+
 param 
     VForm = 
        VInf      -- zijn
@@ -154,9 +158,9 @@ param
                  VPresSg3 | VImp3 => aait; -- hij/zij aait
                  VPastSg          => aaide; -- ik aaide  --# notpresent
                  VPastPl          => aaiden; -- hij/zij/het/wij aaiden --# notpresent
-                 VPerf APred      => geaaid ; -- ik heb geaaid
-                 VPerf AAttr      => geaaide ; -- geaaide X
+                 VPerf (AAttr Utr)=> geaaide ; -- geaaide X
                  VPerf AGen       => geaaid + "s" ; -- iets geaaids
+                 VPerf (APred|_)  => geaaid ; -- ik heb geaaid
                  VPresPart        => aaien + "de" ;
                  VGer             => aaien + "d"
               }
@@ -316,9 +320,9 @@ param
        VImp2       => "wees" ;
        VImp3       => "weest" ;
        VImpPl      => "wezen" ;
-       VPerf APred => "geweest" ;
-       VPerf AAttr => "geweeste" ;
+       VPerf (AAttr Utr) => "geweeste" ;
        VPerf AGen  => "geweests" ;
+       VPerf (APred|_) => "geweest" ;
        VPresPart   => "zijnde" ;
        VGer        => "wezend"
        } ;
@@ -341,9 +345,9 @@ param
        VImp2       => "heb" ;
        VImp3       => "heeft" ;
        VImpPl      => "hebben" ;
-       VPerf APred => "gehad" ;
-       VPerf AAttr  => "gehadde" ;
+       VPerf (AAttr Utr) => "gehadde" ;
        VPerf AGen  => "gehads" ;
+       VPerf (APred|_) => "gehad" ;
        VPresPart   => "hebbende" ;
        VGer        => "hebbend"
        } ;
@@ -366,9 +370,9 @@ param
        VImp2       => "zoud" ;  ---- not used
        VImp3       => "zoudt" ;
        VImpPl      => "zouden" ; ----
-       VPerf APred => "gezoudt" ;
-       VPerf AAttr => "gezoude" ;
+       VPerf (AAttr Utr) => "gezoude" ;
        VPerf AGen  => "gezouds" ;
+       VPerf (APred|_) => "gezoudt" ;
        VPresPart   => "zullende" ;
        VGer        => "zullend"
        } ;
@@ -391,9 +395,9 @@ param
        VImp2       => "kan" ;  ---- not used
        VImp3       => "kan" ;
        VImpPl      => "kunnen" ; ----
-       VPerf APred => "gekund" ;
-       VPerf AAttr => "gekunde" ;
+       VPerf (AAttr Utr) => "gekunde" ;
        VPerf AGen  => "gekunds" ;
+       VPerf (APred|_) => "gekund" ;
        VPresPart   => "kunnende" ;
        VGer        => "kunnend"
        } ;
@@ -523,8 +527,8 @@ param
 
     agrAdj : Gender -> Adjf -> NForm -> AForm = \g,a,n ->
       case <a,g,n> of {
-        <Strong,Neutr,NF Sg _> => APred ;
-        _ => AAttr
+        <Strong,Neutr,NF Sg _> => AAttr Neutr ;
+        _ => AAttr Utr
         } ;
 
   param NegPosition = BeforeObjs | AfterObjs | BetweenObjs;
