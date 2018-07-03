@@ -132,6 +132,7 @@ lin
 
 lin
   ComplBareVS = ComplVS ;
+  ComplSlashPartLast = ComplSlash ;
 
 lincat
   RNP = {s : Role => Str; a : Agr; p : Polarity} ;

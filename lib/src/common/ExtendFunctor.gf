@@ -44,7 +44,6 @@ lin
   FocusAdv = variants {} ;     -- Adv -> S -> Utt ; -- today I will sleep
   FocusAdV = variants {} ;     -- AdV -> S -> Utt ; -- never will I sleep
   FocusAP = variants {} ;     -- AP -> NP -> Utt ; -- green was the tree
-  ParticipleAP = variants {} ;     -- VP -> AP ; -- (the man) looking at Mary
   EmbedPresPart = variants {} ;     -- VP -> SC ; -- looking at Mary (is fun)
   PassVPSlash = variants {} ;     -- VPSlash -> VP ; -- be forced to sleep
   PassAgentVPSlash = variants {} ;     -- VPSlash -> NP -> VP ; -- be begged by her to go
@@ -75,7 +74,8 @@ lin
   Base_rn_RNP = variants {} ;     -- RNP -> NP -> RNPList ; -- myself, John
   Cons_rr_RNP = variants {} ;     -- RNP -> RNPList -> RNPList ; -- my family, myself, John
   Cons_nr_RNP = variants {} ;     -- NP -> RNPList -> RNPList ; -- John, my family, myself
-  ComplVV = variants {} ;     -- VV -> Ant -> Pol -> VP -> VP ; -- want not to have slept
+  ComplGenVV = variants {} ;     -- VV -> Ant -> Pol -> VP -> VP ; -- want not to have slept
+  ComplSlashPartLast = ComplSlash ;
   SlashV2V = variants {} ;     -- V2V -> Ant -> Pol -> VPS -> VPSlash ; -- force (her) not to have slept
   CompoundN = variants {} ;     -- N -> N -> N ; -- control system / controls system / control-system
   CompoundAP = variants {} ;     -- N -> A -> AP ; -- language independent / language-independent
