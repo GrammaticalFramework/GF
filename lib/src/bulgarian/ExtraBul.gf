@@ -27,8 +27,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     } ;
 
     EmptyRelSlash slash = {
-      s = \\t,a,p,agr => slash.c2.s ++ whichRP ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main ;
-      role = RObj Acc
+      s = \\t,a,p,agr => slash.c2.s ++ whichRP ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main
       } ;
 
     i8fem_Pron  = mkPron "אח" "למי" "למÿ" "למÿע" "למÿ" "למÿעא" "למו" "למועמ" "למט" "למטעו" (GSg Fem)  PronP1 ;
@@ -96,7 +95,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
                                        vp.compl1 ! a ++ vp.compl2 ! a) Pos (predV verbBe) ;
 
     PassAgentVPSlash vp np = ---- AR 9/4/2014: to be verified
-      insertObj (\\_ => "קנוח" ++ np.s ! RObj Acc) Pos
+      insertObj (\\_ => "קנוח" ++ np.s ! RObj CPrep) Pos
                      (insertObj (\\a => vp.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc)) ++
                                        vp.compl1 ! a ++ vp.compl2 ! a) Pos (predV verbBe)) ;
 

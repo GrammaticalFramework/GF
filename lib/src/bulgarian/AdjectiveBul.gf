@@ -10,8 +10,8 @@ concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
       } ;
 
     ComparA a np = {
-      s = \\aform,_ => "по" ++ hyphen ++ a.s ! aform ++ "от" ++ np.s ! RObj Acc ; 
-      adv = "по" ++ hyphen ++ a.adv ++ "от" ++ np.s ! RObj Acc ;
+      s = \\aform,_ => "по" ++ hyphen ++ a.s ! aform ++ "от" ++ np.s ! RObj CPrep ; 
+      adv = "по" ++ hyphen ++ a.adv ++ "от" ++ np.s ! RObj CPrep ;
       isPre = True
       } ;
     UseComparA a = {
@@ -28,16 +28,15 @@ concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
 
 -- $SuperlA$ belongs to determiner syntax in $Noun$.
 
----- just to make the API compile. AR 7/4/2010
     CAdvAP ad ap np = {
-      s = \\a,p => ad.s ++ ap.s ! a ! p ++ ad.sn ++ np.s ! RObj Acc ; 
-      adv =        ad.s ++ ap.adv ++ ad.sn ++ np.s ! RObj Acc ; 
+      s = \\a,p => ad.s ++ ap.s ! a ! p ++ ad.sn ++ np.s ! RObj CPrep ; 
+      adv =        ad.s ++ ap.adv ++ ad.sn ++ np.s ! RObj CPrep ; 
       isPre = False
       } ;
 
     ComplA2 a np = {
-      s = \\aform,p => a.s ! aform ++ a.c2 ++ np.s ! RObj Acc ; 
-      adv = a.adv ++ a.c2 ++ np.s ! RObj Acc ; 
+      s = \\aform,p => a.s ! aform ++ a.c2 ++ np.s ! RObj CPrep ; 
+      adv = a.adv ++ a.c2 ++ np.s ! RObj CPrep ; 
       isPre = False
       } ;
 

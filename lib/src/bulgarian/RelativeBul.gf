@@ -28,7 +28,7 @@ concrete RelativeBul of Relative = CatBul ** open ResBul in {
       } ;
 
     FunRP p np rp = {
-      s = \\gn => np.s ! RObj Acc ++ linPrep p ++ rp.s ! gn ;
+      s = \\gn => np.s ! RObj CPrep ++ linPrep p ++ rp.s ! gn ;
       } ;
 
     IdRP = {

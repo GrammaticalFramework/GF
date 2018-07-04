@@ -7,8 +7,7 @@ lin
   AdAdV a adv = {s = a.s ++ adv.s; p = adv.p} ;
 
   EmptyRelSlash slash = {
-      s = \\t,a,p,agr => slash.c2.s ++ whichRP ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main ;
-      role = RObj Acc
+      s = \\t,a,p,agr => slash.c2.s ++ whichRP ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main
       } ;
 
   CompoundN n1 n2 = 
@@ -55,7 +54,7 @@ lin
                           vp.s ! Perf ! VPassive aform ++
                           vp.compl1 ! {gn=aform2gennum aform; p=p} ++
                           vp.compl2 ! {gn=aform2gennum aform; p=p} ++
-                          "от" ++ np.s ! RObj Acc
+                          "от" ++ np.s ! RObj CPrep
     in {s = ap; adv = ap ! ASg Neut Indef ! P3; isPre = False} ;
 
   GerundCN vp = {
@@ -93,7 +92,7 @@ lin
                                      vp.compl1 ! a ++ vp.compl2 ! a) Pos (predV verbBe) ;
 
   PassAgentVPSlash vp np =
-    insertObj (\\_ => "от" ++ np.s ! RObj Acc) Pos
+    insertObj (\\_ => "от" ++ np.s ! RObj CPrep) Pos
                    (insertObj (\\a => vp.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc)) ++
                                       vp.compl1 ! a ++ vp.compl2 ! a) Pos (predV verbBe)) ;
 

@@ -150,7 +150,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     PassV2 v = insertObj (\\a => v.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc))) Pos (predV verbBe) ;
 
     CompAP ap = {s = \\agr => ap.s ! aform agr.gn Indef (RObj Acc) ! agr.p; p = Pos} ;
-    CompNP np = {s = \\_ => np.s ! RObj Acc; p = personPol np.p} ;
+    CompNP np = {s = \\_ => np.s ! RObj CPrep; p = personPol np.p} ;
     CompAdv a = {s = \\_ => a.s; p = Pos} ;
     CompCN cn = {s = \\agr => cn.s ! (NF (numGenNum agr.gn) Indef); p = Pos} ;
 
