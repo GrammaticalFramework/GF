@@ -2,7 +2,7 @@
 concrete ExtendBul of Extend = CatBul ** open Prelude, Predef, ResBul, GrammarBul, MorphoFunsBul in {
 
 lin
-  GenModNP num np cn = DetCN (DetQuant DefArt num) (AdvCN cn (PrepNP possess_Prep np)) ;     -- this man's car(s) ; DEFAULT the car of this man
+  GenModNP num np cn = DetCN (DetQuant DefArt num) (AdvCN cn (PrepNP (mkPrep "на") np)) ;
 
   AdAdV a adv = {s = a.s ++ adv.s; p = adv.p} ;
 
@@ -66,9 +66,9 @@ lin
   } ;
 
   GerundNP vp = {
-    s = \\_ => daComplex Simul Pos vp ! Imperf ! {gn=GSg Neut; p=P1};
-    a = {gn=GSg Neut; p=P3};
-    p = Pos
+    s  = \\_ => daComplex Simul Pos vp ! Imperf ! {gn=GSg Neut; p=P1};
+    gn =GSg Neut;
+    p  = NounP3 Pos
   } ;
 
   GerundAdv, ByVP = \vp ->
@@ -79,7 +79,7 @@ lin
   InOrderToVP vp = 
     {s = "за" ++ daComplex Simul Pos vp ! Perf ! {gn=GSg Neut; p=P3}};
 
-  iFem_Pron      = mkPron "аз" "мен" "ме" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  P1 ;
+  iFem_Pron      = mkPron "аз" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem) PronP1 ;
   youFem_Pron    = youSg_Pron ;
   weFem_Pron     = we_Pron ;
   youPlFem_Pron  = youPl_Pron ;
@@ -102,7 +102,7 @@ lin
             clitic = case vp.vtype of {
                        VNormal    => {s=[]; agr=agr} ;
                        VMedial c  => {s=reflClitics ! c; agr=agr} ;
-                       VPhrasal c => {s=personalClitics ! c ! agr.gn ! agr.p; agr={gn=GSg Neut; p=P3}}
+                       VPhrasal c => {s=personalClitics agr ! c; agr={gn=GSg Neut; p=P3}}
                      } ;
         in vp.ad.s ++ clitic.s ++
            vp.s ! Imperf ! VPres (numGenNum clitic.agr.gn) clitic.agr.p ++
@@ -117,7 +117,7 @@ lin
   BaseVPS x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
   ConsVPS x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep bindComma)!d!t++xs.s!d!t!a} ;
 
-  PredVPS np vps = {s = np.s ! RSubj ++ vps.s ! np.a} ;
+  PredVPS np vps = {s = np.s ! RSubj ++ vps.s ! personAgr np.gn np.p} ;
 
   MkVPS t p vp = {
     s = \\a => 
@@ -135,22 +135,22 @@ lin
   ComplSlashPartLast = ComplSlash ;
 
 lincat
-  RNP = {s : Role => Str; a : Agr; p : Polarity} ;
+  RNP = {s : Role => Str; gn : GenNum} ;
 
 lin
   ReflRNP slash rnp = {
     s   = slash.s ;
     ad  = slash.ad ;
-    compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ rnp.s ! RObj slash.c2.c ++ slash.compl2 ! rnp.a ;
+    clitics = slash.clitics ;
+    compl = \\a => slash.compl1 ! a ++ slash.c2.s ++ rnp.s ! RObj slash.c2.c ++ slash.compl2 ! agrP3 rnp.gn ;
     vtype = slash.vtype ;
-    p   = orPol rnp.p slash.p ;
+    p     = slash.p ;
     isSimple = False
   } ;
 
   ReflPron =
-      { s = \\role => "себе си";
-        a = {gn = GSg Masc; p = P3} ;
-        p = Pos
+      { s  = \\role => "себе си";
+        gn = GSg Masc
       } ;
 
   ReflPoss num cn =
@@ -168,43 +168,44 @@ lin
                          } ;
                     s = reflPron ! aform (gennum cn.g (numnnum num.nn)) Def (RObj Acc) ++ num.s ! dgenderSpecies cn.g Indef role ++ cn.s ! nf
                 in case role of {
-                     RObj Dat      => "на" ++ s;
-                     RObj WithPrep => with_Word ++ s;
-                     _             => s
+                     RObj c => linCase c Pos ++ s;
+                     _      => s
                    } ;
-        a = {gn = gennum cn.g (numnnum num.nn); p = P3} ;
-        p = Pos
+        gn = gennum cn.g (numnnum num.nn)
       } ;
 
   PredetRNP pred rnp = {
-    s = \\c => pred.s ! rnp.a.gn ++ rnp.s ! c ;
-    a = rnp.a ;
-    p = rnp.p
+    s  = \\c => pred.s ! rnp.gn ++ rnp.s ! c ;
+    gn = rnp.gn
   } ;
 
 lin
-  ApposNP np1 np2 = {s = \\role => np1.s ! role ++ bindComma ++ np2.s ! role; a = np1.a; p = np1.p} ;
+  ApposNP np1 np2 = {s = \\role => case role of {
+                                     RObj c => linCase c (personPol np1.p) ++ np1.s ! RObj CPrep ;
+                                     role   => np1.s ! role
+                                   } ++ bindComma ++ np2.s ! role;
+                     gn = np1.gn;
+                     p  = NounP3 (personPol np1.p)
+                    } ;
 
   DetNPMasc det = {
-    s = \\role => let s = det.s ! False ! (AMasc Human) ! role
-                  in case role of {
-                       RObj Dat      => "на" ++ s;
-                       RObj WithPrep => with_Word ++ s;
-                       _             => s
-                     } ;
-    a = {gn = gennum (AMasc Human) (numnnum det.nn); p = P3} ;
-    p = det.p
+    s  = \\role => let s = det.s ! False ! (AMasc Human) ! role
+                   in case role of {
+                        RObj c => linCase c det.p ++ s;
+                        _      => s
+                      } ;
+    gn = gennum (AMasc Human) (numnnum det.nn);
+    p  = NounP3 det.p
     } ;
 
   DetNPFem det = {
     s = \\role => let s = det.s ! False ! AFem ! role
                   in case role of {
-                       RObj Dat      => "на" ++ s;
-                       RObj WithPrep => with_Word ++ s;
-                       _             => s
+                       RObj c => linCase c det.p ++ s;
+                       _      => s
                      } ;
-    a = {gn = gennum AFem (numnnum det.nn); p = P3} ;
-    p = det.p
+    gn = gennum AFem (numnnum det.nn);
+    p = NounP3 det.p
     } ;
 
 }

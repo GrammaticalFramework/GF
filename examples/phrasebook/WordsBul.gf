@@ -142,7 +142,7 @@ concrete WordsBul of Words = SentencesBul **
     ALike p item = mkCl p.name (dirV2 (actionV (mkV186 "харесвам") (mkV186 "харесам"))) item ;
     ALive p co = mkCl p.name (mkVP (mkVP (stateV (mkV160 "живея"))) (SyntaxBul.mkAdv in_Prep (mkNP co))) ;
     ALove p q = mkCl p.name (dirV2 (actionV (mkV186 "обичам") (mkV152 "обикна"))) q.name ;
-    AMarried p = mkCl p.name (mkA076 (case p.name.a.gn of {
+    AMarried p = mkCl p.name (mkA076 (case p.name.gn of {
                                         R.GSg R.Fem => "омъжен" ;
                                         _           => "женен"
                                       })) ;

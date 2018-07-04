@@ -7,26 +7,28 @@ concrete RelativeBul of Relative = CatBul ** open ResBul in {
 
   lin
     RelCl cl = {
-      s = \\t,a,p,agr => suchRP ! agr.gn ++ "че" ++ cl.s ! t ! a ! p ! Main ; 
-      role = RSubj
+      s = \\t,a,p,agr => suchRP ! agr.gn ++ "че" ++ cl.s ! t ! a ! p ! Main
       } ;
 
     RelVP rp vp = {
       s = \\t,a,p,agr => 
-        let 
-          cl = mkClause (rp.s ! agr.gn) agr Pos vp
+        let
+          pp = case agr.p of {
+                 P1 => PronP1 ;
+                 P2 => PronP2 ;
+                 P3 => PronP3
+               } ;
+          cl = mkClause (rp.s ! agr.gn) agr.gn pp vp
         in
-        cl.s ! t ! a ! p ! Main ;
-      role = RSubj
+        cl.s ! t ! a ! p ! Main
       } ;
 
     RelSlash rp slash = {
-      s = \\t,a,p,agr => slash.c2.s ++ rp.s ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main ;
-      role = RObj Acc
+      s = \\t,a,p,agr => slash.c2.s ++ rp.s ! agr.gn ++ slash.s ! agr ! t ! a ! p ! Main
       } ;
 
     FunRP p np rp = {
-      s = \\gn => np.s ! RObj Acc ++ p.s ++ (case p.c of {Acc => []; Dat => "на"; WithPrep => with_Word}) ++ rp.s ! gn ;
+      s = \\gn => np.s ! RObj Acc ++ linPrep p ++ rp.s ! gn ;
       } ;
 
     IdRP = {

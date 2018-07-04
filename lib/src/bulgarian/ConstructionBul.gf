@@ -24,7 +24,7 @@ lin
   how_old_QCl p = mkQCl (MorphoFunsBul.mkIAdv "на колко") (mkCl <lin NP p : NP> (mkNP a_Quant plNum (mkN041 "година"))) ;
   how_far_QCl name = mkQCl (ExtraBul.IAdvAdv (ss "далече")) name ;
   married_Cl p1 p2 = mkCl <lin NP p1 : NP> 
-                         (mkVP (mkVP (mkA076 (case p1.a.gn of {
+                         (mkVP (mkVP (mkA076 (case p1.gn of {
                                                 R.GSg R.Fem => "омъжен" ;
                                                 _           => "женен"
                                               }))) (SyntaxBul.mkAdv (mkPrep "за" R.Acc) <lin NP p2 : NP>));
@@ -32,7 +32,7 @@ lin
   is_right_VP = mkVP (mkA084 "верен") ;
   is_wrong_VP = mkVP (mkA079 "грешен") ;
   n_units_AP card cn a = mkAP (lin AdA (mkUtt (mkNP <lin Card card : Card> (lin CN cn)))) (lin A a) ;
-  weather_adjCl a = R.mkClause (a.s ! R.ASg R.Masc R.Indef ! R.P3) {gn=R.GSg R.Masc; p=R.P3} R.Pos (R.insertObj (\\_=>"") R.Pos (R.predV R.verbBe)) ;
+  weather_adjCl a = R.mkClause (a.s ! R.ASg R.Masc R.Indef ! R.P3) (R.GSg R.Masc) (R.NounP3 R.Pos) (R.insertObj (\\_=>"") R.Pos (R.predV R.verbBe)) ;
 
 lin
   weekdayPunctualAdv w = SyntaxBul.mkAdv in_Prep (mkNP w) ;         -- on Sunday

@@ -231,12 +231,7 @@ oper
                       
     dualN : N -> Prep -> N
       = \n,p -> lin N { s   = n.s;
-                        rel = \\_ => p.s ++ 
-                                     case p.c of {
-                                       Acc      => "" ;
-                                       Dat      => "на" ;
-                                       WithPrep => with_Word
-                                     } ++
+                        rel = \\_ => linPrep p ++
                                      n.s ! NF Sg Def ;
                         relPost = True;
                         g   = n.g
@@ -267,13 +262,12 @@ oper
 
   mkPrep = overload {
     mkPrep : Str -> Prep = 
-      \p   -> {s = p; c = Acc; lock_Prep = <>} ;
+      \p   -> {s = p; c = CPrep; lock_Prep = <>} ;
     mkPrep : Str -> Case -> Prep = 
-      \p,c -> {s = p; c = c;   lock_Prep = <>}
+      \p,c -> {s = p; c = c;     lock_Prep = <>}
   } ;
 
-  noPrep   : Prep = mkPrep [] Acc ;
-  dat_Prep : Prep = mkPrep [] Dat ;
+  noPrep : Prep = mkPrep [] Acc ;
 
 --2 Proper Names
 --

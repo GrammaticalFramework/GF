@@ -12,19 +12,19 @@ lin
   FloatPN i = {s = i.s ; g = Neut} ;
   NumPN i = {s = i.s ! CFNeut Indef ; g = Neut} ;
   CNIntNP cn i = {
-    s = \\c => cn.s ! NF Sg Indef ++ i.s ;
-    a = agrP3 (gennum cn.g Sg) ;
-    p = Pos
+    s  = \\c => cn.s ! NF Sg Indef ++ i.s ;
+    gn = gennum cn.g Sg ;
+    p  = NounP3 Pos
     } ;
   CNSymbNP det cn xs = {
-    s = \\c => det.s ! False ! cn.g ! RSubj ++ cn.s ! NF (numnnum det.nn) Indef ++ xs.s ; 
-    a = agrP3 (gennum cn.g (numnnum det.nn)) ;
-    p = Pos
+    s  = \\c => det.s ! False ! cn.g ! RSubj ++ cn.s ! NF (numnnum det.nn) Indef ++ xs.s ; 
+    gn = gennum cn.g (numnnum det.nn) ;
+    p  = NounP3 Pos
     } ;
   CNNumNP cn i = {
-    s = \\c => (cn.s ! NF Sg Indef ++ i.s ! CFNeut Indef) ;
-    a = agrP3 (gennum cn.g Sg) ;
-    p = Pos
+    s  = \\c => (cn.s ! NF Sg Indef ++ i.s ! CFNeut Indef) ;
+    gn = gennum cn.g Sg ;
+    p  = NounP3 Pos
     } ;
 
   SymbS sy = sy ; 

@@ -10,11 +10,27 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
 
     SlashV2a v = slashV v v.c2 False ;
 
-    Slash2V3 v np = 
-      insertSlashObj1 (\\_ => v.c2.s ++ np.s ! RObj v.c2.c) np.p (slashV v v.c3 False) ;
+    Slash2V3 v np =
+      let arg : {obj,clitics : Str}
+              = case <v.c2.c,np.p> of {
+                  <c,  NounP3 _> => {obj=np.s ! RObj c; clitics=[];            } ;
+                  <Acc,_       > => {obj=[];            clitics=np.s ! RObj Acc} ;
+                  <Dat,_       > => {obj=[];            clitics=np.s ! RObj Dat} ;
+                  <c,  _       > => {obj=np.s ! RObj c; clitics=[];            }
+                }
+      in insertSlashObj1 (\\_ => v.c2.s ++ arg.obj) (personPol np.p) (slashV v v.c3 False)
+            ** {clitics = arg.clitics};
 
     Slash3V3 v np = 
-      insertSlashObj2 (\\_ => v.c3.s ++ np.s ! RObj v.c3.c) np.p (slashV v v.c2 False) ;
+      let arg : {obj,clitics : Str}
+              = case <v.c3.c,np.p> of {
+                  <c,  NounP3 _> => {obj=np.s ! RObj c; clitics=[];            } ;
+                  <Acc,_       > => {obj=[];            clitics=np.s ! RObj Acc} ;
+                  <Dat,_       > => {obj=[];            clitics=np.s ! RObj Dat} ;
+                  <c,  _       > => {obj=np.s ! RObj c; clitics=[];            }
+                }
+      in insertSlashObj2 (\\_ => v.c3.s ++ arg.obj) (personPol np.p) (slashV v v.c2 False)
+            ** {clitics = arg.clitics};
 
     ComplVV vv vp =
       insertObj (case vv.typ of {
@@ -47,7 +63,8 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     SlashVV vv slash = {
       s = vv.s ;
       ad = {isEmpty=True; s=[]};
-      compl1 = daComplex Simul Pos {s=slash.s; ad=slash.ad; compl=slash.compl1; vtype=slash.vtype; p = Pos; isSimple = slash.isSimple} ! Perf ;
+      clitics = [] ;
+      compl1 = daComplex Simul Pos {s=slash.s; ad=slash.ad; clitics=slash.clitics; compl=slash.compl1; vtype=slash.vtype; p = Pos; isSimple = slash.isSimple} ! Perf ;
       compl2 = slash.compl2 ;
       vtype  = vv.vtype ;
       p  = slash.p ;
@@ -60,8 +77,9 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     SlashV2VNP vv np slash = {
       s = vv.s ;
       ad = {isEmpty=True; s=[]};
+      clitics = [] ;
       compl1 = \\agr => vv.c2.s ++ np.s ! RObj vv.c2.c ++ 
-                        daComplex Simul np.p {s=slash.s; ad=slash.ad; compl=slash.compl1; vtype=slash.vtype; p=Pos; isSimple = slash.isSimple} ! Perf ! np.a ;
+                        daComplex Simul (personPol np.p) {s=slash.s; ad=slash.ad; clitics=slash.clitics; compl=slash.compl1; vtype=slash.vtype; p=Pos; isSimple = slash.isSimple} ! Perf ! (personAgr np.gn np.p) ;
       compl2 = slash.compl2 ;
       vtype = vv.vtype ;
       p  = Pos ;
@@ -70,15 +88,23 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
       subjCtrl = slash.subjCtrl
       } ;
 
-    ComplSlash slash np = {
-      s   = slash.s ;
-      ad  = slash.ad ;
-      compl = \\a => let a2 = case slash.subjCtrl of {True => a; False => np.a}
-                     in slash.compl1 ! a ++ slash.c2.s ++ np.s ! RObj slash.c2.c ++ slash.compl2 ! a2 ;
-      vtype = slash.vtype ;
-      p   = orPol np.p slash.p ;
-      isSimple = False
-      } ;
+    ComplSlash slash np = 
+      let arg : {obj,acc,dat : Str}
+              = case <slash.c2.c,np.p> of {
+                  <c,  NounP3 _> => {obj=np.s ! RObj c; acc=[];              dat=[]             } ;
+                  <Acc,_       > => {obj=[];            acc=np.s ! RObj Acc; dat=[]             } ;
+                  <Dat,_       > => {obj=[];            acc=[];              dat=np.s ! RObj Dat} ;
+                  <c,  _       > => {obj=np.s ! RObj c; acc=[];              dat=[]             }
+                }
+      in {s   = slash.s ;
+          ad  = slash.ad ;
+          clitics = arg.dat++slash.clitics++arg.acc ;
+          compl = \\a => let a2 = case slash.subjCtrl of {True => a; False => personAgr np.gn np.p}
+                         in slash.compl1 ! a ++ slash.c2.s ++ arg.obj ++ slash.compl2 ! a2 ;
+          vtype = slash.vtype ;
+          p   = orPol (personPol np.p) slash.p ;
+          isSimple = False
+         } ;
 
     UseComp comp = insertObj comp.s comp.p (predV verbBe) ;
 
@@ -92,6 +118,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     AdVVP adv vp = {
       s   = vp.s ;
       ad  = {isEmpty=False; s=vp.ad.s ++ adv.s} ;
+      clitics = vp.clitics ;
       compl = vp.compl ;
       vtype = vp.vtype ;
       p = orPol adv.p vp.p ;
@@ -100,6 +127,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     AdVVPSlash adv vp = {
       s   = vp.s ;
       ad  = {isEmpty=False; s=vp.ad.s ++ adv.s} ;
+      clitics = vp.clitics ;
       compl1 = vp.compl1 ;
       compl2 = vp.compl2 ;
       vtype = vp.vtype ;
@@ -112,6 +140,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     ReflVP slash = {
       s = slash.s ;
       ad = slash.ad ;
+      clitics = slash.clitics ;
       compl = \\agr => slash.compl1 ! agr ++ slash.compl2 ! agr ;
       vtype = VMedial slash.c2.c ;
       p = slash.p ;
@@ -121,7 +150,7 @@ concrete VerbBul of Verb = CatBul ** open Prelude, ResBul, ParadigmsBul in {
     PassV2 v = insertObj (\\a => v.s ! Perf ! VPassive (aform a.gn Indef (RObj Acc))) Pos (predV verbBe) ;
 
     CompAP ap = {s = \\agr => ap.s ! aform agr.gn Indef (RObj Acc) ! agr.p; p = Pos} ;
-    CompNP np = {s = \\_ => np.s ! RObj Acc; p = np.p} ;
+    CompNP np = {s = \\_ => np.s ! RObj Acc; p = personPol np.p} ;
     CompAdv a = {s = \\_ => a.s; p = Pos} ;
     CompCN cn = {s = \\agr => cn.s ! (NF (numGenNum agr.gn) Indef); p = Pos} ;
 

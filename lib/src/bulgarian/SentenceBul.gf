@@ -9,9 +9,9 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
     PredVP np vp = mkClause (np.s ! (case vp.vtype of {
                                        VNormal    => RSubj ;
                                        VMedial  _ => RSubj ;
-                                       VPhrasal c => RObj c})) np.a np.p vp ;
+                                       VPhrasal c => RObj c})) np.gn np.p vp ;
 
-    PredSCVP sc vp = let agr = {gn=GSg Masc; p=P3} in mkClause (sc.s ! agr) agr Pos vp ;
+    PredSCVP sc vp = mkClause (sc.s ! {gn=GSg Masc; p=P3}) (GSg Masc) (NounP3 Pos) vp ;
 
     ImpVP vp = {
       s = \\p,gn => 
@@ -20,21 +20,23 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
                    = \asp -> vp.s ! asp ! VImperative (numGenNum gn) ;
             compl  = vp.compl ! agr ;
             clitic = case vp.vtype of {
-	                   VNormal    => [] ;
-	                   VMedial c  => reflClitics ! c ;
-	                   VPhrasal c => personalClitics ! c ! agr.gn ! agr.p
-	                 } ;
+                       VNormal      => vp.clitics;
+                       VMedial c    => vp.clitics++reflClitics ! c;
+                       VPhrasal Dat => personalClitics agr ! Dat++vp.clitics;
+                       VPhrasal c   => vp.clitics++personalClitics agr ! c
+                     }
         in case p of {Pos => vp.ad.s ++ verb Perf ++ clitic ;
                       Neg => "не" ++ vp.ad.s ++ clitic ++ verb Imperf} ++ compl ;
     } ;
 
     SlashVP np slash =  {
-      s = \\agr => (mkClause (np.s ! RSubj) np.a np.p {s      = slash.s ;
-                                                       ad     = slash.ad ;
-                                                       compl  = \\_ => slash.compl1 ! np.a ++ slash.compl2 ! agr ;
-                                                       vtype  = slash.vtype ;
-                                                       p      = Pos ;
-                                                       isSimple = slash.isSimple}).s ;
+      s = \\agr => (mkClause (np.s ! RSubj) np.gn np.p {s      = slash.s ;
+                                                        ad     = slash.ad ;
+                                                        clitics= slash.clitics ;
+                                                        compl  = \\_ => slash.compl1 ! personAgr np.gn np.p ++ slash.compl2 ! agr ;
+                                                        vtype  = slash.vtype ;
+                                                        p      = Pos ;
+                                                        isSimple = slash.isSimple}).s ;
       c2 = slash.c2
     } ;
 
@@ -46,7 +48,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
     SlashPrep cl prep = {s = \\_ => cl.s; c2 = prep} ;
     
     SlashVS np vs slash = {
-      s = \\agr => (mkClause (np.s ! RSubj) np.a np.p
+      s = \\agr => (mkClause (np.s ! RSubj) np.gn np.p
                              (insertObj (\\_ => "че" ++ slash.s ! agr) Pos (predV vs))).s ;
       c2 = slash.c2
     } ;

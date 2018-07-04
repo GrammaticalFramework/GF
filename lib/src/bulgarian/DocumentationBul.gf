@@ -120,7 +120,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++ v.s ! Imperf ! VPres Sg P3 ;
     s2= inflVerb v ;
     s3= ""
@@ -133,7 +133,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
@@ -149,7 +149,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
@@ -166,7 +166,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
@@ -183,7 +183,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
@@ -200,7 +200,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
@@ -217,7 +217,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         v.c2.s ++
@@ -233,7 +233,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         case v.typ of {
@@ -251,7 +251,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         "че" ++ pp "изречение";
@@ -265,7 +265,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         pp "въпрос";
@@ -279,7 +279,7 @@ lin
         case v.vtype of {
           VNormal => "" ;
           VMedial c => reflClitics ! c ;
-          VPhrasal c => personalClitics ! c ! GSg Masc ! P3
+          VPhrasal c => personalClitics (agrP3 (GSg Masc)) ! c
         } ++
         v.s ! Imperf ! VPres Sg P3 ++
         pp "прилагателно";

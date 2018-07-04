@@ -5,14 +5,14 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
   flags optimize=all_subs ;
 
   lin
-    ImpersCl vp = mkClause [] (agrP3 (GSg Neut)) Pos vp ;
-    GenericCl vp = mkClause "някой" (agrP3 (GSg Neut)) Pos vp ;
+    ImpersCl vp = mkClause [] (GSg Neut) (NounP3 Pos) vp ;
+    GenericCl vp = mkClause "някой" (GSg Neut) (NounP3 Pos) vp ;
 
     CleftNP np rs = 
       mkClause (np.s ! RSubj)
-               {gn=GSg Neut; p=np.a.p} Pos
-               (insertObj (\\_ => thisRP ! np.a.gn ++ rs.s ! np.a) np.p (predV verbBe)) ;        
-        
+               (GSg Neut) np.p
+               (insertObj (\\_ => thisRP ! np.gn ++ rs.s ! personAgr np.gn np.p) (personPol np.p) (predV verbBe)) ;        
+
     CleftAdv ad s = {s = \\t,a,p,o => case p of {Pos=>[]; Neg=>"не"} ++ ad.s ++ s.s } ;
 
     ExistNP np = ExistNPAdv np (lin Adv {s = ""}) ;
@@ -20,7 +20,7 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
 
     ExistNPAdv np adv = 
       { s = \\t,a,p,o => 
-	          let verb = case orPol p np.p of {
+	          let verb = case orPol p (personPol np.p) of {
 	                       Pos => mkV186 "имам" ;
 	                       Neg => mkV186 "нямам" 
 	                     } ;
@@ -56,11 +56,12 @@ concrete IdiomBul of Idiom = CatBul ** open Prelude, ParadigmsBul, ResBul in {
 
     ExistIPAdv ip adv = 
       mkQuestion {s = ip.s ! RSubj}
-                 (mkClause "тук" (agrP3 ip.gn) Pos (insertObj (\\_ => adv.s) Pos (predV verbBe))) ;
+                 (mkClause "тук" ip.gn (NounP3 Pos) (insertObj (\\_ => adv.s) Pos (predV verbBe))) ;
 
     ProgrVP vp = {
       s   = \\_ => vp.s ! Imperf ;
       ad = vp.ad ;
+      clitics = vp.clitics ;
       compl = vp.compl ;
       vtype = vp.vtype ;
       p = vp.p ;

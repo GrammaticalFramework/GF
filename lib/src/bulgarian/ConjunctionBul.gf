@@ -25,9 +25,9 @@ concrete ConjunctionBul of Conjunction =
       } ;
 
     ConjNP conj ss = {
-      s = \\role => conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!role;
-      a = {gn = conjGenNum (gennum (AMasc NonHuman) conj.n) ss.a.gn; p = ss.a.p};
-      p = Pos
+      s  = \\role => conj.s ++ (linCoordSep [])!conj.distr!conj.conj++ss.s!conj.distr!conj.conj!role;
+      gn = conjGenNum (gennum (AMasc NonHuman) conj.n) ss.gn;
+      p  = ss.p
       } ;
 
     ConjAP conj ss = {
@@ -59,11 +59,13 @@ concrete ConjunctionBul of Conjunction =
     ConsIAdv x xs = {s  = \\d,t,qform=>x.s!qform++(linCoordSep comma)!d!t++xs.s!d!t!qform} ;
 
     BaseNP x y =
-      {s = \\d,t,role=>x.s!role++linCoord!t++y.s!role; 
-       a = conjAgr x.a y.a} ;
+      {s  = \\d,t,role=>x.s!role++linCoord!t++y.s!role; 
+       gn = conjGenNum x.gn y.gn;
+       p  = x.p} ;
     ConsNP x xs =
-      {s = \\d,t,role=>x.s!role++(linCoordSep comma)!d!t++xs.s!d!t!role; 
-       a = conjAgr xs.a x.a} ;
+      {s  = \\d,t,role=>x.s!role++(linCoordSep comma)!d!t++xs.s!d!t!role; 
+       gn = conjGenNum xs.gn x.gn;
+       p  = x.p} ;
 
     BaseAP x y =
       {s  = \\d,t,aform,p => x.s!aform!p++linCoord!t++y.s!aform!p; 
@@ -91,7 +93,7 @@ concrete ConjunctionBul of Conjunction =
     [Adv] = {s : Bool => Ints 3 => Str} ;
     [AdV] = {s : Bool => Ints 3 => Str} ;
     [IAdv] = {s : Bool => Ints 3 => QForm => Str} ;
-    [NP] = {s : Bool => Ints 3 => Role  => Str; a : Agr} ;
+    [NP] = {s : Bool => Ints 3 => Role  => Str; gn : GenNum; p : PronPerson} ;
     [AP] = {s : Bool => Ints 3 => AForm => Person => Str; adv : Bool => Ints 3 => Str; isPre : Bool} ;
     [RS] = {s : Bool => Ints 3 => Agr   => Str} ;
     [CN] = {s : Bool => Ints 3 => NForm => Str; g : AGender} ;

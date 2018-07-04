@@ -52,8 +52,8 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
 -- Noun
 
     CN = {s : NForm => Str; g : AGender} ;
-    NP = {s : Role => Str; a : Agr; p : Polarity} ;
-    Pron = {s : Role => Str; clit : Case => Str; gen : AForm => Str; a : Agr} ;
+    NP = {s : Role => Str; gn : GenNum; p : PronPerson} ;
+    Pron = {s : Role => Str; gen : AForm => Str; gn : GenNum; p : PronPerson} ;
     Det,DAP = {s : Bool => AGender => Role => Str; nn : NNumber; spec : Species; p : Polarity} ;
     Predet = {s : GenNum => Str} ;
     Ord = {s : AForm => Str} ;
@@ -118,6 +118,7 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
     VPSlash = \vps -> let vp : ResBul.VP
                              = {s  = vps.s ;
                                 ad = vps.ad ;
+                                clitics = vps.clitics ;
                                 compl = \\a => vps.compl1 ! a ++ vps.c2.s ++ vps.compl2 ! a ;
                                 vtype = vps.vtype ;
                                 p     = Pos ;
@@ -132,19 +133,19 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
                        } ;
 
     V, VS, VQ, VA = \v -> linrefVP (predV v);
-    V2 = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ;
-    V2V = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ++ linrefPrep v.c3 ++ "да";
-    V2A, V2S, V2Q = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ++ linrefPrep v.c3;
-    V3 = \v -> linrefVP (predV v) ++ linrefPrep v.c2 ++ linrefPrep v.c3;
+    V2 = \v -> linrefVP (predV v) ++ linPrep v.c2 ;
+    V2V = \v -> linrefVP (predV v) ++ linPrep v.c2 ++ linPrep v.c3 ++ "да";
+    V2A, V2S, V2Q = \v -> linrefVP (predV v) ++ linPrep v.c2 ++ linPrep v.c3;
+    V3 = \v -> linrefVP (predV v) ++ linPrep v.c2 ++ linPrep v.c3;
     VV = \v -> linrefVP (predV v);
 
-    Prep = linrefPrep ;
+    Prep = linPrep ;
 
 	A = \a -> a.s ! ASg Masc Indef;
     A2 = \a -> a.s ! ASg Masc Indef ++ a.c2;
 
     N  = \n -> n.s ! NF Sg Indef;
-    N2 = \n -> n.s ! NF Sg Indef ++ linrefPrep n.c2;
-    N3 = \n -> n.s ! NF Sg Indef ++ linrefPrep n.c2 ++ linrefPrep n.c3;
+    N2 = \n -> n.s ! NF Sg Indef ++ linPrep n.c2;
+    N3 = \n -> n.s ! NF Sg Indef ++ linPrep n.c2 ++ linPrep n.c3;
 
 }

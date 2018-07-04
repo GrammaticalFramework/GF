@@ -31,8 +31,8 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
       role = RObj Acc
       } ;
 
-    i8fem_Pron  = mkPron "аз" "мен" "ме" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  P1 ;
-    i8neut_Pron = mkPron "аз" "мен" "ме" "ми" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Neut) P1 ;
+    i8fem_Pron  = mkPron "аз" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Fem)  PronP1 ;
+    i8neut_Pron = mkPron "аз" "мой" "моя" "моят" "моя" "моята" "мое" "моето" "мои" "моите" (GSg Neut) PronP1 ;
     
     whatSg8fem_IP  = mkIP "каква" "каква" (GSg Fem) ;
     whatSg8neut_IP = mkIP "какво" "какво" (GSg Neut) ;
@@ -40,8 +40,8 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     whoSg8fem_IP  = mkIP "коя" "кого" (GSg Fem) ;
     whoSg8neut_IP = mkIP "кое" "кого" (GSg Neut) ;
     
-    youSg8fem_Pron  = mkPron "ти" "теб" "те" "ти" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Fem) P2 ;
-    youSg8neut_Pron = mkPron "ти" "теб" "те" "ти" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Neut) P2 ;
+    youSg8fem_Pron  = mkPron "ти" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Fem)  PronP2 ;
+    youSg8neut_Pron = mkPron "ти" "твой" "твоя" "твоят" "твоя" "твоята" "твое" "твоето" "твои" "твоите" (GSg Neut) PronP2 ;
 
     onePl_Num = {s = table {
                        CFMasc Indef _ | CFFem Indef | CFNeut Indef            => "едни" ;
@@ -79,7 +79,7 @@ concrete ExtraBul of ExtraBulAbs = CatBul **
     BaseVPS x y = {s  = \\d,t,a=>x.s!a++linCoord!t++y.s!a} ;
     ConsVPS x xs = {s  = \\d,t,a=>x.s!a++(linCoordSep bindComma)!d!t++xs.s!d!t!a} ;
 
-    PredVPS np vps = {s = np.s ! RSubj ++ vps.s ! np.a} ;
+    PredVPS np vps = {s = np.s ! RSubj ++ vps.s ! personAgr np.gn np.p} ;
 
     MkVPS t p vp = {
       s = \\a => 
