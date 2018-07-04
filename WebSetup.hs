@@ -6,8 +6,7 @@ import System.Process(rawSystem)
 import System.Exit(ExitCode(..))
 import Distribution.Simple.Setup(BuildFlags(..),Flag(..),CopyDest(..),copyDest)
 import Distribution.Simple.LocalBuildInfo(datadir,buildDir,absoluteInstallDirs)
-import Distribution.Simple.Utils(die,noticeNoWrap)
-import qualified Distribution.Verbosity
+import Distribution.Simple.Utils(die)
 
 {-
    To test the GF web services, the minibar and the grammar editor, use
@@ -52,7 +51,7 @@ buildWeb gf (flags,pkg,lbi) = do
   contrib_exists <- doesDirectoryExist contrib_dir
   if contrib_exists
   then mapM_ build_pgf example_grammars
-  else noticeNoWrap Distribution.Verbosity.normal $ unlines
+  else putStr $ unlines
     [ "---"
     , "Example grammars are no longer included in the main GF repository, but have moved to gf-contrib."
     , "If you want these example grammars to be built, clone this repository in the same top-level directory as GF:"
