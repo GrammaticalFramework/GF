@@ -37,7 +37,6 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild  = gfPreBuild
 
     gfPre args distFlag =
       do h <- checkRGLArgs args
-         extractDarcsVersion distFlag
          return h
 
     gfPostBuild args flags pkg lbi =
@@ -382,35 +381,6 @@ default_gf lbi = buildDir lbi </> exeName' </> exeNameReal
     exeName' = (exeName . head . executables) pkg
     exeNameReal = exeName' <.> (if null $ takeExtension exeName' then exeExtension else "")
     -}
-
--- | Create autogen module with detailed version info by querying darcs
-extractDarcsVersion distFlag =
-  do info <- tryIOE askDarcs
-     createDirectoryIfMissing True autogenPath
-     updateFile versionModulePath $ unlines $
-       ["module "++modname++" where",
-        "{-# NOINLINE darcs_info #-}",
-        "darcs_info = "++show (either (const (Left ())) Right info)]
-  where
-    dist = fromFlagOrDefault "dist" distFlag
-    autogenPath = dist</>"build"</>"autogen"
-    versionModulePath = autogenPath</>"DarcsVersion_gf.hs"
-    modname = "DarcsVersion_gf"
-
-askDarcs =
-  do flip unless (fail "no _darcs") =<< doesDirectoryExist "_darcs"
-     tags <- lines `fmap` readProcess "darcs" ["show","tags"] ""
-     let from = case tags of
-                  [] -> []
-                  tag:_ -> ["--from-tag="++tag]
-     dates <- (init' . patches) `fmap` readProcess "darcs" ("changes":from) ""
---   let dates = init' (filter ((`notElem` [""," "]).take 1) changes)
-     whatsnew <- tryIOE $ lines `fmap` readProcess "darcs" ["whatsnew","-s"] ""
-     return (listToMaybe tags,listToMaybe dates,
-             length dates,either (const 0) length whatsnew)
-  where
-    init' [] = []
-    init' xs = init xs
 
 -- | Only update the file if contents has changed
 updateFile path new =
