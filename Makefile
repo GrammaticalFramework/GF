@@ -21,9 +21,6 @@ doc:
 clean:
 	cabal clean
 
-#sdist:
-#	cabal sdist
-
 gf:
 	cabal build rgl-none
 	strip dist/build/gf/gf
@@ -45,9 +42,11 @@ pkg:
 bintar:
 	bash bin/build-binary-dist.sh
 
-# Make a source tar.gz distribution using darcs to make sure that everything
-# is included. We put the distribution in dist/ so it is removed on
-# `make clean`
+#sdist:
+#	cabal sdist
+
+# Make a source tar.gz distribution using git to make sure that everything is included.
+# We put the distribution in dist/ so it is removed on `make clean`
 sdist:
 	test -d dist || mkdir dist
-	darcs dist -d dist/gf-${VERSION}
+	git archive --format=tar.gz --output=dist/gf-${VERSION}.tar.gz HEAD
