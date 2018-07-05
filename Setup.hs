@@ -1,19 +1,15 @@
-import Distribution.Simple
-import Distribution.Simple.LocalBuildInfo
+import Distribution.Simple(defaultMainWithHooks,UserHooks(..),simpleUserHooks)
+import Distribution.Simple.LocalBuildInfo(LocalBuildInfo(..),absoluteInstallDirs,datadir)
 import Distribution.Simple.BuildPaths(exeExtension)
-import Distribution.Simple.Utils
-import Distribution.Simple.Setup
-import Distribution.PackageDescription hiding (Flag)
-import Control.Monad
+import Distribution.Simple.Utils(intercalate)
+import Distribution.Simple.Setup(BuildFlags(..),Flag(..),InstallFlags(..),CopyDest(..),CopyFlags(..))
+import Distribution.PackageDescription(PackageDescription(..),emptyHookedBuildInfo)
+import Control.Monad(unless,when)
 import Data.List(isPrefixOf,intersect)
---import System.IO
 import qualified Control.Exception as E
 import System.Process(readProcess)
-import System.FilePath
+import System.FilePath((</>),(<.>))
 import System.Directory(createDirectoryIfMissing,copyFile,getDirectoryContents)
---import System.Exit
---import Control.Concurrent(forkIO)
---import Control.Concurrent.Chan(newChan,writeChan,readChan)
 
 import WebSetup
 
