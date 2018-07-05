@@ -6,10 +6,10 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
   flags optimize=all_subs ;
 
   lin
-    PredVP np vp = mkClause (np.s ! (case vp.vtype of {
-                                       VNormal    => RSubj ;
-                                       VMedial  _ => RSubj ;
-                                       VPhrasal c => RObj c})) np.gn np.p vp ;
+    PredVP np vp = mkClause (case vp.vtype of {
+                                VNormal    => np.s ! RSubj ;
+                                VMedial  _ => np.s ! RSubj ;
+                                VPhrasal c => linCase c (personPol np.p) ++ np.s ! RObj CPrep}) np.gn np.p vp ;
 
     PredSCVP sc vp = mkClause (sc.s ! {gn=GSg Masc; p=P3}) (GSg Masc) (NounP3 Pos) vp ;
 
