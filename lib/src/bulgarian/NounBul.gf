@@ -113,15 +113,15 @@ concrete NounBul of Noun = CatBul ** open ResBul, Prelude in {
     NumSg = {s = \\_ => []; nn = NNum Sg; nonEmpty = False} ;
     NumPl = {s = \\_ => []; nn = NNum Pl; nonEmpty = False} ;
 
-    NumCard n = {s=n.s; nn=case n.n of {Sg => NNum Sg; Pl => NCountable}; nonEmpty = True} ;
+    NumCard n = {s=n.s; nn=n.nn; nonEmpty = True} ;
 
-    NumDigits n = {s = \\gspec => n.s ! NCard gspec; n = n.n} ;
+    NumDigits n = {s = \\gspec => n.s ! NCard gspec; nn = case n.n of {Sg => NNum Sg; Pl => NCountable}} ;
     OrdDigits n = {s = \\aform => n.s ! NOrd aform} ;
 
-    NumNumeral numeral = {s = \\gspec => numeral.s ! NCard gspec; n = numeral.n; nonEmpty = True} ;
+    NumNumeral numeral = {s = \\gspec => numeral.s ! NCard gspec; nn = case numeral.n of {Sg => NNum Sg; Pl => NCountable}} ;
     OrdNumeral numeral = {s = \\aform => numeral.s ! NOrd aform} ;
     
-    AdNum adn num = {s = \\gspec => adn.s ++ num.s ! gspec; n = num.n; nonEmpty = num.nonEmpty} ;
+    AdNum adn num = {s = \\gspec => adn.s ++ num.s ! gspec; nn = num.nn} ;
 
     OrdSuperl a = {s = \\aform => "най" ++ hyphen ++ a.s ! aform} ;
 

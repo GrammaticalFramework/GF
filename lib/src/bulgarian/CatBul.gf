@@ -58,7 +58,7 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
     Predet = {s : GenNum => Str} ;
     Ord = {s : AForm => Str} ;
     Num = {s : CardForm => Str; nn : NNumber; nonEmpty : Bool} ;
-    Card = {s : CardForm => Str; n : Number} ;
+    Card = {s : CardForm => Str; nn : NNumber} ;
     Quant = {s : Bool => AForm => Str; nonEmpty : Bool; spec : Species; p : Polarity} ;
 
 -- Numeral

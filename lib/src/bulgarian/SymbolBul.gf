@@ -29,7 +29,7 @@ lin
 
   SymbS sy = sy ; 
 
-  SymbNum sy = {s = \\_ => sy.s; n = Pl; nonEmpty = True} ;
+  SymbNum sy = {s = \\_ => sy.s; nn = NNum Pl} ;
   SymbOrd sy = {s = \\aform => sy.s ++ "-" ++ 
                                case aform of {
                                  ASg Masc Indef => "ти" ;
