@@ -4,11 +4,11 @@ import Distribution.Simple.BuildPaths(exeExtension)
 import Distribution.Simple.Utils(intercalate)
 import Distribution.Simple.Setup(BuildFlags(..),Flag(..),InstallFlags(..),CopyDest(..),CopyFlags(..),SDistFlags(..))
 import Distribution.PackageDescription(PackageDescription(..),HookedBuildInfo(..),emptyHookedBuildInfo)
-import Control.Monad(unless)
+import Control.Monad(unless,when)
 import Data.List(isPrefixOf,intersect)
 import System.Process(readProcess)
 import System.FilePath((</>),(<.>))
-import System.Directory(createDirectoryIfMissing,copyFile,getDirectoryContents,listDirectory)
+import System.Directory(createDirectoryIfMissing,copyFile,getDirectoryContents)
 
 import WebSetup
 
@@ -71,8 +71,8 @@ rglCommands =
        let prelude_src_dir = rgl_src_dir    </> "prelude"
            prelude_dst_dir = rgl_dst_dir (lbi bi) </> "prelude"
        createDirectoryIfMissing True prelude_dst_dir
-       files <- listDirectory prelude_src_dir
-       run_gfc bi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files])
+       files <- getDirectoryContents prelude_src_dir
+       run_gfc bi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files, file /= "." && file /= ".."])
 
   , RGLCommand "all"     True  $ gfcp [l,s,c,t,sc]
   , RGLCommand "lang"    False $ gfcp [l,s]
@@ -158,7 +158,7 @@ copyAll :: String -> FilePath -> FilePath -> IO ()
 copyAll s from to = do
   putStrLn $ "Installing [" ++ s ++ "] " ++ to
   createDirectoryIfMissing True to
-  mapM_ (\file -> copyFile (from </> file) (to </> file)) =<< listDirectory from
+  mapM_ (\file -> when (file /= "." && file /= "..") $ copyFile (from </> file) (to </> file)) =<< getDirectoryContents from
 
 {-
 sdistRGL :: PackageDescription -> Maybe LocalBuildInfo -> UserHooks -> SDistFlags -> IO ()
