@@ -50,7 +50,6 @@ rm -rf "$REP_RGL"
 # === core ===
 # - remove non-core stuff, preserving general structure
 # - shrink
-# - TODO use BFG (a lot faster)
 # - TODO changes to build scripts
 echo
 echo "# ${REP_CORE}"
@@ -64,8 +63,9 @@ RM_DIRS="lib split"
 # git rm -r --quiet "$RM_DIRS"
 # git commit -m "${COMMIT_PREFIX}Remove everything non-core" --quiet
 
-echo "This will take hours. Go for a nice long walk."
-git filter-branch --tree-filter "'rm -rf ${RM_DIRS}'" --prune-empty HEAD
+echo "This will take some time. Go for a walk."
+# git filter-branch --tree-filter "rm -rf ${RM_DIRS}" --prune-empty HEAD
+git filter-branch --index-filter "git rm --cached --ignore-unmatch --quiet -r -- ${RM_DIRS}" --prune-empty HEAD
 git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
 
 echo "Shrinking..."
@@ -76,7 +76,7 @@ echo "Set origin to git@github.com:GrammaticalFramework/${REP_CORE}.git"
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_CORE}.git"
 if [ "$PUSH" = true ]; then
   echo "Pushing..."
-  git push --set-upstream origin master
+  git push --set-upstream --force origin master
 fi
 cd ..
 
@@ -115,7 +115,7 @@ echo "Set origin to git@github.com:GrammaticalFramework/${REP_RGL}.git"
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_RGL}.git"
 if [ "$PUSH" = true ]; then
   echo "Pushing..."
-  git push --set-upstream origin master
+  git push --set-upstream --force origin master
 fi
 cd ..
 

@@ -21,7 +21,6 @@ Contributions and comments welcome.
 
 - `gf-rgl:doc` contains lots of stuff which is probably outdated
 - `GF:demos`
-- `GF:examples`
 - `GF:treebanks`
 
 ## Things which should live separately
@@ -32,6 +31,7 @@ Contributions and comments welcome.
 **Done**
 - RGL Source Browser `GF:lib/doc/browse`
 - gftest `GF:src/tools/gftest`
+- `GF:examples`
 
 
 ## Things which should definitely be archived
@@ -59,7 +59,7 @@ mv <REPO_CLONED> <REPO>
 cd <REPO>
 ```
 
-*Shrink manually (more desctructive)*
+*Shrink manually (more destructive)*
 ```
 git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
 git reflog expire --expire=now --all
@@ -73,6 +73,12 @@ git filter-branch --tree-filter 'rm -rf <DIR>' --prune-empty HEAD
 git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
 ```
 This works but is very slow.
+Slightly faster:
+
+```
+git filter-branch --index-filter 'git rm --cached --ignore-unmatch --quiet -r -- <DIR>' --prune-empty HEAD
+...
+```
 
 ### [BFG](https://rtyley.github.io/bfg-repo-cleaner/)
 A faster alternative to method above.  

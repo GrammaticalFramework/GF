@@ -5,14 +5,12 @@ import Distribution.Simple.Utils
 import Distribution.Simple.Setup
 import Distribution.PackageDescription hiding (Flag)
 import Control.Monad
-import Data.Char(isSpace)
-import Data.List(isPrefixOf,intersect,unfoldr,stripPrefix)
-import Data.Maybe(listToMaybe)
+import Data.List(isPrefixOf,intersect)
 --import System.IO
 import qualified Control.Exception as E
 import System.Process(readProcess)
 import System.FilePath
-import System.Directory(createDirectoryIfMissing,copyFile,doesDirectoryExist,getDirectoryContents)
+import System.Directory(createDirectoryIfMissing,copyFile,getDirectoryContents)
 --import System.Exit
 --import Control.Concurrent(forkIO)
 --import Control.Concurrent.Chan(newChan,writeChan,readChan)
@@ -399,14 +397,3 @@ parallel_ ms = sequence_ ms {-
      ts <- sequence [ forkIO (m >> writeChan c ()) | m <- ms]
      sequence_ [readChan c | _ <- ts]
 --}
-
-patches = paras . lines
-  where
-    paras = unfoldr para
-    para ls = case break null $ dropWhile null ls of
-                ([],[]) -> Nothing
-                (xs,ys) -> Just (info xs,ys)
-
-    info = unwords . map dropHeaders . filter (\l->not $ any (`isPrefixOf` l) [" ","patch "])
-    dropHeaders = dropWhile isSpace . dropPrefix "Author: " . dropPrefix "Date: "
-    dropPrefix pre l = maybe l id (stripPrefix pre l)
