@@ -1,24 +1,16 @@
-import Distribution.Simple
-import Distribution.Simple.LocalBuildInfo
+import Distribution.Simple(defaultMainWithHooks,UserHooks(..),simpleUserHooks)
+import Distribution.Simple.LocalBuildInfo(LocalBuildInfo(..),absoluteInstallDirs,datadir)
 import Distribution.Simple.BuildPaths(exeExtension)
-import Distribution.Simple.Utils
-import Distribution.Simple.Setup
-import Distribution.PackageDescription hiding (Flag)
-import Control.Monad
+import Distribution.Simple.Utils(intercalate)
+import Distribution.Simple.Setup(BuildFlags(..),Flag(..),InstallFlags(..),CopyDest(..),CopyFlags(..),SDistFlags(..))
+import Distribution.PackageDescription(PackageDescription(..),HookedBuildInfo(..),emptyHookedBuildInfo)
+import Control.Monad(unless)
 import Data.List(isPrefixOf,intersect)
---import System.IO
-import qualified Control.Exception as E
 import System.Process(readProcess)
-import System.FilePath
-import System.Directory(createDirectoryIfMissing,copyFile,getDirectoryContents)
---import System.Exit
---import Control.Concurrent(forkIO)
---import Control.Concurrent.Chan(newChan,writeChan,readChan)
+import System.FilePath((</>),(<.>))
+import System.Directory(createDirectoryIfMissing,copyFile,getDirectoryContents,listDirectory)
 
 import WebSetup
-
-tryIOE :: IO a -> IO (Either E.IOException a)
-tryIOE = E.try
 
 main :: IO ()
 main = defaultMainWithHooks simpleUserHooks{ preBuild  = gfPreBuild
@@ -38,8 +30,7 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild  = gfPreBuild
          return h
 
     gfPostBuild args flags pkg lbi =
-      do --writeFile "running" ""
-         buildRGL args flags (flags,pkg,lbi)
+      do buildRGL args flags (flags,pkg,lbi)
 --       let gf = default_gf lbi
 --       buildWeb gf (pkg,lbi)
 
@@ -73,13 +64,14 @@ bf (i,_,_) = i
 --pd (_,i,_) = i
 lbi (_,_,i) = i
 
+rglCommands :: [RGLCommand]
 rglCommands =
   [ RGLCommand "prelude" True  $ \mode args bi -> do
        putStrLn $ "Compiling [prelude]"
        let prelude_src_dir = rgl_src_dir    </> "prelude"
            prelude_dst_dir = rgl_dst_dir (lbi bi) </> "prelude"
        createDirectoryIfMissing True prelude_dst_dir
-       files <- list_files prelude_src_dir
+       files <- listDirectory prelude_src_dir
        run_gfc bi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files])
 
   , RGLCommand "all"     True  $ gfcp [l,s,c,t,sc]
@@ -130,6 +122,7 @@ rglCommands =
 
 --------------------------------------------------------
 
+checkRGLArgs :: [String] -> IO HookedBuildInfo
 checkRGLArgs args = do
   let args' = filter (\arg -> not (arg `elem` all_modes ||
                                    rgl_prefix `isPrefixOf` arg ||
@@ -138,17 +131,20 @@ checkRGLArgs args = do
     putStrLn $ "Unrecognised flags: " ++ intercalate ", " args'
   return emptyHookedBuildInfo
 
+buildRGL :: [String] -> BuildFlags -> Info -> IO ()
 buildRGL args flags bi = do
   let cmds = getRGLCommands args
   let modes = getOptMode args
   mapM_ (\cmd -> cmdAction cmd modes args bi) cmds
 
+installRGL :: [String] -> InstallFlags -> (PackageDescription, LocalBuildInfo) -> IO ()
 installRGL args flags bi = do
   let modes = getOptMode args
   let inst_gf_lib_dir = datadir (uncurry absoluteInstallDirs bi NoCopyDest) </> "lib"
   copyAll "prelude"   (rgl_dst_dir (snd bi) </> "prelude") (inst_gf_lib_dir </> "prelude")
   sequence_ [copyAll (show mode) (getRGLBuildDir (snd bi) mode) (inst_gf_lib_dir </> getRGLBuildSubDir mode)|mode<-modes]
 
+copyRGL :: [String] -> CopyFlags -> (PackageDescription, LocalBuildInfo) -> IO ()
 copyRGL args flags bi = do
   let modes = getOptMode args
       dest = case copyDest flags of
@@ -158,11 +154,14 @@ copyRGL args flags bi = do
   copyAll "prelude"   (rgl_dst_dir (snd bi) </> "prelude") (inst_gf_lib_dir </> "prelude")
   sequence_ [copyAll (show mode) (getRGLBuildDir (snd bi) mode) (inst_gf_lib_dir </> getRGLBuildSubDir mode)|mode<-modes]
 
+copyAll :: String -> FilePath -> FilePath -> IO ()
 copyAll s from to = do
   putStrLn $ "Installing [" ++ s ++ "] " ++ to
   createDirectoryIfMissing True to
-  mapM_ (\file -> copyFile (from </> file) (to </> file)) =<< list_files from
+  mapM_ (\file -> copyFile (from </> file) (to </> file)) =<< listDirectory from
+
 {-
+sdistRGL :: PackageDescription -> Maybe LocalBuildInfo -> UserHooks -> SDistFlags -> IO ()
 sdistRGL pkg mb_lbi hooks flags = do
   paths <- getRGLFiles rgl_src_dir []
   let pkg' = pkg{dataFiles=paths}
@@ -184,15 +183,17 @@ sdistRGL pkg mb_lbi hooks flags = do
 -- | Cabal doesn't know how to correctly create the source distribution, so
 -- we print an error message with the correct instructions when someone tries
 -- `cabal sdist`.
+sdistError :: PackageDescription -> Maybe LocalBuildInfo -> UserHooks -> SDistFlags -> IO ()
 sdistError _ _ _ _ = fail "Error: Use `make sdist` to create the source distribution file"
 
-rgl_src_dir         = "lib" </> "src"
+rgl_src_dir = "lib" </> "src"
 rgl_dst_dir lbi = buildDir lbi </> "rgl"
 
 -- the languages have long directory names and short ISO codes (3 letters)
 -- we also give the decodings for postprocessing linearizations, as long as grammars
 -- don't support all flags needed; they are used in tests
 
+langsCoding :: [((String, String), String)]
 langsCoding = [
   (("afrikaans","Afr"),""),
   (("amharic",  "Amh"),""),
@@ -237,6 +238,7 @@ langsCoding = [
   (("urdu",     "Urd"),"")
   ]
 
+langs :: [(String, String)]
 langs = map fst langsCoding
 
 -- default set of languages to compile
@@ -246,7 +248,7 @@ langs = map fst langsCoding
 langsLang = langs -- `except` ["Amh","Ara","Lat","Tur"]
 --langsLang = langs `only` ["Fin"] --test
 
--- languagues that have notpresent marked
+-- languages that have notpresent marked
 langsPresent = langsLang `except` ["Afr","Chi","Eus","Gre","Heb","Ice","Jpn","Mlt","Mon","Nep","Pes","Snd","Tha","Thb","Est"]
 
 -- languages for which to compile Try
@@ -269,8 +271,11 @@ langsPGF = langsLang `except` ["Ara","Hin","Ron","Tha"]
 -- languages for which Compatibility exists (to be extended)
 langsCompat = langsLang `only` ["Cat","Eng","Fin","Fre","Ita","Lav","Spa","Swe"]
 
+gfc :: Info -> [Mode] -> [Char] -> [[Char]] -> IO ()
 gfc bi modes summary files =
     parallel_ [gfcn bi mode summary files | mode<-modes]
+
+gfcn :: Info -> Mode -> [Char] -> [[Char]] -> IO ()
 gfcn bi mode summary files = do
   let dir = getRGLBuildDir (lbi bi) mode
       preproc = case mode of
@@ -280,6 +285,7 @@ gfcn bi mode summary files = do
   putStrLn $ "Compiling [" ++ show mode ++ "] " ++ summary
   run_gfc bi (["-s", "-no-pmcfg", preproc, "--gfo-dir="++dir] ++ files)
 
+gf :: Info -> String -> [String] -> IO ()
 gf bi comm files = do
   putStrLn $ "Reading " ++ unwords files
   let gf = default_gf (lbi bi)
@@ -288,8 +294,8 @@ gf bi comm files = do
   out <- readProcess gf ("-s":files) comm
   putStrLn out
 
-demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++
-           " | ps -to_html | wf -file=resdemo.html"
+demos :: String -> [(String, String)] -> String
+demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++ " | ps -to_html | wf -file=resdemo.html"
 
 lang   (lla,la) = rgl_src_dir </> lla </> ("All"           ++ la ++ ".gf")
 compat (lla,la) = rgl_src_dir </> lla </> ("Compatibility" ++ la ++ ".gf")
@@ -301,9 +307,13 @@ syntax (lla,la) = rgl_src_dir </> "api" </> ("Syntax" ++ la ++ ".gf")
 symbolic (lla,la) = rgl_src_dir </> "api"   </> ("Symbolic" ++ la ++ ".gf")
 parse    (lla,la) = rgl_src_dir </> "parse" </> ("Parse"    ++ la ++ ".gf")
 
+except :: (Eq b) => [(a, b)] -> [b] -> [(a, b)]
 except ls es = filter (flip notElem es . snd) ls
-only   ls es = filter (flip elem es . snd) ls
 
+only :: (Eq b) => [(a, b)] -> [b] -> [(a, b)]
+only ls es = filter (flip elem es . snd) ls
+
+getOptMode :: [String] -> [Mode]
 getOptMode args =
     if null explicit_modes
     then default_modes
@@ -316,6 +326,7 @@ getOptMode args =
     have mode = mode `elem` args
 
 -- list of languages overriding the definitions above
+getOptLangs :: [(String, String)] -> [String] -> [(String, String)]
 getOptLangs defaultLangs args =
     case [ls | arg <- args,
                let (f,ls) = splitAt (length langs_prefix) arg,
@@ -332,6 +343,7 @@ getOptLangs defaultLangs args =
                    then findLangs langs [l]++ls
                    else ls
 
+getRGLBuildSubDir :: Mode -> String
 getRGLBuildSubDir mode =
   case mode of
     AllTenses -> "alltenses"
@@ -341,6 +353,7 @@ getRGLBuildSubDir mode =
 getRGLBuildDir :: LocalBuildInfo -> Mode -> FilePath
 getRGLBuildDir lbi mode = rgl_dst_dir lbi </> getRGLBuildSubDir mode
 
+getRGLCommands :: [String] -> [RGLCommand]
 getRGLCommands args =
   let cmds0 = [cmd | arg <- args,
                      let (prefix,name) = splitAt (length rgl_prefix) arg,
@@ -354,6 +367,7 @@ getRGLCommands args =
 langs_prefix = "langs="
 rgl_prefix = "rgl-"
 
+unlexer :: String -> [(String, String)] -> String
 unlexer abstr ls =
   "-unlexer=\\\"" ++ unwords
       [abstr ++ la ++ "=" ++ unl |
@@ -370,28 +384,16 @@ run_gfc bi args =
            gf = default_gf (lbi bi)
        execute gf args'
 
+-- | Get path to locally-built gf
 default_gf :: LocalBuildInfo -> FilePath
 default_gf lbi = buildDir lbi </> exeName' </> exeNameReal
   where
     exeName' = "gf"
     exeNameReal = exeName' <.> exeExtension
-    {- --old solution, could pick the wrong executable if there is more than one
-    exeName' = (exeName . head . executables) pkg
-    exeNameReal = exeName' <.> (if null $ takeExtension exeName' then exeExtension else "")
-    -}
-
--- | Only update the file if contents has changed
-updateFile path new =
-  do old <- tryIOE $ readFile path
-     when (Right new/=old) $ seq (either (const 0) length old) $
-                                 writeFile path new
-
--- | List files, excluding "." and ".."
-list_files path = filter ((/=".").take 1) `fmap` getDirectoryContents path
-
 
 -- | For parallel RGL module compilation
 -- Unfortunately, this has no effect unless Setup.hs is compiled with -threaded
+parallel_ :: (Foldable t, Monad m) => t (m a) -> m ()
 parallel_ ms = sequence_ ms {-
   do c <- newChan
      ts <- sequence [ forkIO (m >> writeChan c ()) | m <- ms]

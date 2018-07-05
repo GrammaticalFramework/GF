@@ -1,7 +1,7 @@
 name: gf
 version: 3.9-git
 
-cabal-version: >= 1.20
+cabal-version: >= 1.24
 build-type: Custom
 license: OtherLicense
 license-file: LICENSE
@@ -38,6 +38,14 @@ data-files:
   www/translator/*.html
   www/translator/*.css
   www/translator/*.js
+
+custom-setup
+  setup-depends:
+    base,
+    Cabal >=1.4.0.0,
+    directory >=1.2.5.0,
+    filepath,
+    process >=1.0.1.1
 
 source-repository head
   type:     git
