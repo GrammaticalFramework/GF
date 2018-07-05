@@ -43,7 +43,7 @@ custom-setup
   setup-depends:
     base,
     Cabal >=1.4.0.0,
-    directory >=1.2.5.0,
+    directory,
     filepath,
     process >=1.0.1.1
 
