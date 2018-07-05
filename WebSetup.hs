@@ -4,9 +4,10 @@ import System.Directory(createDirectoryIfMissing,copyFile,doesDirectoryExist)
 import System.FilePath((</>),dropExtension)
 import System.Process(rawSystem)
 import System.Exit(ExitCode(..))
-import Distribution.Simple.Setup(BuildFlags(..),Flag(..),CopyDest(..),copyDest)
-import Distribution.Simple.LocalBuildInfo(datadir,buildDir,absoluteInstallDirs)
-import Distribution.Simple.Utils(die)
+import Distribution.Simple.Setup(BuildFlags(..),Flag(..),CopyFlags(..),CopyDest(..),copyDest)
+import Distribution.Simple.LocalBuildInfo(LocalBuildInfo(..),datadir,buildDir,absoluteInstallDirs)
+import Distribution.Simple.Utils(die) -- deprecated as of Cabal >= 2
+import Distribution.PackageDescription(PackageDescription(..))
 
 {-
    To test the GF web services, the minibar and the grammar editor, use
@@ -26,27 +27,26 @@ import Distribution.Simple.Utils(die)
   so users won't see this message unless they check the log.)
 -}
 
-example_grammars =  -- :: [(pgf, subdir, src)]
+example_grammars :: [(String, String, [String])] -- [(pgf, subdir, source modules)]
+example_grammars =
    [("Letter.pgf","letter",letterSrc)
    ,("Foods.pgf","foods",foodsSrc)
    ,("Phrasebook.pgf","phrasebook",phrasebookSrc)
    ]
   where
-  --foodsSrc = "Foods???.gf" -- doesn't work on Win32
     foodsSrc = ["Foods"++lang++".gf"|lang<-foodsLangs]
     foodsLangs = words "Afr Amh Bul Cat Cze Dut Eng Epo Fin Fre Ger Gle Heb Hin Ice Ita Jpn Lav Mlt Mon Nep Pes Por Ron Spa Swe Tha Tsn Tur Urd"
 
-  --phrasebookSrc = "Phrasebook???.gf" -- doesn't work on Win32
     phrasebookSrc = ["Phrasebook"++lang++".gf"|lang<-phrasebookLangs]
     phrasebookLangs = words "Bul Cat Chi Dan Dut Eng Lav Hin Nor Spa Swe Tha" -- only fastish languages
 
-  --letterSrc = "Letter???.gf"
     letterSrc = ["Letter"++lang++".gf"|lang<-letterLangs]
     letterLangs = words "Eng Fin Fre Heb Rus Swe"
 
 contrib_dir :: FilePath
 contrib_dir = ".."</>"gf-contrib"
 
+buildWeb :: String -> (BuildFlags, PackageDescription, LocalBuildInfo) -> IO ()
 buildWeb gf (flags,pkg,lbi) = do
   contrib_exists <- doesDirectoryExist contrib_dir
   if contrib_exists
@@ -75,14 +75,17 @@ buildWeb gf (flags,pkg,lbi) = do
                   "--output-dir="++gfo_dir]
                ++[dir</>file|file<-src]
 
+installWeb :: (PackageDescription, LocalBuildInfo) -> IO ()
 installWeb = setupWeb NoCopyDest
 
+copyWeb :: CopyFlags -> (PackageDescription, LocalBuildInfo) -> IO ()
 copyWeb flags = setupWeb dest
   where
     dest = case copyDest flags of
              NoFlag -> NoCopyDest
              Flag d -> d
 
+setupWeb :: CopyDest -> (PackageDescription, LocalBuildInfo) -> IO ()
 setupWeb dest (pkg,lbi) = do
   mapM_ (createDirectoryIfMissing True) [grammars_dir,cloud_dir]
   contrib_exists <- doesDirectoryExist contrib_dir
@@ -108,10 +111,10 @@ setupWeb dest (pkg,lbi) = do
       do createDirectoryIfMissing True logo_dir
          copyFile ("doc"</>"Logos"</>gf_logo) (logo_dir</>gf_logo)
 
+-- | Run an arbitrary system command
+execute :: String -> [String] -> IO ()
 execute command args =
   do let cmdline = command ++ " " ++ unwords (map showArg args)
---   putStrLn $ "Running: " ++ cmdline
---   appendFile "running" (cmdline++"\n")
      e <- rawSystem command args
      case e of
        ExitSuccess   -> return ()
@@ -120,8 +123,8 @@ execute command args =
   where
     showArg arg = if ' ' `elem` arg then "'" ++ arg ++ "'" else arg
 
--- | This function is used to enable parallel compilation of the RGL and
--- example grammars
+-- | This function is used to enable parallel compilation of the RGL and example grammars
+numJobs :: BuildFlags -> [String]
 numJobs flags =
     if null n
     then ["-j","+RTS","-A20M","-N","-RTS"]

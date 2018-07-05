@@ -36,12 +36,10 @@ main = defaultMainWithHooks simpleUserHooks{ preBuild  = gfPreBuild
 
     gfPostInst args flags pkg lbi =
       do installRGL args flags (pkg,lbi)
-         let gf = default_gf lbi
          installWeb (pkg,lbi)
 
     gfPostCopy args flags  pkg lbi =
-      do let gf = default_gf lbi
-         copyRGL args flags (pkg,lbi)
+      do copyRGL args flags (pkg,lbi)
          copyWeb flags (pkg,lbi)
 
 --------------------------------------------------------
