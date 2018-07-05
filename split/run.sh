@@ -63,7 +63,7 @@ RM_DIRS="lib split"
 # git rm -r --quiet "$RM_DIRS"
 # git commit -m "${COMMIT_PREFIX}Remove everything non-core" --quiet
 
-echo "This will take some time. Go for a walk."
+echo "Filtering (this will take some time)..."
 # git filter-branch --tree-filter "rm -rf ${RM_DIRS}" --prune-empty HEAD
 git filter-branch --index-filter "git rm --cached --ignore-unmatch --quiet -r -- ${RM_DIRS}" --prune-empty HEAD
 git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
@@ -91,7 +91,7 @@ echo "# ${REP_RGL}"
 echo "Copying..."
 cp -R -- "$REP_PRISTINE" "$REP_RGL"
 
-echo "Filtering..."
+echo "Filtering (this will take some time)..."
 cd "$REP_RGL"
 git filter-branch --prune-empty --subdirectory-filter lib --tag-name-filter cat -- --all
 
