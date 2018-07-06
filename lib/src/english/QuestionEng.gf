@@ -47,7 +47,7 @@ concrete QuestionEng of Question = CatEng ** open ResEng, Prelude in {
       } ;
 
     IdetQuant idet num = {
-      s = idet.s ! num.n ++ num.s ! Nom ; 
+      s = idet.s ! num.n ++ num.s ! False ! Nom ; 
       n = num.n
       } ;
 

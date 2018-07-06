@@ -6,7 +6,7 @@ lin
   SymbPN i = {s = addGenitiveS i.s ; g = Neutr} ;
   IntPN i  = {s = addGenitiveS i.s ; g = Neutr} ;
   FloatPN i = {s = addGenitiveS i.s ; g = Neutr} ;
-  NumPN i = {s = i.s ; g = Neutr} ;
+  NumPN i = {s = i.s ! False ; g = Neutr} ;
   CNIntNP cn i = {
     s = \\c => cn.s ! Sg ! Nom ++ (addGenitiveS i.s) ! npcase2case c ;
     a = agrgP3 Sg cn.g
@@ -16,14 +16,14 @@ lin
     a = agrgP3 det.n cn.g
     } ;
   CNNumNP cn i = {
-    s = \\c => cn.s ! Sg ! Nom ++ i.s ! npcase2case c ;
+    s = \\c => cn.s ! Sg ! Nom ++ i.s ! False ! npcase2case c ;
     a = agrgP3 Sg cn.g
     } ;
 
   SymbS sy = sy ; 
 
-  SymbNum sy = { s = addGenitiveS sy.s ; n = Pl ; hasCard = True } ;
-  SymbOrd sy = { s = \\c => sy.s ++ (regGenitiveS "th")!c} ;
+  SymbNum sy = { s,sp = \\_ => addGenitiveS sy.s ; n = Pl ; hasCard = True } ;
+  SymbOrd sy = { s    = \\c => sy.s ++ (regGenitiveS "th")!c} ;
 
 lincat 
 

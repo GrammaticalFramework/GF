@@ -443,7 +443,8 @@ mkInterj : Str -> Interj
     s = \\_    => table { Sg => sg ; Pl => pl } ;
     sp = \\g,_ => table {
       Sg => \\c => regGenitiveS (case g of {Masc=>sg1'; Fem=>sg1'; Neutr=>sg2'}) ! npcase2case c ; 
-      Pl => \\c => regGenitiveS (case g of {Masc=>pl1'; Fem=>pl1'; Neutr=>pl2'}) ! npcase2case c}
+      Pl => \\c => regGenitiveS (case g of {Masc=>pl1'; Fem=>pl1'; Neutr=>pl2'}) ! npcase2case c} ;
+    isDef = True
     } ;
 
   mkOrd : Str -> Ord = \x -> lin Ord { s = regGenitiveS x};

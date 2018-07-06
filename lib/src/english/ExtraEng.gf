@@ -2,10 +2,10 @@ concrete ExtraEng of ExtraEngAbs = CatEng **
   open ResEng, Coordination, Prelude, MorphoEng, ParadigmsEng in {
 
   lin
-    GenNP np = {s = \\_,_ => np.s ! npGen ; sp = \\_,_,_,_ => np.s ! npGen} ;
+    GenNP np = {s = \\_,_ => np.s ! npGen ; sp = \\_,_,_,_ => np.s ! npGen; isDef = True} ;
     GenIP ip = {s = \\_ => ip.s ! NCase Gen} ;
     GenRP nu cn = {
-      s = \\c => "whose" ++ nu.s ! Nom ++ 
+      s = \\c => "whose" ++ nu.s ! False ! Nom ++ 
                  case c of {
                    RC _ (NCase Gen) => cn.s ! nu.n ! Gen ;
                    _ => cn.s ! nu.n ! Nom
@@ -288,7 +288,7 @@ lin
   lin 
     ReflRNP vps rnp = insertObjPre (\\a => vps.c2 ++ rnp.s ! a) vps ;
     ReflPron = {s = reflPron} ;
-    ReflPoss num cn = {s = \\a => possPron ! a ++ num.s ! Nom ++ cn.s ! num.n ! Nom} ;
+    ReflPoss num cn = {s = \\a => possPron ! a ++ num.s ! True ! Nom ++ cn.s ! num.n ! Nom} ;
     PredetRNP predet rnp = {s = \\a => predet.s ++ rnp.s ! a} ;
 
     ConjRNP conj rpns = conjunctDistrTable Agr conj rpns ;

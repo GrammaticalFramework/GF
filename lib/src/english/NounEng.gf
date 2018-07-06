@@ -36,19 +36,20 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       a = np.a
       } ;
 
+
     DetQuant quant num = {
-      s  = quant.s ! num.hasCard ! num.n ++ num.s ! Nom;
+      s  = quant.s ! num.hasCard ! num.n ++ num.s ! quant.isDef ! Nom;
       sp = \\g,hasAdj,c => case num.hasCard of {
-                             False => quant.sp ! g ! (orB hasAdj num.hasCard) ! num.n ! c ++ num.s ! Nom ;
-                             True  => quant.s  !     num.hasCard              ! num.n     ++ num.s ! npcase2case c
+                             False => quant.sp ! g ! hasAdj ! num.n ! c ++ num.s  ! quant.isDef ! Nom ;
+                             True  => quant.s  !     True   ! num.n     ++ num.sp ! quant.isDef ! npcase2case c
                            } ;
       n  = num.n ;
       hasNum = num.hasCard
       } ;
 
     DetQuantOrd quant num ord = {
-      s  =            quant.s  ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! Nom; 
-      sp = \\g,_,c => quant.s  ! num.hasCard ! num.n ++ num.s ! Nom ++ ord.s ! npcase2case c ; 
+      s  =            quant.s  ! num.hasCard ! num.n ++ num.s ! quant.isDef ! Nom ++ ord.s ! Nom; 
+      sp = \\g,_,c => quant.s  ! num.hasCard ! num.n ++ num.s ! quant.isDef ! Nom ++ ord.s ! npcase2case c ; 
       n  = num.n ;
       hasNum = True
       } ;
@@ -64,21 +65,24 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       sp = \\_,hasAdj,_,c => case hasAdj of {
                                True  => p.s ! NCase Gen ;
                                False => p.sp ! npcase2case c
-                             }
+                             } ;
+      isDef = True
       } ;
 
-    NumSg = {s = \\c => []; n = Sg ; hasCard = False} ;
-    NumPl = {s = \\c => []; n = Pl ; hasCard = False} ;
+    NumSg = {s,sp = \\_,c => []; n = Sg ; hasCard = False} ;
+    NumPl = {s,sp = \\_,c => []; n = Pl ; hasCard = False} ;
 
     NumCard n = n ** {hasCard = True} ;
 
-    NumDigits n = {s = n.s ! NCard ; n = n.n} ;
-    OrdDigits n = {s = n.s ! NOrd} ;
+    NumDigits n = {s,sp = \\_ => n.s ! NCard ; n = n.n} ;
+    OrdDigits n = {s    = n.s ! NOrd} ;
 
-    NumNumeral numeral = {s = numeral.s ! NCard; n = numeral.n} ;
-    OrdNumeral numeral = {s = numeral.s ! NOrd} ;
+    NumNumeral numeral = {s,sp = \\_ => numeral.s ! NCard; n = numeral.n} ;
+    OrdNumeral numeral = {s    = numeral.s ! NOrd} ;
 
-    AdNum adn num = {s = \\c => adn.s ++ num.s!c ; n = num.n} ;
+    AdNum adn num = {s  = \\_,c => adn.s ++ num.s !False!c ;
+                     sp = \\_,c => adn.s ++ num.sp!False!c ;
+                     n  = num.n} ;
 
     OrdSuperl a = {s = \\c => a.s ! AAdj Superl c } ;
 
@@ -90,7 +94,8 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
         <Sg,False> => table { NCase Gen => table Gender ["its"; "his"; "her"] ! g; _ => table Gender ["it"; "he"; "she"] ! g } ;
         <Pl,False> => table { NCase Nom => "they"; NPAcc => "them"; _ => "theirs" } ;
         _          => \\c => artDef
-        }
+        } ;
+      isDef = True
       } ;
 
     IndefArt = {
@@ -102,7 +107,8 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
         <Sg,False> => table {NCase Gen => "one's"; _ => "one" };
         <Pl,False> => table {NCase Gen => "ones'"; _ => "ones" } ;
         _          => \\c => []
-        }
+        } ;
+      isDef = False
       } ;
 
     MassNP cn = {
