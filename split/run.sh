@@ -17,13 +17,30 @@ COMMIT_PREFIX="[GF Split] "
 # Directory where the new split repositories will live
 # https://stackoverflow.com/a/246128/98600
 THISDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DIR="${THISDIR}/../../GF-SPLIT/"
+DIR="${THISDIR}/../../GF-SPLIT"
 mkdir -p "$DIR"
 
 # Repository names
 REP_PRISTINE="pristine"
 REP_CORE="gf-core"
 REP_RGL="gf-rgl"
+
+# --- Are you sure? -----------------------------------------------------------
+
+realpath() {
+  cd "$1"
+  pwd
+}
+
+FLAG="--yes"
+if [ "$1" != "$FLAG" ]; then
+  echo "Wait! This script will completely rewrite everything in the following locations:"
+  echo "  "$(realpath "${DIR}/${REP_PRISTINE}")
+  echo "  "$(realpath "${DIR}/${REP_CORE}")
+  echo "  "$(realpath "${DIR}/${REP_RGL}")
+  echo "If you are sure you want to do this, re-run with the flag: ${FLAG}"
+  exit 0
+fi
 
 # --- Setting up --------------------------------------------------------------
 
