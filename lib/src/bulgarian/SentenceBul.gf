@@ -25,8 +25,10 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
                        VPhrasal Dat => personalClitics agr ! Dat++vp.clitics;
                        VPhrasal c   => vp.clitics++personalClitics agr ! c
                      }
-        in case p of {Pos => vp.ad.s ++ verb Perf ++ clitic ;
-                      Neg => "не" ++ vp.ad.s ++ clitic ++ verb Imperf} ++ compl ;
+        in case orPol p vp.p of {
+             Pos => vp.ad.s ++ verb Perf ++ clitic ;
+             Neg => "не" ++ vp.ad.s ++ clitic ++ verb Imperf
+           } ++ compl ;
     } ;
 
     SlashVP np slash =  {
@@ -55,7 +57,7 @@ concrete SentenceBul of Sentence = CatBul ** open Prelude, ResBul in {
 
     EmbedS  s  = {s = \\_ => "че" ++ s.s} ;
     EmbedQS qs = {s = \\_ => qs.s ! QIndir} ;
-    EmbedVP vp = {s = \\agr => daComplex Simul Pos vp ! Perf ! agr} ;
+    EmbedVP vp = {s = \\agr => daComplex Simul vp.p vp ! Perf ! agr} ;
 
     UseCl t p cl = {
       s = t.s ++ p.s ++ cl.s ! t.t ! t.a ! p.p ! Main
