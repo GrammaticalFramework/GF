@@ -106,8 +106,6 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
 	A = \s -> {s = \\_ => s; adv = s; isPre = True};
     A2 = \s -> {s = \\_ => s; adv = s; c2 = ""};
 
-    CAdv = \s -> {s=[]; sn=s} ;
-
     N  = \s -> {s = \\_ => s; rel = \\_ => s; relPost = False; g = AMasc NonHuman};
     N2 = \s -> {s = \\_ => s; rel = \\_ => s; relPost = False; g = AMasc NonHuman; c2 = {s=""; c=Acc}};
     N3 = \s -> {s = \\_ => s; rel = \\_ => s; relPost = False; g = AMasc NonHuman; c2,c3 = {s=""; c=Acc}};
@@ -145,8 +143,6 @@ concrete CatBul of Cat = CommonX - [IAdv,CAdv,AdV,SC] ** open ResBul, Prelude, P
 
 	A = \a -> a.s ! ASg Masc Indef;
     A2 = \a -> a.s ! ASg Masc Indef ++ a.c2;
-
-    CAdv = \adv -> adv.s ++ adv.sn ;
 
     N  = \n -> n.s ! NF Sg Indef;
     N2 = \n -> n.s ! NF Sg Indef ++ linPrep n.c2;
