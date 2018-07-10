@@ -235,6 +235,7 @@ oper
           APl Def        => dobrite
         } ;
     adv = dobro ;
+    isPre = True ;
     lock_A = <>
     } ;
 }

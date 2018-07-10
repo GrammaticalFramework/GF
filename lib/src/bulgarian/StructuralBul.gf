@@ -122,6 +122,8 @@ concrete StructuralBul of Structural = CatBul **
   youPl_Pron = mkPron "вие" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl PronP2 ;
   youPol_Pron = mkPron "вие" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl PronP2 ;
 
+  as_CAdv = mkCAdv "" "колкото" ;
+
   have_V2 = dirV2 (stateV (mkV186 "имам")) ;
 
   lin language_title_Utt = ss "Български" ;

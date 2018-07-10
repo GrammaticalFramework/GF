@@ -84,7 +84,7 @@ lin
   fridge_N = mkN007 "фризер" ;
   friend_N = mkN031a "приятел" ;
   fruit_N = mkN001 "плод" ;
-  fun_AV = mkAV (mkA079 "забавен") ;
+  fun_AV = mkA079 "забавен" ;
   forget_V2 = dirV2 (actionV (mkV187 "забравям") (mkV173 "забравя")) ;
   garden_N = mkN041 "градина" ;
   girl_N = mkN065 "момиче" ;
@@ -152,7 +152,7 @@ lin
   play_V2 = dirV2 (stateV (mkV161 "играя")) ;
   policeman_N = mkN032a "полицай" ;
   priest_N = mkN014 "свещеник" ;
-  probable_AS = mkAS (mkA079 "вероятен") ;
+  probable_AS = mkA079 "вероятен" ;
   queen_N = mkN041 "кралица" ;
   radio_N = mkN054 "радио" ;
   rain_V0 = mkV0 (stateV (mkV174 "вали")) ;

@@ -21,13 +21,13 @@ oper
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
-  mkAdA : Str -> AdA = \x -> ss x ** {lock_AdA = <>} ;
-
+  mkAdA  : Str -> AdA = \x -> lin AdA (ss x) ;
+  mkCAdv : Str -> Str -> CAdv = \s,sn -> lin CAdv {s = s; sn = sn} ;
 
 --2 Adjectives
 --
 
-  AS, A2S, AV : Type = A ;
+  AS, A2S, AV : Type = {s : AForm => Str; adv : Str} ;
   A2V : Type = A2 ;
 
   mkA2 : A -> Prep -> A2 ;

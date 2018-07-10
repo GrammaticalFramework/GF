@@ -6,7 +6,7 @@ concrete AdjectiveBul of Adjective = CatBul ** open ResBul, Prelude in {
     PositA  a = {
       s = \\aform,_ => a.s ! aform ;
       adv = a.adv ;
-      isPre = True
+      isPre = a.isPre
       } ;
 
     ComparA a np = {

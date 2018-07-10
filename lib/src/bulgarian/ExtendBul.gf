@@ -11,17 +11,14 @@ lin
       } ;
 
   CompoundN n1 n2 = 
-    let aform = ASg (case n2.g of {
-                       AMasc _       => Masc ;
-                       AFem          => Fem ;
-                       ANeut         => Neut
-                    }) Indef
+    let comp : NForm => Str
+             = \\nf => case n1.relPost of {
+                          True  => n2.s ! nf ++ n1.rel ! nform2aform nf n2.g ;
+                          False => n1.rel ! nform2aform nf n2.g ++ n2.s ! indefNForm nf
+                        }
     in {
-         s   = \\nf => case n1.relPost of {
-                         True  => n2.s ! nf ++ n1.rel ! nform2aform nf n2.g ;
-                         False => n1.rel ! nform2aform nf n2.g ++ n2.s ! indefNForm nf
-                       } ;
-         rel = \\af => n1.rel ! aform ++ n2.s ! NF Sg Indef ;  relPost = n1.relPost ;
+         s   = comp ;
+         rel = \\af => "на" ++ comp ! NF Sg Def ;  relPost = True ;
          g   = n2.g
     } ;
 

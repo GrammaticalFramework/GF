@@ -2081,5 +2081,5 @@ oper
                           (v0+"ане") ;
 
   adjAdv : A -> Str -> A =
-    \a,adv -> {s = a.s; adv = adv; lock_A=<>} ;
+    \a,adv -> a ** {adv = adv} ;
 }
