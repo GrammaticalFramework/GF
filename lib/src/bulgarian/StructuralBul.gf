@@ -1,6 +1,6 @@
 --# -coding=cp1251
 concrete StructuralBul of Structural = CatBul ** 
-  open MorphoBul, ParadigmsBul, Prelude in {
+  open MorphoBul, ParadigmsBul, Prelude, (X = ConstructX) in {
   flags coding=cp1251 ;
 
 
@@ -48,9 +48,9 @@ concrete StructuralBul of Structural = CatBul **
                           "във" / strs {"в" ; "ф" ; "В" ; "Ф"}
                         }) ;
   it_Pron  = mkPron "то" "негов" "неговия" "неговият" "негова" "неговата" "негово" "неговото" "негови" "неговите" (GSg Neut) PronP3 ;
-  less_CAdv = {s="не"; sn="по-малко"} ;
+  less_CAdv = X.mkCAdv "по-малко" "от" ;
   many_Det = mkDeterminerPl "много" ;
-  more_CAdv = {s=[]; sn="повече"} ;
+  more_CAdv = X.mkCAdv "повече" "от" ;
   most_Predet = {s = \\_ => "повечето"} ;
   much_Det = mkDeterminerSg "много" "много" "много";
   must_VV = 
@@ -122,7 +122,7 @@ concrete StructuralBul of Structural = CatBul **
   youPl_Pron = mkPron "вие" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl PronP2 ;
   youPol_Pron = mkPron "вие" "ваш" "вашия" "вашият" "ваша" "вашата" "ваше" "вашето" "ваши" "вашите" GPl PronP2 ;
 
-  as_CAdv = mkCAdv "" "колкото" ;
+  as_CAdv = X.mkCAdv [] "колкото" ;
 
   have_V2 = dirV2 (stateV (mkV186 "имам")) ;
 

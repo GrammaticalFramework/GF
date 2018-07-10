@@ -22,7 +22,6 @@ oper
 -- Adverbs modifying adjectives and sentences can also be formed.
 
   mkAdA  : Str -> AdA = \x -> lin AdA (ss x) ;
-  mkCAdv : Str -> Str -> CAdv = \s,sn -> lin CAdv {s = s; sn = sn} ;
 
 --2 Adjectives
 --

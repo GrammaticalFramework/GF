@@ -5,10 +5,10 @@ concrete AdverbBul of Adverb = CatBul ** open ResBul, Prelude in {
   lin
     PositAdvAdj a = {s = a.adv} ;
     ComparAdvAdj cadv a np = {
-      s = cadv.s ++ "по" ++ "-" ++ a.s ! ASg Neut Indef ++ "от" ++ np.s ! RObj CPrep
+      s = cadv.s ++ a.s ! ASg Neut Indef ++ cadv.p ++ np.s ! RObj CPrep
       } ;
     ComparAdvAdjS cadv a s = {
-      s = cadv.s ++ "по" ++ "-" ++ a.s ! ASg Neut Indef ++ "от" ++ "колкото" ++ s.s
+      s = cadv.s ++ a.s ! ASg Neut Indef ++ cadv.p ++ "колкото" ++ s.s
       } ;
 
     PrepNP prep np = {s = prep.s ++ np.s ! RObj prep.c} ;
@@ -19,5 +19,6 @@ concrete AdverbBul of Adverb = CatBul ** open ResBul, Prelude in {
 
     SubjS = cc2 ;
 
-    AdnCAdv cadv = {s = cadv.sn ++ "от"} ;
+    AdnCAdv cadv = {s = cadv.s ++ cadv.p} ;
+
 }
