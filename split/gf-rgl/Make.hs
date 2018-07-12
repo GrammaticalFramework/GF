@@ -1,11 +1,12 @@
 import System.FilePath ((</>),(<.>))
 import Data.List (find,intersect,isPrefixOf,intercalate)
-import Data.Maybe (fromJust,isJust)
-import System.Environment (getArgs)
+import Data.Maybe (fromJust,isJust,catMaybes)
+import System.Environment (getArgs,lookupEnv)
 import System.Exit (ExitCode(..),die)
 import System.Process (rawSystem,readProcess)
 import System.Directory (createDirectoryIfMissing,copyFile,getDirectoryContents,removeDirectoryRecursive)
-import Control.Monad(unless,when)
+import System.IO.Error (catchIOError)
+import Control.Monad (unless,when)
 
 main :: IO ()
 main = do
@@ -34,7 +35,7 @@ copyRGL :: [String] -> IO ()
 copyRGL args = do
   let modes = getOptMode args
   info <- mkInfo
-  let gf_lib_dir = infoInstallDir info </> "lib"
+  let gf_lib_dir = infoInstallDir info
   copyAll "prelude" (infoBuildDir info </> "prelude") (gf_lib_dir </> "prelude")
   sequence_ [copyAll (show mode) (getRGLBuildDir info mode) (gf_lib_dir </> getRGLBuildSubDir mode)|mode<-modes]
 
@@ -50,9 +51,17 @@ clean = do
   info <- mkInfo
   removeDirectoryRecursive (infoBuildDir info)
 
--- | Flag name for specifying languages
+-- | Flag for specifying languages
 langs_prefix :: String
 langs_prefix = "langs="
+
+-- | Flag for specifying gf location
+gf_prefix :: String
+gf_prefix = "gf="
+
+-- | Flag for specifying RGL install location
+install_prefix :: String
+install_prefix = "to="
 
 -- | Check arguments are valid
 checkArgs :: [String] -> IO ()
@@ -61,6 +70,8 @@ checkArgs args = do
         (  arg `elem` (map cmdName rglCommands)
         || arg `elem` all_modes
         || langs_prefix `isPrefixOf` arg
+        || gf_prefix `isPrefixOf` arg
+        || install_prefix `isPrefixOf` arg
         ))
   unless (null args') $ die $ "Unrecognised flags: " ++ intercalate ", " args'
   return ()
@@ -83,6 +94,9 @@ getOptLangs defaultLangs args =
                    then findLangs langs [l]++ls
                    else ls
 
+getFlag :: String -> [String] -> Maybe String
+getFlag flag args = fmap (drop (length flag)) $ find (isPrefixOf flag) args
+
 -------------------------------------------------------------------------------
 -- Paths and directories
 
@@ -93,25 +107,28 @@ sourceDir = "src"
 data Info = Info
   { infoBuildDir :: FilePath -- ^ where to put built RGL modules
   , infoInstallDir :: FilePath -- ^ install directory, found dynamically
+  , infoGFPath :: FilePath -- ^ Path to GF
   }
 
 mkInfo :: IO Info
 mkInfo = do
-  inst <- readFile "../gf-core/GF_LIB_PATH" -- TODO
+  args <- getArgs
+
+  -- Look for install location in a few different places
+  let mflag = getFlag install_prefix args
+  mbuilt <- catchIOError (readFile "../gf-core/GF_LIB_PATH" >>= return . Just) (\e -> return Nothing)
+  menvar <- lookupEnv "GF_LIB_PATH"
+  inst_dir <- case catMaybes [mflag,menvar,mbuilt] of
+    [] -> die "Unable to get install location"
+    p:_ -> return p
+
   return $ Info
     { infoBuildDir = "dist"
-    , infoInstallDir = inst
+    , infoInstallDir = inst_dir
+    , infoGFPath = maybe default_gf id (getFlag gf_prefix args)
     }
-
-default_gf :: Info -> FilePath
-default_gf bi = "gf"
-
--- -- | Get path to locally-built gf
--- default_gf :: LocalBuildInfo -> FilePath
--- default_gf lbi = buildDir lbi </> exeName' </> exeNameReal
---   where
---     exeName' = "gf"
---     exeNameReal = exeName' <.> exeExtension
+  where
+    default_gf = "gf"
 
 getRGLBuildDir :: Info -> Mode -> FilePath
 getRGLBuildDir info mode = infoBuildDir info </> getRGLBuildSubDir mode
@@ -364,7 +381,7 @@ run_gfc :: Info -> [String] -> IO ()
 run_gfc bi args = do
   let
     args' = ["-batch","-gf-lib-path="++sourceDir] ++ filter (not . null) args
-    gf = default_gf bi
+    gf = infoGFPath bi
   execute gf args'
 
 gfc :: Info -> [Mode] -> String -> [String] -> IO ()
@@ -384,7 +401,7 @@ gfcn bi mode summary files = do
 gf :: Info -> String -> [String] -> IO ()
 gf bi comm files = do
   putStrLn $ "Reading " ++ unwords files
-  let gf = default_gf bi
+  let gf = infoGFPath bi
   putStrLn ("executing: " ++ comm ++ "\n" ++ "in " ++ gf)
   out <- readProcess gf ("-s":files) comm
   putStrLn out
