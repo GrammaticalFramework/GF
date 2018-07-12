@@ -1,59 +1,107 @@
-module Main where
-
 import System.FilePath ((</>),(<.>))
 import Data.List (find,intersect,isPrefixOf,intercalate)
 import Data.Maybe (fromJust,isJust)
 import System.Environment (getArgs)
 import System.Exit (ExitCode(..),die)
 import System.Process (rawSystem,readProcess)
-import System.Directory (createDirectoryIfMissing,copyFile,getDirectoryContents)
-import Control.Monad(unless)
+import System.Directory (createDirectoryIfMissing,copyFile,getDirectoryContents,removeDirectoryRecursive)
+import Control.Monad(unless,when)
 
 main :: IO ()
 main = do
-  putStrLn "RGL Build Script"
-  getArgs >>= buildRGL
+  aargs <- getArgs
+  case aargs of
+    [] -> putStrLn $ "Must specify command: " ++ intercalate ", " commands
+    a:_ | a `notElem` commands -> putStrLn $ "Unknown command: " ++ a
+    "build":args -> buildRGL args
+    "copy":args -> copyRGL args
+    "install":args -> buildRGL args >> copyRGL args
+    "clean":_ -> clean
+  where
+    commands = ["build","copy","install","clean"]
 
+-- | Build grammars into dist
 buildRGL :: [String] -> IO ()
 buildRGL args = do
+  checkArgs args
   let cmds = getRGLCommands args
   let modes = getOptMode args
-  info <- readFile "../gf-core/GF_LIB_PATH" >>= return . Info
+  info <- mkInfo
   mapM_ (\cmd -> cmdAction cmd modes args info) cmds
 
--- copyRGL :: [String] -> CopyFlags -> (PackageDescription, LocalBuildInfo) -> IO ()
--- copyRGL args flags bi = do
---   let modes = getOptMode args
---       dest = case copyDest flags of
---                NoFlag -> NoCopyDest
---                Flag d -> d
---   let inst_gf_lib_dir = datadir (uncurry absoluteInstallDirs bi dest) </> "lib"
---   copyAll "prelude"   (rgl_dst_dir (snd bi) </> "prelude") (inst_gf_lib_dir </> "prelude")
---   sequence_ [copyAll (show mode) (getRGLBuildDir (snd bi) mode) (inst_gf_lib_dir </> getRGLBuildSubDir mode)|mode<-modes]
+-- | Copy from dist to install location
+copyRGL :: [String] -> IO ()
+copyRGL args = do
+  let modes = getOptMode args
+  info <- mkInfo
+  let gf_lib_dir = infoInstallDir info </> "lib"
+  copyAll "prelude" (infoBuildDir info </> "prelude") (gf_lib_dir </> "prelude")
+  sequence_ [copyAll (show mode) (getRGLBuildDir info mode) (gf_lib_dir </> getRGLBuildSubDir mode)|mode<-modes]
 
--- copyAll :: String -> FilePath -> FilePath -> IO ()
--- copyAll s from to = do
---   putStrLn $ "Installing [" ++ s ++ "] " ++ to
---   createDirectoryIfMissing True to
---   mapM_ (\file -> when (file /= "." && file /= "..") $ copyFile (from </> file) (to </> file)) =<< getDirectoryContents from
+-- | Copy all files between directories
+copyAll :: String -> FilePath -> FilePath -> IO ()
+copyAll msg from to = do
+  putStrLn $ "Installing [" ++ msg ++ "] " ++ to
+  createDirectoryIfMissing True to
+  mapM_ (\file -> when (file /= "." && file /= "..") $ copyFile (from </> file) (to </> file)) =<< getDirectoryContents from
 
-checkRGLArgs :: [String] -> IO ()
-checkRGLArgs args = do
-  let args' = filter (\arg -> not (arg `elem` all_modes ||
-                                   langs_prefix `isPrefixOf` arg)) args
-  unless (null args') $ die $ "Unrecognised flags: " ++ intercalate ", " args'
-  return ()
+clean :: IO ()
+clean = do
+  info <- mkInfo
+  removeDirectoryRecursive (infoBuildDir info)
 
--------------------------------------------------------------------------------
--- Paths and directories
--- TODO this whole section
-
+-- | Flag name for specifying languages
 langs_prefix :: String
 langs_prefix = "langs="
 
+-- | Check arguments are valid
+checkArgs :: [String] -> IO ()
+checkArgs args = do
+  let args' = flip filter args (\arg -> not
+        (  arg `elem` (map cmdName rglCommands)
+        || arg `elem` all_modes
+        || langs_prefix `isPrefixOf` arg
+        ))
+  unless (null args') $ die $ "Unrecognised flags: " ++ intercalate ", " args'
+  return ()
+
+-- | List of languages overriding the definitions above
+getOptLangs :: [LangInfo] -> [String] -> [LangInfo]
+getOptLangs defaultLangs args =
+    case [ls | arg <- args,
+               let (f,ls) = splitAt (length langs_prefix) arg,
+               f==langs_prefix] of
+      ('+':ls):_ -> foldr addLang defaultLangs (seps ls)
+      ('-':ls):_ -> foldr removeLang defaultLangs (seps ls)
+      ls:_ -> findLangs langs (seps ls)
+      _    -> defaultLangs
+  where
+    seps = words . map (\c -> if c==',' then ' ' else c)
+    findLangs langs ls = [lang | lang <- langs, langCode lang `elem` ls]
+    removeLang l ls = [lang | lang <- ls, langCode lang /= l]
+    addLang l ls = if null (findLangs ls [l])
+                   then findLangs langs [l]++ls
+                   else ls
+
+-------------------------------------------------------------------------------
+-- Paths and directories
+
+-- | RGL sources
+sourceDir :: FilePath
+sourceDir = "src"
+
 data Info = Info
-  { infoInstallDir :: FilePath
+  { infoBuildDir :: FilePath -- ^ where to put built RGL modules
+  , infoInstallDir :: FilePath -- ^ install directory, found dynamically
   }
+
+mkInfo :: IO Info
+mkInfo = do
+  inst <- readFile "../gf-core/GF_LIB_PATH" -- TODO
+  return $ Info
+    { infoBuildDir = "dist"
+    , infoInstallDir = inst
+    }
 
 default_gf :: Info -> FilePath
 default_gf bi = "gf"
@@ -65,14 +113,8 @@ default_gf bi = "gf"
 --     exeName' = "gf"
 --     exeNameReal = exeName' <.> exeExtension
 
-rgl_src_dir :: FilePath
-rgl_src_dir = "src"
-
-rgl_dst_dir :: Info -> FilePath
-rgl_dst_dir info = infoInstallDir info </> "rgl"
-
 getRGLBuildDir :: Info -> Mode -> FilePath
-getRGLBuildDir bi mode = rgl_dst_dir bi </> getRGLBuildSubDir mode
+getRGLBuildDir info mode = infoBuildDir info </> getRGLBuildSubDir mode
 
 getRGLBuildSubDir :: Mode -> String
 getRGLBuildSubDir mode =
@@ -84,7 +126,7 @@ getRGLBuildSubDir mode =
 -- Build modes
 
 data Mode = AllTenses | Present
-  deriving Show
+  deriving (Show)
 
 all_modes :: [String]
 all_modes = ["alltenses","present"]
@@ -93,17 +135,17 @@ default_modes :: [Mode]
 default_modes = [AllTenses,Present]
 
 data RGLCommand = RGLCommand
-  { cmdName   :: String
-  , cmdIsDef  :: Bool
-  , cmdAction :: [Mode] -> [String] -> Info -> IO ()
+  { cmdName   :: String -- ^ name of command
+  , cmdIsDef  :: Bool   -- ^ is default?
+  , cmdAction :: [Mode] -> [String] -> Info -> IO () -- ^ action
   }
 
 rglCommands :: [RGLCommand]
 rglCommands =
   [ RGLCommand "prelude" True  $ \mode args bi -> do
        putStrLn $ "Compiling [prelude]"
-       let prelude_src_dir = rgl_src_dir    </> "prelude"
-           prelude_dst_dir = rgl_dst_dir bi </> "prelude"
+       let prelude_src_dir = sourceDir       </> "prelude"
+           prelude_dst_dir = infoBuildDir bi </> "prelude"
        createDirectoryIfMissing True prelude_dst_dir
        files <- getDirectoryContents prelude_src_dir
        run_gfc bi (["-s", "--gfo-dir="++prelude_dst_dir] ++ [prelude_src_dir </> file | file <- files, file /= "." && file /= ".."])
@@ -127,10 +169,8 @@ rglCommands =
        let ls = optl langsDemo args
        gf bi (demos "Demo" ls) ["demo/Demo" ++ langCode l ++ ".gf" | l <- ls]
        return ()
-  -- , RGLCommand "parse"   False $ \modes args bi ->
-  --      gfc bi modes (summary parse) (map parse (optl langsParse args))
-  -- , RGLCommand "none"    False $ \modes args bi ->
-  --      return ()
+  , RGLCommand "parse"   False $ \modes args bi ->
+       gfc bi modes (summary parse) (map parse (optl langsParse args))
   ]
   where
     gfcp :: [Mode -> [String] -> (LangInfo -> FilePath,[LangInfo])] -> [Mode] -> [String] -> Info -> IO ()
@@ -184,9 +224,9 @@ getRGLCommands args =
 
 -- | Information about a language
 data LangInfo = LangInfo
-  { langCode :: String -- ^ 3-letter ISO code
+  { langCode :: String -- ^ 3-letter ISO 639-2/B code
   , langDir :: String -- ^ directory name
-  , langFunctor :: Maybe String
+  , langFunctor :: Maybe String -- ^ functor (not used)
   , langUnlexer :: Maybe String -- ^ decoding for postprocessing linearizations
   } deriving (Eq)
 
@@ -238,7 +278,7 @@ langs =
 
 -- | Languagues for which to compile Lang
 langsLang :: [LangInfo]
-langsLang = langs -- `except` ["Amh","Ara","Lat","Tur"]
+langsLang = langs
 
 -- | Languages that have notpresent marked
 langsPresent :: [LangInfo]
@@ -248,12 +288,9 @@ langsPresent = langsLang `except` ["Afr","Chi","Eus","Gre","Heb","Ice","Jpn","Ml
 langsAPI :: [LangInfo]
 langsAPI = langsLang `except` langsIncomplete
 
+-- | Languages which compile but which are incomplete
 langsIncomplete :: [String]
 langsIncomplete = ["Amh","Ara","Grc","Heb","Ina","Lat","Tur"]
-
--- -- | Languages for which to compile minimal Syntax
--- langsMinimal :: [LangInfo]
--- langsMinimal = langs `only` ["Ara","Eng","Bul","Rus"]
 
 -- | Languages for which to compile Symbolic
 langsSymbolic :: [LangInfo]
@@ -286,47 +323,38 @@ only ls es = filter (flip elem es . langCode) ls
 -------------------------------------------------------------------------------
 -- Getting module paths/names
 
--- | List of languages overriding the definitions above
-getOptLangs :: [LangInfo] -> [String] -> [LangInfo]
-getOptLangs defaultLangs args =
-    case [ls | arg <- args,
-               let (f,ls) = splitAt (length langs_prefix) arg,
-               f==langs_prefix] of
-      ('+':ls):_ -> foldr addLang defaultLangs (seps ls)
-      ('-':ls):_ -> foldr removeLang defaultLangs (seps ls)
-      ls:_ -> findLangs langs (seps ls)
-      _    -> defaultLangs
-  where
-    seps = words . map (\c -> if c==',' then ' ' else c)
-    findLangs langs ls = [lang | lang <- langs, langCode lang `elem` ls]
-    removeLang l ls = [lang | lang <- ls, langCode lang /= l]
-    addLang l ls = if null (findLangs ls [l])
-                   then findLangs langs [l]++ls
-                   else ls
-
 lang :: LangInfo -> FilePath
-lang l = rgl_src_dir </> langDir l </> ("All" ++ langCode l ++ ".gf")
+lang l = sourceDir </> langDir l </> ("All" ++ langCode l ++ ".gf")
 
 compat :: LangInfo -> FilePath
-compat l = rgl_src_dir </> langDir l </> ("Compatibility" ++ langCode l ++ ".gf")
+compat l = sourceDir </> langDir l </> ("Compatibility" ++ langCode l ++ ".gf")
 
 symbol :: LangInfo -> FilePath
-symbol l = rgl_src_dir </> langDir l </> ("Symbol" ++ langCode l ++ ".gf")
+symbol l = sourceDir </> langDir l </> ("Symbol" ++ langCode l ++ ".gf")
 
 try :: LangInfo -> FilePath
-try l = rgl_src_dir </> "api" </> ("Try" ++ langCode l ++ ".gf")
+try l = sourceDir </> "api" </> ("Try" ++ langCode l ++ ".gf")
 
 syntax :: LangInfo -> FilePath
-syntax l = rgl_src_dir </> "api" </> ("Syntax" ++ langCode l ++ ".gf")
+syntax l = sourceDir </> "api" </> ("Syntax" ++ langCode l ++ ".gf")
 
 symbolic :: LangInfo -> FilePath
-symbolic l = rgl_src_dir </> "api" </> ("Symbolic" ++ langCode l ++ ".gf")
+symbolic l = sourceDir </> "api" </> ("Symbolic" ++ langCode l ++ ".gf")
 
 parse :: LangInfo -> FilePath
-parse l = rgl_src_dir </> "parse" </> ("Parse" ++ langCode l ++ ".gf")
+parse l = sourceDir </> "parse" </> ("Parse" ++ langCode l ++ ".gf")
 
 demos :: String -> [LangInfo] -> String
 demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++ " | ps -to_html | wf -file=resdemo.html"
+
+-- | Get unlexer flags for languages
+unlexer :: String -> [LangInfo] -> String
+unlexer abstr ls =
+  "-unlexer=\\\"" ++ unwords
+    [ abstr ++ langCode lang ++ "=" ++ fromJust unl
+    | lang <- ls
+    , let unl = langUnlexer lang
+    , isJust unl] ++ "\\\""
 
 -------------------------------------------------------------------------------
 -- Executing GF
@@ -335,7 +363,7 @@ demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++ " | ps -
 run_gfc :: Info -> [String] -> IO ()
 run_gfc bi args = do
   let
-    args' = ["-batch","-gf-lib-path="++rgl_src_dir] ++ filter (not . null) args
+    args' = ["-batch","-gf-lib-path="++sourceDir] ++ filter (not . null) args
     gf = default_gf bi
   execute gf args'
 
@@ -348,7 +376,7 @@ gfcn bi mode summary files = do
   let dir = getRGLBuildDir bi mode
       preproc = case mode of
                   AllTenses -> ""
-                  Present   -> "-preproc="++({-rgl_src_dir </>-} "mkPresent")
+                  Present   -> "-preproc="++({-sourceDir </>-} "mkPresent")
   createDirectoryIfMissing True dir
   putStrLn $ "Compiling [" ++ show mode ++ "] " ++ summary
   run_gfc bi (["-s", "-no-pmcfg", preproc, "--gfo-dir="++dir] ++ files)
@@ -380,15 +408,3 @@ parallel_ ms = sequence_ ms
   -- do c <- newChan
   --    ts <- sequence [ forkIO (m >> writeChan c ()) | m <- ms]
   --    sequence_ [readChan c | _ <- ts]
-
-
--------------------------------------------------------------------------------
--- Helpers
-
-unlexer :: String -> [LangInfo] -> String
-unlexer abstr ls =
-  "-unlexer=\\\"" ++ unwords
-    [ abstr ++ langCode lang ++ "=" ++ fromJust unl
-    | lang <- ls
-    , let unl = langUnlexer lang
-    , isJust unl] ++ "\\\""
