@@ -65,20 +65,18 @@ rm -rf "$REP_RGL"
 # --- Begin building repos ----------------------------------------------------
 
 # === core ===
-# - remove non-core stuff, preserving general structure
+# - remove RGL
 # - shrink
-# - TODO changes to build scripts
+# - changes to build scripts
 echo
 echo "# ${REP_CORE}"
 
 echo "Copying..."
-cp -R -- "$REP_PRISTINE" "$REP_CORE"
+cp -R "$REP_PRISTINE" "$REP_CORE"
 
 echo "Cleaning..."
 cd "$REP_CORE"
 RM_DIRS="lib split"
-# git rm -r --quiet "$RM_DIRS"
-# git commit -m "${COMMIT_PREFIX}Remove everything non-core" --quiet
 
 echo "Filtering (this will take some time)..."
 # git filter-branch --tree-filter "rm -rf ${RM_DIRS}" --prune-empty HEAD
@@ -88,6 +86,14 @@ git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-re
 echo "Shrinking..."
 git reflog expire --expire=now --all
 git gc --prune=now --aggressive
+
+echo "Post-split updates..."
+CP_FILES="Setup.hs WebSetup.hs"
+for FILE in "$CP_FILES" ; do
+  cp "${REP_PRISTINE}/split/${REP_CORE}/${FILE}" .
+done
+git add --quiet "$CP_FILES"
+git commit -m "${COMMIT_PREFIX}Update setup files" --quiet
 
 echo "Set origin to git@github.com:GrammaticalFramework/${REP_CORE}.git"
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_CORE}.git"
@@ -124,9 +130,20 @@ git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-re
 git reflog expire --expire=now --all
 git gc --prune=now
 
-echo "Cleaning..."
+echo "Post-split updates..."
 git rm -r --quiet doc/browse
-git commit -m "${COMMIT_PREFIX}Remove RGL browser (separate repo)" --quiet
+git commit -m "${COMMIT_PREFIX}Remove RGL browser" --quiet
+
+echo "Post-split updates..."
+CP_FILES=".gitignore Make.hs Makefile README.md"
+for FILE in "$CP_FILES" ; do
+  cp "${REP_PRISTINE}/split/${REP_RGL}/${FILE}" .
+done
+git add --quiet "$CP_FILES"
+RM_FILES="src/Makefile"
+git rm --quiet "$RM_FILES"
+done
+git commit -m "${COMMIT_PREFIX}Update setup files" --quiet
 
 echo "Set origin to git@github.com:GrammaticalFramework/${REP_RGL}.git"
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_RGL}.git"
