@@ -3,10 +3,18 @@
 # Split this repository into smaller repositories
 # Only tested with macOS
 
-# --- Config settings ---------------------------------------------------------
-
 # Exit on error
 set -e
+
+# --- Config settings ---------------------------------------------------------
+
+# Directory where the new split repositories will live
+DIR="/Users/john/repositories/GF-SPLIT"
+
+# Repository names
+REP_PRISTINE="pristine"
+REP_CORE="gf-core"
+REP_RGL="gf-rgl"
 
 # Push to remotes?
 PUSH=true
@@ -14,37 +22,37 @@ PUSH=true
 # Text prefix to include in commit messages created by this script
 COMMIT_PREFIX="[GF Split] "
 
-# Directory where the new split repositories will live
-# https://stackoverflow.com/a/246128/98600
-THISDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DIR="${THISDIR}/../../GF-SPLIT"
-mkdir -p "$DIR"
-
-# Repository names
-REP_PRISTINE="pristine"
-REP_CORE="gf-core"
-REP_RGL="gf-rgl"
+# Directory name suffix for backups
+BACKUP_SUFFIX="_copy"
 
 # --- Are you sure? -----------------------------------------------------------
 
-realpath() {
-  cd "$1"
-  pwd
-}
+echo "GF repository split script"
 
-FLAG="--yes"
-if [ "$1" != "$FLAG" ]; then
-  echo "Wait! This script will completely rewrite everything in the following locations:"
-  echo "  "$(realpath "${DIR}/${REP_PRISTINE}")
-  echo "  "$(realpath "${DIR}/${REP_CORE}")
-  echo "  "$(realpath "${DIR}/${REP_RGL}")
-  echo "If you are sure you want to do this, re-run with the flag: ${FLAG}"
+CONFIRM=""
+while getopts 'yd:' flag; do
+  case "${flag}" in
+    y) CONFIRM='true' ;;
+    d) DIR="${OPTARG}" ;;
+  esac
+done
+
+if [ "$CONFIRM" != true ]; then
+  echo "This script will [re]create the following directories:"
+  echo "  ${DIR}/${REP_PRISTINE}"
+  echo "  ${DIR}/${REP_CORE}"
+  echo "  ${DIR}/${REP_RGL}"
+  echo "  ${DIR}/${REP_CORE}${BACKUP_SUFFIX}"
+  echo "  ${DIR}/${REP_RGL}${BACKUP_SUFFIX}"
+  echo "To change the path, set the DIR variable in this script use the -d flag."
+  echo "When you are sure, re-run this script with the -y flag."
   exit 0
 fi
 
 # --- Setting up --------------------------------------------------------------
 
 # Make a brand new clone which is copied for each sub repo
+mkdir -p "$DIR"
 cd "$DIR"
 echo "# $REP_PRISTINE"
 if [ -d "$REP_PRISTINE" ]; then
@@ -89,7 +97,7 @@ git gc --prune=now --aggressive
 
 echo "Backing up shrunk repository..."
 cd ..
-cp -R "$REP_CORE" "${REP_CORE}_copy"
+cp -R "$REP_CORE" "${REP_CORE}${BACKUP_SUFFIX}"
 cd "$REP_CORE"
 
 echo "Post-split updates..."
@@ -138,7 +146,7 @@ git gc --prune=now
 
 echo "Backing up shrunk repository..."
 cd ..
-cp -R "$REP_RGL" "${REP_RGL}_copy"
+cp -R "$REP_RGL" "${REP_RGL}${BACKUP_SUFFIX}"
 cd "$REP_RGL"
 
 echo "Post-split updates..."
@@ -153,6 +161,7 @@ done
 git add --quiet "$CP_FILES"
 RM_FILES="src/Makefile"
 git rm --quiet "$RM_FILES"
+git mv --quiet "src/mkPresent" .
 done
 git commit -m "${COMMIT_PREFIX}Update setup files" --quiet
 
@@ -163,3 +172,14 @@ if [ "$PUSH" = true ]; then
   git push --set-upstream --force origin master
 fi
 cd ..
+
+# --- Finally ----------------------------------------------------------------
+echo
+echo "Done. Your new repositories are at:"
+echo "  ${DIR}/${REP_CORE}"
+echo "  ${DIR}/${REP_RGL}"
+
+echo "You may want to delete these repositories:"
+echo "  ${DIR}/${REP_PRISTINE}"
+echo "  ${DIR}/${REP_CORE}${BACKUP_SUFFIX}"
+echo "  ${DIR}/${REP_RGL}${BACKUP_SUFFIX}"
