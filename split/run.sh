@@ -9,7 +9,7 @@
 set -e
 
 # Push to remotes?
-PUSH=false
+PUSH=true
 
 # Text prefix to include in commit messages created by this script
 COMMIT_PREFIX="[GF Split] "
@@ -65,9 +65,9 @@ rm -rf "$REP_RGL"
 # --- Begin building repos ----------------------------------------------------
 
 # === core ===
-# - remove RGL
+# - remove RGL (filter out lib directory)
 # - shrink
-# - changes to build scripts
+# - update build scripts
 echo
 echo "# ${REP_CORE}"
 
@@ -87,12 +87,18 @@ echo "Shrinking..."
 git reflog expire --expire=now --all
 git gc --prune=now --aggressive
 
+echo "Backing up shrunk repository..."
+cd ..
+cp -R "$REP_CORE" "${REP_CORE}_copy"
+cd "$REP_CORE"
+
 echo "Post-split updates..."
 CP_FILES="Setup.hs WebSetup.hs"
 for FILE in "$CP_FILES" ; do
   cp "${REP_PRISTINE}/split/${REP_CORE}/${FILE}" .
 done
 git add --quiet "$CP_FILES"
+git apply "${REP_PRISTINE}/split/${REP_CORE}/diff.patch"
 git commit -m "${COMMIT_PREFIX}Update setup files" --quiet
 
 echo "Set origin to git@github.com:GrammaticalFramework/${REP_CORE}.git"
@@ -104,10 +110,10 @@ fi
 cd ..
 
 # === RGL ===
-# - filter `lib` directory
+# - filter just `lib` directory
 # - shrink
-# - minor clean up
-# - TODO build scripts
+# - clean up
+# - update build scripts
 echo
 echo "# ${REP_RGL}"
 
@@ -129,6 +135,11 @@ echo "Shrinking..."
 git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
 git reflog expire --expire=now --all
 git gc --prune=now
+
+echo "Backing up shrunk repository..."
+cd ..
+cp -R "$REP_RGL" "${REP_RGL}_copy"
+cd "$REP_RGL"
 
 echo "Post-split updates..."
 git rm -r --quiet doc/browse
@@ -152,5 +163,3 @@ if [ "$PUSH" = true ]; then
   git push --set-upstream --force origin master
 fi
 cd ..
-
-# --- Finally -----------------------------------------------------------------

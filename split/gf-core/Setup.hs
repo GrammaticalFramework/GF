@@ -8,23 +8,23 @@ import WebSetup
 
 -- | Notice about RGL not built anymore
 noRGLmsg :: IO ()
-noRGLmsg = putStrLn "RGL is not built as part of GF anymore."
+noRGLmsg = putStrLn "Notice: the RGL is not built as part of GF anymore. See https://github.com/GrammaticalFramework/gf-rgl"
 
 -- | Cabal doesn't know how to correctly create the source distribution, so
 -- we print an error message with the correct instructions when someone tries
 -- `cabal sdist`.
 sdistError :: PackageDescription -> Maybe LocalBuildInfo -> UserHooks -> SDistFlags -> IO ()
-sdistError _ _ _ _ = fail "Error: Use `make sdist` to create the source distribution file"
+sdistError _ _ _ _ = fail "Use `make sdist` to create the source distribution file"
 
 main :: IO ()
-main = defaultMainWithHooks simpleUserHooks{ preBuild  = gfPreBuild
-                                           , postBuild = gfPostBuild
-                                           , preInst   = gfPreInst
-                                           , postInst  = gfPostInst
-                                           -- , preCopy   = const . checkRGLArgs
-                                           , postCopy  = gfPostCopy
-                                           , sDistHook = sdistError
-                                           }
+main = defaultMainWithHooks simpleUserHooks
+  { preBuild  = gfPreBuild
+  , postBuild = gfPostBuild
+  , preInst   = gfPreInst
+  , postInst  = gfPostInst
+  , postCopy  = gfPostCopy
+  , sDistHook = sdistError
+  }
   where
     gfPreBuild args  = gfPre args . buildDistPref
     gfPreInst args = gfPre args . installDistPref

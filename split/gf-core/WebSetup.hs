@@ -6,8 +6,8 @@ import System.Process(rawSystem)
 import System.Exit(ExitCode(..))
 import Distribution.Simple.Setup(BuildFlags(..),Flag(..),CopyFlags(..),CopyDest(..),copyDest)
 import Distribution.Simple.LocalBuildInfo(LocalBuildInfo(..),datadir,buildDir,absoluteInstallDirs)
-import Distribution.Simple.Utils(die) -- deprecated as of Cabal >= 2
 import Distribution.PackageDescription(PackageDescription(..))
+import System.Exit(die)
 
 {-
    To test the GF web services, the minibar and the grammar editor, use
