@@ -7,15 +7,15 @@ This is a work-in-progress; once finalised, the split will be run on the latest 
 
 Contributions and comments welcome.
 
-## Decisions
+## Checklist
 
-- When HTML is generated from some other format, e.g. txt2tags, the HTML should not be under version control.
-
-## Questions
-
-- Active RGL documentation and web availability
-- Should current `GF` become an archive OR should it live on as main repo?
-  Related names: `gf-core`, `gf-archive`
+- [ ] Beta testing of build scripts
+- [ ] Package-building scripts
+- [ ] Webpage setup to follow new repositories
+- [ ] GF Developers documentation
+- [ ] RGL Documentation
+- [ ] Update GF web styles
+- [ ] Script for auto-rendering Markdown
 
 ## To check
 
@@ -23,7 +23,7 @@ Contributions and comments welcome.
 - `GF:demos`
 - `GF:treebanks`
 
-## Things which should live separately
+### Things which should live separately
 
 - Android app `GF:src/ui/android`
 - iOS app `GF:src/ui/ios`
@@ -33,8 +33,7 @@ Contributions and comments welcome.
 - gftest `GF:src/tools/gftest`
 - `GF:examples`
 
-
-## Things which should definitely be archived
+### Things which should definitely be archived
 
 - `GF:src/ui/gwt`
 - `GF:src/tools/c`
