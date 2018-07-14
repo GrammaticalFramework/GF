@@ -9,6 +9,7 @@ set -e
 # --- Config settings ---------------------------------------------------------
 
 # Directory where the new split repositories will live
+# Can be overridden when running the script with -d /PATH/TO/DIR
 DIR="/Users/john/repositories/GF-SPLIT"
 
 # Repository names
@@ -17,7 +18,7 @@ REP_CORE="gf-core"
 REP_RGL="gf-rgl"
 
 # Push to remotes?
-PUSH=true
+PUSH="true"
 
 # Text prefix to include in commit messages created by this script
 COMMIT_PREFIX="[GF Split] "
@@ -28,12 +29,15 @@ BACKUP_SUFFIX="_copy"
 # --- Are you sure? -----------------------------------------------------------
 
 echo "GF repository split script"
+echo "Usage: run.sh [-d PATH] [-y]"
+echo
 
 CONFIRM=""
-while getopts 'yd:' flag; do
-  case "${flag}" in
-    y) CONFIRM='true' ;;
-    d) DIR="${OPTARG}" ;;
+while getopts "yd:" FLAG; do
+  case "$FLAG" in
+    y) CONFIRM="true" ;;
+    d) DIR="$OPTARG" ;;
+    *) exit 1
   esac
 done
 
@@ -44,7 +48,7 @@ if [ "$CONFIRM" != true ]; then
   echo "  ${DIR}/${REP_RGL}"
   echo "  ${DIR}/${REP_CORE}${BACKUP_SUFFIX}"
   echo "  ${DIR}/${REP_RGL}${BACKUP_SUFFIX}"
-  echo "To change the path, set the DIR variable in this script use the -d flag."
+  echo "To change the path, set the DIR variable in this script or use the -d flag."
   echo "When you are sure, re-run this script with the -y flag."
   exit 0
 fi
@@ -102,12 +106,12 @@ cd "$REP_CORE"
 
 echo "Post-split updates..."
 CP_FILES="Setup.hs WebSetup.hs"
-for FILE in "$CP_FILES" ; do
-  cp "${REP_PRISTINE}/split/${REP_CORE}/${FILE}" .
+for FILE in $CP_FILES ; do
+  cp "${DIR}/${REP_PRISTINE}/split/${REP_CORE}/${FILE}" .
 done
-git add --quiet "$CP_FILES"
-git apply "${REP_PRISTINE}/split/${REP_CORE}/diff.patch"
-git commit -m "${COMMIT_PREFIX}Update setup files" --quiet
+git apply "${DIR}/${REP_PRISTINE}/split/${REP_CORE}/diff.patch"
+git add .
+git commit -m "${COMMIT_PREFIX}Post-split updates" --quiet
 
 echo "Set origin to git@github.com:GrammaticalFramework/${REP_CORE}.git"
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_CORE}.git"
@@ -153,17 +157,14 @@ echo "Post-split updates..."
 git rm -r --quiet doc/browse
 git commit -m "${COMMIT_PREFIX}Remove RGL browser" --quiet
 
-echo "Post-split updates..."
 CP_FILES=".gitignore Make.hs Makefile README.md"
-for FILE in "$CP_FILES" ; do
-  cp "${REP_PRISTINE}/split/${REP_RGL}/${FILE}" .
+for FILE in $CP_FILES ; do
+  cp "${DIR}/${REP_PRISTINE}/split/${REP_RGL}/${FILE}" .
 done
-git add --quiet "$CP_FILES"
-RM_FILES="src/Makefile"
-git rm --quiet "$RM_FILES"
-git mv --quiet "src/mkPresent" .
-done
-git commit -m "${COMMIT_PREFIX}Update setup files" --quiet
+git add .
+git rm --quiet "src/Makefile"
+git mv "src/mkPresent" .
+git commit -m "${COMMIT_PREFIX}Post-split updates" --quiet
 
 echo "Set origin to git@github.com:GrammaticalFramework/${REP_RGL}.git"
 git remote set-url origin "git@github.com:GrammaticalFramework/${REP_RGL}.git"
