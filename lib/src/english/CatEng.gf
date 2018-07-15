@@ -1,4 +1,4 @@
-concrete CatEng of Cat = CommonX - [Pol,SC] ** open ResEng, Prelude in {
+concrete CatEng of Cat = CommonX - [Pol,SC,CAdv] ** open ResEng, Prelude in {
 
   flags optimize=all_subs ;
 
@@ -85,10 +85,9 @@ concrete CatEng of Cat = CommonX - [Pol,SC] ** open ResEng, Prelude in {
 -- Structural
 
     Conj = {s1,s2 : Str ; n : Number} ;
----b    Conj = {s : Str ; n : Number} ;
----b    DConj = {s1,s2 : Str ; n : Number} ;
     Subj = {s : Str} ;
     Prep = {s : Str; isPre : Bool} ;
+    CAdv = {s : Polarity => Str; p : Str} ;
 
 -- Open lexical classes, e.g. Lexicon
 

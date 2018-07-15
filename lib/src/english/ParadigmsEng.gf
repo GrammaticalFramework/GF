@@ -190,7 +190,8 @@ oper
 
 -- Adverbs modifying adjectives and sentences can also be formed.
 
-  mkAdA : Str -> AdA ; -- e.g. quite
+  mkAdA  : Str -> AdA ; -- e.g. quite
+  mkCAdv : Str -> Str -> Str -> CAdv ;   -- more than/no more than
 
 -- Adverbs modifying numerals
 
@@ -496,6 +497,8 @@ mkInterj : Str -> Interj
   mkAdV x = lin AdV (ss x) ;
   mkAdA x = lin AdA (ss x) ;
   mkAdN x = lin AdN (ss x) ;
+
+  mkCAdv sp sn p = lin CAdv {s = table Polarity [sp;sn]; p = p} ;
 
   mkPrep p = lin Prep {s=p; isPre=True} ;
   mkPost p = lin Prep {s=p; isPre=False} ;
