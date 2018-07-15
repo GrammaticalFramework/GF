@@ -40,7 +40,7 @@ concrete CatBul of Cat = CommonX - [IAdv,AdV,SC] ** open ResBul, Prelude, Predef
 
 -- Adjective
 
-    AP = {s : AForm => Person => Str; adv : Str; isPre : Bool} ;
+    AP = {s : AForm => Person => Str; isPre : Bool} ;
 
 -- Adverb
 

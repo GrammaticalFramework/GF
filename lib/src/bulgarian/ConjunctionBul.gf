@@ -68,12 +68,10 @@ concrete ConjunctionBul of Conjunction =
        p  = x.p} ;
 
     BaseAP x y =
-      {s  = \\d,t,aform,p => x.s!aform!p++linCoord!t++y.s!aform!p; 
-       adv= \\d,t         => x.adv      ++linCoord!t++y.adv;
+      {s  = \\d,t,aform,p => x.s!aform!p++linCoord!t++y.s!aform!p;
        isPre = andB x.isPre y.isPre} ; 
     ConsAP x xs =
       {s  = \\d,t,aform,p =>x.s!aform!p++(linCoordSep comma)!d!t++xs.s!d!t!aform!p;
-       adv= \\d,t         =>x.adv      ++(linCoordSep comma)!d!t++xs.adv!d!t;
        isPre = andB x.isPre xs.isPre} ; 
 
     BaseRS x y =
@@ -94,7 +92,7 @@ concrete ConjunctionBul of Conjunction =
     [AdV] = {s : Bool => Ints 3 => Str} ;
     [IAdv] = {s : Bool => Ints 3 => QForm => Str} ;
     [NP] = {s : Bool => Ints 3 => Role  => Str; gn : GenNum; p : PronPerson} ;
-    [AP] = {s : Bool => Ints 3 => AForm => Person => Str; adv : Bool => Ints 3 => Str; isPre : Bool} ;
+    [AP] = {s : Bool => Ints 3 => AForm => Person => Str; isPre : Bool} ;
     [RS] = {s : Bool => Ints 3 => Agr   => Str} ;
     [CN] = {s : Bool => Ints 3 => NForm => Str; g : AGender} ;
 
