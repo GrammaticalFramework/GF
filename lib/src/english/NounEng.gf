@@ -166,7 +166,7 @@ concrete NounEng of Noun = CatEng ** open MorphoEng, ResEng, Prelude in {
       s = dap.s ++ ap.s ! agrgP3 dap.n Masc ;       --- post-ap's ? "this larger than life (movie)"
       sp = \\g,_,c => case c of {
                         NCase Gen => dap.sp ! g ! True ! NCase Nom ++ ap.s ! agrgP3 dap.n g ++ BIND ++ "'s" ;
-                        c         => dap.sp ! g ! True ! c         ++ ap.s ! agrgP3 dap.n g
+                        c         => dap.sp ! g ! True ! c ++ ap.s ! agrgP3 dap.n g
                       } ;
       n = dap.n ;
       hasNum = dap.hasNum
