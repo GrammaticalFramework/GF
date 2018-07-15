@@ -1,0 +1,32 @@
+diff --git a/.gitignore b/.gitignore
+index 1c083ede..0e8eb0bf 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -43,3 +43,4 @@ src/ui/android/libs/
+ src/ui/android/obj/
+ .cabal-sandbox
+ cabal.sandbox.config
++GF_LIB_PATH
+diff --git a/gf.cabal b/gf.cabal
+index 5c795c10..a8b399b1 100644
+--- a/gf.cabal
++++ b/gf.cabal
+@@ -341,12 +341,12 @@ executable pgf-shell
+   if impl(ghc>=7.0)
+     ghc-options: -rtsopts
+ 
+-test-suite rgl-tests
+-  type:           exitcode-stdio-1.0
+-  main-is:        run.hs
+-  hs-source-dirs: lib/tests/
+-  build-depends:  base, HTF, process, HUnit, filepath, directory
+-  default-language:    Haskell2010
++-- test-suite rgl-tests
++--   type:           exitcode-stdio-1.0
++--   main-is:        run.hs
++--   hs-source-dirs: lib/tests/
++--   build-depends:  base, HTF, process, HUnit, filepath, directory
++--   default-language:    Haskell2010
+ 
+ test-suite gf-tests
+   type:           exitcode-stdio-1.0
