@@ -6,7 +6,6 @@ import System.Process(rawSystem)
 import System.Exit(ExitCode(..))
 import Distribution.Simple.Setup(BuildFlags(..),Flag(..),CopyFlags(..),CopyDest(..),copyDest)
 import Distribution.Simple.LocalBuildInfo(LocalBuildInfo(..),datadir,buildDir,absoluteInstallDirs)
-import Distribution.Simple.Utils(die) -- deprecated as of Cabal >= 2
 import Distribution.PackageDescription(PackageDescription(..))
 
 {-
@@ -68,9 +67,11 @@ buildWeb gf (flags,pkg,lbi) = do
       where
         tmp_dir = gfo_dir</>subdir
         dir = contrib_dir</>subdir
+        dest = NoCopyDest
+        gf_lib_path = datadir (absoluteInstallDirs pkg lbi dest) </> "lib"
         args = numJobs flags++["-make","-s"] -- ,"-optimize-pgf"
                ++["--gfo-dir="++tmp_dir,
-                  "--gf-lib-path="++buildDir lbi </> "rgl",
+                  "--gf-lib-path="++gf_lib_path,
                   "--name="++dropExtension pgf,
                   "--output-dir="++gfo_dir]
                ++[dir</>file|file<-src]
@@ -111,15 +112,16 @@ setupWeb dest (pkg,lbi) = do
       do createDirectoryIfMissing True logo_dir
          copyFile ("doc"</>"Logos"</>gf_logo) (logo_dir</>gf_logo)
 
--- | Run an arbitrary system command
-execute :: String -> [String] -> IO ()
+-- | Run an arbitrary system command, returning False on failure
+execute :: String -> [String] -> IO Bool
 execute command args =
   do let cmdline = command ++ " " ++ unwords (map showArg args)
      e <- rawSystem command args
      case e of
-       ExitSuccess   -> return ()
+       ExitSuccess   -> return True
        ExitFailure i -> do putStrLn $ "Ran: " ++ cmdline
-                           die $ command++" exited with exit code: " ++ show i
+                           putStrLn $ command++" exited with exit code: " ++ show i
+                           return False
   where
     showArg arg = if ' ' `elem` arg then "'" ++ arg ++ "'" else arg
 

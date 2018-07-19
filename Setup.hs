@@ -9,6 +9,7 @@ import Data.List(isPrefixOf,intersect)
 import System.Process(readProcess)
 import System.FilePath((</>),(<.>))
 import System.Directory(createDirectoryIfMissing,copyFile,getDirectoryContents)
+import System.Exit(die)
 
 import WebSetup
 
@@ -380,7 +381,8 @@ run_gfc bi args =
     do let args' = numJobs (bf bi)++["-batch","-gf-lib-path="++rgl_src_dir]
                    ++ filter (not . null) args
            gf = default_gf (lbi bi)
-       execute gf args'
+       ok <- execute gf args'
+       if ok then return () else die "Stopping"
 
 -- | Get path to locally-built gf
 default_gf :: LocalBuildInfo -> FilePath
