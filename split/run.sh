@@ -105,7 +105,7 @@ cp -R "$REP_CORE" "${REP_CORE}${BACKUP_SUFFIX}"
 cd "$REP_CORE"
 
 echo "Post-split updates..."
-CP_FILES="Setup.hs WebSetup.hs"
+CP_FILES="Setup.hs"
 for FILE in $CP_FILES ; do
   cp "${DIR}/${REP_PRISTINE}/split/${REP_CORE}/${FILE}" .
 done
