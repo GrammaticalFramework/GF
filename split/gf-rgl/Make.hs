@@ -1,5 +1,5 @@
 import System.FilePath ((</>),(<.>))
-import Data.List (find,intersect,isPrefixOf,intercalate)
+import Data.List (find,intersect,isPrefixOf)
 import Data.Maybe (fromJust,isJust,catMaybes)
 import System.Environment (getArgs,lookupEnv)
 import System.Exit (ExitCode(..),die)
@@ -12,8 +12,8 @@ main :: IO ()
 main = do
   aargs <- getArgs
   case aargs of
-    [] -> putStrLn $ "Must specify command: " ++ intercalate ", " commands
-    a:_ | a `notElem` commands -> putStrLn $ "Unknown command: " ++ a
+    [] -> putStrLn $ "Must specify command, one of: " ++ unwords commands
+    a:_ | a `notElem` commands -> putStrLn $ "Unknown command: " ++ a ++ " (valid commands: " ++ unwords commands ++ ")"
     "build":args -> buildRGL args
     "copy":args -> copyRGL args
     "install":args -> buildRGL args >> copyRGL args
@@ -35,9 +35,18 @@ copyRGL :: [String] -> IO ()
 copyRGL args = do
   let modes = getOptMode args
   info <- mkInfo
-  let gf_lib_dir = infoInstallDir info
+  gf_lib_dir <- maybe (die errLocation) return (infoInstallDir info)
   copyAll "prelude" (infoBuildDir info </> "prelude") (gf_lib_dir </> "prelude")
   sequence_ [copyAll (show mode) (getRGLBuildDir info mode) (gf_lib_dir </> getRGLBuildSubDir mode)|mode<-modes]
+
+-- | Error message when install location cannot be determined
+errLocation :: String
+errLocation = unlines $
+  [ "Unable to determine where to install the RGL. Please do one of the following:"
+  , " - Pass the " ++ install_prefix ++ "... flag to this script"
+  , " - Set the GF_LIB_PATH environment variable"
+  , " - Compile GF from the gf-core repository (must be in same directory as gf-rgl)"
+  ]
 
 -- | Copy all files between directories
 copyAll :: String -> FilePath -> FilePath -> IO ()
@@ -46,6 +55,7 @@ copyAll msg from to = do
   createDirectoryIfMissing True to
   mapM_ (\file -> when (file /= "." && file /= "..") $ copyFile (from </> file) (to </> file)) =<< getDirectoryContents from
 
+-- | Remove dist directory
 clean :: IO ()
 clean = do
   info <- mkInfo
@@ -61,7 +71,7 @@ gf_prefix = "gf="
 
 -- | Flag for specifying RGL install location
 install_prefix :: String
-install_prefix = "to="
+install_prefix = "dest="
 
 -- | Check arguments are valid
 checkArgs :: [String] -> IO ()
@@ -73,10 +83,10 @@ checkArgs args = do
         || gf_prefix `isPrefixOf` arg
         || install_prefix `isPrefixOf` arg
         ))
-  unless (null args') $ die $ "Unrecognised flags: " ++ intercalate ", " args'
+  unless (null args') $ die $ "Unrecognised flags: " ++ unwords args'
   return ()
 
--- | List of languages overriding the definitions above
+-- | List of languages overriding the definitions below
 getOptLangs :: [LangInfo] -> [String] -> [LangInfo]
 getOptLangs defaultLangs args =
     case [ls | arg <- args,
@@ -94,22 +104,25 @@ getOptLangs defaultLangs args =
                    then findLangs langs [l]++ls
                    else ls
 
+-- | Get flag value from list of args
 getFlag :: String -> [String] -> Maybe String
 getFlag flag args = fmap (drop (length flag)) $ find (isPrefixOf flag) args
 
 -------------------------------------------------------------------------------
 -- Paths and directories
 
--- | RGL sources
+-- | RGL source directory
 sourceDir :: FilePath
 sourceDir = "src"
 
+-- | Information needed in build
 data Info = Info
-  { infoBuildDir :: FilePath -- ^ where to put built RGL modules
-  , infoInstallDir :: FilePath -- ^ install directory, found dynamically
-  , infoGFPath :: FilePath -- ^ Path to GF
+  { infoBuildDir :: FilePath -- ^ where to put built RGL modules (fixed)
+  , infoInstallDir :: Maybe FilePath -- ^ install directory (found dynamically)
+  , infoGFPath :: FilePath -- ^ path to GF
   }
 
+-- | Build info object from command line args
 mkInfo :: IO Info
 mkInfo = do
   args <- getArgs
@@ -118,9 +131,11 @@ mkInfo = do
   let mflag = getFlag install_prefix args
   mbuilt <- catchIOError (readFile "../gf-core/GF_LIB_PATH" >>= return . Just) (\e -> return Nothing)
   menvar <- lookupEnv "GF_LIB_PATH"
-  inst_dir <- case catMaybes [mflag,menvar,mbuilt] of
-    [] -> die "Unable to get install location"
-    p:_ -> return p
+  let
+    inst_dir =
+      case catMaybes [mflag,menvar,mbuilt] of
+        [] -> Nothing
+        p:_ -> Just p
 
   return $ Info
     { infoBuildDir = "dist"
@@ -151,12 +166,14 @@ all_modes = ["alltenses","present"]
 default_modes :: [Mode]
 default_modes = [AllTenses,Present]
 
+-- | An RGL build command
 data RGLCommand = RGLCommand
   { cmdName   :: String -- ^ name of command
   , cmdIsDef  :: Bool   -- ^ is default?
   , cmdAction :: [Mode] -> [String] -> Info -> IO () -- ^ action
   }
 
+-- | Possible build commands
 rglCommands :: [RGLCommand]
 rglCommands =
   [ RGLCommand "prelude" True  $ \mode args bi -> do
@@ -216,6 +233,7 @@ rglCommands =
                    Present -> intersect langsPresent
                    _ -> id
 
+-- | Get mode from args (may be missing)
 getOptMode :: [String] -> [Mode]
 getOptMode args =
     if null explicit_modes
@@ -227,6 +245,7 @@ getOptMode args =
       [AllTenses|have "alltenses"]
     have mode = mode `elem` args
 
+-- | Get RGL command from args
 getRGLCommands :: [String] -> [RGLCommand]
 getRGLCommands args =
   let cmds0 = [cmd | arg <- args,
@@ -419,7 +438,7 @@ execute command args =
     showArg arg = if ' ' `elem` arg then "'" ++ arg ++ "'" else arg
 
 -- | For parallel RGL module compilation
--- Unfortunately, this has no effect unless Setup.hs is compiled with -threaded
+-- Unfortunately, this has no effect unless compiled with -threaded
 parallel_ :: (Foldable t, Monad m) => t (m a) -> m ()
 parallel_ ms = sequence_ ms
   -- do c <- newChan

@@ -25,7 +25,7 @@ There is also `make clean` available.
 
 The install script will try to determine where to copy the compiled RGL modules.
 It will look for, in this order:
-- the `to=` flag (see below)
+- the `dest=` flag (see below)
 - the `GF_LIB_PATH` environment variable
 - the file `../gf-core/GF_LIB_PATH` (relative to this directory). This only works if you have the `gf-core` and `gf-rgl` repositories in the same top-level directory **and** you have already compiled GF from source.
 (This is considered messy and will probably disappead in the future)
@@ -41,8 +41,8 @@ runghc Make.hs ...
 Where `...` is one of:
 ```
 build   [CMD] [MODE] [langs=LANG,LANG,...] [gf=...]
-copy    [to=...]
-install [CMD] [MODE] [langs=LANG,LANG,...] [gf=...] [to=...]
+copy    [dest=...]
+install [CMD] [MODE] [langs=LANG,LANG,...] [gf=...] [dest=...]
 clean
 ```
 
