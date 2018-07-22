@@ -154,8 +154,6 @@ cp -R "$REP_RGL" "${REP_RGL}${BACKUP_SUFFIX}"
 cd "$REP_RGL"
 
 echo "Post-split updates..."
-git rm -r --quiet doc/browse
-git commit -m "${COMMIT_PREFIX}Remove RGL browser" --quiet
 
 CP_FILES=".gitignore Make.hs Makefile README.md"
 for FILE in $CP_FILES ; do
