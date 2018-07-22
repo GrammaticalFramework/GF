@@ -1,11 +1,12 @@
-import System.FilePath ((</>),(<.>))
 import Data.List (find,intersect,isPrefixOf)
 import Data.Maybe (fromJust,isJust,catMaybes)
-import System.Environment (getArgs,lookupEnv)
-import System.Exit (ExitCode(..),die)
-import System.Process (rawSystem,readProcess)
-import System.Directory (createDirectoryIfMissing,copyFile,getDirectoryContents,removeDirectoryRecursive)
+import System.IO (hPutStrLn,stderr)
 import System.IO.Error (catchIOError)
+import System.Exit (ExitCode(..),die)
+import System.Environment (getArgs,lookupEnv)
+import System.Process (rawSystem,readProcess)
+import System.FilePath ((</>),(<.>))
+import System.Directory (createDirectoryIfMissing,copyFile,getDirectoryContents,removeDirectoryRecursive)
 import Control.Monad (unless,when)
 
 main :: IO ()
@@ -199,10 +200,7 @@ rglCommands =
           run_gfc bi (["-s","-make","-name=Lang"]++
                            ["Lang" ++ langCode l ++ ".pgf"|l <- optl langsPGF args])
        | mode <- modes]
-  , RGLCommand "demo"    False $ \modes args bi -> do
-       let ls = optl langsDemo args
-       gf bi (demos "Demo" ls) ["demo/Demo" ++ langCode l ++ ".gf" | l <- ls]
-       return ()
+
   , RGLCommand "parse"   False $ \modes args bi ->
        gfc bi modes (summary parse) (map parse (optl langsParse args))
   ]
@@ -332,10 +330,6 @@ langsIncomplete = ["Amh","Ara","Grc","Heb","Ina","Lat","Tur"]
 langsSymbolic :: [LangInfo]
 langsSymbolic  = langsAPI `except` ["Afr","Ice","Mon","Nep"]
 
--- | Languages for which to run demo test
-langsDemo :: [LangInfo]
-langsDemo = langsLang `except` ["Ara","Hin","Ina","Lav","Tha"]
-
 -- | Languages for which to compile parsing grammars
 langsParse :: [LangInfo]
 langsParse = langs `only` ["Eng"]
@@ -380,9 +374,6 @@ symbolic l = sourceDir </> "api" </> ("Symbolic" ++ langCode l ++ ".gf")
 parse :: LangInfo -> FilePath
 parse l = sourceDir </> "parse" </> ("Parse" ++ langCode l ++ ".gf")
 
-demos :: String -> [LangInfo] -> String
-demos abstr ls = "gr -number=100 | l -treebank " ++ unlexer abstr ls ++ " | ps -to_html | wf -file=resdemo.html"
-
 -- | Get unlexer flags for languages
 unlexer :: String -> [LangInfo] -> String
 unlexer abstr ls =
@@ -395,14 +386,6 @@ unlexer abstr ls =
 -------------------------------------------------------------------------------
 -- Executing GF
 
--- | Runs the gf executable in compile mode with the given arguments
-run_gfc :: Info -> [String] -> IO ()
-run_gfc bi args = do
-  let
-    args' = ["-batch","-gf-lib-path="++sourceDir] ++ filter (not . null) args
-    gf = infoGFPath bi
-  execute gf args'
-
 gfc :: Info -> [Mode] -> String -> [String] -> IO ()
 gfc bi modes summary files =
   parallel_ [gfcn bi mode summary files | mode<-modes]
@@ -412,28 +395,29 @@ gfcn bi mode summary files = do
   let dir = getRGLBuildDir bi mode
       preproc = case mode of
                   AllTenses -> ""
-                  Present   -> "-preproc="++({-sourceDir </>-} "mkPresent")
+                  Present   -> "-preproc=mkPresent"
   createDirectoryIfMissing True dir
   putStrLn $ "Compiling [" ++ show mode ++ "] " ++ summary
   run_gfc bi (["-s", "-no-pmcfg", preproc, "--gfo-dir="++dir] ++ files)
 
-gf :: Info -> String -> [String] -> IO ()
-gf bi comm files = do
-  putStrLn $ "Reading " ++ unwords files
-  let gf = infoGFPath bi
-  putStrLn ("executing: " ++ comm ++ "\n" ++ "in " ++ gf)
-  out <- readProcess gf ("-s":files) comm
-  putStrLn out
+-- | Runs the gf executable in compile mode with the given arguments
+run_gfc :: Info -> [String] -> IO ()
+run_gfc bi args = do
+  let
+    args' = ["-batch","-gf-lib-path="++sourceDir] ++ filter (not . null) args
+    gf = infoGFPath bi
+  execute gf args'
 
 -- | Run an arbitrary system command
 execute :: String -> [String] -> IO ()
-execute command args =
-  do let cmdline = command ++ " " ++ unwords (map showArg args)
-     e <- rawSystem command args
-     case e of
-       ExitSuccess   -> return ()
-       ExitFailure i -> do putStrLn $ "Ran: " ++ cmdline
-                           die $ command++" exited with exit code: " ++ show i
+execute command args = do
+  let cmdline = command ++ " " ++ unwords (map showArg args)
+  e <- rawSystem command args
+  case e of
+    ExitSuccess   -> return ()
+    ExitFailure i -> do
+      putStrLn $ "Ran: " ++ cmdline
+      die $ command ++ " exited with exit code: " ++ show i
   where
     showArg arg = if ' ' `elem` arg then "'" ++ arg ++ "'" else arg
 
@@ -444,3 +428,6 @@ parallel_ ms = sequence_ ms
   -- do c <- newChan
   --    ts <- sequence [ forkIO (m >> writeChan c ()) | m <- ms]
   --    sequence_ [readChan c | _ <- ts]
+
+putErrLn :: String -> IO ()
+putErrLn = hPutStrLn stderr
