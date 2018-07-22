@@ -38,6 +38,7 @@ import Control.Monad(when,liftM,foldM)
 import Control.Monad.Trans(MonadIO(..))
 import Control.Monad.State(StateT,lift)
 import Control.Exception(evaluate)
+import Data.List (nub)
 
 --putIfVerb :: MonadIO io => Options -> String -> io ()
 putIfVerb opts msg = when (verbAtLeast opts Verbose) $ putStrLnE msg
@@ -51,28 +52,32 @@ type FullPath = String
 gfLibraryPath    = "GF_LIB_PATH"
 gfGrammarPathVar = "GF_GRAMMAR_PATH"
 
-getLibraryDirectory :: MonadIO io => Options -> io FilePath
+getLibraryDirectory :: MonadIO io => Options -> io [FilePath]
 getLibraryDirectory opts =
   case flag optGFLibPath opts of
     Just path -> return path
-    Nothing   -> liftIO $ catch (getEnv gfLibraryPath)
-                                (\ex -> fmap (</> "lib") getDataDir)
+    Nothing   -> liftM splitSearchPath $ liftIO (catch (getEnv gfLibraryPath)
+                                                (\ex -> fmap (</> "lib") getDataDir))
 
-getGrammarPath :: MonadIO io => FilePath -> io [FilePath]
-getGrammarPath lib_dir = liftIO $ do
+getGrammarPath :: MonadIO io => [FilePath] -> io [FilePath]
+getGrammarPath lib_dirs = liftIO $ do
   catch (fmap splitSearchPath $ getEnv gfGrammarPathVar) 
-        (\_ -> return [lib_dir </> "alltenses",lib_dir </> "prelude"])     -- e.g. GF_GRAMMAR_PATH
+        (\_ -> return $ concat [[lib_dir </> "alltenses", lib_dir </> "prelude"]
+                               | lib_dir <- lib_dirs ])     -- e.g. GF_GRAMMAR_PATH
 
 -- | extends the search path with the
 -- 'gfLibraryPath' and 'gfGrammarPathVar'
 -- environment variables. Returns only existing paths.
 extendPathEnv :: MonadIO io => Options -> io [FilePath]
 extendPathEnv opts = liftIO $ do
-  let opt_path = flag optLibraryPath opts         -- e.g. paths given as options
-  lib_dir  <- getLibraryDirectory opts                  -- e.g. GF_LIB_PATH
-  grm_path <- getGrammarPath lib_dir                   -- e.g. GF_GRAMMAR_PATH
-  let paths = opt_path ++ [lib_dir] ++ grm_path
-  ps <- liftM concat $ mapM allSubdirs paths
+  let opt_path = nub $ flag optLibraryPath opts         -- e.g. paths given as options
+  lib_dirs <- getLibraryDirectory opts                  -- e.g. GF_LIB_PATH
+  grm_path <- getGrammarPath lib_dirs                   -- e.g. GF_GRAMMAR_PATH
+  let paths = opt_path ++ lib_dirs ++ grm_path
+  when (verbAtLeast opts Verbose) $ putStrLn ("extendPathEnv: opt_path is "++ show opt_path)
+  when (verbAtLeast opts Verbose) $ putStrLn ("extendPathEnv: lib_dirs is "++ show lib_dirs)
+  when (verbAtLeast opts Verbose) $ putStrLn ("extendPathEnv: grm_path is "++ show grm_path)
+  ps <- liftM (nub . concat) $ mapM allSubdirs (nub paths)
   mapM canonicalizePath ps
   where
     allSubdirs :: FilePath -> IO [FilePath]
@@ -80,11 +85,15 @@ extendPathEnv opts = liftIO $ do
     allSubdirs p = case last p of
       '*' -> do let path = init p
                 fs <- getSubdirs path
-                return [path </> f | f <- fs]
+                let starpaths = [path </> f | f <- fs]
+                when (verbAtLeast opts Verbose) $ putStrLn ("extendPathEnv: allSubdirs: * found "++show starpaths)
+                return starpaths
       _   -> do exists <- doesDirectoryExist p
                 if exists
-                  then return [p]
-                  else do when (verbAtLeast opts Verbose) $ putStrLn ("ignore path "++p)
+                  then do
+                       when (verbAtLeast opts Verbose) $ putStrLn ("extendPathEnv: allSubdirs: found path "++show p)
+                       return [p]
+                  else do when (verbAtLeast opts Verbose) $ putStrLn ("extendPathEnv: allSubdirs: ignore path "++ show p)
                           return []
 
 getSubdirs :: FilePath -> IO [FilePath]

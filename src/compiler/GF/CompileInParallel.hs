@@ -34,8 +34,11 @@ import qualified Data.ByteString.Lazy as BS
 parallelBatchCompile jobs opts rootfiles0 =
   do setJobs jobs
      rootfiles <- mapM canonical rootfiles0
-     lib_dir  <- canonical =<< getLibraryDirectory opts
-     filepaths <- mapM (getPathFromFile lib_dir opts) rootfiles
+     lib_dirs1 <- getLibraryDirectory opts
+     lib_dirs2 <- mapM canonical lib_dirs1
+     let lib_dir = head lib_dirs2
+     when (length lib_dirs2 >1) $ ePutStrLn ("GF_LIB_PATH defines more than one directory; using the first, " ++ show lib_dir)
+     filepaths <- mapM (getPathFromFile [lib_dir] opts) rootfiles
      let groups = groupFiles lib_dir filepaths
          n = length groups
      when (n>1) $ ePutStrLn "Grammar mixes present and alltenses, dividing modules into two groups"
