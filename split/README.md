@@ -9,9 +9,9 @@ Contributions and comments welcome.
 
 ## Checklist
 
-- [ ] Beta testing of build scripts
+- [x] Beta testing of build scripts
 - [ ] Package-building scripts
-- [ ] Webpage setup to follow new repositories
+- [x] Webpage setup to follow new repositories
 - [ ] GF Developers documentation
 - [ ] RGL Documentation
 - [ ] Update GF web styles

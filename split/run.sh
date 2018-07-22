@@ -155,7 +155,7 @@ cd "$REP_RGL"
 
 echo "Post-split updates..."
 
-CP_FILES=".gitignore Make.hs Makefile README.md"
+CP_FILES=".gitignore Make.hs Make.sh Make.bat Makefile README.md"
 for FILE in $CP_FILES ; do
   cp "${DIR}/${REP_PRISTINE}/split/${REP_RGL}/${FILE}" .
 done
