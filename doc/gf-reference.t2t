@@ -412,21 +412,33 @@ use on-line ``h -FLAG``.
 
 
 
-===File paths===
+===File import search paths===
 
-Colon-separated lists of directories searched in the
+Colon-separated list of directories searched in the
 given order: 
 ```
 --# -path=.:../abstract:../common:prelude
 ```
-This can be (in order of growing preference), as
-first line in the top file, as flag to ``gf``
+This can be (in order of increasing priority), as
+first line in the file, as flag to ``gf``
 when invoked, or as flag to the ``i`` command.
 The prefix ``--#`` is used only in files.
 
-If the environment variabls ``GF_LIB_PATH`` is defined, its
-value is automatically prefixed to each directory to
-extend the original search path.
+GF attempts to satisfy an ``import`` command by searching for the
+import filename in the above search paths, initially qualified
+relative to the current working directory. If the file is not found in
+that initial expansion, the search paths are re-qualified relative to
+the directories given in the ``GF_LIB_PATH`` environment variable. If
+``GF_LIB_PATH`` is not defined, its default value is
+``/usr/local/share/gf-3.9/lib`` (assuming you have GF version 3.9).
+
+If your GF resource grammar libraries are installed somewhere else,
+you will want to set ``GF_LIB_PATH`` to point there instead. In a
+pinch, you can point to the ``GF/lib/src/`` folder in your clone of
+the GF source code repository.
+
+Developers of resource grammars may find it useful to define multiple
+directories, colon-separated, in ``GF_LIB_PATH``.
 
 
 ===Alternative grammar formats===

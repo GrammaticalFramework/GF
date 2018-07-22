@@ -3204,7 +3204,10 @@ in the top of <CODE>FILE.gf</CODE> causes the GF compiler, when invoked on <CODE
 to search through the current directory (<CODE>.</CODE>) and the directories
 <CODE>present</CODE>, <CODE>prelude</CODE>, and <CODE>/home/aarne/GF/tmp</CODE>, in this order.
 If a directory <CODE>DIR</CODE> is not found relative to the working directory,
-also <CODE>$(GF_LIB_PATH)/DIR</CODE> is searched.
+<CODE>$(GF_LIB_PATH)/DIR</CODE> is searched. <CODE>$GF_LIB_PATH</CODE>
+can be a colon-separated list of directories, in which case each directory
+in the list contributes to the search path expansion.
+
 </P>
 <A NAME="toc53"></A>
 <H2>Alternative grammar input formats</H2>
