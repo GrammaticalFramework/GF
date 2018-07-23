@@ -25,7 +25,7 @@ There is also `make clean` available.
 
 The install script will try to determine where to copy the compiled RGL modules.
 It will look for, in this order:
-- the `dest=` flag (see below)
+- the `--dest=` flag (see below)
 - the `GF_LIB_PATH` environment variable
 - the file `../gf-core/GF_LIB_PATH` (relative to this directory). This only works if you have the `gf-core` and `gf-rgl` repositories in the same top-level directory **and** you have already compiled GF from source.
 (This is considered messy and will probably disappead in the future)
@@ -40,9 +40,9 @@ runghc Make.hs ...
 
 Where `...` is one of:
 ```
-build   [CMD] [MODE] [langs=LANG,LANG,...] [gf=...]
-copy    [dest=...]
-install [CMD] [MODE] [langs=LANG,LANG,...] [gf=...] [dest=...]
+build   [CMD] [MODE] [--langs=[+|-]LANG,LANG,...] [--gf=...]
+copy    [--dest=...]
+install [CMD] [MODE] [--langs=[+|-]LANG,LANG,...] [--gf=...] [--dest=...]
 clean
 ```
 
@@ -53,16 +53,15 @@ clean
 `api`,
 `compat`,
 `pgf`,
-`demo`,
 `parse`
 (default is `all`)
 - `MODE` is one of:
 `present`,
 `alltenses`
 (default is both)
-- You can _override_ the default language list with `langs=...`
-- You can _add_ languages to the default list with `+langs=...`
-- You can _remove_ languages from the default list with `-langs=...`
+- You can _override_ the default language list with `--langs=...`
+- You can _add_ languages to the default list with `--langs=+...`
+- You can _remove_ languages from the default list with `langs=-...`
 - `LANG` is a 3-letter language code, e.g. `Eng`, `Swe` etc.
 - The path to GF installed on your system can be specified via the `gf` flag (default is that the `gf` executable is in the global system path).
 - The `to` flag can be used to manually specify where the compiled RGL modules should be copied/installed. This is the same place as `GF_LIB_PATH`.

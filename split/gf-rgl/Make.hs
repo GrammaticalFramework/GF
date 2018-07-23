@@ -44,7 +44,7 @@ copyRGL args = do
 errLocation :: String
 errLocation = unlines $
   [ "Unable to determine where to install the RGL. Please do one of the following:"
-  , " - Pass the " ++ install_prefix ++ "... flag to this script"
+  , " - Pass the " ++ destination_flag ++ "... flag to this script"
   , " - Set the GF_LIB_PATH environment variable"
   , " - Compile GF from the gf-core repository (must be in same directory as gf-rgl)"
   ]
@@ -63,16 +63,17 @@ clean = do
   removeDirectoryRecursive (infoBuildDir info)
 
 -- | Flag for specifying languages
-langs_prefix :: String
-langs_prefix = "langs="
+-- '=' can optionally be followed by '+' or '-' to alter the default languages
+lang_flag :: String
+lang_flag = "--langs="
 
 -- | Flag for specifying gf location
-gf_prefix :: String
-gf_prefix = "gf="
+gf_flag :: String
+gf_flag = "--gf="
 
 -- | Flag for specifying RGL install location
-install_prefix :: String
-install_prefix = "dest="
+destination_flag :: String
+destination_flag = "--dest="
 
 -- | Check arguments are valid
 checkArgs :: [String] -> IO ()
@@ -80,9 +81,9 @@ checkArgs args = do
   let args' = flip filter args (\arg -> not
         (  arg `elem` (map cmdName rglCommands)
         || arg `elem` all_modes
-        || langs_prefix `isPrefixOf` arg
-        || gf_prefix `isPrefixOf` arg
-        || install_prefix `isPrefixOf` arg
+        || lang_flag `isPrefixOf` arg
+        || gf_flag `isPrefixOf` arg
+        || destination_flag `isPrefixOf` arg
         ))
   unless (null args') $ die $ "Unrecognised flags: " ++ unwords args'
   return ()
@@ -91,8 +92,8 @@ checkArgs args = do
 getOptLangs :: [LangInfo] -> [String] -> [LangInfo]
 getOptLangs defaultLangs args =
     case [ls | arg <- args,
-               let (f,ls) = splitAt (length langs_prefix) arg,
-               f==langs_prefix] of
+               let (f,ls) = splitAt (length lang_flag) arg,
+               f==lang_flag] of
       ('+':ls):_ -> foldr addLang defaultLangs (seps ls)
       ('-':ls):_ -> foldr removeLang defaultLangs (seps ls)
       ls:_ -> findLangs langs (seps ls)
@@ -129,7 +130,7 @@ mkInfo = do
   args <- getArgs
 
   -- Look for install location in a few different places
-  let mflag = getFlag install_prefix args
+  let mflag = getFlag destination_flag args
   mbuilt <- catchIOError (readFile "../gf-core/GF_LIB_PATH" >>= return . Just) (\e -> return Nothing)
   menvar <- lookupEnv "GF_LIB_PATH"
   let
@@ -141,7 +142,7 @@ mkInfo = do
   return $ Info
     { infoBuildDir = "dist"
     , infoInstallDir = inst_dir
-    , infoGFPath = maybe default_gf id (getFlag gf_prefix args)
+    , infoGFPath = maybe default_gf id (getFlag gf_flag args)
     }
   where
     default_gf = "gf"
