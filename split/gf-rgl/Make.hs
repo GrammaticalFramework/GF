@@ -46,7 +46,7 @@ errLocation = unlines $
   [ "Unable to determine where to install the RGL. Please do one of the following:"
   , " - Pass the " ++ destination_flag ++ "... flag to this script"
   , " - Set the GF_LIB_PATH environment variable"
-  , " - Compile GF from the gf-core repository (must be in same directory as gf-rgl)"
+  , " - Compile & install GF from the gf-core repository (must be in same directory as gf-rgl)"
   ]
 
 -- | Copy all files between directories
@@ -131,7 +131,7 @@ mkInfo = do
 
   -- Look for install location in a few different places
   let mflag = getFlag destination_flag args
-  mbuilt <- catchIOError (readFile "../gf-core/GF_LIB_PATH" >>= return . Just) (\e -> return Nothing)
+  mbuilt <- catchIOError (readFile "../gf-core/DATA_DIR" >>= \d -> return (Just (d </> "lib"))) (\e -> return Nothing)
   menvar <- lookupEnv "GF_LIB_PATH"
   let
     inst_dir =

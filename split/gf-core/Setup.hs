@@ -2,7 +2,6 @@ import Distribution.Simple(defaultMainWithHooks,UserHooks(..),simpleUserHooks)
 import Distribution.Simple.LocalBuildInfo(LocalBuildInfo(..),absoluteInstallDirs,datadir)
 import Distribution.Simple.Setup(BuildFlags(..),Flag(..),InstallFlags(..),CopyDest(..),CopyFlags(..),SDistFlags(..))
 import Distribution.PackageDescription(PackageDescription(..),emptyHookedBuildInfo)
-import System.FilePath((</>))
 
 import WebSetup
 
@@ -49,8 +48,8 @@ saveInstallPath :: [String] -> InstallFlags -> (PackageDescription, LocalBuildIn
 saveInstallPath args flags bi = do
   let
     dest = NoCopyDest
-    inst_gf_lib_dir = datadir (uncurry absoluteInstallDirs bi dest) </> "lib"
-  writeFile "GF_LIB_PATH" inst_gf_lib_dir
+    dir = datadir (uncurry absoluteInstallDirs bi dest)
+  writeFile dataDirFile dir
 
 saveCopyPath :: [String] -> CopyFlags -> (PackageDescription, LocalBuildInfo) -> IO ()
 saveCopyPath args flags bi = do
@@ -58,5 +57,11 @@ saveCopyPath args flags bi = do
     dest = case copyDest flags of
       NoFlag -> NoCopyDest
       Flag d -> d
-    inst_gf_lib_dir = datadir (uncurry absoluteInstallDirs bi dest) </> "lib"
-  writeFile "GF_LIB_PATH" inst_gf_lib_dir
+    dir = datadir (uncurry absoluteInstallDirs bi dest)
+  writeFile dataDirFile dir
+
+-- | Name of file where installation's data directory is recording
+-- This is a last-resort way in which the seprate RGL build script
+-- can determine where to put the compiled RGL files
+dataDirFile :: String
+dataDirFile = "DATA_DIR"
