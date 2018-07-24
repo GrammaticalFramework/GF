@@ -161,7 +161,7 @@ for FILE in $CP_FILES ; do
 done
 git add .
 git rm --quiet "src/Makefile"
-git rm --quiet "src/old-demo"
+git rm -r --quiet "src/old-demo"
 git mv "src/mkPresent" .
 git commit -m "${COMMIT_PREFIX}Post-split updates" --quiet
 
