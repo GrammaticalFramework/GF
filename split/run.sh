@@ -23,8 +23,9 @@ PUSH="true"
 # Text prefix to include in commit messages created by this script
 COMMIT_PREFIX="[GF Split] "
 
-# Directory name suffix for backups
+# Directory name suffix for backups/clones
 BACKUP_SUFFIX="_copy"
+CLONED_SUFFIX="_cloned"
 
 # --- Are you sure? -----------------------------------------------------------
 
@@ -45,9 +46,11 @@ if [ "$CONFIRM" != true ]; then
   echo "This script will [re]create the following directories:"
   echo "  ${DIR}/${REP_PRISTINE}"
   echo "  ${DIR}/${REP_CORE}"
-  echo "  ${DIR}/${REP_RGL}"
   echo "  ${DIR}/${REP_CORE}${BACKUP_SUFFIX}"
+  echo "  ${DIR}/${REP_CORE}${CLONED_SUFFIX}"
+  echo "  ${DIR}/${REP_RGL}"
   echo "  ${DIR}/${REP_RGL}${BACKUP_SUFFIX}"
+  echo "  ${DIR}/${REP_RGL}${CLONED_SUFFIX}"
   echo "To change the path, set the DIR variable in this script or use the -d flag."
   echo "When you are sure, re-run this script with the -y flag."
   exit 0
@@ -71,9 +74,6 @@ else
   git clone git@github.com:GrammaticalFramework/GF.git "$REP_PRISTINE"
 fi
 
-rm -rf "$REP_CORE"
-rm -rf "$REP_RGL"
-
 # --- Begin building repos ----------------------------------------------------
 
 # === core ===
@@ -84,25 +84,31 @@ echo
 echo "# ${REP_CORE}"
 
 echo "Copying..."
+rm -rf "$REP_CORE"
 cp -R "$REP_PRISTINE" "$REP_CORE"
 
-echo "Cleaning..."
+echo "Filtering (this will take some time)..."
 cd "$REP_CORE"
 RM_DIRS="lib split"
-
-echo "Filtering (this will take some time)..."
 # git filter-branch --tree-filter "rm -rf ${RM_DIRS}" --prune-empty HEAD
 git filter-branch --index-filter "git rm --cached --ignore-unmatch --quiet -r -- ${RM_DIRS}" --prune-empty HEAD
-git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
 
-echo "Shrinking..."
-git reflog expire --expire=now --all
-git gc --prune=now --aggressive
-
-echo "Backing up shrunk repository..."
+echo "Backing up filtered repository..."
 cd ..
 cp -R "$REP_CORE" "${REP_CORE}${BACKUP_SUFFIX}"
 cd "$REP_CORE"
+
+echo "Cloning..."
+cd ..
+git clone "file://`pwd`/$REP_CORE" "${REP_CORE}${CLONED_SUFFIX}"
+rm -rf "$REP_CORE"
+mv "${REP_CORE}${CLONED_SUFFIX}" "$REP_CORE"
+cd "$REP_CORE"
+
+echo "Shrinking..."
+# git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+# git reflog expire --expire=now --all
+git gc --prune=now --aggressive
 
 echo "Post-split updates..."
 CP_FILES="Setup.hs"
@@ -130,31 +136,31 @@ echo
 echo "# ${REP_RGL}"
 
 echo "Copying..."
+rm -rf "$REP_RGL"
 cp -R -- "$REP_PRISTINE" "$REP_RGL"
 
 echo "Filtering (this will take some time)..."
 cd "$REP_RGL"
 git filter-branch --prune-empty --subdirectory-filter lib --tag-name-filter cat -- --all
 
-# echo "Cloning..."
-# cd ..
-# git clone "file://`pwd`/$REP_RGL" "${REP_RGL}_cloned"
-# rm -rf "$REP_RGL"
-# mv "${REP_RGL}_cloned" "$REP_RGL"
-# cd "$REP_RGL"
-
-echo "Shrinking..."
-git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
-git reflog expire --expire=now --all
-git gc --prune=now
-
-echo "Backing up shrunk repository..."
+echo "Backing up filtered repository..."
 cd ..
 cp -R "$REP_RGL" "${REP_RGL}${BACKUP_SUFFIX}"
 cd "$REP_RGL"
 
-echo "Post-split updates..."
+echo "Cloning..."
+cd ..
+git clone "file://`pwd`/$REP_RGL" "${REP_RGL}${CLONED_SUFFIX}"
+rm -rf "$REP_RGL"
+mv "${REP_RGL}${CLONED_SUFFIX}" "$REP_RGL"
+cd "$REP_RGL"
 
+echo "Shrinking..."
+# git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+# git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+
+echo "Post-split updates..."
 CP_FILES=".gitignore Make.hs Make.sh Make.bat Makefile README.md"
 for FILE in $CP_FILES ; do
   cp "${DIR}/${REP_PRISTINE}/split/${REP_RGL}/${FILE}" .
